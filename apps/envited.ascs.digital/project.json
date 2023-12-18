@@ -1,0 +1,59 @@
+{
+  "name": "envited.ascs.digital",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/envited.ascs.digital",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/envited.ascs.digital",
+        "postcssConfig": "apps/envited.ascs.digital/postcss.config.js"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "apps/envited.ascs.digital"
+        },
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "envited.ascs.digital:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "envited.ascs.digital:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "envited.ascs.digital:build:production",
+          "dev": false
+        }
+      }
+    },
+    "export": {
+      "executor": "@nx/next:export",
+      "options": {
+        "buildTarget": "envited.ascs.digital:build:production"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/envited.ascs.digital/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}

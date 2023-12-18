@@ -23,7 +23,7 @@ export const Header: FC<HeaderProps> = () => {
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
             <Button onClick={() => {}}>
-              <span>{t('[Button} connect')}</span>
+              <span>{t('[Button] connect')}</span>
             </Button>
           </div>
         </nav>

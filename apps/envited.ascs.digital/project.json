@@ -53,6 +53,14 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "deploy:staging": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/envited.ascs.digital",
+        "commands": ["npx sst deploy Envited --stage staging"],
+        "parallel": false
+      }
     }
   },
   "tags": []

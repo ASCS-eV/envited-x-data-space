@@ -24,7 +24,7 @@
     "**/*.js",
     "**/*.jsx",
     ".next/types/**/*.ts",
-    "../../dist/apps/marketplace/.next/types/**/*.ts",
+    "../../dist/apps/envited.ascs.digital/.next/types/**/*.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "../../dist/apps/envited.ascs.digital/.next/types/**/*.ts"

@@ -15,8 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@envited-marketplace/design-system": ["apps/design-system/src/index.ts"],
-      "@envited-marketplace/ui": ["ui/src/index.ts"]
+      "@envited-marketplace/design-system": ["apps/design-system/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

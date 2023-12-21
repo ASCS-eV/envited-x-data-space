@@ -2,7 +2,7 @@ name: SST staging deployment workflow
 on:
   push:
     branches:
-      - feat/github_actions
+      - develop
 
 # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
 concurrency:

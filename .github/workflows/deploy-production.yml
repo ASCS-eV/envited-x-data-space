@@ -1,0 +1,32 @@
+name: SST production deployment workflow
+on:
+  push:
+    branches:
+      - main
+
+# Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
+concurrency:
+  group: merge-${{ github.ref }}
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+jobs:
+  DeployApp:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      PLATFORM: ${{ vars.PLATFORM }}
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::597778497612:role/GitHub-Actions
+          role-duration-seconds: 900 #adjust as needed for your build time
+          aws-region: eu-central-1
+      - name: Deploy app
+        run: |
+          npm i && npx nx deploy:production envited.ascs.digital

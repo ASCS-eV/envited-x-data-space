@@ -4,7 +4,6 @@ import * as cdk from 'aws-cdk-lib/core'
 import { NextjsSite, StackContext } from 'sst/constructs'
 
 export default function Envited({ stack }: StackContext) {
-
   const vpc = new aws_ec2.Vpc(stack, 'Vpc')
 
   const sg = new aws_ec2.SecurityGroup(stack, 'PostgresSG', {
@@ -45,7 +44,6 @@ export default function Envited({ stack }: StackContext) {
     path: './',
     memorySize: '1024 MB',
     timeout: '20 seconds',
-    edge: false,
     cdk: {
       server: {
         vpc,

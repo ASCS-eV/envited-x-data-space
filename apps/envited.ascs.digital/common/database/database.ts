@@ -1,0 +1,47 @@
+import { PostgresJsDatabase, drizzle } from 'drizzle-orm/postgres-js'
+import postgres from 'postgres'
+import { equals } from 'ramda'
+
+import { ERRORS } from '../constants'
+import { getSecret } from '../secretsManager'
+
+export const initDb =
+  ({
+    drizzle,
+    postgres,
+    getSecret,
+  }: {
+    drizzle: (client: postgres.Sql) => PostgresJsDatabase
+    postgres: (options: postgres.Options<any>) => postgres.Sql
+    getSecret: (secretId: string) => Promise<Record<string, any>>
+  }): (() => Promise<PostgresJsDatabase>) =>
+  async () => {
+    let config = {
+      host: process.env.POSTGRES_HOST || 'localhost', // Postgres ip address[s] or domain name[s]
+      port: parseInt(process.env.POSTGRES_PORT || '5432', 10), // Postgres server port[s]
+      database: process.env.POSTGRES_DATABASE_NAME!, // Name of database to connect to
+      username: process.env.POSTGRES_DATABASE_USER!, // Username of database user
+      password: process.env.POSTGRES_DATABASE_PASSWORD!, // Password of database user
+      max: 1,
+    }
+
+    if (!equals(process.env.ENV, 'local')) {
+      try {
+        const { password, dbname, port, host, username } = await getSecret(process.env.RDS_SECRET_ARN!)
+        config = {
+          host,
+          port,
+          database: dbname,
+          username,
+          password,
+          max: 1,
+        }
+      } catch (error) {
+        console.log(ERRORS.CANNOT_CONNECT_TO_DATABASE, error)
+      }
+    }
+
+    return drizzle(postgres(config))
+  }
+
+export const connectDb = initDb({ drizzle, postgres, getSecret })

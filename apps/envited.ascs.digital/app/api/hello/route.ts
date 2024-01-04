@@ -1,3 +1,11 @@
 export async function GET(request: Request) {
-  return new Response('Hello, from API!')
+
+  try {
+    return Response.json('hello dynamic world')
+  } catch (error) {
+    console.log('error', error)
+    return Response.json(error)
+  }
 }
+
+export const dynamic = 'force-dynamic'

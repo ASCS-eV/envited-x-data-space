@@ -54,6 +54,100 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     },
+
+    "db:generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/ascs.digital",
+        "commands": ["ENV=development drizzle-kit generate:pg"]
+      }
+    },
+    "db:migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/ascs.digital/common/database",
+        "commands": [
+          "tsc --project ../../tsconfig.migrate.json",
+          "npx dotenv -e ../../.env.development node dist/migrate.js",
+          "rm -rf dist"
+        ],
+        "parallel": false
+      }
+    },
+    "db:seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/ascs.digital/common/database",
+        "commands": [
+          "tsc --project ../../tsconfig.seed.json",
+          "npx dotenv -e ../../.env.development node dist/seed.js",
+          "rm -rf dist"
+        ],
+        "parallel": false
+      }
+    },
+    "db:generate:staging": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/ascs.digital",
+        "commands": ["ENV=staging drizzle-kit generate:pg"]
+      }
+    },
+    "db:migrate:staging": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/ascs.digital/common/database",
+        "commands": [
+          "tsc --project ../../tsconfig.migrate.json",
+          "dotenv -e ../../.env.staging node dist/migrate.js",
+          "rm -rf dist"
+        ],
+        "parallel": false
+      }
+    },
+    "db:seed:staging": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/ascs.digital/common/database",
+        "commands": [
+          "tsc --project ../../tsconfig.seed.json",
+          "dotenv -e ../../.env.staging node dist/seed.js",
+          "rm -rf dist"
+        ],
+        "parallel": false
+      }
+    },
+    "db:generate:production": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/ascs.digital",
+        "commands": ["ENV=production drizzle-kit generate:pg"]
+      }
+    },
+    "db:migrate:production": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/ascs.digital/common/database",
+        "commands": [
+          "tsc --project ../../tsconfig.migrate.json",
+          "dotenv -e ../../.env.production node dist/migrate.js",
+          "rm -rf dist"
+        ],
+        "parallel": false
+      }
+    },
+    "db:seed:production": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/ascs.digital/common/database",
+        "commands": [
+          "tsc --project ../../tsconfig.seed.json",
+          "dotenv -e ../../.env.production node dist/seed.js",
+          "rm -rf dist"
+        ],
+        "parallel": false
+      }
+    },
     "deploy:staging": {
       "executor": "nx:run-commands",
       "options": {

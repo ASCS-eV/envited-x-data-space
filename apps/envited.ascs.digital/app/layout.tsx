@@ -1,3 +1,4 @@
+import { Providers } from '../modules/Theme/Providers'
 import './global.css'
 
 export const metadata = {
@@ -8,7 +9,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <Providers>
+        <body className="bg-white dark:bg-gray-800">{children}</body>
+      </Providers>
     </html>
   )
 }

@@ -1,7 +1,8 @@
 # ENVITED Marketplace
 
 ## Resources
-* [Miro Board](https://miro.com/app/board/uXjVNeZRbEw=/)
+
+- [Miro Board](https://miro.com/app/board/uXjVNeZRbEw=/)
 
 #### Installing dependencies
 

@@ -1,11 +1,10 @@
-'use client'
-
 import { Button } from '@envited-marketplace/design-system'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
+import { ThemeToggle } from '../ThemeToggle'
 
 export interface HeaderProps {}
 
@@ -22,6 +21,7 @@ export const Header: FC<HeaderProps> = () => {
             </Link>
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
+            <ThemeToggle />
             <Button onClick={() => {}}>
               <span>{t('[Button] connect')}</span>
             </Button>

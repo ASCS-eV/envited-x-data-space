@@ -1,5 +1,4 @@
 export async function GET(request: Request) {
-
   try {
     return Response.json('hello dynamic world')
   } catch (error) {

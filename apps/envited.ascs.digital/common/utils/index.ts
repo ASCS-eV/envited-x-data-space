@@ -1,1 +1,1 @@
-export { ok, badRequest, noContent, notFound } from './utils'
+export { ok, badRequest, noContent, notFound, internalServerError } from './utils'

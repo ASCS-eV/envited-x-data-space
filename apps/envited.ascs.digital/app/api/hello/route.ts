@@ -1,3 +1,4 @@
+import { ok } from '../../../common/utils'
 import { db } from '../../../common/database/queries'
 
 export async function GET(request: Request) {
@@ -5,7 +6,7 @@ export async function GET(request: Request) {
     const connection = await db()
     const tables = await connection.fetchTables()
 
-    return Response.json(tables)
+    return ok(tables)
   } catch (error) {
     console.log('error', error)
     return Response.json(error)

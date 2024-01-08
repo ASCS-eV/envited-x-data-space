@@ -1,13 +1,11 @@
-import { NextResponse } from 'next/server'
-
 import { RESPONSES } from '../constants'
 
-export const ok = (response: NextResponse) => result => response.json(result)
+export const ok = (data: any) => Response.json(data)
 
-export const badRequest = (response: NextResponse) => response.json({ status: 403, statusText: RESPONSES.BAD_REQUEST })
+export const badRequest = () => Response.json(null, { status: RESPONSES.badRequest.status, statusText: RESPONSES.badRequest.statusText })
 
-export const internalServerError = () => Response.json({ status: 500, statusText: RESPONSES.INTERNAL_SERVER_ERROR })
+export const internalServerError = () => Response.json(null, { status: RESPONSES.internalServerError.status, statusText: RESPONSES.internalServerError.statusText })
 
-export const notFound = () => Response.json({ status: 404, statusText: RESPONSES.NOT_FOUND })
+export const notFound = () => Response.json(null, { status: RESPONSES.notFound.status, statusText: RESPONSES.notFound.statusText})
 
-export const noContent = () => Response.json({ status: 205, statusText: RESPONSES.NO_CONTENT })
+export const noContent = () => new Response(null, { status: RESPONSES.noContent.status, statusText: RESPONSES.noContent.statusText })

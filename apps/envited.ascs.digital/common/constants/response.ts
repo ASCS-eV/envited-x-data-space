@@ -1,6 +1,18 @@
 export const RESPONSES = {
-  BAD_REQUEST: 'Bad request',
-  INTERNAL_SERVER_ERROR: 'Internal server error',
-  NO_CONTENT: 'No content',
-  NOT_FOUND: 'Not found',
+  badRequest: {
+    status: 403,
+    statusText: 'Bad request',
+  },
+  internalServerError: {
+    status: 500,
+    statusText: 'Internal server error',
+  },
+  notFound: {
+    status: 404,
+    statusText: 'Not found',
+  },
+  noContent: {
+    status: 204,
+    statusText: 'No content',
+  },
 }

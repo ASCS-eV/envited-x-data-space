@@ -1,0 +1,1 @@
+export { fetchTables } from './common'

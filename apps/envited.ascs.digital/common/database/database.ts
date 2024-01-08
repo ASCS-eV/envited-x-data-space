@@ -25,7 +25,7 @@ export const initDb =
       max: 1,
     }
 
-    if (!equals(process.env.ENV, 'local')) {
+    if (!equals(process.env.ENV, 'development')) {
       try {
         const { password, dbname, port, host, username } = await getSecret(process.env.RDS_SECRET_ARN!)
         config = {

@@ -6,7 +6,7 @@ import { connectDb } from './database'
 const runMigration = async () => {
   const db = await connectDb()
   try {
-    await PGMigrate(db as PostgresJsDatabase, { migrationsFolder: `../../drizzle/${process.env.ENV}` })
+    await PGMigrate(db as PostgresJsDatabase, { migrationsFolder: `../drizzle/${process.env.ENV}` })
   } catch (error) {
     console.error(error)
   } finally {

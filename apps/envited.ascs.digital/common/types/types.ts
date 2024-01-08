@@ -32,3 +32,9 @@ export type Action<T> = {
   type: T
   data?: Obj
 }
+
+export type Role = {
+  id: string
+  name: string
+  description: string
+}

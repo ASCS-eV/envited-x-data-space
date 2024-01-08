@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1704721774957,
+      "tag": "0000_thankful_oracle",
+      "breakpoints": true
+    }
+  ]
+}

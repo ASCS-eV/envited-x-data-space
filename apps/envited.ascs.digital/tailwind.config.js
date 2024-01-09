@@ -10,6 +10,7 @@ module.exports = {
     join(__dirname, '{src,pages,components,app,modules}/**/*!(*.stories|*.spec).{ts,tsx,html}'),
     ...createGlobPatternsForDependencies(__dirname),
   ],
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     colors: {
       black: colors.black,

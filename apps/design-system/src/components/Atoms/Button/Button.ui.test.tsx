@@ -7,7 +7,7 @@ import Button from './Button'
 
 describe('components/Button', () => {
   describe('render', () => {
-    it('should render Button with default properties', () => {
+    it('should render Button with default properties', async () => {
       // when ... rendering component
       const onClickStub = jest.fn()
       render(<Button onClick={onClickStub}>Button</Button>)
@@ -16,7 +16,7 @@ describe('components/Button', () => {
       // then ... should render with expected properties
       expect(element).toBeInTheDocument()
       expect(element).toHaveClass('bg-orange')
-      userEvent.click(element)
+      await userEvent.click(element)
       expect(onClickStub).toHaveBeenCalledWith()
     })
 

@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.database.json",
+  "files": ["common/database/migrate.ts"]
+}

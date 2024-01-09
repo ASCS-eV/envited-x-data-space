@@ -43,8 +43,9 @@ Thumbs.db
 # Next.js
 .next
 .env
-.env.dev
+.env.development
 .env.staging
+.env.prod
 .env.production
 
 .nx

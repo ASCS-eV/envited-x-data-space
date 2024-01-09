@@ -44,7 +44,6 @@ export default function Envited({ stack }: StackContext) {
     path: './',
     memorySize: '1024 MB',
     timeout: '20 seconds',
-    edge: false,
     cdk: {
       server: {
         vpc,

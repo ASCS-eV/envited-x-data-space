@@ -1,10 +1,8 @@
-'use client'
-
 import { ExampleTable } from '../modules/ExampleTable'
 import { Header } from '../modules/Header'
 import { HeroHeader } from '../modules/HeroHeader'
 
-export default function Index() {
+export default async function Index() {
   return (
     <>
       <Header />

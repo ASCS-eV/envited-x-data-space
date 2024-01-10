@@ -1,14 +1,13 @@
 /**
  * @jest-environment node
  */
-
-import { RESPONSES } from '../constants';
+import { RESPONSES } from '../constants'
 import * as SUT from './utils'
 
 describe('common/utils', () => {
-  const mockFetch = Promise.resolve({ json: () => Promise.resolve('') });
-  global.fetch = jest.fn().mockImplementation(() => mockFetch);
-  
+  const mockFetch = Promise.resolve({ json: () => Promise.resolve('') })
+  global.fetch = jest.fn().mockImplementation(() => mockFetch)
+
   describe('ok', () => {
     it.each([
       ['Message', 'Message'],

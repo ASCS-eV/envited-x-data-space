@@ -1,5 +1,5 @@
-import { ok } from '../../../common/utils'
 import { db } from '../../../common/database/queries'
+import { ok } from '../../../common/utils'
 
 export async function GET(request: Request) {
   try {

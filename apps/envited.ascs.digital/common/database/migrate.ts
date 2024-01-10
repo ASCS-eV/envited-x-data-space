@@ -1,15 +1,14 @@
 import { RDSDataClient } from '@aws-sdk/client-rds-data'
 import { fromIni } from '@aws-sdk/credential-providers'
+import { drizzle as RDSDrizzle } from 'drizzle-orm/aws-data-api/pg'
+import { migrate as AWSDataApiMigrate } from 'drizzle-orm/aws-data-api/pg/migrator'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { migrate as PGMigrate } from 'drizzle-orm/postgres-js/migrator'
-import { migrate as AWSDataApiMigrate } from 'drizzle-orm/aws-data-api/pg/migrator'
-import { drizzle as RDSDrizzle } from 'drizzle-orm/aws-data-api/pg'
 
 import { connectDb } from './database'
 import * as schema from './schema'
 
 const runMigration = async () => {
-  
   try {
     if (process.env.ENV === 'development') {
       const db = await connectDb()
@@ -21,7 +20,7 @@ const runMigration = async () => {
       credentials: fromIni({ profile: process.env.AWS_PROFILE || '' }),
       region: 'eu-central-1',
     })
-  
+
     const db = RDSDrizzle(rdsClient, {
       database: process.env.RDS_DB_NAME || '',
       secretArn: process.env.RDS_SECRET_ARN || '',

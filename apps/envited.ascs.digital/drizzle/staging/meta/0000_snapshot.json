@@ -98,9 +98,7 @@
         "issuer_id_unique": {
           "name": "issuer_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       }
     },
@@ -134,9 +132,7 @@
         "role_id_unique": {
           "name": "role_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       }
     },
@@ -265,12 +261,8 @@
           "name": "user_issuer_id_issuer_id_fk",
           "tableFrom": "user",
           "tableTo": "issuer",
-          "columnsFrom": [
-            "issuer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["issuer_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -278,12 +270,8 @@
           "name": "user_address_type_id_addressType_id_fk",
           "tableFrom": "user",
           "tableTo": "addressType",
-          "columnsFrom": [
-            "address_type_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["address_type_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -293,9 +281,7 @@
         "user_id_unique": {
           "name": "user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       }
     },
@@ -322,12 +308,8 @@
           "name": "usersToCredentialTypes_user_id_user_id_fk",
           "tableFrom": "usersToCredentialTypes",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -335,12 +317,8 @@
           "name": "usersToCredentialTypes_credential_type_id_credentialType_id_fk",
           "tableFrom": "usersToCredentialTypes",
           "tableTo": "credentialType",
-          "columnsFrom": [
-            "credential_type_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["credential_type_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -371,12 +349,8 @@
           "name": "usersToRoles_user_id_user_id_fk",
           "tableFrom": "usersToRoles",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -384,12 +358,8 @@
           "name": "usersToRoles_role_id_role_id_fk",
           "tableFrom": "usersToRoles",
           "tableTo": "role",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["role_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

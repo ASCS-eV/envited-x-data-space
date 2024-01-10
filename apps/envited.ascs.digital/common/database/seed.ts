@@ -7,14 +7,13 @@ import { connectDb } from './database'
 import { role } from './schema'
 import * as schema from './schema'
 
-const insertRoles = (connection: any) => async (roles: any[]) =>
-  connection.insert(role).values(roles).execute()
+const insertRoles = (connection: any) => async (roles: any[]) => connection.insert(role).values(roles).execute()
 
 const seed = async () => {
   try {
     // Insert seeding requirements here
     let connection = null
-    
+
     if (process.env.ENV === 'development') {
       connection = await connectDb()
       return
@@ -23,7 +22,7 @@ const seed = async () => {
         credentials: fromIni({ profile: process.env.AWS_PROFILE || '' }),
         region: 'eu-central-1',
       })
-    
+
       connection = RDSDrizzle(rdsClient, {
         database: process.env.RDS_DB_NAME || '',
         secretArn: process.env.RDS_SECRET_ARN || '',

@@ -1,9 +1,9 @@
-import { _getServerSession } from "./session"
+import { _getServerSession } from './session'
 
 describe('common/session', () => {
   describe('getServerSession', () => {
     it('should should fetch a server session with the correct parameters', async () => {
-      // when ... we want to get the current session server side 
+      // when ... we want to get the current session server side
       // then ... it should call the getServerSession function with the correct parameters
       const authOptions = 'AUTH_OPTIONS' as any
       const NAGetServerSession = jest.fn().mockResolvedValue('SESSION')
@@ -15,4 +15,3 @@ describe('common/session', () => {
     })
   })
 })
- 

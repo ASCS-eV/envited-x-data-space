@@ -68,7 +68,7 @@
         "cwd": "apps/envited.ascs.digital/common",
         "commands": [
           "tsc --project ../tsconfig.migrate.json",
-          "npx dotenv -e ../.env.development node dist/database/migrate.js",
+          "dotenv -e ../.env.development node dist/database/migrate.js",
           "rm -rf dist"
         ],
         "parallel": false

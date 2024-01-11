@@ -1,6 +1,6 @@
 import { getServerSession as NAGetServerSession, NextAuthOptions } from 'next-auth'
 
-import { authOptions } from '../../app/api/auth/[...nextauth]/route'
+import { authOptions } from './auth'
 
 export const _getServerSession = (NAGetServerSession: any) => (authOptions: NextAuthOptions) => () =>
   NAGetServerSession(authOptions)

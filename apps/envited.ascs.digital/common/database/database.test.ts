@@ -5,7 +5,7 @@ describe('common/database', () => {
     it('should should setup a connection with a local database', async () => {
       // when ... we want to make a connection with a local db
       // then ... we should get a connection as expected
-      process.env.ENV = 'local'
+      process.env.ENV = 'development'
       process.env.POSTGRES_DATABASE_NAME = 'DB_NAME'
       process.env.POSTGRES_DATABASE_USER = 'DB_USER'
       process.env.POSTGRES_DATABASE_PASSWORD = 'DB_PASSWORD'

@@ -1,42 +1,37 @@
 'use client'
 
-import { Button, Card, Grid, GridRow, Heading, HeadingWithTooltip, Tooltip } from '@envited-marketplace/design-system'
+import { Button, Grid, GridRow } from '@envited-marketplace/design-system'
+import { useSearchParams } from 'next/navigation'
 import React, { FC } from 'react'
 
+import { signIn } from '../../common/auth'
 import { useTranslation } from '../../common/i18n'
 
 export const HeroHeader: FC = () => {
   const { t } = useTranslation('HeroHeader')
+  const searchParams = useSearchParams()
 
   return (
-    <div className="mx-auto max-w-6xl py-32 sm:py-48 lg:py-56">
+    <div className="mx-auto max-w-6xl">
+      {searchParams.has('error') ? (
+        <div className="w-full text-center text-orange text-2xl">Could not sign you in</div>
+      ) : null}
       <Grid>
-        <GridRow columns={`four` as any}>
-          <Card>
-            <Heading importance="h1">Hello</Heading>
-            <HeadingWithTooltip heading={<Heading importance="h3">Hello</Heading>} tooltip={<Tooltip>Test</Tooltip>} />
-          </Card>
-          <Card>
-            <Heading importance="h1">Hello</Heading>
-            <HeadingWithTooltip heading={<Heading importance="h3">Hello</Heading>} tooltip={<Tooltip>Test</Tooltip>} />
-          </Card>
-          <Card>
-            <Heading importance="h1">Hello</Heading>
-            <HeadingWithTooltip heading={<Heading importance="h3">Hello</Heading>} tooltip={<Tooltip>Test</Tooltip>} />
-          </Card>
-          <Card>
-            <Heading importance="h1">Hello</Heading>
-            <HeadingWithTooltip heading={<Heading importance="h3">Hello</Heading>} tooltip={<Tooltip>Test</Tooltip>} />
-          </Card>
+        <GridRow columns={`three` as any}>
+          <Button onClick={() => signIn({ pkh: 'tz1USER' })}>
+            <span>Login as User</span>
+          </Button>
+          <Button onClick={() => signIn({ pkh: 'tz1PRINCIPAL' })}>
+            <span>Login as Principal</span>
+          </Button>
+          <Button onClick={() => signIn({ pkh: 'tz1NO_USER' })}>
+            <span>Test Failed Login</span>
+          </Button>
         </GridRow>
       </Grid>
       <div className="text-center">
         <div className="flex justify-center items-center"></div>
-        <div className="mt-10 flex items-center justify-center gap-x-6">
-          <Button onClick={() => {}}>
-            <span>{t('[Button] title')}</span>
-          </Button>
-        </div>
+        <div className="mt-10 flex items-center justify-center gap-x-6"></div>
         <div className="mt-10">
           <h2 className="text-lg font-bold tracking-tight text-gray-900">{t('[Heading] why')}</h2>
           <p className="mt-2 text-md leading-8 text-gray-600">{t('[Description] why')}</p>

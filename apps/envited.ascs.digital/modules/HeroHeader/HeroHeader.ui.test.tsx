@@ -16,6 +16,12 @@ jest.mock('next/navigation', () => ({
   },
 }))
 
+jest.mock('next/navigation', () => ({
+  useSearchParams: () => ({
+    has: jest.fn(),
+  }),
+}))
+
 describe('modules/HeroHeader', () => {
   describe('render', () => {
     it('should return as expected', async () => {

@@ -57,6 +57,7 @@
     "@types/ramda": "^0.29.9",
     "@types/react": "18.2.33",
     "@types/react-dom": "18.2.14",
+    "@types/react-test-renderer": "^18.0.7",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "autoprefixer": "^10.4.16",

@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@envited-marketplace/design-system'
 import Image from 'next/image'
 import Link from 'next/link'

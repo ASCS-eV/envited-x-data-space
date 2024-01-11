@@ -33,8 +33,15 @@ export type Action<T> = {
   data?: Obj
 }
 
-export type Role = {
+export interface IRole {
   id: string
   name: string
   description: string
+}
+
+export enum Role {
+  admin = 'admin',
+  user = 'user',
+  principal = 'principal',
+  federator = 'federator',
 }

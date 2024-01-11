@@ -1,3 +1,5 @@
+'use client'
+
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@envited-marketplace/design-system'
 import React from 'react'
 

@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Card, Grid, GridRow, Heading, HeadingWithTooltip, Tooltip } from '@envited-marketplace/design-system'
 import React, { FC } from 'react'
 

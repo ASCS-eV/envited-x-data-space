@@ -68,7 +68,7 @@
         "cwd": "apps/envited.ascs.digital/common",
         "commands": [
           "tsc --project ../tsconfig.migrate.json",
-          "npx dotenv -e ../.env.development node dist/database/migrate.js",
+          "dotenv -e ../.env.development node dist/database/migrate.js",
           "rm -rf dist"
         ],
         "parallel": false
@@ -80,7 +80,7 @@
         "cwd": "apps/envited.ascs.digital/common",
         "commands": [
           "tsc --project ../tsconfig.seed.json",
-          "npx dotenv -e ../.env.development node dist/database/seed.js",
+          "dotenv -e ../.env.development node dist/database/seed.js",
           "rm -rf dist"
         ],
         "parallel": false
@@ -152,7 +152,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/envited.ascs.digital",
-        "commands": ["npx sst deploy Envited --stage staging"],
+        "commands": ["sst deploy Envited --stage staging"],
         "parallel": false
       }
     },
@@ -160,7 +160,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/envited.ascs.digital",
-        "commands": ["npx sst deploy Envited --stage production"],
+        "commands": ["sst deploy Envited --stage production"],
         "parallel": false
       }
     }

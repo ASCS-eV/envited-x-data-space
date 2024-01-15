@@ -16,6 +16,9 @@ jobs:
   TestApp:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
       - name: Git clone the repository
         uses: actions/checkout@v3
       - name: Test app

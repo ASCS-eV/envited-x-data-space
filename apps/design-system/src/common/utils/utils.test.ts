@@ -1,6 +1,6 @@
 /* eslint-disable no-global-assign */
-/* eslint-disable no-native-reassign */
 
+/* eslint-disable no-native-reassign */
 import '@testing-library/jest-dom'
 
 import * as SUT from './utils'
@@ -51,7 +51,6 @@ describe('common/utils', () => {
       ['1970-01-01T00:00:00Z', 'January 1, 1970'],
       ['2021-09-27T10:26:14Z', 'September 27, 2021'],
     ])('should, with value %s, return %s as expected', (date, result) => {
-  
       // when ... we provide a value
       // then ... it should return as expected
       expect(SUT.formatDate(date)).toEqual(result)

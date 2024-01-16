@@ -16,7 +16,6 @@ const seed = async () => {
 
     if (process.env.ENV === 'development') {
       connection = await connectDb()
-      return
     } else {
       const rdsClient = new RDSDataClient({
         credentials: fromIni({ profile: process.env.AWS_PROFILE || '' }),
@@ -31,6 +30,7 @@ const seed = async () => {
       })
     }
     await insertRoles(connection)(ROLES)
+    return
   } catch (error) {
     console.error(error)
   } finally {

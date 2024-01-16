@@ -5,6 +5,11 @@
   "scripts": {
     "prepare": "husky install"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx nx format"
+    }
+  },
   "private": true,
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.485.0",

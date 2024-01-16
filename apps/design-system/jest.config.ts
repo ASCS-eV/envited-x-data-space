@@ -1,5 +1,6 @@
 /* eslint-disable */
 process.env.TZ = 'GMT'
+
 export default {
   displayName: 'design-system',
   preset: '../../jest.preset.js',

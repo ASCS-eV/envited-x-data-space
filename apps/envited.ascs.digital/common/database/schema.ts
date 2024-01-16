@@ -42,7 +42,7 @@ export const roleRelations = relations(role, ({ many }) => ({
 
 export const addressType = pgTable('addressType', {
   id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name'),
+  name: text('name').unique(),
   description: text('description'),
 })
 

@@ -1,5 +1,5 @@
 {
-  "id": "80905e30-6a30-4250-a963-25e52e2b88a7",
+  "id": "96c668c6-208a-4336-907b-bd99e7497d16",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -31,7 +31,13 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "addressType_name_unique": {
+          "name": "addressType_name_unique",
+          "nullsNotDistinct": false,
+          "columns": ["name"]
+        }
+      }
     },
     "credentialType": {
       "name": "credentialType",
@@ -261,6 +267,7 @@
           "name": "user_issuer_id_issuer_id_fk",
           "tableFrom": "user",
           "tableTo": "issuer",
+          "schemaTo": "public",
           "columnsFrom": ["issuer_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
@@ -270,6 +277,7 @@
           "name": "user_address_type_id_addressType_id_fk",
           "tableFrom": "user",
           "tableTo": "addressType",
+          "schemaTo": "public",
           "columnsFrom": ["address_type_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
@@ -308,6 +316,7 @@
           "name": "usersToCredentialTypes_user_id_user_id_fk",
           "tableFrom": "usersToCredentialTypes",
           "tableTo": "user",
+          "schemaTo": "public",
           "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
@@ -317,6 +326,7 @@
           "name": "usersToCredentialTypes_credential_type_id_credentialType_id_fk",
           "tableFrom": "usersToCredentialTypes",
           "tableTo": "credentialType",
+          "schemaTo": "public",
           "columnsFrom": ["credential_type_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
@@ -349,6 +359,7 @@
           "name": "usersToRoles_user_id_user_id_fk",
           "tableFrom": "usersToRoles",
           "tableTo": "user",
+          "schemaTo": "public",
           "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
@@ -358,6 +369,7 @@
           "name": "usersToRoles_role_id_role_id_fk",
           "tableFrom": "usersToRoles",
           "tableTo": "role",
+          "schemaTo": "public",
           "columnsFrom": ["role_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",

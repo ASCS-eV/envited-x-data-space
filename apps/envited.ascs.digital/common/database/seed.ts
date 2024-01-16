@@ -13,7 +13,7 @@ const seed = async () => {
   try {
     // Insert seeding requirements here
     let connection = null
-    
+
     if (process.env.ENV === 'development') {
       connection = await connectDb()
     } else {

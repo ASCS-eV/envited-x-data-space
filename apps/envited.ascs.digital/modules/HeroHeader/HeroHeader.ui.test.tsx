@@ -1,8 +1,8 @@
+import { render } from '@testing-library/react'
 import { useSession } from 'next-auth/react'
 import React from 'react'
 
 import { HeroHeader } from './HeroHeader'
-import { render } from '@testing-library/react'
 
 jest.mock('next-auth/react')
 
@@ -27,10 +27,10 @@ describe('modules/HeroHeader', () => {
     it('should return as expected', async () => {
       // when ... rendering component
       // then ... should render with expected css class
-      
+
       mockUseSession.mockReturnValue({})
       const { container } = render(<HeroHeader />)
-      
+
       expect(container.firstChild).toHaveClass('mx-auto max-w-6xl')
     })
   })

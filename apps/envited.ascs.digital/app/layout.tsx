@@ -1,4 +1,4 @@
-import { Providers } from "../modules/Theme/Providers"
+import { Providers } from '../modules/Theme/Providers'
 import './global.css'
 
 export const metadata = {

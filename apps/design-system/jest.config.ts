@@ -1,4 +1,6 @@
 /* eslint-disable */
+process.env.TZ = 'GMT'
+
 export default {
   displayName: 'design-system',
   preset: '../../jest.preset.js',
@@ -8,4 +10,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/apps/design-system',
+  
 }

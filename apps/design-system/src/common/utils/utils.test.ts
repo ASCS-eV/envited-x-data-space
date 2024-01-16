@@ -1,3 +1,6 @@
+/* eslint-disable no-global-assign */
+/* eslint-disable no-native-reassign */
+
 import '@testing-library/jest-dom'
 
 import * as SUT from './utils'
@@ -48,6 +51,7 @@ describe('common/utils', () => {
       ['1970-01-01T00:00:00Z', 'January 1, 1970'],
       ['2021-09-27T10:26:14Z', 'September 27, 2021'],
     ])('should, with value %s, return %s as expected', (date, result) => {
+  
       // when ... we provide a value
       // then ... it should return as expected
       expect(SUT.formatDate(date)).toEqual(result)
@@ -67,10 +71,10 @@ describe('common/utils', () => {
 
   describe('formatDateTime', () => {
     it.each([
-      ['1970-01-01T00:00:00Z', 'January 1, 1970 at 01:00 AM'],
-      ['2021-09-27T10:26:14Z', 'September 27, 2021 at 12:26 PM'],
-      ['2022-01-11 16:13:50', 'January 11, 2022 at 05:13 PM'],
-      ['2022-01-11T16:13:50Z', 'January 11, 2022 at 05:13 PM'],
+      ['1970-01-01T00:00:00Z', 'January 1, 1970 at 12:00 AM'],
+      ['2021-09-27T10:26:14Z', 'September 27, 2021 at 10:26 AM'],
+      ['2022-01-11 16:13:50', 'January 11, 2022 at 04:13 PM'],
+      ['2022-01-11T16:13:50Z', 'January 11, 2022 at 04:13 PM'],
     ])('should, with value %s, return %s as expected', (date, result) => {
       // when ... we provide a value
       // then ... it should return as expected

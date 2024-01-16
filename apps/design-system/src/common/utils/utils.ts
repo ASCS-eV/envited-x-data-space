@@ -1,8 +1,6 @@
 import { parseJSON } from 'date-fns'
 import {
   __,
-  compose,
-  concat,
   divide,
   equals,
   flip,
@@ -10,14 +8,12 @@ import {
   join,
   lt,
   pipe,
-  prepend,
   propSatisfies,
   replace,
   splitEvery,
   subtract,
   take,
   takeLast,
-  toString,
   when,
 } from 'ramda'
 

@@ -150,6 +150,10 @@ describe('common/database/users', () => {
     })
   })
 
+  beforeAll(() => {
+    jest.useFakeTimers('modern')
+    jest.setSystemTime(new Date(2020, 3, 1))
+  });
   describe('txn', () => {
     it('should insert a user with all the relational', async () => {
       // when ... we want to connect a user to a role
@@ -180,7 +184,27 @@ describe('common/database/users', () => {
 
       const transaction = await _txn(dependencies)(USER_CREDENTIAL)(tx as any)
 
-      expect(tx.insert().values).toHaveBeenCalled()
+      expect(tx.insert().values).toHaveBeenCalledWith({
+        addressCountry: 'DE',
+        addressLocality: 'Munich',
+        addressTypeId: 'ADDRESS_TYPE_ID',
+        articlesOfAssociationAccepted: 'articlesOfAssociation',
+        contributionRulesAccepted: 'contributionRules',
+        createdAt: new Date(),
+        email: 'email',
+        expirationDate: new Date('2102-09-15T17:14:33.000Z'),
+        id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
+        isAscsMember: true,
+        isEnvitedMember: true,
+        issuanceDate: new Date('2023-11-22T17:14:33.000Z'),
+        issuerId: 'ISSUER_ID',
+        name: 'User',
+        postalCode: '12345',
+        privacyPolicyAccepted: 'https://media.ascs.digital/terms/ascs_privacy_policy_2020-07-08.pdf#SHA-256',
+        streetAddress: 'Teststraße 1',
+        updatedAt: new Date(),
+        vatId: 'vatId',
+      })
       expect(transaction).toEqual({
         id: 'USER_ID',
       })

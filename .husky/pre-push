@@ -7,7 +7,7 @@ do
   do
     if ! git verify-commit $commit >/dev/null 2>&1
     then
-      echo "ERROR: Unsigned commit detected!!"
+      echo "ERROR: Unsigned commit detected!"
       exit 1
     fi
   done

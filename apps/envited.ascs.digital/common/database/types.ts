@@ -1,7 +1,7 @@
+import { StringChange } from '@nx/devkit'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
 import * as schema from './schema'
-import { StringChange } from '@nx/devkit'
 
 export type DatabaseConnection = PostgresJsDatabase<typeof schema>
 

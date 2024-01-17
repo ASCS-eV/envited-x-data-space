@@ -187,6 +187,38 @@ describe('common/database/users', () => {
     })
   })
 
+  it('should rollback a user with all the relational', async () => {
+    // when ... we want to insert and get an rejected user
+    // then ... we should get the rollback as expected
+    const dependencies = {
+      insertAddressTypeTx: () => jest.fn().mockResolvedValue([{ id: 'ADDRESS_TYPE_ID' }]),
+      insertIssuerTx: () => jest.fn().mockResolvedValue([{ id: 'ISSUER_ID' }]),
+      insertUsersToRolesTx: () => jest.fn().mockResolvedValue([{ id: 'ISSUER_ID' }]),
+      insertCredentialTypeTx: () => jest.fn().mockResolvedValue([{ id: 'CREDENTIAL_TYPE_ID' }]),
+    } as any
+
+    const tx = {
+      insert: jest.fn().mockReturnValue({
+        values: jest.fn().mockReturnValue({
+          onConflictDoNothing: jest.fn().mockReturnValue({
+            returning: jest.fn().mockResolvedValue({}),
+          }),
+          returning: jest.fn().mockRejectedValue('ERROR'),
+        }),
+      }),
+      select: jest.fn().mockReturnValue({
+        from: jest.fn().mockReturnValue({
+          where: jest.fn().mockReturnValue([{ id: 'ROLE_ID' }]),
+        }),
+      }),
+      rollback: jest.fn().mockResolvedValue({}),
+    }
+
+    await _txn(dependencies)(USER_CREDENTIAL)(tx as any)
+
+    expect(tx.rollback).toHaveBeenCalled()
+  })
+
   describe('_insertUserTx', () => {
     it('should insert a user with all the relational connections', async () => {
       // when ... we want to connect a user to a role

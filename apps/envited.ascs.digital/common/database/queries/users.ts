@@ -168,7 +168,6 @@ export const _txn =
     } catch (error) {
       console.log(error)
       tx.rollback()
-      throw error
     }
   }
 

@@ -1,5 +1,5 @@
 import { db } from '../../../common/database/queries'
-import { ok } from '../../../common/utils'
+import { internalServerError, ok } from '../../../common/utils'
 
 export async function POST(request: Request) {
   try {
@@ -7,10 +7,12 @@ export async function POST(request: Request) {
 
     const connection = await db()
     const newUser = await connection.insertUserTx(credential)
+
     return ok(newUser)
   } catch (error) {
     console.log('error', error)
-    return Response.json(error)
+
+    return internalServerError()
   }
 }
 

@@ -32,7 +32,7 @@ export const initDb =
         config = {
           host,
           port,
-          database: dbname as string,
+          database: dbname,
           username,
           password,
           max: 1,

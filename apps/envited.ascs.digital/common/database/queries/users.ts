@@ -26,26 +26,19 @@ export const insertIssuerTx =
         url: newIssuer.url,
         type: newIssuer.type,
       })
-      .onConflictDoNothing()
+      .onConflictDoUpdate({ target: issuer.id, set: { id: newIssuer.id } })
       .returning()
 
 export const insertAddressTypeTx =
   (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
-  async (type: string) => {
-    let result = await tx
+  async (type: string) =>
+    await tx
       .insert(addressType)
       .values({
         name: type,
       })
-      .onConflictDoNothing()
+      .onConflictDoUpdate({ target: addressType.name, set: { name: type } })
       .returning()
-
-    if (isEmpty(result)) {
-      result = await tx.select().from(addressType).where(eq(addressType.name, type)).limit(1)
-    }
-
-    return result
-  }
 
 export const insertCredentialTypeTx =
   (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>

@@ -18,7 +18,7 @@ describe('common/database/users', () => {
       const tx = {
         insert: jest.fn().mockReturnValue({
           values: jest.fn().mockReturnValue({
-            onConflictDoNothing: jest.fn().mockReturnValue({
+            onConflictDoUpdate: jest.fn().mockReturnValue({
               returning: jest.fn().mockResolvedValue([{ id: 'ADDRESS_TYPE_ID' }]),
             }),
           }),
@@ -36,8 +36,11 @@ describe('common/database/users', () => {
 
       expect(tx.insert).toHaveBeenCalledWith(addressType)
       expect(tx.insert().values).toHaveBeenCalledWith({ name: 'ADDRESS_TYPE' })
-      expect(tx.insert().values().onConflictDoNothing).toHaveBeenCalledWith()
-      expect(tx.insert().values().onConflictDoNothing().returning).toHaveBeenCalledWith()
+      expect(tx.insert().values().onConflictDoUpdate).toHaveBeenCalledWith({
+        target: addressType.name,
+        set: { name: 'ADDRESS_TYPE' },
+      })
+      expect(tx.insert().values().onConflictDoUpdate().returning).toHaveBeenCalledWith()
       expect(result).toEqual([{ id: 'ADDRESS_TYPE_ID' }])
     })
   })
@@ -88,9 +91,9 @@ describe('common/database/users', () => {
       const tx = {
         insert: jest.fn().mockReturnValue({
           values: jest.fn().mockReturnValue({
-            onConflictDoNothing: jest.fn().mockReturnValue({
+            onConflictDoUpdate: jest.fn().mockReturnValue({
               returning: jest.fn().mockResolvedValue({
-                id: 'ID',
+                id: 'ISSUER_ID',
                 type: 'TYPE',
                 name: 'NAME',
                 url: 'URL',
@@ -102,7 +105,7 @@ describe('common/database/users', () => {
       } as any
 
       const result = await insertIssuerTx(tx)({
-        id: 'ID',
+        id: 'ISSUER_ID',
         type: 'TYPE',
         name: 'NAME',
         url: 'URL',
@@ -110,15 +113,18 @@ describe('common/database/users', () => {
 
       expect(tx.insert).toHaveBeenCalledWith(issuer)
       expect(tx.insert().values).toHaveBeenCalledWith({
-        id: 'ID',
+        id: 'ISSUER_ID',
         type: 'TYPE',
         name: 'NAME',
         url: 'URL',
       })
-      expect(tx.insert().values().onConflictDoNothing).toHaveBeenCalledWith()
-      expect(tx.insert().values().onConflictDoNothing().returning).toHaveBeenCalledWith()
+      expect(tx.insert().values().onConflictDoUpdate).toHaveBeenCalledWith({
+        target: issuer.id,
+        set: { id: 'ISSUER_ID' },
+      })
+      expect(tx.insert().values().onConflictDoUpdate().returning).toHaveBeenCalledWith()
       expect(result).toEqual({
-        id: 'ID',
+        id: 'ISSUER_ID',
         type: 'TYPE',
         name: 'NAME',
         url: 'URL',
@@ -153,7 +159,7 @@ describe('common/database/users', () => {
   beforeAll(() => {
     jest.useFakeTimers('modern')
     jest.setSystemTime(new Date(2020, 3, 1))
-  });
+  })
   describe('txn', () => {
     it('should insert a user with all the relational', async () => {
       // when ... we want to connect a user to a role

@@ -5,10 +5,11 @@ import { fromPairs, map, pipe, toPairs } from 'ramda'
 import { connectDb } from '../database'
 import * as schema from '../schema'
 import { fetchTables } from './common'
-import { insertUserTx } from './users'
+import { getUserById, insertUserTx } from './users'
 
 const queries = {
   fetchTables,
+  getUserById,
   insertUserTx,
 }
 

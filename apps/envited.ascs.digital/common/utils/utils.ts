@@ -2,8 +2,8 @@ import { RESPONSES } from '../constants'
 
 export const ok = (data: any) => Response.json(data)
 
-export const badRequest = () =>
-  Response.json(null, { status: RESPONSES.badRequest.status, statusText: RESPONSES.badRequest.statusText })
+export const badRequest = (message: string | null = null) =>
+  Response.json(message, { status: RESPONSES.badRequest.status, statusText: RESPONSES.badRequest.statusText })
 
 export const internalServerError = () =>
   Response.json(null, {

@@ -1,4 +1,5 @@
 import { initDb } from './database'
+import * as schema from './schema'
 
 describe('common/database', () => {
   describe('database', () => {
@@ -26,7 +27,7 @@ describe('common/database', () => {
       const db = await initDb({ drizzle, postgres, getSecret })()
 
       expect(postgres).toHaveBeenCalledWith(config)
-      expect(drizzle).toHaveBeenCalledWith(postgres(config))
+      expect(drizzle).toHaveBeenCalledWith(postgres(config), { schema })
       expect(getSecret).not.toHaveBeenCalled()
       expect(db).toEqual('DB_CONNECTION')
     })
@@ -59,7 +60,7 @@ describe('common/database', () => {
       const db = await initDb({ drizzle, postgres, getSecret })()
 
       expect(postgres).toHaveBeenCalledWith(config)
-      expect(drizzle).toHaveBeenCalledWith(postgres(config))
+      expect(drizzle).toHaveBeenCalledWith(postgres(config), { schema })
       expect(getSecret).toHaveBeenCalled()
       expect(db).toEqual('DB_CONNECTION')
     })

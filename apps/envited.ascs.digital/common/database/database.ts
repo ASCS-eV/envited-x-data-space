@@ -4,6 +4,7 @@ import { equals } from 'ramda'
 
 import { ERRORS } from '../constants'
 import { getSecret } from '../secretsManager'
+import * as schema from './schema'
 
 export const initDb =
   ({
@@ -11,10 +12,10 @@ export const initDb =
     postgres,
     getSecret,
   }: {
-    drizzle: (client: postgres.Sql) => PostgresJsDatabase
+    drizzle: (client: postgres.Sql, config: any) => PostgresJsDatabase<typeof schema>
     postgres: (options: postgres.Options<any>) => postgres.Sql
     getSecret: (secretId: string) => Promise<Record<string, any>>
-  }): (() => Promise<PostgresJsDatabase>) =>
+  }): (() => Promise<PostgresJsDatabase<typeof schema>>) =>
   async () => {
     let config = {
       host: process.env.POSTGRES_HOST || 'localhost', // Postgres ip address[s] or domain name[s]
@@ -41,7 +42,7 @@ export const initDb =
       }
     }
 
-    return drizzle(postgres(config))
+    return drizzle(postgres(config), { schema })
   }
 
 export const connectDb = initDb({ drizzle, postgres, getSecret })

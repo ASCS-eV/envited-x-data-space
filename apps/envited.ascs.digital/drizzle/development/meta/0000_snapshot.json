@@ -1,5 +1,5 @@
 {
-  "id": "80905e30-6a30-4250-a963-25e52e2b88a7",
+  "id": "8fbe3d01-c68f-48ae-9a7f-49222e392a4a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -31,7 +31,15 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "addressType_name_unique": {
+          "name": "addressType_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
     },
     "credentialType": {
       "name": "credentialType",
@@ -98,7 +106,9 @@
         "issuer_id_unique": {
           "name": "issuer_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       }
     },
@@ -132,7 +142,9 @@
         "role_id_unique": {
           "name": "role_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       }
     },
@@ -261,8 +273,13 @@
           "name": "user_issuer_id_issuer_id_fk",
           "tableFrom": "user",
           "tableTo": "issuer",
-          "columnsFrom": ["issuer_id"],
-          "columnsTo": ["id"],
+          "schemaTo": "public",
+          "columnsFrom": [
+            "issuer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -270,8 +287,13 @@
           "name": "user_address_type_id_addressType_id_fk",
           "tableFrom": "user",
           "tableTo": "addressType",
-          "columnsFrom": ["address_type_id"],
-          "columnsTo": ["id"],
+          "schemaTo": "public",
+          "columnsFrom": [
+            "address_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -281,7 +303,9 @@
         "user_id_unique": {
           "name": "user_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       }
     },
@@ -308,8 +332,13 @@
           "name": "usersToCredentialTypes_user_id_user_id_fk",
           "tableFrom": "usersToCredentialTypes",
           "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "schemaTo": "public",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -317,8 +346,13 @@
           "name": "usersToCredentialTypes_credential_type_id_credentialType_id_fk",
           "tableFrom": "usersToCredentialTypes",
           "tableTo": "credentialType",
-          "columnsFrom": ["credential_type_id"],
-          "columnsTo": ["id"],
+          "schemaTo": "public",
+          "columnsFrom": [
+            "credential_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -349,8 +383,13 @@
           "name": "usersToRoles_user_id_user_id_fk",
           "tableFrom": "usersToRoles",
           "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "schemaTo": "public",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -358,8 +397,13 @@
           "name": "usersToRoles_role_id_role_id_fk",
           "tableFrom": "usersToRoles",
           "tableTo": "role",
-          "columnsFrom": ["role_id"],
-          "columnsTo": ["id"],
+          "schemaTo": "public",
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

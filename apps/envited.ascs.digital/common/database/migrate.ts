@@ -12,7 +12,7 @@ const runMigration = async () => {
   try {
     if (process.env.ENV === 'development') {
       const db = await connectDb()
-      await PGMigrate(db as PostgresJsDatabase, { migrationsFolder: `../drizzle/${process.env.ENV}` })
+      await PGMigrate(db as PostgresJsDatabase<typeof schema>, { migrationsFolder: `../drizzle/${process.env.ENV}` })
       return
     }
 

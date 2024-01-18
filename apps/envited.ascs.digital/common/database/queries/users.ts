@@ -21,10 +21,6 @@ export const insertIssuerTx =
       .insert(issuer)
       .values({
         ...newIssuer,
-        id: newIssuer.id,
-        name: newIssuer.name,
-        url: newIssuer.url,
-        type: newIssuer.type,
       })
       .onConflictDoUpdate({ target: issuer.id, set: { id: newIssuer.id } })
       .returning()

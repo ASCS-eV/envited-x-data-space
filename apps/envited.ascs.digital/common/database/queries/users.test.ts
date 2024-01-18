@@ -246,7 +246,7 @@ describe('common/database/users', () => {
 
     await _txn(dependencies)(USER_CREDENTIAL)(tx as any)
 
-    expect(tx.rollback).toHaveBeenCalled()
+    expect(tx.rollback).toHaveBeenCalledWith()
   })
 
   describe('_insertUserTx', () => {

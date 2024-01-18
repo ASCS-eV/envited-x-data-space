@@ -18,18 +18,14 @@ export async function POST(request: Request) {
     const user = await connection.getUserById(credentialId)
 
     if (!isEmpty(user)) {
-      return badRequest(
-        equals(CredentialType.AscsMember)(credentialType as CredentialType)
-          ? 'Principal already exists'
-          : 'User already exists',
-      )
+      return badRequest()
     }
 
     if (equals(CredentialType.AscsUser)(credentialType as CredentialType)) {
       const principal = await connection.getUserById(credentialIssuerId)
 
       if (isEmpty(principal)) {
-        return badRequest('Principal not found, register the company first')
+        return badRequest()
       }
     }
 

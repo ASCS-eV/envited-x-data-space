@@ -1,5 +1,5 @@
 {
-  "id": "96c668c6-208a-4336-907b-bd99e7497d16",
+  "id": "8fbe3d01-c68f-48ae-9a7f-49222e392a4a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -35,7 +35,9 @@
         "addressType_name_unique": {
           "name": "addressType_name_unique",
           "nullsNotDistinct": false,
-          "columns": ["name"]
+          "columns": [
+            "name"
+          ]
         }
       }
     },
@@ -104,7 +106,9 @@
         "issuer_id_unique": {
           "name": "issuer_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       }
     },
@@ -138,7 +142,9 @@
         "role_id_unique": {
           "name": "role_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       }
     },
@@ -268,8 +274,12 @@
           "tableFrom": "user",
           "tableTo": "issuer",
           "schemaTo": "public",
-          "columnsFrom": ["issuer_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "issuer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -278,8 +288,12 @@
           "tableFrom": "user",
           "tableTo": "addressType",
           "schemaTo": "public",
-          "columnsFrom": ["address_type_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "address_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -289,7 +303,9 @@
         "user_id_unique": {
           "name": "user_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       }
     },
@@ -317,8 +333,12 @@
           "tableFrom": "usersToCredentialTypes",
           "tableTo": "user",
           "schemaTo": "public",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -327,8 +347,12 @@
           "tableFrom": "usersToCredentialTypes",
           "tableTo": "credentialType",
           "schemaTo": "public",
-          "columnsFrom": ["credential_type_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "credential_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -360,8 +384,12 @@
           "tableFrom": "usersToRoles",
           "tableTo": "user",
           "schemaTo": "public",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -370,8 +398,12 @@
           "tableFrom": "usersToRoles",
           "tableTo": "role",
           "schemaTo": "public",
-          "columnsFrom": ["role_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

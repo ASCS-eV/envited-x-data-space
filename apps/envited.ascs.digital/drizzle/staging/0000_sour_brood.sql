@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS "addressType" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text,
-	"description" text
+	"description" text,
+	CONSTRAINT "addressType_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "credentialType" (
@@ -59,37 +60,37 @@ CREATE TABLE IF NOT EXISTS "usersToRoles" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "user" ADD CONSTRAINT "user_issuer_id_issuer_id_fk" FOREIGN KEY ("issuer_id") REFERENCES "issuer"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "user" ADD CONSTRAINT "user_issuer_id_issuer_id_fk" FOREIGN KEY ("issuer_id") REFERENCES "public"."issuer"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "user" ADD CONSTRAINT "user_address_type_id_addressType_id_fk" FOREIGN KEY ("address_type_id") REFERENCES "addressType"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "user" ADD CONSTRAINT "user_address_type_id_addressType_id_fk" FOREIGN KEY ("address_type_id") REFERENCES "public"."addressType"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "usersToCredentialTypes" ADD CONSTRAINT "usersToCredentialTypes_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "usersToCredentialTypes" ADD CONSTRAINT "usersToCredentialTypes_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "usersToCredentialTypes" ADD CONSTRAINT "usersToCredentialTypes_credential_type_id_credentialType_id_fk" FOREIGN KEY ("credential_type_id") REFERENCES "credentialType"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "usersToCredentialTypes" ADD CONSTRAINT "usersToCredentialTypes_credential_type_id_credentialType_id_fk" FOREIGN KEY ("credential_type_id") REFERENCES "public"."credentialType"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "usersToRoles" ADD CONSTRAINT "usersToRoles_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "usersToRoles" ADD CONSTRAINT "usersToRoles_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "usersToRoles" ADD CONSTRAINT "usersToRoles_role_id_role_id_fk" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "usersToRoles" ADD CONSTRAINT "usersToRoles_role_id_role_id_fk" FOREIGN KEY ("role_id") REFERENCES "public"."role"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

@@ -45,3 +45,8 @@ export enum Role {
   principal = 'principal',
   federator = 'federator',
 }
+
+export enum CredentialType {
+  AscsMember = 'AscsMember',
+  AscsUser = 'AscsUser',
+}

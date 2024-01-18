@@ -7,7 +7,10 @@ import { isEmpty, prop, propOr } from 'ramda'
 
 import * as schema from '../schema'
 import { addressType, credentialType, issuer, role, user, usersToCredentialTypes, usersToRoles } from '../schema'
-import { Credential, Issuer, User } from '../types'
+import { Credential, DatabaseConnection, Issuer, User } from '../types'
+
+export const getUserById = (db: DatabaseConnection) => async (id: string) =>
+  db.select().from(user).where(eq(user.id, id))
 
 export const insertUsersToRolesTx =
   (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>

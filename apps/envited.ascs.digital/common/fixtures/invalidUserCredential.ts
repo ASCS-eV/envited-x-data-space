@@ -51,7 +51,7 @@ export const INVALID_USER_CREDENTIAL = {
     url: 'https://test.de/',
   },
   'credentialSubject': {
-    id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
+    id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeX',
     type: 'AscsUser',
     name: 'User',
     email: 'mailto:user@test.de',

@@ -13,6 +13,17 @@ interface DashboardProps {
 }
 
 export const Dashboard: FC<DashboardProps> = ({ id, address, role }) => {
+  const getUserById = async (userId: string) => {
+    try {
+      const result = await fetch(`/api/user/${userId}`)
+      const body = await result.json()
+
+      return body
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-5">You are logged in:</h1>
@@ -24,7 +35,13 @@ export const Dashboard: FC<DashboardProps> = ({ id, address, role }) => {
         <dt className="font-bold">Role</dt>
         <dd className="ml-5 italic">{role}</dd>
       </dl>
-      <Button onClick={signOut}>Sign out</Button>
+      <div className="flex gap-x-3">
+        <Button onClick={signOut}>Sign out</Button>
+        <Button onClick={() => getUserById(address)}>Get current user</Button>
+        <Button onClick={() => getUserById('did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE')}>
+          Get employer data
+        </Button>
+      </div>
     </div>
   )
 }

@@ -50,3 +50,14 @@ export enum CredentialType {
   AscsMember = 'AscsMember',
   AscsUser = 'AscsUser',
 }
+
+export interface User {
+  id: string
+  issuerId: string
+}
+
+export interface Session {
+  user: {
+    pkh: string
+  }
+}

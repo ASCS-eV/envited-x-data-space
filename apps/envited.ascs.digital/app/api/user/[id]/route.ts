@@ -1,9 +1,9 @@
-import { equals, isNil } from 'ramda'
+import { isNil } from 'ramda'
 
 import { getServerSession } from '../../../../common/auth/session'
 import { db } from '../../../../common/database/queries'
-import { Role } from '../../../../common/types'
 import { badRequest, internalServerError, ok, unauthorized } from '../../../../common/utils'
+import { isOwnUser, userIsIssuedByLoggedInUser } from '../../utils'
 
 export async function GET(request: Request, { params: { id } }: { params: { id: string } }) {
   try {
@@ -16,11 +16,7 @@ export async function GET(request: Request, { params: { id } }: { params: { id: 
     const connection = await db()
     const [user] = await connection.getUserById(id)
 
-    if (
-      !equals(Role.federator)(session?.user.role) &&
-      !equals(id)(session?.user.pkh) &&
-      !equals(user.issuerId)(session?.user.pkh)
-    ) {
+    if (!userIsIssuedByLoggedInUser(user)(session?.user.pkh) && !isOwnUser(user)(session?.user.pkh)) {
       return badRequest()
     }
 

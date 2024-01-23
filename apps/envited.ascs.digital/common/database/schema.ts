@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { boolean, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { boolean, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 export const user = pgTable('user', {
   id: text('id').unique().primaryKey(),
@@ -9,7 +9,7 @@ export const user = pgTable('user', {
   isEnvitedMember: boolean('is_envited_member'),
   streetAddress: text('street_address'),
   postalCode: text('postal_code'),
-  addressLocality: text('address_location'),
+  addressLocality: text('address_locality'),
   addressCountry: text('address_country'),
   vatId: text('vat_id'),
   privacyPolicyAccepted: text('privacy_policy_accepted'),
@@ -100,5 +100,48 @@ export const usersToRolesRelations = relations(usersToRoles, ({ one }) => ({
   user: one(user, {
     fields: [usersToRoles.userId],
     references: [user.id],
+  }),
+}))
+
+export const profile = pgTable('profile', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').unique(),
+  description: text('description'),
+  logo: text('logo'),
+  streetAddress: text('street_address'),
+  postalCode: text('postal_code'),
+  addressLocality: text('address_locality'),
+  addressCountry: text('address_country'),
+  firstName: text('first_name'),
+  lastName: text('last_name'),
+  phone: text('phone'),
+  email: text('email'),
+  website: text('website'),
+  offerings: jsonb('offerings'),
+})
+
+export const companyCategory = pgTable('companyCategory', {
+  id: text('id').unique().primaryKey(),
+  name: text('name').unique(),
+  description: text('description'),
+})
+
+export const profilesToCompanyCategories = pgTable('profilesToCompanyCategories', {
+  profileId: uuid('profile_id')
+    .references(() => profile.id)
+    .notNull(),
+  companyCategoryId: text('company_category_id')
+    .references(() => companyCategory.id)
+    .notNull(),
+})
+
+export const profilesToCompanyCategoriesRelations = relations(profilesToCompanyCategories, ({ one }) => ({
+  companyCategory: one(companyCategory, {
+    fields: [profilesToCompanyCategories.companyCategoryId],
+    references: [companyCategory.id],
+  }),
+  profile: one(profile, {
+    fields: [profilesToCompanyCategories.profileId],
+    references: [profile.id],
   }),
 }))

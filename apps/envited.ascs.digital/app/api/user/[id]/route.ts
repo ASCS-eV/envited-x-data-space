@@ -16,7 +16,7 @@ export async function GET(request: Request, { params: { id } }: { params: { id: 
     const connection = await db()
     const [user] = await connection.getUserById(id)
 
-    if (!userIsIssuedByLoggedInUser(user)(session?.user.pkh) && !isOwnUser(user)(session?.user.pkh)) {
+    if (!userIsIssuedByLoggedInUser(user)(session) && !isOwnUser(user)(session)) {
       return badRequest()
     }
 

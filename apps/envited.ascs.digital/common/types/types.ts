@@ -54,6 +54,23 @@ export enum CredentialType {
 export interface User {
   id: string
   issuerId: string
+  addressCountry: string
+  addressLocality: string
+  addressTypeId: string
+  articlesOfAssociationAccepted: string
+  contributionRulesAccepted: string
+  createdAt: string
+  email: string
+  expirationDate: string
+  isAscsMember: boolean
+  isEnvitedMember: boolean
+  issuanceDate: string
+  name: string
+  postalCode: string
+  privacyPolicyAccepted: string
+  streetAddress: string
+  updatedAt: string
+  vatId: string
 }
 
 export interface Session {

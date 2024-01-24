@@ -42,8 +42,8 @@ describe('api/utils', () => {
 
       const session = {
         user: {
-          pkh: 'PKH'
-        }
+          pkh: 'PKH',
+        },
       }
       // then ... we should get the result as expected
       const result = SUT.userIsIssuedByLoggedInUser(user)(session)
@@ -62,8 +62,8 @@ describe('api/utils', () => {
 
       const session = {
         user: {
-          pkh: 'PKH'
-        }
+          pkh: 'PKH',
+        },
       }
       // then ... we should get the result as expected
       const result = SUT.isOwnUser(user)(session)

@@ -10,7 +10,7 @@ describe('common/server/users/getUsersByIssuerId', () => {
       Promise.resolve({
         user: {
           pkh: 'USER_ISSUER_ID',
-          role: Role.federator
+          role: Role.federator,
         },
       }),
     )
@@ -32,7 +32,9 @@ describe('common/server/users/getUsersByIssuerId', () => {
       }),
     )
 
-    const result = await SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub })('USER_ISSUER_ID')
+    const result = await SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub })(
+      'USER_ISSUER_ID',
+    )
     expect(result).toEqual([user])
   })
 

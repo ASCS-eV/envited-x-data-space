@@ -5,10 +5,10 @@ import { getServerSession } from '../auth'
 import { db } from '../database/queries'
 import { Database } from '../database/types'
 import { User } from '../types'
-import { badRequestError, internalServerErrorError, unauthorizedError } from '../utils'
+import { badRequestError, unauthorizedError, error } from '../utils'
 
 export const _getUserById =
-  (db: Database) =>
+  ({db, getServerSession}: { db: Database, getServerSession: any }) =>
   async (id: string): Promise<User> => {
     try {
       const session = await getServerSession()
@@ -25,10 +25,10 @@ export const _getUserById =
       }
 
       return user
-    } catch (error) {
-      console.log('error', error)
-      throw internalServerErrorError()
+    } catch (e) {
+      console.log('error', e)
+      throw error()
     }
   }
 
-export const getUserById = _getUserById(db)
+export const getUserById = _getUserById({ db, getServerSession })

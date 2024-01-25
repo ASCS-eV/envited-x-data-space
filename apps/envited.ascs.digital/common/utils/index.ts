@@ -4,4 +4,5 @@ export {
   internalServerError as internalServerErrorError,
   notFound as notFoundError,
   unauthorized as unauthorizedError,
+  error,
 } from './errors'

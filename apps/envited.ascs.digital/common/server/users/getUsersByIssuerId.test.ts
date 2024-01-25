@@ -1,6 +1,16 @@
 import { Role } from '../../types'
 import * as SUT from './getUsersByIssuerId'
 
+const testCache = <T extends Function>(func: T) => func
+
+jest.mock('react', () => {
+    const originalModule = jest.requireActual('react')
+    return {
+        ...originalModule,
+        cache: testCache,
+    }
+})
+
 describe('common/server/users/getUsersByIssuerId', () => {
   it('should return a array of user as expected', async () => {
     // when ... we request a user by id
@@ -32,9 +42,7 @@ describe('common/server/users/getUsersByIssuerId', () => {
       }),
     )
 
-    const result = await SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub })(
-      'USER_ISSUER_ID',
-    )
+    const result = await SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub })()
     expect(result).toEqual([user])
   })
 

@@ -14,14 +14,11 @@ describe('common/server/users/getUserById', () => {
   it('should return a user as expected', async () => {
     // when ... we request a user by id
     // then ... it returns a user as expected
-
-    const getServerSessionStub = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        user: {
-          pkh: 'USER_PKH',
-        },
-      }),
-    )
+    const getServerSessionStub = jest.fn().mockResolvedValue({
+      user: {
+        pkh: 'USER_PKH',
+      },
+    })
     const user = {
       id: 'USER_PKH',
       name: 'USER_NAME',
@@ -33,11 +30,9 @@ describe('common/server/users/getUserById', () => {
       isAscsMember: true,
       isEnvitedMember: true,
     }
-    const dbStub = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        getUserById: () => Promise.resolve([user]),
-      }),
-    )
+    const dbStub = jest.fn().mockResolvedValue({
+      getUserById: jest.fn().mockResolvedValue([user]),
+    })
 
     const result = await SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')
     expect(result).toEqual(user)
@@ -46,7 +41,7 @@ describe('common/server/users/getUserById', () => {
   it('should throw because of missing session', async () => {
     // when ... we request a user by id without a session
     // then ... it throws as expected
-    const getServerSessionStub = jest.fn().mockImplementation(() => Promise.resolve(null))
+    const getServerSessionStub = jest.fn().mockResolvedValue(null)
     const user = {
       id: 'USER_PKH',
       name: 'USER_NAME',
@@ -58,11 +53,9 @@ describe('common/server/users/getUserById', () => {
       isAscsMember: true,
       isEnvitedMember: true,
     }
-    const dbStub = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        getUserById: () => Promise.resolve([user]),
-      }),
-    )
+    const dbStub = jest.fn().mockResolvedValue({
+      getUserById: jest.fn().mockResolvedValue([user]),
+    })
 
     await expect(SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')).rejects.toThrow(
       'Something went wrong',
@@ -72,13 +65,11 @@ describe('common/server/users/getUserById', () => {
   it('should throw because requester is not allowed to get this resource', async () => {
     // when ... we request a user by id, but the requested user is not issued by the requester OR is not their own user
     // then ... it throws as expected
-    const getServerSessionStub = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        user: {
-          pkh: 'ISSUER_PKH',
-        },
-      }),
-    )
+    const getServerSessionStub = jest.fn().mockResolvedValue({
+      user: {
+        pkh: 'ISSUER_PKH',
+      },
+    })
     const user = {
       id: 'USER_PKH',
       issuerId: 'FEDERATOR_PKH',
@@ -91,11 +82,9 @@ describe('common/server/users/getUserById', () => {
       isAscsMember: true,
       isEnvitedMember: true,
     }
-    const dbStub = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        getUserById: () => Promise.resolve([user]),
-      }),
-    )
+    const dbStub = jest.fn().mockResolvedValue({
+      getUserById: jest.fn().mockResolvedValue([user]),
+    })
 
     await expect(SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')).rejects.toThrow(
       'Something went wrong',

@@ -4,10 +4,10 @@ import { cache } from 'react'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
+import { isFederator, isPrincipal } from '../../guards'
 import { User } from '../../types'
 import { Session } from '../../types/types'
 import { badRequestError, error, unauthorizedError } from '../../utils'
-import { isFederator, isPrincipal } from '../utils'
 
 export const _getUsersByIssuerId =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>

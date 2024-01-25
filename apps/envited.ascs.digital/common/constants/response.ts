@@ -15,4 +15,8 @@ export const RESPONSES = {
     status: 204,
     statusText: 'No content',
   },
+  unauthorized: {
+    status: 401,
+    statusText: 'Unauthorized',
+  },
 }

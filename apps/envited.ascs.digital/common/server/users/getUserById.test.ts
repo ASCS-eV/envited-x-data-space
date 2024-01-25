@@ -3,11 +3,11 @@ import * as SUT from './getUserById'
 const testCache = <T extends Function>(func: T) => func
 
 jest.mock('react', () => {
-    const originalModule = jest.requireActual('react')
-    return {
-        ...originalModule,
-        cache: testCache,
-    }
+  const originalModule = jest.requireActual('react')
+  return {
+    ...originalModule,
+    cache: testCache,
+  }
 })
 
 describe('common/server/users/getUserById', () => {

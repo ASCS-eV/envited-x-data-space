@@ -1,8 +1,8 @@
-import { User } from '../../modules/User'
+import { getServerSession } from '../../common/auth'
+import { getUserById } from '../../common/server'
 import { Dashboard } from '../../modules/Dashboard'
 import { Header } from '../../modules/Header'
-import { getUserById } from '../../common/server'
-import { getServerSession } from '../../common/auth'
+import { User } from '../../modules/User'
 
 export default async function Index() {
   const session = await getServerSession()

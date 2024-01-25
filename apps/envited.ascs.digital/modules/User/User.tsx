@@ -1,5 +1,6 @@
 import { FC } from 'react'
-import { User as IUser} from '../../common/types'
+
+import { User as IUser } from '../../common/types'
 
 export const User: FC<IUser> = ({
   id,

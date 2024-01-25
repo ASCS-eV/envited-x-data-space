@@ -76,5 +76,7 @@ export interface User {
 export interface Session {
   user: {
     pkh: string
+    id: string
+    role: Role
   }
 }

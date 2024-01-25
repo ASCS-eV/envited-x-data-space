@@ -6,9 +6,10 @@ import { db } from '../database/queries'
 import { Database } from '../database/types'
 import { User } from '../types'
 import { badRequestError, error, unauthorizedError } from '../utils'
+import { Session } from '../types/types'
 
 export const _getUserById =
-  ({ db, getServerSession }: { db: Database; getServerSession: any }) =>
+  ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
   async (id: string): Promise<User> => {
     try {
       const session = await getServerSession()

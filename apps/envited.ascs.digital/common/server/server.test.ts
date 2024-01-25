@@ -1,15 +1,17 @@
-import * as SUT from "./server"
+import * as SUT from './server'
 
 describe('common/server/server', () => {
   it('should return a user as expected', async () => {
     // when ... we request a user by id
     // then ... it returns a user as expected
 
-    const getServerSessionStub = jest.fn().mockImplementation(() => Promise.resolve({
-      user: {
-        pkh: 'USER_PKH',
-      },
-    }))
+    const getServerSessionStub = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        user: {
+          pkh: 'USER_PKH',
+        },
+      }),
+    )
     const user = {
       id: 'USER_PKH',
       name: 'USER_NAME',
@@ -21,9 +23,11 @@ describe('common/server/server', () => {
       isAscsMember: true,
       isEnvitedMember: true,
     }
-    const dbStub = jest.fn().mockImplementation(() => Promise.resolve({
-      getUserById: () => Promise.resolve([user]),
-    }))
+    const dbStub = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        getUserById: () => Promise.resolve([user]),
+      }),
+    )
 
     const result = await SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')
     expect(result).toEqual(user)
@@ -44,21 +48,27 @@ describe('common/server/server', () => {
       isAscsMember: true,
       isEnvitedMember: true,
     }
-    const dbStub = jest.fn().mockImplementation(() => Promise.resolve({
-      getUserById: () => Promise.resolve([user]),
-    }))
+    const dbStub = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        getUserById: () => Promise.resolve([user]),
+      }),
+    )
 
-    await expect(SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')).rejects.toThrow('Something went wrong')
+    await expect(SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')).rejects.toThrow(
+      'Something went wrong',
+    )
   })
 
   it('should throw because requester is not allowed to get this resource', async () => {
     // when ... we request a user by id, but the requested user is not issued by the requester OR is not their own user
     // then ... it throws as expected
-    const getServerSessionStub = jest.fn().mockImplementation(() => Promise.resolve({
-      user: {
-        pkh: 'ISSUER_PKH',
-      },
-    }))
+    const getServerSessionStub = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        user: {
+          pkh: 'ISSUER_PKH',
+        },
+      }),
+    )
     const user = {
       id: 'USER_PKH',
       issuerId: 'FEDERATOR_PKH',
@@ -71,10 +81,14 @@ describe('common/server/server', () => {
       isAscsMember: true,
       isEnvitedMember: true,
     }
-    const dbStub = jest.fn().mockImplementation(() => Promise.resolve({
-      getUserById: () => Promise.resolve([user]),
-    }))
+    const dbStub = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        getUserById: () => Promise.resolve([user]),
+      }),
+    )
 
-    await expect(SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')).rejects.toThrow('Something went wrong')
+    await expect(SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')).rejects.toThrow(
+      'Something went wrong',
+    )
   })
 })

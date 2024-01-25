@@ -1,0 +1,1 @@
+ALTER TABLE "profile" ADD COLUMN "is_published" boolean DEFAULT false;

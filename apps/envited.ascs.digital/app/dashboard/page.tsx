@@ -1,7 +1,6 @@
 import { getServerSession } from '../../common/auth'
 import { getUserById } from '../../common/server'
 import { Dashboard } from '../../modules/Dashboard'
-import { Header } from '../../modules/Header'
 import { User } from '../../modules/User'
 
 export default async function Index() {
@@ -10,7 +9,6 @@ export default async function Index() {
 
   return (
     <>
-      <Header />
       <main>
         <div className="mx-auto max-w-6xl">
           {session ? (

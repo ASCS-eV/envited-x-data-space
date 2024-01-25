@@ -16,3 +16,6 @@ export const notFound = () =>
 
 export const noContent = () =>
   new Response(null, { status: RESPONSES.noContent.status, statusText: RESPONSES.noContent.statusText })
+
+export const unauthorized = () =>
+  new Response(null, { status: RESPONSES.unauthorized.status, statusText: RESPONSES.unauthorized.statusText })

@@ -57,10 +57,10 @@ export interface User {
   addressCountry: string
   addressLocality: string
   addressTypeId: string
-  articlesOfAssociationAccepted: string
-  contributionRulesAccepted: string
+  articlesOfAssociationAccepted?: string
+  contributionRulesAccepted?: string
   createdAt: string
-  email: string
+  email?: string
   expirationDate: string
   isAscsMember: boolean
   isEnvitedMember: boolean
@@ -70,7 +70,7 @@ export interface User {
   privacyPolicyAccepted: string
   streetAddress: string
   updatedAt: string
-  vatId: string
+  vatId?: string
 }
 
 export interface Session {

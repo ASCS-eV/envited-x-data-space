@@ -1,10 +1,12 @@
-import { getServerSession } from '../../common/auth'
+import { User } from '../../modules/User'
 import { Dashboard } from '../../modules/Dashboard'
 import { Header } from '../../modules/Header'
-import DashboardPage from './dashboard'
+import { getUserById } from '../../common/server'
+import { getServerSession } from '../../common/auth'
 
 export default async function Index() {
   const session = await getServerSession()
+  const user = await getUserById('did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE')
 
   return (
     <>
@@ -13,7 +15,7 @@ export default async function Index() {
         <div className="mx-auto max-w-6xl">
           {session ? (
             <>
-              <DashboardPage id={session?.user?.pkh} />
+              <User {...user} />
               <Dashboard id={session?.user?.id} address={session?.user?.pkh} role={session?.user?.role} />
             </>
           ) : (

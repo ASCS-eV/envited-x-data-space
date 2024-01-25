@@ -24,7 +24,9 @@ export const Dashboard: FC<DashboardProps> = ({ id, address, role }) => {
         <dt className="font-bold">Role</dt>
         <dd className="ml-5 italic">{role}</dd>
       </dl>
-      <Button onClick={signOut}>Sign out</Button>
+      <div className="flex gap-x-3">
+        <Button onClick={signOut}>Sign out</Button>
+      </div>
     </div>
   )
 }

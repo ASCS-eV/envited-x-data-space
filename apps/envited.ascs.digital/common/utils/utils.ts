@@ -1,21 +1,7 @@
-import { RESPONSES } from '../constants'
+import { pathOr } from 'ramda'
 
-export const ok = (data: any) => Response.json(data)
+export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
 
-export const badRequest = () =>
-  Response.json(null, { status: RESPONSES.badRequest.status, statusText: RESPONSES.badRequest.statusText })
+export const extractIssuerIdFromCredential = pathOr('', ['issuer', 'id'])
 
-export const internalServerError = () =>
-  Response.json(null, {
-    status: RESPONSES.internalServerError.status,
-    statusText: RESPONSES.internalServerError.statusText,
-  })
-
-export const notFound = () =>
-  Response.json(null, { status: RESPONSES.notFound.status, statusText: RESPONSES.notFound.statusText })
-
-export const noContent = () =>
-  new Response(null, { status: RESPONSES.noContent.status, statusText: RESPONSES.noContent.statusText })
-
-export const unauthorized = () =>
-  new Response(null, { status: RESPONSES.unauthorized.status, statusText: RESPONSES.unauthorized.statusText })
+export const extractTypeFromCredential = pathOr('', ['credentialSubject', 'type'])

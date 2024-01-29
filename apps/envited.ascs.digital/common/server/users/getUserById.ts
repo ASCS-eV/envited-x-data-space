@@ -1,12 +1,13 @@
 import { isNil } from 'ramda'
+import { cache } from 'react'
 
-import { isOwnUser, userIsIssuedByLoggedInUser } from '../../app/api/utils'
-import { getServerSession } from '../auth'
-import { db } from '../database/queries'
-import { Database } from '../database/types'
-import { User } from '../types'
-import { Session } from '../types/types'
-import { badRequestError, error, unauthorizedError } from '../utils'
+import { getServerSession } from '../../auth'
+import { db } from '../../database/queries'
+import { Database } from '../../database/types'
+import { isOwnUser, userIsIssuedByLoggedInUser } from '../../guards'
+import { User } from '../../types'
+import { Session } from '../../types/types'
+import { badRequestError, error, unauthorizedError } from '../../utils'
 
 export const _getUserById =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
@@ -32,4 +33,4 @@ export const _getUserById =
     }
   }
 
-export const getUserById = _getUserById({ db, getServerSession })
+export const getUserById = cache(_getUserById({ db, getServerSession }))

@@ -1,1 +1,1 @@
-export { getUserById } from './server'
+export { getUserById, getUsersByIssuerId } from './users'

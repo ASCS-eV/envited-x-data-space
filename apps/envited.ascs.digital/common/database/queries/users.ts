@@ -22,6 +22,9 @@ import { Credential, DatabaseConnection, Issuer, User } from '../types'
 export const getUserById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id))
 
+export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
+  db.select().from(user).where(eq(user.issuerId, issuerId))
+
 export const insertUsersToRolesTx =
   (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
   async ({ userId, roleId }: { userId: string; roleId: string }) =>

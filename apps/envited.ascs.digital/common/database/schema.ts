@@ -113,7 +113,9 @@ export const usersToRolesRelations = relations(usersToRoles, ({ one }) => ({
 
 export const profile = pgTable('profile', {
   id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name').unique().references(() => user.name),
+  name: text('name')
+    .unique()
+    .references(() => user.name),
   description: text('description'),
   logo: text('logo'),
   streetAddress: text('street_address'),

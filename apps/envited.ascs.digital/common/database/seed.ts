@@ -1,13 +1,13 @@
 import { RDSDataClient } from '@aws-sdk/client-rds-data'
 import { fromIni } from '@aws-sdk/credential-providers'
 import { drizzle as RDSDrizzle } from 'drizzle-orm/aws-data-api/pg'
+import { map } from 'ramda'
 
 import { COMPANY_CATEGORIES } from './data/companyCategories'
 import { ROLES } from './data/roles'
 import { connectDb } from './database'
 import { companyCategory, role } from './schema'
 import * as schema from './schema'
-import { map } from 'ramda'
 
 const insertRoles = (connection: any) => async (roles: any[]) =>
   connection.insert(role).values(roles).onConflictDoNothing().execute()
@@ -37,8 +37,12 @@ const seed = async () => {
 
     const roles = map((role: Record<string, any>) => ({ ...role, createdAt: new Date(), updatedAt: new Date() }))(ROLES)
     await insertRoles(connection)(roles)
-    
-    const companyCategories = map((category: Record<string, any>) => ({...category, createdAt: new Date(), updatedAt: new Date()}))(COMPANY_CATEGORIES)
+
+    const companyCategories = map((category: Record<string, any>) => ({
+      ...category,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }))(COMPANY_CATEGORIES)
     await insertCompanyCategories(connection)(companyCategories)
     return
   } catch (error) {

@@ -146,7 +146,7 @@ describe('common/database/users', () => {
         name: 'NAME',
         isPublished: false,
       })
-      
+
       expect(tx.insert).toHaveBeenCalledWith(profile)
       expect(tx.insert().values).toHaveBeenCalledWith({
         name: 'NAME',

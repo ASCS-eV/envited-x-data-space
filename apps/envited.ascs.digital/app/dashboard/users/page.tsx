@@ -1,5 +1,4 @@
-import { getUsersByIssuerId } from 'apps/envited.ascs.digital/common/server'
-
+import { getUsersByIssuerId } from '../../../common/server'
 import { Users } from '../../../modules/Users'
 
 export default async function Index() {

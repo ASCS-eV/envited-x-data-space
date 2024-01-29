@@ -8,7 +8,11 @@ import { Locale, TranslationsMap } from './types'
 const getTranslationsForLanguage = (namespace: string) => (locale: Locale) => pathOr({}, [locale, namespace])
 
 const mergeTranslations = reduce(mergeDeepRight, { [Locale.en_GB]: {}, [Locale.de_DE]: {} })
-const translationObject = mergeTranslations([HeaderTranslation, HeroHeaderTranslation, UsersTranslation]) as TranslationsMap
+const translationObject = mergeTranslations([
+  HeaderTranslation,
+  HeroHeaderTranslation,
+  UsersTranslation,
+]) as TranslationsMap
 
 export const translation = (translations: TranslationsMap) => (namespace: string) => {
   const t = (key: string): React.ReactElement =>

@@ -1,11 +1,11 @@
 'use client'
 
 import { Card, Heading, Table, TableBody, TableCell, TableHeader, TableRow } from '@envited-marketplace/design-system'
+import { map } from 'ramda'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { User } from '../../common/types/types'
-import { map } from 'ramda'
 
 interface UsersProps {
   users: Partial<User>[]
@@ -31,13 +31,13 @@ export const Users: FC<UsersProps> = ({ users }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {map(({id, name, email }: Partial<User>) => 
+          {map(({ id, name, email }: Partial<User>) => (
             <TableRow key={id}>
               <TableCell>{id}</TableCell>
               <TableCell>{name}</TableCell>
               <TableCell>{email}</TableCell>
             </TableRow>
-          )(users)}
+          ))(users)}
         </TableBody>
       </Table>
     </Card>

@@ -74,21 +74,21 @@ export interface User {
 }
 
 export interface Profile {
-  id: string,
-  name?: string | null,
-  description?: string | null,
-  logo?: string | null,
-  streetAddress?: string | null,
-  postalCode?: string | null,
-  addressLocality?: string | null,
-  addressCountry?: string | null,
-  firstName?: string | null,
-  lastName?: string | null,
-  phone?: string | null,
-  email?: string | null,
-  website?: string | null,
-  offerings?: unknown | null,
-  isPublished: boolean | null,
+  id: string
+  name?: string | null
+  description?: string | null
+  logo?: string | null
+  streetAddress?: string | null
+  postalCode?: string | null
+  addressLocality?: string | null
+  addressCountry?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  offerings?: unknown | null
+  isPublished: boolean | null
 }
 
 export interface Session {

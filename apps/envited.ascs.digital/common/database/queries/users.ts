@@ -5,10 +5,19 @@ import { PostgresJsQueryResultHKT } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import { isEmpty, prop, propOr } from 'ramda'
 
-import * as schema from '../schema'
-import { addressType, credentialType, issuer, role, user, usersToCredentialTypes, usersToRoles, profile } from '../schema'
-import { Credential, DatabaseConnection, Issuer, User } from '../types'
 import { Profile } from '../../types'
+import * as schema from '../schema'
+import {
+  addressType,
+  credentialType,
+  issuer,
+  profile,
+  role,
+  user,
+  usersToCredentialTypes,
+  usersToRoles,
+} from '../schema'
+import { Credential, DatabaseConnection, Issuer, User } from '../types'
 
 export const getUserById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id))
@@ -60,9 +69,9 @@ export const insertCredentialTypeTx =
     return tx.insert(usersToCredentialTypes).values({ userId, credentialTypeId }).onConflictDoNothing().returning()
   }
 
-export const insertCompanyProfileTx = 
-(tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
-  async (partialProfile: Omit<Profile, "id">) => {
+export const insertCompanyProfileTx =
+  (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
+  async (partialProfile: Omit<Profile, 'id'>) => {
     return tx
       .insert(profile)
       .values({
@@ -114,7 +123,7 @@ export const _txn =
     >
     insertCompanyProfileTx: (
       tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>,
-    ) => (partialProfile: Omit<Profile, "id">) => Promise<Profile[]>
+    ) => (partialProfile: Omit<Profile, 'id'>) => Promise<Profile[]>
   }) =>
   (credential: Credential) =>
   async (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) => {

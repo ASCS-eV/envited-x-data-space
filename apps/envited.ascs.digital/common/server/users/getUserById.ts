@@ -23,7 +23,7 @@ export const _getUserById =
       const [user] = await connection.getUserById(id)
 
       if (!userIsIssuedByLoggedInUser(user)(session) && !isOwnUser(user)(session)) {
-        throw badRequestError()
+        throw badRequestError('Incorrect permissions')
       }
 
       return user

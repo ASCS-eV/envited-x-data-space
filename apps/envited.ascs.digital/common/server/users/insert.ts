@@ -1,3 +1,5 @@
+'use server'
+
 import { equals, isEmpty } from 'ramda'
 
 import { db } from '../../database/queries'
@@ -31,14 +33,12 @@ export const _insert =
         const principal = await connection.getUserById(credentialIssuerId)
 
         if (isEmpty(principal)) {
-          return badRequestError('Issuer not found')
+          throw badRequestError('Issuer not found')
         }
       }
-
       return connection.insertUserTx(credential)
     } catch (e) {
-      console.log('error', e)
-      return error()
+      throw error()
     }
   }
 

@@ -74,7 +74,7 @@ export const insertCredentialTypeTx =
 
 export const insertCompanyProfileTx =
   (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
-  async (partialProfile: Omit<Profile, 'id'>) => {
+  async (partialProfile: Omit<Profile, 'id' | 'createdAt' | 'updatedAt'>) => {
     return tx
       .insert(profile)
       .values({
@@ -126,7 +126,7 @@ export const _txn =
     >
     insertCompanyProfileTx: (
       tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>,
-    ) => (partialProfile: Omit<Profile, 'id'>) => Promise<Profile[]>
+    ) => (partialProfile: Omit<Profile, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Profile[]>
   }) =>
   (credential: Credential) =>
   async (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) => {

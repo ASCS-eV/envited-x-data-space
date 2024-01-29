@@ -89,6 +89,8 @@ export interface Profile {
   website?: string | null
   offerings?: unknown | null
   isPublished: boolean | null
+  createdAt?: string | Date | null
+  updatedAt?: string | Date | null
 }
 
 export interface Session {

@@ -1,4 +1,4 @@
-import { USER_CREDENTIAL } from '../../common/fixtures'
+import { USER_CREDENTIAL } from '../fixtures'
 import * as SUT from './utils'
 
 describe('api/utils', () => {

@@ -3,7 +3,7 @@ import { boolean, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-c
 
 export const user = pgTable('user', {
   id: text('id').unique().primaryKey(),
-  name: text('name'),
+  name: text('name').unique(),
   email: text('email'),
   isAscsMember: boolean('is_ascs_member'),
   isEnvitedMember: boolean('is_envited_member'),
@@ -34,6 +34,8 @@ export const role = pgTable('role', {
   id: text('id').unique().primaryKey(),
   name: text('name'),
   description: text('description'),
+  createdAt: timestamp('created_at'),
+  updatedAt: timestamp('updated_at'),
 })
 
 export const roleRelations = relations(role, ({ many }) => ({
@@ -44,6 +46,8 @@ export const addressType = pgTable('addressType', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').unique(),
   description: text('description'),
+  createdAt: timestamp('created_at'),
+  updatedAt: timestamp('updated_at'),
 })
 
 export const issuer = pgTable('issuer', {
@@ -51,12 +55,16 @@ export const issuer = pgTable('issuer', {
   name: text('name'),
   url: text('url'),
   type: text('type'),
+  createdAt: timestamp('created_at'),
+  updatedAt: timestamp('updated_at'),
 })
 
 export const credentialType = pgTable('credentialType', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name'),
   description: text('description'),
+  createdAt: timestamp('created_at'),
+  updatedAt: timestamp('updated_at'),
 })
 
 export const credentialTypeRelations = relations(credentialType, ({ many }) => ({
@@ -105,7 +113,7 @@ export const usersToRolesRelations = relations(usersToRoles, ({ one }) => ({
 
 export const profile = pgTable('profile', {
   id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name').unique(),
+  name: text('name').unique().references(() => user.name),
   description: text('description'),
   logo: text('logo'),
   streetAddress: text('street_address'),
@@ -127,6 +135,8 @@ export const companyCategory = pgTable('companyCategory', {
   id: text('id').unique().primaryKey(),
   name: text('name').unique(),
   description: text('description'),
+  createdAt: timestamp('created_at'),
+  updatedAt: timestamp('updated_at'),
 })
 
 export const profilesToCompanyCategories = pgTable('profilesToCompanyCategories', {

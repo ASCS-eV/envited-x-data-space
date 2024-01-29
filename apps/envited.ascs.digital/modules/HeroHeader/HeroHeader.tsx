@@ -7,23 +7,20 @@ import React, { FC, useState } from 'react'
 import { signIn } from '../../common/auth'
 import { INVALID_USER_CREDENTIAL, MEMBER_CREDENTIAL, USER_CREDENTIAL } from '../../common/fixtures'
 import { useTranslation } from '../../common/i18n'
+import { insertUser } from '../../common/server/users'
 
 export const HeroHeader: FC = () => {
   const { t } = useTranslation('HeroHeader')
   const searchParams = useSearchParams()
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState('')
 
   const addPrincipal = async () => {
     try {
-      const result = await fetch('/api/user', {
-        method: 'POST',
-        body: JSON.stringify(MEMBER_CREDENTIAL),
-      })
+      const user = await insertUser(MEMBER_CREDENTIAL)
 
-      const resultMessage = await result.json()
-      setMessage(resultMessage)
-
-      return result
+      if (user) {
+        setMessage(`Added ${user.id} as Principal`)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -31,15 +28,10 @@ export const HeroHeader: FC = () => {
 
   const addUser = async () => {
     try {
-      const result = await fetch('/api/user', {
-        method: 'POST',
-        body: JSON.stringify(USER_CREDENTIAL),
-      })
-
-      const resultMessage = await result.json()
-      setMessage(resultMessage)
-
-      return result
+      const user = await insertUser(USER_CREDENTIAL)
+      if (user) {
+        setMessage(`Added ${user.id} as User`)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -47,17 +39,9 @@ export const HeroHeader: FC = () => {
 
   const addInvalidUser = async () => {
     try {
-      const result = await fetch('/api/user', {
-        method: 'POST',
-        body: JSON.stringify(INVALID_USER_CREDENTIAL),
-      })
-
-      const resultMessage = await result.json()
-      setMessage(resultMessage)
-
-      return result
-    } catch (error) {
-      console.log(error)
+      await insertUser(INVALID_USER_CREDENTIAL)
+    } catch (error: any) {
+      setMessage(error.message)
     }
   }
 

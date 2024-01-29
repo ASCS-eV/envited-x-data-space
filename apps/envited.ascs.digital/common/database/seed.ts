@@ -7,6 +7,7 @@ import { ROLES } from './data/roles'
 import { connectDb } from './database'
 import { companyCategory, role } from './schema'
 import * as schema from './schema'
+import { map } from 'ramda'
 
 const insertRoles = (connection: any) => async (roles: any[]) =>
   connection.insert(role).values(roles).onConflictDoNothing().execute()
@@ -33,8 +34,12 @@ const seed = async () => {
         schema,
       })
     }
-    await insertRoles(connection)(ROLES)
-    await insertCompanyCategories(connection)(COMPANY_CATEGORIES)
+
+    const roles = map((role: Record<string, any>) => ({ ...role, createdAt: new Date(), updatedAt: new Date() }))(ROLES)
+    await insertRoles(connection)(roles)
+    
+    const companyCategories = map((category: Record<string, any>) => ({...category, createdAt: new Date(), updatedAt: new Date()}))(COMPANY_CATEGORIES)
+    await insertCompanyCategories(connection)(companyCategories)
     return
   } catch (error) {
     console.error(error)

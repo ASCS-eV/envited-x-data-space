@@ -118,6 +118,7 @@ export const profile = pgTable('profile', {
   email: text('email'),
   website: text('website'),
   offerings: jsonb('offerings'),
+  isPublished: boolean('is_published').default(false),
 })
 
 export const companyCategory = pgTable('companyCategory', {

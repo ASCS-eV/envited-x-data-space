@@ -20,16 +20,8 @@ export interface Address {
   addressCountry: string
 }
 
-export interface AscsMember {
-  id: string
-  type: string
-  name: string
+export interface AscsMember extends AscsUser {
   url: string
-  address: Address
-  vatID: string
-  isAscsMember: boolean
-  isEnvitedMember: boolean
-  privacyPolicy: string
   articlesOfAssociation: string
   contributionRules: string
 }

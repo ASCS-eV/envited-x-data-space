@@ -38,6 +38,7 @@ export const _insert =
       }
       return connection.insertUserTx(credential)
     } catch (e) {
+      console.log('error', e)
       throw error()
     }
   }

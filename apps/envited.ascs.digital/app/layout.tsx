@@ -1,3 +1,4 @@
+import { NotifiactionContainer } from '../modules/Notifications'
 import { Providers } from '../modules/Theme/Providers'
 import './global.css'
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#ffffff"></meta>
       </head>
       <body className="bg-white dark:bg-gray-800">
+        <NotifiactionContainer />
         <Providers>{children}</Providers>
       </body>
     </html>

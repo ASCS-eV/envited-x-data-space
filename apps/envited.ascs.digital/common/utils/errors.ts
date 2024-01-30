@@ -1,6 +1,6 @@
 export const unauthorized = () => new Error('Unauthorized')
 
-export const badRequest = () => new Error('Bad Request')
+export const badRequest = (message: string) => new Error(`BAD_REQUEST::403::${message}`)
 
 export const internalServerError = () => new Error('Internal Server Error')
 

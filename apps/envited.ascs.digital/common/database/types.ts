@@ -20,25 +20,18 @@ export interface Address {
   addressCountry: string
 }
 
-export interface AscsMember {
-  id: string
-  type: string
-  name: string
+export interface AscsMember extends AscsUser {
   url: string
-  address: Address
-  vatID: string
-  isAscsMember: boolean
-  isEnvitedMember: boolean
-  privacyPolicy: string
   articlesOfAssociation: string
   contributionRules: string
+  vatId: string
 }
 
 export interface AscsUser {
   id: string
   type: string
   name: string
-  email: string
+  email?: string
   address: Address
   isAscsMember: boolean
   isEnvitedMember: boolean
@@ -74,4 +67,33 @@ export interface User {
   expirationDate: string
   createdAt: string
   updatedAt: string
+}
+
+export interface CompanyCategory {
+  id: string
+  name?: string
+  description?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface Profile {
+  id: string
+  name: string
+  description?: string
+  logo?: string
+  streetAddress?: string
+  postalCode?: string
+  addressLocality?: string
+  addressCountry?: string
+  firstName?: string
+  lastName?: string
+  phone?: string
+  email?: string
+  website?: string
+  offerings?: string
+  isPublished: boolean
+  createdAt: string
+  updatedAt: string
+  categories?: CompanyCategory[]
 }

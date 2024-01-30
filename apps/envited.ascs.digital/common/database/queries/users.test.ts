@@ -1,14 +1,7 @@
 import { USER_CREDENTIAL } from '../../fixtures'
-import { addressType, credentialType, issuer, usersToRoles } from '../schema'
+import { addressType, credentialType, issuer, profile, usersToRoles } from '../schema'
 import { Credential } from '../types'
-import {
-  _insertUserTx,
-  _txn,
-  insertAddressTypeTx,
-  insertCredentialTypeTx,
-  insertIssuerTx,
-  insertUsersToRolesTx,
-} from './users'
+import * as SUT from './users'
 
 describe('common/database/users', () => {
   describe('insertAddressTypeTx', () => {
@@ -32,7 +25,7 @@ describe('common/database/users', () => {
         }),
       } as any
 
-      const result = await insertAddressTypeTx(tx)('ADDRESS_TYPE')
+      const result = await SUT.insertAddressTypeTx(tx)('ADDRESS_TYPE')
 
       expect(tx.insert).toHaveBeenCalledWith(addressType)
       expect(tx.insert().values).toHaveBeenCalledWith({ name: 'ADDRESS_TYPE' })
@@ -66,7 +59,7 @@ describe('common/database/users', () => {
         }),
       } as any
 
-      const result = await insertCredentialTypeTx(tx)({
+      const result = await SUT.insertCredentialTypeTx(tx)({
         userId: 'USER_ID',
         type: 'TYPE',
       })
@@ -104,7 +97,7 @@ describe('common/database/users', () => {
         select: jest.fn().mockReturnValue({}),
       } as any
 
-      const result = await insertIssuerTx(tx)({
+      const result = await SUT.insertIssuerTx(tx)({
         id: 'ISSUER_ID',
         type: 'TYPE',
         name: 'NAME',
@@ -132,6 +125,43 @@ describe('common/database/users', () => {
     })
   })
 
+  describe('insertCompanyProfileTx', () => {
+    it('should insert a issuer', async () => {
+      // when ... we to insert a issuer
+      // then ... we should get the issuer result
+      const tx = {
+        insert: jest.fn().mockReturnValue({
+          values: jest.fn().mockReturnValue({
+            onConflictDoNothing: jest.fn().mockReturnValue({
+              returning: jest.fn().mockResolvedValue({
+                name: 'NAME',
+                isPublished: true,
+              }),
+            }),
+          }),
+        }),
+      } as any
+
+      const result = await SUT.insertCompanyProfileTx(tx)({
+        name: 'NAME',
+        isPublished: false,
+      })
+
+      expect(tx.insert).toHaveBeenCalledWith(profile)
+      expect(tx.insert().values).toHaveBeenCalledWith({
+        name: 'NAME',
+        isPublished: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      expect(tx.insert().values().onConflictDoNothing().returning).toHaveBeenCalledWith()
+      expect(result).toEqual({
+        name: 'NAME',
+        isPublished: true,
+      })
+    })
+  })
+
   describe('insertUsersToRolesTx', () => {
     it('should connect users to roles', async () => {
       // when ... we want to connect a user to a role
@@ -142,7 +172,7 @@ describe('common/database/users', () => {
         }),
       } as any
 
-      const result = await insertUsersToRolesTx(tx)({
+      const result = await SUT.insertUsersToRolesTx(tx)({
         userId: 'USER_ID',
         roleId: 'ROLE_ID',
       })
@@ -157,7 +187,7 @@ describe('common/database/users', () => {
   })
 
   beforeAll(() => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
     jest.setSystemTime(new Date(2020, 3, 1))
   })
   describe('txn', () => {
@@ -169,6 +199,7 @@ describe('common/database/users', () => {
         insertIssuerTx: () => jest.fn().mockResolvedValue([{ id: 'ISSUER_ID' }]),
         insertUsersToRolesTx: () => jest.fn().mockResolvedValue([{ id: 'ISSUER_ID' }]),
         insertCredentialTypeTx: () => jest.fn().mockResolvedValue([{ id: 'CREDENTIAL_TYPE_ID' }]),
+        insertCompanyProfileTx: () => jest.fn().mockResolvedValue([{ id: 'COMPANY_PROFILE_ID' }]),
       } as any
 
       const tx = {
@@ -188,7 +219,7 @@ describe('common/database/users', () => {
         rollback: jest.fn().mockResolvedValue({}),
       }
 
-      const transaction = await _txn(dependencies)(USER_CREDENTIAL)(tx as any)
+      const transaction = await SUT._txn(dependencies)(USER_CREDENTIAL)(tx as any)
 
       expect(tx.insert().values).toHaveBeenCalledWith({
         addressCountry: 'DE',
@@ -244,7 +275,7 @@ describe('common/database/users', () => {
       rollback: jest.fn().mockResolvedValue({}),
     }
 
-    await _txn(dependencies)(USER_CREDENTIAL)(tx as any)
+    await SUT._txn(dependencies)(USER_CREDENTIAL)(tx as any)
 
     expect(tx.rollback).toHaveBeenCalledWith()
   })
@@ -259,7 +290,7 @@ describe('common/database/users', () => {
       const credential = {} as Credential
       const transaction = jest.fn().mockResolvedValue('x')
 
-      _insertUserTx(transaction)(db as any)(credential)
+      SUT._insertUserTx(transaction)(db as any)(credential)
 
       expect(transaction).toHaveBeenCalledWith(credential)
       expect(db.transaction).toHaveBeenCalledWith(transaction(credential))

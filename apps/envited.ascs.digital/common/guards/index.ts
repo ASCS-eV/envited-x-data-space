@@ -1,1 +1,1 @@
-export { isFederator, isOwnUser, isPrincipal, userIsIssuedByLoggedInUser } from './guards'
+export { isFederator, isOwnUser, isOwnProfile, isPrincipal, userIsIssuedByLoggedInUser } from './guards'

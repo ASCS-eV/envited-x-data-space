@@ -5,13 +5,17 @@ import { fromPairs, map, pipe, toPairs } from 'ramda'
 import { connectDb } from '../database'
 import * as schema from '../schema'
 import { fetchTables } from './common'
-import { getUserById, getUsersByIssuerId, insertUserTx } from './users'
+import { maybeUpdatePublishedState, update as updateProfile } from './profiles'
+import { getUserById, getUserWithProfileById, getUsersByIssuerId, insertUserTx } from './users'
 
 const queries = {
   fetchTables,
   getUserById,
+  getUserWithProfileById,
   getUsersByIssuerId,
   insertUserTx,
+  updateProfile,
+  maybeUpdatePublishedState,
 }
 
 export const init =

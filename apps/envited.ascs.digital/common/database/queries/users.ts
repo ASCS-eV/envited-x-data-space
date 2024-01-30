@@ -5,12 +5,25 @@ import { PostgresJsQueryResultHKT } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import { isEmpty, prop, propOr } from 'ramda'
 
+import { Profile } from '../../types'
 import * as schema from '../schema'
-import { addressType, credentialType, issuer, role, user, usersToCredentialTypes, usersToRoles } from '../schema'
+import {
+  addressType,
+  credentialType,
+  issuer,
+  profile,
+  role,
+  user,
+  usersToCredentialTypes,
+  usersToRoles,
+} from '../schema'
 import { Credential, DatabaseConnection, Issuer, User } from '../types'
 
 export const getUserById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id))
+
+export const getUserWithProfileById = (db: DatabaseConnection) => async (id: string) =>
+  db.select().from(user).where(eq(user.id, id)).leftJoin(profile, eq(user.name, profile.name))
 
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.select().from(user).where(eq(user.issuerId, issuerId))
@@ -62,12 +75,27 @@ export const insertCredentialTypeTx =
     return tx.insert(usersToCredentialTypes).values({ userId, credentialTypeId }).onConflictDoNothing().returning()
   }
 
+export const insertCompanyProfileTx =
+  (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
+  async (partialProfile: Omit<Profile, 'id' | 'createdAt' | 'updatedAt'>) => {
+    return tx
+      .insert(profile)
+      .values({
+        ...partialProfile,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .onConflictDoNothing()
+      .returning()
+  }
+
 export const _txn =
   ({
     insertAddressTypeTx,
     insertIssuerTx,
     insertUsersToRolesTx,
     insertCredentialTypeTx,
+    insertCompanyProfileTx,
   }: {
     insertAddressTypeTx: (
       tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>,
@@ -99,6 +127,9 @@ export const _txn =
         credentialTypeId: string
       }[]
     >
+    insertCompanyProfileTx: (
+      tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>,
+    ) => (partialProfile: Omit<Profile, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Profile[]>
   }) =>
   (credential: Credential) =>
   async (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) => {
@@ -159,6 +190,15 @@ export const _txn =
 
       await Promise.all(insertCredentialTypeTxPromises)
 
+      await insertCompanyProfileTx(tx)({
+        name: credentialSubject.name,
+        streetAddress: credentialSubject.address.streetAddress,
+        postalCode: credentialSubject.address.postalCode,
+        addressLocality: credentialSubject.address.addressLocality,
+        addressCountry: credentialSubject.address.addressCountry,
+        isPublished: false,
+      })
+
       return newUser
     } catch (error) {
       console.log(error)
@@ -171,6 +211,7 @@ export const txn = _txn({
   insertIssuerTx,
   insertUsersToRolesTx,
   insertCredentialTypeTx,
+  insertCompanyProfileTx,
 })
 
 export const _insertUserTx =

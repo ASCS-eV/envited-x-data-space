@@ -1,4 +1,3 @@
-import { USER_CREDENTIAL } from '../../common/fixtures'
 import { Role, Session, User } from '../types'
 import * as SUT from './guards'
 
@@ -79,6 +78,27 @@ describe('common/guards', () => {
       const result = SUT.isPrincipal(session as Session)
 
       expect(result).toEqual(expected)
+    })
+  })
+
+  describe('isOwnProfile', () => {
+    it('should check if the profile to be updated is the profile of the logged in user', () => {
+      // when ... we want to check if the profile is owned by the logged in user
+      const user = {
+        id: 'PKH',
+        name: 'NAME',
+        profile: {
+          name: 'NAME',
+        },
+      } as any
+
+      const profile = {
+        name: 'NAME',
+      } as any
+      // then ... we should get the result as expected
+      const result = SUT.isOwnProfile(user)(profile)
+
+      expect(result).toEqual(true)
     })
   })
 })

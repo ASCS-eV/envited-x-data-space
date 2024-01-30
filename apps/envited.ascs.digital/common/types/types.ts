@@ -73,6 +73,26 @@ export interface User {
   vatId?: string
 }
 
+export interface Profile {
+  id?: string
+  name: string
+  description?: string | null
+  logo?: string | null
+  streetAddress?: string | null
+  postalCode?: string | null
+  addressLocality?: string | null
+  addressCountry?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  offerings?: unknown | null
+  isPublished?: boolean | null
+  createdAt?: Date | null
+  updatedAt?: Date | null
+}
+
 export interface Session {
   user: {
     pkh: string

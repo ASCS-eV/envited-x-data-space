@@ -15,6 +15,27 @@
       "when": 1706193086011,
       "tag": "0001_slippery_tusk",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1706540987496,
+      "tag": "0002_sticky_titanium_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1706540993101,
+      "tag": "0003_real_roulette",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1706620277155,
+      "tag": "0004_dear_scarlet_spider",
+      "breakpoints": true
     }
   ]
 }

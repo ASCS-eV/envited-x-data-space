@@ -12,6 +12,22 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve = {
+        ...config.resolve,
+        fallback: {
+          // fixes proxy-agent dependencies
+          net: false,
+          tls: false,
+          perf_hooks: false,
+          fs: false,
+        },
+      }
+    }
+
+    return config
+  },
 }
 
 const plugins = [

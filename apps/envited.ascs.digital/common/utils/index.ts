@@ -1,4 +1,5 @@
-export { ok, badRequest, noContent, notFound, internalServerError, unauthorized } from './utils'
+export { ok, badRequest, noContent, notFound, internalServerError, unauthorized } from './apiResponses'
+
 export {
   badRequest as badRequestError,
   internalServerError as internalServerErrorError,
@@ -6,3 +7,5 @@ export {
   unauthorized as unauthorizedError,
   error,
 } from './errors'
+
+export { extractIdFromCredential, extractIssuerIdFromCredential, extractTypeFromCredential } from './utils'

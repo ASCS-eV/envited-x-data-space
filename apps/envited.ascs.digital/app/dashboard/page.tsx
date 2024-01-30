@@ -1,5 +1,5 @@
 import { getServerSession } from '../../common/auth'
-import { getUserById } from '../../common/server'
+import { getUserById } from '../../common/serverActions'
 import { Dashboard } from '../../modules/Dashboard'
 import { User } from '../../modules/User'
 

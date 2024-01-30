@@ -20,7 +20,7 @@ export const _getUsersByIssuerId =
       }
 
       if (!isFederator(session) && !isPrincipal(session)) {
-        throw badRequestError()
+        throw badRequestError('Bad request')
       }
 
       const connection = await db()

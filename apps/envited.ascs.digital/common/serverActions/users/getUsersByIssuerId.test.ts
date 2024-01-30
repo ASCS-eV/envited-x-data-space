@@ -1,17 +1,7 @@
 import { Role } from '../../types'
 import * as SUT from './getUsersByIssuerId'
 
-const testCache = <T extends Function>(func: T) => func
-
-jest.mock('react', () => {
-  const originalModule = jest.requireActual('react')
-  return {
-    ...originalModule,
-    cache: testCache,
-  }
-})
-
-describe('common/server/users/getUsersByIssuerId', () => {
+describe('common/serverAction/users/getUsersByIssuerId', () => {
   it('should return a array of user as expected', async () => {
     // when ... we request a user by id
     // then ... it returns a user as expected

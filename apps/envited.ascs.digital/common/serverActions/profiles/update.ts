@@ -34,7 +34,7 @@ export const _update =
       }
 
       const [updatedProfile] = await connection.updateProfile(profile)
-      const [result] = await connection.maybeUpdatePublishedState(updatedProfile) 
+      const [result] = await connection.maybeUpdatePublishedState(updatedProfile)
       return result
     } catch (e) {
       console.log('error', e)

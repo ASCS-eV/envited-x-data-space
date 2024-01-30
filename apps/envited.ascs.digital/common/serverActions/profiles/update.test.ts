@@ -26,8 +26,8 @@ describe('serverActions/profiles/update', () => {
 
       const dbStub = jest.fn().mockResolvedValue({
         getUserWithProfileById: jest.fn().mockResolvedValue([user]),
-        updateProfile: jest.fn().mockResolvedValue(newProfile),
-        maybeUpdatePublishedState: jest.fn().mockResolvedValue(newProfile),
+        updateProfile: jest.fn().mockResolvedValue([newProfile]),
+        maybeUpdatePublishedState: jest.fn().mockResolvedValue([newProfile]),
       })
 
       const result = await SUT._update({ db: dbStub, getServerSession: getServerSessionStub })(newProfile)

@@ -24,6 +24,7 @@ export interface AscsMember extends AscsUser {
   url: string
   articlesOfAssociation: string
   contributionRules: string
+  vatId: string
 }
 
 export interface AscsUser {

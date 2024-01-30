@@ -1,7 +1,7 @@
 import { USER_CREDENTIAL } from '../fixtures'
 import * as SUT from './utils'
 
-describe('api/utils', () => {
+describe('common/utils', () => {
   describe('extractIdFromCredential', () => {
     it('should return the id from the credentialSubject', () => {
       // when ... we want to get the id from the credential

@@ -65,6 +65,7 @@ export interface User {
   issuerId: StringChange
   issuanceDate: string
   expirationDate: string
+  isActive: boolean
   createdAt: string
   updatedAt: string
 }

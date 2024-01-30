@@ -21,6 +21,7 @@ export const user = pgTable('user', {
   addressTypeId: uuid('address_type_id').references(() => addressType.id),
   issuanceDate: timestamp('issuance_date'),
   expirationDate: timestamp('expiration_date'),
+  isActive: boolean('is_active').default(true),
   createdAt: timestamp('created_at'),
   updatedAt: timestamp('updated_at'),
 })

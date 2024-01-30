@@ -43,6 +43,13 @@
       "when": 1706620270271,
       "tag": "0005_solid_charles_xavier",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1706625704993,
+      "tag": "0006_complete_caretaker",
+      "breakpoints": true
     }
   ]
 }

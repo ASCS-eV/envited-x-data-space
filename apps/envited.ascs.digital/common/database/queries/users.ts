@@ -162,6 +162,7 @@ export const _txn =
           issuerId: id,
           issuanceDate: new Date(issuanceDate),
           expirationDate: new Date(expirationDate),
+          isActive: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         })

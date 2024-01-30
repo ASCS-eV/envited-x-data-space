@@ -26,7 +26,7 @@ export const _deleteUserById =
         throw badRequestError('Incorrect permissions')
       }
 
-      const [deletedUser] = await connection.deleteUserById(user.id, user.issuerId)
+      const [deletedUser] = await connection.deleteUserById(user.id)
 
       return deletedUser
     } catch (e) {

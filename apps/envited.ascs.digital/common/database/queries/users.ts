@@ -1,4 +1,4 @@
-import { ExtractTablesWithRelations, and, eq, inArray } from 'drizzle-orm'
+import { ExtractTablesWithRelations, eq, inArray } from 'drizzle-orm'
 import { PgTransaction } from 'drizzle-orm/pg-core'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { PostgresJsQueryResultHKT } from 'drizzle-orm/postgres-js'
@@ -19,11 +19,11 @@ import {
 } from '../schema'
 import { Credential, DatabaseConnection, Issuer, User } from '../types'
 
-export const deleteUserById = (db: DatabaseConnection) => async (id: string, issuerId: string) =>
+export const deleteUserById = (db: DatabaseConnection) => async (id: string) =>
   db
     .update(user)
     .set({ isActive: false, updatedAt: new Date() })
-    .where(and(eq(user.id, id), eq(user.issuerId, issuerId)))
+    .where(eq(user.id, id))
     .returning({ updatedId: user.id })
 
 export const getUserById = (db: DatabaseConnection) => async (id: string) =>

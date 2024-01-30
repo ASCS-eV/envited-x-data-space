@@ -22,7 +22,7 @@ import { Credential, DatabaseConnection, Issuer, User } from '../types'
 export const deleteUserById = (db: DatabaseConnection) => async (id: string, issuerId: string) =>
   db
     .update(user)
-    .set({ isActive: false })
+    .set({ isActive: false, updatedAt: new Date() })
     .where(and(eq(user.id, id), eq(user.issuerId, issuerId)))
     .returning({ updatedId: user.id })
 

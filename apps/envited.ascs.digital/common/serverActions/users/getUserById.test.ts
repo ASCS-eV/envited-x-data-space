@@ -1,16 +1,6 @@
 import * as SUT from './getUserById'
 
-const testCache = <T extends Function>(func: T) => func
-
-jest.mock('react', () => {
-  const originalModule = jest.requireActual('react')
-  return {
-    ...originalModule,
-    cache: testCache,
-  }
-})
-
-describe('common/server/users/getUserById', () => {
+describe('common/serverActions/users/getUserById', () => {
   it('should return a user as expected', async () => {
     // when ... we request a user by id
     // then ... it returns a user as expected

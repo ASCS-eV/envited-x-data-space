@@ -12,4 +12,3 @@ jest.mock('react', () => {
     cache: testCache,
   }
 })
-

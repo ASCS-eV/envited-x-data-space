@@ -1,7 +1,7 @@
 import { Role } from '../../types'
 import * as SUT from './getUsersByIssuerId'
 
-describe('common/server/users/getUsersByIssuerId', () => {
+describe('common/serverAction/users/getUsersByIssuerId', () => {
   it('should return a array of user as expected', async () => {
     // when ... we request a user by id
     // then ... it returns a user as expected

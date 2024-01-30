@@ -115,6 +115,7 @@ export const profile = pgTable('profile', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name')
     .unique()
+    .notNull()
     .references(() => user.name),
   description: text('description'),
   logo: text('logo'),

@@ -34,12 +34,12 @@ export const authOptions: NextAuthOptions = {
 
         return match(pkh)
           .with('tz1USER', () => ({
-            id: '1',
+            id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
             pkh: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
             role: Role.user,
           }))
           .with('tz1PRINCIPAL', () => ({
-            id: '1',
+            id: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
             pkh: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
             role: Role.principal,
           }))

@@ -7,7 +7,7 @@ import React, { FC, useState } from 'react'
 import { signIn } from '../../common/auth'
 import { INVALID_USER_CREDENTIAL, MEMBER_CREDENTIAL, USER_CREDENTIAL } from '../../common/fixtures'
 import { useTranslation } from '../../common/i18n'
-import { insertUser } from '../../common/server/users'
+import { insertUser, updateProfile } from '../../common/serverActions'
 
 export const HeroHeader: FC = () => {
   const { t } = useTranslation('HeroHeader')
@@ -45,6 +45,14 @@ export const HeroHeader: FC = () => {
     }
   }
 
+  const update = async () => {
+    try {
+      await updateProfile({ name: 'Testcompany GmbH', description: 'test description' })
+    } catch (error: any) {
+      setMessage(error.message)
+    }
+  }
+
   return (
     <div className="mx-auto max-w-6xl">
       {searchParams.has('error') ? (
@@ -69,6 +77,9 @@ export const HeroHeader: FC = () => {
           </Button>
           <Button onClick={() => addInvalidUser()}>
             <span>Add Invalid User</span>
+          </Button>
+          <Button onClick={() => update()}>
+            <span>Update Profile</span>
           </Button>
         </GridRow>
       </Grid>

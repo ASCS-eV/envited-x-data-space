@@ -1,7 +1,7 @@
-import { CredentialType } from "../../types"
+import { CredentialType } from '../../types'
 import * as SUT from './insert'
 
-describe('common/server/users/insert', () => {
+describe('common/serverActions/users/insert', () => {
   it('should insert a user as expected', async () => {
     // when ... we insert a user
     // then ... it returns a user as expected
@@ -11,12 +11,10 @@ describe('common/server/users/insert', () => {
         id: 'USER_DID',
         type: CredentialType.AscsUser,
       }),
-      getUserById: jest.fn()
-        .mockResolvedValueOnce({})
-        .mockResolvedValueOnce({
-          id: 'USER_DID',
-          type: CredentialType.AscsMember,
-        }),
+      getUserById: jest.fn().mockResolvedValueOnce({}).mockResolvedValueOnce({
+        id: 'USER_DID',
+        type: CredentialType.AscsMember,
+      }),
     }) as any
 
     const credential = {
@@ -26,7 +24,7 @@ describe('common/server/users/insert', () => {
       },
       issuer: {
         id: 'ISSUER_DID',
-      }
+      },
     } as any
 
     const result = await SUT._insert({ db: dbStub })(credential)
@@ -49,7 +47,8 @@ describe('common/server/users/insert', () => {
         id: 'USER_DID',
         type: CredentialType.AscsUser,
       }),
-      getUserById: jest.fn()
+      getUserById: jest
+        .fn()
         .mockResolvedValueOnce({
           id: 'USER_DID',
           type: CredentialType.AscsUser,
@@ -67,7 +66,7 @@ describe('common/server/users/insert', () => {
       },
       issuer: {
         id: 'ISSUER_DID',
-      }
+      },
     } as any
 
     await expect(() => SUT._insert({ db: dbStub })(credential)).rejects.toThrow()
@@ -82,9 +81,7 @@ describe('common/server/users/insert', () => {
         id: 'USER_DID',
         type: CredentialType.AscsUser,
       }),
-      getUserById: jest.fn()
-        .mockResolvedValueOnce({})
-        .mockResolvedValueOnce({}),
+      getUserById: jest.fn().mockResolvedValueOnce({}).mockResolvedValueOnce({}),
     }) as any
 
     const credential = {
@@ -94,7 +91,7 @@ describe('common/server/users/insert', () => {
       },
       issuer: {
         id: 'ISSUER_DID',
-      }
+      },
     } as any
 
     await expect(() => SUT._insert({ db: dbStub })(credential)).rejects.toThrow()

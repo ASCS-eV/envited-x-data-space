@@ -74,8 +74,8 @@ export interface User {
 }
 
 export interface Profile {
-  id: string
-  name?: string | null
+  id?: string
+  name: string
   description?: string | null
   logo?: string | null
   streetAddress?: string | null
@@ -88,9 +88,9 @@ export interface Profile {
   email?: string | null
   website?: string | null
   offerings?: unknown | null
-  isPublished: boolean | null
-  createdAt?: string | Date | null
-  updatedAt?: string | Date | null
+  isPublished?: boolean | null
+  createdAt?: Date | null
+  updatedAt?: Date | null
 }
 
 export interface Session {

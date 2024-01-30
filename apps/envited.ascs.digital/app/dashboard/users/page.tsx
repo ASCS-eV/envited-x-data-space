@@ -1,4 +1,4 @@
-import { getUsersByIssuerId } from '../../../common/server'
+import { getUsersByIssuerId } from '../../../common/serverActions'
 import { Users } from '../../../modules/Users'
 
 export default async function Index() {

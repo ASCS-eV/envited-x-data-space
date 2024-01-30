@@ -22,6 +22,9 @@ import { Credential, DatabaseConnection, Issuer, User } from '../types'
 export const getUserById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id))
 
+export const getUserWithProfileById = (db: DatabaseConnection) => async (id: string) =>
+  db.select().from(user).where(eq(user.id, id)).leftJoin(profile, eq(user.name, profile.name))
+
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.select().from(user).where(eq(user.issuerId, issuerId))
 

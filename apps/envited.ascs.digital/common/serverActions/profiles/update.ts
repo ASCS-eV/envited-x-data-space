@@ -11,7 +11,7 @@ import { badRequestError, error, unauthorizedError } from '../../utils'
 
 export const _update =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
-  async (profile: Profile) => {
+  async (profile: Partial<Profile>) => {
     try {
       const session = await getServerSession()
       if (isNil(session)) {

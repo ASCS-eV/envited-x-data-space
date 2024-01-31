@@ -6,7 +6,7 @@ import postgres from 'postgres'
 import { isEmpty, prop, propOr } from 'ramda'
 
 import { Profile } from '../../types'
-import { slugify } from '../../utils/utils'
+import { slugify } from '../../utils'
 import * as schema from '../schema'
 import {
   addressType,

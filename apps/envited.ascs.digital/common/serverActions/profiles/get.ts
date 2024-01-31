@@ -15,7 +15,7 @@ export const _get =
   async (slug: string) => {
     try {
       if (isNil(slug) || isEmpty(slug)) {
-        throw badRequestError('Missing profile id')
+        throw badRequestError('Missing slug')
       }
 
       const session = await getServerSession()

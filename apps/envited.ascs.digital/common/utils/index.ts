@@ -8,4 +8,4 @@ export {
   error,
 } from './errors'
 
-export { extractIdFromCredential, extractIssuerIdFromCredential, extractTypeFromCredential } from './utils'
+export { extractIdFromCredential, extractIssuerIdFromCredential, extractTypeFromCredential, slugify } from './utils'

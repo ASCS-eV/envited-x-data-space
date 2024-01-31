@@ -1,8 +1,7 @@
 import { getProfile } from '../../../common/serverActions'
 import { Header } from '../../../modules/Header'
 
-export default async function Index({ params }: { params: { slug: string } }) {
-  const { slug } = params
+export default async function Index({ params: { slug } }: { params: { slug: string } }) {
   const profile = await getProfile(slug)
 
   return (

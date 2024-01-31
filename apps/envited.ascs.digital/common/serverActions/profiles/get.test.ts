@@ -34,7 +34,7 @@ describe('serverActions/profiles/get', () => {
       expect(result).toEqual({
         name: 'USER_NAME',
         description: 'USER_DESCRIPTION',
-        principalName: 'USER_PRINCIPAL_NAME'
+        principalName: 'USER_PRINCIPAL_NAME',
       })
       expect(getServerSessionStub).toHaveBeenCalledWith()
       expect(db.getProfileById).toHaveBeenCalledWith(id)

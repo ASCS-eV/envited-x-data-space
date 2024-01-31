@@ -1,14 +1,15 @@
 'use server'
 
-import { error } from 'console';
+import { error } from 'console'
+import { isEmpty, isNil, omit } from 'ramda'
+
 import { getServerSession } from '../../auth'
+import { RESTRICTED_PROFILE_FIELDS } from '../../constants'
 import { db } from '../../database/queries'
-import { Database } from '../../database/types';
-import { Session } from '../../types';
-import { isEmpty, isNil, omit } from 'ramda';
-import { RESTRICTED_PROFILE_FIELDS } from '../../constants';
-import { badRequestError, notFoundError } from '../../utils';
-import { isOwnProfile, isUsersCompanyProfile } from '../../guards';
+import { Database } from '../../database/types'
+import { isOwnProfile, isUsersCompanyProfile } from '../../guards'
+import { Session } from '../../types'
+import { badRequestError, notFoundError } from '../../utils'
 
 export const _get =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
@@ -32,7 +33,7 @@ export const _get =
         if (isOwnProfile(user)(profile)) {
           return profile
         }
-        
+
         const principal = await connection.getPrincipalByUserId(user.id)
         if (isUsersCompanyProfile(principal)(profile)) {
           return profile

@@ -21,7 +21,7 @@ export const Users: FC<UsersProps> = ({ users }) => {
     try {
       await deleteUser(id)
       success('User is deactivated')
-    } catch(e) {
+    } catch (e) {
       error('Something went wrong')
     }
   }

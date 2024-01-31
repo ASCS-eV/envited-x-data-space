@@ -2,10 +2,11 @@
 
 import { Card, Heading, Table, TableBody, TableCell, TableHeader, TableRow } from '@envited-marketplace/design-system'
 import { TrashIcon } from '@heroicons/react/24/outline'
-import { map } from 'ramda'
+import { has, map } from 'ramda'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
+import { useNotification } from '../../common/notifications'
 import { User } from '../../common/types/types'
 import { deleteUser } from './Users.actions'
 
@@ -14,8 +15,17 @@ interface UsersProps {
 }
 export const Users: FC<UsersProps> = ({ users }) => {
   const { t } = useTranslation('Users')
+  const { error, success } = useNotification()
 
-  const deleteUserWithId = (id: string) => deleteUser.bind(null, id)
+  const deleteUserWithId = (id: string) => async () => {
+    const result = await deleteUser(id)
+
+    if (has('error')(result)) {
+      return error('Something went wrong')
+    }
+
+    success('User is deactivated')
+  }
 
   return (
     <Card>

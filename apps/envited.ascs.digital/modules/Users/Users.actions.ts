@@ -13,8 +13,6 @@ export async function deleteUser(id: string) {
   } catch (e) {
     console.log('error', e)
 
-    return {
-      error: 'Something went wrong',
-    }
+    throw error()
   }
 }

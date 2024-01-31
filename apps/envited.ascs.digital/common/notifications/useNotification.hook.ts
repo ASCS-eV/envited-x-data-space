@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 
-export const notification = (notify: typeof toast) => {
-  const info = (content: string) => notify(content)
+export const notification = (notify: typeof toast) => () => {
+  const info = (content: string) => notify.info(content)
 
   const success = (content: string) => notify.success(content)
 
@@ -12,4 +12,4 @@ export const notification = (notify: typeof toast) => {
   return { info, success, error, warning }
 }
 
-export const useNotification = () => notification(toast)
+export const useNotification = notification(toast)

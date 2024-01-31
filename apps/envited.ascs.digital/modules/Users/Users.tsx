@@ -18,13 +18,12 @@ export const Users: FC<UsersProps> = ({ users }) => {
   const { error, success } = useNotification()
 
   const deleteUserWithId = (id: string) => async () => {
-    const result = await deleteUser(id)
-
-    if (has('error')(result)) {
-      return error('Something went wrong')
+    try {
+      await deleteUser(id)
+      success('User is deactivated')
+    } catch(e) {
+      error('Something went wrong')
     }
-
-    success('User is deactivated')
   }
 
   return (

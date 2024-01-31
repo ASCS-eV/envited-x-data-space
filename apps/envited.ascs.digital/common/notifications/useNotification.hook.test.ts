@@ -1,10 +1,13 @@
 /**
  * @jest-environment node
  */
+import { toast } from 'react-toastify'
+
 import { notification } from './useNotification.hook'
 
 jest.mock('react-toastify', () => ({
   toast: {
+    info: jest.fn().mockImplementation(x => x),
     success: jest.fn().mockImplementation(x => x),
     error: jest.fn().mockImplementation(x => x),
     warning: jest.fn().mockImplementation(x => x),
@@ -14,10 +17,7 @@ jest.mock('react-toastify', () => ({
 describe('common/notification', () => {
   describe('info', () => {
     it('should return as expected', async () => {
-      const toastifyStub = jest.fn().mockImplementation(x => x)
-
-      const { info } = notification(toastifyStub)
-
+      const { info } = notification(toast)()
       const result = info('INFO_TOAST')
 
       // when ... we want to get the notification
@@ -28,14 +28,7 @@ describe('common/notification', () => {
 
   describe('success', () => {
     it('should return as expected', async () => {
-      const toastifyStub = {
-        success: jest.fn().mockImplementation(x => x),
-        error: jest.fn().mockImplementation(x => x),
-        warning: jest.fn().mockImplementation(x => x),
-      }
-
-      const { success } = notification(toastifyStub)
-
+      const { success } = notification(toast)()
       const result = success('SUCCESS_TOAST')
 
       // when ... we want to get the notification
@@ -46,14 +39,7 @@ describe('common/notification', () => {
 
   describe('warning', () => {
     it('should return as expected', async () => {
-      const toastifyStub = {
-        success: jest.fn().mockImplementation(x => x),
-        error: jest.fn().mockImplementation(x => x),
-        warning: jest.fn().mockImplementation(x => x),
-      }
-
-      const { warning } = notification(toastifyStub)
-
+      const { warning } = notification(toast)()
       const result = warning('WARNING_TOAST')
 
       // when ... we want to get the notification
@@ -64,14 +50,7 @@ describe('common/notification', () => {
 
   describe('error', () => {
     it('should return as expected', async () => {
-      const toastifyStub = {
-        success: jest.fn().mockImplementation(x => x),
-        error: jest.fn().mockImplementation(x => x),
-        warning: jest.fn().mockImplementation(x => x),
-      }
-
-      const { error } = notification(toastifyStub)
-
+      const { error } = notification(toast)()
       const result = error('ERROR_TOAST')
 
       // when ... we want to get the notification

@@ -3,5 +3,8 @@
   "[Heading] name": "Name",
   "[Heading] email": "Email",
   "[Heading] did": "DID",
-  "[Heading] actions": "Actions"
+  "[Heading] status": "Status",
+  "[Button] deactivate": "Deactivate",
+  "[Label] active": "Active",
+  "[Label] deactive": "Deactive"
 }

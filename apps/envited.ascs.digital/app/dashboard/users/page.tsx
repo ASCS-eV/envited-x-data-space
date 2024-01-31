@@ -6,3 +6,5 @@ export default async function Index() {
 
   return <Users users={users} />
 }
+
+export const dynamic = 'force-dynamic'

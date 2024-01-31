@@ -12,6 +12,7 @@ export async function deleteUser(id: string) {
     revalidatePath('/dashboard/users')
   } catch (e) {
     console.log('error', e)
+
     throw error()
   }
 }

@@ -77,6 +77,7 @@ export interface User {
 export interface Profile {
   id?: string
   name: string
+  slug: string
   description?: string | null
   logo?: string | null
   streetAddress?: string | null

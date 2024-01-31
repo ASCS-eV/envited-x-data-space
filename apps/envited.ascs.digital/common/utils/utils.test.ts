@@ -31,4 +31,14 @@ describe('common/utils', () => {
       expect(result).toEqual('AscsUser')
     })
   })
+
+  describe('slugify', () => {
+    it('should create a slug of the string as expected', () => {
+      // when ... we want to create a slug of the string
+      // then ... we should get the slug as expected
+      const result = SUT.slugify('This is a test')
+
+      expect(result).toEqual('this-is-a-test')
+    })
+  })
 })

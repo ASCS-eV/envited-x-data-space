@@ -43,6 +43,13 @@
       "when": 1706625722525,
       "tag": "0005_sour_king_cobra",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1706716757110,
+      "tag": "0006_fine_maverick",
+      "breakpoints": true
     }
   ]
 }

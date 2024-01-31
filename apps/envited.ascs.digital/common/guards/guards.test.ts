@@ -101,4 +101,25 @@ describe('common/guards', () => {
       expect(result).toEqual(true)
     })
   })
+
+  describe('isUsersCompanyProfile', () => {
+    it('should check if the requested profile is the profile of the logged in users company', () => {
+      // when ... we want to check if the requested profile is owned by the logged in users company
+      // then ... we should get the result as expected
+      const principal = {
+        id: 'PKH',
+        name: 'NAME',
+        profile: {
+          name: 'NAME',
+        },
+      } as any
+
+      const profile = {
+        name: 'NAME',
+      } as any
+      const result = SUT.isUsersCompanyProfile(principal)(profile)
+
+      expect(result).toEqual(true)
+    })
+  })
 })

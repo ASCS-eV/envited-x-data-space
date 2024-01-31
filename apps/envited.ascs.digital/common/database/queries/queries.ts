@@ -5,8 +5,15 @@ import { fromPairs, map, pipe, toPairs } from 'ramda'
 import { connectDb } from '../database'
 import * as schema from '../schema'
 import { fetchTables } from './common'
-import { maybeUpdatePublishedState, update as updateProfile } from './profiles'
-import { deleteUserById, getUserById, getUserWithProfileById, getUsersByIssuerId, insertUserTx } from './users'
+import { getProfileBySlug, maybeUpdatePublishedState, update as updateProfile } from './profiles'
+import {
+  deleteUserById,
+  getUserById,
+  getUserByIssuerId,
+  getUserWithProfileById,
+  getUsersByIssuerId,
+  insertUserTx,
+} from './users'
 
 const queries = {
   deleteUserById,
@@ -17,6 +24,8 @@ const queries = {
   insertUserTx,
   updateProfile,
   maybeUpdatePublishedState,
+  getProfileBySlug,
+  getUserByIssuerId,
 }
 
 export const init =

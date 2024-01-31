@@ -6,5 +6,5 @@
   "[Heading] status": "Status",
   "[Button] deactivate": "Deactivate",
   "[Label] active": "Active",
-  "[Label] deactive": "Deactive"
+  "[Label] inactive": "Inactive"
 }

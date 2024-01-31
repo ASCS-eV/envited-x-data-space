@@ -52,7 +52,7 @@ export const Users: FC<UsersProps> = ({ users }) => {
                       : 'bg-red-100 text-red-600 dark:bg-red-600'
                   } dark:text-white pl-1 pr-1.5 py-0.5 text-xs text-center rounded-xl`}
                 >
-                  {t(isActive ? '[Label] active' : '[Label] deactive')}
+                  {t(isActive ? '[Label] active' : '[Label] inactive')}
                 </div>
               </TableCell>
               <TableCell extraClasses="pl-3">

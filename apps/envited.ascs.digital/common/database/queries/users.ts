@@ -19,6 +19,13 @@ import {
 } from '../schema'
 import { Credential, DatabaseConnection, Issuer, User } from '../types'
 
+export const deleteUserById = (db: DatabaseConnection) => async (id: string) =>
+  db
+    .update(user)
+    .set({ isActive: false, updatedAt: new Date() })
+    .where(eq(user.id, id))
+    .returning({ updatedId: user.id })
+
 export const getUserById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id))
 
@@ -162,6 +169,7 @@ export const _txn =
           issuerId: id,
           issuanceDate: new Date(issuanceDate),
           expirationDate: new Date(expirationDate),
+          isActive: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         })

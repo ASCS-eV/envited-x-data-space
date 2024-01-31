@@ -241,6 +241,7 @@ describe('common/database/users', () => {
         streetAddress: 'Teststraße 1',
         updatedAt: new Date(),
         vatId: 'vatId',
+        isActive: true,
       })
       expect(transaction).toEqual({
         id: 'USER_ID',

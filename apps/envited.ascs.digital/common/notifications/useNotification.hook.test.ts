@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { useNotification } from './useNotification.hook'
+import { notification } from './useNotification.hook'
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -14,13 +14,14 @@ jest.mock('react-toastify', () => ({
 describe('common/notification', () => {
   describe('info', () => {
     it('should return as expected', async () => {
-      const { info } = useNotification()
+      const toastifyStub = jest.fn().mockImplementation(x => x)
+
+      const { info } = notification(toastifyStub)
 
       const result = info('INFO_TOAST')
 
       // when ... we want to get the notification
       // then ... it returns the content as expected
-      expect(result).toHaveBeenCalledWith()
       expect(result).toEqual('INFO_TOAST')
     })
   })
@@ -33,13 +34,12 @@ describe('common/notification', () => {
         warning: jest.fn().mockImplementation(x => x),
       }
 
-      const { success } = useNotification()
+      const { success } = notification(toastifyStub)
 
       const result = success('SUCCESS_TOAST')
 
       // when ... we want to get the notification
       // then ... it returns the content as expected
-
       expect(result).toEqual('SUCCESS_TOAST')
     })
   })
@@ -52,7 +52,7 @@ describe('common/notification', () => {
         warning: jest.fn().mockImplementation(x => x),
       }
 
-      const { warning } = useNotification()
+      const { warning } = notification(toastifyStub)
 
       const result = warning('WARNING_TOAST')
 
@@ -70,7 +70,7 @@ describe('common/notification', () => {
         warning: jest.fn().mockImplementation(x => x),
       }
 
-      const { error } = useNotification()
+      const { error } = notification(toastifyStub)
 
       const result = error('ERROR_TOAST')
 

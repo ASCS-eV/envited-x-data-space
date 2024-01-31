@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-export const NotifiactionContainer: FC = () => (
+export const NotificationContainer: FC = () => (
   <ToastContainer
     toastClassName="dark:bg-gray-900 dark:text-gray-300"
     closeButton={({ closeToast }) => (

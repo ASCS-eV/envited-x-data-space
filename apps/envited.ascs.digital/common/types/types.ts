@@ -71,6 +71,7 @@ export interface User {
   streetAddress: string
   updatedAt: string
   vatId?: string
+  isActive: boolean
 }
 
 export interface Profile {

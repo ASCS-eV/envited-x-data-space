@@ -6,9 +6,10 @@ import { connectDb } from '../database'
 import * as schema from '../schema'
 import { fetchTables } from './common'
 import { maybeUpdatePublishedState, update as updateProfile } from './profiles'
-import { getUserById, getUserWithProfileById, getUsersByIssuerId, insertUserTx } from './users'
+import { deleteUserById, getUserById, getUserWithProfileById, getUsersByIssuerId, insertUserTx } from './users'
 
 const queries = {
+  deleteUserById,
   fetchTables,
   getUserById,
   getUserWithProfileById,

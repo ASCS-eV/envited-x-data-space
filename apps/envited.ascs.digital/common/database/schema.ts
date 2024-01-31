@@ -118,6 +118,7 @@ export const profile = pgTable('profile', {
     .unique()
     .notNull()
     .references(() => user.name),
+  slug: text('slug').unique().notNull(),
   description: text('description'),
   logo: text('logo'),
   streetAddress: text('street_address'),

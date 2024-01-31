@@ -6,6 +6,7 @@ import postgres from 'postgres'
 import { isEmpty, prop, propOr } from 'ramda'
 
 import { Profile } from '../../types'
+import { slugify } from '../../utils/utils'
 import * as schema from '../schema'
 import {
   addressType,
@@ -31,6 +32,9 @@ export const getUserById = (db: DatabaseConnection) => async (id: string) =>
 
 export const getUserWithProfileById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id)).leftJoin(profile, eq(user.name, profile.name))
+
+export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
+  db.select().from(user).where(eq(user.id, issuerId))
 
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.select().from(user).where(eq(user.issuerId, issuerId))
@@ -200,6 +204,7 @@ export const _txn =
 
       await insertCompanyProfileTx(tx)({
         name: credentialSubject.name,
+        slug: slugify(credentialSubject.name),
         streetAddress: credentialSubject.address.streetAddress,
         postalCode: credentialSubject.address.postalCode,
         addressLocality: credentialSubject.address.addressLocality,

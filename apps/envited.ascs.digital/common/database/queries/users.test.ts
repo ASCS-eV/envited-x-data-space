@@ -144,12 +144,14 @@ describe('common/database/users', () => {
 
       const result = await SUT.insertCompanyProfileTx(tx)({
         name: 'NAME',
+        slug: 'name',
         isPublished: false,
       })
 
       expect(tx.insert).toHaveBeenCalledWith(profile)
       expect(tx.insert().values).toHaveBeenCalledWith({
         name: 'NAME',
+        slug: 'name',
         isPublished: false,
         createdAt: new Date(),
         updatedAt: new Date(),

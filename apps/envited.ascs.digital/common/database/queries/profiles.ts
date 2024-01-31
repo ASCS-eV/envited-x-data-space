@@ -18,3 +18,6 @@ export const maybeUpdatePublishedState = (db: DatabaseConnection) => async (data
 
   return db.update(profile).set({ isPublished, updatedAt: new Date() }).where(eq(profile.name, data.name)).returning()
 }
+
+export const getProfileBySlug = (db: DatabaseConnection) => async (slug: string) =>
+  db.select().from(profile).where(eq(profile.slug, slug))

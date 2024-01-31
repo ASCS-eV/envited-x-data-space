@@ -1,6 +1,5 @@
 'use server'
 
-import { error } from 'console'
 import { isEmpty, isNil, omit } from 'ramda'
 
 import { getServerSession } from '../../auth'
@@ -9,32 +8,32 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { isOwnProfile, isUsersCompanyProfile } from '../../guards'
 import { Session } from '../../types'
-import { badRequestError, notFoundError } from '../../utils'
+import { badRequestError, error, notFoundError } from '../../utils'
 
 export const _get =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
-  async (id: string) => {
+  async (slug: string) => {
     try {
-      if (isNil(id) || isEmpty(id)) {
+      if (isNil(slug) || isEmpty(slug)) {
         throw badRequestError('Missing profile id')
       }
 
       const session = await getServerSession()
       const connection = await db()
-      const profile = await connection.getProfileById(id)
+      const [profile] = await connection.getProfileBySlug(slug)
 
       if (isNil(profile) || isEmpty(profile)) {
         throw notFoundError()
       }
 
       if (!isNil(session)) {
-        const user = await connection.getUserById(session.user.id)
+        const [user] = await connection.getUserById(session.user.id)
 
         if (isOwnProfile(user)(profile)) {
           return profile
         }
 
-        const principal = await connection.getPrincipalByUserId(user.id)
+        const [principal] = await connection.getUserByIssuerId(user.issuerId)
         if (isUsersCompanyProfile(principal)(profile)) {
           return profile
         }

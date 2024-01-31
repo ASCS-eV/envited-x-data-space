@@ -50,6 +50,20 @@
       "when": 1706625704993,
       "tag": "0006_complete_caretaker",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1706714023800,
+      "tag": "0007_calm_micromacro",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1706714069769,
+      "tag": "0008_goofy_scarlet_witch",
+      "breakpoints": true
     }
   ]
 }

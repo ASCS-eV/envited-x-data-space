@@ -7,6 +7,7 @@ import React, { FC, useState } from 'react'
 import { signIn } from '../../common/auth'
 import { INVALID_USER_CREDENTIAL, MEMBER_CREDENTIAL, USER_CREDENTIAL } from '../../common/fixtures'
 import { useTranslation } from '../../common/i18n'
+import { useNotification } from '../../common/notifications'
 import { insertUser, updateProfile } from '../../common/serverActions'
 
 export const HeroHeader: FC = () => {
@@ -14,15 +15,19 @@ export const HeroHeader: FC = () => {
   const searchParams = useSearchParams()
   const [message, setMessage] = useState('')
 
+  const { success, error } = useNotification()
+
   const addPrincipal = async () => {
     try {
       const user = await insertUser(MEMBER_CREDENTIAL)
 
       if (user) {
         setMessage(`Added ${user.id} as Principal`)
+        success('SUCCESS')
       }
-    } catch (error) {
-      console.log(error)
+    } catch (e) {
+      console.log('error', e)
+      error('Something went wrong')
     }
   }
 

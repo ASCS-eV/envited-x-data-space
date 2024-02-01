@@ -1,3 +1,4 @@
+import { ERRORS } from '../../constants'
 import { Role } from '../../types'
 import * as SUT from './getUsersByIssuerId'
 
@@ -29,8 +30,11 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getUsersByIssuerId: jest.fn().mockResolvedValue(user),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    const result = await SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub })()
+    const result = await SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })()
     expect(result).toEqual(user)
   })
 
@@ -55,10 +59,14 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getUsersByIssuerId: jest.fn().mockResolvedValue(user),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    await expect(SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub })()).rejects.toThrow(
-      'Something went wrong',
-    )
+    await expect(
+      SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'Unauthorized', name: 'UnauthorizedError' })
   })
 
   it('should throw because requester is not allowed to get this resource', async () => {
@@ -86,9 +94,13 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getUsersByIssuerId: jest.fn().mockResolvedValue(user),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    await expect(SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub })()).rejects.toThrow(
-      'Something went wrong',
-    )
+    await expect(
+      SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'Incorrect role', name: 'ForbiddenError' })
   })
 })

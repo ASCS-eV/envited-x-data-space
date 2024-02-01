@@ -1,3 +1,4 @@
+import { ERRORS } from '../../constants'
 import * as SUT from './getUserById'
 
 describe('common/serverActions/users/getUserById', () => {
@@ -23,8 +24,13 @@ describe('common/serverActions/users/getUserById', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue([user]),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    const result = await SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')
+    const result = await SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
+      'USER_ID',
+    )
     expect(result).toEqual(user)
   })
 
@@ -46,10 +52,14 @@ describe('common/serverActions/users/getUserById', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue([user]),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    await expect(SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')).rejects.toThrow(
-      'Something went wrong',
-    )
+    await expect(
+      SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_ID'),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'Unauthorized', name: 'UnauthorizedError' })
   })
 
   it('should throw because requester is not allowed to get this resource', async () => {
@@ -75,9 +85,13 @@ describe('common/serverActions/users/getUserById', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue([user]),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    await expect(SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')).rejects.toThrow(
-      'Something went wrong',
-    )
+    await expect(
+      SUT._getUserById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_ID'),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'Not allowed to get this resource', name: 'ForbiddenError' })
   })
 })

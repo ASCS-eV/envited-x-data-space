@@ -1,3 +1,4 @@
+import { ERRORS } from '../../constants'
 import { Role } from '../../types'
 import * as SUT from './update'
 
@@ -29,8 +30,11 @@ describe('serverActions/profiles/update', () => {
         updateProfile: jest.fn().mockResolvedValue([newProfile]),
         maybeUpdatePublishedState: jest.fn().mockResolvedValue([newProfile]),
       })
+      const logStub = {
+        error: jest.fn(),
+      } as any
 
-      const result = await SUT._update({ db: dbStub, getServerSession: getServerSessionStub })(newProfile)
+      const result = await SUT._update({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(newProfile)
       const db = await dbStub()
       expect(result).toEqual(newProfile)
       expect(db.getUserWithProfileById).toHaveBeenCalledWith('USER_PKH')
@@ -58,10 +62,14 @@ describe('serverActions/profiles/update', () => {
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
       updateProfile: jest.fn().mockResolvedValue(newProfile),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    await expect(() =>
-      SUT._update({ db: dbStub, getServerSession: getServerSessionStub })(newProfile),
-    ).rejects.toThrow()
+    await expect(
+      SUT._update({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(newProfile),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'Unauthorized', name: 'UnauthorizedError' })
   })
 
   it('should throw with incorrect role', async () => {
@@ -88,10 +96,14 @@ describe('serverActions/profiles/update', () => {
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
       updateProfile: jest.fn().mockResolvedValue(newProfile),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    await expect(() =>
-      SUT._update({ db: dbStub, getServerSession: getServerSessionStub })(newProfile),
-    ).rejects.toThrow()
+    await expect(
+      SUT._update({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(newProfile),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'Incorrect role', name: 'ForbiddenError' })
   })
 
   it('should throw when user is not found', async () => {
@@ -113,10 +125,14 @@ describe('serverActions/profiles/update', () => {
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
       updateProfile: jest.fn().mockResolvedValue(newProfile),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    await expect(() =>
-      SUT._update({ db: dbStub, getServerSession: getServerSessionStub })(newProfile),
-    ).rejects.toThrow()
+    await expect(
+      SUT._update({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(newProfile),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'User not found', name: 'BadRequestError' })
   })
 
   it('should throw if user is updating someone elses profile', async () => {
@@ -144,9 +160,13 @@ describe('serverActions/profiles/update', () => {
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
       updateProfile: jest.fn().mockResolvedValue(newProfile),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    await expect(() =>
-      SUT._update({ db: dbStub, getServerSession: getServerSessionStub })(newProfile),
-    ).rejects.toThrow()
+    await expect(
+      SUT._update({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(newProfile),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'Incorrect profile', name: 'ForbiddenError' })
   })
 })

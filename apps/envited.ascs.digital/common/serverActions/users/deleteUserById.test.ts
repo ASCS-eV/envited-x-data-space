@@ -1,3 +1,4 @@
+import { ERRORS } from '../../constants'
 import * as SUT from './deleteUserById'
 
 describe('common/serverActions/users/deleteUserById', () => {
@@ -21,8 +22,13 @@ describe('common/serverActions/users/deleteUserById', () => {
       getUserById: jest.fn().mockResolvedValue([user]),
       deleteUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
-    const result = await SUT._deleteUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID')
+    const result = await SUT._deleteUserById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
+      'USER_ID',
+    )
     expect(result).toEqual(expected)
   })
 
@@ -38,10 +44,14 @@ describe('common/serverActions/users/deleteUserById', () => {
       getUserById: jest.fn().mockResolvedValue([user]),
       deleteUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
     await expect(
-      SUT._deleteUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID'),
-    ).rejects.toThrow('Something went wrong')
+      SUT._deleteUserById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_ID'),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'Unauthorized', name: 'UnauthorizedError' })
   })
 
   it('should throw because requester is not allowed to get this resource', async () => {
@@ -60,9 +70,16 @@ describe('common/serverActions/users/deleteUserById', () => {
       getUserById: jest.fn().mockResolvedValue([user]),
       deleteUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
     await expect(
-      SUT._deleteUserById({ db: dbStub, getServerSession: getServerSessionStub })('USER_ID'),
-    ).rejects.toThrow('Something went wrong')
+      SUT._deleteUserById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_ID'),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
+    expect(logStub.error).toHaveBeenCalledWith({
+      message: 'Not allowed to delete this resource',
+      name: 'ForbiddenError',
+    })
   })
 })

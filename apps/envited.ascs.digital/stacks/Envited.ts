@@ -57,6 +57,9 @@ export default function Envited({ stack }: StackContext) {
     environment: {
       RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
       REGION: process.env.region || 'eu-central-1',
+      ENV: process.env.ENV!,
+      NEXTAUTH_URL: process.env.NEXTAUTH_URL!,
+      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET!,
     },
   })
 

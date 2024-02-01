@@ -2,17 +2,18 @@
 
 import { revalidatePath } from 'next/cache'
 
+import { log } from '../../common/logger'
 import { deleteUserById } from '../../common/serverActions/users/deleteUserById'
-import { error } from '../../common/utils'
+import { formatError, internalServerErrorError } from '../../common/utils'
 
 export async function deleteUser(id: string) {
   try {
     await deleteUserById(id)
 
     revalidatePath('/dashboard/users')
-  } catch (e) {
-    console.log('error', e)
+  } catch (error: unknown) {
+    log.error(formatError(error))
 
-    throw error()
+    throw internalServerErrorError()
   }
 }

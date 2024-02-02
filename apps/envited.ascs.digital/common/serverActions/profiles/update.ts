@@ -39,7 +39,7 @@ export const _update =
           userId: session.user.id,
         })
       }
-      
+
       if (!isOwnProfile(user)(profile)) {
         throw forbiddenError({
           resource: 'profiles',

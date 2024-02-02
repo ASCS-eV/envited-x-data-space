@@ -19,7 +19,9 @@ describe('serverActions/profiles/update', () => {
       } as any
 
       const user = {
-        name: 'USER_NAME',
+        user: {
+          name: 'USER_NAME',
+        },
         profile: {
           name: 'USER_NAME',
         },
@@ -52,7 +54,9 @@ describe('serverActions/profiles/update', () => {
     } as any
 
     const user = {
-      name: 'USER_NAME',
+      user: {
+        name: 'USER_NAME',
+      },
       profile: {
         name: 'USER_NAME',
       },

@@ -1,4 +1,4 @@
-import { equals, path, pathOr, prop, propOr } from 'ramda'
+import { equals, pathOr, prop, propOr } from 'ramda'
 
 import { Role, Session, User } from '../../common/types/types'
 
@@ -13,6 +13,6 @@ export const userIsIssuedByLoggedInUser = (user: User) => (session: Session) =>
   equals(prop('issuerId')(user))(pathOr('', ['user', 'pkh'])(session))
 
 export const isOwnProfile = (user: User) => (profile: { name?: string }) =>
-  equals(path(['user', 'name'])(user))(propOr('', 'name')(profile))
+  equals(prop('name')(user))(propOr('', 'name')(profile))
 
 export const isUsersCompanyProfile = isOwnProfile

@@ -40,7 +40,7 @@ export const _update =
         })
       }
 
-      if (!isOwnProfile(user)(profile)) {
+      if (!isOwnProfile(user.user)(profile)) {
         throw forbiddenError({
           resource: 'profiles',
           resourceId: profile.id,

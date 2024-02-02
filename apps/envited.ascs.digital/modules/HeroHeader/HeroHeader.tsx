@@ -36,9 +36,11 @@ export const HeroHeader: FC = () => {
       const user = await insertUser(USER_CREDENTIAL)
       if (user) {
         setMessage(`Added ${user.id} as User`)
+        success('User added')
       }
-    } catch (error) {
-      console.log(error)
+    } catch (e) {
+      error('Something went wrong')
+      console.log(e)
     }
   }
 
@@ -46,6 +48,7 @@ export const HeroHeader: FC = () => {
     try {
       await insertUser(INVALID_USER_CREDENTIAL)
     } catch (error: any) {
+      error('Something went wrong')
       setMessage(error.message)
     }
   }
@@ -53,7 +56,9 @@ export const HeroHeader: FC = () => {
   const update = async () => {
     try {
       await updateProfile({ name: 'Testcompany GmbH', description: 'test description' })
+      success('Profile updated')
     } catch (error: any) {
+      error('Something went wrong')
       setMessage(error.message)
     }
   }

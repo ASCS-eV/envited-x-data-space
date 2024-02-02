@@ -2,7 +2,7 @@
 
 import { Card, Heading, Table, TableBody, TableCell, TableHeader, TableRow } from '@envited-marketplace/design-system'
 import { TrashIcon } from '@heroicons/react/24/outline'
-import { has, map } from 'ramda'
+import { map } from 'ramda'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'

@@ -1,0 +1,63 @@
+{
+  "name": "ory-hydra",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/ory-hydra/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/ory-hydra",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/ory-hydra/src/main.ts",
+        "tsConfig": "apps/ory-hydra/tsconfig.app.json",
+        "assets": ["apps/ory-hydra/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "ory-hydra:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "ory-hydra:build:development"
+        },
+        "production": {
+          "buildTarget": "ory-hydra:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/ory-hydra/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

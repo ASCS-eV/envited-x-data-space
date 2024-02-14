@@ -1,5 +1,6 @@
-import { SSTConfig } from "sst";
-import { OryHydra } from "./stacks/OryHydra";
+import { SSTConfig } from 'sst'
+
+import { OryHydra } from './stacks/OryHydra'
 
 export default {
   config() {
@@ -10,6 +11,6 @@ export default {
     }
   },
   stacks(app) {
-    app.stack(OryHydra);
-  }
-} satisfies SSTConfig;
+    app.stack(OryHydra)
+  },
+} satisfies SSTConfig

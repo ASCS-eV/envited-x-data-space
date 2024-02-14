@@ -3,8 +3,7 @@ import * as cdk from 'aws-cdk-lib/core'
 import { StackContext } from 'sst/constructs'
 
 export function OryHydra({ stack }: StackContext) {
-
-  /* 
+  /*
    * Retrieve VPC
    */
   const vpc = aws_ec2.Vpc.fromLookup(stack, 'Vpc', {
@@ -13,7 +12,7 @@ export function OryHydra({ stack }: StackContext) {
 
   const sg = aws_ec2.SecurityGroup.fromLookupById(stack, 'HydraSG', 'sg-0e32398ab57f2a85d')
 
-  /* 
+  /*
    * Create RDS Cluster
    */
   const rdsCluster = new aws_rds.DatabaseCluster(stack, 'Hydra', {
@@ -45,7 +44,7 @@ export function OryHydra({ stack }: StackContext) {
   const ecSubnetGroup = new aws_elasticache.CfnSubnetGroup(this, 'HydraElastiCacheSubnetGroup', {
     description: 'Hydra Elasticache Subnet Group',
     subnetIds: vpc.selectSubnets({ subnetType: aws_ec2.SubnetType.PUBLIC }).subnetIds,
-    cacheSubnetGroupName: 'HydraRedisSubnetGroup'
+    cacheSubnetGroupName: 'HydraRedisSubnetGroup',
   })
 
   const SecurityGroup = new aws_ec2.SecurityGroup(this, 'HydraRedisSG', {
@@ -74,7 +73,7 @@ export function OryHydra({ stack }: StackContext) {
 
   new cdk.CfnOutput(this, `HydraRedisCacheEndpointUrl${stack.stage}`, {
     value: redis.attrEndpointAddress,
-  });
+  })
 
   new cdk.CfnOutput(this, `HydraRedisCachePort${stack.stage}`, {
     value: redis.attrReaderEndpointPort,

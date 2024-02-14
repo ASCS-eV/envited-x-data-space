@@ -29,7 +29,7 @@ export const _update =
         throw badRequestError('User not found')
       }
 
-      if (!isOwnProfile(user)(profile)) {
+      if (!isOwnProfile(user.user)(profile)) {
         throw badRequestError('Incorrect profile')
       }
 

@@ -1,6 +1,7 @@
 export { Button } from './components/Atoms/Button'
 export { Card } from './components/Atoms/Card'
 export { Date } from './components/Atoms/Date'
+export { Checkbox, Checkboxes, TextField, TextareaField } from './components/Atoms/Form'
 export { Grid, GridRow } from './components/Atoms/Grid'
 export { Heading } from './components/Atoms/Heading'
 export { HeadingWithTooltip } from './components/Atoms/HeadingWithTooltip'

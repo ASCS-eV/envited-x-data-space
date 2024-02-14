@@ -8,7 +8,7 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { isOwnProfile, isUsersCompanyProfile } from '../../guards'
 import { Session } from '../../types'
-import { badRequestError, error, notFoundError } from '../../utils'
+import { badRequestError, error, notFoundError, unauthorizedError } from '../../utils'
 
 export const _get =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
@@ -47,3 +47,25 @@ export const _get =
   }
 
 export const get = _get({ db, getServerSession })
+
+export const _getCategories =
+  ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
+  async () => {
+    try {
+      const session = await getServerSession()
+
+      if (isNil(session)) {
+        throw unauthorizedError()
+      }
+
+      const connection = await db()
+      const categories = await connection.getCompanyCategories()
+
+      return categories
+    } catch (e) {
+      console.log('error', e)
+      throw error()
+    }
+  }
+
+export const getCategories = _getCategories({ db, getServerSession })

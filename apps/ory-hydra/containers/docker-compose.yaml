@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  hydra-migrate:
+    image: oryd/hydra:v2.2.0
+    restart: on-failure
+    networks:
+      - ory-hydra-network
+    command: migrate sql -e --yes
+    environment:
+      - DSN=postgres://hydra:secret@postgresd:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
+
+  hydra:
+    image: oryd/hydra:v2.2.0
+    networks:
+      - ory-hydra-network
+    ports:
+      - 5004:4444 # Public port
+      - 5001:4445 # Admin port
+    command: serve all --dev
+    environment:
+      - URLS_SELF_ISSUER=http://localhost:5004/
+      - URLS_CONSENT=http://localhost:5002/api/consent
+      - URLS_LOGIN=http://localhost:5002/login
+      - DSN=postgres://hydra:secret@postgresd:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
+      - SECRETS_SYSTEM=youReallyNeedToChangeThis
+      - OIDC_SUBJECT_IDENTIFIERS_SUPPORTED_TYPES=public,pairwise
+      - OIDC_SUBJECT_IDENTIFIERS_PAIRWISE_SALT=youReallyNeedToChangeThis
+      - SERVE_PUBLIC_CORS_ENABLED=true
+      - SERVE_PUBLIC_CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
+      - SERVE_ADMIN_CORS_ENABLED=true
+      - SERVE_ADMIN_CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
+      - LOG_LEVEL=debug
+      - LOG_LEAK_SENSITIVE_VALUES=true
+      - OAUTH2_EXPOSE_INTERNAL_ERRORS=1
+      - WEBFINGER_OIDC_DISCOVERY_USERINFO_URL=http://hydra:4444/userinfo
+      - OIDC_DYNAMIC_CLIENT_REGISTRATION_ENABLED=true
+    restart: on-failure
+
+  redis:
+    image: redis:7.2.2
+    networks:
+      - ory-hydra-network
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+
+networks:
+  ory-hydra-network:
+    name: ory-hydra-net

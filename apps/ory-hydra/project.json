@@ -57,6 +57,20 @@
       "options": {
         "jestConfig": "apps/ory-hydra/jest.config.ts"
       }
+    },
+    "deploy:staging": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/ory-hydra",
+        "commands": ["sst deploy OryHydra --stage staging"],
+        "parallel": false
+      }
+    },
+    "run:local": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./apps/ory-hydra/src/local.sh"
+      }
     }
   },
   "tags": []

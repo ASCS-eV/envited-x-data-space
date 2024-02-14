@@ -1,3 +1,4 @@
+import { ERRORS } from '../../constants'
 import { Role } from '../../types'
 import * as SUT from './get'
 
@@ -32,10 +33,13 @@ describe('serverActions/profiles/get', () => {
           },
         ]),
       })
+      const logStub = {
+        error: jest.fn(),
+      } as any
 
       const slug = 'PROFILE_SLUG'
 
-      const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub })(slug)
+      const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug)
       const db = await dbStub()
       expect(result).toEqual({
         name: 'USER_PRINCIPAL_NAME',
@@ -77,10 +81,13 @@ describe('serverActions/profiles/get', () => {
           },
         ]),
       })
+      const logStub = {
+        error: jest.fn(),
+      } as any
 
       const slug = 'PROFILE_SLUG'
 
-      const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub })(slug)
+      const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug)
       const db = await dbStub()
       expect(result).toEqual({
         name: 'USER_PRINCIPAL_NAME',
@@ -115,10 +122,13 @@ describe('serverActions/profiles/get', () => {
           },
         ]),
       })
+      const logStub = {
+        error: jest.fn(),
+      } as any
 
       const slug = 'PROFILE_SLUG'
 
-      const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub })(slug)
+      const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug)
       const db = await dbStub()
       expect(result).toEqual({
         name: 'USER_NAME',
@@ -140,15 +150,20 @@ describe('serverActions/profiles/get', () => {
           },
         },
       ])
+      const logStub = {
+        error: jest.fn(),
+      } as any
 
       const dbStub = jest.fn().mockResolvedValue({})
 
       const slug = ''
 
-      expect.assertions(3)
-      await expect(() => SUT._get({ db: dbStub, getServerSession: getServerSessionStub })(slug)).rejects.toThrow()
+      await expect(
+        SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug),
+      ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
       expect(getServerSessionStub).not.toHaveBeenCalledWith()
       expect(dbStub).not.toHaveBeenCalled()
+      expect(logStub.error).toHaveBeenCalledWith({ message: 'Missing slug', name: 'BadRequestError' })
     })
   })
 
@@ -161,16 +176,22 @@ describe('serverActions/profiles/get', () => {
         role: Role.principal,
       },
     })
+    const logStub = {
+      error: jest.fn(),
+    } as any
 
     const dbStub = jest.fn().mockResolvedValue({
-      getProfileBySlug: jest.fn().mockResolvedValue(null),
+      getProfileBySlug: jest.fn().mockResolvedValue([]),
     })
 
     const slug = 'NON_EXISTANT_PROFILE_SLUG'
     const db = await dbStub()
-    await expect(() => SUT._get({ db: dbStub, getServerSession: getServerSessionStub })(slug)).rejects.toThrow()
+    await expect(SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug)).rejects.toThrow(
+      ERRORS.INTERNAL_SERVER_ERROR,
+    )
     expect(getServerSessionStub).toHaveBeenCalledWith()
     expect(dbStub).toHaveBeenCalledWith()
     expect(db.getProfileBySlug).toHaveBeenCalledWith(slug)
+    expect(logStub.error).toHaveBeenCalledWith({ message: 'Not found', name: 'NotFoundError' })
   })
 })

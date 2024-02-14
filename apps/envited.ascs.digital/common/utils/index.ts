@@ -5,7 +5,9 @@ export {
   internalServerError as internalServerErrorError,
   notFound as notFoundError,
   unauthorized as unauthorizedError,
-  error,
+  ExtendedError,
+  formatError,
+  forbidden as forbiddenError,
 } from './errors'
 
 export { extractIdFromCredential, extractIssuerIdFromCredential, extractTypeFromCredential, slugify } from './utils'

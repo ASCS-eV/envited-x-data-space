@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - develop
+      - 82_update_deployment_with_next_auth_vars
 
 # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
 concurrency:
@@ -17,7 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     env:
-      PLATFORM: ${{ vars.PLATFORM }}
+      ENV: ${{ vars.ENV }}
+      NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3

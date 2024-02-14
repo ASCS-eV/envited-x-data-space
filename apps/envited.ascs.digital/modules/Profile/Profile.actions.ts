@@ -3,8 +3,9 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
+import { log } from '../../common/logger'
 import { updateProfile } from '../../common/serverActions/profiles'
-import { error } from '../../common/utils'
+import { badRequestError, formatError, internalServerErrorError } from '../../common/utils'
 import { ProfileSchema, ValidateProfileForm } from './Profile.schema'
 
 type ProfileForm = z.infer<typeof ProfileSchema>
@@ -14,15 +15,18 @@ export async function updateProfileForm(data: ProfileForm) {
     const result = ValidateProfileForm(data)
 
     if (!result.success) {
-      throw error()
+      throw badRequestError({
+        resource: 'profiles',
+        resourceId: data.name,
+        message: 'Profile validate form data failed',
+      })
     }
 
     await updateProfile(data)
 
     revalidatePath('/dashboard/profile')
-  } catch (e) {
-    console.log('error', e)
-
-    throw error()
+  } catch (error: unknown) {
+    log.error(formatError(error))
+    throw internalServerErrorError()
   }
 }

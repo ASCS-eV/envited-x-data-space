@@ -7,15 +7,16 @@ import { RESTRICTED_PROFILE_FIELDS } from '../../constants'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { isOwnProfile, isUsersCompanyProfile } from '../../guards'
+import { Log, log } from '../../logger'
 import { Session } from '../../types'
-import { badRequestError, error, notFoundError, unauthorizedError } from '../../utils'
+import { badRequestError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
 
 export const _get =
-  ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
+  ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async (slug: string) => {
     try {
       if (isNil(slug) || isEmpty(slug)) {
-        throw badRequestError('Missing slug')
+        throw badRequestError({ resource: 'profiles', resourceId: slug, message: 'Missing slug' })
       }
 
       const session = await getServerSession()
@@ -23,7 +24,7 @@ export const _get =
       const [profile] = await connection.getProfileBySlug(slug)
 
       if (isNil(profile) || isEmpty(profile)) {
-        throw notFoundError()
+        throw notFoundError({ resource: 'profiles', resourceId: slug, userId: session?.user.id })
       }
 
       if (!isNil(session)) {
@@ -40,32 +41,32 @@ export const _get =
       }
 
       return omit(RESTRICTED_PROFILE_FIELDS)(profile)
-    } catch (e) {
-      console.log('error', e)
-      throw error()
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
     }
   }
 
-export const get = _get({ db, getServerSession })
+export const get = _get({ db, getServerSession, log })
 
 export const _getCategories =
-  ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
+  ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async () => {
     try {
       const session = await getServerSession()
 
       if (isNil(session)) {
-        throw unauthorizedError()
+        throw unauthorizedError({ resource: 'profiles' })
       }
 
       const connection = await db()
       const categories = await connection.getCompanyCategories()
 
       return categories
-    } catch (e) {
-      console.log('error', e)
-      throw error()
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
     }
   }
 
-export const getCategories = _getCategories({ db, getServerSession })
+export const getCategories = _getCategories({ db, getServerSession, log })

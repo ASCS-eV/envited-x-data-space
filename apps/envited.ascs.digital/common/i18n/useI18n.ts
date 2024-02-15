@@ -2,6 +2,7 @@ import { compose, mergeDeepRight, pathOr, propOr, reduce } from 'ramda'
 
 import { HeaderTranslation } from '../../modules/Header'
 import { HeroHeaderTranslation } from '../../modules/HeroHeader'
+import { ProfileTranslation } from '../../modules/Profile'
 import { UsersTranslation } from '../../modules/Users'
 import { Locale, TranslationsMap } from './types'
 
@@ -11,6 +12,7 @@ const mergeTranslations = reduce(mergeDeepRight, { [Locale.en_GB]: {}, [Locale.d
 const translationObject = mergeTranslations([
   HeaderTranslation,
   HeroHeaderTranslation,
+  ProfileTranslation,
   UsersTranslation,
 ]) as TranslationsMap
 

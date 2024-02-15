@@ -9,7 +9,7 @@ import { Database } from '../../database/types'
 import { isOwnProfile, isUsersCompanyProfile } from '../../guards'
 import { Log, log } from '../../logger'
 import { Session } from '../../types'
-import { badRequestError, formatError, internalServerErrorError, notFoundError } from '../../utils'
+import { badRequestError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
 
 export const _get =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
@@ -48,3 +48,25 @@ export const _get =
   }
 
 export const get = _get({ db, getServerSession, log })
+
+export const _getCategories =
+  ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
+  async () => {
+    try {
+      const session = await getServerSession()
+
+      if (isNil(session)) {
+        throw unauthorizedError({ resource: 'profiles' })
+      }
+
+      const connection = await db()
+      const categories = await connection.getCompanyCategories()
+
+      return categories
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const getCategories = _getCategories({ db, getServerSession, log })

@@ -49,7 +49,7 @@ export const _get =
 
 export const get = _get({ db, getServerSession, log })
 
-export const _getCategories =
+export const _getBusinessCategories =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async () => {
     try {
@@ -60,7 +60,7 @@ export const _getCategories =
       }
 
       const connection = await db()
-      const categories = await connection.getCompanyCategories()
+      const categories = await connection.getBusinessCategories()
 
       return categories
     } catch (error: unknown) {
@@ -69,4 +69,4 @@ export const _getCategories =
     }
   }
 
-export const getCategories = _getCategories({ db, getServerSession, log })
+export const getBusinessCategories = _getBusinessCategories({ db, getServerSession, log })

@@ -29,11 +29,13 @@ describe('serverActions/businessCategories/get', () => {
 
       const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })()
       const db = await dbStub()
-      expect(result).toEqual([{
-        id: 'BUSINESS_CATEGORY_ID',
-        name: 'BUSINESS_CATEGORY_NAME',
-        description: 'BUSINESS_CATEGORY_DESCRIPTION',
-      }])
+      expect(result).toEqual([
+        {
+          id: 'BUSINESS_CATEGORY_ID',
+          name: 'BUSINESS_CATEGORY_NAME',
+          description: 'BUSINESS_CATEGORY_DESCRIPTION',
+        },
+      ])
       expect(getServerSessionStub).toHaveBeenCalledWith()
       expect(db.getBusinessCategories).toHaveBeenCalled()
     })

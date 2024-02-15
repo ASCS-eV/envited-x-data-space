@@ -25,7 +25,7 @@ export const TextareaField: FC<TextareaFieldProps> = ({
 }) => {
   return (
     <>
-      <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+      <label htmlFor={name} className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
         {label}
       </label>
       <div className="mt-2">

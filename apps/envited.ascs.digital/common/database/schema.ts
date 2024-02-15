@@ -138,7 +138,7 @@ export const profile = pgTable('profile', {
   updatedAt: timestamp('updated_at'),
 })
 
-export const companyCategory = pgTable('companyCategory', {
+export const businessCategory = pgTable('businessCategory', {
   id: text('id').unique().primaryKey(),
   name: text('name').unique(),
   description: text('description'),
@@ -146,22 +146,22 @@ export const companyCategory = pgTable('companyCategory', {
   updatedAt: timestamp('updated_at'),
 })
 
-export const profilesToCompanyCategories = pgTable('profilesToCompanyCategories', {
+export const profilesToBusinessCategories = pgTable('profilesToBusinessCategories', {
   profileId: uuid('profile_id')
     .references(() => profile.id)
     .notNull(),
-  companyCategoryId: text('company_category_id')
-    .references(() => companyCategory.id)
+  businessCategoryId: text('business_category_id')
+    .references(() => businessCategory.id)
     .notNull(),
 })
 
-export const profilesToCompanyCategoriesRelations = relations(profilesToCompanyCategories, ({ one }) => ({
-  companyCategory: one(companyCategory, {
-    fields: [profilesToCompanyCategories.companyCategoryId],
-    references: [companyCategory.id],
+export const profilesToBusinessCategoriesRelations = relations(profilesToBusinessCategories, ({ one }) => ({
+  companyCategory: one(businessCategory, {
+    fields: [profilesToBusinessCategories.businessCategoryId],
+    references: [businessCategory.id],
   }),
   profile: one(profile, {
-    fields: [profilesToCompanyCategories.profileId],
+    fields: [profilesToBusinessCategories.profileId],
     references: [profile.id],
   }),
 }))

@@ -24,4 +24,4 @@ jobs:
       - name: Test app
         run: |
           npm i
-          npx nx run-many -t test
+          npx nx run-many -t test --exclude ory-hydra

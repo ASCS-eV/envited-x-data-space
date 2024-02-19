@@ -66,10 +66,18 @@
         "parallel": false
       }
     },
-    "run:local": {
+    "run:local:container": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./apps/ory-hydra/src/local.sh"
+        "cwd": "apps/ory-hydra/containers",
+        "commands": ["ENV=development docker compose --profile development --env-file ../.env.development up --build"],
+        "parallel": false
+      }
+    },
+    "run:local:testClient": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./apps/ory-hydra/containers/testClient.sh"
       }
     }
   },

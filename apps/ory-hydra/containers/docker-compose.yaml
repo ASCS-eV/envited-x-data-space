@@ -1,41 +1,30 @@
-version: '3'
+version: "3.7"
 
 services:
   hydra-migrate:
     image: oryd/hydra:v2.2.0
+    environment:
+      - DSN=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable&max_conns=20&max_idle_conns=4
+    command: migrate sql -e --yes
     restart: on-failure
     networks:
       - ory-hydra-network
-    command: migrate sql -e --yes
-    environment:
-      - DSN=postgres://hydra:secret@postgresd:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
 
   hydra:
     image: oryd/hydra:v2.2.0
+    ports:
+      - 4444:4444 # Public port
+      - 4445:4445 # Admin port
+    environment:
+      - DSN=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable&max_conns=20&max_idle_conns=4
+    command: serve -c /etc/config/hydra/${ENV}.yml all --dev
+    volumes:
+      - type: bind
+        source: ../config
+        target: /etc/config/hydra
+    restart: on-failure
     networks:
       - ory-hydra-network
-    ports:
-      - 5004:4444 # Public port
-      - 5001:4445 # Admin port
-    command: serve all --dev
-    environment:
-      - URLS_SELF_ISSUER=http://localhost:5004/
-      - URLS_CONSENT=http://localhost:5002/api/consent
-      - URLS_LOGIN=http://localhost:5002/login
-      - DSN=postgres://hydra:secret@postgresd:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
-      - SECRETS_SYSTEM=youReallyNeedToChangeThis
-      - OIDC_SUBJECT_IDENTIFIERS_SUPPORTED_TYPES=public,pairwise
-      - OIDC_SUBJECT_IDENTIFIERS_PAIRWISE_SALT=youReallyNeedToChangeThis
-      - SERVE_PUBLIC_CORS_ENABLED=true
-      - SERVE_PUBLIC_CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
-      - SERVE_ADMIN_CORS_ENABLED=true
-      - SERVE_ADMIN_CORS_ALLOWED_METHODS=POST,GET,PUT,DELETE
-      - LOG_LEVEL=debug
-      - LOG_LEAK_SENSITIVE_VALUES=true
-      - OAUTH2_EXPOSE_INTERNAL_ERRORS=1
-      - WEBFINGER_OIDC_DISCOVERY_USERINFO_URL=http://hydra:4444/userinfo
-      - OIDC_DYNAMIC_CLIENT_REGISTRATION_ENABLED=true
-    restart: on-failure
 
   redis:
     image: redis:7.2.2
@@ -44,6 +33,20 @@ services:
     ports:
       - 6379:6379
     restart: unless-stopped
+    profiles: ["development"]
+
+  postgresd:
+    image: postgres:16
+    networks:
+      - ory-hydra-network
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    restart: on-failure
+    profiles: ["development"]
 
 networks:
   ory-hydra-network:

@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 services:
   hydra-migrate:
@@ -33,7 +33,7 @@ services:
     ports:
       - 6379:6379
     restart: unless-stopped
-    profiles: ["development"]
+    profiles: ['development']
 
   postgresd:
     image: postgres:16
@@ -46,7 +46,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     restart: on-failure
-    profiles: ["development"]
+    profiles: ['development']
 
 networks:
   ory-hydra-network:

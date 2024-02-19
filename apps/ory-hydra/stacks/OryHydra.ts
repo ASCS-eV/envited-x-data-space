@@ -13,11 +13,11 @@ export function OryHydra({ stack }: StackContext) {
   const sg = aws_ec2.SecurityGroup.fromLookupById(stack, 'HydraSG', 'sg-0e32398ab57f2a85d')
 
   /*
-  * Create RDS Secret
-  */
+   * Create RDS Secret
+   */
   const rdsSecret = new aws_rds.DatabaseSecret(this, 'HydraRDSSecret', {
     username: 'postgres',
-    excludeCharacters: "%+~`#$&*()|[]{}:;<>?!'/@\"\\^,=.",
+    excludeCharacters: '%+~`#$&*()|[]{}:;<>?!\'/@"\\^,=.',
   })
 
   /*
@@ -93,21 +93,21 @@ export function OryHydra({ stack }: StackContext) {
   })
 
   /*
-  * Create Hydra secret
-  */
+   * Create Hydra secret
+   */
   const hydraSecret = new aws_secretsmanager.Secret(this, 'HydraSecret', {
     generateSecretString: {
       secretStringTemplate: JSON.stringify({}),
       generateStringKey: 'hydra_secret',
-      excludeCharacters: "%+~`#$&*()|[]{}:;<>?!'/@\"\\^,=.",
+      excludeCharacters: '%+~`#$&*()|[]{}:;<>?!\'/@"\\^,=.',
     },
   })
   /*
-  * Create Hydra ECS Service
-  */
+   * Create Hydra ECS Service
+   */
   const cluster = new aws_ecs.Cluster(this, 'HydraCluster', { vpc })
   cluster.addCapacity('DefaultAutoScalingGroupCapacity', {
-    instanceType: new aws_ec2.InstanceType("t2.small"),
+    instanceType: new aws_ec2.InstanceType('t2.small'),
     desiredCapacity: 1,
   })
   const taskDefinition = new aws_ecs.Ec2TaskDefinition(stack, 'HydraTask', {

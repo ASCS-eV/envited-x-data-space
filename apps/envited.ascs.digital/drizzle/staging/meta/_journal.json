@@ -50,6 +50,13 @@
       "when": 1706716757110,
       "tag": "0006_fine_maverick",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1707993494808,
+      "tag": "0007_cheerful_thundra",
+      "breakpoints": true
     }
   ]
 }

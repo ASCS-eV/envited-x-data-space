@@ -1,4 +1,4 @@
-export const COMPANY_CATEGORIES = [
+export const BUSINESS_CATEGORIES = [
   {
     id: 'oem',
     name: 'OEM',

@@ -23,5 +23,5 @@ jobs:
         uses: actions/checkout@v3
       - name: Test app
         run: |
-          npm i
+          npm ci --force
           npx nx run-many -t test --exclude ory-hydra

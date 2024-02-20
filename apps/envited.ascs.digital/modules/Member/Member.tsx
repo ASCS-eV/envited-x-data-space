@@ -1,7 +1,6 @@
 'use client'
 
 import { Address, Card, ContactPerson, Heading, Pill } from '@envited-marketplace/design-system'
-import Image from 'next/image'
 import { isNil, map } from 'ramda'
 import React, { FC } from 'react'
 
@@ -62,7 +61,7 @@ export const Member: FC<MemberProps> = ({
       </div>
       <div className="w-1/4 flex flex-col gap-8">
         <Card>
-          {!isNil(logo) && <Image src={logo} alt={name} />}
+          {!isNil(logo) && <img src={logo} alt={name} width={0} height={0} className="w-full h-auto mb-6" />}
           <Heading importance="h4">{t('[Heading] address')}</Heading>
           <div className="mt-4">
             <Address

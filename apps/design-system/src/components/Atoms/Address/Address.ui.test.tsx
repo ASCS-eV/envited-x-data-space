@@ -16,7 +16,7 @@ describe('compoments/Atoms/Address', () => {
       <Address street={street} city={city} postalCode={postalCode} country={country} phone={phone} email={email} />,
     )
 
-    const AddressElement = screen.getByText(street)
+    const AddressElement = screen.getByText(phone)
 
     // then ... should render as expected
     expect(AddressElement).toBeInTheDocument()

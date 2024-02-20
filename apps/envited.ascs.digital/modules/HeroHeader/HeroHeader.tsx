@@ -96,7 +96,7 @@ export const HeroHeader: FC = () => {
       </Grid>
       <div className="text-center">
         <div className="flex justify-center items-center">
-          <Link href="`/members">See list of registered members</Link>
+          <Link href="/members" className="underline text-orange">See list of registered members</Link>
         </div>
         <div className="mt-10 flex items-center justify-center gap-x-6"></div>
         <div className="mt-10">

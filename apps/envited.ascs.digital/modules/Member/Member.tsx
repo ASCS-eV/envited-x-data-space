@@ -1,44 +1,16 @@
 'use client'
 
 import { Address, Card, ContactPerson, Heading, Pill } from '@envited-marketplace/design-system'
-import { isNil, map } from 'ramda'
+import { has, isNil, map, propOr } from 'ramda'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
+import { Profile } from '../../common/types'
 
 interface MemberProps {
-  name: string
-  description: string
-  logo: string
-  website: string
-  streetAddress: string
-  addressCountry: string
-  addressLocality: string
-  postalCode: string
-  salesEmail: string | null
-  salesName: string | null
-  salesPhone: string | null
-  principalEmail: string | null
-  principalName: string | null
-  principalPhone: string | null
+  member: Profile
 }
-
-export const Member: FC<MemberProps> = ({
-  name,
-  description,
-  logo,
-  website,
-  streetAddress,
-  addressCountry,
-  addressLocality,
-  postalCode,
-  salesEmail,
-  salesName,
-  salesPhone,
-  principalEmail,
-  principalName,
-  principalPhone,
-}) => {
+export const Member: FC<MemberProps> = ({ member }) => {
   const { t } = useTranslation('Member')
 
   return (
@@ -46,7 +18,7 @@ export const Member: FC<MemberProps> = ({
       <div className="w-3/4 flex flex-col gap-8">
         <Card>
           <Heading importance="h4">{t('[Heading] member profile')}</Heading>
-          <Heading importance="h2">{name}</Heading>
+          <Heading importance="h2">{propOr('', 'name')(member)}</Heading>
           <div className="">
             <Heading importance="h4">{t('[Heading] business categories')}</Heading>
             <div className="flex gap-3 mt-2">
@@ -55,37 +27,53 @@ export const Member: FC<MemberProps> = ({
           </div>
           <div className="mt-6">
             <Heading importance="h4">{t('[Heading] about us')}</Heading>
-            <div className="flex gap-3 mt-2">{description}</div>
+            <div className="flex gap-3 mt-2">{propOr('', 'description')(member)}</div>
           </div>
         </Card>
       </div>
       <div className="w-1/4 flex flex-col gap-8">
         <Card>
-          {!isNil(logo) && <img src={logo} alt={name} width={0} height={0} className="w-full h-auto mb-6" />}
+          {!isNil(propOr('', 'logo')(member)) && (
+            <img
+              src={propOr('', 'logo')(member)}
+              alt={propOr('', 'name')(member)}
+              width={0}
+              height={0}
+              className="w-full h-auto mb-6"
+            />
+          )}
           <Heading importance="h4">{t('[Heading] address')}</Heading>
           <div className="mt-4">
             <Address
-              street={streetAddress}
-              postalCode={postalCode}
-              city={addressLocality}
-              country={addressCountry}
-              website={website}
+              street={propOr('', 'streetAddress')(member)}
+              postalCode={propOr('', 'postalCode')(member)}
+              city={propOr('', 'addressLocality')(member)}
+              country={propOr('', 'addressCountry')(member)}
+              website={propOr('', 'website')(member)}
             />
           </div>
         </Card>
-        {principalName && principalEmail && principalPhone && (
+        {has('principalName')(member) && has('principalEmail')(member) && has('principalPhone')(member) && (
           <Card>
             <Heading importance="h4">{t('[Heading] principal contact')}</Heading>
             <div className="mt-4">
-              <ContactPerson name={principalName} email={principalEmail} phone={principalPhone} />
+              <ContactPerson
+                name={propOr('', 'principalName')(member)}
+                email={propOr('', 'principalEmail')(member)}
+                phone={propOr('', 'principalPhone')(member)}
+              />
             </div>
           </Card>
         )}
-        {salesName && salesEmail && salesPhone && (
+        {has('salesName')(member) && has('salesEmail')(member) && has('salesPhone')(member) && (
           <Card>
             <Heading importance="h4">{t('[Heading] sales contact')}</Heading>
             <div className="mt-4">
-              <ContactPerson name={salesName} email={salesEmail} phone={salesPhone} />
+              <ContactPerson
+                name={propOr('', 'salesName')(member)}
+                email={propOr('', 'salesEmail')(member)}
+                phone={propOr('', 'salesPhone')(member)}
+              />
             </div>
           </Card>
         )}

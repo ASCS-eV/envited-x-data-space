@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 
-import Pill from '../Pill/Pill'
+import Pill from '../../Atoms/Pill/Pill'
 import MemberProfileCard from './MemberProfileCard'
 
-describe('compoments/Atoms/MemberProfileCard', () => {
+describe('compoments/Molecules/MemberProfileCard', () => {
   it('should render a Member Card with the title', () => {
     // when ... rendering component
     const title = 'TITLE'

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 
 import Address from './Address'
 
-describe('compoments/Atoms/Address', () => {
+describe('compoments/Molecules/Address', () => {
   it('should render Address', () => {
     // when ... rendering component
     const street = 'STREET'

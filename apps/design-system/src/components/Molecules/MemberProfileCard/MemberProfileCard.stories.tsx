@@ -1,11 +1,11 @@
 import { Meta, Story } from '@storybook/react'
 
-import Pill from '../Pill/Pill'
+import Pill from '../../Atoms/Pill/Pill'
 import MemberProfileCard from './MemberProfileCard'
 
 export default {
   component: MemberProfileCard,
-  title: 'Components/MemberProfileCard',
+  title: 'Molecules/MemberProfileCard',
 } as Meta
 
 const Template: Story = ({ title, logoUri, street, city, postalCode, country }) => (

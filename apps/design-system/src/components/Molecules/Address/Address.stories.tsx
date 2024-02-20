@@ -4,7 +4,7 @@ import Address from './Address'
 
 export default {
   component: Address,
-  title: 'Components/Address',
+  title: 'Molecules/Address',
 } as Meta
 
 const Template: Story = ({ street, city, postalCode, country, phone, email }) => (

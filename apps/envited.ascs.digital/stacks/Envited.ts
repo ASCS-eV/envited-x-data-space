@@ -10,6 +10,7 @@ export default function Envited({ stack }: StackContext) {
     vpc,
     description: 'Postgres SG',
     allowAllOutbound: true,
+    securityGroupName: 'PostgresSG',
   })
   sg.addIngressRule(aws_ec2.Peer.anyIpv4(), aws_ec2.Port.tcp(5432))
 

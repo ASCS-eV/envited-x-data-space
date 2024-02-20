@@ -1,6 +1,7 @@
 'use client'
 
 import { Button, Grid, GridRow } from '@envited-marketplace/design-system'
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import React, { FC, useState } from 'react'
 
@@ -9,7 +10,6 @@ import { INVALID_USER_CREDENTIAL, MEMBER_CREDENTIAL, USER_CREDENTIAL } from '../
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { insertUser, updateProfile } from '../../common/serverActions'
-import Link from 'next/link'
 
 export const HeroHeader: FC = () => {
   const { t } = useTranslation('HeroHeader')

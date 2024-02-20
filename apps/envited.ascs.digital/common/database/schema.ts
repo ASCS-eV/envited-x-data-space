@@ -156,7 +156,7 @@ export const profilesToBusinessCategories = pgTable('profilesToBusinessCategorie
 })
 
 export const profilesToBusinessCategoriesRelations = relations(profilesToBusinessCategories, ({ one }) => ({
-  companyCategory: one(businessCategory, {
+  businessCategory: one(businessCategory, {
     fields: [profilesToBusinessCategories.businessCategoryId],
     references: [businessCategory.id],
   }),

@@ -9,6 +9,7 @@ import { INVALID_USER_CREDENTIAL, MEMBER_CREDENTIAL, USER_CREDENTIAL } from '../
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { insertUser, updateProfile } from '../../common/serverActions'
+import Link from 'next/link'
 
 export const HeroHeader: FC = () => {
   const { t } = useTranslation('HeroHeader')
@@ -94,7 +95,9 @@ export const HeroHeader: FC = () => {
         </GridRow>
       </Grid>
       <div className="text-center">
-        <div className="flex justify-center items-center"></div>
+        <div className="flex justify-center items-center">
+          <Link href="`/members">See list of registered members</Link>
+        </div>
         <div className="mt-10 flex items-center justify-center gap-x-6"></div>
         <div className="mt-10">
           <h2 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">{message}</h2>

@@ -49,24 +49,18 @@ export const _get =
 
 export const get = _get({ db, getServerSession, log })
 
-export const _getBusinessCategories =
-  ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
+export const _getPublishedProfiles =
+  ({ db, log }: { db: Database; log: Log }) =>
   async () => {
     try {
-      const session = await getServerSession()
-
-      if (isNil(session)) {
-        throw unauthorizedError({ resource: 'profiles' })
-      }
-
       const connection = await db()
-      const categories = await connection.getBusinessCategories()
+      const profiles = await connection.getPublishedProfiles()
 
-      return categories
+      return profiles
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()
     }
   }
 
-export const getBusinessCategories = _getBusinessCategories({ db, getServerSession, log })
+export const getPublishedProfiles = _getPublishedProfiles({ db, log })

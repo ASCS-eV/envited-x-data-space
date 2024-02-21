@@ -16,3 +16,5 @@ export default async function Index({ params: { slug } }: { params: { slug: stri
     </>
   )
 }
+
+export const dynamic = 'force-dynamic'

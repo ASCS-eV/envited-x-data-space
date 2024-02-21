@@ -84,15 +84,17 @@ export interface Profile {
   postalCode: string | null
   addressLocality: string | null
   addressCountry: string | null
-  firstName?: string | null
-  lastName?: string | null
-  phone?: string | null
-  email?: string | null
   website?: string | null
   offerings?: unknown | null
   isPublished?: boolean | null
   createdAt?: Date | null
   updatedAt?: Date | null
+  salesName?: string | null
+  salesPhone?: string | null
+  salesEmail?: string | null
+  principalName?: string | null
+  principalPhone?: string | null
+  principalEmail?: string | null
 }
 
 export interface Session {

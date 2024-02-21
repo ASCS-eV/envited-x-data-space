@@ -6,7 +6,7 @@ import { connectDb } from '../database'
 import * as schema from '../schema'
 import { getBusinessCategories } from './businessCategories'
 import { fetchTables } from './common'
-import { getProfileBySlug, maybeUpdatePublishedState, update as updateProfile } from './profiles'
+import { getProfileBySlug, getPublishedProfiles, maybeUpdatePublishedState, update as updateProfile } from './profiles'
 import {
   deleteUserById,
   getUserById,
@@ -27,6 +27,7 @@ const queries = {
   updateProfile,
   maybeUpdatePublishedState,
   getProfileBySlug,
+  getPublishedProfiles,
   getUserByIssuerId,
 }
 

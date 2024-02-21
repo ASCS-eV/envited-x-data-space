@@ -16,3 +16,5 @@ export default async function Index() {
     </>
   )
 }
+
+export const dynamic = 'force-dynamic'

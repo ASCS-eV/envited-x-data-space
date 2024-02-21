@@ -21,9 +21,11 @@ module.exports = {
       red: colors.red,
       green: colors.green,
       indigo: colors.indigo,
-      orange: {
-        ...colors.orange,
-        DEFAULT: '#ff584d',
+      blue: {
+        ...colors.blue,
+        800: '#798bb3',
+        900: '#5a6f9f',
+        DEFAULT: '#848ab7',
       },
     },
     extend: {},

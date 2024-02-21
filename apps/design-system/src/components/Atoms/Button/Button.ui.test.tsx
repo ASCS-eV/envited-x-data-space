@@ -15,7 +15,7 @@ describe('components/Button', () => {
 
       // then ... should render with expected properties
       expect(element).toBeInTheDocument()
-      expect(element).toHaveClass('bg-orange')
+      expect(element).toHaveClass('bg-blue-900')
       await userEvent.click(element)
       expect(onClickStub).toHaveBeenCalledWith()
     })

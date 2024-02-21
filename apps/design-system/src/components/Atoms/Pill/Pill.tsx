@@ -16,7 +16,7 @@ const Pill: FC<Props> = ({ size = Size.small, children }) => {
 
   return (
     <div
-      className={`${sizeClassMap[size]} bg-gray-300 dark:bg-gray-600 text-black dark:text-white inline-block font-medium leading-none rounded-full hover:bg-orange hover:text-white transition`}
+      className={`${sizeClassMap[size]} bg-gray-300 dark:bg-gray-600 text-black dark:text-white inline-block font-medium leading-none rounded-full`}
     >
       {children}
     </div>

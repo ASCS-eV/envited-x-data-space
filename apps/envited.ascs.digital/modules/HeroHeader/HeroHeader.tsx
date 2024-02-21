@@ -67,7 +67,7 @@ export const HeroHeader: FC = () => {
   return (
     <div className="mx-auto max-w-6xl">
       {searchParams.has('error') ? (
-        <div className="w-full text-center text-orange text-2xl">Could not sign you in</div>
+        <div className="w-full text-center text-blue text-2xl">Could not sign you in</div>
       ) : null}
       <Grid>
         <GridRow columns={`three` as any}>
@@ -96,7 +96,7 @@ export const HeroHeader: FC = () => {
       </Grid>
       <div className="text-center">
         <div className="flex justify-center items-center">
-          <Link href="/members" className="underline text-orange">
+          <Link href="/members" className="underline text-blue">
             See list of registered members
           </Link>
         </div>

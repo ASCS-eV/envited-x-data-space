@@ -49,7 +49,7 @@ export const Checkboxes: FC<CheckboxProps> = ({
               ref={inputRef}
               checked={includes(id)(values)}
               type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
+              className="h-4 w-4 rounded border-gray-300 text-blue-800 focus:ring-blue-800"
             />
           </div>
           <div className="ml-3 text-sm leading-6">

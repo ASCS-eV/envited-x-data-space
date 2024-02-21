@@ -26,8 +26,8 @@ const Button: FC<Props> = ({
 }) => {
   const styleClassMap = {
     [ButtonType.primary]: {
-      [ButtonStyle.solid]: 'bg-orange hover:bg-orange-700 text-white',
-      [ButtonStyle.ghost]: 'text-orange hover:text-white border-orange hover:bg-orange border-solid border-2',
+      [ButtonStyle.solid]: 'bg-blue-900 hover:bg-blue-800 text-white',
+      [ButtonStyle.ghost]: 'text-blue hover:text-white border-blue hover:bg-blue border-solid border-2',
     },
     [ButtonType.secondary]: {
       [ButtonStyle.solid]: 'bg-gray-300 hover:bg-gray-400 text-gray-700 hover:text-gray-50',

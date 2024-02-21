@@ -18,7 +18,7 @@ export enum Colour {
   main = 'main',
   white = 'white',
   black = 'black',
-  orange = 'orange',
+  blue = 'blue',
 }
 
 export enum ButtonType {

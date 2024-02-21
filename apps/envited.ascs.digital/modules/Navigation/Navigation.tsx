@@ -17,7 +17,7 @@ const NavLink: FC<NavItemProps> = ({ href, name, icon = <></> }) => {
   const isActive = equals(pathname)(href)
 
   const iconElement = !isEmpty(icon) ? (
-    <div className={`${isActive ? 'text-orange-600' : null} flex-shrink-0 mr-4`}>{icon}</div>
+    <div className={`${isActive ? 'text-blue' : null} flex-shrink-0 mr-4`}>{icon}</div>
   ) : null
 
   return (

@@ -14,13 +14,13 @@ export default {
 const GridTemplate: Story = ({ columns }) => (
   <Grid>
     <GridRow columns={columns}>
-      <div className="bg-orange-100 block h-40" />
-      <div className="bg-orange-100 block h-40" />
-      <div className="bg-orange-100 block h-40" />
-      <div className="bg-orange-100 block h-40" />
-      <div className="bg-orange-100 block h-40" />
-      <div className="bg-orange-100 block h-40" />
-      <div className="bg-orange-100 block h-40" />
+      <div className="bg-blue block h-40" />
+      <div className="bg-blue block h-40" />
+      <div className="bg-blue block h-40" />
+      <div className="bg-blue block h-40" />
+      <div className="bg-blue block h-40" />
+      <div className="bg-blue block h-40" />
+      <div className="bg-blue block h-40" />
     </GridRow>
   </Grid>
 )

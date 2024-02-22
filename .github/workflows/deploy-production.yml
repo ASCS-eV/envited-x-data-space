@@ -29,4 +29,4 @@ jobs:
           aws-region: eu-central-1
       - name: Deploy app
         run: |
-          npm i && npx nx deploy:production envited.ascs.digital
+          npm ci --force && npx nx deploy:production envited.ascs.digital

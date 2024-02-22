@@ -335,7 +335,7 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <button
             type="submit"
-            className="bg-orange hover:bg-orange-700 text-white transition rounded-full font-bold py-2 px-4"
+            className="bg-blue hover:bg-blue-900 text-white transition rounded-full font-bold py-2 px-4"
           >
             {t('[Button] update profile')}
           </button>

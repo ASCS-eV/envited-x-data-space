@@ -21,3 +21,6 @@ export const maybeUpdatePublishedState = (db: DatabaseConnection) => async (data
 
 export const getProfileBySlug = (db: DatabaseConnection) => async (slug: string) =>
   db.select().from(profile).where(eq(profile.slug, slug))
+
+export const getPublishedProfiles = (db: DatabaseConnection) => async () =>
+  db.select().from(profile).where(eq(profile.isPublished, true))

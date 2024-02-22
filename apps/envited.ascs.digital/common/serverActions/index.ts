@@ -1,3 +1,3 @@
 export { getBusinessCategories } from './businessCategories'
-export { updateProfile, getProfile } from './profiles'
+export { updateProfile, getProfile, getPublishedProfiles } from './profiles'
 export { getUserById, getUsersByIssuerId, insertUser } from './users'

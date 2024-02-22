@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - develop
-      - 33_add_sst_bucket
-      - 82_update_deployment_with_next_auth_vars
 
 # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
 concurrency:

@@ -40,12 +40,12 @@ export default function Envited({ stack }: StackContext) {
     exportName: `SecretArn:${stack.stage}`,
   })
 
-  const profileBucket = new Bucket(stack, 'public')
+  const uploadsBucket = new Bucket(stack, 'uploads')
 
   // Create the Next.js site
   const site = new NextjsSite(stack, 'envited_ascs_digital', {
     path: './',
-    bind: [profileBucket],
+    bind: [uploadsBucket],
     memorySize: '1024 MB',
     timeout: '20 seconds',
     cdk: {

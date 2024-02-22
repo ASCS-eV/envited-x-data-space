@@ -8,14 +8,7 @@ export default {
 } as Meta
 
 const FileFieldTemplate: Story = ({ label, name, value, error, inputRef, onChange }) => (
-  <FileField
-    label={label}
-    name={name}
-    value={value}
-    error={error}
-    inputRef={inputRef}
-    onChange={onChange}
-  />
+  <FileField label={label} name={name} value={value} error={error} inputRef={inputRef} onChange={onChange} />
 )
 
 export const FileFieldComponent = FileFieldTemplate.bind({})

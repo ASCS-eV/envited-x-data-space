@@ -172,20 +172,19 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                   name="file"
                   control={control}
                   render={({ field: { ref, onChange, value, ...field } }) => (
-                      <FileField
-                        label="File"
-                        {...field}
-                        inputRef={ref}
-                        value={value?.name}
-                        onChange={event => {
-                          if (event.target.files) {
-                            onChange(event.target.files?.[0])
-                          }
-                        }}
-                        error={pathOr('', ['file', 'message'])(errors)}
-                      />
-                    )
-                  }
+                    <FileField
+                      label="File"
+                      {...field}
+                      inputRef={ref}
+                      value={value?.name}
+                      onChange={event => {
+                        if (event.target.files) {
+                          onChange(event.target.files?.[0])
+                        }
+                      }}
+                      error={pathOr('', ['file', 'message'])(errors)}
+                    />
+                  )}
                 />
               </div>
 

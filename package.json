@@ -12,7 +12,9 @@
   },
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.515.0",
     "@aws-sdk/client-secrets-manager": "^3.485.0",
+    "@aws-sdk/s3-request-presigner": "^3.515.0",
     "@hookform/resolvers": "^3.3.4",
     "@nx/next": "v17.2.5",
     "@swc/helpers": "~0.5.2",

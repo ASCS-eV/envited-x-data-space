@@ -1,18 +1,21 @@
 import styles from './App.module.css'
-import { Logo } from './logo'
 
 function App() {
   return (
     <div class={styles.App}>
       <header class={styles.header}>
-        <Logo class={styles.logo} />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a class={styles.link} href="https://github.com/preactjs/preact" target="_blank" rel="noopener noreferrer">
-          Learn Preact
-        </a>
-      </header>
+          <div class={styles.logo}>
+            <img src='/envited-logo.png' alt='Envited Data Space' />
+          </div>
+        </header>
+      <main class={styles.container}>
+        
+        <p>Sign in with your verified credentials to continue to <strong>Envited Data Space</strong></p>
+        
+        <div class={`${styles.qrCodeContainer} ${styles.shadow}`}>
+          <img src='/qrcode.png' alt='QR code' />
+        </div>
+      </main>
     </div>
   )
 }

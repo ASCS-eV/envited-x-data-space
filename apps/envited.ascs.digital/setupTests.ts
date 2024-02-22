@@ -12,3 +12,12 @@ jest.mock('react', () => {
     cache: testCache,
   }
 })
+
+jest.mock('sst/node/bucket', () => ({
+  __esModule: true,
+  Bucket: {
+    public: {
+      bucketName: 'BUCKET_NAME',
+    },
+  },
+}))

@@ -1,7 +1,7 @@
 import { aws_ec2, aws_rds } from 'aws-cdk-lib'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import * as cdk from 'aws-cdk-lib/core'
-import { NextjsSite, StackContext } from 'sst/constructs'
+import { Bucket, NextjsSite, StackContext } from 'sst/constructs'
 
 export default function Envited({ stack }: StackContext) {
   const vpc = new aws_ec2.Vpc(stack, 'Vpc')
@@ -40,9 +40,12 @@ export default function Envited({ stack }: StackContext) {
     exportName: `SecretArn:${stack.stage}`,
   })
 
+  const uploadsBucket = new Bucket(stack, 'uploads')
+
   // Create the Next.js site
   const site = new NextjsSite(stack, 'envited_ascs_digital', {
     path: './',
+    bind: [uploadsBucket],
     memorySize: '1024 MB',
     timeout: '20 seconds',
     cdk: {

@@ -12,7 +12,7 @@ describe('components/LoadingIndicator', () => {
 
     // then ... should render with expected properties
     expect(element).toBeInTheDocument()
-    expect(element.closest('svg')).toHaveClass('text-orange')
+    expect(element.closest('svg')).toHaveClass('text-blue')
   })
 
   it('should render LoadingIndicator with specific properties', () => {

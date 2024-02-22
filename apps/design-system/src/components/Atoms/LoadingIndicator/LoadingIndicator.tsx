@@ -7,7 +7,7 @@ interface Props {
   colour?: Colour
 }
 
-const LoadingIndicator: FC<Props> = ({ size = Size.medium, colour = Colour.orange }) => {
+const LoadingIndicator: FC<Props> = ({ size = Size.medium, colour = Colour.blue }) => {
   const sizeClassMap = {
     [Size.small]: 'h-3.5 w-3.5',
     [Size.medium]: 'h-4 w-4',

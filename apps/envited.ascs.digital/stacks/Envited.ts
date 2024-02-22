@@ -40,7 +40,7 @@ export default function Envited({ stack }: StackContext) {
     exportName: `SecretArn:${stack.stage}`,
   })
 
-  const profileBucket = new Bucket(stack, "public")
+  const profileBucket = new Bucket(stack, 'public')
 
   // Create the Next.js site
   const site = new NextjsSite(stack, 'envited_ascs_digital', {

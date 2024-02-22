@@ -10,7 +10,7 @@ main {
 
 .header {
   background: #ffffff;
-  padding: 0.5rem 0 .25rem 0;
+  padding: 0.5rem 0 0.25rem 0;
   border-bottom: 1px solid #d1d5db;
   height: 5.5rem;
 }

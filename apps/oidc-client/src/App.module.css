@@ -16,8 +16,8 @@ main {
 }
 
 p {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
   text-align: center;
 }
 
@@ -49,6 +49,7 @@ p {
   background-color: #ffffff;
   padding: 1rem;
   width: 100%;
+  max-width: 20rem;
 }
 
 img {
@@ -64,4 +65,21 @@ img {
 
 .logo img {
   max-width: 17rem;
+}
+
+.error {
+  margin-top: 2rem;
+}
+
+.error h3 {
+  color: #ff0000;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.error p {
+  color: #ff0000;
+  font-size: 1rem;
+  margin-top: 0
 }

@@ -16,6 +16,10 @@ function App() {
         <div class={`${styles.qrCodeContainer} ${styles.shadow}`}>
           <img src="/qrcode.png" alt="QR code" />
         </div>
+        <div class={styles.error}>
+          <h3 class={styles.errorTitle}>Error</h3>
+          <p>Something went wrong</p>
+        </div>
       </main>
     </div>
   )

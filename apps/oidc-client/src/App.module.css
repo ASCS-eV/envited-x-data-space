@@ -1,33 +1,85 @@
-.App {
+main {
   text-align: center;
-}
-
-.logo {
-  animation: logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: calc(100vh - 5.5rem);
+  margin: 0 auto;
+}
+
+.header {
+  background: #ffffff;
+  padding: 0.5rem 0 0.25rem 0;
+  border-bottom: 1px solid #d1d5db;
+  height: 5.5rem;
+}
+
+p {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  text-align: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 30rem;
+  padding: 1rem;
 }
 
 .link {
-  color: #b318f0;
+  color: #000000;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.shadow {
+  --shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-colored: 0 25px 50px -12px var(--shadow-color);
+  --ring-offset-shadow: 0 0 #0000;
+  --ring-shadow: 0 0 #0000;
+  box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--shadow);
+}
+
+.qrCodeContainer {
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  width: 100%;
+  max-width: 20rem;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}
+
+.logo {
+  width: 100%;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.logo img {
+  max-width: 17rem;
+}
+
+.error {
+  margin-top: 2rem;
+}
+
+.error h3 {
+  color: #ff0000;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.error p {
+  color: #ff0000;
+  font-size: 1rem;
+  margin-top: 0;
 }

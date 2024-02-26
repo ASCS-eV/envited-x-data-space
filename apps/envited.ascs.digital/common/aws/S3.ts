@@ -16,10 +16,10 @@ export const _getUploadUrl =
     s3Client: S3Client
     putObjectCommand: typeof PutObjectCommand
   }) =>
-  async () => {
+  async (filename: string) => {
     const command = new putObjectCommand({
       ACL: 'public-read',
-      Key: crypto.randomUUID(),
+      Key: `${crypto.randomUUID()}-${filename}`,
       Bucket: process.env.UPLOAD_BUCKET_NAME,
     })
 

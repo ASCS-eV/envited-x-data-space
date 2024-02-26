@@ -159,32 +159,6 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                     />
                   )}
                 />
-                <Controller
-                  name="file"
-                  control={control}
-                  render={({ field: { ref, onChange, value, ...field } }) => (
-                    <DragAndDropField
-                      label="File"
-                      {...field}
-                      inputRef={ref}
-                      value={value?.name}
-                      onDrop={event => {
-                        if (event.dataTransfer.files.length > 0) {
-                          onChange(event.dataTransfer.files?.[0])
-                          // const newFiles = Array.from(event.dataTransfer.files)
-                          // console.log([...value, ...newFiles])
-                          // onChange([...value, ...newFiles])
-                        }
-                      }}
-                      onChange={event => {
-                        if (event.target.files) {
-                          onChange(event.target.files?.[0])
-                        }
-                      }}
-                      error={pathOr('', ['file', 'message'])(errors)}
-                    />
-                  )}
-                />
               </div>
 
               <div className="sm:col-span-full">

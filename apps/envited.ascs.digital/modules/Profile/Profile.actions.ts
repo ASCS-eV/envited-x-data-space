@@ -28,7 +28,7 @@ export async function updateProfileForm(data: ProfileForm) {
 
       const file = data.file
       const image = await fetch(url, {
-        body: file,
+        body: file as any,
         method: 'PUT',
         headers: {
           'Content-Type': file.type,

@@ -1,10 +1,6 @@
 'use server'
 
-// import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
-// import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-// import crypto from 'crypto'
 import { revalidatePath } from 'next/cache'
-// import { Bucket } from 'sst/node/bucket'
 import { z } from 'zod'
 
 import { getUploadUrl } from '../../common/aws'
@@ -12,8 +8,6 @@ import { log } from '../../common/logger'
 // import { updateProfile } from '../../common/serverActions/profiles'
 import { badRequestError, formatError, internalServerErrorError } from '../../common/utils'
 import { ProfileSchema, ValidateProfileForm } from './Profile.schema'
-
-// import { uploadBucketUrl } from '../../common/aws'
 
 type ProfileForm = z.infer<typeof ProfileSchema>
 
@@ -30,28 +24,24 @@ export async function updateProfileForm(data: ProfileForm) {
     }
 
     if (data.file) {
-      getUploadUrl()
-      // const command = new PutObjectCommand({
-      //   ACL: 'public-read',
-      //   Key: crypto.randomUUID(),
-      //   Bucket: Bucket.public.bucketName,
-      // })
-      // const url = await getSignedUrl(new S3Client({}), command)
+      const url = await getUploadUrl()
 
-      // const file = data.file
-      // const image = await fetch(url, {
-      //   body: file,
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': file.type,
-      //     'Content-Disposition': `attachment; filename="${file.name}"`,
-      //   },
-      // })
+      const file = data.file
+      const image = await fetch(url, {
+        body: file,
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,
+          'Content-Disposition': `attachment; filename="${file.name}"`,
+        },
+      })
 
-      //   data = {
-      //     ...data,
-      //     logo: image.url.split('?')[0],
-      //   }
+      console.log('***** UPLOAD IMAGE *****', image)
+
+      data = {
+        ...data,
+        logo: image.url.split('?')[0],
+      }
     }
 
     console.log(data)

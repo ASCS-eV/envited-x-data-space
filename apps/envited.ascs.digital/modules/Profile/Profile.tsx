@@ -1,14 +1,6 @@
 'use client'
 
-import {
-  Card,
-  Checkbox,
-  Checkboxes,
-  FileField,
-  Heading,
-  TextField,
-  TextareaField,
-} from '@envited-marketplace/design-system'
+import { Card, Checkbox, Checkboxes, Heading, TextField, TextareaField } from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { append, equals, includes, pathOr, prop, propOr, reject } from 'ramda'
 import { FC } from 'react'
@@ -29,7 +21,6 @@ type ProfileInputs = {
   name: string
   description: string
   logo: string
-  file: any
   streetAddress: string
   postalCode: string
   addressLocality: string
@@ -172,11 +163,19 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                   name="file"
                   control={control}
                   render={({ field: { ref, onChange, value, ...field } }) => (
-                    <FileField
+                    <DragAndDropField
                       label="File"
                       {...field}
                       inputRef={ref}
                       value={value?.name}
+                      onDrop={event => {
+                        if (event.dataTransfer.files.length > 0) {
+                          onChange(event.dataTransfer.files?.[0])
+                          // const newFiles = Array.from(event.dataTransfer.files)
+                          // console.log([...value, ...newFiles])
+                          // onChange([...value, ...newFiles])
+                        }
+                      }}
                       onChange={event => {
                         if (event.target.files) {
                           onChange(event.target.files?.[0])

@@ -12,7 +12,9 @@ describe('src/utils', () => {
 
       const result = SUT.getOpenIdConnectUrl(params)
 
-      expect(result).toEqual('openid-vc://?client_id=CLIENT_ID&request_uri=EXTERNAL_URL%2Fapi%2FpresentCredential%3Flogin_id%3DLOGIN_ID')
+      expect(result).toEqual(
+        'openid-vc://?client_id=CLIENT_ID&request_uri=EXTERNAL_URL%2Fapi%2FpresentCredential%3Flogin_id%3DLOGIN_ID',
+      )
     })
 
     it('should throw an error when not all url params are set', () => {

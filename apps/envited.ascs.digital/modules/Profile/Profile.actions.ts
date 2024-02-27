@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { dissoc, evolve, pipe } from 'ramda'
+import { assoc, dissoc, lens, prop, set } from 'ramda'
 import { z } from 'zod'
 
 import { getUploadUrl } from '../../common/aws'
@@ -37,12 +37,7 @@ export async function updateProfileForm(data: ProfileForm) {
         },
       })
 
-      data = pipe(
-        evolve({
-          logo: () => image.url.split('?')[0],
-        }),
-        dissoc('file'),
-      )(data)
+      data = dissoc('file')(set(lens(prop('logo'), assoc('logo')), image.url.split('?')[0], data))
     }
 
     await updateProfile(data)

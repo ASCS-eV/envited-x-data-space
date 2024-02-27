@@ -5,7 +5,7 @@ import { RefCallBack } from 'react-hook-form'
 interface FileFieldProps {
   label: string | ReactElement<any, string | JSXElementConstructor<any>>
   name: string
-  value: any
+  value: string
   error?: string
   inputRef: RefCallBack
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -22,7 +22,6 @@ export const FileField: FC<FileFieldProps> = ({ label, name, value, error = '', 
           type="file"
           name={name}
           id={name}
-          defaultValue={value}
           accept="image/png, image/jpeg"
           onChange={onChange}
           ref={inputRef}

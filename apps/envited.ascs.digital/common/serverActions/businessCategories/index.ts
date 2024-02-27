@@ -1,1 +1,1 @@
-export { get as getBusinessCategories } from './get'
+export { get as getBusinessCategories, getProfileBusinessCategories } from './get'

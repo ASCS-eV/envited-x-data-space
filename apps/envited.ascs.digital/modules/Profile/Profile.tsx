@@ -21,7 +21,8 @@ import { ProfileSchema } from './Profile.schema'
 
 interface ProfileProps {
   profile: ProfileType
-  memberCategories: any[]
+  profileBusinessCategories: string[]
+  businessCategories: any[]
 }
 
 type ProfileInputs = {
@@ -40,10 +41,10 @@ type ProfileInputs = {
   principalPhone: string
   principalEmail: string
   website: string
-  offerings: []
+  businessCategories: string[]
 }
 
-export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
+export const Profile: FC<ProfileProps> = ({ profile, profileBusinessCategories, businessCategories }) => {
   const { t } = useTranslation('Profile')
   const { error, success } = useNotification()
 
@@ -69,13 +70,13 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
       principalPhone: propOr('', 'principalPhone')(profile),
       principalEmail: propOr('', 'principalEmail')(profile),
       website: propOr('', 'website')(profile),
-      offerings: [],
+      businessCategories: profileBusinessCategories,
     },
     mode: 'onChange',
   })
 
   const handleCheckbox = (checkId: string) => {
-    const { offerings: ids } = getValues()
+    const { businessCategories: ids } = getValues()
 
     return includes(checkId)(ids) ? reject(equals(checkId))(ids) : append(checkId)(ids)
   }
@@ -126,17 +127,17 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
 
               <div className="col-span-full">
                 <Controller
-                  name="offerings"
+                  name="businessCategories"
                   control={control}
                   render={({ field: { ref, value, ...field } }) => (
                     <Checkboxes
-                      label={t('[Label] offerings')}
+                      label={t('[Label] business categories')}
                       inputRef={ref}
-                      items={memberCategories}
+                      items={businessCategories}
                       values={value}
                       handleCheckbox={handleCheckbox}
                       {...field}
-                      error={pathOr('', ['offerings', 'message'])(errors)}
+                      error={pathOr('', ['businessCategories', 'message'])(errors)}
                     />
                   )}
                 />
@@ -155,26 +156,6 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                     />
                   )}
                 />
-                {/*
-                <Controller
-                  name="file"
-                  control={control}
-                  render={({ field: { ref, onChange, value, ...field } }) => (
-                    <FileField
-                      label="File"
-                      {...field}
-                      inputRef={ref}
-                      value={value?.name}
-                      onChange={event => {
-                        if (event.target.files) {
-                          onChange(event.target.files?.[0])
-                        }
-                      }}
-                      error={pathOr('', ['file', 'message'])(errors)}
-                    />
-                  )}
-                />
-                */}
                 <Controller
                   name="file"
                   control={control}

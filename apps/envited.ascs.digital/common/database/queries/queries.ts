@@ -4,7 +4,12 @@ import { fromPairs, map, pipe, toPairs } from 'ramda'
 
 import { connectDb } from '../database'
 import * as schema from '../schema'
-import { getBusinessCategories } from './businessCategories'
+import {
+  deleteBusinessCategoriesByProfileId,
+  getBusinessCategories,
+  getBusinessCategoriesByProfileId,
+  insertBusinessCategoryByProfileId,
+} from './businessCategories'
 import { fetchTables } from './common'
 import { getProfileBySlug, getPublishedProfiles, maybeUpdatePublishedState, update as updateProfile } from './profiles'
 import {
@@ -18,11 +23,14 @@ import {
 
 const queries = {
   deleteUserById,
+  deleteBusinessCategoriesByProfileId,
   fetchTables,
   getBusinessCategories,
+  getBusinessCategoriesByProfileId,
   getUserById,
   getUserWithProfileById,
   getUsersByIssuerId,
+  insertBusinessCategoryByProfileId,
   insertUserTx,
   updateProfile,
   maybeUpdatePublishedState,

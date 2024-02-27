@@ -1,6 +1,6 @@
 'use server'
 
-import { isNil } from 'ramda'
+import { dissoc, isNil } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
@@ -12,7 +12,7 @@ import { badRequestError, forbiddenError, formatError, internalServerErrorError,
 
 export const _update =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
-  async (profile: Partial<Profile>) => {
+  async (profile: Partial<Profile>, businessCategories?: string[]) => {
     try {
       const session = await getServerSession()
       if (isNil(session)) {
@@ -50,6 +50,16 @@ export const _update =
       }
 
       const [updatedProfile] = await connection.updateProfile(profile)
+
+      if (businessCategories) {
+        await connection.deleteBusinessCategoriesByProfileId(updatedProfile.id)
+
+        const insertProfilesToBusinessCategoriesPromises = businessCategories.map((id: string) =>
+          connection.insertBusinessCategoryByProfileId(updatedProfile.id, id),
+        )
+
+        await Promise.all(insertProfilesToBusinessCategoriesPromises)
+      }
       const [result] = await connection.maybeUpdatePublishedState(updatedProfile)
       return result
     } catch (error: unknown) {

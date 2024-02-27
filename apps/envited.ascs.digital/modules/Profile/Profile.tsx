@@ -5,6 +5,7 @@ import {
   Checkboxes,
   DragAndDropField,
   Heading,
+  LoadingIndicator,
   TextField,
   TextareaField,
 } from '@envited-marketplace/design-system'
@@ -51,7 +52,7 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
     control,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ProfileInputs>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
@@ -81,6 +82,8 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
   }
 
   const updateProfileAction: SubmitHandler<ProfileInputs> = async data => {
+    // return new Promise(resolve => setTimeout(resolve, 2000))
+
     try {
       await updateProfileForm(data)
       success('Profile is updated')
@@ -375,8 +378,9 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
           <button
             type="submit"
             className="bg-blue hover:bg-blue-900 text-white transition rounded-full font-bold py-2 px-4"
+            disabled={isSubmitting}
           >
-            {t('[Button] update profile')}
+            {isSubmitting ? <LoadingIndicator /> : t('[Button] update profile')}
           </button>
         </div>
       </form>

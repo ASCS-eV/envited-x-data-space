@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - develop
-      - 35_upload_file_to_s3
 
 # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
 concurrency:

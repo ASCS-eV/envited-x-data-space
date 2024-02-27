@@ -26,7 +26,7 @@ describe('src/utils', () => {
 
       const result = () => SUT.getOpenIdConnectUrl(params)
 
-      expect(result).toThrowError('Missing required parameters')
+      expect(result).toThrow('Missing required parameters')
     })
   })
 })

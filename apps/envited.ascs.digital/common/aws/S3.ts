@@ -1,7 +1,7 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import type { getSignedUrl as TgetSignedUrl } from '@aws-sdk/s3-request-presigner'
-import crypto from 'crypto'
+import { createRandomString } from '../utils'
 
 const s3Client = new S3Client({})
 const putObjectCommand = PutObjectCommand
@@ -16,10 +16,10 @@ export const _getUploadUrl =
     s3Client: S3Client
     putObjectCommand: typeof PutObjectCommand
   }) =>
-  async (filename: string) => {
+  async (slug: string, filename: string) => {
     const command = new putObjectCommand({
       ACL: 'public-read',
-      Key: `${crypto.randomUUID()}-${filename}`,
+      Key: `${slug}-${createRandomString(5)}-.${filename.split('').pop()}`,
       Bucket: process.env.NEXT_PUBLIC_UPLOAD_BUCKET_NAME,
     })
 

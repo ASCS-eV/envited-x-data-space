@@ -1,4 +1,4 @@
-import { pathOr } from 'ramda'
+import { pathOr, times } from 'ramda'
 
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
 
@@ -13,3 +13,11 @@ export const slugify = (string: string) =>
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '')
+
+export const createRandomString = (length: number) => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  times(() => (result += chars.charAt(Math.floor(Math.random() * chars.length))), length)
+
+  return result
+}

@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { getUploadUrl } from '../../common/aws'
 import { log } from '../../common/logger'
 import { updateProfile } from '../../common/serverActions/profiles'
-import { badRequestError, formatError, internalServerErrorError } from '../../common/utils'
+import { badRequestError, formatError, internalServerErrorError, slugify } from '../../common/utils'
 import { ProfileSchema, ValidateProfileForm } from './Profile.schema'
 
 type ProfileForm = z.infer<typeof ProfileSchema>
@@ -26,7 +26,7 @@ export async function updateProfileForm(data: ProfileForm) {
 
     if (data.file) {
       const file = data.file
-      const url = await getUploadUrl(file.name)
+      const url = await getUploadUrl(slugify(data.name), file.name)
 
       const image = await fetch(url, {
         body: file as any,

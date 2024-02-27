@@ -10,4 +10,10 @@ export {
   forbidden as forbiddenError,
 } from './errors'
 
-export { extractIdFromCredential, extractIssuerIdFromCredential, extractTypeFromCredential, slugify } from './utils'
+export {
+  extractIdFromCredential,
+  extractIssuerIdFromCredential,
+  extractTypeFromCredential,
+  slugify,
+  createRandomString,
+} from './utils'

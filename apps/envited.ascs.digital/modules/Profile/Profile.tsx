@@ -2,9 +2,8 @@
 
 import {
   Card,
-  Checkbox,
   Checkboxes,
-  FileField,
+  DragAndDropField,
   Heading,
   TextField,
   TextareaField,
@@ -16,7 +15,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { Profile as ProfileType } from '../../common/types'
+import { File, Profile as ProfileType } from '../../common/types'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
 
@@ -29,7 +28,7 @@ type ProfileInputs = {
   name: string
   description: string
   logo: string
-  file: any
+  file: File
   streetAddress: string
   postalCode: string
   addressLocality: string
@@ -156,6 +155,7 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                     />
                   )}
                 />
+                {/*
                 <Controller
                   name="file"
                   control={control}
@@ -165,6 +165,30 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                       {...field}
                       inputRef={ref}
                       value={value?.name}
+                      onChange={event => {
+                        if (event.target.files) {
+                          onChange(event.target.files?.[0])
+                        }
+                      }}
+                      error={pathOr('', ['file', 'message'])(errors)}
+                    />
+                  )}
+                />
+                */}
+                <Controller
+                  name="file"
+                  control={control}
+                  render={({ field: { ref, onChange, value, ...field } }) => (
+                    <DragAndDropField
+                      label="File"
+                      {...field}
+                      inputRef={ref}
+                      value={value?.name}
+                      onDrop={event => {
+                        if (event.dataTransfer.files.length > 0) {
+                          onChange(event.dataTransfer.files?.[0])
+                        }
+                      }}
                       onChange={event => {
                         if (event.target.files) {
                           onChange(event.target.files?.[0])

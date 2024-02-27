@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+const FILE_TYPES = ['image/png', 'image/jpeg'] as const
+
 export const ProfileSchema = z.object({
   name: z.string(),
   description: z.string(),
@@ -9,7 +11,7 @@ export const ProfileSchema = z.object({
       name: z.string({ required_error: 'Please upload a valid file type. (JPG, JPEG, PNG)' }),
       lastModified: z.number(),
       size: z.number(),
-      type: z.string(),
+      type: z.enum(FILE_TYPES),
     })
     .optional(),
   salesName: z.string().or(z.literal(null)),

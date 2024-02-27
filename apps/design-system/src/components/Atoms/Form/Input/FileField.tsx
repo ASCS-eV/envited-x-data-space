@@ -14,7 +14,6 @@ interface FileFieldProps {
 export const FileField: FC<FileFieldProps> = ({ label, name, value, error = '', inputRef, onChange }) => {
   return (
     <>
-      {/* {value} */}
       <label htmlFor={name} className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
         {label}
       </label>
@@ -23,7 +22,7 @@ export const FileField: FC<FileFieldProps> = ({ label, name, value, error = '', 
           type="file"
           name={name}
           id={name}
-          // defaultValue={value}
+          defaultValue={value}
           accept="image/png, image/jpeg"
           onChange={onChange}
           ref={inputRef}

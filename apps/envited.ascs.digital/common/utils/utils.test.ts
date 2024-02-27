@@ -41,4 +41,10 @@ describe('common/utils', () => {
       expect(result).toEqual('this-is-a-test')
     })
   })
+
+  describe('createRandomString', () => {
+    const result = SUT.createRandomString(5)
+
+    expect(result).toHaveLength(5)
+  })
 })

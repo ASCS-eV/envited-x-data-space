@@ -1,6 +1,13 @@
 'use client'
 
-import { Card, Checkbox, Checkboxes, Heading, TextField, TextareaField } from '@envited-marketplace/design-system'
+import {
+  Card,
+  Checkboxes,
+  DragAndDropField,
+  Heading,
+  TextField,
+  TextareaField,
+} from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { append, equals, includes, pathOr, prop, propOr, reject } from 'ramda'
 import { FC } from 'react'
@@ -8,7 +15,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { Profile as ProfileType } from '../../common/types'
+import { File, Profile as ProfileType } from '../../common/types'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
 
@@ -21,6 +28,7 @@ type ProfileInputs = {
   name: string
   description: string
   logo: string
+  file: File
   streetAddress: string
   postalCode: string
   addressLocality: string
@@ -33,7 +41,6 @@ type ProfileInputs = {
   principalEmail: string
   website: string
   offerings: []
-  isPublished: boolean
 }
 
 export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
@@ -63,7 +70,6 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
       principalEmail: propOr('', 'principalEmail')(profile),
       website: propOr('', 'website')(profile),
       offerings: [],
-      isPublished: propOr(false, 'isPublished')(profile),
     },
     mode: 'onChange',
   })
@@ -120,16 +126,6 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
 
               <div className="col-span-full">
                 <Controller
-                  name="isPublished"
-                  control={control}
-                  render={({ field: { ref, value, ...field } }) => (
-                    <Checkbox label={t('[Label] is published')} checked={value} inputRef={ref} {...field} />
-                  )}
-                />
-              </div>
-
-              <div className="col-span-full">
-                <Controller
                   name="offerings"
                   control={control}
                   render={({ field: { ref, value, ...field } }) => (
@@ -156,6 +152,49 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                       inputRef={ref}
                       {...field}
                       error={pathOr('', ['logo', 'message'])(errors)}
+                    />
+                  )}
+                />
+                {/*
+                <Controller
+                  name="file"
+                  control={control}
+                  render={({ field: { ref, onChange, value, ...field } }) => (
+                    <FileField
+                      label="File"
+                      {...field}
+                      inputRef={ref}
+                      value={value?.name}
+                      onChange={event => {
+                        if (event.target.files) {
+                          onChange(event.target.files?.[0])
+                        }
+                      }}
+                      error={pathOr('', ['file', 'message'])(errors)}
+                    />
+                  )}
+                />
+                */}
+                <Controller
+                  name="file"
+                  control={control}
+                  render={({ field: { ref, onChange, value, ...field } }) => (
+                    <DragAndDropField
+                      label="File"
+                      {...field}
+                      inputRef={ref}
+                      value={value?.name}
+                      onDrop={event => {
+                        if (event.dataTransfer.files.length > 0) {
+                          onChange(event.dataTransfer.files?.[0])
+                        }
+                      }}
+                      onChange={event => {
+                        if (event.target.files) {
+                          onChange(event.target.files?.[0])
+                        }
+                      }}
+                      error={pathOr('', ['file', 'message'])(errors)}
                     />
                   )}
                 />

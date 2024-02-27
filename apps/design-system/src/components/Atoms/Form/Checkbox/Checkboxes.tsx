@@ -38,7 +38,7 @@ export const Checkboxes: FC<CheckboxProps> = ({
     {!isEmpty(description) && <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">{description}</p>}
     <div className="grid gap-4 grid-cols-3 mt-2">
       {map(({ id, name: itemName, description: itemDescription }: CheckboxItem) => (
-        <div className="relative flex items-start">
+        <div key={id} className="relative flex items-start">
           <div className="flex h-6 items-center">
             <input
               id={`${name}-${id}`}

@@ -26,11 +26,23 @@ export enum ColorScheme {
   dark = 'dark',
 }
 
+export enum UploadTypes {
+  png = 'image/png',
+  jpeg = 'image/jpeg',
+}
+
 export type Obj = { [key: string]: string | number }
 
 export type Action<T> = {
   type: T
   data?: Obj
+}
+
+export interface File {
+  name: string
+  lastModified: number
+  size: number
+  type: UploadTypes
 }
 
 export interface IRole {

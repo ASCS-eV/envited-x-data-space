@@ -20,7 +20,7 @@ export const _getUploadUrl =
     const command = new putObjectCommand({
       ACL: 'public-read',
       Key: `${crypto.randomUUID()}-${filename}`,
-      Bucket: process.env.UPLOAD_BUCKET_NAME,
+      Bucket: process.env.NEXT_PUBLIC_UPLOAD_BUCKET_NAME,
     })
 
     return await getSignedUrl(s3Client, command)

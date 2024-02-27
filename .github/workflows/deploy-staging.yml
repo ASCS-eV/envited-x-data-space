@@ -19,6 +19,7 @@ jobs:
     environment: staging
     env:
       ENV: ${{ vars.ENV }}
+      UPLOAD_BUCKET_NAME: ${{ vars.UPLOAD_BUCKET_NAME }}
       NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
       NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
     steps:

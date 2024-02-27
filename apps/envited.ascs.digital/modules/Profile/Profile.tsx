@@ -42,7 +42,6 @@ type ProfileInputs = {
   principalEmail: string
   website: string
   offerings: []
-  isPublished: boolean
 }
 
 export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
@@ -72,7 +71,6 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
       principalEmail: propOr('', 'principalEmail')(profile),
       website: propOr('', 'website')(profile),
       offerings: [],
-      isPublished: propOr(false, 'isPublished')(profile),
     },
     mode: 'onChange',
   })
@@ -123,16 +121,6 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                       {...field}
                       error={pathOr('', ['description', 'message'])(errors)}
                     />
-                  )}
-                />
-              </div>
-
-              <div className="col-span-full">
-                <Controller
-                  name="isPublished"
-                  control={control}
-                  render={({ field: { ref, value, ...field } }) => (
-                    <Checkbox label={t('[Label] is published')} checked={value} inputRef={ref} {...field} />
                   )}
                 />
               </div>

@@ -1,5 +1,5 @@
 {
   "name": "oidc-client",
-  "version": "0.0.1",
-  "description": "Nx Preact oidc-client app"
+  "version": "0.0.0",
+  "private": true
 }

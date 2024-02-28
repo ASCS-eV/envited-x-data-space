@@ -1,7 +1,7 @@
 /// <reference types='vitest' />
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin'
 import preact from '@preact/preset-vite'
-import { defineConfig, searchForWorkspaceRoot } from 'vite'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/oidc-client',

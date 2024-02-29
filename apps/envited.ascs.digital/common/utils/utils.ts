@@ -1,4 +1,4 @@
-import { pathOr, times } from 'ramda'
+import { addIndex, map, pathOr, times } from 'ramda'
 
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
 
@@ -21,3 +21,5 @@ export const createRandomString = (length: number) => {
 
   return result
 }
+
+export const mapIndexed = addIndex(map)

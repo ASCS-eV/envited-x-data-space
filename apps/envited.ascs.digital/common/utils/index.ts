@@ -16,4 +16,5 @@ export {
   extractTypeFromCredential,
   slugify,
   createRandomString,
+  mapIndexed,
 } from './utils'

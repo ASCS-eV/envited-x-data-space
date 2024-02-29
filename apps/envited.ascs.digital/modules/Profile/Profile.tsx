@@ -1,21 +1,15 @@
 'use client'
 
-import {
-  Card,
-  Checkboxes,
-  DragAndDropField,
-  Heading,
-  TextField,
-  TextareaField,
-} from '@envited-marketplace/design-system'
+import { Card, Checkboxes, DragAndDropField, Heading, LoadingIndicator, TextField, TextareaField } from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { append, chain, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
 import { FC } from 'react'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { File, Profile as ProfileType } from '../../common/types'
+import { mapIndexed } from '../../common/utils'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
 
@@ -29,6 +23,14 @@ interface Profiles extends ProfileType {
 interface ProfileProps {
   profile: Profiles
   businessCategories: any[]
+}
+
+interface OfferingItem {
+  name: string
+  type: string
+  functionalities: string
+  supportedTools: string
+  supportedStandards: string
 }
 
 type ProfileInputs = {
@@ -48,6 +50,7 @@ type ProfileInputs = {
   principalEmail: string
   website: string
   businessCategories: string[]
+  offerings: OfferingItem[] | []
 }
 
 export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
@@ -58,7 +61,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
     control,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ProfileInputs>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
@@ -79,9 +82,11 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
       businessCategories: !isNil(profile?.businessCategories)
         ? (chain(prop('businessCategoryId'))(profile?.businessCategories as any) as string[])
         : [],
+      offerings: propOr([], 'offerings')(profile),
     },
     mode: 'onChange',
   })
+
 
   const handleCheckbox = (checkId: string) => {
     const { businessCategories: ids } = getValues()
@@ -89,12 +94,21 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
     return includes(checkId)(ids) ? reject(equals(checkId))(ids) : append(checkId)(ids)
   }
 
+  const {
+    fields: offeringFields,
+    append: appendOffering,
+    remove: removeOffering,
+  } = useFieldArray({
+    control,
+    name: 'offerings',
+  })
+
   const updateProfileAction: SubmitHandler<ProfileInputs> = async data => {
     try {
       await updateProfileForm(data)
-      success('Profile is updated')
+      success(t('[Status] profile is updated'))
     } catch (e) {
-      error('Something went wrong')
+      error(t('[Status] something wrong'))
     }
   }
 
@@ -358,14 +372,129 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
               </div>
             </div>
           </div>
+          <div className="border-b border-gray-900/10 dark:border-white/10 pb-12">
+            <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-white">
+              {t('[Heading] offerings')}
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">{t('[Description] offerings')}</p>
+
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
+              {mapIndexed((field: any, index: number) => (
+                <div key={field.id} className="border-t">
+                  <div className="flex justify-between py-4">
+                    <h3 className="font-bold text-gray-400">
+                      {t('[Label] offering')} {index + 1}
+                    </h3>
+                    <button
+                      type="button"
+                      className="underline text-blue-800 hover:text-blue-900"
+                      onClick={() => removeOffering(index)}
+                    >
+                      {t('[Button] remove')}
+                    </button>
+                  </div>
+                  <div className="pt-4">
+                    <Controller
+                      name={`offerings.${index}.name`}
+                      control={control}
+                      render={({ field: { ref, ...field } }) => (
+                        <TextField
+                          label={t('[Label] offering name')}
+                          inputRef={ref}
+                          {...field}
+                          error={pathOr('', ['offerings', index, 'name', 'message'])(errors)}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <Controller
+                      name={`offerings.${index}.type`}
+                      control={control}
+                      render={({ field: { ref, ...field } }) => (
+                        <TextField
+                          label={t('[Label] offering type')}
+                          inputRef={ref}
+                          {...field}
+                          error={pathOr('', ['offerings', index, 'type', 'message'])(errors)}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <Controller
+                      name={`offerings.${index}.functionalities`}
+                      control={control}
+                      render={({ field: { ref, ...field } }) => (
+                        <TextField
+                          label={t('[Label] offering functionalities')}
+                          inputRef={ref}
+                          {...field}
+                          error={pathOr('', ['offerings', index, 'functionalities', 'message'])(errors)}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <Controller
+                      name={`offerings.${index}.supportedTools`}
+                      control={control}
+                      render={({ field: { ref, ...field } }) => (
+                        <TextareaField
+                          label={t('[Label] offering supported tools')}
+                          description={t('[Description] offering supported tools')}
+                          inputRef={ref}
+                          {...field}
+                          error={pathOr('', ['offerings', index, 'supportedTools', 'message'])(errors)}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <Controller
+                      name={`offerings.${index}.supportedStandards`}
+                      control={control}
+                      render={({ field: { ref, ...field } }) => (
+                        <TextareaField
+                          label={t('[Label] offering supported standards')}
+                          description={t('[Description] offering supported standards')}
+                          inputRef={ref}
+                          {...field}
+                          error={pathOr('', ['offerings', index, 'supportedStandards', 'message'])(errors)}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+              ))(offeringFields)}
+              {offeringFields.length < 5 && (
+                <button
+                  type="button"
+                  className="underline text-blue-800 hover:text-blue-900"
+                  onClick={() =>
+                    appendOffering({
+                      name: '',
+                      type: '',
+                      functionalities: '',
+                      supportedTools: '',
+                      supportedStandards: '',
+                    })
+                  }
+                >
+                  {t('[Button] add further offerings')}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <button
             type="submit"
             className="bg-blue hover:bg-blue-900 text-white transition rounded-full font-bold py-2 px-4"
+            disabled={isSubmitting}
           >
-            {t('[Button] update profile')}
+            {isSubmitting ? <LoadingIndicator /> : t('[Button] update profile')}
           </button>
         </div>
       </form>

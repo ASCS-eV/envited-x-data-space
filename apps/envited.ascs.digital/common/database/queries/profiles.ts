@@ -23,7 +23,7 @@ export const getProfileBySlug = (db: DatabaseConnection) => async (slug: string)
   db.query.profile.findFirst({
     where: eq(profile.slug, slug),
     with: {
-      profilesToBusinessCategories: true,
+      businessCategories: true,
     },
   })
 

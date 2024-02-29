@@ -139,7 +139,7 @@ export const profile = pgTable('profile', {
 })
 
 export const profileRelations = relations(profile, ({ many }) => ({
-  profilesToBusinessCategories: many(profilesToBusinessCategories),
+  businessCategories: many(profilesToBusinessCategories),
 }))
 
 export const businessCategory = pgTable('businessCategory', {

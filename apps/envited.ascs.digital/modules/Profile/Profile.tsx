@@ -82,13 +82,11 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
   }
 
   const updateProfileAction: SubmitHandler<ProfileInputs> = async data => {
-    // return new Promise(resolve => setTimeout(resolve, 2000))
-
     try {
       await updateProfileForm(data)
-      success('Profile is updated')
+      success(t('[Status] profile is updated'))
     } catch (e) {
-      error('Something went wrong')
+      error(t('[Status] something wrong'))
     }
   }
 

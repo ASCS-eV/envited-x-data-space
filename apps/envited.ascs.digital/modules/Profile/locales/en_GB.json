@@ -18,5 +18,7 @@
   "[Label] name": "Name",
   "[Label] phone": "Phone",
   "[Label] email": "Email address",
-  "[Button] update profile": "Update profile"
+  "[Button] update profile": "Update profile",
+  "[Status] profile is updated": "Profile is updated",
+  "[Status] something wrong": "Something went wrong"
 }

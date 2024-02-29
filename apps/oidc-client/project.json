@@ -63,6 +63,14 @@
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/apps/oidc-client"
       }
+    },
+    "deploy:staging": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/oidc-client",
+        "commands": ["sst deploy OIDCClient --stage staging"],
+        "parallel": false
+      }
     }
   }
 }

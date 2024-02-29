@@ -1,6 +1,14 @@
 'use client'
 
-import { Card, Checkboxes, DragAndDropField, Heading, LoadingIndicator, TextField, TextareaField } from '@envited-marketplace/design-system'
+import {
+  Card,
+  Checkboxes,
+  DragAndDropField,
+  Heading,
+  LoadingIndicator,
+  TextField,
+  TextareaField,
+} from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { append, chain, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
 import { FC } from 'react'
@@ -86,7 +94,6 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
     },
     mode: 'onChange',
   })
-
 
   const handleCheckbox = (checkId: string) => {
     const { businessCategories: ids } = getValues()

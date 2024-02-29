@@ -53,7 +53,7 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
     control,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ProfileInputs>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
@@ -88,9 +88,9 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
   const updateProfileAction: SubmitHandler<ProfileInputs> = async data => {
     try {
       await updateProfileForm(data)
-      success('Profile is updated')
+      success(t('[Status] profile is updated'))
     } catch (e) {
-      error('Something went wrong')
+      error(t('[Status] something wrong'))
     }
   }
 
@@ -476,8 +476,9 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
           <button
             type="submit"
             className="bg-blue hover:bg-blue-900 text-white transition rounded-full font-bold py-2 px-4"
+            disabled={isSubmitting}
           >
-            {t('[Button] update profile')}
+            {isSubmitting ? <LoadingIndicator /> : t('[Button] update profile')}
           </button>
         </div>
       </form>

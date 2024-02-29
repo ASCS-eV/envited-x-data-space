@@ -27,6 +27,8 @@
   "[Label] name": "Name",
   "[Label] phone": "Phone",
   "[Label] email": "Email address",
+  "[Status] profile is updated": "Profile is updated",
+  "[Status] something wrong": "Something went wrong",
   "[Label] offering": "Offering",
   "[Button] remove": "Remove offering",
   "[Button] add further offerings": "+ add further offerings",

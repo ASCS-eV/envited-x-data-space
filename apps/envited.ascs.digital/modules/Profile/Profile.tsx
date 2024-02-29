@@ -9,6 +9,7 @@ import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-fo
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { File, Profile as ProfileType } from '../../common/types'
+import { mapIndexed } from '../../common/utils'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
 
@@ -362,7 +363,7 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
             <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">{t('[Description] offerings')}</p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
-              {offeringFields.map((field, index) => (
+              {mapIndexed((field: any, index: number) => (
                 <div key={field.id} className="border-t">
                   <div className="flex justify-between py-4">
                     <h3 className="font-bold text-gray-400">
@@ -449,7 +450,7 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                     />
                   </div>
                 </div>
-              ))}
+              ))(offeringFields)}
               {offeringFields.length < 5 && (
                 <button
                   type="button"

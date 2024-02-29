@@ -21,7 +21,17 @@ export const ProfileSchema = z.object({
   principalPhone: z.string(),
   principalEmail: z.string().email().optional().or(z.literal('')),
   website: z.string().url().optional().or(z.literal('')),
-  offerings: z.string().array().optional(),
+  offerings: z
+    .object({
+      name: z.string().max(100),
+      type: z.string().max(100),
+      functionalities: z.string().max(100),
+      supportedTools: z.string().max(200),
+      supportedStandards: z.string().max(200),
+    })
+    .array()
+    .max(5)
+    .optional(),
 })
 
 export const ValidateProfileForm = ProfileSchema.safeParse

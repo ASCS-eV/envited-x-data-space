@@ -9,7 +9,7 @@ import {
   TextareaField,
 } from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { append, equals, includes, pathOr, prop, propOr, reject } from 'ramda'
+import { append, chain, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
 import { FC } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -19,9 +19,15 @@ import { File, Profile as ProfileType } from '../../common/types'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
 
+interface BusinessCategories {
+  profileId: string
+  businessCategoryId: string
+}
+interface Profiles extends ProfileType {
+  businessCategories: BusinessCategories[]
+}
 interface ProfileProps {
-  profile: ProfileType
-  profileBusinessCategories: string[]
+  profile: Profiles
   businessCategories: any[]
 }
 
@@ -44,7 +50,7 @@ type ProfileInputs = {
   businessCategories: string[]
 }
 
-export const Profile: FC<ProfileProps> = ({ profile, profileBusinessCategories, businessCategories }) => {
+export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
   const { t } = useTranslation('Profile')
   const { error, success } = useNotification()
 
@@ -70,7 +76,9 @@ export const Profile: FC<ProfileProps> = ({ profile, profileBusinessCategories, 
       principalPhone: propOr('', 'principalPhone')(profile),
       principalEmail: propOr('', 'principalEmail')(profile),
       website: propOr('', 'website')(profile),
-      businessCategories: profileBusinessCategories,
+      businessCategories: !isNil(profile?.businessCategories)
+        ? (chain(prop('businessCategoryId'))(profile?.businessCategories as any) as string[])
+        : [],
     },
     mode: 'onChange',
   })

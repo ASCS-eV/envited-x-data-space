@@ -46,7 +46,7 @@ export const init =
       string,
       (
         db: PostgresJsDatabase<typeof schema>,
-      ) => (...args: any[]) => Promise<postgres.RowList<Record<string, unknown>[]> | postgres.Row>
+      ) => (...args: any[]) => Promise<postgres.RowList<Record<string, unknown>[]> | postgres.Row | undefined>
     >,
   ) =>
   async () => {

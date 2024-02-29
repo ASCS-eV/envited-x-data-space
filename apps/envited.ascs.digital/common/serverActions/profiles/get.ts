@@ -22,8 +22,7 @@ export const _get =
       const session = await getServerSession()
       const connection = await db()
       const profile = await connection.getProfileBySlug(slug)
-      console.log('profile')
-      console.log(profile)
+
       if (isNil(profile) || isEmpty(profile)) {
         throw notFoundError({ resource: 'profiles', resourceId: slug, userId: session?.user.id })
       }

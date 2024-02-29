@@ -20,7 +20,7 @@ export const maybeUpdatePublishedState = (db: DatabaseConnection) => async (data
 }
 
 export const getProfileBySlug = (db: DatabaseConnection) => async (slug: string) =>
-  db.query.profile.findFirst({ 
+  db.query.profile.findFirst({
     where: eq(profile.slug, slug),
     with: {
       profilesToBusinessCategories: true,

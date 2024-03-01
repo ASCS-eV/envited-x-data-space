@@ -23,7 +23,9 @@ describe('Profile', () => {
       isPublished: true,
     }
 
-    const { baseElement } = render(<Profile profile={profile} memberCategories={[]} />)
+    const { baseElement } = render(
+      <Profile profile={profile} profileBusinessCategories={[]} businessCategories={['CATEGORY']} />,
+    )
     expect(baseElement).toBeTruthy()
   })
 })

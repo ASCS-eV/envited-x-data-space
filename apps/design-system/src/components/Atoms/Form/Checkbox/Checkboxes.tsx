@@ -10,7 +10,7 @@ interface CheckboxItem {
 
 interface CheckboxProps {
   name: string
-  values: []
+  values: string[]
   label: string | ReactElement<any, string | JSXElementConstructor<any>>
   description?: string
   error?: string

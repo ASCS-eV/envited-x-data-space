@@ -9,7 +9,7 @@ import { Database } from '../../database/types'
 import { isOwnProfile, isUsersCompanyProfile } from '../../guards'
 import { Log, log } from '../../logger'
 import { Session } from '../../types'
-import { badRequestError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
+import { badRequestError, formatError, internalServerErrorError, notFoundError } from '../../utils'
 
 export const _get =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
@@ -21,7 +21,7 @@ export const _get =
 
       const session = await getServerSession()
       const connection = await db()
-      const [profile] = await connection.getProfileBySlug(slug)
+      const profile = await connection.getProfileBySlug(slug)
 
       if (isNil(profile) || isEmpty(profile)) {
         throw notFoundError({ resource: 'profiles', resourceId: slug, userId: session?.user.id })

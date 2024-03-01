@@ -21,6 +21,7 @@ export const ProfileSchema = z.object({
   principalPhone: z.string(),
   principalEmail: z.string().email().optional().or(z.literal('')),
   website: z.string().url().optional().or(z.literal('')),
+  businessCategories: z.string().array().optional(),
   offerings: z
     .object({
       name: z.string().max(100),

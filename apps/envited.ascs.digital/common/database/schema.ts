@@ -138,6 +138,10 @@ export const profile = pgTable('profile', {
   updatedAt: timestamp('updated_at'),
 })
 
+export const profileRelations = relations(profile, ({ many }) => ({
+  businessCategories: many(profilesToBusinessCategories),
+}))
+
 export const businessCategory = pgTable('businessCategory', {
   id: text('id').unique().primaryKey(),
   name: text('name').unique(),
@@ -145,6 +149,10 @@ export const businessCategory = pgTable('businessCategory', {
   createdAt: timestamp('created_at'),
   updatedAt: timestamp('updated_at'),
 })
+
+export const businessCategoryRelations = relations(businessCategory, ({ many }) => ({
+  profilesToBusinessCategories: many(profilesToBusinessCategories),
+}))
 
 export const profilesToBusinessCategories = pgTable('profilesToBusinessCategories', {
   profileId: uuid('profile_id')

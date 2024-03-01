@@ -1,8 +1,16 @@
 'use client'
 
-import { Card, DragAndDropField, Heading, TextField, TextareaField } from '@envited-marketplace/design-system'
+import {
+  Card,
+  Checkboxes,
+  DragAndDropField,
+  Heading,
+  LoadingIndicator,
+  TextField,
+  TextareaField,
+} from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { pathOr, prop, propOr } from 'ramda'
+import { append, chain, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
 import { FC } from 'react'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
@@ -13,9 +21,16 @@ import { mapIndexed } from '../../common/utils'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
 
+interface BusinessCategories {
+  profileId: string
+  businessCategoryId: string
+}
+interface Profiles extends ProfileType {
+  businessCategories: BusinessCategories[]
+}
 interface ProfileProps {
-  profile: ProfileType
-  memberCategories: any[]
+  profile: Profiles
+  businessCategories: any[]
 }
 
 interface OfferingItem {
@@ -42,10 +57,11 @@ type ProfileInputs = {
   principalPhone: string
   principalEmail: string
   website: string
+  businessCategories: string[]
   offerings: OfferingItem[] | []
 }
 
-export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
+export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
   const { t } = useTranslation('Profile')
   const { error, success } = useNotification()
 
@@ -71,10 +87,19 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
       principalPhone: propOr('', 'principalPhone')(profile),
       principalEmail: propOr('', 'principalEmail')(profile),
       website: propOr('', 'website')(profile),
+      businessCategories: !isNil(profile?.businessCategories)
+        ? (chain(prop('businessCategoryId'))(profile?.businessCategories as any) as string[])
+        : [],
       offerings: propOr([], 'offerings')(profile),
     },
     mode: 'onChange',
   })
+
+  const handleCheckbox = (checkId: string) => {
+    const { businessCategories: ids } = getValues()
+
+    return includes(checkId)(ids) ? reject(equals(checkId))(ids) : append(checkId)(ids)
+  }
 
   const {
     fields: offeringFields,
@@ -131,6 +156,24 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
 
               <div className="col-span-full">
                 <Controller
+                  name="businessCategories"
+                  control={control}
+                  render={({ field: { ref, value, ...field } }) => (
+                    <Checkboxes
+                      label={t('[Label] business categories')}
+                      inputRef={ref}
+                      items={businessCategories}
+                      values={value}
+                      handleCheckbox={handleCheckbox}
+                      {...field}
+                      error={pathOr('', ['businessCategories', 'message'])(errors)}
+                    />
+                  )}
+                />
+              </div>
+
+              <div className="col-span-full">
+                <Controller
                   name="logo"
                   control={control}
                   render={({ field: { ref, ...field } }) => (
@@ -142,26 +185,6 @@ export const Profile: FC<ProfileProps> = ({ profile, memberCategories }) => {
                     />
                   )}
                 />
-                {/*
-                <Controller
-                  name="file"
-                  control={control}
-                  render={({ field: { ref, onChange, value, ...field } }) => (
-                    <FileField
-                      label="File"
-                      {...field}
-                      inputRef={ref}
-                      value={value?.name}
-                      onChange={event => {
-                        if (event.target.files) {
-                          onChange(event.target.files?.[0])
-                        }
-                      }}
-                      error={pathOr('', ['file', 'message'])(errors)}
-                    />
-                  )}
-                />
-                */}
                 <Controller
                   name="file"
                   control={control}

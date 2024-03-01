@@ -3,9 +3,9 @@ import { Profile } from '../../../modules/Profile'
 
 export default async function Index() {
   const profile = await getProfile('testcompany-gmbh')
-  const memberCategories = await getBusinessCategories()
+  const businessCategories = await getBusinessCategories()
 
-  return <Profile profile={profile} memberCategories={memberCategories} />
+  return <Profile profile={profile} businessCategories={businessCategories} />
 }
 
 export const dynamic = 'force-dynamic'

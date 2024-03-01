@@ -15,13 +15,11 @@ describe('serverActions/profiles/get', () => {
       })
 
       const dbStub = jest.fn().mockResolvedValue({
-        getProfileBySlug: jest.fn().mockResolvedValue([
-          {
-            name: 'USER_PRINCIPAL_NAME',
-            description: 'USER_DESCRIPTION',
-            principalName: 'USER_PRINCIPAL_NAME',
-          },
-        ]),
+        getProfileBySlug: jest.fn().mockResolvedValue({
+          name: 'USER_PRINCIPAL_NAME',
+          description: 'USER_DESCRIPTION',
+          principalName: 'USER_PRINCIPAL_NAME',
+        }),
         getUserById: jest.fn().mockResolvedValue([
           {
             name: 'USER_PRINCIPAL_NAME',
@@ -63,13 +61,11 @@ describe('serverActions/profiles/get', () => {
       })
 
       const dbStub = jest.fn().mockResolvedValue({
-        getProfileBySlug: jest.fn().mockResolvedValue([
-          {
-            name: 'USER_PRINCIPAL_NAME',
-            description: 'USER_DESCRIPTION',
-            principalName: 'USER_PRINCIPAL_NAME',
-          },
-        ]),
+        getProfileBySlug: jest.fn().mockResolvedValue({
+          name: 'USER_PRINCIPAL_NAME',
+          description: 'USER_DESCRIPTION',
+          principalName: 'USER_PRINCIPAL_NAME',
+        }),
         getUserById: jest.fn().mockResolvedValue([
           {
             name: 'USER_NAME',
@@ -106,13 +102,11 @@ describe('serverActions/profiles/get', () => {
       const getServerSessionStub = jest.fn().mockResolvedValue(null)
 
       const dbStub = jest.fn().mockResolvedValue({
-        getProfileBySlug: jest.fn().mockResolvedValue([
-          {
-            name: 'USER_NAME',
-            description: 'USER_DESCRIPTION',
-            principalName: 'USER_PRINCIPAL_NAME',
-          },
-        ]),
+        getProfileBySlug: jest.fn().mockResolvedValue({
+          name: 'USER_NAME',
+          description: 'USER_DESCRIPTION',
+          principalName: 'USER_PRINCIPAL_NAME',
+        }),
         getUserById: jest.fn().mockResolvedValue([
           {
             name: 'USER_NAME',

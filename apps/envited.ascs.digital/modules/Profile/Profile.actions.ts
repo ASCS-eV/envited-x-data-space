@@ -40,7 +40,7 @@ export async function updateProfileForm(data: ProfileForm) {
       data = dissoc('file')(set(lens(prop('logo'), assoc('logo')), image.url.split('?')[0], data))
     }
 
-    await updateProfile(data)
+    await updateProfile(dissoc('businessCategories')(data), data.businessCategories)
 
     revalidatePath('/dashboard/profile')
   } catch (error: unknown) {

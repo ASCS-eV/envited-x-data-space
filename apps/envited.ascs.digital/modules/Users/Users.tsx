@@ -1,30 +1,18 @@
 'use client'
 
 import { Card, Heading, Table, TableBody, TableCell, TableHeader, TableRow } from '@envited-marketplace/design-system'
-import { TrashIcon } from '@heroicons/react/24/outline'
 import { map } from 'ramda'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
-import { useNotification } from '../../common/notifications'
 import { User } from '../../common/types/types'
-import { deleteUser } from './Users.actions'
+import { UserDialogConfirm } from './UsersDialogConfirm'
 
 interface UsersProps {
   users: User[]
 }
 export const Users: FC<UsersProps> = ({ users }) => {
   const { t } = useTranslation('Users')
-  const { error, success } = useNotification()
-
-  const deleteUserWithId = (id: string) => async () => {
-    try {
-      await deleteUser(id)
-      success('User is deactivated')
-    } catch (e) {
-      error('Something went wrong')
-    }
-  }
 
   return (
     <Card>
@@ -64,18 +52,7 @@ export const Users: FC<UsersProps> = ({ users }) => {
                   {t(isActive ? '[Label] active' : '[Label] inactive')}
                 </div>
               </TableCell>
-              <TableCell extraClasses="pl-3">
-                {isActive ? (
-                  <form action={deleteUserWithId(id)}>
-                    <button className="text-white bg-red-500 hover:bg-red-600 p-1.5 rounded-lg">
-                      <span className="sr-only">{t('[Button] deactivate')}</span>
-                      <TrashIcon className="w-3" />
-                    </button>
-                  </form>
-                ) : (
-                  <></>
-                )}
-              </TableCell>
+              <TableCell extraClasses="pl-3">{isActive ? <UserDialogConfirm id={id} /> : <></>}</TableCell>
             </TableRow>
           ))(users)}
         </TableBody>

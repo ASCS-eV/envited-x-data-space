@@ -6,13 +6,13 @@ describe('atoms/Dialog', () => {
   describe('render', () => {
     it('should render Dialog with content', () => {
       // when ... rendering component
-      const setShowHideStub = jest.fn()
+      const setShowStub = jest.fn()
       render(
         <Dialog
           heading="HEADING"
           description="DESCRIPTION"
           isOpen={true}
-          setShowHide={setShowHideStub}
+          setShow={setShowStub}
           action={<button>BUTTON</button>}
         />,
       )

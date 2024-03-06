@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { NAVIGATION_DASHBOARD } from '../../common/constants'
+import { Footer } from '../../modules/Footer'
 import { Header } from '../../modules/Header'
 import { Navigation } from '../../modules/Navigation'
 
@@ -22,6 +23,7 @@ export default function DashboardLayout({ children }: DashboardProps) {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   )
 }

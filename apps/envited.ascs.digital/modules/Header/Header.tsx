@@ -5,21 +5,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
+import { NAVIGATION } from '../../common/constants'
 import { useTranslation } from '../../common/i18n'
-
-// import { ThemeToggle } from '../ThemeToggle'
 
 export interface HeaderProps {}
 
 export const Header: FC<HeaderProps> = () => {
   const { t } = useTranslation('Header')
-
-  const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Assets', href: '/assets' },
-    { name: 'Members', href: '/members' },
-    { name: 'Contact', href: '#' },
-  ]
 
   return (
     <header className="py-10">
@@ -31,7 +23,7 @@ export const Header: FC<HeaderProps> = () => {
             </Link>
           </div>
           <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
-            {navigation.map(item => (
+            {NAVIGATION.map(item => (
               <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
                 {item.name}
               </a>

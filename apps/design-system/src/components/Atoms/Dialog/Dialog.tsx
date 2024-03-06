@@ -3,17 +3,17 @@ import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { FC, Fragment, JSXElementConstructor, ReactElement } from 'react'
 
 interface DialogProps {
-  open: boolean
-  setOpen: (x: boolean) => void
+  isOpen: boolean
+  setShowHide: (x: boolean) => void
   heading: string | ReactElement<any, string | JSXElementConstructor<any>>
   description: string | ReactElement<any, string | JSXElementConstructor<any>>
   action: ReactElement
 }
 
-export const Dialog: FC<DialogProps> = ({ open, setOpen, heading, description, action }) => {
+export const Dialog: FC<DialogProps> = ({ isOpen, setShowHide, heading, description, action }) => {
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <ReactDialog as="div" className="relative z-50" onClose={setOpen}>
+    <Transition.Root show={isOpen} as={Fragment}>
+      <ReactDialog as="div" className="relative z-50" onClose={setShowHide}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -43,7 +43,7 @@ export const Dialog: FC<DialogProps> = ({ open, setOpen, heading, description, a
                     type="button"
                     className="rounded-md bg-white dark:bg-gray-900 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-900 focus:ring-offset-0"
                     onClick={() => {
-                      setOpen(false)
+                      setShowHide(false)
                     }}
                   >
                     <span className="sr-only">Close</span>
@@ -72,7 +72,7 @@ export const Dialog: FC<DialogProps> = ({ open, setOpen, heading, description, a
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     onClick={() => {
-                      setOpen(false)
+                      setShowHide(false)
                     }}
                   >
                     Cancel

@@ -8,15 +8,15 @@ export default {
   title: 'Components/Dialog',
 } as Meta
 
-const Template: Story = ({ open, setOpen, heading, description }) => (
-  <Dialog open={open} setOpen={setOpen} heading={heading} description={description} action={<button>CLICK</button>} />
+const Template: Story = ({ isOpen, setShowHide, heading, description }) => (
+  <Dialog isOpen={isOpen} setShowHide={setShowHide} heading={heading} description={description} action={<button>CLICK</button>} />
 )
 
 export const DialogStory = Template.bind({})
 
 DialogStory.args = {
-  open: true,
-  setOpen: () => {},
+  isOpen: true,
+  setShowHide: () => {},
   heading: 'Heading',
   description: 'Description',
 }

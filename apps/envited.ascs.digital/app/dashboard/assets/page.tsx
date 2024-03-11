@@ -1,3 +1,5 @@
+import { DashboardAssets } from '../../../modules/Assets'
+
 export default async function Index() {
-  return 'Assets'
+  return <DashboardAssets />
 }

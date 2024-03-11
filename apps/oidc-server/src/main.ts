@@ -1,4 +1,5 @@
 import express from 'express'
+
 import { getClientMetadata } from './handlers/clientMetadata'
 
 const host = process.env.HOST ?? 'localhost'

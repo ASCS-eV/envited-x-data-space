@@ -32,7 +32,7 @@ describe('handlers/clientMetadata', () => {
       request_parameter_supported: false,
       redirect_uris: ['API_URL/presentCredential'],
     }
-    
+
     const result = SUT.getClientMetadata()
     expect(result).toStrictEqual(clientMetadata)
   })

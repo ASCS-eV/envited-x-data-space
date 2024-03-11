@@ -1,14 +1,14 @@
 import express from 'express'
-
-import { helloWorld } from './handlers/helloWorld'
+import { getClientMetadata } from './handlers/clientMetadata'
 
 const host = process.env.HOST ?? 'localhost'
-const port = process.env.PORT ? Number(process.env.PORT) : 3000
+const port = process.env.PORT ? Number(process.env.PORT) : 3005
 
 const app = express()
 
-app.get('/', (req, res) => {
-  const result = helloWorld()
+app.get('/client-metadata', (req, res) => {
+  const result = getClientMetadata()
+
   res.send(result)
 })
 

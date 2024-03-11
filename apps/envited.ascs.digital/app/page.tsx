@@ -1,14 +1,10 @@
-import { ExampleTable } from '../modules/ExampleTable'
 import { HeroHeader } from '../modules/HeroHeader'
 
 export default async function Index() {
   return (
     <>
-      <main>
+      <main className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8">
         <HeroHeader />
-        <div className="mx-auto max-w-6xl">
-          <ExampleTable />
-        </div>
       </main>
     </>
   )

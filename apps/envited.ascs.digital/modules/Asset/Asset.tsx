@@ -98,7 +98,7 @@ const products = [
 ]
 
 const pages = [
-  { name: 'Assets', href: '#', current: false },
+  { name: 'Assets', href: '/assets', current: false },
   { name: 'XODR-3DM-23001', href: '#', current: true },
 ]
 

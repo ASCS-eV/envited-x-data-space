@@ -3,6 +3,7 @@ export { Button } from './components/Atoms/Button'
 export { Card } from './components/Atoms/Card'
 export { ContactPerson } from './components/Atoms/ContactPerson'
 export { Date } from './components/Atoms/Date'
+export { Dialog } from './components/Atoms/Dialog'
 export { Checkbox, Checkboxes, DragAndDropField, FileField, TextField, TextareaField } from './components/Atoms/Form'
 export { Grid, GridRow } from './components/Atoms/Grid'
 export { Heading } from './components/Atoms/Heading'
@@ -15,7 +16,7 @@ export { Table, TableBody, TableCell, TableFooter, TableHeader, TableRow } from 
 export { ThemeToggle } from './components/Atoms/ThemeToggle'
 export { Tooltip } from './components/Atoms/Tooltip'
 
-export { ColorScheme, Language } from './types'
+export { ColorScheme, Language, Size } from './types'
 
 export { useClipboard, useLocalStorage } from './hooks'
 export { formatPercentage, formatDate, formatShortDate, calculateProfitPercentage } from './common/utils'

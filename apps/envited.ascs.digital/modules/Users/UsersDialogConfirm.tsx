@@ -15,7 +15,7 @@ interface DialogConfirmProps {
 export const UserDialogConfirm: FC<DialogConfirmProps> = ({ id }) => {
   const { t } = useTranslation('Users')
   const { error, success } = useNotification()
-  const [showDialog, setShowDialog] = useState(true)
+  const [showDialog, setShowDialog] = useState(false)
 
   const deleteUserWithId = (id: string) => async () => {
     try {

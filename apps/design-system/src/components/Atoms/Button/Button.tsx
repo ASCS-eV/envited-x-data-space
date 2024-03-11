@@ -37,9 +37,9 @@ const Button: FC<Props> = ({
   }
 
   const sizeClassMap = {
-    [Size.small]: 'py-3 px-4 md:py-4 md:px-6 text-xs sm:text-sm',
-    [Size.medium]: 'py-4 px-8 text-sm sm:text-base',
-    [Size.large]: 'py-4 px-10 text-base sm:text-2xl',
+    [Size.small]: 'py-2 px-4 text-xs sm:text-sm',
+    [Size.medium]: 'px-8 py-3 text-sm sm:text-base',
+    [Size.large]: 'px-8 py-3 text-base sm:text-2xl',
   }
 
   const indicatorColour = {
@@ -59,7 +59,7 @@ const Button: FC<Props> = ({
     <button
       type="button"
       onClick={() => onClick()}
-      className={`${styleClassMap[type][style]} ${sizeClassMap[size]} ${extraClasses} disabled:opacity-50 font-bold leading-none transition duration-300 ease-in-out rounded-full`}
+      className={`${styleClassMap[type][style]} ${sizeClassMap[size]} ${extraClasses} disabled:opacity-50 font-bold leading-none transition duration-300 ease-in-out rounded-md`}
       disabled={isDisabled || isWorking}
     >
       {buttonView}

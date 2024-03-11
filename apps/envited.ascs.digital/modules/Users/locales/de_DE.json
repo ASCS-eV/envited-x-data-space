@@ -4,7 +4,11 @@
   "[Heading] email": "Email",
   "[Heading] did": "DID",
   "[Heading] status": "Status",
+  "[Heading] deactivate account": "Deactivate account",
+  "[Description] deactivate account": "Are you sure you want to deactivate this account? All of your data will be permanently removed from our servers forever. This action cannot be undone.",
   "[Button] deactivate": "Deactivate",
   "[Label] active": "Active",
-  "[Label] inactive": "Inactive"
+  "[Label] inactive": "Inactive",
+  "[Notification] success": "User is deactivated",
+  "[Notification] error": "Something went wrong"
 }

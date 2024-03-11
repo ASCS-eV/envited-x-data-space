@@ -1,5 +1,12 @@
 import { ROUTES } from './routes'
 
+export const NAVIGATION = [
+  { name: 'Home', href: '/' },
+  { name: 'Assets', href: '/assets' },
+  { name: 'Members', href: '/members' },
+  { name: 'Contact', href: '#' },
+]
+
 export const NAVIGATION_DASHBOARD = [
   {
     href: ROUTES.DASHBOARD.HOME,

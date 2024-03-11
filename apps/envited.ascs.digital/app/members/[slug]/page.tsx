@@ -1,5 +1,4 @@
 import { getProfile } from '../../../common/serverActions'
-import { Header } from '../../../modules/Header'
 import { Member } from '../../../modules/Member'
 
 export default async function Index({ params: { slug } }: { params: { slug: string } }) {
@@ -7,11 +6,8 @@ export default async function Index({ params: { slug } }: { params: { slug: stri
 
   return (
     <>
-      <Header />
-      <main>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Member member={profile} />
-        </div>
+      <main className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8">
+        <Member member={profile} />
       </main>
     </>
   )

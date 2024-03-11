@@ -41,8 +41,7 @@ export const Breadcrumbs: FC = () => {
             </div>
           </li>
           {pages.map(slug => {
-            const page = BREADCRUMBS_MAP[`${slug}`]
-            console.log(page)
+            const page = prop(slug)(BREADCRUMBS_MAP) as { name: string, href: string, current?: boolean }
             return (
               <li key={prop('name')(page)}>
                 <div className="flex items-center">

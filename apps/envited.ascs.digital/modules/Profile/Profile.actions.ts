@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { assoc, dissoc, lens, prop, set } from 'ramda'
+import { dissoc } from 'ramda'
 import { z } from 'zod'
 
 import { getUploadUrl } from '../../common/aws'
@@ -40,7 +40,7 @@ export async function updateProfileForm(formData: FormData) {
         },
       })
 
-      data = dissoc('file')(set(lens(prop('logo'), assoc('logo')), image.url.split('?')[0], data))
+      data = { ...data, logo: image.url.split('?')[0] }
     }
 
     await updateProfile(dissoc('businessCategories')(data), data.businessCategories)

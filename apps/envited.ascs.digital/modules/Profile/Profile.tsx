@@ -9,7 +9,7 @@ import {
   TextField,
   TextareaField,
 } from '@envited-marketplace/design-system'
-import { zodResolver } from '@hookform/resolvers/zod/dist/zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { append, chain, dissoc, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
 import { FC } from 'react'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'

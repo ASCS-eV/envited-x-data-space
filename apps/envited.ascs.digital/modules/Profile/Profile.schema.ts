@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
-const MAX_FILE_SIZE = 5000000
-const FILE_TYPES = ['image/png', 'image/jpeg'] as string[]
+import { FILE_TYPES, MAX_FILE_SIZE } from '../../common/constants'
 
 export const ProfileSchema = z.object({
   name: z.string(),

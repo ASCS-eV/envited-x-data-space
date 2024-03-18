@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { assoc, dissoc, lens, prop, set } from 'ramda'
+import { dissoc } from 'ramda'
 import { z } from 'zod'
 
 import { getUploadUrl } from '../../common/aws'
@@ -12,7 +12,10 @@ import { ProfileSchema, ValidateProfileForm } from './Profile.schema'
 
 type ProfileForm = z.infer<typeof ProfileSchema>
 
-export async function updateProfileForm(data: ProfileForm) {
+export async function updateProfileForm(formData: FormData) {
+  const file = formData.get('file') as File
+  let data = JSON.parse(formData.get('data') as string) as ProfileForm
+
   try {
     const result = ValidateProfileForm(data)
 
@@ -24,12 +27,12 @@ export async function updateProfileForm(data: ProfileForm) {
       })
     }
 
-    if (data.file) {
-      const file = data.file
+    if (file) {
+      const arrayBuffer = Buffer.from(await file.arrayBuffer())
       const url = await getUploadUrl(slugify(data.name), file.name)
 
       const image = await fetch(url, {
-        body: file as any,
+        body: arrayBuffer,
         method: 'PUT',
         headers: {
           'Content-Type': file.type,
@@ -37,7 +40,7 @@ export async function updateProfileForm(data: ProfileForm) {
         },
       })
 
-      data = dissoc('file')(set(lens(prop('logo'), assoc('logo')), image.url.split('?')[0], data))
+      data = { ...data, logo: image.url.split('?')[0] }
     }
 
     await updateProfile(dissoc('businessCategories')(data), data.businessCategories)

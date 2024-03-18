@@ -10,13 +10,13 @@ import {
   TextareaField,
 } from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { append, chain, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
+import { append, chain, dissoc, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
 import { FC } from 'react'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { File, Profile as ProfileType } from '../../common/types'
+import { Profile as ProfileType } from '../../common/types'
 import { mapIndexed } from '../../common/utils'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
@@ -112,7 +112,15 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
 
   const updateProfileAction: SubmitHandler<ProfileInputs> = async data => {
     try {
-      await updateProfileForm(data)
+      const formData = new FormData()
+
+      if (data.file) {
+        formData.append('file', data.file)
+      }
+
+      formData.append('data', JSON.stringify(dissoc('file')(data)))
+
+      await updateProfileForm(formData)
       success(t('[Status] profile is updated'))
     } catch (e) {
       error(t('[Status] something wrong'))

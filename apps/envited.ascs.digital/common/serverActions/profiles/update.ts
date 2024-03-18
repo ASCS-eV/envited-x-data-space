@@ -1,6 +1,6 @@
 'use server'
 
-import { dissoc, isNil } from 'ramda'
+import { isNil } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'

@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { FC, Fragment, ReactNode } from 'react'
 
 import { mapIndexed } from '../../common/utils'
-import { formatBreadcrumbUri, formatBreadcrumbLabel } from './Breadcrumbs.utils'
+import { formatBreadcrumbLabel, formatBreadcrumbUri } from './Breadcrumbs.utils'
 
 export const Breadcrumbs: FC = () => {
   const path = usePathname()

@@ -2,7 +2,7 @@ export const VPEmployeeCredential = {
   '@context': ['https://www.w3.org/2018/credentials/v1'],
   'id': 'urn:uuid:befddbe3-4cbc-430a-b5b5-b61b3850b14a',
   'type': ['VerifiablePresentation'],
-  verifiableCredential: {
+  'verifiableCredential': {
     '@context': [
       'https://www.w3.org/2018/credentials/v1',
       {

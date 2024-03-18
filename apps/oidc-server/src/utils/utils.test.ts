@@ -219,7 +219,9 @@ describe('utils', () => {
       // when ... we want to verify the authentication presentation without credentials
       // then ... it should return false
       const verifyPresentationStub = jest.fn().mockResolvedValue(true)
-      const result = await SUT._verifyAuthenticationPresentation(verifyPresentationStub)(dissoc('verifiableCredential')(VPEmployeeCredential))
+      const result = await SUT._verifyAuthenticationPresentation(verifyPresentationStub)(
+        dissoc('verifiableCredential')(VPEmployeeCredential),
+      )
       expect(result).toEqual(false)
     })
 
@@ -227,7 +229,9 @@ describe('utils', () => {
       // when ... we want to verify the authentication presentation with failing verifyPresentation
       // then ... it should return false
       const verifyPresentationStub = jest.fn().mockResolvedValue(false)
-      const result = await SUT._verifyAuthenticationPresentation(verifyPresentationStub)(dissoc('verifiableCredential')(VPEmployeeCredential))
+      const result = await SUT._verifyAuthenticationPresentation(verifyPresentationStub)(
+        dissoc('verifiableCredential')(VPEmployeeCredential),
+      )
       expect(result).toEqual(false)
     })
   })
@@ -238,7 +242,10 @@ describe('utils', () => {
       const spruceVerifyPresentationStub = jest.fn().mockResolvedValue(JSON.stringify({ errors: [] }))
       const spruceVerifyCredentialStub = jest.fn().mockResolvedValue(JSON.stringify({ errors: [] }))
       const vp = VPEmployeeCredential
-      const result = await SUT._verifyPresentation({ spruceVerifyCredential: spruceVerifyCredentialStub, spruceVerifyPresentation: spruceVerifyPresentationStub })(vp.verifiableCredential, vp)
+      const result = await SUT._verifyPresentation({
+        spruceVerifyCredential: spruceVerifyCredentialStub,
+        spruceVerifyPresentation: spruceVerifyPresentationStub,
+      })(vp.verifiableCredential, vp)
       expect(result).toEqual(true)
     })
 
@@ -248,7 +255,10 @@ describe('utils', () => {
       const spruceVerifyPresentationStub = jest.fn().mockResolvedValue(JSON.stringify({ errors: ['ERROR'] }))
       const spruceVerifyCredentialStub = jest.fn().mockResolvedValue(JSON.stringify({ errors: [] }))
       const vp = VPEmployeeCredential
-      const result = await SUT._verifyPresentation({ spruceVerifyCredential: spruceVerifyCredentialStub, spruceVerifyPresentation: spruceVerifyPresentationStub })(vp.verifiableCredential, vp)
+      const result = await SUT._verifyPresentation({
+        spruceVerifyCredential: spruceVerifyCredentialStub,
+        spruceVerifyPresentation: spruceVerifyPresentationStub,
+      })(vp.verifiableCredential, vp)
       expect(result).toEqual(false)
     })
 
@@ -258,7 +268,10 @@ describe('utils', () => {
       const spruceVerifyPresentationStub = jest.fn().mockResolvedValue(JSON.stringify({ errors: [] }))
       const spruceVerifyCredentialStub = jest.fn().mockResolvedValue(JSON.stringify({ errors: ['ERROR'] }))
       const vp = VPEmployeeCredential
-      const result = await SUT._verifyPresentation({ spruceVerifyCredential: spruceVerifyCredentialStub, spruceVerifyPresentation: spruceVerifyPresentationStub })(vp.verifiableCredential, vp)
+      const result = await SUT._verifyPresentation({
+        spruceVerifyCredential: spruceVerifyCredentialStub,
+        spruceVerifyPresentation: spruceVerifyPresentationStub,
+      })(vp.verifiableCredential, vp)
       expect(result).toEqual(false)
     })
 
@@ -269,7 +282,10 @@ describe('utils', () => {
       const spruceVerifyCredentialStub = jest.fn().mockResolvedValue(JSON.stringify({ errors: [] }))
       const vp = VPEmployeeCredential
       vp.holder = 'OTHER HOLDER'
-      const result = await SUT._verifyPresentation({ spruceVerifyCredential: spruceVerifyCredentialStub, spruceVerifyPresentation: spruceVerifyPresentationStub })(vp.verifiableCredential, vp)
+      const result = await SUT._verifyPresentation({
+        spruceVerifyCredential: spruceVerifyCredentialStub,
+        spruceVerifyPresentation: spruceVerifyPresentationStub,
+      })(vp.verifiableCredential, vp)
       expect(result).toEqual(false)
     })
   })
@@ -277,27 +293,23 @@ describe('utils', () => {
     it.each([
       [
         [
-          ["A", "B"],
-          ["C", "D"],
-          ["E", "F"],
+          ['A', 'B'],
+          ['C', 'D'],
+          ['E', 'F'],
         ],
-        ["A", "C", "E"],
+        ['A', 'C', 'E'],
         true,
       ],
       [
         [
-          ["A", "B"],
-          ["C", "D"],
-          ["E", "F"],
+          ['A', 'B'],
+          ['C', 'D'],
+          ['E', 'F'],
         ],
-        ["A", "C", "E", "B"],
+        ['A', 'C', 'E', 'B'],
         false,
       ],
-      [
-        [[]],
-        [],
-        false,
-      ]
+      [[[]], [], false],
     ])('should return as expected when checking for unique path', (patternFits, usedCreds, expected) => {
       // when ... we want to check for unique path
       // then ... we should return as expected when checking for unique path
@@ -335,12 +347,14 @@ describe('utils', () => {
         },
         {
           issuer: 'ISSUER',
-          claims: [{
-            required: false,
-            claimPath: 'CLAIM_PATH',
-          }],
+          claims: [
+            {
+              required: false,
+              claimPath: 'CLAIM_PATH',
+            },
+          ],
         },
-        true
+        true,
       ],
       [
         {
@@ -348,12 +362,14 @@ describe('utils', () => {
         },
         {
           issuer: '*',
-          claims: [{
-            required: false,
-            claimPath: 'CLAIM_PATH',
-          }],
+          claims: [
+            {
+              required: false,
+              claimPath: 'CLAIM_PATH',
+            },
+          ],
         },
-        true
+        true,
       ],
       [
         {
@@ -362,12 +378,14 @@ describe('utils', () => {
         },
         {
           issuer: 'ISSUER',
-          claims: [{
-            required: true,
-            claimPath: 'CLAIM_PATH',
-          }],
+          claims: [
+            {
+              required: true,
+              claimPath: 'CLAIM_PATH',
+            },
+          ],
         },
-        true
+        true,
       ],
       [
         {
@@ -375,12 +393,14 @@ describe('utils', () => {
         },
         {
           issuer: 'ISSUER',
-          claims: [{
-            required: true,
-            claimPath: 'CLAIM_PATH',
-          }],
+          claims: [
+            {
+              required: true,
+              claimPath: 'CLAIM_PATH',
+            },
+          ],
         },
-        false
+        false,
       ],
       [
         {
@@ -388,35 +408,12 @@ describe('utils', () => {
         },
         {
           issuer: 'OTHER_ISSUER',
-          claims: [{
-            required: false,
-            claimPath: 'CLAIM_PATH',
-          }],
-        },
-        false
-      ],
-      [
-        {
-          issuer: 'ISSUER',
-        },
-        {
-          issuer: 'ISSUER',
-          claims: [{
-            claimPath: 'CLAIM_PATH',
-          }],
-        },
-        false
-      ],
-      [
-        {
-          issuer: 'ISSUER',
-        },
-        {
-          issuer: 'ISSUER',
-          claims: [{
-            required: true,
-            claimPath: 'CLAIM_PATH',
-          }],
+          claims: [
+            {
+              required: false,
+              claimPath: 'CLAIM_PATH',
+            },
+          ],
         },
         false,
       ],
@@ -426,57 +423,103 @@ describe('utils', () => {
         },
         {
           issuer: 'ISSUER',
-          claims: [{
-            required: true,
-            claimPath: 'CLAIM_PATH',
-          }],
+          claims: [
+            {
+              claimPath: 'CLAIM_PATH',
+            },
+          ],
         },
         false,
       ],
-    ])('should return true/false when the credential fits or does not fit the pattern', (credential, pattern, expected) => {
-      // when ... we want to check if the credential fits the pattern
-      // then ... we should return true/false when the credential fits or does not fit the pattern
-      const result = SUT.isCredentialFittingPattern(credential, pattern)
-      expect(result).toEqual(expected)
-    })
+      [
+        {
+          issuer: 'ISSUER',
+        },
+        {
+          issuer: 'ISSUER',
+          claims: [
+            {
+              required: true,
+              claimPath: 'CLAIM_PATH',
+            },
+          ],
+        },
+        false,
+      ],
+      [
+        {
+          issuer: 'ISSUER',
+        },
+        {
+          issuer: 'ISSUER',
+          claims: [
+            {
+              required: true,
+              claimPath: 'CLAIM_PATH',
+            },
+          ],
+        },
+        false,
+      ],
+    ])(
+      'should return true/false when the credential fits or does not fit the pattern',
+      (credential, pattern, expected) => {
+        // when ... we want to check if the credential fits the pattern
+        // then ... we should return true/false when the credential fits or does not fit the pattern
+        const result = SUT.isCredentialFittingPattern(credential, pattern)
+        expect(result).toEqual(expected)
+      },
+    )
   })
   describe('extractClaims', () => {
     it.each([
-      [VPEmployeeCredential, policies.acceptAnything, {
-        tokenAccess: {
-          subjectData: {
-            id: "did:key:z6MkkdC46uhBGjMYS2ZDLUwCrTWdaqZdTD3596sN4397oRNd",
-            hash: "9ecf754ffdad0c6de238f60728a90511780b2f7dbe2f0ea015115515f3f389cd",
-            leiCode: "391200FJBNU0YW987L26",
-            hasLegallyBindingName: "deltaDAO AG",
-            ethereumAddress: "0x4C84a36fCDb7Bc750294A7f3B5ad5CA8F74C4A52",
-            email: "test@test.com",
-            hasRegistrationNumber: "DEK1101R.HRB170364",
-            name: "Name Surname",
-            hasCountry: "GER",
-            type: "EmployeeCredential",
-            title: "CEO",
-            hasJurisdiction: "GER",
-            surname: "Surname",
+      [
+        VPEmployeeCredential,
+        policies.acceptAnything,
+        {
+          tokenAccess: {
+            subjectData: {
+              id: 'did:key:z6MkkdC46uhBGjMYS2ZDLUwCrTWdaqZdTD3596sN4397oRNd',
+              hash: '9ecf754ffdad0c6de238f60728a90511780b2f7dbe2f0ea015115515f3f389cd',
+              leiCode: '391200FJBNU0YW987L26',
+              hasLegallyBindingName: 'deltaDAO AG',
+              ethereumAddress: '0x4C84a36fCDb7Bc750294A7f3B5ad5CA8F74C4A52',
+              email: 'test@test.com',
+              hasRegistrationNumber: 'DEK1101R.HRB170364',
+              name: 'Name Surname',
+              hasCountry: 'GER',
+              type: 'EmployeeCredential',
+              title: 'CEO',
+              hasJurisdiction: 'GER',
+              surname: 'Surname',
+            },
+          },
+          tokenId: {},
+        },
+      ],
+      [
+        VPEmailPass,
+        policies.acceptEmailFromAltme,
+        {
+          tokenId: {
+            email: 'felix.hoops@tum.de',
+          },
+          tokenAccess: {},
+        },
+      ],
+      [
+        VPEmployeeCredential,
+        policies.acceptEmployeeFromAnyone,
+        {
+          tokenAccess: {
+            companyName: 'deltaDAO AG',
+          },
+          tokenId: {
+            email: 'test@test.com',
+            name: 'Name Surname',
           },
         },
-        tokenId: {},
-      }],
-      [VPEmailPass, policies.acceptEmailFromAltme, {
-        tokenId: {
-          email: "felix.hoops@tum.de",
-        },
-        tokenAccess: {},
-      }],
-      [VPEmployeeCredential, policies.acceptEmployeeFromAnyone, {
-        tokenAccess: {
-          companyName: "deltaDAO AG",
-        },
-        tokenId: {
-          email: "test@test.com",
-          name: "Name Surname",
-        },
-      }],
+      ],
     ])('should extract the claims from the VC as expected', (vp, policy, expected) => {
       // when ... we want to extract the claims from the VC
       // then ... we should extract the claims from the VC as expected

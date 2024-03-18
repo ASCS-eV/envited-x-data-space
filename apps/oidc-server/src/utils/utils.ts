@@ -2,7 +2,10 @@
  * Copyright 2024 Software Engineering for Business Information Systems (sebis) <matthes@tum.de> .
  * SPDX-License-Identifier: MIT
  */
-import { verifyPresentation as spruceVerifyPresentation, verifyCredential as spruceVerifyCredential } from '@spruceid/didkit-wasm-node'
+import {
+  verifyCredential as spruceVerifyCredential,
+  verifyPresentation as spruceVerifyPresentation,
+} from '@spruceid/didkit-wasm-node'
 import crypto from 'crypto'
 import jp from 'jsonpath'
 import {
@@ -118,7 +121,13 @@ export const generatePresentationDefinition = (policy: LoginPolicy, inputDescrip
 }
 
 export const _verifyPresentation =
-  ({ spruceVerifyCredential, spruceVerifyPresentation }: { spruceVerifyPresentation: any, spruceVerifyCredential: any}) =>
+  ({
+    spruceVerifyCredential,
+    spruceVerifyPresentation,
+  }: {
+    spruceVerifyPresentation: any
+    spruceVerifyCredential: any
+  }) =>
   async (VC: any, VP: any): Promise<boolean> => {
     if (VP.holder && VP.holder === VC.credentialSubject.id && VP.proof.verificationMethod.split('#')[0] === VP.holder) {
       // Verify the signature on the VC

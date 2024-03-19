@@ -5,7 +5,7 @@ import { pex } from '../../config/pex'
 import { policies } from '../../config/policies'
 import { generatePresentationDefinition } from '../../utils'
 
-export const GET = async (loginId: string) => {
+export const getPresentCredential = async (loginId: string) => {
   const presentationDefinition = generatePresentationDefinition(
     policies[process.env.LOGIN_POLICY || 'acceptAnything'],
     pex.descriptorEmailFromAltme,

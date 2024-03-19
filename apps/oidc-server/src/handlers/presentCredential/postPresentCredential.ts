@@ -1,6 +1,6 @@
 import { extractClaims, isTrustedPresentation, verifyAuthenticationPresentation } from '../../utils'
 
-export const POST = (redis: any, hydraAdmin: any) => async (vpToken: string) => {
+export const postPresentCredential = (redis: any, hydraAdmin: any) => async (vpToken: string) => {
   console.log('LOGIN API POST')
 
   // Parse the JSON string into a JavaScript object

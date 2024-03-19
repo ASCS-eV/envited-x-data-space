@@ -2,10 +2,10 @@
 
 import { HomeIcon } from '@heroicons/react/20/solid'
 import { usePathname } from 'next/navigation'
+import { add, pipe, split, tail } from 'ramda'
 import { FC, Fragment } from 'react'
 
 import { mapIndexed, segmentsToPath, slugToLabel } from '../../common/utils'
-import { add, pipe, split, tail } from 'ramda'
 
 export const Breadcrumbs: FC = () => {
   const path = usePathname()

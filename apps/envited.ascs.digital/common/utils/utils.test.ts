@@ -76,7 +76,7 @@ describe('common/utils', () => {
     ])('should format a label from the slug', (slug, label) => {
       // when ... we want to get a label from a path
       // then ... we should get the label as expected
-      
+
       const result = SUT.slugToLabel(slug)
       expect(result).toEqual(label)
     })

@@ -1,4 +1,19 @@
-import { addIndex, compose, concat, head, join, juxt, map, pathOr, pipe, replace, tail, take, times, toUpper } from 'ramda'
+import {
+  addIndex,
+  compose,
+  concat,
+  head,
+  join,
+  juxt,
+  map,
+  pathOr,
+  pipe,
+  replace,
+  tail,
+  take,
+  times,
+  toUpper,
+} from 'ramda'
 
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
 
@@ -24,6 +39,8 @@ export const createRandomString = (length: number) => {
 
 export const mapIndexed = addIndex(map)
 
-export const slugToLabel = (x: string) => pipe(replace(/-/g, ' ') as any, juxt([compose(toUpper, head), tail]), join(''))(x)
+export const slugToLabel = (x: string) =>
+  pipe(replace(/-/g, ' ') as any, juxt([compose(toUpper, head), tail]), join(''))(x)
 
-export const segmentsToPath = (pathNames: string[]) => (index: number) => pipe(take(index), join('/'), concat('/'))(pathNames)
+export const segmentsToPath = (pathNames: string[]) => (index: number) =>
+  pipe(take(index), join('/'), concat('/'))(pathNames)

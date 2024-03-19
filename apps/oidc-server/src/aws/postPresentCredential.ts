@@ -1,12 +1,15 @@
 import { Handler } from 'aws-lambda'
 
-import { postPresentCredential } from '../handlers/presentCredential'
 import { internalServerError, ok } from '../common/responses'
+import { postPresentCredential } from '../handlers/presentCredential'
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async event => {
   try {
     const { body } = event
-    const result = postPresentCredential(() => {}, () => {})(body)
+    const result = postPresentCredential(
+      () => {},
+      () => {},
+    )(body)
     return ok(result)
   } catch (error) {
     return internalServerError(error.message)

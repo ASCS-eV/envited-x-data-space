@@ -1,8 +1,8 @@
 import express from 'express'
 
 import { getClientMetadata } from './handlers/clientMetadata/clientMetadata'
-import { getPresentCredential } from './handlers/presentCredential/getPresentCredential'
 import { postPresentCredential } from './handlers/presentCredential'
+import { getPresentCredential } from './handlers/presentCredential/getPresentCredential'
 
 const host = process.env.HOST ?? 'localhost'
 const port = process.env.PORT ? Number(process.env.PORT) : 3005
@@ -22,7 +22,10 @@ app.get('/present-credential/:loginId', (req, res) => {
 })
 
 app.post('/present-credential', (req, res) => {
-  const result = postPresentCredential(() => {}, () => {})(req.body)
+  const result = postPresentCredential(
+    () => {},
+    () => {},
+  )(req.body)
   res.send(result)
 })
 

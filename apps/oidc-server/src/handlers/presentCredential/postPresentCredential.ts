@@ -1,4 +1,5 @@
 import { Redis } from 'ioredis'
+
 import { HydraAdmin } from '../../types'
 import { extractClaims, isTrustedPresentation, verifyAuthenticationPresentation } from '../../utils'
 
@@ -31,11 +32,11 @@ export const postPresentCredential = (redis: Redis, hydraAdmin: HydraAdmin) => a
   console.log('Logging in: ' + subject + ' with challenge: ' + challenge)
 
   // hydra login
-  await hydraAdmin
-    .oauth2.getOAuth2LoginRequest({ loginChallenge: challenge })
+  await hydraAdmin.oauth2
+    .getOAuth2LoginRequest({ loginChallenge: challenge })
     .then(() =>
-      hydraAdmin
-        .oauth2.acceptOAuth2LoginRequest({
+      hydraAdmin.oauth2
+        .acceptOAuth2LoginRequest({
           loginChallenge: challenge,
           acceptOAuth2LoginRequest: {
             // Subject is an alias for user ID. A subject can be a random string, a UUID, an email address, ....
@@ -56,7 +57,7 @@ export const postPresentCredential = (redis: Redis, hydraAdmin: HydraAdmin) => a
             //
             // If that variable is not set, the ACR value will be set to the default passed here ('0')
             acr: '0',
-          }
+          },
         })
         .then(({ data: body }) => {
           const MAX_AGE = 30 // 30 seconds

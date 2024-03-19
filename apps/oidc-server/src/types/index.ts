@@ -2,10 +2,9 @@
  * Copyright 2024 Software Engineering for Business Information Systems (sebis) <matthes@tum.de> .
  * SPDX-License-Identifier: MIT
  */
-
-import { FrontendApi, IdentityApi, OAuth2Api } from "@ory/client"
-import { Context } from "aws-lambda"
-import { Redis } from "ioredis"
+import { FrontendApi, IdentityApi, OAuth2Api } from '@ory/client'
+import { Context } from 'aws-lambda'
+import { Redis } from 'ioredis'
 
 export type ClaimEntry = {
   claimPath: string

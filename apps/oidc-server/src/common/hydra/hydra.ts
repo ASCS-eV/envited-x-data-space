@@ -1,4 +1,4 @@
-import { Configuration, OAuth2Api, IdentityApi, FrontendApi } from "@ory/client"
+import { Configuration, FrontendApi, IdentityApi, OAuth2Api } from '@ory/client'
 
 const config = new Configuration({
   basePath: process.env.HYDRA_ADMIN_URL,

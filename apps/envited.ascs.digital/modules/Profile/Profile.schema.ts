@@ -1,19 +1,19 @@
 import { z } from 'zod'
 
-const FILE_TYPES = ['image/png', 'image/jpeg'] as const
+import { FILE_TYPES, MAX_FILE_SIZE } from '../../common/constants'
 
 export const ProfileSchema = z.object({
   name: z.string(),
   description: z.string(),
   logo: z.string().url().optional().or(z.literal('')),
   file: z
-    .object({
-      name: z.string({ required_error: 'Please upload a valid file type. (JPG, JPEG, PNG)' }),
-      lastModified: z.number(),
-      size: z.number(),
-      type: z.enum(FILE_TYPES),
-    })
-    .optional(),
+    .unknown()
+    .transform(value => value as File | null | undefined)
+    .optional()
+    .refine(file => (file ? FILE_TYPES.includes(file?.type) : true), { message: `Valid types: ${FILE_TYPES}` })
+    .refine(file => (file ? file.size <= MAX_FILE_SIZE : true), {
+      message: `File size must be less than ${MAX_FILE_SIZE}MB`,
+    }),
   salesName: z.string().or(z.literal(null)),
   salesPhone: z.string().or(z.literal(null)),
   salesEmail: z.string().email().optional().or(z.literal('')),

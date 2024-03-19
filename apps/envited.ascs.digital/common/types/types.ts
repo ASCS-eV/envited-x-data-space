@@ -38,13 +38,6 @@ export type Action<T> = {
   data?: Obj
 }
 
-export interface File {
-  name: string
-  lastModified: number
-  size: number
-  type: UploadTypes
-}
-
 export interface IRole {
   id: string
   name: string

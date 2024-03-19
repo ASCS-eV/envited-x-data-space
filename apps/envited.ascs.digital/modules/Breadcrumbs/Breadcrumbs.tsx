@@ -2,31 +2,15 @@
 
 import { HomeIcon } from '@heroicons/react/20/solid'
 import { usePathname } from 'next/navigation'
-import { drop, prop } from 'ramda'
-import { FC } from 'react'
+import { add, pipe, split, tail } from 'ramda'
+import { FC, Fragment } from 'react'
 
-const BREADCRUMBS_MAP = {
-  dashboard: {
-    name: 'Dashboard',
-    href: '/dashboard',
-  },
-  profile: {
-    name: 'Profile',
-    href: '/dashboard/profile',
-  },
-  users: {
-    name: 'Users',
-    href: '/dashboard/users',
-  },
-  assets: {
-    name: 'Assets',
-    href: '/dashboard/assets',
-  },
-}
+import { mapIndexed, segmentsToPath, slugToLabel } from '../../common/utils'
 
 export const Breadcrumbs: FC = () => {
-  const pathname = usePathname()
-  const pages = drop(1, pathname.split('/'))
+  const path = usePathname()
+  const pathNames = pipe(split('/'), tail)(path) as string[]
+  const getBreadcrumbUri = segmentsToPath(pathNames)
 
   return (
     <div className="pb-8">
@@ -40,30 +24,35 @@ export const Breadcrumbs: FC = () => {
               </a>
             </div>
           </li>
-          {pages.map(slug => {
-            const page = prop(slug)(BREADCRUMBS_MAP) as { name: string; href: string; current?: boolean }
+          {mapIndexed((link: unknown, index: number) => {
+            const href = getBreadcrumbUri(add(index, 1))
+            const label = slugToLabel(link as string)
+
             return (
-              <li key={prop('name')(page)}>
-                <div className="flex items-center">
-                  <svg
-                    className="h-5 w-5 flex-shrink-0 text-gray-300"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    aria-hidden="true"
-                  >
-                    <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
-                  </svg>
-                  <a
-                    href={prop('href')(page)}
-                    className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
-                    aria-current={page.current ? 'page' : undefined}
-                  >
-                    {prop('name')(page)}
-                  </a>
-                </div>
-              </li>
+              <Fragment key={index}>
+                <li>
+                  <div className="flex items-center">
+                    <svg
+                      className="h-5 w-5 flex-shrink-0 text-gray-300"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                    >
+                      <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                    </svg>
+                    <a
+                      href={href}
+                      className={`${
+                        path === href ? 'text-gray-700' : ''
+                      } ml-4 text-sm font-medium text-gray-500 hover:text-gray-700`}
+                    >
+                      {label}
+                    </a>
+                  </div>
+                </li>
+              </Fragment>
             )
-          })}
+          })(pathNames)}
         </ol>
       </nav>
     </div>

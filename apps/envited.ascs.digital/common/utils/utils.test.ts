@@ -47,4 +47,38 @@ describe('common/utils', () => {
 
     expect(result).toHaveLength(5)
   })
+
+  describe('segmentsToPath', () => {
+    it('should return the url', () => {
+      // when ... we want to format a url from a array of paths
+      // then ... we should get the url as expected
+      const pathNames = ['assets', 'detail']
+      const result = SUT.segmentsToPath(pathNames)(1)
+
+      expect(result).toEqual('/assets')
+    })
+
+    it('should return the url of second level', () => {
+      // when ... we want to format a url from a array of paths
+      // then ... we should get the url as expected
+      const pathNames = ['assets', 'detail']
+      const result = SUT.segmentsToPath(pathNames)(2)
+
+      expect(result).toEqual('/assets/detail')
+    })
+  })
+
+  describe('slugToLabel', () => {
+    it.each([
+      ['breadcrumb-label', 'Breadcrumb label'],
+      ['breadcrumb', 'Breadcrumb'],
+      ['breadcrumb-la-bel', 'Breadcrumb la bel'],
+    ])('should format a label from the slug', (slug, label) => {
+      // when ... we want to get a label from a path
+      // then ... we should get the label as expected
+
+      const result = SUT.slugToLabel(slug)
+      expect(result).toEqual(label)
+    })
+  })
 })

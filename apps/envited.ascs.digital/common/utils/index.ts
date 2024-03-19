@@ -17,4 +17,6 @@ export {
   slugify,
   createRandomString,
   mapIndexed,
+  segmentsToPath,
+  slugToLabel,
 } from './utils'

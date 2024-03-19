@@ -25,11 +25,16 @@ describe('Profile', () => {
     }
 
     const { baseElement } = render(
-      <Profile profile={profile} businessCategories={[{
-        id: 'CATEGORY',
-        name: 'CATEGORY',
-        description: ''
-      }]} />,
+      <Profile
+        profile={profile}
+        businessCategories={[
+          {
+            id: 'CATEGORY',
+            name: 'CATEGORY',
+            description: '',
+          },
+        ]}
+      />,
     )
     expect(baseElement).toBeTruthy()
   })

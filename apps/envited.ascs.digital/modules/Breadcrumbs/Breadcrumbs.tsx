@@ -2,15 +2,15 @@
 
 import { HomeIcon } from '@heroicons/react/20/solid'
 import { usePathname } from 'next/navigation'
-import { FC, Fragment, ReactNode } from 'react'
+import { FC, Fragment } from 'react'
 
-import { mapIndexed } from '../../common/utils'
-import { formatBreadcrumbLabel, formatBreadcrumbUri } from './Breadcrumbs.utils'
+import { mapIndexed, segmentsToPath, slugToLabel } from '../../common/utils'
+import { add, pipe, split, tail } from 'ramda'
 
 export const Breadcrumbs: FC = () => {
   const path = usePathname()
-  const pathNames = path.split('/').filter(path => path)
-  const getBreadcrumbUri = formatBreadcrumbUri(pathNames)
+  const pathNames = pipe(split('/'), tail)(path) as string[]
+  const getBreadcrumbUri = segmentsToPath(pathNames)
 
   return (
     <div className="pb-8">
@@ -24,9 +24,9 @@ export const Breadcrumbs: FC = () => {
               </a>
             </div>
           </li>
-          {mapIndexed((link, index) => {
-            const href = getBreadcrumbUri(index)
-            const label = formatBreadcrumbLabel(link as any)
+          {mapIndexed((link: unknown, index: number) => {
+            const href = getBreadcrumbUri(add(index, 1))
+            const label = slugToLabel(link as string)
 
             return (
               <Fragment key={index}>
@@ -46,7 +46,7 @@ export const Breadcrumbs: FC = () => {
                         path === href ? 'text-gray-700' : ''
                       } ml-4 text-sm font-medium text-gray-500 hover:text-gray-700`}
                     >
-                      {label as ReactNode}
+                      {label}
                     </a>
                   </div>
                 </li>

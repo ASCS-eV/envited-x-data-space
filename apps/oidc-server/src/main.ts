@@ -3,9 +3,9 @@ import express from 'express'
 import { redis } from './common'
 import { hydraAdmin } from './common/hydra'
 import { getClientMetadata } from './handlers/clientMetadata/clientMetadata'
+import { getConsent } from './handlers/consent'
 import { postPresentCredential } from './handlers/presentCredential'
 import { getPresentCredential } from './handlers/presentCredential/getPresentCredential'
-import { getConsent } from './handlers/consent'
 
 const host = process.env.HOST ?? 'localhost'
 const port = process.env.PORT ? Number(process.env.PORT) : 3005

@@ -10,7 +10,9 @@ import { RedisHydraContext } from '../types'
 
 const lambdaHandler = async (event: any, context: RedisHydraContext) => {
   try {
-    const { queryStringParameters: { challenge } } = event
+    const {
+      queryStringParameters: { challenge },
+    } = event
     const { redis, hydraAdmin } = context
     const result = postPresentCredential(redis, hydraAdmin)(challenge as string)
 

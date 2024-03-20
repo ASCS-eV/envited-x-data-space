@@ -89,9 +89,7 @@ export const generatePresentationDefinition = (policy: LoginPolicy, inputDescrip
       map(({ claims }: CredentialPattern) => {
         const fields: any = reduce(
           (acc, claim) =>
-            when(propSatisfies(equals(true), 'required'), (x) => append({ path: [x.claimPath] })(acc))(
-              claim,
-            ),
+            when(propSatisfies(equals(true), 'required'), x => append({ path: [x.claimPath] })(acc))(claim),
           [],
         )(claims)
 

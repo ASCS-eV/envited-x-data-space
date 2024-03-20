@@ -1,3 +1,8 @@
+/**
+ * Copyright 2024 Software Engineering for Business Information Systems (sebis) <matthes@tum.de> .
+ * SPDX-License-Identifier: MIT
+ */
+
 export const getClientMetadata = () => ({
   scopes_supported: ['openid'],
   response_types_supported: ['id_token', 'vp_token'],

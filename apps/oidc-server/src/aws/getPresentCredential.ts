@@ -5,7 +5,7 @@ import { getPresentCredential } from '../handlers/presentCredential'
 
 export const handler: Handler = async event => {
   try {
-    const { loginId } = event.queryStringParameters
+    const { queryStringParameters: { loginId } } = event
     const result = getPresentCredential(loginId)
 
     return ok(result)

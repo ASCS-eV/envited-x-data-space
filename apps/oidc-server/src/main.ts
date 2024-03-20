@@ -5,6 +5,7 @@ import { hydraAdmin } from './common/hydra'
 import { getClientMetadata } from './handlers/clientMetadata/clientMetadata'
 import { postPresentCredential } from './handlers/presentCredential'
 import { getPresentCredential } from './handlers/presentCredential/getPresentCredential'
+import { getConsent } from './handlers/consent'
 
 const host = process.env.HOST ?? 'localhost'
 const port = process.env.PORT ? Number(process.env.PORT) : 3005
@@ -17,14 +18,19 @@ app.get('/client-metadata', (req, res) => {
   res.send(result)
 })
 
-app.get('/present-credential/:loginId', (req, res) => {
+app.get('/present-credential/:loginId', async (req, res) => {
   const { loginId } = req.params
-  const result = getPresentCredential(loginId)
+  const result = await getPresentCredential(loginId)
   res.send(result)
 })
 
-app.post('/present-credential', (req, res) => {
-  const result = postPresentCredential(redis, hydraAdmin)(req.body)
+app.post('/present-credential', async (req, res) => {
+  const result = await postPresentCredential(redis, hydraAdmin)(req.body)
+  res.send(result)
+})
+
+app.get('/conset/:challenge', async (req, res) => {
+  const result = await getConsent(redis, hydraAdmin)(req.params.challenge)
   res.send(result)
 })
 

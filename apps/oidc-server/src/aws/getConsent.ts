@@ -1,5 +1,5 @@
 import middy from '@middy/core'
-import { APIGatewayEvent, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
 import { redis } from '../common'
 import { hydraAdmin } from '../common/hydra'
@@ -8,12 +8,11 @@ import { postPresentCredential } from '../handlers/presentCredential'
 import { hydraMiddleware, redisMiddleware } from '../middleware'
 import { RedisHydraContext } from '../types'
 
-const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraContext) => {
+const lambdaHandler = async (event: any, context: RedisHydraContext) => {
   try {
-    // TODO: extract token from body
-    const { body } = event
+    const { queryStringParameters: { challenge } } = event
     const { redis, hydraAdmin } = context
-    const result = postPresentCredential(redis, hydraAdmin)(body as string)
+    const result = postPresentCredential(redis, hydraAdmin)(challenge as string)
 
     return ok(result)
   } catch (error) {

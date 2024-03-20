@@ -10,4 +10,5 @@ export {
   ipfsToHttps,
   calculateProfitPercentage,
   verifiedValidAddress,
+  bytesToMegaBytes,
 } from './utils'

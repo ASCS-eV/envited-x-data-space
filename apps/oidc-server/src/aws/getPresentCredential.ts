@@ -7,7 +7,7 @@ export const handler: Handler = async event => {
   try {
     const { loginId } = event.queryStringParameters
     const result = getPresentCredential(loginId)
-    
+
     return ok(result)
   } catch (error) {
     return internalServerError(error.message)

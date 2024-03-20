@@ -30,12 +30,12 @@ import {
 import { policies } from '../config/policies'
 import { ClaimEntry, CredentialPattern, ExpectedCredential, LoginPolicy } from '../types'
 
-export const generatePresentationDefinition = (policy: LoginPolicy, inputDescriptorOverride = null) => {
+export const generatePresentationDefinition = (policy: LoginPolicy, inputDescriptorOverride: any = null) => {
   if (isNil(policy)) {
     throw Error('A policy must be specified to generate a presentation definition')
   }
 
-  let pd: Record<string, any> = {
+  let pd: any = {
     format: {
       ldp_vc: {
         proof_type: ['JsonWebSignature2020', 'Ed25519Signature2018', 'EcdsaSecp256k1Signature2019', 'RsaSignature2018'],
@@ -89,9 +89,7 @@ export const generatePresentationDefinition = (policy: LoginPolicy, inputDescrip
       map(({ claims }: CredentialPattern) => {
         const fields: any = reduce(
           (acc, claim) =>
-            when(propSatisfies(equals(true), 'required'), (x: ClaimEntry) => append({ path: [x.claimPath] })(acc))(
-              claim,
-            ),
+            when(propSatisfies(equals(true), 'required'), x => append({ path: [x.claimPath] })(acc))(claim),
           [],
         )(claims)
 
@@ -107,7 +105,7 @@ export const generatePresentationDefinition = (policy: LoginPolicy, inputDescrip
     addInputDescriptors(inputDescriptorsLens)(expectation)
   })(policy)
 
-  addIndex(map)((inputDescriptor: any[], idx: number) => {
+  addIndex(map)((inputDescriptor: unknown, idx: number) => {
     if (propSatisfies(isEmpty, 'constraints')(inputDescriptor)) {
       const inputDescriptorWithConstraints = assoc('constraints', {
         fields: [{ path: ['$.type'], filter: { type: 'string', pattern: 'VerifiableCredential' } }],
@@ -181,7 +179,7 @@ export const _verifyAuthenticationPresentation = (verifyPresentation: any) => as
 export const verifyAuthenticationPresentation = _verifyAuthenticationPresentation(verifyPresentation)
 
 export const isTrustedPresentation = (VP: any, policy?: LoginPolicy) => {
-  const configuredPolicy = policies[process.env.LOGIN_POLICY || undefined]
+  const configuredPolicy = policies[process.env.LOGIN_POLICY || '']
   if (!policy && configuredPolicy === undefined) return false
 
   const usedPolicy = policy ? policy : configuredPolicy!
@@ -195,10 +193,10 @@ export const isTrustedPresentation = (VP: any, policy?: LoginPolicy) => {
     const fittingCreds = []
     for (const cred of credArr) {
       if (isCredentialFittingPatternList(cred, expectation.patterns)) {
-        fittingCreds.push(cred)
+        fittingCreds.push(cred as never)
       }
     }
-    patternFits.push(fittingCreds)
+    patternFits.push(fittingCreds as never)
   }
 
   return hasUniquePath(patternFits, [])

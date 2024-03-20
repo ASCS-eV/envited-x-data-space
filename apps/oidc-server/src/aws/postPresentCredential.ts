@@ -13,6 +13,7 @@ const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraContext)
     const { body } = event
     const { redis, hydraAdmin } = context
     const result = postPresentCredential(redis, hydraAdmin)(body)
+    
     return ok(result)
   } catch (error) {
     return internalServerError(error.message)

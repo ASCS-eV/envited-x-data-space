@@ -122,4 +122,15 @@ describe('common/utils', () => {
       expect(SUT.chunkString(6)('aaaaaabbbbbbcccccc')).toEqual(['aaaaaa', 'bbbbbb', 'cccccc'])
     })
   })
+
+  describe('bytesToMegaBytes', () => {
+    it.each([
+      [104857600, '100.00'],
+      [10013900, '9.55'],
+    ])('should, with value %s, return %s as expected', (value, result) => {
+      // when ... we provide a value
+      // then ... it should return as expected
+      expect(SUT.bytesToMegaBytes(value)).toEqual(result)
+    })
+  })
 })

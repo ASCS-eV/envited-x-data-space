@@ -1,3 +1,9 @@
+'use client'
+
+import { Button, Heading } from '@envited-marketplace/design-system'
+import { ROUTES } from 'apps/envited.ascs.digital/common/constants/routes'
+import Link from 'next/link'
+
 const products = [
   {
     id: 1,
@@ -25,6 +31,15 @@ const products = [
 export const DashboardAssets = () => {
   return (
     <>
+      <div className="flex justify-between mb-6 pb-6 border-b">
+        <Heading importance="h3">Assets</Heading>
+        <Link
+          href={ROUTES.DASHBOARD.ADD_ASSETS}
+          className="bg-blue-900 hover:bg-blue-800 text-white py-2 px-4 text-xs sm:text-sm disabled:opacity-50 font-bold leading-none transition duration-300 ease-in-out rounded-md"
+        >
+          Add assets
+        </Link>
+      </div>
       <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8">
         {products.map(product => (
           <div

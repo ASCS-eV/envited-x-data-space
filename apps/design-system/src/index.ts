@@ -1,4 +1,5 @@
 export { Address } from './components/Molecules/Address'
+export { DragAndDropAssetsField } from './components/Molecules/DragAndDropAssets'
 export { Button } from './components/Atoms/Button'
 export { Card } from './components/Atoms/Card'
 export { ContactPerson } from './components/Atoms/ContactPerson'

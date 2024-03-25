@@ -7,6 +7,7 @@ import {
   gt,
   join,
   lt,
+  multiply,
   pipe,
   propSatisfies,
   replace,
@@ -84,3 +85,5 @@ export const calculateProfitPercentage = (currentValue: number) => pipe(flip(div
 export const chunkString = splitEvery
 
 export const verifiedValidAddress = equals(3)
+
+export const bytesToMegaBytes = pipe(flip(divide)(multiply(1024, 1024)), x => x.toFixed(2))

@@ -20,4 +20,10 @@ export { Tooltip } from './components/Atoms/Tooltip'
 export { ColorScheme, Language, Size } from './types'
 
 export { useClipboard, useLocalStorage } from './hooks'
-export { formatPercentage, formatDate, formatShortDate, calculateProfitPercentage } from './common/utils'
+export {
+  bytesToMegaBytes,
+  formatPercentage,
+  formatDate,
+  formatShortDate,
+  calculateProfitPercentage,
+} from './common/utils'

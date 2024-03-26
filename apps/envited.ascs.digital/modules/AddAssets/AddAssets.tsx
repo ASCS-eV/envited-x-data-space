@@ -1,8 +1,11 @@
 'use client'
 
-import { DragAndDropAssetsField, Heading, LoadingIndicator } from '@envited-marketplace/design-system'
+import { Heading, LoadingIndicator } from '@envited-marketplace/design-system'
 import { pathOr } from 'ramda'
 import { Controller, useForm } from 'react-hook-form'
+
+import { removeFileHandler } from './AddAssets.utils'
+import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
   const {
@@ -23,7 +26,7 @@ export const AddAssets = () => {
           name="assets"
           control={control}
           render={({ field: { ref, onChange, value, ...field } }) => (
-            <DragAndDropAssetsField
+            <UploadAssetsField
               label="Select assets"
               {...field}
               inputRef={ref}
@@ -38,7 +41,9 @@ export const AddAssets = () => {
                   onChange(event.target.files)
                 }
               }}
-              removeFile={(idx: number) => onChange([...value].splice(idx, 1))}
+              removeFile={(idx: number) => {
+                onChange(removeFileHandler(value, idx))
+              }}
               error={pathOr('', ['assets', 'message'])(errors)}
             />
           )}

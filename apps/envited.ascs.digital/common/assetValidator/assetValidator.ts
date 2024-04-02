@@ -61,7 +61,7 @@ export const readContentFromJsonFile = async (file: any) => {
 
     return JSON.parse(fileContent)
   } catch (e) {
-    return e  
+    return e
   }
 }
 

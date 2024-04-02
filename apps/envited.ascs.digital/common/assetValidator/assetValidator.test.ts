@@ -6,10 +6,6 @@ jest.mock('@zip.js/zip.js', () => ({
   ZipReader: () => {},
 }))
 
-jest.mock('./assetValidator.global.ts', () => ({
-  stream: () => {},
-}))
-
 describe('common/assetValidator', () => {
   describe('validateAssetFile', () => {
     it('Should return a valid result', async () => {

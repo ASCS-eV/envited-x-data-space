@@ -1,7 +1,6 @@
 import { BlobReader, Entry, ZipReader } from '@zip.js/zip.js'
 import { find, isNil, propEq } from 'ramda'
 
-import { stream } from './assetValidator.global'
 import { ASSETS_VALIDATION_MAP, Asset, MetadataSchema } from './assetValidator.schema'
 
 export const _validateAssetFile = (getMetadataJsonFromZip: (file: File) => void) => async (file: File) => {
@@ -53,18 +52,17 @@ export const getFileFromZip = async (file: File, filename: string) => {
   }
 }
 
-export const _readContentFromJsonFile = (stream: TransformStream) => async (file: any) => {
+export const readContentFromJsonFile = async (file: any) => {
   try {
+    const stream = new TransformStream()
     const response = new Response(stream.readable).text()
     await file.getData(stream.writable)
     const fileContent = await response
 
     return JSON.parse(fileContent)
   } catch (e) {
-    return e
+    return e  
   }
 }
-
-export const readContentFromJsonFile = _readContentFromJsonFile(stream)
 
 export const validateAssetFile = _validateAssetFile(getMetadataJsonFromZip)

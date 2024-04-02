@@ -53,7 +53,7 @@ export const getFileFromZip = async (file: File, filename: string) => {
   }
 }
 
-export const _readContentFromJsonFile = (stream: any) => async (file: any) => {
+export const _readContentFromJsonFile = (stream: TransformStream) => async (file: any) => {
   try {
     const response = new Response(stream.readable).text()
     await file.getData(stream.writable)

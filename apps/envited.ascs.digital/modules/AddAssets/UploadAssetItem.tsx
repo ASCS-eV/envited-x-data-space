@@ -2,10 +2,10 @@
 
 import { LoadingIndicator, bytesToMegaBytes } from '@envited-marketplace/design-system'
 import { CheckCircleIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { has, pathOr } from 'ramda'
+import { pathOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 
-import { validateAssetFile } from './AddAssets.utils'
+import { validateAssetFile } from '../../common/assetValidator'
 
 interface UploadAssetItemProps {
   idx: number
@@ -13,13 +13,19 @@ interface UploadAssetItemProps {
   removeFile: (idx: number) => void
 }
 export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, removeFile }) => {
-  const [asset, setAsset] = useState(null)
+  const [asset, setAsset] = useState<any>(null)
+  const [validating, setValidating] = useState(true)
 
   useEffect(() => {
     async function getAssetData() {
-      const data = (await validateAssetFile(file)) as any
+      try {
+        const data = await validateAssetFile(file)
 
-      setAsset(data)
+        setAsset(data)
+        setValidating(false)
+      } catch (e) {
+        console.log(e)
+      }
     }
 
     if (!asset) {
@@ -39,7 +45,7 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, removeFil
           <span className="text-gray-500 flex">
             <span className="block sm:inline">
               <span className="flex gap-x-2 items-center">
-                {!has('isValidating')(asset) ? (
+                {validating ? (
                   <>
                     <LoadingIndicator /> Is validating
                   </>

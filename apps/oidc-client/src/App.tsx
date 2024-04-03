@@ -4,8 +4,8 @@ import useSWR from 'swr'
 
 import styles from './App.module.css'
 import { fetcher } from './common/fetcher'
-import { getOpenIdConnectUrl } from './utils'
 import { Loader } from './modules/loader'
+import { getOpenIdConnectUrl } from './utils'
 
 const QRCode = ReactQRCode as any
 
@@ -13,7 +13,10 @@ function App() {
   const urlSearchParams = new URLSearchParams(window.location.search)
   const loginChallenge = urlSearchParams.get('login_challenge')
 
-  const { data, error, isLoading } = useSWR(`${import.meta.env.VITE_AUTH_SERVER_URI}/challenge/${loginChallenge}`, fetcher)
+  const { data, error, isLoading } = useSWR(
+    `${import.meta.env.VITE_AUTH_SERVER_URI}/challenge/${loginChallenge}`,
+    fetcher,
+  )
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [qrCodeValue, setQrCodeValue] = useState<string | null>(null)
@@ -33,14 +36,14 @@ function App() {
       const { loginId } = data
       const interval = setInterval(() => {
         fetch(`${import.meta.env.VITE_AUTH_SERVER_URI}/redirect/${loginId}`)
-          .then((res) => res.json())
-          .then((data) => {
+          .then(res => res.json())
+          .then(data => {
             console.log(data.redirect)
             if (data?.redirect?.destination) {
               window.location = data.redirect.destination
             }
           })
-          .catch((e) => {
+          .catch(e => {
             console.error(e)
           })
       }, 3000)

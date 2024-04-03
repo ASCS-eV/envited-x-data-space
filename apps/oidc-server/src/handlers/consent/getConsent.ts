@@ -7,7 +7,7 @@ import { Redis } from 'ioredis'
 import { HydraAdmin } from '../../types'
 
 export const getConsent = (redis: Redis, hydraAdmin: HydraAdmin) => async (challenge: string) => {
-  console.log("CONSENT")
+  console.log('CONSENT')
   try {
     const { data: body } = await hydraAdmin.oauth2.getOAuth2ConsentRequest({ consentChallenge: challenge })
     console.log(challenge)

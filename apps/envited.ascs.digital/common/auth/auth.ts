@@ -1,7 +1,6 @@
 import type { NextAuthOptions } from 'next-auth'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 
-
 export const authOptions: NextAuthOptions = {
   pages: {
     error: '/',
@@ -9,23 +8,23 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     {
-      id: "siwt",
-      name: "siwt",
-      type: "oauth",
-      version: "2.0",
+      id: 'siwt',
+      name: 'siwt',
+      type: 'oauth',
+      version: '2.0',
       idToken: true,
-      issuer: "http://localhost:5004",
+      issuer: 'http://localhost:5004',
       authorization: {
-        url: "http://localhost:5004/oauth2/auth?response_type=code",
+        url: 'http://localhost:5004/oauth2/auth?response_type=code',
         params: {
-          scope: "openid",
+          scope: 'openid',
         },
       },
-      token: "http://localhost:5004/oauth2/token",
-      jwks_endpoint: "http://localhost:5004/.well-known/jwks.json",
+      token: 'http://localhost:5004/oauth2/token',
+      jwks_endpoint: 'http://localhost:5004/.well-known/jwks.json',
       clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
       clientSecret: process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET,
-      profile: (profile) => ({
+      profile: profile => ({
         id: profile.sub,
       }),
     },
@@ -69,7 +68,8 @@ export const _signIn =
     return NASignIn('siwt', {
       pkh,
       callbackUrl: '/dashboard',
-    })}
+    })
+  }
 
 export const signIn = _signIn(NASignIn)
 

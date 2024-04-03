@@ -3,9 +3,9 @@ import { APIGatewayEvent, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aw
 
 import { redis } from '../common'
 import { internalServerError, ok } from '../common/responses'
+import { getRedirect } from '../handlers/redirect'
 import { redisMiddleware } from '../middleware'
 import { RedisHydraContext } from '../types'
-import { getRedirect } from '../handlers/redirect'
 
 const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraContext) => {
   try {

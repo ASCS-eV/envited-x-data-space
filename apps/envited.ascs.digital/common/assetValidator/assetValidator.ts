@@ -1,9 +1,10 @@
-import { BlobReader, Entry, ZipReader } from '@zip.js/zip.js'
-import { find, isNil, propEq } from 'ramda'
+
+import { Entry } from '@zip.js/zip.js'
 
 import { ASSETS_VALIDATION_MAP, Asset, MetadataSchema } from './assetValidator.schema'
+import { extract, read } from '../archive'
 
-export const _validateAssetFile = (getMetadataJsonFromZip: (file: File) => void) => async (file: File) => {
+export const _validateAssetFile = (getMetadataJsonFromZip: (file: File) => Promise<Record<string, any>>) => async (file: File) => {
   try {
     const metadata = await getMetadataJsonFromZip(file)
     const metadataResult = MetadataSchema.safeParse(metadata)
@@ -12,7 +13,7 @@ export const _validateAssetFile = (getMetadataJsonFromZip: (file: File) => void)
       return { isValid: false, data: {} }
     }
 
-    const { type } = MetadataSchema.parse(metadata)
+    const { type } = metadata 
     const resultAssetTypeValidation = ASSETS_VALIDATION_MAP[type as Asset].safeParse(metadata)
 
     if (!resultAssetTypeValidation.success) {
@@ -21,48 +22,18 @@ export const _validateAssetFile = (getMetadataJsonFromZip: (file: File) => void)
 
     return { isValid: true, data: metadata }
   } catch (e) {
-    console.log(e)
+    throw new Error('Error validating asset file')
   }
 }
 
-export const getMetadataJsonFromZip = async (asset: File) => {
-  try {
-    const file = await getFileFromZip(asset, 'metadata.json')
+export const _getMetadataJsonFromZip = ({ extract }: { extract: (archive: File, fileName: string) => Promise<Entry> }) => async (asset: File) => 
+  extract(asset, 'metadata.json')
+  .then(readContentFromJsonFile)
 
-    if (isNil(file)) {
-      return {}
-    }
+export const getMetadataJsonFromZip = _getMetadataJsonFromZip({ extract })
 
-    return readContentFromJsonFile(file as Entry)
-  } catch (e) {
-    console.log(e)
-  }
-}
+export const _readContentFromJsonFile = ({ read }: { read: (file: Entry) => Promise<string> }) => async (file: Entry) => read(file).then(JSON.parse)
 
-export const getFileFromZip = async (file: File, filename: string) => {
-  try {
-    const zipReader = new ZipReader(new BlobReader(file))
-    const zipEntries = await zipReader.getEntries()
-    const fileEntry = find(propEq(filename, 'filename'))(zipEntries)
-    await zipReader.close()
-
-    return fileEntry
-  } catch (e) {
-    return e
-  }
-}
-
-export const readContentFromJsonFile = async (file: any) => {
-  try {
-    const stream = new TransformStream()
-    const response = new Response(stream.readable).text()
-    await file.getData(stream.writable)
-    const fileContent = await response
-
-    return JSON.parse(fileContent)
-  } catch (e) {
-    return e
-  }
-}
+export const readContentFromJsonFile = _readContentFromJsonFile({ read })
 
 export const validateAssetFile = _validateAssetFile(getMetadataJsonFromZip)

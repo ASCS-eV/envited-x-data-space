@@ -25,5 +25,5 @@ export const getClientMetadata = () => ({
   client_name: process.env.CLIENT_NAME || 'VP Login Service',
   request_uri_parameter_supported: true,
   request_parameter_supported: false,
-  redirect_uris: [process.env.API_URL + '/presentCredential'],
+  redirect_uris: [process.env.API_URL + '/present-credential'],
 })

@@ -140,7 +140,7 @@ export function OryHydra({ stack }: StackContext) {
       SECRETS_DATABASE_URL: rdsCluster.secret?.secretArn || '',
       SECRETS_REDIS_URL: `redis://${redis.attrEndpointAddress}:${redis.attrReaderEndpointPort}`,
       SERVE_COOKIES_SAME_SITE_MODE: 'Lax',
-      URLS_SELF_ISSUER: 'http://localhost:4444',
+      URLS_SELF_ISSUER: 'http://localhost:5004',
       URLS_CONSENT: 'http://localhost:3000/consent',
       URLS_LOGIN: 'http://localhost:3000/login',
       URLS_LOGOUT: 'http://localhost:3000/logout',

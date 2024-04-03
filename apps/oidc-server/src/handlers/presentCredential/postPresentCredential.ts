@@ -7,11 +7,11 @@ import { Redis } from 'ioredis'
 import { HydraAdmin } from '../../types'
 import { extractClaims, isTrustedPresentation, verifyAuthenticationPresentation } from '../../utils'
 
-export const postPresentCredential = (redis: Redis, hydraAdmin: HydraAdmin) => async (vpToken: string) => {
+export const postPresentCredential = (redis: Redis, hydraAdmin: HydraAdmin) => async (vpToken: any) => {
   console.log('LOGIN API POST')
 
   // Parse the JSON string into a JavaScript object
-  const presentation = JSON.parse(vpToken)
+  const presentation = vpToken
   console.log('Presentation: \n', vpToken)
 
   // Verify the presentation and the status of the credential
@@ -32,10 +32,12 @@ export const postPresentCredential = (redis: Redis, hydraAdmin: HydraAdmin) => a
   const userClaims = extractClaims(presentation)
   const subject = presentation['holder']
   const login_id = presentation['proof']['challenge']
+
   const challenge = (await redis.get('' + login_id))!
   console.log('Logging in: ' + subject + ' with challenge: ' + challenge)
 
   // hydra login
+
   await hydraAdmin.oauth2
     .getOAuth2LoginRequest({ loginChallenge: challenge })
     .then(() =>
@@ -78,6 +80,7 @@ export const postPresentCredential = (redis: Redis, hydraAdmin: HydraAdmin) => a
     )
     // This will handle any error that happens when making HTTP calls to hydra
     .catch((error: any) => {
+      console.log(error)
       throw error
     })
 }

@@ -10,24 +10,31 @@ import { policies } from '../../config/policies'
 import { generatePresentationDefinition } from '../../utils'
 
 export const getPresentCredential = async (loginId: string) => {
+  console.log('LOGIN API GET')
   const presentationDefinition = generatePresentationDefinition(
     policies[process.env.LOGIN_POLICY || 'acceptAnything'],
     pex.descriptorEmailFromAltme,
   )
+
+  console.log('PRESENTATION DEFINITION', JSON.stringify(presentationDefinition))
+
   const did = keyToDID('key', process.env.DID_KEY_JWK!)
   const verificationMethod = await keyToVerificationMethod('key', process.env.DID_KEY_JWK!)
   const challenge = loginId
   const payload = {
     client_id: did,
     client_id_scheme: 'did',
-    client_metadata_uri: `${process.env.EXTERNAL_URL}/api/clientMetadata`,
+    client_metadata_uri: `${process.env.EXTERNAL_URL}/client-metadata`,
     nonce: challenge,
     presentation_definition: presentationDefinition,
     response_mode: 'direct_post',
     response_type: 'vp_token',
-    response_uri: `${process.env.EXTERNAL_URL}/api/presentCredential`,
+    response_uri: `${process.env.EXTERNAL_URL}/present-credential`,
     state: challenge,
   }
+
+  console.log('CHALLENGE', challenge)
+
   const privateKey = await jose.importJWK(JSON.parse(process.env.DID_KEY_JWK!), 'EdDSA')
   const token = await new jose.SignJWT(payload)
     .setProtectedHeader({

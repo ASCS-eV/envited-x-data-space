@@ -2,17 +2,18 @@ import middy from '@middy/core'
 import { APIGatewayEvent, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
 import { redis } from '../common'
-import { hydraAdmin } from '../common/hydra'
 import { internalServerError, ok } from '../common/responses'
-import { postPresentCredential } from '../handlers/presentCredential'
-import { hydraMiddleware, redisMiddleware } from '../middleware'
+import { redisMiddleware } from '../middleware'
 import { RedisHydraContext } from '../types'
+import { getRedirect } from '../handlers/redirect'
 
 const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraContext) => {
   try {
-    const { body } = event
-    const { redis, hydraAdmin } = context
-    const result = postPresentCredential(redis, hydraAdmin)(body as string)
+    const {
+      queryStringParameters: { loginId },
+    } = event
+    const { redis } = context
+    const result = getRedirect({ redis })(loginId as string)
 
     return ok(result)
   } catch (error) {
@@ -22,5 +23,4 @@ const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraContext)
 
 export const handler = middy<APIGatewayProxyEvent, APIGatewayProxyResult>()
   .use(redisMiddleware(redis))
-  .use(hydraMiddleware(hydraAdmin))
   .handler(lambdaHandler)

@@ -51,6 +51,7 @@ describe('utils', () => {
           },
         ],
       }
+
       expect(result).toEqual(expected)
     })
 

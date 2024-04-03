@@ -7,13 +7,14 @@ import { Redis } from 'ioredis'
 import { HydraAdmin } from '../../types'
 
 export const getConsent = (redis: Redis, hydraAdmin: HydraAdmin) => async (challenge: string) => {
+  console.log("CONSENT")
   try {
     const { data: body } = await hydraAdmin.oauth2.getOAuth2ConsentRequest({ consentChallenge: challenge })
-
+    console.log(challenge)
     // get user identity and fetch user claims from redis
     const userClaims = JSON.parse((await redis.get('' + body.subject))!)
-
-    hydraAdmin.oauth2
+    console.log(userClaims)
+    return hydraAdmin.oauth2
       .acceptOAuth2ConsentRequest({
         consentChallenge: challenge,
         // We can grant all scopes that have been requested - hydra already checked for us that no additional scopes

@@ -1,18 +1,18 @@
 'use client'
 
-import { Button, Size } from '@envited-marketplace/design-system'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
 import { NAVIGATION } from '../../common/constants'
-import { useTranslation } from '../../common/i18n'
+// import { useTranslation } from '../../common/i18n'
 import { Navigation } from '../Navigation'
+import { SignIn } from '../SignIn'
 
 export interface HeaderProps {}
 
 export const Header: FC<HeaderProps> = () => {
-  const { t } = useTranslation('Header')
+  // const { t } = useTranslation('Header')
 
   return (
     <header className="py-10">
@@ -27,9 +27,7 @@ export const Header: FC<HeaderProps> = () => {
             <Navigation items={NAVIGATION} />
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
-            <Button onClick={() => {}} size={Size.small}>
-              <span>{t('[Button] connect')}</span>
-            </Button>
+            <SignIn /> 
           </div>
         </nav>
       </div>

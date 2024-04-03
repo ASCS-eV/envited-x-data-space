@@ -13,8 +13,8 @@ services:
   hydra:
     image: oryd/hydra:v2.2.0
     ports:
-      - 4444:4444 # Public port
-      - 4445:4445 # Admin port
+      - 5004:4444 # Public port
+      - 5001:4445 # Admin port
     environment:
       - DSN=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable&max_conns=20&max_idle_conns=4
     command: serve -c /etc/config/hydra/${ENV}.yml all --dev

@@ -46,7 +46,7 @@ describe('common/assetValidator', () => {
     it('Should return a invalid result because of invalid asset type metadata', async () => {
       // when ... we want to validate an asset file with a valid asset type but incorrectly formatted metadata
       // then ... it should return an invalid result
-      
+
       const getMetadataJsonFromZipStub = jest.fn().mockResolvedValue({
         non_existent_key: 'VALUE',
         type: 'ASSET_TYPE',
@@ -65,7 +65,7 @@ describe('common/assetValidator', () => {
     it('Should throw an error when we cannot read from file', async () => {
       // when ... we want to validate a corrupted asset file
       // then ... it should throw
-      
+
       const getMetadataJsonFromZipStub = jest.fn().mockRejectedValue(new Error('ERROR'))
 
       const validateAssetFile = SUT._validateAssetFile(getMetadataJsonFromZipStub)

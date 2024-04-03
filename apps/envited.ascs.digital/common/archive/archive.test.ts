@@ -1,4 +1,4 @@
-import * as SUT from "./archive"
+import * as SUT from './archive'
 
 describe('common/archive', () => {
   describe('extract', () => {
@@ -14,7 +14,10 @@ describe('common/archive', () => {
       }))
       const blobReaderStub = jest.fn()
 
-      const result = await SUT._extract({ ZipReader: zipReaderStub, BlobReader: blobReaderStub })('' as any, 'FILENAME.EXT')
+      const result = await SUT._extract({ ZipReader: zipReaderStub, BlobReader: blobReaderStub })(
+        '' as any,
+        'FILENAME.EXT',
+      )
       expect(result).toEqual({ filename: 'FILENAME.EXT' })
       expect(closeStub).toHaveBeenCalledWith()
       expect(getEntriesStub).toHaveBeenCalledWith()
@@ -34,7 +37,10 @@ describe('common/archive', () => {
       }))
       const blobReaderStub = jest.fn()
 
-      const result = await SUT._extract({ ZipReader: zipReaderStub, BlobReader: blobReaderStub })('' as any, 'NON_EXISTING_FILENAME.EXT')
+      const result = await SUT._extract({ ZipReader: zipReaderStub, BlobReader: blobReaderStub })(
+        '' as any,
+        'NON_EXISTING_FILENAME.EXT',
+      )
       expect(result).toEqual(undefined)
     })
 
@@ -50,7 +56,10 @@ describe('common/archive', () => {
       }))
       const blobReaderStub = jest.fn()
 
-      const result = await SUT._extract({ ZipReader: zipReaderStub, BlobReader: blobReaderStub })('' as any, 'FILENAME.EXT')
+      const result = await SUT._extract({ ZipReader: zipReaderStub, BlobReader: blobReaderStub })(
+        '' as any,
+        'FILENAME.EXT',
+      )
       expect(result).toEqual(undefined)
     })
   })

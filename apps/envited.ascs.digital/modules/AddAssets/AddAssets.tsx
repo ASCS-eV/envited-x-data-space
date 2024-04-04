@@ -1,7 +1,8 @@
 'use client'
 
 import { Heading, LoadingIndicator } from '@envited-marketplace/design-system'
-import { pathOr } from 'ramda'
+import { all, equals, isEmpty, pathOr } from 'ramda'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { removeFileHandler } from './AddAssets.utils'
@@ -13,6 +14,17 @@ export const AddAssets = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm()
+
+  const [validatedFiles, setValidatedFiles] = useState<any[]>([])
+
+  useEffect(() => {
+    console.log('ValidatedFiles has been updated:', validatedFiles)
+  }, [validatedFiles])
+
+  const validationHandler = (idx: number, data: { isValid: boolean; data: any }) => {
+    validatedFiles[idx] = data.isValid
+    setValidatedFiles(validatedFiles)
+  }
 
   const addAssetsAction = () => {}
 
@@ -42,20 +54,27 @@ export const AddAssets = () => {
                 }
               }}
               removeFile={(idx: number) => {
+                validatedFiles.splice(idx, 1)
+                setValidatedFiles(validatedFiles)
                 onChange(removeFileHandler(value, idx))
               }}
+              validationHandler={validationHandler}
               error={pathOr('', ['assets', 'message'])(errors)}
             />
           )}
         />
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          <button
-            type="submit"
-            className="bg-blue hover:bg-blue-900 text-white transition rounded-full font-bold py-2 px-4"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? <LoadingIndicator /> : 'Upload assets'}
-          </button>
+          {!isEmpty(validatedFiles) && all(equals(true))(validatedFiles) ? (
+            <button
+              type="submit"
+              className="bg-blue hover:bg-blue-900 text-white transition rounded-full font-bold py-2 px-4"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? <LoadingIndicator /> : 'Upload assets'}
+            </button>
+          ) : (
+            <></>
+          )}
         </div>
       </form>
     </>

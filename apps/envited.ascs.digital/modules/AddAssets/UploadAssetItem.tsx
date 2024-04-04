@@ -10,9 +10,10 @@ import { validateAssetFile } from '../../common/assetValidator'
 interface UploadAssetItemProps {
   idx: number
   file: File
+  validHandler: (idx: number, data: any) => void
   removeFile: (idx: number) => void
 }
-export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, removeFile }) => {
+export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, validHandler, removeFile }) => {
   const [asset, setAsset] = useState<any>(null)
   const [validating, setValidating] = useState(true)
 
@@ -22,6 +23,7 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, removeFil
         const data = await validateAssetFile(file)
 
         setAsset(data)
+        validHandler(idx, data)
         setValidating(false)
       } catch (e) {
         console.log(e)

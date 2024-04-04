@@ -7,6 +7,11 @@ import { RefCallBack } from 'react-hook-form'
 
 import { UploadAssetItem } from './UploadAssetItem'
 
+interface FileData {
+  isValid: boolean
+  data: any
+}
+
 interface DragAndDropFieldProps {
   label: string | ReactElement<any, string | JSXElementConstructor<any>>
   name: string
@@ -15,6 +20,7 @@ interface DragAndDropFieldProps {
   inputRef: RefCallBack
   onDrop: (event: React.DragEvent<HTMLDivElement>) => void
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  validationHandler: (idx: number, data: FileData) => void
   removeFile: (idx: number) => void
 }
 
@@ -26,6 +32,7 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
   inputRef,
   onDrop,
   onChange,
+  validationHandler,
   removeFile,
 }) => {
   const [isDragActive, setIsDragActive] = useState<boolean>(false)
@@ -42,6 +49,10 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
 
   const handleDragLeave = () => {
     setIsDragActive(false)
+  }
+
+  const removeItem = (idx: number) => {
+    removeFile(idx)
   }
 
   return (
@@ -84,7 +95,7 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
       <div className="flex flex-col items-center py-3 space-y-4">
         {!isNil(files) &&
           Array.from(files as File[]).map((file, idx) => (
-            <UploadAssetItem key={idx} idx={idx} file={file} removeFile={removeFile} />
+            <UploadAssetItem key={idx} idx={idx} file={file} validHandler={validationHandler} removeFile={removeItem} />
           ))}
       </div>
       {!isEmpty(error) && <p className="mt-3 text-sm leading-6 text-red-600 dark:text-red-400">{error}</p>}

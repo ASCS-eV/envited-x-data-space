@@ -1,3 +1,4 @@
+import { ERRORS } from '../constants'
 import * as SUT from './assetValidator'
 
 describe('common/assetValidator', () => {
@@ -40,6 +41,7 @@ describe('common/assetValidator', () => {
       expect(result).toEqual({
         data: {},
         isValid: false,
+        error: ERRORS.ASSET_INVALID,
       })
     })
 
@@ -59,6 +61,7 @@ describe('common/assetValidator', () => {
       expect(result).toEqual({
         data: {},
         isValid: false,
+        error: ERRORS.ASSET_INVALID,
       })
     })
 
@@ -69,8 +72,9 @@ describe('common/assetValidator', () => {
       const getMetadataJsonFromZipStub = jest.fn().mockRejectedValue(new Error('ERROR'))
 
       const validateAssetFile = SUT._validateAssetFile(getMetadataJsonFromZipStub)
+      const result = await validateAssetFile('' as any)
 
-      expect(() => validateAssetFile('' as any)).rejects.toThrow('Error validating asset file')
+      expect(result).toEqual({ isValid: false, data: {}, error: ERRORS.ASSET_FILE_NOT_FOUND })
     })
   })
 })

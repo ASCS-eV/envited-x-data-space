@@ -1,28 +1,22 @@
 import { Entry } from '@zip.js/zip.js'
 
 import { extract, read } from '../archive'
-import { ASSETS_VALIDATION_MAP, Asset, MetadataSchema } from './assetValidator.schema'
+import { ERRORS } from '../constants'
+import { assetSchema } from './assetValidator.schema'
 
 export const _validateAssetFile =
   (getMetadataJsonFromZip: (file: File) => Promise<Record<string, any>>) => async (file: File) => {
     try {
       const metadata = await getMetadataJsonFromZip(file)
-      const metadataResult = MetadataSchema.safeParse(metadata)
+      const metadataResult = assetSchema.safeParse(metadata)
 
       if (!metadataResult.success) {
-        return { isValid: false, data: {} }
+        return { isValid: false, data: {}, error: ERRORS.ASSET_INVALID }
       }
 
-      const { type } = metadata
-      const resultAssetTypeValidation = ASSETS_VALIDATION_MAP[type as Asset].safeParse(metadata)
-
-      if (!resultAssetTypeValidation.success) {
-        return { isValid: false, data: {} }
-      }
-
-      return { isValid: true, data: metadata }
-    } catch (e) {
-      throw new Error('Error validating asset file')
+      return { isValid: true, data: metadataResult.data }
+    } catch {
+      return { isValid: false, data: {}, error: ERRORS.ASSET_FILE_NOT_FOUND }
     }
   }
 

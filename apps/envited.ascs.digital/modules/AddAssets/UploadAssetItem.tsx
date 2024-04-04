@@ -2,7 +2,7 @@
 
 import { LoadingIndicator, bytesToMegaBytes } from '@envited-marketplace/design-system'
 import { CheckCircleIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { pathOr } from 'ramda'
+import { pathOr, prop } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 
 import { validateAssetFile } from '../../common/assetValidator'
@@ -63,7 +63,9 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, removeFil
             <span className="hidden sm:mx-1 sm:inline" aria-hidden="true">
               &middot;
             </span>{' '}
-            <span className="block sm:inline">{pathOr('', ['data', 'type'])(asset)}</span>{' '}
+            <span className="block sm:inline">
+              {prop('isValid')(asset) ? pathOr('', ['data', 'type'])(asset) : prop('error')(asset)}
+            </span>{' '}
           </span>
         </span>
       </span>

@@ -1,0 +1,1 @@
+export { validateAssetFile } from './assetValidator'

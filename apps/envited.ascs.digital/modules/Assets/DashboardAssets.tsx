@@ -1,8 +1,9 @@
 'use client'
 
-import { Button, Heading } from '@envited-marketplace/design-system'
-import { ROUTES } from 'apps/envited.ascs.digital/common/constants/routes'
+import { Heading } from '@envited-marketplace/design-system'
 import Link from 'next/link'
+
+import { ROUTES } from '../../common/constants/routes'
 
 const products = [
   {

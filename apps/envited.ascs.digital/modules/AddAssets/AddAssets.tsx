@@ -1,38 +1,44 @@
 'use client'
 
 import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-marketplace/design-system'
-import { all, equals, isEmpty, pathOr } from 'ramda'
+import { isEmpty, pathOr } from 'ramda'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { removeFileHandler } from './AddAssets.utils'
+import { useTranslation } from '../../common/i18n'
+import { checkIfAllAssetsAreValid, removeFileHandler } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
+  const { t } = useTranslation('AddAssets')
+
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
+    getValues,
     setValue,
     watch,
   } = useForm()
 
-  watch('validAssets')
+  watch('allAssetsValid')
 
-  const [validatedFiles, setValidatedFiles] = useState<any[]>([])
+  const [selectedAssetsValidationResults, setSelectedAssetsValidationResults] = useState<boolean[]>([])
 
   const validationHandler = (idx: number, data: { isValid: boolean; data: any }) => {
-    validatedFiles[idx] = data.isValid
-    setValue('validAssets', all(equals(true))(validatedFiles))
-    setValidatedFiles(validatedFiles)
+    selectedAssetsValidationResults[idx] = data.isValid
+    setValue('allAssetsValid', checkIfAllAssetsAreValid(selectedAssetsValidationResults))
+    setSelectedAssetsValidationResults(selectedAssetsValidationResults)
   }
+
+  const { allAssetsValid } = getValues()
 
   const addAssetsAction = () => {}
 
   return (
     <>
       <div className="flex justify-between mb-6 pb-6 border-b">
-        <Heading importance="h3">Add assets</Heading>
+        <Heading importance="h3">{t('[Heading] add assets')}</Heading>
       </div>
       <form onSubmit={handleSubmit(addAssetsAction)} className="pt-6">
         <Controller
@@ -40,7 +46,7 @@ export const AddAssets = () => {
           control={control}
           render={({ field: { ref, onChange, value, ...field } }) => (
             <UploadAssetsField
-              label="Select assets"
+              label={t('[Label] select assets')}
               {...field}
               inputRef={ref}
               files={value}
@@ -55,9 +61,9 @@ export const AddAssets = () => {
                 }
               }}
               removeFile={(idx: number) => {
-                validatedFiles.splice(idx, 1)
-                setValidatedFiles(validatedFiles)
-                setValue('validAssets', all(equals(true))(validatedFiles))
+                selectedAssetsValidationResults.splice(idx, 1)
+                setSelectedAssetsValidationResults(selectedAssetsValidationResults)
+                setValue('allAssetsValid', checkIfAllAssetsAreValid(selectedAssetsValidationResults))
                 onChange(removeFileHandler(value, idx))
               }}
               validationHandler={validationHandler}
@@ -65,28 +71,21 @@ export const AddAssets = () => {
             />
           )}
         />
-        <div className="mt-4">
-          {!isEmpty(validatedFiles) && !all(equals(true))(validatedFiles) ? (
-            <Alert type={AlertType.error}>
-              Some asset(s) are invalid. Please remove the asset(s) then you be able to upload it.
-            </Alert>
-          ) : (
-            <></>
-          )}
-        </div>
-        <div className="mt-6 flex items-center justify-end gap-x-6">
-          {!isEmpty(validatedFiles) && all(equals(true))(validatedFiles) ? (
-            <button
-              type="submit"
-              className="bg-blue hover:bg-blue-900 text-white transition rounded-full font-bold py-2 px-4"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? <LoadingIndicator /> : 'Upload assets'}
-            </button>
-          ) : (
-            <></>
-          )}
-        </div>
+        {!isEmpty(selectedAssetsValidationResults) && (
+          <div className="mt-6">
+            {allAssetsValid ? (
+              <button
+                type="submit"
+                className="bg-blue hover:bg-blue-900 text-white transition rounded-full font-bold py-2 px-4"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? <LoadingIndicator /> : t('[Button] upload assets')}
+              </button>
+            ) : (
+              <Alert type={AlertType.error}>{t('[Error] invalid asset found')}</Alert>
+            )}
+          </div>
+        )}
       </form>
     </>
   )

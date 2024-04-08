@@ -1,4 +1,4 @@
-import { all, equals, times } from 'ramda'
+import { equals, times } from 'ramda'
 
 export const removeFileHandler = (files: FileList, idx: number) => {
   const dataTransfer = new DataTransfer()
@@ -6,5 +6,3 @@ export const removeFileHandler = (files: FileList, idx: number) => {
 
   return dataTransfer.files
 }
-
-export const checkIfAllAssetsAreValid = all(equals(true))

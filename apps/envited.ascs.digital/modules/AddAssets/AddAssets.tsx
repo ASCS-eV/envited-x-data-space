@@ -6,7 +6,8 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
-import { checkIfAllAssetsAreValid, removeFileHandler } from './AddAssets.utils'
+import { allTrue } from '../../common/utils/utils'
+import { removeFileHandler } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
@@ -27,7 +28,7 @@ export const AddAssets = () => {
 
   const validationHandler = (idx: number, data: { isValid: boolean; data: any }) => {
     selectedAssetsValidationResults[idx] = data.isValid
-    setValue('allAssetsValid', checkIfAllAssetsAreValid(selectedAssetsValidationResults))
+    setValue('allAssetsValid', allTrue(selectedAssetsValidationResults))
     setSelectedAssetsValidationResults(selectedAssetsValidationResults)
   }
 
@@ -63,7 +64,7 @@ export const AddAssets = () => {
               removeFile={(idx: number) => {
                 selectedAssetsValidationResults.splice(idx, 1)
                 setSelectedAssetsValidationResults(selectedAssetsValidationResults)
-                setValue('allAssetsValid', checkIfAllAssetsAreValid(selectedAssetsValidationResults))
+                setValue('allAssetsValid', allTrue(selectedAssetsValidationResults))
                 onChange(removeFileHandler(value, idx))
               }}
               validationHandler={validationHandler}

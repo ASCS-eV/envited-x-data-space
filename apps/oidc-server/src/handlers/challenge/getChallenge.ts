@@ -1,8 +1,11 @@
 import crypto from 'crypto'
 import { Redis } from 'ioredis'
 
+import { Log } from '../../common/logger'
+import { formatError } from '../../common/utils'
+
 export const getChallenge =
-  ({ redis, keyToDID }: { redis: Redis; keyToDID: any }) =>
+  ({ redis, keyToDID, log }: { redis: Redis; keyToDID: any; log: Log }) =>
   async (loginChallenge: string) => {
     try {
       if (loginChallenge === undefined) {
@@ -37,8 +40,8 @@ export const getChallenge =
       const did = await keyToDID('key', process.env.DID_KEY_JWK!)
 
       return { loginId, externalUrl: process.env.EXTERNAL_URL, clientId: did }
-    } catch (error) {
-      console.log(error)
+    } catch (error: unknown) {
+      log.error(formatError(error))
       return {
         redirect: {
           destination: '/common/error',

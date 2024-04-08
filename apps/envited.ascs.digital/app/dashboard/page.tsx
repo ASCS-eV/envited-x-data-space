@@ -1,14 +1,15 @@
 import { EnvelopeOpenIcon, UsersIcon } from '@heroicons/react/24/outline'
 
 import { getServerSession } from '../../common/auth'
-import { getUserById } from '../../common/serverActions'
+// import { getUserById } from '../../common/serverActions'
 import { Dashboard } from '../../modules/Dashboard'
-import { User } from '../../modules/User'
+
+// import { User } from '../../modules/User'
 
 export default async function Index() {
   const session = await getServerSession()
-  const user = await getUserById('did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE')
-
+  // const user = await getUserById('did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE')
+  console.log(session)
   const stats = [
     { id: 1, name: 'Users', stat: '5', icon: UsersIcon },
     { id: 2, name: 'Assets', stat: '8', icon: EnvelopeOpenIcon },
@@ -49,7 +50,7 @@ export default async function Index() {
           </div>
           {session ? (
             <>
-              <User {...user} />
+              {/* <User {...user} /> */}
               <Dashboard id={session?.user?.id} address={session?.user?.pkh} role={session?.user?.role} />
             </>
           ) : (

@@ -1,10 +1,12 @@
-import { keyToDID } from '@spruceid/didkit-wasm-node'
+import { keyToDID, keyToVerificationMethod } from '@spruceid/didkit-wasm-node'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 
 import { redis } from './common'
 import { hydraAdmin } from './common/hydra'
+import { importJWK, signJWT } from './common/jose'
+import { log } from './common/logger'
 import { getChallenge } from './handlers/challenge'
 import { getClientMetadata } from './handlers/clientMetadata'
 import { getConsent } from './handlers/consent'
@@ -26,22 +28,24 @@ app.get('/client-metadata', (req, res) => {
 
 app.get('/present-credential', async (req, res) => {
   const { login_id: loginId } = req.query
-  const result = await getPresentCredential(loginId as string)
+  const result = await getPresentCredential({ log, importJWK, signJWT, keyToDID, keyToVerificationMethod })(
+    loginId as string,
+  )
   res.send(result)
 })
 
 app.post('/present-credential', urlencodedParser, async (req, res) => {
-  const result = await postPresentCredential(redis, hydraAdmin)(JSON.parse(req.body.vp_token))
+  const result = await postPresentCredential({ redis, hydraAdmin, log })(JSON.parse(req.body.vp_token))
   res.send(result)
 })
 
 app.get('/consent', async (req, res) => {
-  const result = await getConsent(redis, hydraAdmin)(req.query.consent_challenge as string)
+  const result = await getConsent({ redis, hydraAdmin, log })(req.query.consent_challenge as string)
   res.redirect(result)
 })
 
 app.get('/challenge/:challenge', async (req, res) => {
-  const result = await getChallenge({ redis, keyToDID })(req.params.challenge)
+  const result = await getChallenge({ redis, keyToDID, log })(req.params.challenge)
   res.send(result)
 })
 

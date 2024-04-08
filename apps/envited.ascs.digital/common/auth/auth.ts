@@ -34,31 +34,29 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // async callback({ session, token, user }) {
     //   console.log('CALLBACK')
-    //   console.log("session", session);
-    //   console.log("token", token);
-    //   console.log("user", user);
-    //   return Promise.resolve(session);
+    //   console.log('session', session)
+    //   console.log('token', token)
+    //   console.log('user', user)
+    //   return Promise.resolve(session)
     // },
     // async signin(user, account, profile) {
-    //   console.log("user", user, account, profile);
-    //   return true;
+    //   console.log('user', user, account, profile)
+    //   return true
     // },
-    // async jwt(token, user, account, profile, isNewUser) {
-    //   console.log(token);
-    //   console.log(user);
-    //   console.log(account);
-    //   console.log(profile);
-    //   console.log(isNewUser);
-    //   if (account.access_token) {
-    //     token.accessToken = account.access_token;
-    //   }
-    //   return Promise.resolve(token);
-    // },
-    // async session(session, token) {
-    //   console.log(session);
-    //   console.log(token);
-    //   return session;
-    // },
+    async jwt({ token, user, account, profile }) {
+      if (account?.access_token) {
+        token.accessToken = account.access_token
+      }
+      return token
+    },
+    async session({ session, token }) {
+      console.log(session)
+      console.log(token)
+      if (session?.user) {
+        session.user.name = token?.user?.id
+      }
+      return session
+    },
   },
 }
 

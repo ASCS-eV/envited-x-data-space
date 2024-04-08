@@ -1,8 +1,8 @@
 'use client'
 
-import { Heading, LoadingIndicator } from '@envited-marketplace/design-system'
+import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-marketplace/design-system'
 import { all, equals, isEmpty, pathOr } from 'ramda'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { removeFileHandler } from './AddAssets.utils'
@@ -13,16 +13,17 @@ export const AddAssets = () => {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
+    watch,
   } = useForm()
+
+  watch('validAssets')
 
   const [validatedFiles, setValidatedFiles] = useState<any[]>([])
 
-  useEffect(() => {
-    console.log('ValidatedFiles has been updated:', validatedFiles)
-  }, [validatedFiles])
-
   const validationHandler = (idx: number, data: { isValid: boolean; data: any }) => {
     validatedFiles[idx] = data.isValid
+    setValue('validAssets', all(equals(true))(validatedFiles))
     setValidatedFiles(validatedFiles)
   }
 
@@ -56,6 +57,7 @@ export const AddAssets = () => {
               removeFile={(idx: number) => {
                 validatedFiles.splice(idx, 1)
                 setValidatedFiles(validatedFiles)
+                setValue('validAssets', all(equals(true))(validatedFiles))
                 onChange(removeFileHandler(value, idx))
               }}
               validationHandler={validationHandler}
@@ -63,6 +65,15 @@ export const AddAssets = () => {
             />
           )}
         />
+        <div className="mt-4">
+          {!isEmpty(validatedFiles) && !all(equals(true))(validatedFiles) ? (
+            <Alert type={AlertType.error}>
+              Some asset(s) are invalid. Please remove the asset(s) then you be able to upload it.
+            </Alert>
+          ) : (
+            <></>
+          )}
+        </div>
         <div className="mt-6 flex items-center justify-end gap-x-6">
           {!isEmpty(validatedFiles) && all(equals(true))(validatedFiles) ? (
             <button

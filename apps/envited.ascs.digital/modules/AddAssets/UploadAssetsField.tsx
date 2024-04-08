@@ -95,7 +95,13 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
       <div className="flex flex-col items-center py-3 space-y-4">
         {!isNil(files) &&
           Array.from(files as File[]).map((file, idx) => (
-            <UploadAssetItem key={idx} idx={idx} file={file} validHandler={validationHandler} removeFile={removeItem} />
+            <UploadAssetItem
+              key={file.name}
+              idx={idx}
+              file={file}
+              validHandler={validationHandler}
+              removeFile={removeItem}
+            />
           ))}
       </div>
       {!isEmpty(error) && <p className="mt-3 text-sm leading-6 text-red-600 dark:text-red-400">{error}</p>}

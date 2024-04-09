@@ -4,6 +4,13 @@ export enum Size {
   large = 'large',
 }
 
+export enum AlertType {
+  error = 'error',
+  info = 'info',
+  succes = 'succes',
+  warning = 'warning',
+}
+
 export enum TooltipType {
   info = 'info',
   warning = 'warning',

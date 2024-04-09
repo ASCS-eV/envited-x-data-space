@@ -1,7 +1,9 @@
 import {
   addIndex,
+  all,
   compose,
   concat,
+  equals,
   head,
   join,
   juxt,
@@ -44,3 +46,7 @@ export const slugToLabel = (x: string) =>
 
 export const segmentsToPath = (pathNames: string[]) => (index: number) =>
   pipe(take(index), join('/'), concat('/'))(pathNames)
+
+export const allEqual = (x: any) => all(equals(x))
+
+export const allTrue = allEqual(true)

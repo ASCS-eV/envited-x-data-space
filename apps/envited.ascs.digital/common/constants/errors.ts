@@ -5,6 +5,8 @@ export const ERRORS = {
   FORBIDDEN: 'Forbidden',
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
   NOT_FOUND: 'Not found',
+  ASSET_INVALID: 'Asset validation failed',
+  ASSET_FILE_NOT_FOUND: 'No valid metadata.json found',
 }
 
 export const ERROR_CODES = {

@@ -81,4 +81,15 @@ describe('common/utils', () => {
       expect(result).toEqual(label)
     })
   })
+
+  describe('allTrue', () => {
+    it.each([
+      [[true, false], false],
+      [[true, true], true],
+    ])('should, with value %s, return %s as expected', (array, result) => {
+      // when ... rendering component
+      // then ... should render with expected properties
+      expect(SUT.allTrue(array)).toBe(result)
+    })
+  })
 })

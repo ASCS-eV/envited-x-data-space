@@ -1,0 +1,1 @@
+export { DragAndDropAssetsField } from './DragAndDropAssetsField'

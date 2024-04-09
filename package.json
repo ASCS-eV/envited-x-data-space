@@ -22,6 +22,7 @@
     "@ory/client": "^1.9.0",
     "@spruceid/didkit-wasm-node": "^0.2.1",
     "@swc/helpers": "~0.5.2",
+    "@zip.js/zip.js": "^2.7.40",
     "aws-lambda": "^1.0.7",
     "axios": "^1.6.0",
     "body-parser": "^1.20.2",

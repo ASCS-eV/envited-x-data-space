@@ -1,9 +1,5 @@
 import type { NextAuthOptions } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { match } from 'ts-pattern'
-
-import { Role } from '../types'
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -11,55 +7,54 @@ export const authOptions: NextAuthOptions = {
     signIn: '/',
   },
   providers: [
-    CredentialsProvider({
-      name: 'Sign in with Your Credentials',
-      credentials: {
-        pkh: { label: 'Address', type: 'text', placeholder: 'tz...' },
+    {
+      id: 'siwt',
+      name: 'siwt',
+      type: 'oauth',
+      version: '2.0',
+      idToken: true,
+      issuer: 'http://localhost:5004',
+      authorization: {
+        url: 'http://localhost:5004/oauth2/auth?response_type=code',
+        params: {
+          scope: 'openid',
+        },
       },
-
-      async authorize(credentials) {
-        if (!credentials) {
-          return {
-            id: '',
-            pkh: '',
-            role: '',
-          }
-        }
-        const { pkh } = credentials
-
-        return match(pkh)
-          .with('tz1USER', () => ({
-            id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
-            pkh: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
-            role: Role.user,
-          }))
-          .with('tz1PRINCIPAL', () => ({
-            id: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
-            pkh: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
-            role: Role.principal,
-          }))
-          .with('tz1NO_USER', () => null)
-          .otherwise(() => null)
-      },
-    }),
+      token: 'http://localhost:5004/oauth2/token',
+      jwks_endpoint: 'http://localhost:5004/.well-known/jwks.json',
+      clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
+      clientSecret: process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET,
+      profile: profile => ({
+        id: profile.sub,
+      }),
+    },
   ],
-  session: {
-    strategy: 'jwt',
-  },
+  secret: process.env.SECRET,
+  debug: true,
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.user = user
+    // async callback({ session, token, user }) {
+    //   console.log('CALLBACK')
+    //   console.log('session', session)
+    //   console.log('token', token)
+    //   console.log('user', user)
+    //   return Promise.resolve(session)
+    // },
+    // async signin(user, account, profile) {
+    //   console.log('user', user, account, profile)
+    //   return true
+    // },
+    async jwt({ token, user, account, profile }) {
+      if (account?.access_token) {
+        token.accessToken = account.access_token
       }
-
       return token
     },
-    async session({ session, token }: { session: any; token: any }) {
-      session.user.pkh = token.user.pkh
-      session.user.role = token.user.role
-      session.user.id = token.sub
-      session.user.email = undefined
-      session.user.image = undefined
+    async session({ session, token }) {
+      console.log(session)
+      console.log(token)
+      if (session?.user) {
+        session.user.name = token?.user?.id
+      }
       return session
     },
   },
@@ -67,11 +62,12 @@ export const authOptions: NextAuthOptions = {
 
 export const _signIn =
   (NASignIn: any) =>
-  ({ pkh }: { pkh: string }) =>
-    NASignIn('credentials', {
+  ({ pkh }: { pkh: string }) => {
+    return NASignIn('siwt', {
       pkh,
       callbackUrl: '/dashboard',
     })
+  }
 
 export const signIn = _signIn(NASignIn)
 

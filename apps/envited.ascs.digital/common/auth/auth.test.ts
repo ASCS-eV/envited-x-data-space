@@ -9,7 +9,7 @@ describe('common/auth/auth', () => {
       const pkh = 'PKH'
 
       const session = await _signIn(NASignIn)({ pkh })
-      expect(NASignIn).toHaveBeenCalledWith('credentials', {
+      expect(NASignIn).toHaveBeenCalledWith('siwt', {
         pkh,
         callbackUrl: '/dashboard',
       })

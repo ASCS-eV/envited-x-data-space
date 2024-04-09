@@ -3,17 +3,17 @@ import { APIGatewayEvent, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aw
 
 import { redis } from '../common'
 import { hydraAdmin } from '../common/hydra'
+import { log } from '../common/logger'
 import { internalServerError, ok } from '../common/responses'
 import { postPresentCredential } from '../handlers/presentCredential'
-import { hydraMiddleware, redisMiddleware } from '../middleware'
-import { RedisHydraContext } from '../types'
+import { hydraMiddleware, loggerMiddleware, redisMiddleware } from '../middleware'
+import { RedisHydraLogContext } from '../types'
 
-const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraContext) => {
+const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraLogContext) => {
   try {
-    // TODO: extract token from body
     const { body } = event
-    const { redis, hydraAdmin } = context
-    const result = postPresentCredential(redis, hydraAdmin)(body as string)
+    const { redis, hydraAdmin, log } = context
+    const result = postPresentCredential({ redis, hydraAdmin, log })(body as string)
 
     return ok(result)
   } catch (error) {
@@ -24,4 +24,5 @@ const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraContext)
 export const handler = middy<APIGatewayProxyEvent, APIGatewayProxyResult>()
   .use(redisMiddleware(redis))
   .use(hydraMiddleware(hydraAdmin))
+  .use(loggerMiddleware(log))
   .handler(lambdaHandler)

@@ -4,10 +4,10 @@ serve:
 
 urls:
   self:
-    issuer: http://localhost:4444
-  consent: http://localhost:5002/api/consent
-  login: http://localhost:5002/login
-  logout: http://localhost:5002/logout
+    issuer: http://localhost:5004
+  consent: http://localhost:5002/consent
+  login: http://localhost:4201/login
+  logout: http://localhost:4201/logout
 
 secrets:
   system:

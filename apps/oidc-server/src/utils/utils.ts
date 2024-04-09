@@ -53,7 +53,7 @@ export const generatePresentationDefinition = (policy: LoginPolicy, inputDescrip
 
   if (!isNil(inputDescriptorOverride)) {
     pd.input_descriptors = inputDescriptorOverride
-    return pd
+    return reject(isEmpty)(pd)
   }
 
   const submissionRequirementsLens = lensProp('submission_requirements' as never)
@@ -114,7 +114,6 @@ export const generatePresentationDefinition = (policy: LoginPolicy, inputDescrip
       pd.input_descriptors[idx] = inputDescriptorWithConstraints
     }
   })(pd.input_descriptors)
-
   return reject(isEmpty)(pd)
 }
 

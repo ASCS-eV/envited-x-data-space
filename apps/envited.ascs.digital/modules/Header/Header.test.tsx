@@ -8,6 +8,6 @@ describe('Header', () => {
     // when ... rendering component
     // then ... should render as expected
     const { getByText } = render(<Header />)
-    expect(getByText('Connect')).toBeInTheDocument()
+    expect(getByText('Sign in')).toBeInTheDocument()
   })
 })

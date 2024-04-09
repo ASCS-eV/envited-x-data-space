@@ -1,1 +1,1 @@
-export { getClientMetadata } from './clientMetadata'
+export { getClientMetadata } from './getClientMetadata'

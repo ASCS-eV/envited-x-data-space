@@ -1,4 +1,4 @@
-import * as SUT from './clientMetadata'
+import * as SUT from './getClientMetadata'
 
 describe('handlers/clientMetadata', () => {
   it('should return the metadata as expected', () => {
@@ -30,7 +30,7 @@ describe('handlers/clientMetadata', () => {
       client_name: 'CLIENT_NAME',
       request_uri_parameter_supported: true,
       request_parameter_supported: false,
-      redirect_uris: ['API_URL/presentCredential'],
+      redirect_uris: ['API_URL/present-credential'],
     }
 
     const result = SUT.getClientMetadata()

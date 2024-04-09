@@ -3,18 +3,19 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
 import { redis } from '../common'
 import { hydraAdmin } from '../common/hydra'
+import { log } from '../common/logger'
 import { internalServerError, ok } from '../common/responses'
-import { postPresentCredential } from '../handlers/presentCredential'
-import { hydraMiddleware, redisMiddleware } from '../middleware'
-import { RedisHydraContext } from '../types'
+import { getConsent } from '../handlers/consent'
+import { hydraMiddleware, loggerMiddleware, redisMiddleware } from '../middleware'
+import { RedisHydraLogContext } from '../types'
 
-const lambdaHandler = async (event: any, context: RedisHydraContext) => {
+const lambdaHandler = async (event: any, context: RedisHydraLogContext) => {
   try {
     const {
       queryStringParameters: { challenge },
     } = event
-    const { redis, hydraAdmin } = context
-    const result = postPresentCredential(redis, hydraAdmin)(challenge as string)
+    const { redis, hydraAdmin, log } = context
+    const result = getConsent({ redis, hydraAdmin, log })(challenge as string)
 
     return ok(result)
   } catch (error) {
@@ -25,4 +26,5 @@ const lambdaHandler = async (event: any, context: RedisHydraContext) => {
 export const handler = middy<APIGatewayProxyEvent, APIGatewayProxyResult>()
   .use(redisMiddleware(redis))
   .use(hydraMiddleware(hydraAdmin))
+  .use(loggerMiddleware(log))
   .handler(lambdaHandler)

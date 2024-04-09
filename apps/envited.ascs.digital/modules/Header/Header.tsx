@@ -12,7 +12,6 @@ import { SignIn } from '../SignIn'
 export interface HeaderProps {}
 
 export const Header: FC<HeaderProps> = () => {
-
   return (
     <header className="py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

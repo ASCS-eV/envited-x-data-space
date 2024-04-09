@@ -9,7 +9,7 @@ import { Dashboard } from '../../modules/Dashboard'
 export default async function Index() {
   const session = await getServerSession()
   // const user = await getUserById('did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE')
-  console.log(session)
+  
   const stats = [
     { id: 1, name: 'Users', stat: '5', icon: UsersIcon },
     { id: 2, name: 'Assets', stat: '8', icon: EnvelopeOpenIcon },

@@ -114,7 +114,6 @@ export const generatePresentationDefinition = (policy: LoginPolicy, inputDescrip
       pd.input_descriptors[idx] = inputDescriptorWithConstraints
     }
   })(pd.input_descriptors)
-  console.log('PD: ', pd)
   return reject(isEmpty)(pd)
 }
 

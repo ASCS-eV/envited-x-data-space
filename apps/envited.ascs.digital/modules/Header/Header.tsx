@@ -12,7 +12,6 @@ import { SignIn } from '../SignIn'
 export interface HeaderProps {}
 
 export const Header: FC<HeaderProps> = () => {
-  // const { t } = useTranslation('Header')
 
   return (
     <header className="py-10">

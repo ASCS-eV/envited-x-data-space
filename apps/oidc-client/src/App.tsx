@@ -38,7 +38,6 @@ function App() {
         fetch(`${import.meta.env.VITE_AUTH_SERVER_URI}/redirect/${loginId}`)
           .then(res => res.json())
           .then(data => {
-            console.log(data.redirect)
             if (data?.redirect?.destination) {
               window.location = data.redirect.destination
             }

@@ -11,12 +11,9 @@ import { extractClaims, isTrustedPresentation, verifyAuthenticationPresentation 
 
 export const postPresentCredential =
   ({ redis, hydraAdmin, log }: { redis: Redis; hydraAdmin: HydraAdmin; log: Log }) =>
-  async (vpToken: any) => {
+  async (presentation: any) => {
     log.info('POST: Presenting credential')
-
-    // Parse the JSON string into a JavaScript object
-    const presentation = vpToken
-    log.info('Presentation: \n', vpToken)
+    log.info('Presentation: \n', presentation)
 
     // Verify the presentation and the status of the credential
     if (await verifyAuthenticationPresentation(presentation)) {

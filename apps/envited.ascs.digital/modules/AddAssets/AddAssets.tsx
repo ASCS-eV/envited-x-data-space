@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { allTrue } from '../../common/utils/utils'
-import { removeFileHandler } from './AddAssets.utils'
+import { addFileHandler, removeFileHandler } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
@@ -53,12 +53,12 @@ export const AddAssets = () => {
               files={value}
               onDrop={event => {
                 if (event.dataTransfer.files.length > 0) {
-                  onChange(event.dataTransfer.files)
+                  onChange(value ? addFileHandler(value)(event.dataTransfer.files) : event.dataTransfer.files)
                 }
               }}
               onChange={event => {
                 if (event.target.files) {
-                  onChange(event.target.files)
+                  onChange(value ? addFileHandler(value)(event.target.files) : event.target.files)
                 }
               }}
               removeFile={(idx: number) => {

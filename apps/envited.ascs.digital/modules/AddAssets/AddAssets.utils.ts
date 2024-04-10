@@ -6,3 +6,12 @@ export const removeFileHandler = (files: FileList, idx: number) => {
 
   return dataTransfer.files
 }
+
+export const addFileHandler = (files: FileList) => (newFiles: FileList) => {
+  const dataTransfer = new DataTransfer()
+
+  times(index => dataTransfer.items.add(files[index]), files.length)
+  times(index => dataTransfer.items.add(newFiles[index]), newFiles.length)
+
+  return dataTransfer.files
+}

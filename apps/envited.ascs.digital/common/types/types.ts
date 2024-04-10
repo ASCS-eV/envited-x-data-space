@@ -3,6 +3,8 @@ export enum Language {
   en = 'en',
 }
 
+export type Environment = 'development' | 'staging' | 'production'
+
 export interface TranslationsMap {
   [Language.en]: { [key: string]: { [key: string]: string } }
   [Language.nl]: { [key: string]: { [key: string]: string } }

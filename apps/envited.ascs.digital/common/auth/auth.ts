@@ -2,8 +2,9 @@ import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { match } from 'ts-pattern'
-import { Role } from '../types'
+
 import { FEATURE_FLAGS } from '../featureFlags'
+import { Role } from '../types'
 import { Environment } from '../types'
 
 export const authOptions: NextAuthOptions = {
@@ -110,8 +111,7 @@ export const authOptions: NextAuthOptions = {
 export const _signIn =
   (NASignIn: any) =>
   ({ pkh }: { pkh: string }) => {
-    
-    if (FEATURE_FLAGS[process.env.NEXT_PUBLIC_ENV as Environment || 'development'].oidc) {
+    if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
       return NASignIn('siwt', {
         pkh,
         callbackUrl: '/dashboard',

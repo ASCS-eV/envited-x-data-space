@@ -1,4 +1,4 @@
-import * as SUT  from './AddAssets.utils'
+import * as SUT from './AddAssets.utils'
 
 describe('modules/AddAssets/AddAssets.utils', () => {
   describe('_removeFile', () => {
@@ -9,14 +9,13 @@ describe('modules/AddAssets/AddAssets.utils', () => {
         this.files = []
         this.items = {
           add: (value: any) => {
-            this.files.push(value);
-          }
+            this.files.push(value)
+          },
         }
       }
 
       const result = SUT._removeFile(new (DataTransfer as any)() as any)([0, 1, 2, 3] as any, 2)
 
-      
       expect(result).toEqual([0, 1, 3])
     })
   })
@@ -28,8 +27,8 @@ describe('modules/AddAssets/AddAssets.utils', () => {
         this.files = []
         this.items = {
           add: (value: any) => {
-            this.files.push(value);
-          }
+            this.files.push(value)
+          },
         }
       }
 

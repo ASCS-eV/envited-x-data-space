@@ -75,7 +75,7 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
               htmlFor={name}
               className="relative cursor-pointer rounded-md bg-transparent font-semibold text-black dark:text-gray-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-blue-800"
             >
-              <span>Upload a file</span>
+              <span>Select asset(s)</span>
               <input
                 id={name}
                 name={name}

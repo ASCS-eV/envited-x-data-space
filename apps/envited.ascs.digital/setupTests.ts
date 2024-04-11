@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { TextDecoder, TextEncoder } from 'util'
 
-Object.assign(global, { TextDecoder, TextEncoder, TransformStream: jest.fn() })
+Object.assign(global, { TextDecoder, TextEncoder, TransformStream: jest.fn(), DataTransfer: jest.fn() })
 
 const testCache = <T extends Function>(func: T) => func
 

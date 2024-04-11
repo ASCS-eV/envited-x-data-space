@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { allTrue } from '../../common/utils/utils'
-import { removeFileHandler } from './AddAssets.utils'
+import { addFiles, removeFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
@@ -53,19 +53,19 @@ export const AddAssets = () => {
               files={value}
               onDrop={event => {
                 if (event.dataTransfer.files.length > 0) {
-                  onChange(event.dataTransfer.files)
+                  onChange(value ? addFiles(value, event.dataTransfer.files) : event.dataTransfer.files)
                 }
               }}
               onChange={event => {
                 if (event.target.files) {
-                  onChange(event.target.files)
+                  onChange(value ? addFiles(value, event.target.files) : event.target.files)
                 }
               }}
               removeFile={(idx: number) => {
                 selectedAssetsValidationResults.splice(idx, 1)
                 setSelectedAssetsValidationResults(selectedAssetsValidationResults)
                 setValue('allAssetsValid', allTrue(selectedAssetsValidationResults))
-                onChange(removeFileHandler(value, idx))
+                onChange(removeFile(value, idx))
               }}
               validationHandler={validationHandler}
               error={pathOr('', ['assets', 'message'])(errors)}

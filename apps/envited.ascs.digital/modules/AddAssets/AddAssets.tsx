@@ -53,12 +53,12 @@ export const AddAssets = () => {
               files={value}
               onDrop={event => {
                 if (event.dataTransfer.files.length > 0) {
-                  onChange(value ? addFiles(value)(event.dataTransfer.files) : event.dataTransfer.files)
+                  onChange(value ? addFiles(value, event.dataTransfer.files) : event.dataTransfer.files)
                 }
               }}
               onChange={event => {
                 if (event.target.files) {
-                  onChange(value ? addFiles(value)(event.target.files) : event.target.files)
+                  onChange(value ? addFiles(value, event.target.files) : event.target.files)
                 }
               }}
               removeFile={(idx: number) => {

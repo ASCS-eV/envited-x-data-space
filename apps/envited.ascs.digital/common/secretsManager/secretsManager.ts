@@ -4,4 +4,4 @@ export const getSecret = (secretId: string) =>
   new SecretsManagerClient()
     .send(new GetSecretValueCommand({ SecretId: secretId }))
     .then(({ SecretString }) => (SecretString ? JSON.parse(SecretString) : {}))
-    .catch(error => console.log('error', error))
+    .catch(error => console.error('Secrets manager error: ', error))

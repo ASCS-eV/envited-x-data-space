@@ -119,7 +119,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
       }
 
       formData.append('data', JSON.stringify(dissoc('file')(data)))
-      console.log(formData)
+
       await updateProfileForm(formData)
       success(t('[Status] profile is updated'))
     } catch (e) {

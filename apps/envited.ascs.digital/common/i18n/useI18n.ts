@@ -6,6 +6,7 @@ import { HeaderTranslation } from '../../modules/Header'
 import { HeroHeaderTranslation } from '../../modules/HeroHeader'
 import { MemberTranslation } from '../../modules/Member'
 import { ProfileTranslation } from '../../modules/Profile'
+import { UploadedAssetsTranslation } from '../../modules/UploadedAssets'
 import { UsersTranslation } from '../../modules/Users'
 import { Locale, TranslationsMap } from './types'
 
@@ -19,6 +20,7 @@ const translationObject = mergeTranslations([
   HeroHeaderTranslation,
   MemberTranslation,
   ProfileTranslation,
+  UploadedAssetsTranslation,
   UsersTranslation,
 ]) as TranslationsMap
 

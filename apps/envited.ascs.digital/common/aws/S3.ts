@@ -22,7 +22,7 @@ export const _getUploadUrl =
   }) =>
   async (slug: string, filename: string) => {
     const command = new putObjectCommand({
-      ACL: 'public-read',
+      ACL: 'private',
       Key: `${slug}-${randomString}.${filename.split('.').pop()}`,
       Bucket: process.env.NEXT_PUBLIC_UPLOAD_BUCKET_NAME,
     })

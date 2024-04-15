@@ -41,15 +41,13 @@ export default function Envited({ stack }: StackContext) {
   })
 
   const s3CorsRule = {
-    allowedMethods: [aws_s3.HttpMethods.GET, aws_s3.HttpMethods.HEAD],
+    allowedMethods: [aws_s3.HttpMethods.GET, aws_s3.HttpMethods.HEAD, aws_s3.HttpMethods.PUT],
     allowedOrigins: ['*'],
-    allowedHeaders: ['*'],
   }
 
   const uploadsBucket = new Bucket(stack, 'uploads', {
     cdk: {
       bucket: {
-        blockPublicAccess: aws_s3.BlockPublicAccess.BLOCK_ALL,
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
       },
     },

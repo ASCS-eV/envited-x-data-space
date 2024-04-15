@@ -38,8 +38,9 @@ export async function updateProfileForm(formData: FormData) {
           'Content-Type': file.type,
           'Content-Disposition': `attachment; filename="${file.name}"`,
         },
-      }).catch((error) => {
-        throw new error })
+      }).catch(error => {
+        throw new error()
+      })
       console.log(image)
       data = { ...data, logo: image.url.split('?')[0] }
     }

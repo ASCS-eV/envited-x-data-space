@@ -26,11 +26,10 @@ export async function updateProfileForm(formData: FormData) {
         message: 'Profile validate form data failed',
       })
     }
-    console.log(file)
+    
     if (file) {
       const arrayBuffer = Buffer.from(await file.arrayBuffer())
       const url = await getUploadUrl(slugify(data.name), file.name)
-      console.log(url)
       const image = await fetch(url, {
         body: arrayBuffer,
         method: 'PUT',
@@ -38,16 +37,14 @@ export async function updateProfileForm(formData: FormData) {
           'Content-Type': file.type,
           'Content-Disposition': `attachment; filename="${file.name}"`,
         },
-      }).catch(error => {
-        throw new error()
       })
-      console.log(image)
-      data = { ...data, logo: image.url.split('?')[0] }
-    }
 
+      data = { ...data, logo: image.url.split('?')[0] }
+      console.log('data', data, image)
+    }
     await updateProfile(dissoc('businessCategories')(data), data.businessCategories)
 
-    revalidatePath('/dashboard/profile')
+    // revalidatePath('/dashboard/profile')
   } catch (error: unknown) {
     log.error(formatError(error))
     throw internalServerErrorError()

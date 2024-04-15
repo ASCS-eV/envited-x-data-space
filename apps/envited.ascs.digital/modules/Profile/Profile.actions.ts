@@ -26,7 +26,7 @@ export async function updateProfileForm(formData: FormData) {
         message: 'Profile validate form data failed',
       })
     }
-    
+
     if (file) {
       const arrayBuffer = Buffer.from(await file.arrayBuffer())
       const url = await getUploadUrl(slugify(data.name), file.name)
@@ -35,7 +35,7 @@ export async function updateProfileForm(formData: FormData) {
         method: 'PUT',
         headers: {
           'Content-Type': file.type,
-          'Content-Disposition': `attachment; filename="${file.name}"`,
+          'Content-Disposition': `inline; filename="${file.name}"`,
         },
       })
 

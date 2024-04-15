@@ -26,11 +26,11 @@ export async function updateProfileForm(formData: FormData) {
         message: 'Profile validate form data failed',
       })
     }
-
+    console.log(file)
     if (file) {
       const arrayBuffer = Buffer.from(await file.arrayBuffer())
       const url = await getUploadUrl(slugify(data.name), file.name)
-
+      console.log(url)
       const image = await fetch(url, {
         body: arrayBuffer,
         method: 'PUT',
@@ -39,7 +39,7 @@ export async function updateProfileForm(formData: FormData) {
           'Content-Disposition': `attachment; filename="${file.name}"`,
         },
       })
-
+      console.log(image)
       data = { ...data, logo: image.url.split('?')[0] }
     }
 

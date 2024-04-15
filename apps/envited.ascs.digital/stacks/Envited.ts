@@ -1,4 +1,4 @@
-import { aws_ec2, aws_rds, aws_cloudfront, aws_s3 } from 'aws-cdk-lib'
+import { aws_cloudfront, aws_ec2, aws_rds, aws_s3 } from 'aws-cdk-lib'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import * as cdk from 'aws-cdk-lib/core'
 import { Bucket, NextjsSite, StackContext } from 'sst/constructs'
@@ -51,13 +51,13 @@ export default function Envited({ stack }: StackContext) {
       bucket: {
         blockPublicAccess: aws_s3.BlockPublicAccess.BLOCK_ALL,
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
-      }
+      },
     },
     cors: [s3CorsRule],
   })
 
-  const oai = new aws_cloudfront.OriginAccessIdentity(stack, 'OAI');
-  uploadsBucket.cdk.bucket.grantRead(oai);
+  const oai = new aws_cloudfront.OriginAccessIdentity(stack, 'OAI')
+  uploadsBucket.cdk.bucket.grantRead(oai)
 
   const uploadsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'uploadsDistribution', {
     originConfigs: [
@@ -66,7 +66,10 @@ export default function Envited({ stack }: StackContext) {
           s3BucketSource: uploadsBucket.cdk.bucket,
           originAccessIdentity: oai,
         },
-        behaviors: [{isDefaultBehavior: true}, { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD }]
+        behaviors: [
+          { isDefaultBehavior: true },
+          { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
+        ],
       },
     ],
   })

@@ -25,12 +25,9 @@ export const initDb =
       password: process.env.POSTGRES_DATABASE_PASSWORD!, // Password of database user
       max: 1,
     }
-    console.log('ENV', process.env.ENV)
     if (!equals(process.env.ENV, 'development')) {
       try {
-        console.log('SECERT', process.env.RDS_SECRET_ARN)
         const { password, dbname, port, host, username } = await getSecret(process.env.RDS_SECRET_ARN!)
-        console.log('SECRET', { password, dbname, port, host, username })
         config = {
           host,
           port,

@@ -29,8 +29,8 @@ export async function updateProfileForm(formData: FormData) {
 
     if (file) {
       const arrayBuffer = Buffer.from(await file.arrayBuffer())
-      const url = await getUploadUrl(slugify(data.name), file.name)
-      const image = await fetch(url, {
+      const signedUrl = await getUploadUrl(slugify(data.name), file.name)
+      await fetch(signedUrl, {
         body: arrayBuffer,
         method: 'PUT',
         headers: {
@@ -39,12 +39,11 @@ export async function updateProfileForm(formData: FormData) {
         },
       })
 
-      data = { ...data, logo: image.url.split('?')[0] }
-      console.log('data', data, image.url)
+      data = { ...data, logo: file.name }
     }
     await updateProfile(dissoc('businessCategories')(data), data.businessCategories)
 
-    // revalidatePath('/dashboard/profile')
+    revalidatePath('/dashboard/profile')
   } catch (error: unknown) {
     log.error(formatError(error))
     throw internalServerErrorError()

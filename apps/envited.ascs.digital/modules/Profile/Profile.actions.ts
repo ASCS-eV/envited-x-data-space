@@ -37,7 +37,7 @@ export async function updateProfileForm(formData: FormData) {
           'Content-Type': file.type,
           'Content-Disposition': `inline; filename="${file.name}"`,
         },
-      })
+      }).then((res) => res.json())
 
       data = { ...data, logo: image.url.split('?')[0] }
       console.log('data', data, image)

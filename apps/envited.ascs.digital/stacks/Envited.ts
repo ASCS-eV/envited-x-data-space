@@ -72,10 +72,35 @@ export default function Envited({ stack }: StackContext) {
     ],
   })
 
+  const assetsBucket = new Bucket(stack, 'assets', {
+    cdk: {
+      bucket: {
+        accessControl: aws_s3.BucketAccessControl.PRIVATE,
+      },
+    },
+    cors: [s3CorsRule],
+  })
+  assetsBucket.cdk.bucket.grantRead(oai)
+
+  const assetsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'assetsDistribution', {
+    originConfigs: [
+      {
+        s3OriginSource: {
+          s3BucketSource: assetsBucket.cdk.bucket,
+          originAccessIdentity: oai,
+        },
+        behaviors: [
+          { isDefaultBehavior: true },
+          { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
+        ],
+      },
+    ],
+  })
+
   // Create the Next.js site
   const site = new NextjsSite(stack, 'envited_ascs_digital', {
     path: './',
-    bind: [uploadsBucket],
+    bind: [uploadsBucket, assetsBucket],
     memorySize: '1024 MB',
     timeout: '20 seconds',
     cdk: {
@@ -102,7 +127,9 @@ export default function Envited({ stack }: StackContext) {
   // Add the site's URL to stack output
   stack.addOutputs({
     URL: metadata.data.url,
-    Distribution: uploadsDistribution.distributionDomainName,
-    DistributionId: uploadsDistribution.distributionId,
+    UploadsDistribution: uploadsDistribution.distributionDomainName,
+    UploadsDistributionId: uploadsDistribution.distributionId,
+    AssetsDistribution: assetsDistribution.distributionDomainName,
+    AssetsDistributionId: assetsDistribution.distributionId,
   })
 }

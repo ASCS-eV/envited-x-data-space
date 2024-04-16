@@ -29,20 +29,18 @@ export async function updateProfileForm(formData: FormData) {
 
     if (file) {
       const arrayBuffer = Buffer.from(await file.arrayBuffer())
-      const url = await getUploadUrl(slugify(data.name), file.name)
-
-      const image = await fetch(url, {
+      const signedUrl = await getUploadUrl(slugify(data.name), file.name)
+      await fetch(signedUrl, {
         body: arrayBuffer,
         method: 'PUT',
         headers: {
           'Content-Type': file.type,
-          'Content-Disposition': `attachment; filename="${file.name}"`,
+          'Content-Disposition': `inline; filename="${file.name}"`,
         },
       })
 
-      data = { ...data, logo: image.url.split('?')[0] }
+      data = { ...data, logo: file.name }
     }
-
     await updateProfile(dissoc('businessCategories')(data), data.businessCategories)
 
     revalidatePath('/dashboard/profile')

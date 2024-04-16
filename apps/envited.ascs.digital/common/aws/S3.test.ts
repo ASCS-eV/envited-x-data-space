@@ -18,7 +18,7 @@ describe('common/aws/S3', () => {
 
       expect(result).toEqual('UPLOAD_URL')
       expect(putObjectCommand).toHaveBeenCalledWith({
-        ACL: 'public-read',
+        ACL: 'private',
         Key: `${slug}-${randomString}.jpeg`,
         Bucket: undefined,
       })

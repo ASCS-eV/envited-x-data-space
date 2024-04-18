@@ -1,1 +1,1 @@
-export { getUploadUrl } from './S3'
+export { getUploadUrl, getAssetsUrl } from './S3'

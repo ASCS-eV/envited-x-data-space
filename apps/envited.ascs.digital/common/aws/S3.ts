@@ -31,3 +31,27 @@ export const _getUploadUrl =
   }
 
 export const getUploadUrl = _getUploadUrl({ getSignedUrl, s3Client, putObjectCommand, randomString })
+
+export const _getAssetUploadUrl =
+  ({
+    getSignedUrl,
+    s3Client,
+    putObjectCommand,
+    randomString,
+  }: {
+    getSignedUrl: typeof TgetSignedUrl
+    s3Client: S3Client
+    putObjectCommand: typeof PutObjectCommand
+    randomString: string
+  }) =>
+  async (pkh: string, slug: string, filename: string) => {
+    const command = new putObjectCommand({
+      ACL: 'private',
+      Key: `${pkh}/${slug}-${randomString}.${filename.split('.').pop()}`,
+      Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME,
+    })
+
+    return await getSignedUrl(s3Client, command)
+  }
+
+export const getAssetUploadUrl = _getAssetUploadUrl({ getSignedUrl, s3Client, putObjectCommand, randomString })

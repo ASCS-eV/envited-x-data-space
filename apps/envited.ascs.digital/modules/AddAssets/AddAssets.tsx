@@ -1,12 +1,13 @@
 'use client'
 
 import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-marketplace/design-system'
-import { isEmpty, pathOr } from 'ramda'
+import { isEmpty, isNil, pathOr, times } from 'ramda'
 import { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { allTrue } from '../../common/utils/utils'
+import { addAssetsForm } from './AddAssets.actions'
 import { addFiles, removeFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
@@ -16,10 +17,11 @@ export const AddAssets = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitted },
     getValues,
     setValue,
     watch,
+    reset,
   } = useForm()
 
   watch('allAssetsValid')
@@ -34,7 +36,21 @@ export const AddAssets = () => {
 
   const { allAssetsValid } = getValues()
 
-  const addAssetsAction = () => {}
+  const addAssetsAction: SubmitHandler<any> = async data => {
+    try {
+      const formData = new FormData()
+
+      if (data.assets) {
+        times(idx => formData.append('assets', data.assets[idx]))(data.assets.length)
+      }
+
+      await addAssetsForm(formData)
+
+      reset()
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
     <>
@@ -72,20 +88,29 @@ export const AddAssets = () => {
             />
           )}
         />
-        {!isEmpty(selectedAssetsValidationResults) && (
+        {!isEmpty(selectedAssetsValidationResults) && !isNil(allAssetsValid) && (
           <div>
             {allAssetsValid ? (
               <button
                 type="submit"
-                className="bg-blue hover:bg-blue-900 text-white transition rounded-md font-bold py-2 px-4 w-full"
+                className="bg-blue hover:bg-blue-900 text-white transition rounded-md font-bold py-2 px-4 w-full text-center"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? <LoadingIndicator /> : t('[Button] upload assets')}
+                {isSubmitting ? (
+                  <span>
+                    <LoadingIndicator />
+                  </span>
+                ) : (
+                  t('[Button] upload assets')
+                )}
               </button>
             ) : (
               <Alert type={AlertType.error}>{t('[Error] invalid asset found')}</Alert>
             )}
           </div>
+        )}
+        {isSubmitted && isNil(allAssetsValid) && (
+          <Alert type={AlertType.succes}>{t('[Success] assets are uploaded')}</Alert>
         )}
       </form>
     </>

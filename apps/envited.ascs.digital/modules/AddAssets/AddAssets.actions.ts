@@ -7,7 +7,7 @@ import { getServerSession } from '../../common/auth'
 import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
-import { badRequestError, unauthorizedError, formatError, internalServerErrorError, slugify } from '../../common/utils'
+import { badRequestError, formatError, internalServerErrorError, slugify, unauthorizedError } from '../../common/utils'
 
 export async function addAssetsForm(formData: FormData) {
   const assets = formData.getAll('assets') as File[]

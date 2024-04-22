@@ -3,7 +3,8 @@
 import { revalidatePath } from 'next/cache'
 
 import { getServerSession } from '../../common/auth'
-import { getAssetsUrl } from '../../common/aws'
+import { getAssetUploadUrl } from '../../common/aws'
+import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
 import { badRequestError, formatError, internalServerErrorError, slugify } from '../../common/utils'
 
@@ -16,29 +17,35 @@ export async function addAssetsForm(formData: FormData) {
       throw badRequestError({
         resource: 'addAssets',
         resourceId: 'session',
-        message: 'Add assets form failed',
+        message: ERRORS.UNAUTHORIZED,
       })
     }
 
-    if (assets) {
-      const result = assets.map(async (asset: File) => {
-        const arrayBuffer = Buffer.from(await asset.arrayBuffer())
-        const signedUrl = await getAssetsUrl(session?.user?.pkh, slugify(asset.name), asset.name)
+    if (!assets) {
+      throw badRequestError({
+        resource: 'addAssets',
+        resourceId: 'assets',
+        message: ERRORS.ASSETS_NOT_FOUND,
+      })
+    }
 
-        const uploadResult = await fetch(signedUrl, {
-          body: arrayBuffer,
-          method: 'PUT',
-          headers: {
-            'Content-Type': asset.type,
-            'Content-Disposition': `attachment; filename="${asset.name}"`,
-          },
-        })
+    const result = assets.map(async (asset: File) => {
+      const arrayBuffer = Buffer.from(await asset.arrayBuffer())
+      const signedUrl = await getAssetUploadUrl(session?.user?.pkh, slugify(asset.name), asset.name)
 
-        return uploadResult
+      const uploadResult = await fetch(signedUrl, {
+        body: arrayBuffer,
+        method: 'PUT',
+        headers: {
+          'Content-Type': asset.type,
+          'Content-Disposition': `attachment; filename="${asset.name}"`,
+        },
       })
 
-      await Promise.all(result)
-    }
+      return uploadResult
+    })
+
+    await Promise.all(result)
 
     revalidatePath('/dashboard/assets/add-assets')
   } catch (error: unknown) {

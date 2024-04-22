@@ -2,6 +2,6 @@
   "[Heading] add assets": "Add assets",
   "[Label] select assets": "Select assets",
   "[Button] upload assets": "Upload assets",
-  "[Error] invalid asset found": "Some asset(s) are invalid. Please remove the asset(s) then you be able to upload it.",
+  "[Error] invalid asset found": "Invalid asset(s) found.",
   "[Success] assets are uploaded": "All assets are uploaded."
 }

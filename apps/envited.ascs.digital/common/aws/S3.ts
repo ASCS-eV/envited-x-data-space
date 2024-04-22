@@ -32,7 +32,7 @@ export const _getUploadUrl =
 
 export const getUploadUrl = _getUploadUrl({ getSignedUrl, s3Client, putObjectCommand, randomString })
 
-export const _getAssetsUrl =
+export const _getAssetUploadUrl =
   ({
     getSignedUrl,
     s3Client,
@@ -54,4 +54,4 @@ export const _getAssetsUrl =
     return await getSignedUrl(s3Client, command)
   }
 
-export const getAssetsUrl = _getAssetsUrl({ getSignedUrl, s3Client, putObjectCommand, randomString })
+export const getAssetUploadUrl = _getAssetUploadUrl({ getSignedUrl, s3Client, putObjectCommand, randomString })

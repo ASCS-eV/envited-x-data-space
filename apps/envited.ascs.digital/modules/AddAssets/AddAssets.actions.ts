@@ -1,27 +1,24 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { isNil } from 'ramda'
 
 import { getServerSession } from '../../common/auth'
 import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
-import { badRequestError, formatError, internalServerErrorError, slugify } from '../../common/utils'
+import { badRequestError, unauthorizedError, formatError, internalServerErrorError, slugify } from '../../common/utils'
 
 export async function addAssetsForm(formData: FormData) {
   const assets = formData.getAll('assets') as File[]
   const session = await getServerSession()
 
   try {
-    if (!session) {
-      throw badRequestError({
-        resource: 'addAssets',
-        resourceId: 'session',
-        message: ERRORS.UNAUTHORIZED,
-      })
+    if (isNil(session)) {
+      throw unauthorizedError({ resource: 'addAssets' })
     }
 
-    if (!assets) {
+    if (isNil(assets)) {
       throw badRequestError({
         resource: 'addAssets',
         resourceId: 'assets',

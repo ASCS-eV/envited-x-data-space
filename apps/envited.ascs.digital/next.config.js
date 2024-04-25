@@ -12,9 +12,6 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
-  experimental: {
-    forceSwcTransforms: true,
-  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve = {

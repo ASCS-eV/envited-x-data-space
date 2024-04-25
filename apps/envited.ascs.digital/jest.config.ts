@@ -14,7 +14,7 @@ export default {
   displayName: 'envited.ascs.digital',
   preset: '../../jest.preset.js',
   transform: {
-    [`(${esModules}).+\\.js$`]: 'babel-jest',
+    [`(${esModules}).+\\.js$`]: ['babel-jest', { presets: ['@babel/preset-env'] }],
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/next/babel'] }],
   },

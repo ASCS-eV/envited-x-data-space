@@ -12,6 +12,9 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  experimental: {
+    forceSwcTransforms: true,
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve = {
@@ -26,17 +29,6 @@ const nextConfig = {
         },
       }
     }
-
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-    }
-
-    config.module.rules = [
-      ...config.module.rules,
-      { test: /\.jsonld$/i, loader: 'raw-loader' },
-      { test: /\.ttl$/i, loader: 'raw-loader' },
-    ]
 
     return config
   },

@@ -22,9 +22,21 @@ const nextConfig = {
           tls: false,
           perf_hooks: false,
           fs: false,
+          path: false,
         },
       }
     }
+
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    }
+
+    config.module.rules = [
+      ...config.module.rules,
+      { test: /\.jsonld$/i, loader: 'raw-loader' },
+      { test: /\.ttl$/i, loader: 'raw-loader' },
+    ]
 
     return config
   },

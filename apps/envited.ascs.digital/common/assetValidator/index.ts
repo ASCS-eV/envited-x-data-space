@@ -1,1 +1,1 @@
-export { validateAssetFile } from './assetValidator'
+export { validateAssetFile, validateAssetShaclFile } from './assetValidator'

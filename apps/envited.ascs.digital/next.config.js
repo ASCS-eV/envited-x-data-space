@@ -22,6 +22,7 @@ const nextConfig = {
           tls: false,
           perf_hooks: false,
           fs: false,
+          path: false,
         },
       }
     }

@@ -4,7 +4,8 @@ import fs from 'fs'
 import rdfParser, { RdfParser } from 'rdf-parse'
 import SHACLValidator from 'rdf-validate-shacl'
 
-import { internalServerErrorError } from '../utils'
+import { log } from '../logger'
+import { formatError, internalServerErrorError } from '../utils'
 
 export const _loadDataset =
   ({ fileSystem, parser, environment }: { fileSystem: any; parser: RdfParser<Quad>; environment: any }) =>
@@ -14,7 +15,8 @@ export const _loadDataset =
       const quads = parser.parse(stream, { contentType })
 
       return environment.dataset().import(quads)
-    } catch (e) {
+    } catch (error: unknown) {
+      log.error(formatError(error))
       throw internalServerErrorError()
     }
   }
@@ -24,10 +26,10 @@ export const loadDataset = _loadDataset({ fileSystem: fs, parser: rdfParser, env
 export const validateShacl = (shapes: DatasetCore<Quad, Quad>) => async (data: DatasetCore<Quad, Quad>) => {
   try {
     const validator = new SHACLValidator(shapes, { factory: rdf })
-    const report = await validator.validate(data)
 
-    return report
-  } catch (e) {
+    return validator.validate(data)
+  } catch (error: unknown) {
+    log.error(formatError(error))
     throw internalServerErrorError()
   }
 }

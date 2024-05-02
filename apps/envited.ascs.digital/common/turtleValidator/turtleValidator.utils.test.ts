@@ -1,4 +1,4 @@
-import * as SUT from './turtleValidator.utils'
+import { _loadDataset, loadDataset, validateShacl } from './turtleValidator.utils'
 
 describe('common/turtleValidator.utils', () => {
   describe('_loadDataset', () => {
@@ -25,7 +25,7 @@ describe('common/turtleValidator.utils', () => {
         })),
       }
 
-      await SUT._loadDataset({ fileSystem: fsStub as any, parser: parserStub as any, environment: rdfStub as any })(
+      await _loadDataset({ fileSystem: fsStub as any, parser: parserStub as any, environment: rdfStub as any })(
         file,
         fileType,
       )
@@ -40,10 +40,10 @@ describe('common/turtleValidator.utils', () => {
       const shapes = `${process.cwd()}/apps/envited.ascs.digital/common/fixtures/shaclSchema.ttl`
       const data = `${process.cwd()}/apps/envited.ascs.digital/common/fixtures/shaclData.jsonld`
 
-      const shapesGraph = await SUT.loadDataset(shapes, 'text/turtle')
-      const dataGraph = await SUT.loadDataset(data, 'application/ld+json')
+      const shapesGraph = await loadDataset(shapes, 'text/turtle')
+      const dataGraph = await loadDataset(data, 'application/ld+json')
 
-      const report = await SUT.validateShacl(shapesGraph)(dataGraph)
+      const report = await validateShacl(shapesGraph)(dataGraph)
 
       expect(report.conforms).toBe(true)
     })

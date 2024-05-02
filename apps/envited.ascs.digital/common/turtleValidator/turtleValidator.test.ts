@@ -1,4 +1,4 @@
-import { validator } from './turtleValidator'
+import { validate } from './turtleValidator'
 
 describe('common/turtleValidator', () => {
   describe('readShaclFile', () => {
@@ -8,7 +8,7 @@ describe('common/turtleValidator', () => {
       const dataFile = `${process.cwd()}/apps/envited.ascs.digital/common/fixtures/shaclData.jsonld`
 
       // then ... it should return a valid result
-      const result = await validator(shapeFile, dataFile)
+      const result = await validate(shapeFile, dataFile)
 
       expect(result.conforms).toEqual(true)
     })

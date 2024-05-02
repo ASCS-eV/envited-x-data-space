@@ -1,4 +1,4 @@
-import { validator } from './turtleValidator'
+import * as SUT from './turtleValidator'
 
 describe('common/serviceActions/turtleValidator', () => {
   describe('readShaclFile', () => {
@@ -8,7 +8,7 @@ describe('common/serviceActions/turtleValidator', () => {
       const dataFile = `${process.cwd()}/apps/envited.ascs.digital/common/fixtures/shaclData.jsonld`
 
       // then ... it should return a valid result
-      const result = await validator(shapeFile, dataFile)
+      const result = await SUT.validate(shapeFile, dataFile)
 
       expect(result.conforms).toEqual(true)
     })

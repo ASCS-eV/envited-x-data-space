@@ -1,3 +1,4 @@
+import { loadDataset } from './turtleValidator.utils'
 import * as SUT from './turtleValidator.utils'
 
 describe('common/serverActions/turtleValidator.utils', () => {
@@ -40,8 +41,8 @@ describe('common/serverActions/turtleValidator.utils', () => {
       const shapes = `${process.cwd()}/apps/envited.ascs.digital/common/fixtures/shaclSchema.ttl`
       const data = `${process.cwd()}/apps/envited.ascs.digital/common/fixtures/shaclData.jsonld`
 
-      const shapesGraph = await SUT.loadDataset(shapes, 'text/turtle')
-      const dataGraph = await SUT.loadDataset(data, 'application/ld+json')
+      const shapesGraph = await loadDataset(shapes, 'text/turtle')
+      const dataGraph = await loadDataset(data, 'application/ld+json')
 
       const report = await SUT.validateShacl(shapesGraph)(dataGraph)
 

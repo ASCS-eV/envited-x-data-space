@@ -7,7 +7,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 import { internalServerErrorError } from '../../utils'
 import { loadDataset, validateShacl } from './turtleValidator.utils'
 
-export const _validator =
+export const _validate =
   ({
     loadDataset,
     validateShacl,
@@ -27,4 +27,4 @@ export const _validator =
     }
   }
 
-export const validator = _validator({ loadDataset, validateShacl })
+export const validate = _validate({ loadDataset, validateShacl })

@@ -1,1 +1,1 @@
-export { validator } from './turtleValidator'
+export { validate } from './turtleValidator'

@@ -1,1 +1,1 @@
-export { extract, read, readStream } from './archive'
+export { extract, read } from './archive'

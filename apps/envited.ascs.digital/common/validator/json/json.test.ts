@@ -1,8 +1,8 @@
-import { ERRORS } from '../constants'
-import * as SUT from './assetValidator'
+import { ERRORS } from '../../constants'
+import * as SUT from './json'
 
-describe('common/assetValidator', () => {
-  describe('validateAssetFile', () => {
+describe('common/validator/json', () => {
+  describe('validateJSONFile', () => {
     it('Should return a valid result', async () => {
       // when ... we want to validate a valid asset file
       // then ... it should return a valid result including the metadata
@@ -12,7 +12,7 @@ describe('common/assetValidator', () => {
         type: 'OpenDrive',
       })
 
-      const validateAssetFile = SUT._validateAssetFile(getMetadataJsonFromZipStub)
+      const validateAssetFile = SUT._validateJSONFile(getMetadataJsonFromZipStub)
 
       const result = await validateAssetFile('' as any)
 
@@ -34,7 +34,7 @@ describe('common/assetValidator', () => {
         type: 'ASSET_TYPE',
       })
 
-      const validateAssetFile = SUT._validateAssetFile(getMetadataJsonFromZipStub)
+      const validateAssetFile = SUT._validateJSONFile(getMetadataJsonFromZipStub)
 
       const result = await validateAssetFile('' as any)
 
@@ -54,7 +54,7 @@ describe('common/assetValidator', () => {
         type: 'ASSET_TYPE',
       })
 
-      const validateAssetFile = SUT._validateAssetFile(getMetadataJsonFromZipStub)
+      const validateAssetFile = SUT._validateJSONFile(getMetadataJsonFromZipStub)
 
       const result = await validateAssetFile('' as any)
 
@@ -71,7 +71,7 @@ describe('common/assetValidator', () => {
 
       const getMetadataJsonFromZipStub = jest.fn().mockRejectedValue(new Error('ERROR'))
 
-      const validateAssetFile = SUT._validateAssetFile(getMetadataJsonFromZipStub)
+      const validateAssetFile = SUT._validateJSONFile(getMetadataJsonFromZipStub)
       const result = await validateAssetFile('' as any)
 
       expect(result).toEqual({ isValid: false, data: {}, error: ERRORS.ASSET_FILE_NOT_FOUND })

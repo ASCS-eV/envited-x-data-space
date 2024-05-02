@@ -5,7 +5,8 @@ import { CheckCircleIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/out
 import { pathOr, prop } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 
-import { validateAssetFile, validateAssetShaclFile } from '../../common/assetValidator'
+import { validateJSONFile } from '../../common/validator'
+import { validateShaclFile } from '../../common/validator'
 
 interface UploadAssetItemProps {
   idx: number
@@ -20,8 +21,10 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, validHand
   useEffect(() => {
     async function getAssetData() {
       try {
-        // const data = await validateAssetFile(file)
-        const data = await validateAssetShaclFile(file)
+        // const dataJson = await validateJSONFile(file)
+        // console.log(dataJson)
+        const data = await validateShaclFile(file)
+        console.log(data)
 
         setAsset(data)
         validHandler(idx, data)

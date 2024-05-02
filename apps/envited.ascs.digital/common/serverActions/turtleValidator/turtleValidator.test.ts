@@ -1,6 +1,6 @@
 import { validator } from './turtleValidator'
 
-describe('common/turtleValidator', () => {
+describe('common/serviceActions/turtleValidator', () => {
   describe('readShaclFile', () => {
     it('Should return a valid result', async () => {
       // when ... we want to validate a valid shacl file

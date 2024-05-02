@@ -25,10 +25,3 @@ export const read = async (entry: Entry) => {
 
   return new Response(stream.readable).text()
 }
-
-export const readStream = async (entry: Entry) => {
-  const stream = new TransformStream()
-  entry.getData?.(stream.writable)
-
-  return new Response(stream.readable).text()
-}

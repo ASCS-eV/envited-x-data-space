@@ -27,8 +27,7 @@
     "../../dist/apps/envited.ascs.digital/.next/types/**/*.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "../../dist/apps/envited.ascs.digital/.next/types/**/*.ts",
-    "babel.config.js"
+    "../../dist/apps/envited.ascs.digital/.next/types/**/*.ts"
   ],
   "exclude": ["node_modules", "jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }

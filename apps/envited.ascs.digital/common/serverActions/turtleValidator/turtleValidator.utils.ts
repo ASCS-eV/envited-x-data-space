@@ -4,8 +4,8 @@ import fs from 'fs'
 import rdfParser, { RdfParser } from 'rdf-parse'
 import SHACLValidator from 'rdf-validate-shacl'
 
-import { log } from '../logger'
-import { formatError, internalServerErrorError } from '../utils'
+import { log } from '../../logger'
+import { formatError, internalServerErrorError } from '../../utils'
 
 export const _loadDataset =
   ({ fileSystem, parser, environment }: { fileSystem: any; parser: RdfParser<Quad>; environment: any }) =>

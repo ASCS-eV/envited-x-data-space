@@ -1,0 +1,1 @@
+export { validateShaclFile } from './shacl'

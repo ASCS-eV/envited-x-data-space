@@ -1,7 +1,7 @@
 import { loadDataset } from './turtleValidator.utils'
 import * as SUT from './turtleValidator.utils'
 
-describe('common/turtleValidator.utils', () => {
+describe('common/serverActions/turtleValidator.utils', () => {
   describe('_loadDataset', () => {
     it('Should return a SHACL dataset', async () => {
       // when ... we want to parse a ttl file to rdf quads

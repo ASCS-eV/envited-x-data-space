@@ -4,7 +4,7 @@ import { DatasetCore, Quad } from '@rdfjs/types'
 import fs from 'fs'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { internalServerErrorError } from '../utils'
+import { internalServerErrorError } from '../../utils'
 import { loadDataset, validateShacl } from './turtleValidator.utils'
 
 export const _validate =

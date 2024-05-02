@@ -1,10 +1,10 @@
 import { Entry } from '@zip.js/zip.js'
 
-import { extract, read } from '../archive'
-import { ERRORS } from '../constants'
-import { assetSchema } from './assetValidator.schema'
+import { extract, read } from '../../archive'
+import { ERRORS } from '../../constants'
+import { assetSchema } from './json.schema'
 
-export const _validateAssetFile =
+export const _validateJSONFile =
   (getMetadataJsonFromZip: (file: File) => Promise<Record<string, any>>) => async (file: File) => {
     try {
       const metadata = await getMetadataJsonFromZip(file)
@@ -34,4 +34,4 @@ export const _readContentFromJsonFile =
 
 export const readContentFromJsonFile = _readContentFromJsonFile({ read })
 
-export const validateAssetFile = _validateAssetFile(getMetadataJsonFromZip)
+export const validateJSONFile = _validateJSONFile(getMetadataJsonFromZip)

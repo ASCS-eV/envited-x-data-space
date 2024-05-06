@@ -13,6 +13,8 @@ export async function addAssetsForm(formData: FormData) {
   const assets = formData.getAll('assets') as File[]
   const session = await getServerSession()
 
+  console.log('session', session)
+
   try {
     if (isNil(session)) {
       throw unauthorizedError({ resource: 'addAssets' })
@@ -26,9 +28,13 @@ export async function addAssetsForm(formData: FormData) {
       })
     }
 
+    console.log('assets', assets)
+    
     const result = assets.map(async (asset: File) => {
       const arrayBuffer = Buffer.from(await asset.arrayBuffer())
       const signedUrl = await getAssetUploadUrl(session?.user?.pkh, slugify(asset.name), asset.name)
+      console.log('arrayBuffer', arrayBuffer)
+      console.log('signedUrl', signedUrl)
 
       const uploadResult = await fetch(signedUrl, {
         body: arrayBuffer,
@@ -38,6 +44,8 @@ export async function addAssetsForm(formData: FormData) {
           'Content-Disposition': `attachment; filename="${asset.name}"`,
         },
       })
+
+      console.log('uploadResult', uploadResult)
 
       return uploadResult
     })

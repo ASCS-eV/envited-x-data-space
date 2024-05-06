@@ -29,7 +29,7 @@ export async function addAssetsForm(formData: FormData) {
     }
 
     console.log('assets', assets)
-    
+
     const result = assets.map(async (asset: File) => {
       const arrayBuffer = Buffer.from(await asset.arrayBuffer())
       const signedUrl = await getAssetUploadUrl(session?.user?.pkh, slugify(asset.name), asset.name)

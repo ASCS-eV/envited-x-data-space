@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { map } from 'ramda'
 import React, { FC } from 'react'
 
+import { getImageUrl } from '../../common/utils'
+
 interface ItemProps {
   name: string
   slug: string
@@ -30,7 +32,7 @@ export const GridItem: FC<ItemProps> = ({
     <Link href={`/members/${slug}`}>
       <MemberProfileCard
         title={name}
-        logoUri={logo}
+        logoUri={getImageUrl(logo)}
         street={street}
         city={city}
         postalCode={postalCode}

@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { dissoc } from 'ramda'
 import { z } from 'zod'
 
-import { getUploadUrl } from '../../common/aws'
+import { getUniqueFilename, getUploadUrl } from '../../common/aws'
 import { log } from '../../common/logger'
 import { updateProfile } from '../../common/serverActions/profiles'
 import { badRequestError, formatError, internalServerErrorError, slugify } from '../../common/utils'
@@ -29,17 +29,19 @@ export async function updateProfileForm(formData: FormData) {
 
     if (file) {
       const arrayBuffer = Buffer.from(await file.arrayBuffer())
-      const signedUrl = await getUploadUrl(slugify(data.name), file.name)
+
+      const uniqueFilename = getUniqueFilename(slugify(data.name), file.name)
+      const signedUrl = await getUploadUrl(uniqueFilename)
       await fetch(signedUrl, {
         body: arrayBuffer,
         method: 'PUT',
         headers: {
           'Content-Type': file.type,
-          'Content-Disposition': `inline; filename="${file.name}"`,
+          'Content-Disposition': `inline; filename="${uniqueFilename}"`,
         },
       })
 
-      data = { ...data, logo: file.name }
+      data = { ...data, logo: uniqueFilename }
     }
     await updateProfile(dissoc('businessCategories')(data), data.businessCategories)
 

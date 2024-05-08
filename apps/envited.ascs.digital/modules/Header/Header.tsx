@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { FC } from 'react'
 
 import { NAVIGATION } from '../../common/constants'
-// import { useTranslation } from '../../common/i18n'
 import { Navigation } from '../Navigation'
 import { SignIn } from '../SignIn'
 

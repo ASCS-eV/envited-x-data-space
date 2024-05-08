@@ -10,7 +10,7 @@ export const NAVIGATION = [
 export const NAVIGATION_DASHBOARD = [
   {
     href: ROUTES.DASHBOARD.HOME,
-    name: 'Overview',
+    name: 'Dashboard',
     icon: '',
   },
   {

@@ -1,1 +1,1 @@
-export { getUploadUrl, getAssetUploadUrl } from './S3'
+export { getUniqueFilename, getUploadUrl, getAssetUploadUrl } from './S3'

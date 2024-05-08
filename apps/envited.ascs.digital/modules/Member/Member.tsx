@@ -7,6 +7,7 @@ import React, { FC, Fragment } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { Profile } from '../../common/types'
+import { getImageUrl } from '../../common/utils'
 
 const products = [
   {
@@ -15,7 +16,7 @@ const products = [
     href: '/assets/detail',
     description: 'A map section of the A8 highway from Heimsheim to Leonberg with a total length of 37.91 km. It was',
     options: 'XODR-3DM-23001',
-    price: '20 xtz',
+    price: '20 EUR',
     imageSrc: 'https://envited.market/media/OpenDRIVE_A9_final_bO9LFP7.png.500x320_q85_crop-scale.png',
     imageAlt: 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
   },
@@ -26,7 +27,7 @@ const products = [
     description:
       'San Francisco Union Square and adjacent streets. 3D Visualization of San Francisco HD maps, designed based on real-world OpenDRIVE data',
     options: 'CARLA-TGG-21001',
-    price: '300 xtz',
+    price: '300 EUR',
     imageSrc: 'https://envited.market/media/Kachel_San_Francisco_unreal.png.500x320_q85_crop-scale.png',
     imageAlt: 'Front of plain black t-shirt.',
   },
@@ -72,7 +73,7 @@ export const Member: FC<MemberProps> = ({ member }) => {
               <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
                 {!isNil(propOr('', 'logo')(member)) && (
                   <img
-                    src={propOr('', 'logo')(member)}
+                    src={getImageUrl(propOr('', 'logo')(member))}
                     alt={propOr('', 'name')(member)}
                     width={0}
                     height={0}
@@ -153,7 +154,7 @@ export const Member: FC<MemberProps> = ({ member }) => {
                             <dt className="text-sm font-medium leading-6 text-gray-900">
                               {t('[Heading] offering type')}
                             </dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 gap-2">
                               {map((item: string) => <Pill key={item}>{item}</Pill>)(type.split(';') as [])}
                             </dd>
                           </div>

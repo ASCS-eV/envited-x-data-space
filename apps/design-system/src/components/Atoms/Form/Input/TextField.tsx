@@ -6,7 +6,7 @@ interface TextFieldProps {
   label: string | ReactElement<any, string | JSXElementConstructor<any>>
   name: string
   value: string
-  description?: string
+  description?: string | ReactElement<any, string | JSXElementConstructor<any>>
   error?: string
   disabled?: boolean
   inputRef: RefCallBack

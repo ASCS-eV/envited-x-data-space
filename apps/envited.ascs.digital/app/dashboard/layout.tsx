@@ -79,3 +79,5 @@ export default async function DashboardLayout({ children }: DashboardProps) {
     </>
   )
 }
+
+export const dynamic = 'force-dynamic'

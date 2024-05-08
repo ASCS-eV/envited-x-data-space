@@ -11,6 +11,8 @@
   "[Label] about": "About",
   "[Label] about description": "Write a few sentences about the company.",
   "[Label] logo": "Logo",
+  "[Button] change": "Change",
+  "[Label] select new logo": "Select new logo",
   "[Label] business categories": "Business categories",
   "[Label] offerings": "Offerings",
   "[Label] offering name": "Name of offering",

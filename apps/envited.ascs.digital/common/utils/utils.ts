@@ -50,3 +50,5 @@ export const segmentsToPath = (pathNames: string[]) => (index: number) =>
 export const allEqual = (x: any) => all(equals(x))
 
 export const allTrue = allEqual(true)
+
+export const getImageUrl = (image: string) => `${process.env.NEXT_PUBLIC_URL || ''}/${image}`

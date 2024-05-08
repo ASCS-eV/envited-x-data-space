@@ -11,13 +11,13 @@ import {
 } from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { append, chain, dissoc, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { Profile as ProfileType } from '../../common/types'
-import { mapIndexed } from '../../common/utils'
+import { getImageUrl, mapIndexed } from '../../common/utils'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
 
@@ -64,6 +64,9 @@ type ProfileInputs = {
 export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
   const { t } = useTranslation('Profile')
   const { error, success } = useNotification()
+
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const { name, logo } = profile
 
   const {
     control,
@@ -181,41 +184,50 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
               </div>
 
               <div className="col-span-full">
-                <Controller
-                  name="logo"
-                  control={control}
-                  render={({ field: { ref, ...field } }) => (
-                    <TextField
-                      label={t('[Label] logo')}
-                      inputRef={ref}
-                      {...field}
-                      error={pathOr('', ['logo', 'message'])(errors)}
-                    />
-                  )}
-                />
-                <Controller
-                  name="file"
-                  control={control}
-                  render={({ field: { ref, onChange, value, ...field } }) => (
-                    <DragAndDropField
-                      label="File"
-                      {...field}
-                      inputRef={ref}
-                      value={value?.name}
-                      onDrop={event => {
-                        if (event.dataTransfer.files.length > 0) {
-                          onChange(event.dataTransfer.files?.[0])
-                        }
-                      }}
-                      onChange={event => {
-                        if (event.target.files) {
-                          onChange(event.target.files?.[0])
-                        }
-                      }}
-                      error={pathOr('', ['file', 'message'])(errors)}
-                    />
-                  )}
-                />
+                {!isNil(logo) && (
+                  <>
+                    <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
+                      {t('[Label] logo')}
+                    </label>
+                    <div className="mt-2 flex items-center gap-x-3">
+                      <img src={getImageUrl(logo)} alt={`Logo - ${name}`} className="h-20 w-20" />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsOpen(!isOpen)
+                        }}
+                        className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      >
+                        {t('[Button] change')}
+                      </button>
+                    </div>
+                  </>
+                )}
+                {isOpen && (
+                  <Controller
+                    name="file"
+                    control={control}
+                    render={({ field: { ref, onChange, value, ...field } }) => (
+                      <DragAndDropField
+                        label={t('[Label] select new logo')}
+                        {...field}
+                        inputRef={ref}
+                        value={value?.name}
+                        onDrop={event => {
+                          if (event.dataTransfer.files.length > 0) {
+                            onChange(event.dataTransfer.files?.[0])
+                          }
+                        }}
+                        onChange={event => {
+                          if (event.target.files) {
+                            onChange(event.target.files?.[0])
+                          }
+                        }}
+                        error={pathOr('', ['file', 'message'])(errors)}
+                      />
+                    )}
+                  />
+                )}
               </div>
 
               <div className="sm:col-span-full">
@@ -429,6 +441,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                       render={({ field: { ref, ...field } }) => (
                         <TextField
                           label={t('[Label] offering type')}
+                          description={t('[Description] offering type')}
                           inputRef={ref}
                           {...field}
                           error={pathOr('', ['offerings', index, 'type', 'message'])(errors)}
@@ -441,8 +454,9 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                       name={`offerings.${index}.functionalities`}
                       control={control}
                       render={({ field: { ref, ...field } }) => (
-                        <TextField
+                        <TextareaField
                           label={t('[Label] offering functionalities')}
+                          description={t('[Description] offering functionalities')}
                           inputRef={ref}
                           {...field}
                           error={pathOr('', ['offerings', index, 'functionalities', 'message'])(errors)}

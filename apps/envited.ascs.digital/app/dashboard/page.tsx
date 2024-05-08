@@ -1,6 +1,7 @@
 import { EnvelopeOpenIcon, UsersIcon } from '@heroicons/react/24/outline'
 
 import { getServerSession } from '../../common/auth'
+import { ROUTES } from '../../common/constants/routes'
 // import { getUserById } from '../../common/serverActions'
 import { Dashboard } from '../../modules/Dashboard'
 
@@ -11,8 +12,8 @@ export default async function Index() {
   // const user = await getUserById('did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE')
 
   const stats = [
-    { id: 1, name: 'Users', stat: '5', icon: UsersIcon },
-    { id: 2, name: 'Assets', stat: '8', icon: EnvelopeOpenIcon },
+    { id: 1, name: 'Users', stat: '1', icon: UsersIcon, route: ROUTES.DASHBOARD.USERS },
+    { id: 2, name: 'Assets', stat: '2', icon: EnvelopeOpenIcon, route: ROUTES.DASHBOARD.ASSETS },
   ]
 
   return (
@@ -38,8 +39,8 @@ export default async function Index() {
                     <p className="text-2xl font-semibold text-gray-900">{item.stat}</p>
                     <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
                       <div className="text-sm">
-                        <a href="#" className="font-medium text-blue-900 hover:text-blue-800">
-                          View all<span className="sr-only"> {item.name} stats</span>
+                        <a href={item.route} className="font-medium text-blue-900 hover:text-blue-800">
+                          View all<span className="sr-only"> {item.name}</span>
                         </a>
                       </div>
                     </div>

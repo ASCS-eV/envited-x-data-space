@@ -6,10 +6,10 @@ import { useSearchParams } from 'next/navigation'
 import React, { FC, useState } from 'react'
 
 import { signIn } from '../../common/auth'
-import { INVALID_USER_CREDENTIAL, MEMBER_CREDENTIAL, USER_CREDENTIAL } from '../../common/fixtures'
+import { MEMBER_CREDENTIAL } from '../../common/fixtures'
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { insertUser, updateProfile } from '../../common/serverActions'
+import { insertUser } from '../../common/serverActions'
 
 export const HeroHeader: FC = () => {
   const { t } = useTranslation('HeroHeader')
@@ -32,38 +32,6 @@ export const HeroHeader: FC = () => {
     }
   }
 
-  const addUser = async () => {
-    try {
-      const user = await insertUser(USER_CREDENTIAL)
-      if (user) {
-        setMessage(`Added ${user.id} as User`)
-        success('User added')
-      }
-    } catch (e) {
-      error('Something went wrong')
-      console.log(e)
-    }
-  }
-
-  const addInvalidUser = async () => {
-    try {
-      await insertUser(INVALID_USER_CREDENTIAL)
-    } catch (error: any) {
-      error('Something went wrong')
-      setMessage(error.message)
-    }
-  }
-
-  const update = async () => {
-    try {
-      await updateProfile({ name: 'Testcompany GmbH', description: 'test description' })
-      success('Profile updated')
-    } catch (error: any) {
-      error('Something went wrong')
-      setMessage(error.message)
-    }
-  }
-
   return (
     <div className="mx-auto max-w-6xl">
       {searchParams.has('error') ? (
@@ -82,15 +50,6 @@ export const HeroHeader: FC = () => {
           </Button>
           <Button onClick={() => addPrincipal()}>
             <span>Add Principal</span>
-          </Button>
-          <Button onClick={() => addUser()}>
-            <span>Add User</span>
-          </Button>
-          <Button onClick={() => addInvalidUser()}>
-            <span>Add Invalid User</span>
-          </Button>
-          <Button onClick={() => update()}>
-            <span>Update Profile</span>
           </Button>
         </GridRow>
       </Grid>

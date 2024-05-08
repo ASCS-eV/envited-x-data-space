@@ -68,7 +68,7 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
         onDragLeave={handleDragLeave}
         onDragOver={event => event.preventDefault()}
       >
-        <div className="text-center">
+        <div className="text-center" onDragEnter={handleDragEnter}>
           <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
           <div className="mt-4 flex text-sm leading-6 text-gray-600 dark:text-gray-400">
             <label

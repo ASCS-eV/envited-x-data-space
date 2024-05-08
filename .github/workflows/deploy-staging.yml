@@ -18,6 +18,7 @@ jobs:
     environment: staging
     env:
       ENV: ${{ vars.ENV }}
+      NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
       NEXT_PUBLIC_ASSET_BUCKET_NAME: ${{ vars.NEXT_PUBLIC_ASSET_BUCKET_NAME }}
       NEXT_PUBLIC_UPLOAD_BUCKET_NAME: ${{ vars.NEXT_PUBLIC_UPLOAD_BUCKET_NAME }}
       NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}

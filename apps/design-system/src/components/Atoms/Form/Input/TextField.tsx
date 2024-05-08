@@ -6,6 +6,7 @@ interface TextFieldProps {
   label: string | ReactElement<any, string | JSXElementConstructor<any>>
   name: string
   value: string
+  description?: string | ReactElement<any, string | JSXElementConstructor<any>>
   error?: string
   disabled?: boolean
   inputRef: RefCallBack
@@ -16,6 +17,7 @@ export const TextField: FC<TextFieldProps> = ({
   label,
   name,
   value,
+  description = '',
   error = '',
   disabled = false,
   inputRef,
@@ -39,6 +41,9 @@ export const TextField: FC<TextFieldProps> = ({
         />
       </div>
       {!isEmpty(error) && <p className="mt-3 text-sm leading-6 text-red-600 dark:text-red-400">{error}</p>}
+      {!isEmpty(description) && (
+        <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">{description}</p>
+      )}
     </>
   )
 }

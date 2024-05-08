@@ -10,16 +10,14 @@ describe('common/aws/S3', () => {
       const s3Client = jest.fn() as any
       const putObjectCommand = jest.fn().mockResolvedValue({}) as any
 
-      const slug = 'SLUG'
       const filename = 'FILE.TEST.jpeg'
-      const randomString = 'RANDOM_STRING'
 
-      const result = await _getUploadUrl({ getSignedUrl, s3Client, putObjectCommand, randomString })(slug, filename)
+      const result = await _getUploadUrl({ getSignedUrl, s3Client, putObjectCommand })(filename)
 
       expect(result).toEqual('UPLOAD_URL')
       expect(putObjectCommand).toHaveBeenCalledWith({
         ACL: 'private',
-        Key: `${slug}-${randomString}.jpeg`,
+        Key: `${filename}`,
         Bucket: undefined,
       })
     })

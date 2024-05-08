@@ -8,7 +8,7 @@ const product = {
   name: 'Motorway Testfield A8 Heimsheim <-> Leonberg (XODR)',
   version: { name: '1.0', date: 'June 5, 2021', datetime: '2021-06-05' },
   sku: 'XODR-3DM-23001',
-  price: '20 xtz',
+  price: '20 EUR',
   shortDescription:
     'A map section of the A8 highway from Heimsheim to Leonberg with a total length of 37.91 km. It was checked, validated and labeled with regard to the credibility levels defined in the UPSIM project. The road quality (asphalt) is good.',
   description:
@@ -79,7 +79,7 @@ const products = [
     href: '/assets/detail',
     description: 'A map section of the A8 highway from Heimsheim to Leonberg with a total length of 37.91 km. It was',
     options: 'XODR-3DM-23001',
-    price: '20 xtz',
+    price: '20 EUR',
     imageSrc: 'https://envited.market/media/OpenDRIVE_A9_final_bO9LFP7.png.500x320_q85_crop-scale.png',
     imageAlt: 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
   },
@@ -90,7 +90,7 @@ const products = [
     description:
       'San Francisco Union Square and adjacent streets. 3D Visualization of San Francisco HD maps, designed based on real-world OpenDRIVE data',
     options: 'CARLA-TGG-21001',
-    price: '300 xtz',
+    price: '300 EUR',
     imageSrc: 'https://envited.market/media/Kachel_San_Francisco_unreal.png.500x320_q85_crop-scale.png',
     imageAlt: 'Front of plain black t-shirt.',
   },
@@ -135,14 +135,8 @@ export const Asset = () => {
 
             <p className="mt-6 text-gray-500">{product.shortDescription}</p>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4">
               <Button onClick={() => {}}>Buy {product.price}</Button>
-              <button
-                type="button"
-                className="flex w-full items-center justify-center rounded-md border border-transparent bg-blue-900/10 px-8 py-3 text-base font-medium text-blue-900 hover:bg-blue-900/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-              >
-                Preview
-              </button>
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">

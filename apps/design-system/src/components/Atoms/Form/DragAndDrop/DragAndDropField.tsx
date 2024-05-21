@@ -65,13 +65,13 @@ export const DragAndDropField: FC<DragAndDropFieldProps> = ({
                 type="file"
                 onChange={onChange}
                 ref={inputRef}
-                accept="image/png, image/jpeg"
+                accept="image/png, image/jpeg, image/gif, image/svg+xml"
                 className="sr-only"
               />
             </label>
             <p className="pl-1">or drag and drop</p>
           </div>
-          <p className="text-xs leading-5 text-gray-600 dark:text-gray-500">PNG, JPG, GIF up to 10MB</p>
+          <p className="text-xs leading-5 text-gray-600 dark:text-gray-500">PNG, JPG, GIF or SVG up to 10MB</p>
         </div>
       </div>
       {value}

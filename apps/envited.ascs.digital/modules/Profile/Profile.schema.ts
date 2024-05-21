@@ -5,7 +5,7 @@ import { FILE_TYPES, MAX_FILE_SIZE } from '../../common/constants'
 export const ProfileSchema = z.object({
   name: z.string(),
   description: z.string(),
-  logo: z.string().url().optional().or(z.literal('')),
+  logo: z.string().or(z.literal('')),
   file: z
     .unknown()
     .transform(value => value as File | null | undefined)

@@ -190,7 +190,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                       {t('[Label] logo')}
                     </label>
                     <div className="mt-2 flex items-center gap-x-3">
-                      <img src={getImageUrl(logo)} alt={`Logo - ${name}`} className="h-20 w-20" />
+                      <img src={getImageUrl(logo)} alt={`Logo - ${name}`} className="h-20 w-20 object-contain" />
                       <button
                         type="button"
                         onClick={() => {

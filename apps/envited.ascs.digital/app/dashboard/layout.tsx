@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: DashboardProps) {
 
   return (
     <>
-      <main className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8">
+      <main className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
         <Breadcrumbs />
         <div className="mb-12">
           <div className="relative -z-10 isolate overflow-hidden bg-gray-400 h-32 lg:h-48 rounded-xl">
@@ -53,7 +53,7 @@ export default async function DashboardLayout({ children }: DashboardProps) {
             <div className="-mt-20 sm:-mt-24 sm:flex sm:items-start sm:space-x-5">
               <div className="flex">
                 <img
-                  className="h-24 w-24 rounded-xl ring-4 ring-white sm:h-32 sm:w-32 bg-gray-300 p-4 object-contain"
+                  className="h-24 w-24 rounded-xl ring-4 ring-white sm:h-32 sm:w-32 bg-gray-300 p-4"
                   src={getImageUrl(profile.logo)}
                   alt=""
                 />

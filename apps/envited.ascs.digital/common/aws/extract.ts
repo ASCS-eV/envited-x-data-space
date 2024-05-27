@@ -1,4 +1,5 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { Entry, ZipReader } from '@zip.js/zip.js'
 import { S3Handler } from 'aws-lambda'
 
 const prefix = `extract`
@@ -31,6 +32,18 @@ export const main: S3Handler = async event => {
   }
 
   const readStream = await readStreamFromS3({ Key, Bucket })
+  const reader = new ZipReader(readStream.Body as ReadableStream) //new BlobReader(archive))
+  reader
+    .getEntries()
+    .then((entries: Entry[]) => {
+      console.log('/*** Entries', entries)
+      // if (entries.length === 0) {
+      //   return []
+      // }
+      // return find(propEq(fileName, 'filename'))(entries)
+    })
+    .catch(() => undefined)
+    .finally(() => reader.close())
   console.log('/**** ReadStream - Response', readStream)
   console.log('/**** ReadStream - Body', readStream.Body)
 

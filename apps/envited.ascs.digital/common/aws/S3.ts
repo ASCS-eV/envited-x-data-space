@@ -50,7 +50,7 @@ export const _getAssetUploadUrl =
   async (pkh: string, slug: string, filename: string) => {
     const command = new putObjectCommand({
       ACL: 'private',
-      Key: `${pkh}/${slug}-${randomString}.${filename.split('.').pop()}`,
+      Key: `${slug}-${randomString}.${filename.split('.').pop()}`,
       Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME,
     })
 

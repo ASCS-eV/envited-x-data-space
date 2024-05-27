@@ -1,6 +1,7 @@
-import { useTranslation } from 'apps/envited.ascs.digital/common/i18n'
 import Image from 'next/image'
 import { FC, SVGProps } from 'react'
+
+import { useTranslation } from '../../common/i18n'
 
 export interface FooterProps {}
 
@@ -50,7 +51,7 @@ export const Footer: FC<FooterProps> = () => {
       <div className="mx-auto max-w-7xl px-6 pb-8 pt-20 sm:pt-24 lg:px-8 lg:pt-32">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
-            <Image src="/envited-logo.png" alt="ENVITED" priority height={40} width={170} />
+            <Image src="/envited-data-space-logo.png" alt="ENVITED" priority height={40} width={170} />
             <p className="text-sm leading-6 text-gray-600 dark:text-gray-300">{t('[Description] envited')}</p>
           </div>
           <div className="grid grid-cols-2 gap-8 xl:col-span-2">

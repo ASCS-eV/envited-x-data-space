@@ -1,4 +1,4 @@
-import { Button } from '@envited-marketplace/design-system'
+import { Button, Size } from '@envited-marketplace/design-system'
 import React, { FC } from 'react'
 
 export const SignIn: FC = () => {
@@ -7,7 +7,7 @@ export const SignIn: FC = () => {
   }
 
   return (
-    <Button onClick={signIn} isDisabled={false}>
+    <Button onClick={signIn} isDisabled={false} size={Size.small}>
       Sign in
     </Button>
   )

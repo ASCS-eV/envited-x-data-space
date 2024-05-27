@@ -32,7 +32,9 @@ export const main: S3Handler = async event => {
   }
 
   const readStream = await readStreamFromS3({ Key, Bucket })
-  const reader = new ZipReader(readStream.Body as ReadableStream) //new BlobReader(archive))
+  const readableStream = readStream.Body as ReadableStream
+  const reader = new ZipReader(readableStream as ReadableStream) //new BlobReader(archive))
+  console.log('/*** ZipReader', reader)
   reader
     .getEntries()
     .then((entries: Entry[]) => {

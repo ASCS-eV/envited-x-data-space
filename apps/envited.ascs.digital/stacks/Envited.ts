@@ -73,6 +73,12 @@ export default function Envited({ stack }: StackContext) {
   })
 
   const assetsBucket = new Bucket(stack, 'assets', {
+    notifications: {
+      extract: {
+        function: 'common/aws/extract.main',
+        events: ['object_created'],
+      },
+    },
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,

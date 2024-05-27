@@ -86,6 +86,7 @@ export default function Envited({ stack }: StackContext) {
     },
     cors: [s3CorsRule],
   })
+  assetsBucket.attachPermissions([assetsBucket]);
   assetsBucket.cdk.bucket.grantRead(oai)
 
   const assetsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'assetsDistribution', {

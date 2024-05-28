@@ -1,1 +1,1 @@
-export { extract, read } from './archive'
+export { extract, extractFromReadable, read } from './archive'

@@ -25,3 +25,21 @@ export const read = async (entry: Entry) => {
 
   return new Response(stream.readable).text()
 }
+
+export const _extractFromReadable =
+  ({ ZipReader }: { ZipReader: any }) =>
+  async (readable: ReadableStream, fileName: string) => {
+    const reader = new ZipReader(readable)
+    return reader
+      .getEntries()
+      .then((entries: Entry[]) => {
+        if (entries.length === 0) {
+          return []
+        }
+        return find(propEq(fileName, 'filename'))(entries)
+      })
+      .catch(() => undefined)
+      .finally(() => reader.close())
+  }
+
+export const extractFromReadable = _extractFromReadable({ ZipReader })

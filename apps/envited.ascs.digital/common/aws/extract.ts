@@ -1,6 +1,5 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { BlobReader, Entry, ZipReader } from '@zip.js/zip.js'
-import AdmZip from 'adm-zip'
 import { S3Handler } from 'aws-lambda'
 import { find, has, isNil, propEq } from 'ramda'
 
@@ -49,11 +48,22 @@ export const main: S3Handler = async event => {
     console.log('***** Body *****', Body)
     if (!isNil(Body)) {
       const blob = await Body.transformToByteArray()
-      console.log('***** Blob *****', blob)
-      const reader = new ZipReader(new BlobReader(blob as any))
-      console.log('***** ZipReader *****', reader)
 
-      const metadata = await reader.getEntries()
+      console.log('***** Blob *****', blob)
+      //const arrayReader = new Uint8ArrayReader(blob)
+      // const blobReady = new BlobReader(blob as any)
+      const reader = new ZipReader(
+        new BlobReader(
+          new Blob([blob], {
+            type: 'application/zip',
+          }),
+        ),
+      )
+      //const reader = new ZipReader(arrayReader)
+      console.log('***** ZipReader *****', reader)
+      const entries = await reader.getEntries()
+      reader.close()
+      console.log('entries', entries)
       /*
       const metadata = reader
         .getEntries()
@@ -73,7 +83,7 @@ export const main: S3Handler = async event => {
       // console.log('***** AdmZip *****', zip)
       // const zipEntries = zip.getEntries()
 
-      console.log('***** Metadata *****', metadata)
+      // console.log('***** Metadata *****', metadata)
     }
     // const readableStream = readStream.Body as ReadableStream
     // const metadata = await getMetadataJsonFromStream(readableStream, 'metadata.json')

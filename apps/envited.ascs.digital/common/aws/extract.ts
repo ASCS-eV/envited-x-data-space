@@ -1,6 +1,7 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { Entry, ZipReader } from '@zip.js/zip.js'
 import { S3Handler } from 'aws-lambda'
+import { find, propEq } from 'ramda'
 
 const prefix = `extract`
 
@@ -35,17 +36,18 @@ export const main: S3Handler = async event => {
   const readableStream = readStream.Body as ReadableStream
   const reader = new ZipReader(readableStream as ReadableStream) //new BlobReader(archive))
   console.log('/*** ZipReader', reader)
-  reader
+  const metadata = reader
     .getEntries()
     .then((entries: Entry[]) => {
-      console.log('/*** Entries', entries)
-      // if (entries.length === 0) {
-      //   return []
-      // }
-      // return find(propEq(fileName, 'filename'))(entries)
+      // console.log('/*** Entries', entries)
+      if (entries.length === 0) {
+        return []
+      }
+      return find(propEq('metadata.json', 'filename'))(entries)
     })
     .catch(() => undefined)
     .finally(() => reader.close())
+  console.log('/*** metadata', metadata)
   console.log('/**** ReadStream - Response', readStream)
   console.log('/**** ReadStream - Body', readStream.Body)
 

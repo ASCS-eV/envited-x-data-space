@@ -53,7 +53,7 @@ export const main: S3Handler = async event => {
       const reader = new ZipReader(new BlobReader(blob as any))
       console.log('***** ZipReader *****', reader)
 
-      const metadata = reader
+      const metadata = await reader
         .getEntries()
         .then((entries: Entry[]) => {
           console.log('***** Entries *****', entries)
@@ -62,6 +62,7 @@ export const main: S3Handler = async event => {
           }
           return find(propEq('metadata.json', 'filename'))(entries)
         })
+        // .then((entry: Entry) => )
         .catch(() => undefined)
         .finally(() => reader.close())
       // const buffer = Buffer.from(blob)

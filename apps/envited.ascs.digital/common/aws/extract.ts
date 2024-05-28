@@ -4,7 +4,7 @@ import { S3Handler } from 'aws-lambda'
 
 // import { find, propEq } from 'ramda'
 import { extractFromReadable } from '../archive'
-import { readContentFromJsonFile } from '../validator/json/json'
+// import { readContentFromJsonFile } from '../validator/json/json'
 
 const prefix = `extract`
 
@@ -25,8 +25,8 @@ const readStreamFromS3 = async ({ Bucket, Key }: { Bucket: string; Key: string }
   }
 }
 
-export const getMetadataJsonFromStream = (readable: ReadableStream, fileName: string) =>
-  extractFromReadable(readable, fileName).then(readContentFromJsonFile)
+export const getMetadataJsonFromStream = async (readable: ReadableStream, fileName: string) =>
+  extractFromReadable(readable, fileName) //.then(readContentFromJsonFile)
 
 export const main: S3Handler = async event => {
   const s3Record = event.Records[0].s3
@@ -58,10 +58,10 @@ export const main: S3Handler = async event => {
     .finally(() => reader.close())
   */
   console.log('/*** metadata', metadata)
-  console.log('/**** ReadStream - Response', readStream)
-  console.log('/**** ReadStream - Body', readStream.Body)
+  // console.log('/**** ReadStream - Response', readStream)
+  // console.log('/**** ReadStream - Body', readStream.Body)
 
-  console.log('/*** Extract handler - Key ***/', Key)
-  console.log('/*** Extract handler - Bucket ***/', Bucket)
-  console.log('/*** Extract handler - S3Record ***/', s3Record)
+  // console.log('/*** Extract handler - Key ***/', Key)
+  // console.log('/*** Extract handler - Bucket ***/', Bucket)
+  // console.log('/*** Extract handler - S3Record ***/', s3Record)
 }

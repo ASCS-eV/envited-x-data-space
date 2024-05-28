@@ -46,9 +46,13 @@ export const main: S3Handler = async event => {
     }
 
     const readStream = await readStreamFromS3({ Key, Bucket })
+    console.log('***** ReadStream *****', readStream)
     if (!isNil(readStream.Body)) {
+      console.log('***** ReadStream with Body *****')
       const buffer = Buffer.from(await readStream.Body.transformToByteArray())
+      console.log('***** Buffer *****', buffer)
       const zip = new AdmZip(buffer.toString('utf-8'), {})
+      console.log('***** AdmZip *****', zip)
       const zipEntries = zip.getEntries()
 
       console.log('/****** zipEntries', zipEntries)

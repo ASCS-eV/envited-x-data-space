@@ -1,7 +1,8 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { Entry, ZipReader } from '@zip.js/zip.js'
+import AdmZip from 'adm-zip'
 import { S3Handler } from 'aws-lambda'
-import { find, propEq } from 'ramda'
+import { find, has, isNil, propEq } from 'ramda'
 
 import { extractFromReadable } from '../archive'
 
@@ -34,20 +35,28 @@ export const getMetadataJsonFromStream = async (readable: ReadableStream, fileNa
 }
 
 export const main: S3Handler = async event => {
-  const s3Record = event.Records[0].s3
+  try {
+    const s3Record = event.Records[0].s3
 
-  const Key = s3Record.object.key
-  const Bucket = s3Record.bucket.name
+    const Key = s3Record.object.key
+    const Bucket = s3Record.bucket.name
 
-  if (Key.startsWith(prefix)) {
-    return
-  }
+    if (Key.startsWith(prefix)) {
+      return
+    }
 
-  const readStream = await readStreamFromS3({ Key, Bucket })
-  const readableStream = readStream.Body as ReadableStream
-  const metadata = await getMetadataJsonFromStream(readableStream, 'metadata.json')
+    const readStream = await readStreamFromS3({ Key, Bucket })
+    if (!isNil(readStream.Body)) {
+      const buffer = Buffer.from(await readStream.Body.transformToByteArray())
+      const zip = new AdmZip(buffer.toString('utf-8'), {})
+      const zipEntries = zip.getEntries()
 
-  /*
+      console.log('/****** zipEntries', zipEntries)
+    }
+    // const readableStream = readStream.Body as ReadableStream
+    // const metadata = await getMetadataJsonFromStream(readableStream, 'metadata.json')
+
+    /*
   const reader = new ZipReader(readableStream as ReadableStream) //new BlobReader(archive))
   console.log('/*** ZipReader', reader)
   const metadata = reader
@@ -62,11 +71,14 @@ export const main: S3Handler = async event => {
     .catch(() => undefined)
     .finally(() => reader.close())
   */
-  console.log('/*** metadata', metadata)
-  // console.log('/**** ReadStream - Response', readStream)
-  // console.log('/**** ReadStream - Body', readStream.Body)
+    // console.log('/*** metadata', metadata)
+    // console.log('/**** ReadStream - Response', readStream)
+    // console.log('/**** ReadStream - Body', readStream.Body)
 
-  // console.log('/*** Extract handler - Key ***/', Key)
-  // console.log('/*** Extract handler - Bucket ***/', Bucket)
-  // console.log('/*** Extract handler - S3Record ***/', s3Record)
+    // console.log('/*** Extract handler - Key ***/', Key)
+    // console.log('/*** Extract handler - Bucket ***/', Bucket)
+    // console.log('/*** Extract handler - S3Record ***/', s3Record)
+  } catch (e) {
+    console.log(e)
+  }
 }

@@ -1,5 +1,5 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { Entry, ZipReader } from '@zip.js/zip.js'
+import { BlobReader, Entry, ZipReader } from '@zip.js/zip.js'
 import AdmZip from 'adm-zip'
 import { S3Handler } from 'aws-lambda'
 import { find, has, isNil, propEq } from 'ramda'
@@ -45,17 +45,32 @@ export const main: S3Handler = async event => {
       return
     }
 
-    const readStream = await readStreamFromS3({ Key, Bucket })
-    console.log('***** ReadStream *****', readStream)
-    if (!isNil(readStream.Body)) {
-      console.log('***** ReadStream with Body *****')
-      const buffer = Buffer.from(await readStream.Body.transformToByteArray())
-      console.log('***** Buffer *****', buffer)
-      const zip = new AdmZip(buffer.toString('utf-8'), {})
-      console.log('***** AdmZip *****', zip)
-      const zipEntries = zip.getEntries()
+    const { Body } = await readStreamFromS3({ Key, Bucket })
+    console.log('***** Body *****', Body)
+    if (!isNil(Body)) {
+      const blob = await Body.transformToByteArray()
+      console.log('***** Blob *****', blob)
+      const reader = new ZipReader(new BlobReader(blob as any))
+      console.log('***** ZipReader *****', reader)
 
-      console.log('/****** zipEntries', zipEntries)
+      const metadata = reader
+        .getEntries()
+        .then((entries: Entry[]) => {
+          console.log('***** Entries *****', entries)
+          if (entries.length === 0) {
+            return []
+          }
+          return find(propEq('metadata.json', 'filename'))(entries)
+        })
+        .catch(() => undefined)
+        .finally(() => reader.close())
+      // const buffer = Buffer.from(blob)
+      // console.log('***** Buffer *****', buffer)
+      // const zip = new AdmZip(buffer.toString('utf-8'), {})
+      // console.log('***** AdmZip *****', zip)
+      // const zipEntries = zip.getEntries()
+
+      console.log('***** Metadata *****', metadata)
     }
     // const readableStream = readStream.Body as ReadableStream
     // const metadata = await getMetadataJsonFromStream(readableStream, 'metadata.json')

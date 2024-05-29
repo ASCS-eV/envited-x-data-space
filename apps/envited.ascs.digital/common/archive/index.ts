@@ -1,1 +1,1 @@
-export { extract, extractFromReadable, read } from './archive'
+export { extract, extractFileFromBlob, extractFromReadable, read, transfromByteArrayToBlob } from './archive'

@@ -1,5 +1,7 @@
-import { BlobReader, Entry, ZipReader } from '@zip.js/zip.js'
+import { BlobReader, Entry, Reader, ZipReader } from '@zip.js/zip.js'
 import { find, propEq } from 'ramda'
+
+import { BlobTypes } from '../types'
 
 export const _extract =
   ({ ZipReader, BlobReader }: { ZipReader: any; BlobReader: any }) =>
@@ -43,3 +45,25 @@ export const _extractFromReadable =
   }
 
 export const extractFromReadable = _extractFromReadable({ ZipReader })
+
+export const _extractFileFromBlob =
+  ({ zipReader, blobReader }: { zipReader: any; blobReader: any }) =>
+  async (blob: Blob, filename: string) => {
+    const reader = new zipReader(new blobReader(blob))
+
+    return reader
+      .getEntries()
+      .then((entries: Entry[]) => {
+        if (entries.length === 0) {
+          return []
+        }
+
+        return find(propEq(filename, 'filename'))(entries)
+      })
+      .catch(() => undefined)
+      .finally(() => reader.close())
+  }
+
+export const extractFileFromBlob = _extractFileFromBlob({ zipReader: ZipReader, blobReader: BlobReader })
+
+export const transfromByteArrayToBlob = (blob: Uint8Array, type: BlobTypes) => new Blob([blob], { type })

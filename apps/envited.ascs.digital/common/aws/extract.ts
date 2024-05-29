@@ -1,7 +1,7 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { BlobReader, Entry, ZipReader } from '@zip.js/zip.js'
+import { BlobReader } from '@zip.js/zip.js'
 import { S3Handler } from 'aws-lambda'
-import { find, has, isNil, propEq } from 'ramda'
+import { isNil } from 'ramda'
 
 import { extractFromReadable } from '../archive'
 import { readContentFromJsonFile } from '../validator/json/json'
@@ -51,68 +51,7 @@ export const main: S3Handler = async event => {
 
       const metadata = await getMetadataJsonFromStream(readableStream, 'metadata.json')
       console.log('***** Metadata *****', metadata)
-
-      // console.log('***** Blob *****', blob)
-      //const arrayReader = new Uint8ArrayReader(blob)
-      //const blobReady = new BlobReader(blob as any)
-      //const reader = new ZipReader(arrayReader)
-      // const reader = new ZipReader(
-      //   new BlobReader(
-      //     new Blob([blob], {
-      //       type: 'application/zip',
-      //     }),
-      //   ),
-      // )
-      // console.log('***** ZipReader *****', reader)
-      // const metadata = await reader.getEntries().then((entries: Entry[]) => {
-      //   if (entries.length === 0) {
-      //     return []
-      //   }
-      //   return find(propEq('metadata.json', 'filename'))(entries)
-      // })
-      // .catch(() => undefined)
-      // .finally(() => reader.close())
-
-      // console.log('metadata', metadata)
-      /*
-      const metadata = reader
-        .getEntries()
-        .then((entries: Entry[]) => {
-          console.log('***** Entries *****', entries)
-          if (entries.length === 0) {
-            return []
-          }
-          return find(propEq('metadata.json', 'filename'))(entries)
-        })
-        .catch(() => undefined)
-        .finally(() => reader.close())
-      */
-      // const buffer = Buffer.from(blob)
-      // console.log('***** Buffer *****', buffer)
-      // const zip = new AdmZip(buffer.toString('utf-8'), {})
-      // console.log('***** AdmZip *****', zip)
-      // const zipEntries = zip.getEntries()
-
-      // console.log('***** Metadata *****', metadata)
     }
-    // const readableStream = readStream.Body as ReadableStream
-    // const metadata = await getMetadataJsonFromStream(readableStream, 'metadata.json')
-
-    /*
-  const reader = new ZipReader(readableStream as ReadableStream) //new BlobReader(archive))
-  console.log('/*** ZipReader', reader)
-  const metadata = reader
-    .getEntries()
-    .then((entries: Entry[]) => {
-      // console.log('/*** Entries', entries)
-      if (entries.length === 0) {
-        return []
-      }
-      return find(propEq('metadata.json', 'filename'))(entries)
-    })
-    .catch(() => undefined)
-    .finally(() => reader.close())
-  */
     // console.log('/*** metadata', metadata)
     // console.log('/**** ReadStream - Response', readStream)
     // console.log('/**** ReadStream - Body', readStream.Body)

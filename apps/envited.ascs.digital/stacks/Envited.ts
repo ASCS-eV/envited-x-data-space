@@ -72,6 +72,16 @@ export default function Envited({ stack }: StackContext) {
     ],
   })
 
+  const metadataBucket = new Bucket(stack, 'metadata', {
+    cdk: {
+      bucket: {
+        accessControl: aws_s3.BucketAccessControl.PRIVATE,
+      },
+    },
+    cors: [s3CorsRule],
+  })
+  metadataBucket.cdk.bucket.grantRead(oai)
+
   const assetsBucket = new Bucket(stack, 'assets', {
     notifications: {
       extract: {
@@ -86,7 +96,8 @@ export default function Envited({ stack }: StackContext) {
     },
     cors: [s3CorsRule],
   })
-  assetsBucket.attachPermissions([assetsBucket])
+  assetsBucket.attachPermissions([assetsBucket, metadataBucket])
+  metadataBucket.attachPermissions([metadataBucket, assetsBucket])
   assetsBucket.cdk.bucket.grantRead(oai)
 
   const assetsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'assetsDistribution', {
@@ -94,6 +105,21 @@ export default function Envited({ stack }: StackContext) {
       {
         s3OriginSource: {
           s3BucketSource: assetsBucket.cdk.bucket,
+          originAccessIdentity: oai,
+        },
+        behaviors: [
+          { isDefaultBehavior: true },
+          { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
+        ],
+      },
+    ],
+  })
+
+  const metadataDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'metadataDistribution', {
+    originConfigs: [
+      {
+        s3OriginSource: {
+          s3BucketSource: metadataBucket.cdk.bucket,
           originAccessIdentity: oai,
         },
         behaviors: [
@@ -138,5 +164,7 @@ export default function Envited({ stack }: StackContext) {
     UploadsDistributionId: uploadsDistribution.distributionId,
     AssetsDistribution: assetsDistribution.distributionDomainName,
     AssetsDistributionId: assetsDistribution.distributionId,
+    MetadataDistribution: metadataDistribution.distributionDomainName,
+    MetadataDistributionId: metadataDistribution.distributionId,
   })
 }

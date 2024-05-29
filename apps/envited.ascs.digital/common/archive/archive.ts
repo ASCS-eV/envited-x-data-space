@@ -28,7 +28,7 @@ export const read = async (entry: Entry) => {
 
 export const _extractFromReadable =
   ({ ZipReader }: { ZipReader: any }) =>
-  async (readable: ReadableStream<any>, fileName: string) => {
+  async (readable: BlobReader, fileName: string) => {
     const reader = new ZipReader(readable)
     return reader
       .getEntries()

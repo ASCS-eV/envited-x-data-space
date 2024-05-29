@@ -1,4 +1,5 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { Upload } from '@aws-sdk/lib-storage'
 import { BlobReader } from '@zip.js/zip.js'
 import { S3Handler } from 'aws-lambda'
 import { isNil } from 'ramda'
@@ -51,6 +52,14 @@ export const main: S3Handler = async event => {
 
       const metadata = await getMetadataJsonFromStream(readableStream, 'metadata.json')
       console.log('***** Metadata *****', metadata)
+      const metadataBuffer = createMetadataBuffer({ name: metadata.title })
+      const { upload } = writeToMetadataS3Bucket({
+        Bucket: 'staging-envitedascsdigital--metadatabucket8ef2ffce-tewzue4uwey3',
+        Key,
+        buf: metadataBuffer,
+      })
+
+      await upload.done()
     }
     // console.log('/*** metadata', metadata)
     // console.log('/**** ReadStream - Response', readStream)
@@ -62,4 +71,34 @@ export const main: S3Handler = async event => {
   } catch (e) {
     console.log(e)
   }
+}
+
+export const writeToMetadataS3Bucket = ({ Bucket, Key, buf }: { Bucket: string; Key: string; buf: Buffer }) => {
+  const upload = new Upload({
+    client: S3,
+    params: {
+      Bucket: Bucket,
+      Key: `${Key}-metadata.json`,
+      Body: buf,
+      ContentEncoding: 'base64',
+      ContentType: 'application/json',
+    },
+  })
+
+  return {
+    writeStream: buf,
+    upload,
+  }
+}
+
+export const createMetadataBuffer = ({ name }: { name: string }) => {
+  const data = {
+    name,
+    symbol: 'ENVITED',
+    decimals: 2,
+    shouldPreferSymbol: true,
+    thumbnailUri: 'THUMBNAIL_URI',
+  }
+
+  return Buffer.from(JSON.stringify(data))
 }

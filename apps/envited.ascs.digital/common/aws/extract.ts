@@ -80,8 +80,8 @@ export const writeToMetadataS3Bucket = ({ Bucket, Key, buf }: { Bucket: string; 
       Bucket: Bucket,
       Key: `${Key}-metadata.json`,
       Body: buf,
-      ContentEncoding: 'base64',
-      ContentType: 'application/json',
+      // ContentEncoding: 'base64',
+      // ContentType: 'application/json',
     },
   })
 

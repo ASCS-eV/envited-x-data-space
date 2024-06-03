@@ -6,13 +6,7 @@ export const Vision = () => {
   return (
     <div>
       <div className="relative flex items-center justify-center h-screen overflow-hidden">
-        <video
-          src="https://d1hqi5mu4fov5n.cloudfront.net/videos/Company/About_us_1920_1080.mp4"
-          autoPlay
-          loop
-          muted
-          className="absolute z-10 w-auto min-w-full min-h-full max-w-none"
-        ></video>
+        <video src="#" autoPlay loop muted className="absolute z-10 w-auto min-w-full min-h-full max-w-none"></video>
         <div className="absolute top-0 z-10 h-full w-full bg-black opacity-60" />
         <div className="relative z-20 mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:max-w-4xl py-32">

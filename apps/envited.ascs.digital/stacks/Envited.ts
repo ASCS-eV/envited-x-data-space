@@ -85,13 +85,17 @@ export default function Envited({ stack }: StackContext) {
   const assetsBucket = new Bucket(stack, 'assets', {
     notifications: {
       extract: {
-        function: 'common/aws/extract.main',
-        events: ['object_created'],
-        environment: {
-          NEXT_PUBLIC_METADATA_BUCKET_NAME: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+        //function: 'common/aws/extract.main',
+        function: {
+          handler: 'common/aws/extract.main',
+          environment: {
+            NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
+          },
+          permissions: [metadataBucket],
         },
+        events: ['object_created'],
       },
-    },
+    },git a
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,

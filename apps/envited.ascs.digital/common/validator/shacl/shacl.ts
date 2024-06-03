@@ -2,7 +2,7 @@ import { DatasetCore, Quad } from '@rdfjs/types'
 import { Entry } from '@zip.js/zip.js'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { extract, read } from '../../archive'
+import { extractFromZipFile, read } from '../../archive'
 import { ERRORS } from '../../constants'
 import { ContentTypes, Schemas } from './shacl.types'
 import { fetchShaclSchema, loadDataset, validateShacl } from './shacl.utils'
@@ -56,7 +56,7 @@ export const _getShaclDataFromZip =
   async (asset: File) =>
     extract(asset, 'data.jsonld').then(read)
 
-export const getShaclDataFromZip = _getShaclDataFromZip({ extract, read })
+export const getShaclDataFromZip = _getShaclDataFromZip({ extract: extractFromZipFile, read })
 
 export const validateShaclFile = _validateShaclFile({
   getShaclDataFromZip,

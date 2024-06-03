@@ -1,1 +1,9 @@
-export { extract, extractFileFromBlob, extractFromReadable, read, transfromByteArrayToBlob } from './archive'
+export {
+  extract,
+  extractFromZipFile,
+  extractFileFromZipByteArray,
+  read,
+  readContentFromJsonFile,
+  transformByteArrayToBlob,
+  transformByteArrayToReadable,
+} from './archive'

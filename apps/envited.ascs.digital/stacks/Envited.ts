@@ -95,7 +95,7 @@ export default function Envited({ stack }: StackContext) {
         },
         events: ['object_created'],
       },
-    },git a
+    },
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,

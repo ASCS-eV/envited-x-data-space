@@ -6,7 +6,7 @@ export const SimulationData = () => {
   return (
     <div>
       <div className="relative isolate overflow-hidden bg-gray-900 pb-16 pt-14 sm:pb-20 h-96">
-        <img src="/preview-image.png" alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />
+        <img src="/AdobeStock_571252297_metamorworks.jpeg" alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />
       </div>
       <div className="mx-auto max-w-2xl px-4 pb-20 sm:px-6 lg:max-w-7xl lg:px-8 bg-white py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">

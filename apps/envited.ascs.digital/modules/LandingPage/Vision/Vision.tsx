@@ -7,7 +7,7 @@ export const Vision = () => {
     <div>
       <div className="relative flex items-center justify-center h-screen overflow-hidden">
         <video
-          src="https://d1hqi5mu4fov5n.cloudfront.net/videos/Company/About_us_1920_1080.mp4"
+          src="#"
           autoPlay
           loop
           muted

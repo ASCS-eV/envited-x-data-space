@@ -87,6 +87,9 @@ export default function Envited({ stack }: StackContext) {
       extract: {
         function: 'common/aws/extract.main',
         events: ['object_created'],
+        environment: {
+          NEXT_PUBLIC_METADATA_BUCKET_NAME: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+        }
       },
     },
     cdk: {

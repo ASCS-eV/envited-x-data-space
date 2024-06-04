@@ -83,9 +83,10 @@ export const main: S3Handler = async event => {
       const byteArray = await Body.transformToByteArray()
       const data = await getFileFromByteArray(byteArray, 'data.jsonld')
 
-      console.log(path.resolve('./schemas/shaclSchema.ttl'))
-      console.log('process.env.LAMBDA_TASK_ROOT', process.env.LAMBDA_TASK_ROOT)
-      fs.createReadStream(__dirname + '/schemas/shaclSchema.ttl')
+      console.log('******* path *****', path.resolve('./schemas/shaclSchema.ttl'))
+      console.log('******* process *****', process.env.LAMBDA_TASK_ROOT)
+      const test = fs.createReadStream(process.env.LAMBDA_TASK_ROOT + '/schemas/shaclSchema.ttl')
+      console.log('******* FS Schema *****', test)
 
       const shaclData = JSON.parse(data)
       const report = await validateShaclDataWithSchema(data, shaclData['@type'])

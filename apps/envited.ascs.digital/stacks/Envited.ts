@@ -1,4 +1,4 @@
-import { aws_cloudfront, aws_ec2, aws_rds, aws_s3 } from 'aws-cdk-lib'
+import { aws_cloudfront, aws_ec2, aws_rds, aws_s3, aws_lambda } from 'aws-cdk-lib'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import * as cdk from 'aws-cdk-lib/core'
 import { Bucket, NextjsSite, StackContext } from 'sst/constructs'
@@ -91,6 +91,11 @@ export default function Envited({ stack }: StackContext) {
             NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
           },
           permissions: [metadataBucket],
+          layers: [
+            new aws_lambda.LayerVersion(stack, "Schemas", {
+              code: aws_lambda.Code.fromAsset("common/aws/validateAndExtractMetadata/schemas"),
+            }),
+          ],
         },
         events: ['object_created'],
       },

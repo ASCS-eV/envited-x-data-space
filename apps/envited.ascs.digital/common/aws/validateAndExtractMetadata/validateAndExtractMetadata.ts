@@ -1,10 +1,13 @@
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
+import fs from 'fs'
+import path from 'path'
 import { isNil } from 'ramda'
 
-import { extractFileFromZipByteArray, read, readContentFromJsonFile } from '../archive'
-import { validateShaclDataWithSchema } from '../validator'
+import { extractFileFromZipByteArray, read, readContentFromJsonFile } from '../../archive'
+import { validateShaclDataWithSchema } from '../../validator'
+import { SCHEMA_MAP } from './validateAndExtractMetadata.utils'
 
 const prefix = `extract`
 
@@ -79,6 +82,10 @@ export const main: S3Handler = async event => {
     if (!isNil(Body)) {
       const byteArray = await Body.transformToByteArray()
       const data = await getFileFromByteArray(byteArray, 'data.jsonld')
+
+      console.log(path.resolve('./schemas/shaclSchema.ttl'))
+      console.log('process.env.LAMBDA_TASK_ROOT', process.env.LAMBDA_TASK_ROOT)      
+      fs.createReadStream(__dirname + '/schemas/shaclSchema.ttl')
 
       const shaclData = JSON.parse(data)
       const report = await validateShaclDataWithSchema(data, shaclData['@type'])

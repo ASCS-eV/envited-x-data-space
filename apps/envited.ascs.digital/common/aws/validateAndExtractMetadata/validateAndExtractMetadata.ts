@@ -2,12 +2,12 @@ import { DeleteObjectCommand, GetObjectCommand, PutObjectCommandInput, S3Client 
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
 import fs from 'fs'
-import path from 'path'
 import { isNil } from 'ramda'
 
-import { extractFileFromZipByteArray, read, readContentFromJsonFile } from '../../archive'
+import { extractFileFromZipByteArray, read } from '../../archive'
 import { validateShaclDataWithSchema } from '../../validator'
-import { SCHEMA_MAP } from './validateAndExtractMetadata.utils'
+import { SCHEMA_MAP } from '../../validator/shacl/shacl.constants'
+import { Schemas } from '../../validator/shacl/shacl.types'
 
 const prefix = `extract`
 
@@ -48,9 +48,6 @@ const deleteObjectFromS3 = async ({ Bucket, Key }: { Bucket: string; Key: string
   }
 }
 
-// const getMetadataJsonFromByteArray = async (byteArray: Uint8Array) =>
-//   extractFileFromZipByteArray(byteArray, 'metadata.json').then(readContentFromJsonFile)
-
 const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFileFromZipByteArray(byteArray, filename).then(read)
 
@@ -83,20 +80,18 @@ export const main: S3Handler = async event => {
       const byteArray = await Body.transformToByteArray()
       const data = await getFileFromByteArray(byteArray, 'data.jsonld')
 
-      console.log('******* path *****', path.resolve('./schemas/shaclSchema.ttl'))
+      console.log('******* dirname *****', __dirname)
       console.log('******* process *****', process.env.LAMBDA_TASK_ROOT)
-      const test = fs.createReadStream(
-        process.env.LAMBDA_TASK_ROOT + '/common/aws/validateAndExtractMetadata/schemas/shaclSchema.ttl',
-      )
-      console.log('******* FS Schema *****', test)
 
       const shaclData = JSON.parse(data)
-      const report = await validateShaclDataWithSchema(data, test)
+      const type = shaclData['@type'] as Schemas
+      const schema = fs.createReadStream(
+        `${process.env.LAMBDA_TASK_ROOT}/common/aws/validateAndExtractMetadata/schemas/${SCHEMA_MAP[type]}`,
+      )
 
-      console.log('validateShaclDataWithSchema - report', report)
+      const report = await validateShaclDataWithSchema(data, schema)
 
       if (report.conforms) {
-        // const metadataContent = await getMetadataJsonFromByteArray(byteArray)
         const metadataBuffer = createMetadataBuffer({ name: shaclData.name[0] })
         const upload = writeStreamToS3({
           Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,

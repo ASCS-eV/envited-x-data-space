@@ -85,7 +85,9 @@ export const main: S3Handler = async event => {
 
       console.log('******* path *****', path.resolve('./schemas/shaclSchema.ttl'))
       console.log('******* process *****', process.env.LAMBDA_TASK_ROOT)
-      const test = fs.createReadStream(process.env.LAMBDA_TASK_ROOT + '/common/aws/validateAndExtractMetadata/schemas/shaclSchema.ttl')
+      const test = fs.createReadStream(
+        process.env.LAMBDA_TASK_ROOT + '/common/aws/validateAndExtractMetadata/schemas/shaclSchema.ttl',
+      )
       console.log('******* FS Schema *****', test)
 
       const shaclData = JSON.parse(data)

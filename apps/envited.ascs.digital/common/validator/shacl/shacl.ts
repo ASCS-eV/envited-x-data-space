@@ -5,7 +5,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 import { extractFromZipFile, read } from '../../archive'
 import { ERRORS } from '../../constants'
 import { ContentTypes, Schemas } from './shacl.types'
-import { fetchShaclSchema, loadDataset, validateShacl } from './shacl.utils'
+import { fetchShaclSchema, loadDataset, parseStreamToDataset, validateShacl } from './shacl.utils'
 
 export const _validateShaclFile =
   ({
@@ -65,11 +65,9 @@ export const validateShaclFile = _validateShaclFile({
   validateShacl,
 })
 
-export const validateShaclDataWithSchema = async (shaclData: string, type: Schemas) => {
+export const validateShaclDataWithSchema = async (shaclData: string, readable: any) => {
   try {
-    const shaclSchema = await fetchShaclSchema(type)
-
-    const schemaPromise = loadDataset(shaclSchema, ContentTypes.ttl)
+    const schemaPromise = parseStreamToDataset(readable, ContentTypes.ttl)
     const dataPromise = loadDataset(shaclData, ContentTypes.jsonLd)
 
     const schema = await schemaPromise

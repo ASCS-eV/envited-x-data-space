@@ -89,7 +89,7 @@ export const main: S3Handler = async event => {
       console.log('******* FS Schema *****', test)
 
       const shaclData = JSON.parse(data)
-      const report = await validateShaclDataWithSchema(data, shaclData['@type'])
+      const report = await validateShaclDataWithSchema(data, test)
 
       console.log('validateShaclDataWithSchema - report', report)
 

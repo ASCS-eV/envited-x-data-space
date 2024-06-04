@@ -85,9 +85,8 @@ export default function Envited({ stack }: StackContext) {
   const assetsBucket = new Bucket(stack, 'assets', {
     notifications: {
       extract: {
-        //function: 'common/aws/extract.main',
         function: {
-          handler: 'common/aws/extract.main',
+          handler: 'common/aws/validateAndExtractMetadata.main',
           environment: {
             NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
           },

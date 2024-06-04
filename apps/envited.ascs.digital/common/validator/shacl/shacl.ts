@@ -64,3 +64,25 @@ export const validateShaclFile = _validateShaclFile({
   loadDataset,
   validateShacl,
 })
+
+export const validateShaclDataWithSchema = async (shaclData: string, type: Schemas) => {
+  try {
+    const shaclSchema = await fetchShaclSchema(type)
+
+    const schemaPromise = loadDataset(shaclSchema, ContentTypes.ttl)
+    const dataPromise = loadDataset(shaclData, ContentTypes.jsonLd)
+
+    const schema = await schemaPromise
+    const data = await dataPromise
+
+    const report = await validateShacl(schema)(data)
+
+    if (!report.conforms) {
+      return false
+    }
+
+    return JSON.parse(shaclData)
+  } catch {
+    return false
+  }
+}

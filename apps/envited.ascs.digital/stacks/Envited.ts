@@ -91,11 +91,12 @@ export default function Envited({ stack }: StackContext) {
             NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
           },
           permissions: [metadataBucket],
-          layers: [
-            new aws_lambda.LayerVersion(stack, 'Schemas', {
-              code: aws_lambda.Code.fromAsset('common/aws/validateAndExtractMetadata/schemas'),
-            }),
-          ],
+          copyFiles: [{ from: 'common/aws/validateAndExtractMetadata/schemas' }],
+          // layers: [
+          //   new aws_lambda.LayerVersion(stack, 'Schemas', {
+          //     code: aws_lambda.Code.fromAsset('common/aws/validateAndExtractMetadata/schemas'),
+          //   }),
+          // ],
         },
         events: ['object_created'],
       },

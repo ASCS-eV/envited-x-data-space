@@ -77,12 +77,12 @@ export const validateShaclDataWithSchema = async (shaclData: string, type: Schem
 
     const report = await validateShacl(schema)(data)
 
-    if (!report.conforms) {
-      return false
+    return {
+      conforms: report.conforms,
     }
-
-    return JSON.parse(shaclData)
   } catch {
-    return false
+    return {
+      conforms: false,
+    }
   }
 }

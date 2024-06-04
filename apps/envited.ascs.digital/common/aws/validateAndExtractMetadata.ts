@@ -1,4 +1,4 @@
-import { GetObjectCommand, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
 import { isNil } from 'ramda'
@@ -30,6 +30,20 @@ const writeStreamToS3 = (params: PutObjectCommandInput) =>
     client: S3,
     params,
   })
+
+const deleteObjectFromS3 = async ({ Bucket, Key }: { Bucket: string; Key: string }) => {
+  const deleteCommand = new DeleteObjectCommand({
+    Bucket,
+    Key,
+  })
+
+  try {
+    const response = await S3.send(deleteCommand)
+    console.log(response)
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 // const getMetadataJsonFromByteArray = async (byteArray: Uint8Array) =>
 //   extractFileFromZipByteArray(byteArray, 'metadata.json').then(readContentFromJsonFile)
@@ -67,8 +81,11 @@ export const main: S3Handler = async event => {
       const data = await getFileFromByteArray(byteArray, 'data.jsonld')
 
       const shaclData = JSON.parse(data)
+      const report = await validateShaclDataWithSchema(data, shaclData['@type'])
 
-      if (await validateShaclDataWithSchema(data, shaclData['@type'])) {
+      console.log('validateShaclDataWithSchema - report', report)
+
+      if (report.conforms) {
         // const metadataContent = await getMetadataJsonFromByteArray(byteArray)
         const metadataBuffer = createMetadataBuffer({ name: shaclData.name[0] })
         const upload = writeStreamToS3({
@@ -80,6 +97,8 @@ export const main: S3Handler = async event => {
         })
 
         await upload.done()
+      } else {
+        await deleteObjectFromS3({ Bucket, Key })
       }
     }
   } catch (e) {

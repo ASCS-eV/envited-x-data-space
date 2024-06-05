@@ -88,6 +88,7 @@ export default function Envited({ stack }: StackContext) {
         function: {
           handler: 'common/aws/validateAndExtractMetadata/index.main',
           environment: {
+            RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
             NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
           },
           permissions: [metadataBucket],

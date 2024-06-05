@@ -5,6 +5,7 @@ import fs from 'fs'
 import { isNil } from 'ramda'
 
 import { extractFileFromZipByteArray, read } from '../../archive'
+import { db } from '../../database/queries'
 import { validateShaclDataWithSchema } from '../../validator'
 import { SCHEMA_MAP } from '../../validator/shacl/shacl.constants'
 import { Schemas } from '../../validator/shacl/shacl.types'
@@ -102,6 +103,10 @@ export const main: S3Handler = async event => {
         })
 
         await upload.done()
+
+        const connection = await db()
+        const profiles = await connection.getPublishedProfiles()
+        console.log('********** profiles **********', profiles)
       } else {
         await deleteObjectFromS3({ Bucket, Key })
       }

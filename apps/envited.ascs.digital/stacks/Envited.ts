@@ -97,6 +97,7 @@ export default function Envited({ stack }: StackContext) {
           permissions: [metadataBucket],
           copyFiles: [{ from: 'common/aws/validateAndExtractMetadata/schemas' }],
           securityGroups: [sg],
+          vpc,
         },
         events: ['object_created'],
       },

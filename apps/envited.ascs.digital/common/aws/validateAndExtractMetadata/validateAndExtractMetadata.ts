@@ -81,14 +81,9 @@ export const main: S3Handler = async event => {
       const byteArray = await Body.transformToByteArray()
       const data = await getFileFromByteArray(byteArray, 'data.jsonld')
 
-      console.log('******* dirname *****', __dirname)
-      console.log('******* process *****', process.env.LAMBDA_TASK_ROOT)
-
       const shaclData = JSON.parse(data)
       const type = shaclData['@type'] as Schemas
-      const schema = fs.createReadStream(
-        `${process.env.LAMBDA_TASK_ROOT}/common/aws/validateAndExtractMetadata/schemas/${SCHEMA_MAP[type]}`,
-      )
+      const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP[type]}`) //process.env.LAMBDA_TASK_ROOT
 
       const report = await validateShaclDataWithSchema(data, schema)
 

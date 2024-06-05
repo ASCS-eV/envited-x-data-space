@@ -14,6 +14,8 @@ export default function Envited({ stack }: StackContext) {
   })
   sg.addIngressRule(aws_ec2.Peer.anyIpv4(), aws_ec2.Port.tcp(5432))
 
+  const databaseName = 'envited'
+
   const rdsCluster = new aws_rds.DatabaseCluster(stack, 'Envited', {
     engine: aws_rds.DatabaseClusterEngine.auroraPostgres({
       version: aws_rds.AuroraPostgresEngineVersion.VER_15_3,
@@ -24,7 +26,7 @@ export default function Envited({ stack }: StackContext) {
       securityGroups: [sg],
       instanceType: 'serverless' as any,
     },
-    defaultDatabaseName: 'envited',
+    defaultDatabaseName: databaseName,
   })
 
   ;(rdsCluster.node.findChild('Resource') as aws_rds.CfnDBCluster).serverlessV2ScalingConfiguration = {
@@ -88,11 +90,13 @@ export default function Envited({ stack }: StackContext) {
         function: {
           handler: 'common/aws/validateAndExtractMetadata/index.main',
           environment: {
+            DB_NAME: databaseName,
             RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
             NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
           },
           permissions: [metadataBucket],
           copyFiles: [{ from: 'common/aws/validateAndExtractMetadata/schemas' }],
+          securityGroups: [sg],
         },
         events: ['object_created'],
       },

@@ -94,7 +94,7 @@ export default function Envited({ stack }: StackContext) {
             RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
             NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
           },
-          permissions: [metadataBucket],
+          permissions: [metadataBucket, 'secretsmanager:GetSecretValue'],
           copyFiles: [{ from: 'common/aws/validateAndExtractMetadata/schemas' }],
           securityGroups: [sg],
           vpc,

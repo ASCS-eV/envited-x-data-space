@@ -110,3 +110,32 @@ export const main: S3Handler = async event => {
     console.log(e)
   }
 }
+
+/*
+const connectToDb = async () => {
+  try {
+    const host = process.env.DB_ENDPOINT_ADDRESS || ''
+    console.log(`host:${host}`)
+    const database = process.env.DB_NAME || ''
+    const dbSecretArn = process.env.DB_SECRET_ARN || ''
+    const secretManager = new SecretsManager({
+      region: 'us-east-1',
+    })
+    const secretParams: SecretsManager.GetSecretValueRequest = {
+      SecretId: dbSecretArn,
+    }
+    const dbSecret = await secretManager.getSecretValue(secretParams).promise()
+    const secretString = dbSecret.SecretString || ''
+
+    if (!secretString) {
+      throw new Error('secret string is empty')
+    }
+
+    const secrets = JSON.parse(secretString)
+    console.log('********* Secrets *********', secrets)
+
+  } catch (err) {
+    console.log('error while trying to connect to db');
+  }
+}
+*/

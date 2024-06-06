@@ -1,6 +1,6 @@
 import { Entry } from '@zip.js/zip.js'
 
-import { extractFromZipFile, readContentFromJsonFile } from '../../archive'
+import { extractFromFile, readContentFromJsonFile } from '../../archive'
 import { ERRORS } from '../../constants'
 import { assetSchema } from './json.schema'
 
@@ -25,6 +25,6 @@ export const _getMetadataJsonFromZip =
   async (asset: File) =>
     extract(asset, 'metadata.json').then(readContentFromJsonFile)
 
-export const getMetadataJsonFromZip = _getMetadataJsonFromZip({ extract: extractFromZipFile })
+export const getMetadataJsonFromZip = _getMetadataJsonFromZip({ extract: extractFromFile })
 
 export const validateJSONFile = _validateJSONFile(getMetadataJsonFromZip)

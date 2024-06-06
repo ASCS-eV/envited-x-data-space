@@ -33,4 +33,36 @@ describe('common/validator/shacl', () => {
       })
     })
   })
+
+  describe('_validateShaclDataWithSchema', () => {
+    it('Should return a valid result', async () => {
+      // when ... we want to validate a asset file on a NodeJS server
+      const data = 'DATA'
+      const schema = 'SCHEMA'
+
+      const parseStreamToDatasetStub = jest.fn().mockResolvedValue('SHACL_QUADS')
+      const loadDatasetStub = jest.fn().mockResolvedValueOnce('DATA_QUADS')
+      const validateShaclDataStub = jest.fn().mockReturnValue({
+        conforms: true,
+        dataset: {},
+      })
+      const validateShaclSchemaStub = jest.fn().mockReturnValue(validateShaclDataStub)
+
+      // then ... we should get a valid response
+      const result = await SUT._validateShaclDataWithSchema({
+        parseStreamToDataset: parseStreamToDatasetStub,
+        loadDataset: loadDatasetStub,
+        validateShacl: validateShaclSchemaStub,
+      })(data as any, schema as any)
+
+      expect(parseStreamToDatasetStub).toHaveBeenCalledWith('SCHEMA', 'text/turtle')
+      expect(loadDatasetStub).toHaveBeenCalledWith('DATA', 'application/ld+json')
+      expect(validateShaclSchemaStub).toHaveBeenCalledWith('SHACL_QUADS')
+      expect(validateShaclDataStub).toHaveBeenCalledWith('DATA_QUADS')
+      expect(result).toEqual({
+        conforms: true,
+        dataset: {},
+      })
+    })
+  })
 })

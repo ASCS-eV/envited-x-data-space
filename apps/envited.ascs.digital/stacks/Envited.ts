@@ -84,7 +84,7 @@ export default function Envited({ stack }: StackContext) {
 
   const assetsBucket = new Bucket(stack, 'assets', {
     notifications: {
-      validateAndExtractMetadata: {
+      processAssetUpload: {
         function: {
           handler: 'common/aws/handlers/processAssetUpload/index.main',
           environment: {

@@ -1,6 +1,6 @@
-import * as SUT from './validateAndExtractMetadata'
+import * as SUT from './processAssetUpload'
 
-describe('common/aws/validateAndExtractMetadata', () => {
+describe('common/aws/handlers/processAssetUpload', () => {
   describe('_main', () => {
     it('should extract and write metadata to a bucket', async () => {
       // when ... we want extract data from a asset and upload to a different bucket
@@ -12,11 +12,9 @@ describe('common/aws/validateAndExtractMetadata', () => {
           transformToByteArray: transformToByteArrayStub,
         },
       }) as any
-      const getFileFromByteArrayStub = jest
+      const validateShaclDataWithSchemaStub = jest
         .fn()
-        .mockResolvedValue(JSON.stringify({ '@type': 'Person', 'name': ['NAME'] })) as any
-      const validateShaclDataWithSchemaStub = jest.fn().mockResolvedValue({ conforms: true }) as any
-      const createMetadataBufferStub = jest.fn().mockReturnValue('METADATA_BUFFER') as any
+        .mockResolvedValue({ report: { conforms: true }, metadata: 'METADATA_BUFFER' }) as any
       const writeStreamToS3Stub = jest.fn().mockReturnValue({
         done: uploadStub,
       }) as any
@@ -41,18 +39,15 @@ describe('common/aws/validateAndExtractMetadata', () => {
 
       const result = await SUT._main({
         readStreamFromS3: readStreamFromS3Stub,
-        getFileFromByteArray: getFileFromByteArrayStub,
-        validateShaclDataWithSchema: validateShaclDataWithSchemaStub,
-        createMetadataBuffer: createMetadataBufferStub,
+        validateAndCreateMetadata: validateShaclDataWithSchemaStub,
         writeStreamToS3: writeStreamToS3Stub,
         deleteObjectFromS3: deleteObjectFromS3Stub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
       expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
-      expect(getFileFromByteArrayStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'data.jsonld')
+      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'data.jsonld')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
-      expect(createMetadataBufferStub).toHaveBeenCalledWith({ name: 'NAME' })
       expect(writeStreamToS3Stub).toHaveBeenCalledWith({
         Body: 'METADATA_BUFFER',
         Bucket: undefined,

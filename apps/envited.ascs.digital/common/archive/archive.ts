@@ -7,22 +7,18 @@ import { BlobTypes } from './types'
 export const _extract =
   ({ ZipReader }: { ZipReader: any }) =>
   async (readable: BlobReader, filename: string) => {
-    try {
-      const reader = new ZipReader(readable)
+    const reader = new ZipReader(readable)
 
-      return reader
-        .getEntries()
-        .then((entries: Entry[]) => {
-          if (entries.length === 0) {
-            return []
-          }
-          return find(propEq(filename, 'filename'))(entries)
-        })
-        .catch(() => undefined)
-        .finally(() => reader.close())
-    } catch (error) {
-      return undefined
-    }
+    return reader
+      .getEntries()
+      .then((entries: Entry[]) => {
+        if (entries.length === 0) {
+          return []
+        }
+        return find(propEq(filename, 'filename'))(entries)
+      })
+      .catch(() => undefined)
+      .finally(() => reader.close())
   }
 
 export const extract = _extract({ ZipReader })

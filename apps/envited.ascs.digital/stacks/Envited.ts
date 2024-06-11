@@ -86,13 +86,13 @@ export default function Envited({ stack }: StackContext) {
     notifications: {
       validateAndExtractMetadata: {
         function: {
-          handler: 'common/aws/validateAndExtractMetadata/index.main',
+          handler: 'common/aws/handlers/processAssetUpload/index.main',
           environment: {
             RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
             NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
           },
           permissions: [metadataBucket, 'secretsmanager:GetSecretValue'],
-          copyFiles: [{ from: 'common/aws/validateAndExtractMetadata/schemas' }],
+          copyFiles: [{ from: 'common/aws/handlers/processAssetUpload/schemas' }],
           securityGroups: [sg],
           vpc,
         },

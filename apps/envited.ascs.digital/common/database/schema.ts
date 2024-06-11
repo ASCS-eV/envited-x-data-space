@@ -176,16 +176,16 @@ export const profilesToBusinessCategoriesRelations = relations(profilesToBusines
 }))
 
 export const asset = pgTable('asset', {
-  id: text('id').unique().primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
   metadata: jsonb('metadata'),
-  status: text('status'),
+  status: text('status', { enum: ['processing', 'done', 'invalid'] }),
 })
 
 export const profilesToAssets = pgTable('profilesToAssets', {
   profileId: uuid('profile_id')
     .references(() => profile.id)
     .notNull(),
-  assetId: text('asset_id')
+  assetId: uuid('asset_id')
     .references(() => asset.id)
     .notNull(),
 })

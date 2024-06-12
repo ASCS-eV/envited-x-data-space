@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm'
 
+import { AssetStatus } from '../../types'
 import { asset, profile } from '../schema'
 import { DatabaseConnection } from '../types'
-import { AssetStatus } from '../../types'
 
 export const getAssetsByProfileSlug = (db: DatabaseConnection) => async (slug: string) =>
   db.query.profile.findMany({

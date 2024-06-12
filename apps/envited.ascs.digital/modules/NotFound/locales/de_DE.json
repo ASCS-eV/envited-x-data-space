@@ -1,5 +1,6 @@
 {
-  "[Heading] error": "Error",
+  "[Heading] 404": "404",
+  "[Heading] page not found": "Page not found",
   "[Description] something went wrong": "Ah oh, Something went wrong!",
   "[Button] home": "Go back to Home"
 }

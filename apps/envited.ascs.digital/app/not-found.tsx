@@ -1,5 +1,5 @@
-import { Error } from '../modules/Error'
+import { NotFound } from '../modules/NotFound'
 
-export default function NotFound() {
-  return <Error />
+export default function Index() {
+  return <NotFound />
 }

@@ -14,11 +14,12 @@ describe('common/aws/handlers/processAssetUpload', () => {
       }) as any
       const validateShaclDataWithSchemaStub = jest
         .fn()
-        .mockResolvedValue({ report: { conforms: true }, metadata: 'METADATA_BUFFER' }) as any
+        .mockResolvedValue({ report: { conforms: true }, metadata: 'METADATA' }) as any
       const writeStreamToS3Stub = jest.fn().mockReturnValue({
         done: uploadStub,
       }) as any
       const deleteObjectFromS3Stub = jest.fn().mockReturnValue('SHACL_DATA') as any
+      const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
 
       const event = {
         Records: [
@@ -39,9 +40,10 @@ describe('common/aws/handlers/processAssetUpload', () => {
 
       const result = await SUT._main({
         readStreamFromS3: readStreamFromS3Stub,
-        validateAndCreateMetadata: validateShaclDataWithSchemaStub,
         writeStreamToS3: writeStreamToS3Stub,
         deleteObjectFromS3: deleteObjectFromS3Stub,
+        validateAndCreateMetadata: validateShaclDataWithSchemaStub,
+        updateAssetStatus: updateAssetStatusStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
@@ -49,7 +51,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'data.jsonld')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
       expect(writeStreamToS3Stub).toHaveBeenCalledWith({
-        Body: 'METADATA_BUFFER',
+        Body: Buffer.from('METADATA'),
         Bucket: undefined,
         ContentEncoding: 'base64',
         ContentType: 'application/json',

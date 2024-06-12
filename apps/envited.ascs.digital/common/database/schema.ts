@@ -140,7 +140,7 @@ export const profile = pgTable('profile', {
 
 export const profileRelations = relations(profile, ({ many }) => ({
   businessCategories: many(profilesToBusinessCategories),
-  assets: many(profilesToAssets),
+  assets: many(asset),
 }))
 
 export const businessCategory = pgTable('businessCategory', {
@@ -178,25 +178,8 @@ export const profilesToBusinessCategoriesRelations = relations(profilesToBusines
 export const asset = pgTable('asset', {
   id: uuid('id').defaultRandom().primaryKey(),
   metadata: jsonb('metadata'),
-  status: text('status', { enum: ['processing', 'done', 'invalid'] }),
-})
-
-export const profilesToAssets = pgTable('profilesToAssets', {
+  status: text('status', { enum: ['processing', 'not_accepted', 'pending', 'completed'] }),
   profileId: uuid('profile_id')
     .references(() => profile.id)
     .notNull(),
-  assetId: uuid('asset_id')
-    .references(() => asset.id)
-    .notNull(),
 })
-
-export const profilesToAssetsRelations = relations(profilesToAssets, ({ one }) => ({
-  asset: one(asset, {
-    fields: [profilesToAssets.assetId],
-    references: [asset.id],
-  }),
-  profile: one(profile, {
-    fields: [profilesToAssets.profileId],
-    references: [profile.id],
-  }),
-}))

@@ -10,6 +10,13 @@ export interface TranslationsMap {
   [Language.nl]: { [key: string]: { [key: string]: string } }
 }
 
+export enum AssetStatus {
+  processing = 'processing',
+  not_accepted = 'not_accepted',
+  pending = 'pending',
+  completed = 'completed',
+}
+
 export enum Columns {
   two = 'two',
   three = 'three',

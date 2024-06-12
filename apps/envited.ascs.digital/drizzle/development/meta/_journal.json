@@ -78,6 +78,13 @@
       "when": 1709215773695,
       "tag": "0010_third_fallen_one",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1718194016270,
+      "tag": "0011_fair_lord_hawal",
+      "breakpoints": true
     }
   ]
 }

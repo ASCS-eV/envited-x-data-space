@@ -173,3 +173,13 @@ export const profilesToBusinessCategoriesRelations = relations(profilesToBusines
     references: [profile.id],
   }),
 }))
+
+export const asset = pgTable('asset', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  cid: text('cid'),
+  metadata: jsonb('metadata'),
+  status: text('status', { enum: ['processing', 'not_accepted', 'pending', 'completed'] }),
+  userId: text('user_id')
+    .references(() => user.id)
+    .notNull(),
+})

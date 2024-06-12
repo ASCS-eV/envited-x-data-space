@@ -10,6 +10,13 @@ export interface TranslationsMap {
   [Language.nl]: { [key: string]: { [key: string]: string } }
 }
 
+export enum AssetStatus {
+  processing = 'processing',
+  not_accepted = 'not_accepted',
+  pending = 'pending',
+  completed = 'completed',
+}
+
 export enum Columns {
   two = 'two',
   three = 'three',
@@ -56,6 +63,14 @@ export enum Role {
 export enum CredentialType {
   AscsMember = 'AscsMember',
   AscsUser = 'AscsUser',
+}
+
+export interface Asset {
+  id: string
+  cid: string
+  metadata: string
+  status: AssetStatus
+  userId: string
 }
 
 export interface User {

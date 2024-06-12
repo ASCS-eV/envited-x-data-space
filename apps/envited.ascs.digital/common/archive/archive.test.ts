@@ -12,17 +12,12 @@ describe('common/archive', () => {
         getEntries: getEntriesStub,
         close: closeStub,
       }))
-      const blobReaderStub = jest.fn()
 
-      const result = await SUT._extract({ ZipReader: zipReaderStub, BlobReader: blobReaderStub })(
-        '' as any,
-        'FILENAME.EXT',
-      )
+      const result = await SUT._extract({ ZipReader: zipReaderStub })('' as any, 'FILENAME.EXT')
       expect(result).toEqual({ filename: 'FILENAME.EXT' })
       expect(closeStub).toHaveBeenCalledWith()
       expect(getEntriesStub).toHaveBeenCalledWith()
-      expect(blobReaderStub).toHaveBeenCalledWith('')
-      expect(zipReaderStub).toHaveBeenCalledWith(new blobReaderStub(''))
+      expect(zipReaderStub).toHaveBeenCalledWith('')
     })
 
     it('Should return undefined when file does not exist', async () => {
@@ -35,12 +30,8 @@ describe('common/archive', () => {
         getEntries: getEntriesStub,
         close: closeStub,
       }))
-      const blobReaderStub = jest.fn()
 
-      const result = await SUT._extract({ ZipReader: zipReaderStub, BlobReader: blobReaderStub })(
-        '' as any,
-        'NON_EXISTING_FILENAME.EXT',
-      )
+      const result = await SUT._extract({ ZipReader: zipReaderStub })('' as any, 'NON_EXISTING_FILENAME.EXT')
       expect(result).toEqual(undefined)
     })
 
@@ -54,12 +45,8 @@ describe('common/archive', () => {
         getEntries: getEntriesStub,
         close: closeStub,
       }))
-      const blobReaderStub = jest.fn()
 
-      const result = await SUT._extract({ ZipReader: zipReaderStub, BlobReader: blobReaderStub })(
-        '' as any,
-        'FILENAME.EXT',
-      )
+      const result = await SUT._extract({ ZipReader: zipReaderStub })('' as any, 'FILENAME.EXT')
       expect(result).toEqual(undefined)
     })
   })

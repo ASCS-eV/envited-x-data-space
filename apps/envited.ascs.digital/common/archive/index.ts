@@ -1,1 +1,1 @@
-export { extract, read } from './archive'
+export { extract, extractFromFile, extractFromByteArray, read, readContentFromJsonFile } from './archive'

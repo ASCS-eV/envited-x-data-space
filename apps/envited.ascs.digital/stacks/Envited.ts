@@ -72,7 +72,7 @@ export default function Envited({ stack }: StackContext) {
     ],
   })
 
-  const assetsBucket = new Bucket(stack, 'assets', {
+  const metadataBucket = new Bucket(stack, 'metadata', {
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
@@ -80,6 +80,34 @@ export default function Envited({ stack }: StackContext) {
     },
     cors: [s3CorsRule],
   })
+  metadataBucket.cdk.bucket.grantRead(oai)
+
+  const assetsBucket = new Bucket(stack, 'assets', {
+    notifications: {
+      processAssetUpload: {
+        function: {
+          handler: 'common/aws/handlers/processAssetUpload/index.main',
+          environment: {
+            RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
+            NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
+          },
+          permissions: [metadataBucket, 'secretsmanager:GetSecretValue'],
+          copyFiles: [{ from: 'common/aws/handlers/processAssetUpload/schemas' }],
+          securityGroups: [sg],
+          vpc,
+        },
+        events: ['object_created'],
+      },
+    },
+    cdk: {
+      bucket: {
+        accessControl: aws_s3.BucketAccessControl.PRIVATE,
+      },
+    },
+    cors: [s3CorsRule],
+  })
+  assetsBucket.attachPermissions([assetsBucket, metadataBucket])
+  metadataBucket.attachPermissions([metadataBucket, assetsBucket])
   assetsBucket.cdk.bucket.grantRead(oai)
 
   const assetsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'assetsDistribution', {
@@ -87,6 +115,21 @@ export default function Envited({ stack }: StackContext) {
       {
         s3OriginSource: {
           s3BucketSource: assetsBucket.cdk.bucket,
+          originAccessIdentity: oai,
+        },
+        behaviors: [
+          { isDefaultBehavior: true },
+          { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
+        ],
+      },
+    ],
+  })
+
+  const metadataDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'metadataDistribution', {
+    originConfigs: [
+      {
+        s3OriginSource: {
+          s3BucketSource: metadataBucket.cdk.bucket,
           originAccessIdentity: oai,
         },
         behaviors: [
@@ -131,5 +174,7 @@ export default function Envited({ stack }: StackContext) {
     UploadsDistributionId: uploadsDistribution.distributionId,
     AssetsDistribution: assetsDistribution.distributionDomainName,
     AssetsDistributionId: assetsDistribution.distributionId,
+    MetadataDistribution: metadataDistribution.distributionDomainName,
+    MetadataDistributionId: metadataDistribution.distributionId,
   })
 }

@@ -1,1 +1,1 @@
-export { validateShaclFile } from './shacl'
+export { validateShaclFile, validateShaclDataWithSchema } from './shacl'

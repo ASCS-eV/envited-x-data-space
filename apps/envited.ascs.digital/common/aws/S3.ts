@@ -1,4 +1,11 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  PutObjectCommandInput,
+  S3Client,
+} from '@aws-sdk/client-s3'
+import { Upload } from '@aws-sdk/lib-storage'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import type { getSignedUrl as TgetSignedUrl } from '@aws-sdk/s3-request-presigner'
 
@@ -50,7 +57,7 @@ export const _getAssetUploadUrl =
   async (pkh: string, slug: string, filename: string) => {
     const command = new putObjectCommand({
       ACL: 'private',
-      Key: `${pkh}/${slug}-${randomString}.${filename.split('.').pop()}`,
+      Key: `${slug}-${randomString}.${filename.split('.').pop()}`,
       Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME,
     })
 
@@ -58,3 +65,36 @@ export const _getAssetUploadUrl =
   }
 
 export const getAssetUploadUrl = _getAssetUploadUrl({ getSignedUrl, s3Client, putObjectCommand, randomString })
+
+export const readStreamFromS3 = async ({ Bucket, Key }: { Bucket: string; Key: string }) => {
+  try {
+    const commandPullObject = new GetObjectCommand({
+      Bucket,
+      Key,
+    })
+
+    return s3Client.send(commandPullObject)
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}
+
+export const writeStreamToS3 = (params: PutObjectCommandInput) =>
+  new Upload({
+    client: s3Client,
+    params,
+  })
+
+export const deleteObjectFromS3 = async ({ Bucket, Key }: { Bucket: string; Key: string }) => {
+  try {
+    const deleteCommand = new DeleteObjectCommand({
+      Bucket,
+      Key,
+    })
+
+    return s3Client.send(deleteCommand)
+  } catch (err) {
+    console.error(err)
+  }
+}

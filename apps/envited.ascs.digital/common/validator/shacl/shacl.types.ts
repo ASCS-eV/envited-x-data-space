@@ -5,4 +5,5 @@ export enum ContentTypes {
 
 export enum Schemas {
   default = 'default',
+  person = 'Person',
 }

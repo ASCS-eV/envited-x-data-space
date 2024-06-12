@@ -1,11 +1,13 @@
 import { compose, mergeDeepRight, pathOr, propOr, reduce } from 'ramda'
 
 import { AddAssetsTranslation } from '../../modules/AddAssets'
+import { ErrorTranslation } from '../../modules/Error'
 import { FooterTranslation } from '../../modules/Footer'
 import { HeaderTranslation } from '../../modules/Header'
 import { HeroHeaderTranslation } from '../../modules/HeroHeader'
 import { ReinventingMobilityTranslation, SimulationDataTranslation, VisionTranslation } from '../../modules/LandingPage'
 import { MemberTranslation } from '../../modules/Member'
+import { NotFoundTranslation } from '../../modules/NotFound'
 import { ProfileTranslation } from '../../modules/Profile'
 import { UploadedAssetsTranslation } from '../../modules/UploadedAssets'
 import { UsersTranslation } from '../../modules/Users'
@@ -16,10 +18,12 @@ const getTranslationsForLanguage = (namespace: string) => (locale: Locale) => pa
 const mergeTranslations = reduce(mergeDeepRight, { [Locale.en_GB]: {}, [Locale.de_DE]: {} })
 const translationObject = mergeTranslations([
   AddAssetsTranslation,
+  ErrorTranslation,
   FooterTranslation,
   HeaderTranslation,
   HeroHeaderTranslation,
   MemberTranslation,
+  NotFoundTranslation,
   ProfileTranslation,
   UploadedAssetsTranslation,
   UsersTranslation,

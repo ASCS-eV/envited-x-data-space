@@ -7,6 +7,7 @@ import { getServerSession } from '../../common/auth'
 import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
+import { insertAsset } from '../../common/serverActions'
 import { badRequestError, formatError, internalServerErrorError, slugify, unauthorizedError } from '../../common/utils'
 
 export async function addAssetsForm(formData: FormData) {
@@ -38,6 +39,8 @@ export async function addAssetsForm(formData: FormData) {
           'Content-Disposition': `attachment; filename="${asset.name}"`,
         },
       })
+
+      await insertAsset(session.user.id, asset.name)
 
       return uploadResult
     })

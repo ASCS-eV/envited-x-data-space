@@ -10,15 +10,13 @@ export const getFileFromByteArray = async (byteArray: Uint8Array, filename: stri
   extractFromByteArray(byteArray, filename).then(read)
 
 export const createMetadataBuffer = ({ name }: { name: string }) =>
-  Buffer.from(
-    JSON.stringify({
-      name,
-      symbol: 'ENVITED',
-      decimals: 2,
-      shouldPreferSymbol: true,
-      thumbnailUri: 'THUMBNAIL_URI',
-    }),
-  )
+  JSON.stringify({
+    name,
+    symbol: 'ENVITED',
+    decimals: 2,
+    shouldPreferSymbol: true,
+    thumbnailUri: 'THUMBNAIL_URI',
+  })
 
 export const _getShaclSchemaAndValidate =
   ({
@@ -69,7 +67,7 @@ export const _validateAndCreateMetadata =
     createMetadataBuffer,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array, filename: string) => Promise<any>
-    createMetadataBuffer: ({ name }: { name: string }) => Buffer
+    createMetadataBuffer: ({ name }: { name: string }) => string
   }) =>
   async (byteArray: Uint8Array, filename: string) => {
     try {

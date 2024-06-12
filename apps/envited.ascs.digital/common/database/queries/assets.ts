@@ -1,36 +1,31 @@
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 
-import { AssetStatus } from '../../types'
-import { asset, profile } from '../schema'
+import { Asset, AssetStatus } from '../../types'
+import { asset } from '../schema'
 import { DatabaseConnection } from '../types'
 
-export const getAssetsByProfileSlug = (db: DatabaseConnection) => async (slug: string) =>
-  db.query.profile.findMany({
-    where: eq(profile.slug, slug),
-    with: {
-      assets: true,
-    },
-  })
+export const getAssetsByUserId = (db: DatabaseConnection) => async (userId: string) =>
+  db.select().from(asset).where(eq(asset.userId, userId))
 
 export const getAsset = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(asset).where(eq(asset.id, id))
 
-export const insertAsset = (db: DatabaseConnection) => async (profileId: string) =>
+export const insertAsset = (db: DatabaseConnection) => async (userId: string, cid: string) =>
   db
     .insert(asset)
     .values({
+      cid,
       metadata: '',
-      status: 'processing',
-      profileId,
+      status: AssetStatus.processing,
+      userId,
     })
     .returning()
 
-export const updateAsset = (db: DatabaseConnection) => async (id: string, metadata: string, status: AssetStatus) =>
+export const updateAsset = (db: DatabaseConnection) => async (userId: string, cid: string, data: Asset) =>
   db
     .update(asset)
     .set({
-      metadata,
-      status,
+      ...data,
     })
-    .where(eq(asset.id, id))
+    .where(and(eq(asset.cid, cid), eq(asset.userId, userId)))
     .returning()

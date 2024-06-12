@@ -5,11 +5,6 @@ import * as schema from './schema'
 
 export type DatabaseConnection = PostgresJsDatabase<typeof schema>
 export type Database = () => Promise<{ [x: string]: any }>
-export interface Asset {
-  id: string
-  metadata: string
-  status: string
-}
 
 export interface Issuer {
   id: string

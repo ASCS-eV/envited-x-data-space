@@ -65,6 +65,14 @@ export enum CredentialType {
   AscsUser = 'AscsUser',
 }
 
+export interface Asset {
+  id: string
+  cid: string
+  metadata: string
+  status: AssetStatus
+  userId: string
+}
+
 export interface User {
   id: string
   issuerId: string

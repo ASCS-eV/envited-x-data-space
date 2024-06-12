@@ -4,7 +4,7 @@ import { fromPairs, map, pipe, toPairs } from 'ramda'
 
 import { connectDb } from '../database'
 import * as schema from '../schema'
-import { getAsset, getAssetsByProfileSlug, insertAsset, updateAsset } from './assets'
+import { getAsset, getAssetsByUserId, insertAsset, updateAsset } from './assets'
 import {
   deleteBusinessCategoriesByProfileId,
   getBusinessCategories,
@@ -39,7 +39,7 @@ const queries = {
   getPublishedProfiles,
   getUserByIssuerId,
   getAsset,
-  getAssetsByProfileSlug,
+  getAssetsByUserId,
   insertAsset,
   updateAsset,
 }

@@ -8,7 +8,7 @@ export const updateAssetStatus = async (cid: string, status: AssetStatus, metada
   try {
     const connection = await db()
     const assets = await connection.getAssets()
-    const asset = await connection.getAssetByCID(cid)
+    const [asset] = await connection.getAssetByCID(cid)
 
     console.log('********* updateAssetStatus - assets', assets)
     console.log('********* updateAssetStatus - cid', cid)

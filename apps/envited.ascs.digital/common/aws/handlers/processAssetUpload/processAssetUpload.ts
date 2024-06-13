@@ -69,7 +69,7 @@ export const _main =
       })
 
       await upload.done()
-      const result = await updateAssetStatus(Key, AssetStatus.not_accepted, metadata)
+      const result = await updateAssetStatus(Key, AssetStatus.pending, metadata)
       console.log('******** UPDATE ASSET STATUS', result)
     } catch (err) {
       console.log(err)

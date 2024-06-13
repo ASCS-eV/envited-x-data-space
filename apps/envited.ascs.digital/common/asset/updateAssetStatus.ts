@@ -7,8 +7,10 @@ import { notFoundError } from '../utils'
 export const updateAssetStatus = async (cid: string, status: AssetStatus, metadata: string = '') => {
   try {
     const connection = await db()
+    const assets = await connection.getAssets()
     const asset = await connection.getAssetByCID(cid)
 
+    console.log('********* updateAssetStatus - assets', assets)
     console.log('********* updateAssetStatus - cid', cid)
     console.log('********* updateAssetStatus - asset', asset)
     console.log('********* updateAssetStatus - status', status)

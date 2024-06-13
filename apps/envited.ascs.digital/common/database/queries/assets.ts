@@ -11,6 +11,9 @@ export const getAssetsByUserId = (db: DatabaseConnection) => async (userId: stri
 export const getAsset = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(asset).where(eq(asset.id, id))
 
+export const getAssets = (db: DatabaseConnection) => async () =>
+  db.select().from(asset)
+
 export const getAssetByCID = (db: DatabaseConnection) => async (cid: string) =>
   db.select().from(asset).where(eq(asset.cid, cid))
 

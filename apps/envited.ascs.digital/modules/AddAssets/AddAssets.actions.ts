@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { isNil } from 'ramda'
 
 import { getServerSession } from '../../common/auth'
-import { getAssetUploadUrl } from '../../common/aws'
+import { getAssetUploadUrl, getUniqueFilename } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
 import { insertAsset } from '../../common/serverActions'
@@ -29,18 +29,19 @@ export async function addAssetsForm(formData: FormData) {
 
     const result = assets.map(async (asset: File) => {
       const arrayBuffer = Buffer.from(await asset.arrayBuffer())
-      const signedUrl = await getAssetUploadUrl(session?.user?.pkh, slugify(asset.name), asset.name)
+      const uniqueFilename = getUniqueFilename(slugify(asset.name), asset.name)
+      const signedUrl = await getAssetUploadUrl(uniqueFilename)
 
       const uploadResult = await fetch(signedUrl, {
         body: arrayBuffer,
         method: 'PUT',
         headers: {
           'Content-Type': asset.type,
-          'Content-Disposition': `attachment; filename="${asset.name}"`,
+          'Content-Disposition': `attachment; filename="${uniqueFilename}"`,
         },
       })
 
-      await insertAsset(session.user.id, asset.name)
+      await insertAsset(session.user.id, uniqueFilename)
 
       return uploadResult
     })

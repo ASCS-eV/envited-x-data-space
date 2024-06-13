@@ -9,6 +9,11 @@ export const updateAssetStatus = async (cid: string, status: AssetStatus, metada
     const connection = await db()
     const asset = await connection.getAssetByCID(cid)
 
+    console.log('********* updateAssetStatus - cid', cid)
+    console.log('********* updateAssetStatus - asset', asset)
+    console.log('********* updateAssetStatus - status', status)
+    console.log('********* updateAssetStatus - metadata', metadata)
+
     if (isNil(asset) || isEmpty(asset)) {
       throw notFoundError({ resource: 'updateAssetStatus', resourceId: cid })
     }

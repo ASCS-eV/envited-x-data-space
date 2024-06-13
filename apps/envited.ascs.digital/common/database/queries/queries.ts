@@ -4,7 +4,7 @@ import { fromPairs, map, pipe, toPairs } from 'ramda'
 
 import { connectDb } from '../database'
 import * as schema from '../schema'
-import { getAsset, getAssets, getAssetByCID, getAssetsByUserId, insertAsset, updateAsset } from './assets'
+import { getAsset, getAssetByCID, getAssets, getAssetsByUserId, insertAsset, updateAsset } from './assets'
 import {
   deleteBusinessCategoriesByProfileId,
   getBusinessCategories,

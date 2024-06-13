@@ -90,3 +90,25 @@ export const _getAssetsByUserId =
   }
 
 export const getAssetsByUserId = _getAssetsByUserId({ db, getServerSession, log })
+
+export const _getAssets =
+  ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
+  async () => {
+    try {
+      const session = await getServerSession()
+
+      if (isNil(session)) {
+        throw unauthorizedError({ resource: 'assets' })
+      }
+
+      const connection = await db()
+      const assets = await connection.getAssetsByUserId(session.user.id)
+
+      return assets
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const getAssets = _getAssets({ db, getServerSession, log })

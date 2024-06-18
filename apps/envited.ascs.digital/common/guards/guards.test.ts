@@ -83,7 +83,7 @@ describe('common/guards', () => {
 
   describe('isOwnAsset', () => {
     it('should check if the profile to be updated is the profile of the logged in user', () => {
-      // when ... we want to check if the profile is owned by the logged in user
+      // when ... we want to check if the asset is owned by the logged in user
       const asset = {
         id: 'ASSET_ID',
         cid: 'ASSET_CID',

@@ -6,7 +6,7 @@ describe('common/asset/updateAssetStatus', () => {
   describe('updateAssetStatus', () => {
     it('should get the asset as expected', async () => {
       // when ... we want to get the asset by id
-      // then ... it should get the profile as expected
+      // then ... it should update the asset as expected
       const dbStub = jest.fn().mockResolvedValue({
         getAssetByCID: jest.fn().mockResolvedValue([
           {

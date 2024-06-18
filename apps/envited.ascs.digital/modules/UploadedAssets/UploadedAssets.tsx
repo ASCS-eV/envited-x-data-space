@@ -30,12 +30,6 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
               >
                 {t('[Label] type')}
               </th>
-              <th
-                scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
-              >
-                {t('[Label] status')}
-              </th>
               <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                 <span className="sr-only">{t('[Label] select')}</span>
               </th>
@@ -69,25 +63,14 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                   </td>
                   <td
                     className={`${
-                      equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
-                    } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
-                  >
-                    {equals(asset.status)(AssetStatus.processing) ? (
-                      <div className="inline-flex gap-x-2">
-                        <LoadingIndicator />
-                        <p className="text-xs">Processing...</p>
-                      </div>
-                    ) : (
-                      asset.status
-                    )}
-                  </td>
-                  <td
-                    className={`${
                       equals(assetIdx)(0) ? '' : 'border-t border-transparent'
                     } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
                   >
                     {equals(asset.status)(AssetStatus.processing) ? (
-                      <></>
+                      <div className="inline-flex gap-x-2 text-sm text-gray-500">
+                        <LoadingIndicator />
+                        <p className="text-xs">Processing...</p>
+                      </div>
                     ) : (
                       <>
                         <button

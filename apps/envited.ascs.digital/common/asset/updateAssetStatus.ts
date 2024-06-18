@@ -1,28 +1,29 @@
 import { isEmpty, isNil } from 'ramda'
 
 import { db } from '../database/queries'
+import { Database } from '../database/types'
+import { Log, log } from '../logger'
 import { AssetStatus } from '../types'
-import { notFoundError } from '../utils'
+import { formatError, internalServerErrorError, notFoundError } from '../utils'
 
-export const updateAssetStatus = async (cid: string, status: AssetStatus, metadata: string = '') => {
-  try {
-    const connection = await db()
-    const [asset] = await connection.getAssetByCID(cid)
+export const _updateAssetStatus =
+  ({ db, log }: { db: Database; log: Log }) =>
+  async (cid: string, status: AssetStatus, metadata: string = '') => {
+    try {
+      const connection = await db()
+      const [asset] = await connection.getAssetByCID(cid)
 
-    console.log('********* updateAssetStatus - cid', cid)
-    console.log('********* updateAssetStatus - asset', asset)
-    console.log('********* updateAssetStatus - status', status)
-    console.log('********* updateAssetStatus - metadata', metadata)
+      if (isNil(asset) || isEmpty(asset)) {
+        throw notFoundError({ resource: 'updateAssetStatus', resourceId: cid })
+      }
 
-    if (isNil(asset) || isEmpty(asset)) {
-      throw notFoundError({ resource: 'updateAssetStatus', resourceId: cid })
+      const [result] = await connection.updateAsset({ ...asset, metadata, status })
+
+      return result
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
     }
-
-    const [result] = await connection.updateAsset({ ...asset, metadata, status })
-
-    return result
-  } catch (err) {
-    console.log(err)
-    throw err
   }
-}
+
+export const updateAssetStatus = _updateAssetStatus({ db, log })

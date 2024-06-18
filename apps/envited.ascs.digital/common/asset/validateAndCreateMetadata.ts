@@ -9,7 +9,7 @@ import { Schemas } from '../validator/shacl/shacl.types'
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)
 
-export const createMetadataBuffer = ({ name }: { name: string }) =>
+export const createMetadata = ({ name }: { name: string }) =>
   JSON.stringify({
     name,
     symbol: 'ENVITED',
@@ -64,15 +64,15 @@ export const getShaclSchemaAndValidate = _getShaclSchemaAndValidate({
 export const _validateAndCreateMetadata =
   ({
     getShaclSchemaAndValidate,
-    createMetadataBuffer,
+    createMetadata,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array, filename: string) => Promise<any>
-    createMetadataBuffer: ({ name }: { name: string }) => string
+    createMetadata: ({ name }: { name: string }) => string
   }) =>
   async (byteArray: Uint8Array, filename: string) => {
     try {
       const { report, data } = await getShaclSchemaAndValidate(byteArray, filename)
-      const metadata = createMetadataBuffer({ name: data.name[0] as string })
+      const metadata = createMetadata({ name: data.name[0] as string })
 
       return {
         report,
@@ -86,5 +86,5 @@ export const _validateAndCreateMetadata =
 
 export const validateAndCreateMetadata = _validateAndCreateMetadata({
   getShaclSchemaAndValidate,
-  createMetadataBuffer,
+  createMetadata,
 })

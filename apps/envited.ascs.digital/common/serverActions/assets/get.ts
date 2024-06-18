@@ -32,7 +32,7 @@ export const _get =
       }
 
       const connection = await db()
-      const asset = await connection.getAsset(id)
+      const [asset] = await connection.getAsset(id)
 
       if (isNil(asset) || isEmpty(asset)) {
         throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })
@@ -55,41 +55,6 @@ export const _get =
   }
 
 export const get = _get({ db, getServerSession, log })
-
-export const _getAssetsByUserId =
-  ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
-  async (userId: string) => {
-    try {
-      if (isNil(userId) || isEmpty(userId)) {
-        throw badRequestError({ resource: 'assets', resourceId: userId, message: 'Missing user ID' })
-      }
-
-      const session = await getServerSession()
-
-      if (isNil(session)) {
-        throw unauthorizedError({ resource: 'assets' })
-      }
-
-      if (!equals(userId)(session.user.id)) {
-        throw forbiddenError({
-          resource: 'assets',
-          resourceId: userId,
-          message: 'Not allowed to fetch this resource',
-          userId: session.user.id,
-        })
-      }
-
-      const connection = await db()
-      const assets = await connection.getAssetsByUserId(userId)
-
-      return assets
-    } catch (error: unknown) {
-      log.error(formatError(error))
-      throw internalServerErrorError()
-    }
-  }
-
-export const getAssetsByUserId = _getAssetsByUserId({ db, getServerSession, log })
 
 export const _getAssets =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>

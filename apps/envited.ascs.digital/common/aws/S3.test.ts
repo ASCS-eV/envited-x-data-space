@@ -1,7 +1,7 @@
-import { _getUploadUrl } from './S3'
+import { _getSignedUploadUrl } from './S3'
 
 describe('common/aws/S3', () => {
-  describe('_getUploadUrl', () => {
+  describe('_getSignedUploadUrl', () => {
     it('should return an info toast expected', async () => {
       // when ... we want to upload a file to S3 a bucket
       // then ... it should return the url as expected
@@ -11,14 +11,15 @@ describe('common/aws/S3', () => {
       const putObjectCommand = jest.fn().mockResolvedValue({}) as any
 
       const filename = 'FILE.TEST.jpeg'
+      const bucket = 'BUCKET_NAME'
 
-      const result = await _getUploadUrl({ getSignedUrl, s3Client, putObjectCommand })(filename)
+      const result = await _getSignedUploadUrl({ getSignedUrl, s3Client, putObjectCommand })(bucket)(filename)
 
       expect(result).toEqual('UPLOAD_URL')
       expect(putObjectCommand).toHaveBeenCalledWith({
         ACL: 'private',
         Key: `${filename}`,
-        Bucket: undefined,
+        Bucket: 'BUCKET_NAME',
       })
     })
   })

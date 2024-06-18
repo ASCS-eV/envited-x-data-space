@@ -30,8 +30,6 @@ export const _insert =
       const connection = await db()
       const [result] = await connection.insertAsset(userId, cid)
 
-      console.log('******* insertAsset ServerAction', result)
-
       return result
     } catch (error: unknown) {
       log.error(formatError(error))

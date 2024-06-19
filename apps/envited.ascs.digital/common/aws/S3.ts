@@ -1,4 +1,5 @@
 import {
+  CopyObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
@@ -75,6 +76,28 @@ export const deleteObjectFromS3 = async ({ Bucket, Key }: { Bucket: string; Key:
     })
 
     return s3Client.send(deleteCommand)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export const copyObjectToS3 = async ({
+  Bucket,
+  CopySource,
+  Key,
+}: {
+  Bucket: string
+  CopySource: string
+  Key: string
+}) => {
+  try {
+    const copyCommand = new CopyObjectCommand({
+      Bucket,
+      CopySource,
+      Key,
+    })
+
+    return s3Client.send(copyCommand)
   } catch (err) {
     console.error(err)
   }

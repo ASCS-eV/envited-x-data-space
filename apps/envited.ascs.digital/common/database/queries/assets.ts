@@ -35,3 +35,12 @@ export const updateAsset = (db: DatabaseConnection) => async (data: Asset) =>
     })
     .where(eq(asset.cid, data.cid))
     .returning()
+
+export const updateAssetCID = (db: DatabaseConnection) => async (data: Asset, cid: string) =>
+  db
+    .update(asset)
+    .set({
+      ...omit(['id', 'userId'])(data),
+    })
+    .where(eq(asset.cid, cid))
+    .returning()

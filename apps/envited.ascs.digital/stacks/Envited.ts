@@ -96,14 +96,12 @@ export default function Envited({ stack }: StackContext) {
           securityGroups: [sg],
           vpc,
         },
-        events: ['object_created'],
+        events: ['object_created_put'],
       },
     },
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
-        autoDeleteObjects: true,
-        removalPolicy: cdk.RemovalPolicy.DESTROY,
       },
     },
     cors: [s3CorsRule],

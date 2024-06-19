@@ -1,4 +1,9 @@
-import { DeleteObjectCommandOutput, GetObjectCommandOutput, PutObjectCommandInput } from '@aws-sdk/client-s3'
+import {
+  CopyObjectCommandOutput,
+  DeleteObjectCommandOutput,
+  GetObjectCommandOutput,
+  PutObjectCommandInput,
+} from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
 import { isNil } from 'ramda'
@@ -6,20 +11,30 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { updateAssetStatus, validateAndCreateMetadata } from '../../../asset'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
-import { deleteObjectFromS3, readStreamFromS3, writeStreamToS3 } from '../../S3'
+import { copyObjectToS3, deleteObjectFromS3, readStreamFromS3, writeStreamToS3 } from '../../S3'
 
-const prefix = `extract`
+const prefix = `bagaaiera`
 
 export const _main =
   ({
     readStreamFromS3,
     writeStreamToS3,
+    copyObjectToS3,
     deleteObjectFromS3,
     validateAndCreateMetadata,
     updateAssetStatus,
   }: {
     readStreamFromS3: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
     writeStreamToS3: (params: PutObjectCommandInput) => Upload
+    copyObjectToS3: ({
+      Bucket,
+      CopySource,
+      Key,
+    }: {
+      Bucket: string
+      CopySource: string
+      Key: string
+    }) => Promise<CopyObjectCommandOutput>
     deleteObjectFromS3: ({
       Bucket,
       Key,
@@ -36,7 +51,7 @@ export const _main =
       assetCID: string
       metadataCID: string
     }>
-    updateAssetStatus: (cid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
+    updateAssetStatus: (newCid: string, cid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {
@@ -60,20 +75,26 @@ export const _main =
 
       if (!report.conforms) {
         await deleteObjectFromS3({ Bucket, Key })
-        await updateAssetStatus(Key, AssetStatus.not_accepted)
+        await updateAssetStatus(assetCID, Key, AssetStatus.not_accepted)
 
         return
       }
 
-      const renameAssetToCID = writeStreamToS3({
+      await copyObjectToS3({
         Bucket,
-        Key: `${assetCID}`,
-        Body,
-        // ContentEncoding: 'base64',
-        ContentType: 'application/zip',
+        CopySource: `${Bucket}/${Key}`,
+        Key: assetCID,
       })
 
-      await renameAssetToCID.done()
+      // const renameAssetToCID = writeStreamToS3({
+      //   Bucket,
+      //   Key: `${assetCID}`,
+      //   Body,
+      //   ContentEncoding: 'base64',
+      //   ContentType: 'application/zip',
+      // })
+
+      // await renameAssetToCID.done()
 
       const writeMetadata = writeStreamToS3({
         Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
@@ -84,7 +105,8 @@ export const _main =
       })
 
       await writeMetadata.done()
-      await updateAssetStatus(Key, AssetStatus.pending, metadata)
+      await updateAssetStatus(assetCID, Key, AssetStatus.pending, metadata)
+      await deleteObjectFromS3({ Bucket, Key })
     } catch (err) {
       console.log(err)
       throw err
@@ -94,6 +116,7 @@ export const _main =
 export const main = _main({
   readStreamFromS3,
   writeStreamToS3,
+  copyObjectToS3,
   deleteObjectFromS3,
   validateAndCreateMetadata,
   updateAssetStatus,

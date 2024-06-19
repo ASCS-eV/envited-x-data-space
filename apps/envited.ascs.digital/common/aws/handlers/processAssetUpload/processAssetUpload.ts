@@ -30,8 +30,8 @@ export const _main =
     validateAndCreateMetadata: (
       byteArray: Uint8Array,
       filename: string,
-    ) => Promise<{ report: ValidationReport<any> | { conforms: boolean }; metadata: string }>
-    updateAssetStatus: (cid: string, status: AssetStatus, metadata?: string) => Promise<Asset>
+    ) => Promise<{ report: ValidationReport<any> | { conforms: boolean }; metadata: object }>
+    updateAssetStatus: (cid: string, status: AssetStatus, metadata?: object) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {

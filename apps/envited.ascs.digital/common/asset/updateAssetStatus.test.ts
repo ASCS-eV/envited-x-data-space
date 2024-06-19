@@ -31,7 +31,7 @@ describe('common/asset/updateAssetStatus', () => {
         userId: 'USER_PKH',
       })
       expect(db.updateAsset).toHaveBeenCalledWith({
-        metadata: '',
+        metadata: '""',
         status: 'pending',
       })
     })

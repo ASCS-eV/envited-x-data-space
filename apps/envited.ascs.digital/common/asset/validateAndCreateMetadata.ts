@@ -66,7 +66,7 @@ export const _validateAndCreateMetadata =
     createMetadata,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array, filename: string) => Promise<any>
-    createMetadata: ({ name }: { name: string }) => string
+    createMetadata: ({ name }: { name: string }) => object
   }) =>
   async (byteArray: Uint8Array, filename: string) => {
     try {

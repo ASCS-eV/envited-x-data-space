@@ -6,7 +6,7 @@ import { formatError, internalServerErrorError } from '../utils'
 
 export const _updateAssetStatus =
   ({ db, log }: { db: Database; log: Log }) =>
-  async (cid: string, status: AssetStatus, metadata: string = '') => {
+  async (cid: string, status: AssetStatus, metadata: object = {}) => {
     try {
       const connection = await db()
       const [result] = await connection.updateAsset({ metadata: JSON.stringify(metadata), status })

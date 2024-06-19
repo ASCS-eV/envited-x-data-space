@@ -66,9 +66,9 @@ export const _main =
       }
 
       const renameAssetToCID = writeStreamToS3({
-        Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME,
-        Key: `${assetCID}`, //`${prefix}-${Key}-metadata.json`,
-        Body: Body,
+        Bucket,
+        Key: `${assetCID}`,
+        Body,
         // ContentEncoding: 'base64',
         ContentType: 'application/zip',
       })

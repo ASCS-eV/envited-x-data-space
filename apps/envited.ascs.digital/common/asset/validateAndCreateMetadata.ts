@@ -5,6 +5,7 @@ import { extractFromByteArray, read } from '../archive'
 import { validateShaclDataWithSchema } from '../validator'
 import { SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { Schemas } from '../validator/shacl/shacl.types'
+import { AssetMetadata } from '../types'
 
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)
@@ -66,7 +67,7 @@ export const _validateAndCreateMetadata =
     createMetadata,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array, filename: string) => Promise<any>
-    createMetadata: ({ name }: { name: string }) => object
+    createMetadata: ({ name }: { name: string }) => AssetMetadata
   }) =>
   async (byteArray: Uint8Array, filename: string) => {
     try {

@@ -5,7 +5,7 @@ import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { updateAssetStatus, validateAndCreateMetadata } from '../../../asset'
-import { Asset, AssetStatus } from '../../../types'
+import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 import { deleteObjectFromS3, readStreamFromS3, writeStreamToS3 } from '../../S3'
 
 const prefix = `extract`
@@ -30,8 +30,8 @@ export const _main =
     validateAndCreateMetadata: (
       byteArray: Uint8Array,
       filename: string,
-    ) => Promise<{ report: ValidationReport<any> | { conforms: boolean }; metadata: object }>
-    updateAssetStatus: (cid: string, status: AssetStatus, metadata?: object) => Promise<Asset>
+    ) => Promise<{ report: ValidationReport<any> | { conforms: boolean }; metadata: AssetMetadata }>
+    updateAssetStatus: (cid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {

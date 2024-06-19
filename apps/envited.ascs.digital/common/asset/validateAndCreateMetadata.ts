@@ -2,6 +2,7 @@ import fs from 'fs'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromByteArray, read } from '../archive'
+import { hashFile } from '../hash'
 import { AssetMetadata } from '../types'
 import { validateShaclDataWithSchema } from '../validator'
 import { SCHEMA_MAP } from '../validator/shacl/shacl.constants'
@@ -65,14 +66,19 @@ export const _validateAndCreateMetadata =
   ({
     getShaclSchemaAndValidate,
     createMetadata,
+    hashFile,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array, filename: string) => Promise<any>
     createMetadata: ({ name }: { name: string }) => AssetMetadata
+    hashFile: (byteArray: Uint8Array) => Promise<any>
   }) =>
   async (byteArray: Uint8Array, filename: string) => {
     try {
       const { report, data } = await getShaclSchemaAndValidate(byteArray, filename)
       const metadata = createMetadata({ name: data.name[0] as string })
+
+      const hashedFile = hashFile(byteArray)
+      console.log('************** hashedFile', hashedFile)
 
       return {
         report,
@@ -87,4 +93,5 @@ export const _validateAndCreateMetadata =
 export const validateAndCreateMetadata = _validateAndCreateMetadata({
   getShaclSchemaAndValidate,
   createMetadata,
+  hashFile,
 })

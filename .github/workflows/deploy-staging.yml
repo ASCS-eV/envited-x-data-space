@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - develop
+      - 201_rename_asset_to_cid
 
 # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
 concurrency:

@@ -34,7 +34,7 @@ export const _main =
       Bucket: string
       CopySource: string
       Key: string
-    }) => Promise<CopyObjectCommandOutput>
+    }) => Promise<CopyObjectCommandOutput | undefined>
     deleteObjectFromS3: ({
       Bucket,
       Key,

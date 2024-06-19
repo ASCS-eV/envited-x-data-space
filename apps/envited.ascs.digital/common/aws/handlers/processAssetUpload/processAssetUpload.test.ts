@@ -12,14 +12,12 @@ describe('common/aws/handlers/processAssetUpload', () => {
           transformToByteArray: transformToByteArrayStub,
         },
       }) as any
-      const validateShaclDataWithSchemaStub = jest
-        .fn()
-        .mockResolvedValue({
-          report: { conforms: true },
-          metadata: 'METADATA',
-          assetCID: 'ASSET_CID',
-          metadataCID: 'METADATA_CID',
-        }) as any
+      const validateShaclDataWithSchemaStub = jest.fn().mockResolvedValue({
+        report: { conforms: true },
+        metadata: 'METADATA',
+        assetCID: 'ASSET_CID',
+        metadataCID: 'METADATA_CID',
+      }) as any
       const writeStreamToS3Stub = jest.fn().mockReturnValue({
         done: uploadStub,
       }) as any

@@ -102,6 +102,8 @@ export default function Envited({ stack }: StackContext) {
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
+        autoDeleteObjects: true,
+        removalPolicy: cdk.RemovalPolicy.DESTROY,
       },
     },
     cors: [s3CorsRule],

@@ -20,7 +20,12 @@ describe('common/asset/validateAndCreateMetadata', () => {
         hashFile: hashFileStub,
       })(byteArray as any, filename)
 
-      expect(result).toEqual({ report: { conforms: true }, metadata: 'METADATA_BUFFER' })
+      expect(result).toEqual({
+        report: { conforms: true },
+        metadata: 'METADATA_BUFFER',
+        assetCID: 'HASH',
+        metadataCID: 'HASH',
+      })
     })
   })
 

@@ -30,7 +30,12 @@ export const _main =
     validateAndCreateMetadata: (
       byteArray: Uint8Array,
       filename: string,
-    ) => Promise<{ report: ValidationReport<any> | { conforms: boolean }; metadata: AssetMetadata }>
+    ) => Promise<{
+      report: ValidationReport<any> | { conforms: boolean }
+      metadata: AssetMetadata
+      assetCID: string
+      metadataCID: string
+    }>
     updateAssetStatus: (cid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
   }): S3Handler =>
   async event => {
@@ -51,7 +56,7 @@ export const _main =
       }
 
       const byteArray = await Body.transformToByteArray()
-      const { report, metadata } = await validateAndCreateMetadata(byteArray, 'data.jsonld')
+      const { report, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(byteArray, 'data.jsonld')
 
       if (!report.conforms) {
         await deleteObjectFromS3({ Bucket, Key })
@@ -60,15 +65,25 @@ export const _main =
         return
       }
 
-      const upload = writeStreamToS3({
+      const renameAssetToCID = writeStreamToS3({
+        Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME,
+        Key: `${assetCID}`, //`${prefix}-${Key}-metadata.json`,
+        Body: Body,
+        // ContentEncoding: 'base64',
+        ContentType: 'application/zip',
+      })
+
+      await renameAssetToCID.done()
+
+      const writeMetadata = writeStreamToS3({
         Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
-        Key: `${prefix}-${Key}-metadata.json`,
+        Key: `${metadataCID}`, //`${prefix}-${Key}-metadata.json`,
         Body: Buffer.from(JSON.stringify(metadata)),
         ContentEncoding: 'base64',
         ContentType: 'application/json',
       })
 
-      await upload.done()
+      await writeMetadata.done()
       await updateAssetStatus(Key, AssetStatus.pending, metadata)
     } catch (err) {
       console.log(err)

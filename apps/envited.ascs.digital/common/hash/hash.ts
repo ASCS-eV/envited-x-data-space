@@ -2,10 +2,11 @@ import { CID } from 'multiformats/cid'
 import * as json from 'multiformats/codecs/json'
 import { sha256 } from 'multiformats/hashes/sha2'
 
-export const hashFile = async (byteArray: Uint8Array) => {
+export const hashFile = async (byteArray: any) => {
   try {
+    const jsonBytes = json.encode(byteArray)
     console.log('************** byteArray', byteArray)
-    const hash = await sha256.digest(byteArray)
+    const hash = await sha256.digest(jsonBytes)
     console.log('************** HASH', hash)
     const cid = CID.create(1, json.code, hash)
     console.log('************** CID', cid)

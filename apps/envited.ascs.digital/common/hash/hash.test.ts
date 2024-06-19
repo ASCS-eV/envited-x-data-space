@@ -9,7 +9,7 @@ describe('common/hash', () => {
       const buffer = fs.readFileSync(assetFile)
       const byteArray = new Uint8Array(buffer, 0, 16)
 
-      console.log(byteArray)
+      // console.log(byteArray)
 
       await SUT.hashFile(byteArray as any)
       // console.log(result)

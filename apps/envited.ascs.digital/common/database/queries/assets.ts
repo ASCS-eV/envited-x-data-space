@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { omit } from 'ramda'
 
 import { Asset, AssetStatus } from '../../types'
@@ -33,5 +33,5 @@ export const updateAsset = (db: DatabaseConnection) => async (data: Asset) =>
     .set({
       ...omit(['id', 'userId'])(data),
     })
-    .where(and(eq(asset.cid, data.cid), eq(asset.userId, data.userId)))
+    .where(eq(asset.cid, data.cid))
     .returning()

@@ -63,7 +63,7 @@ export const _main =
       const upload = writeStreamToS3({
         Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
         Key: `${prefix}-${Key}-metadata.json`,
-        Body: Buffer.from(metadata),
+        Body: Buffer.from(JSON.stringify(metadata)),
         ContentEncoding: 'base64',
         ContentType: 'application/json',
       })

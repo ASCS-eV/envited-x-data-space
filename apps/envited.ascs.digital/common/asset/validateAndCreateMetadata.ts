@@ -2,10 +2,10 @@ import fs from 'fs'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromByteArray, read } from '../archive'
+import { AssetMetadata } from '../types'
 import { validateShaclDataWithSchema } from '../validator'
 import { SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { Schemas } from '../validator/shacl/shacl.types'
-import { AssetMetadata } from '../types'
 
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)

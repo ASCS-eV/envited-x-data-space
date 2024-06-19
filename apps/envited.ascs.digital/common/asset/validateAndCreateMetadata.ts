@@ -9,14 +9,13 @@ import { Schemas } from '../validator/shacl/shacl.types'
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)
 
-export const createMetadata = ({ name }: { name: string }) => (
-  {
-    name,
-    symbol: 'ENVITED',
-    decimals: 2,
-    shouldPreferSymbol: true,
-    thumbnailUri: 'THUMBNAIL_URI',
-  })
+export const createMetadata = ({ name }: { name: string }) => ({
+  name,
+  symbol: 'ENVITED',
+  decimals: 2,
+  shouldPreferSymbol: true,
+  thumbnailUri: 'THUMBNAIL_URI',
+})
 
 export const _getShaclSchemaAndValidate =
   ({

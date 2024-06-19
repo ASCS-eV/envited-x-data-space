@@ -20,7 +20,7 @@ export const _getUniqueFilename = (randomString: string) => (slug: string, filen
 
 export const getUniqueFilename = _getUniqueFilename(randomString)
 
-export const _getUploadUrl =
+export const _getSignedUploadUrl =
   ({
     getSignedUrl,
     s3Client,
@@ -30,41 +30,22 @@ export const _getUploadUrl =
     s3Client: S3Client
     putObjectCommand: typeof PutObjectCommand
   }) =>
+  (Bucket: string) =>
   async (filename: string) => {
     const command = new putObjectCommand({
       ACL: 'private',
       Key: `${filename}`,
-      Bucket: process.env.NEXT_PUBLIC_UPLOAD_BUCKET_NAME,
+      Bucket,
     })
 
     return await getSignedUrl(s3Client, command)
   }
 
-export const getUploadUrl = _getUploadUrl({ getSignedUrl, s3Client, putObjectCommand })
+export const getSignedUploadUrl = _getSignedUploadUrl({ getSignedUrl, s3Client, putObjectCommand })
 
-export const _getAssetUploadUrl =
-  ({
-    getSignedUrl,
-    s3Client,
-    putObjectCommand,
-    randomString,
-  }: {
-    getSignedUrl: typeof TgetSignedUrl
-    s3Client: S3Client
-    putObjectCommand: typeof PutObjectCommand
-    randomString: string
-  }) =>
-  async (pkh: string, slug: string, filename: string) => {
-    const command = new putObjectCommand({
-      ACL: 'private',
-      Key: `${slug}-${randomString}.${filename.split('.').pop()}`,
-      Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME,
-    })
+export const getUploadUrl = getSignedUploadUrl(process.env.NEXT_PUBLIC_UPLOAD_BUCKET_NAME || '')
 
-    return await getSignedUrl(s3Client, command)
-  }
-
-export const getAssetUploadUrl = _getAssetUploadUrl({ getSignedUrl, s3Client, putObjectCommand, randomString })
+export const getAssetUploadUrl = getSignedUploadUrl(process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME || '')
 
 export const readStreamFromS3 = async ({ Bucket, Key }: { Bucket: string; Key: string }) => {
   try {

@@ -2,6 +2,7 @@ import fs from 'fs'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromByteArray, read } from '../archive'
+import { AssetMetadata } from '../types'
 import { validateShaclDataWithSchema } from '../validator'
 import { SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { Schemas } from '../validator/shacl/shacl.types'
@@ -9,16 +10,13 @@ import { Schemas } from '../validator/shacl/shacl.types'
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)
 
-export const createMetadataBuffer = ({ name }: { name: string }) =>
-  Buffer.from(
-    JSON.stringify({
-      name,
-      symbol: 'ENVITED',
-      decimals: 2,
-      shouldPreferSymbol: true,
-      thumbnailUri: 'THUMBNAIL_URI',
-    }),
-  )
+export const createMetadata = ({ name }: { name: string }) => ({
+  name,
+  symbol: 'ENVITED',
+  decimals: 2,
+  shouldPreferSymbol: true,
+  thumbnailUri: 'THUMBNAIL_URI',
+})
 
 export const _getShaclSchemaAndValidate =
   ({
@@ -66,15 +64,15 @@ export const getShaclSchemaAndValidate = _getShaclSchemaAndValidate({
 export const _validateAndCreateMetadata =
   ({
     getShaclSchemaAndValidate,
-    createMetadataBuffer,
+    createMetadata,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array, filename: string) => Promise<any>
-    createMetadataBuffer: ({ name }: { name: string }) => Buffer
+    createMetadata: ({ name }: { name: string }) => AssetMetadata
   }) =>
   async (byteArray: Uint8Array, filename: string) => {
     try {
       const { report, data } = await getShaclSchemaAndValidate(byteArray, filename)
-      const metadata = createMetadataBuffer({ name: data.name[0] as string })
+      const metadata = createMetadata({ name: data.name[0] as string })
 
       return {
         report,
@@ -88,5 +86,5 @@ export const _validateAndCreateMetadata =
 
 export const validateAndCreateMetadata = _validateAndCreateMetadata({
   getShaclSchemaAndValidate,
-  createMetadataBuffer,
+  createMetadata,
 })

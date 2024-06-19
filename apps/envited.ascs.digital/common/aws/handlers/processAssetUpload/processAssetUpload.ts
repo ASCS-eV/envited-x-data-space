@@ -4,7 +4,8 @@ import { S3Handler } from 'aws-lambda'
 import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { validateAndCreateMetadata } from '../../../asset'
+import { updateAssetStatus, validateAndCreateMetadata } from '../../../asset'
+import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 import { deleteObjectFromS3, readStreamFromS3, writeStreamToS3 } from '../../S3'
 
 const prefix = `extract`
@@ -12,15 +13,12 @@ const prefix = `extract`
 export const _main =
   ({
     readStreamFromS3,
-    validateAndCreateMetadata,
     writeStreamToS3,
     deleteObjectFromS3,
+    validateAndCreateMetadata,
+    updateAssetStatus,
   }: {
     readStreamFromS3: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
-    validateAndCreateMetadata: (
-      byteArray: Uint8Array,
-      filename: string,
-    ) => Promise<{ report: ValidationReport<any> | { conforms: boolean }; metadata: Buffer }>
     writeStreamToS3: (params: PutObjectCommandInput) => Upload
     deleteObjectFromS3: ({
       Bucket,
@@ -29,6 +27,11 @@ export const _main =
       Bucket: string
       Key: string
     }) => Promise<DeleteObjectCommandOutput | undefined>
+    validateAndCreateMetadata: (
+      byteArray: Uint8Array,
+      filename: string,
+    ) => Promise<{ report: ValidationReport<any> | { conforms: boolean }; metadata: AssetMetadata }>
+    updateAssetStatus: (cid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {
@@ -52,6 +55,7 @@ export const _main =
 
       if (!report.conforms) {
         await deleteObjectFromS3({ Bucket, Key })
+        await updateAssetStatus(Key, AssetStatus.not_accepted)
 
         return
       }
@@ -59,12 +63,13 @@ export const _main =
       const upload = writeStreamToS3({
         Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
         Key: `${prefix}-${Key}-metadata.json`,
-        Body: metadata,
+        Body: Buffer.from(JSON.stringify(metadata)),
         ContentEncoding: 'base64',
         ContentType: 'application/json',
       })
 
       await upload.done()
+      await updateAssetStatus(Key, AssetStatus.pending, metadata)
     } catch (err) {
       console.log(err)
       throw err
@@ -73,7 +78,8 @@ export const _main =
 
 export const main = _main({
   readStreamFromS3,
-  validateAndCreateMetadata,
   writeStreamToS3,
   deleteObjectFromS3,
+  validateAndCreateMetadata,
+  updateAssetStatus,
 })

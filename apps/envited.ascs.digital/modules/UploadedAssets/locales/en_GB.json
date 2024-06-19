@@ -3,7 +3,7 @@
   "[Description] uploaded assets": "You be able to see a \"preview\" of the asset detail page before you \"mint\" the asset, if there is something incorrect \"delete\" the asset and start over again.",
   "[Label] asset": "Asset",
   "[Label] type": "Type",
-  "[Label] size": "Size",
+  "[Label] status": "Status",
   "[Label] select": "Select",
   "[Button] mint": "Mint",
   "[Button] preview": "Preview",

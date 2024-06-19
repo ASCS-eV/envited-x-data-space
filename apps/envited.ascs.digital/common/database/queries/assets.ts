@@ -1,4 +1,5 @@
-import { and, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
+import { omit } from 'ramda'
 
 import { Asset, AssetStatus } from '../../types'
 import { asset } from '../schema'
@@ -9,6 +10,11 @@ export const getAssetsByUserId = (db: DatabaseConnection) => async (userId: stri
 
 export const getAsset = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(asset).where(eq(asset.id, id))
+
+export const getAssets = (db: DatabaseConnection) => async () => db.select().from(asset)
+
+export const getAssetByCID = (db: DatabaseConnection) => async (cid: string) =>
+  db.select().from(asset).where(eq(asset.cid, cid))
 
 export const insertAsset = (db: DatabaseConnection) => async (userId: string, cid: string) =>
   db
@@ -21,11 +27,11 @@ export const insertAsset = (db: DatabaseConnection) => async (userId: string, ci
     })
     .returning()
 
-export const updateAsset = (db: DatabaseConnection) => async (userId: string, cid: string, data: Asset) =>
+export const updateAsset = (db: DatabaseConnection) => async (data: Asset) =>
   db
     .update(asset)
     .set({
-      ...data,
+      ...omit(['id', 'userId'])(data),
     })
-    .where(and(eq(asset.cid, cid), eq(asset.userId, userId)))
+    .where(eq(asset.cid, data.cid))
     .returning()

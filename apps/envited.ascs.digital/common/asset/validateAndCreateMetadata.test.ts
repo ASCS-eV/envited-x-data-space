@@ -8,14 +8,14 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const getShaclSchemaAndValidateStub = jest
         .fn()
         .mockResolvedValue({ report: { conforms: true }, data: { name: 'NAME' } }) as any
-      const createMetadataBufferStub = jest.fn().mockReturnValue('METADATA_BUFFER') as any
+      const createMetadataStub = jest.fn().mockReturnValue('METADATA_BUFFER') as any
 
       const byteArray = 'ASSET_BYTE_ARRAY'
       const filename = 'data.jsonld'
 
       const result = await SUT._validateAndCreateMetadata({
         getShaclSchemaAndValidate: getShaclSchemaAndValidateStub,
-        createMetadataBuffer: createMetadataBufferStub,
+        createMetadata: createMetadataStub,
       })(byteArray as any, filename)
 
       expect(result).toEqual({ report: { conforms: true }, metadata: 'METADATA_BUFFER' })

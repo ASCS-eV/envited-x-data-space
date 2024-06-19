@@ -73,6 +73,14 @@ export interface Asset {
   userId: string
 }
 
+export interface AssetMetadata {
+  name: string
+  symbol: string
+  decimals: number
+  shouldPreferSymbol: boolean
+  thumbnailUri: string
+}
+
 export interface User {
   id: string
   issuerId: string

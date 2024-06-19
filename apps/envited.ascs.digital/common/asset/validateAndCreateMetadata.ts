@@ -77,7 +77,7 @@ export const _validateAndCreateMetadata =
       const { report, data } = await getShaclSchemaAndValidate(byteArray, filename)
       const metadata = createMetadata({ name: data.name[0] as string })
 
-      const hashedFile = hashFile(byteArray)
+      const hashedFile = await hashFile(byteArray)
       console.log('************** hashedFile', hashedFile)
 
       return {

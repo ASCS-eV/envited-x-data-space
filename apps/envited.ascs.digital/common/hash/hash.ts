@@ -4,6 +4,7 @@ import { sha256 } from 'multiformats/hashes/sha2'
 
 export const hashFile = async (byteArray: Uint8Array) => {
   try {
+    console.log('************** byteArray', byteArray)
     const hash = await sha256.digest(byteArray)
     console.log('************** HASH', hash)
     const cid = CID.create(1, json.code, hash)

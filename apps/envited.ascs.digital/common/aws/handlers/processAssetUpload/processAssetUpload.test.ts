@@ -48,7 +48,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         copyObjectToS3: copyObjectToS3Stub,
         deleteObjectFromS3: deleteObjectFromS3Stub,
         validateAndCreateMetadata: validateShaclDataWithSchemaStub,
-        updateAssetStatus: updateAssetStatusStub,
+        updateAsset: updateAssetStatusStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
@@ -56,15 +56,6 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'data.jsonld')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
       expect(writeStreamToS3Stub).toHaveBeenCalledTimes(1)
-      /*
-      expect(writeStreamToS3Stub).toHaveBeenCalledWith({
-        Body: Buffer.from(JSON.stringify('METADATA')),
-        Bucket: undefined,
-        ContentEncoding: 'base64',
-        ContentType: 'application/json',
-        Key: 'extract-OBJECT_KEY-metadata.json',
-      })
-      */
       expect(deleteObjectFromS3Stub).toHaveBeenCalledTimes(1)
     })
   })

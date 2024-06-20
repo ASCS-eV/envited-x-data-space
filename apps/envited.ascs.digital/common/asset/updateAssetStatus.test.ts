@@ -21,7 +21,7 @@ describe('common/asset/updateAssetStatus', () => {
         error: jest.fn(),
       } as any
 
-      const result = await SUT._updateAssetStatus({ db: dbStub, log: logStub })(
+      const result = await SUT._updateAsset({ db: dbStub, log: logStub })(
         'NEW_ASSET_CID',
         'ASSET_CID',
         AssetStatus.pending,

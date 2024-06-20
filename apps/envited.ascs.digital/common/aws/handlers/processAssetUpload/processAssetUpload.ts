@@ -9,11 +9,9 @@ import { S3Handler } from 'aws-lambda'
 import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { updateAssetStatus, validateAndCreateMetadata } from '../../../asset'
+import { updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 import { copyObjectToS3, deleteObjectFromS3, readStreamFromS3, writeStreamToS3 } from '../../S3'
-
-const prefix = `bagaaiera`
 
 export const _main =
   ({
@@ -22,7 +20,7 @@ export const _main =
     copyObjectToS3,
     deleteObjectFromS3,
     validateAndCreateMetadata,
-    updateAssetStatus,
+    updateAsset,
   }: {
     readStreamFromS3: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
     writeStreamToS3: (params: PutObjectCommandInput) => Upload
@@ -51,7 +49,7 @@ export const _main =
       assetCID: string
       metadataCID: string
     }>
-    updateAssetStatus: (newCid: string, cid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
+    updateAsset: (newCid: string, oldCid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {
@@ -59,10 +57,6 @@ export const _main =
 
       const Key = s3Record.object.key
       const Bucket = s3Record.bucket.name
-
-      if (Key.startsWith(prefix)) {
-        return
-      }
 
       const { Body } = await readStreamFromS3({ Key, Bucket })
 
@@ -75,7 +69,7 @@ export const _main =
 
       if (!report.conforms) {
         await deleteObjectFromS3({ Bucket, Key })
-        await updateAssetStatus(assetCID, Key, AssetStatus.not_accepted)
+        await updateAsset(Key, Key, AssetStatus.not_accepted)
 
         return
       }
@@ -86,26 +80,16 @@ export const _main =
         Key: assetCID,
       })
 
-      // const renameAssetToCID = writeStreamToS3({
-      //   Bucket,
-      //   Key: `${assetCID}`,
-      //   Body,
-      //   ContentEncoding: 'base64',
-      //   ContentType: 'application/zip',
-      // })
-
-      // await renameAssetToCID.done()
-
       const writeMetadata = writeStreamToS3({
         Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
-        Key: `${metadataCID}`, //`${prefix}-${Key}-metadata.json`,
+        Key: metadataCID,
         Body: Buffer.from(JSON.stringify(metadata)),
         ContentEncoding: 'base64',
         ContentType: 'application/json',
       })
 
       await writeMetadata.done()
-      await updateAssetStatus(assetCID, Key, AssetStatus.pending, metadata)
+      await updateAsset(assetCID, Key, AssetStatus.pending, metadata)
       await deleteObjectFromS3({ Bucket, Key })
     } catch (err) {
       console.log(err)
@@ -119,5 +103,5 @@ export const main = _main({
   copyObjectToS3,
   deleteObjectFromS3,
   validateAndCreateMetadata,
-  updateAssetStatus,
+  updateAsset,
 })

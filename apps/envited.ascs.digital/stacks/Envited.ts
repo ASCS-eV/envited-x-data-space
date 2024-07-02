@@ -96,7 +96,7 @@ export default function Envited({ stack }: StackContext) {
           securityGroups: [sg],
           vpc,
         },
-        events: ['object_created'],
+        events: ['object_created_put'],
       },
     },
     cdk: {

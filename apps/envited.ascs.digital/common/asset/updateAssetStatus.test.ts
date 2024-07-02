@@ -7,10 +7,10 @@ describe('common/asset/updateAssetStatus', () => {
       // when ... we want to get the asset by id
       // then ... it should update the asset as expected
       const dbStub = jest.fn().mockResolvedValue({
-        updateAsset: jest.fn().mockResolvedValue([
+        updateAssetCID: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
-            cid: 'ASSET_CID',
+            cid: 'NEW_ASSET_CID',
             metadata: 'METADATA',
             status: AssetStatus.pending,
             userId: 'USER_PKH',
@@ -21,20 +21,28 @@ describe('common/asset/updateAssetStatus', () => {
         error: jest.fn(),
       } as any
 
-      const result = await SUT._updateAssetStatus({ db: dbStub, log: logStub })('ASSET_CID', AssetStatus.pending, '')
+      const result = await SUT._updateAsset({ db: dbStub, log: logStub })(
+        'NEW_ASSET_CID',
+        'ASSET_CID',
+        AssetStatus.pending,
+        {} as any,
+      )
       const db = await dbStub()
       expect(result).toEqual({
         id: 'ASSET_ID',
-        cid: 'ASSET_CID',
+        cid: 'NEW_ASSET_CID',
         metadata: 'METADATA',
         status: AssetStatus.pending,
         userId: 'USER_PKH',
       })
-      expect(db.updateAsset).toHaveBeenCalledWith({
-        cid: 'ASSET_CID',
-        metadata: '""',
-        status: 'pending',
-      })
+      expect(db.updateAssetCID).toHaveBeenCalledWith(
+        {
+          cid: 'NEW_ASSET_CID',
+          metadata: '{}',
+          status: 'pending',
+        },
+        'ASSET_CID',
+      )
     })
   })
 })

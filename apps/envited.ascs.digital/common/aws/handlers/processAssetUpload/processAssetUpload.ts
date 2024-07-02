@@ -1,25 +1,38 @@
-import { DeleteObjectCommandOutput, GetObjectCommandOutput, PutObjectCommandInput } from '@aws-sdk/client-s3'
+import {
+  CopyObjectCommandOutput,
+  DeleteObjectCommandOutput,
+  GetObjectCommandOutput,
+  PutObjectCommandInput,
+} from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
 import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { updateAssetStatus, validateAndCreateMetadata } from '../../../asset'
+import { updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
-import { deleteObjectFromS3, readStreamFromS3, writeStreamToS3 } from '../../S3'
-
-const prefix = `extract`
+import { copyObjectToS3, deleteObjectFromS3, readStreamFromS3, writeStreamToS3 } from '../../S3'
 
 export const _main =
   ({
     readStreamFromS3,
     writeStreamToS3,
+    copyObjectToS3,
     deleteObjectFromS3,
     validateAndCreateMetadata,
-    updateAssetStatus,
+    updateAsset,
   }: {
     readStreamFromS3: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
     writeStreamToS3: (params: PutObjectCommandInput) => Upload
+    copyObjectToS3: ({
+      Bucket,
+      CopySource,
+      Key,
+    }: {
+      Bucket: string
+      CopySource: string
+      Key: string
+    }) => Promise<CopyObjectCommandOutput | undefined>
     deleteObjectFromS3: ({
       Bucket,
       Key,
@@ -30,8 +43,13 @@ export const _main =
     validateAndCreateMetadata: (
       byteArray: Uint8Array,
       filename: string,
-    ) => Promise<{ report: ValidationReport<any> | { conforms: boolean }; metadata: AssetMetadata }>
-    updateAssetStatus: (cid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
+    ) => Promise<{
+      report: ValidationReport<any> | { conforms: boolean }
+      metadata: AssetMetadata
+      assetCID: string
+      metadataCID: string
+    }>
+    updateAsset: (newCid: string, oldCid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {
@@ -40,10 +58,6 @@ export const _main =
       const Key = s3Record.object.key
       const Bucket = s3Record.bucket.name
 
-      if (Key.startsWith(prefix)) {
-        return
-      }
-
       const { Body } = await readStreamFromS3({ Key, Bucket })
 
       if (isNil(Body)) {
@@ -51,25 +65,32 @@ export const _main =
       }
 
       const byteArray = await Body.transformToByteArray()
-      const { report, metadata } = await validateAndCreateMetadata(byteArray, 'data.jsonld')
+      const { report, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(byteArray, 'data.jsonld')
 
       if (!report.conforms) {
         await deleteObjectFromS3({ Bucket, Key })
-        await updateAssetStatus(Key, AssetStatus.not_accepted)
+        await updateAsset(Key, Key, AssetStatus.not_accepted)
 
         return
       }
 
-      const upload = writeStreamToS3({
+      await copyObjectToS3({
+        Bucket,
+        CopySource: `${Bucket}/${Key}`,
+        Key: assetCID,
+      })
+
+      const writeMetadata = writeStreamToS3({
         Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
-        Key: `${prefix}-${Key}-metadata.json`,
+        Key: metadataCID,
         Body: Buffer.from(JSON.stringify(metadata)),
         ContentEncoding: 'base64',
         ContentType: 'application/json',
       })
 
-      await upload.done()
-      await updateAssetStatus(Key, AssetStatus.pending, metadata)
+      await writeMetadata.done()
+      await updateAsset(assetCID, Key, AssetStatus.pending, metadata)
+      await deleteObjectFromS3({ Bucket, Key })
     } catch (err) {
       console.log(err)
       throw err
@@ -79,7 +100,8 @@ export const _main =
 export const main = _main({
   readStreamFromS3,
   writeStreamToS3,
+  copyObjectToS3,
   deleteObjectFromS3,
   validateAndCreateMetadata,
-  updateAssetStatus,
+  updateAsset,
 })

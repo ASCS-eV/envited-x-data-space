@@ -8,6 +8,7 @@ const esModules = [
   'get-stream',
   '@vocabulary',
   'rdf-validate-datatype',
+  'multiformats',
 ].join('|')
 
 export default {

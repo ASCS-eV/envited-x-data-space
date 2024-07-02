@@ -6,6 +6,7 @@ import { AssetMetadata } from '../types'
 import { validateShaclDataWithSchema } from '../validator'
 import { SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { Schemas } from '../validator/shacl/shacl.types'
+import { createFilename } from './validateAndCreateMetadata.utils'
 
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)
@@ -65,18 +66,25 @@ export const _validateAndCreateMetadata =
   ({
     getShaclSchemaAndValidate,
     createMetadata,
+    createFilename,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array, filename: string) => Promise<any>
     createMetadata: ({ name }: { name: string }) => AssetMetadata
+    createFilename: (byteArray: Uint8Array) => Promise<string>
   }) =>
   async (byteArray: Uint8Array, filename: string) => {
     try {
       const { report, data } = await getShaclSchemaAndValidate(byteArray, filename)
       const metadata = createMetadata({ name: data.name[0] as string })
 
+      const assetCID = await createFilename(byteArray)
+      const metadataCID = await createFilename(metadata as any)
+
       return {
         report,
         metadata,
+        assetCID,
+        metadataCID,
       }
     } catch (err) {
       console.log(err)
@@ -87,4 +95,5 @@ export const _validateAndCreateMetadata =
 export const validateAndCreateMetadata = _validateAndCreateMetadata({
   getShaclSchemaAndValidate,
   createMetadata,
+  createFilename,
 })

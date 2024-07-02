@@ -8,7 +8,6 @@ describe('common/aws/S3', () => {
 
       const getSignedUrl = jest.fn().mockResolvedValue('UPLOAD_URL')
       const s3Client = 'S3_CLIENT'
-      // const putObjectCommand = jest.fn().mockResolvedValue({}) as any
 
       const filename = 'FILE.TEST.jpeg'
       const bucket = 'BUCKET_NAME'

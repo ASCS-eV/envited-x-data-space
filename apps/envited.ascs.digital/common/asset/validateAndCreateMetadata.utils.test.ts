@@ -1,26 +1,22 @@
-import fs from 'fs'
-
 import * as SUT from './validateAndCreateMetadata.utils'
 
 describe('common/asset/validateAndCreateMetadata.utils', () => {
   describe('createFilename', () => {
     it('should create a filename', async () => {
-      const assetFile = `${process.cwd()}/apps/envited.ascs.digital/common/fixtures/ContainerJSONLd.zip`
-      const buffer = fs.readFileSync(assetFile)
-      const byteArray = new Uint8Array(buffer, 0, 16)
+      const byteArray = 'BYTE_ARRAY'
 
       const jsonStub = {
-        encode: jest.fn(),
-        code: jest.fn,
+        encode: jest.fn().mockReturnValue('JSON_BYTES'),
+        code: 'JSON_CODE',
       } as any
 
       const sha256Stub = {
-        digest: jest.fn(),
+        digest: jest.fn().mockReturnValue('SHA256_HASH'),
       } as any
 
       const CIDStub = {
         create: jest.fn().mockReturnValue({
-          toString: jest.fn().mockReturnValue('HASH'),
+          toString: jest.fn().mockReturnValue('CID'),
         }),
       } as any
 
@@ -30,7 +26,9 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
         CID: CIDStub,
       })(byteArray as any)
 
-      expect(result).toBe('HASH')
+      expect(jsonStub.encode).toHaveBeenCalledWith('BYTE_ARRAY')
+      expect(CIDStub.create).toHaveBeenCalledWith(1, 'JSON_CODE', 'SHA256_HASH')
+      expect(result).toBe('CID')
     })
   })
 })

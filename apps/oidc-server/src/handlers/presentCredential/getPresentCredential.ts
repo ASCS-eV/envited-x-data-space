@@ -28,7 +28,7 @@ export const getPresentCredential =
     log.info('GET: Presenting credential')
     const presentationDefinition = generatePresentationDefinition(
       policies[process.env.LOGIN_POLICY || 'acceptAnything'],
-      pex.descriptorEmailFromAltme,
+      pex.descriptorASCSFromAltme,
     )
 
     log.info('PRESENTATION DEFINITION', JSON.stringify(presentationDefinition))

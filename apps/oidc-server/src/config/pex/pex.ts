@@ -35,3 +35,22 @@ export const descriptorEmailFromAltme = [
     },
   },
 ]
+
+export const descriptorASCSFromAltme = [
+  {
+    id: 'ascs',
+    name: 'Input descriptor for ASCS',
+    purpose: 'Sign-in',
+    constraints: {
+      fields: [
+        {
+          path: ['$.type'],
+          filter: {
+            type: 'string',
+            pattern: '^AscsUserCredential$|^AscsMemberCredential$',
+          },
+        },
+      ],
+    },
+  },
+]

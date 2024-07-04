@@ -1,7 +1,7 @@
 import { Footer } from '../modules/Footer'
 import { Header } from '../modules/Header'
 import { NotificationContainer } from '../modules/Notifications'
-import NextAuthProvider from './context/NextAuthProvider'
+import { NextAuthProvider } from './context/NextAuthProvider'
 import './global.css'
 
 export const metadata = {

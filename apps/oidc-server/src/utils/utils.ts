@@ -126,7 +126,11 @@ export const _verifyPresentation =
     spruceVerifyCredential: any
   }) =>
   async (VC: any, VP: any): Promise<boolean> => {
-    if (VP.holder && VP.holder === VC.credentialSubject.id && VP.proof.verificationMethod.split('#')[0] === VP.holder) {
+    if (
+      VP.holder &&
+      VP.verifiableCredential.credentialSubject.id === VC.credentialSubject.id &&
+      VP.proof.verificationMethod.split('#')[0] === VP.holder
+    ) {
       // Verify the signature on the VC
       const verifyOptionsString = '{}'
       const verifyResult = JSON.parse(await spruceVerifyCredential(JSON.stringify(VC), verifyOptionsString))

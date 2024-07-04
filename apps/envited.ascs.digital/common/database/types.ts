@@ -44,7 +44,7 @@ export interface Credential {
   issuanceDate: string
   expirationDate: string
   id: string
-  issuer: Issuer
+  issuer: string
   credentialSubject: AscsMember | AscsUser
 }
 

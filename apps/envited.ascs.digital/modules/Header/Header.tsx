@@ -1,11 +1,9 @@
 'use client'
 
-import { Button, Size } from '@envited-marketplace/design-system'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
-import { signIn } from '../../common/auth'
 import { NAVIGATION } from '../../common/constants'
 import { Navigation } from '../Navigation'
 import { SignIn } from '../SignIn'
@@ -26,9 +24,6 @@ export const Header: FC<HeaderProps> = () => {
             <Navigation items={NAVIGATION} />
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
-            <Button onClick={() => signIn({ pkh: 'tz1PRINCIPAL' })} size={Size.small}>
-              <span>Login as Principal</span>
-            </Button>
             <SignIn />
           </div>
         </nav>

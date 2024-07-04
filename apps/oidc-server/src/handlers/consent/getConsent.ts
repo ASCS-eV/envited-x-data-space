@@ -2,21 +2,17 @@
  * Copyright 2024 Software Engineering for Business Information Systems (sebis) <matthes@tum.de> .
  * SPDX-License-Identifier: MIT
  */
-import { Redis } from 'ioredis'
-
 import { Log } from '../../common/logger'
 import { formatError } from '../../common/utils'
 import { HydraAdmin } from '../../types'
 
 export const getConsent =
-  ({ redis, hydraAdmin, log }: { redis: Redis; hydraAdmin: HydraAdmin; log: Log }) =>
+  ({ hydraAdmin, log }: { hydraAdmin: HydraAdmin; log: Log }) =>
   async (challenge: string) => {
     log.info('GET CONSENT')
     try {
       const { data: body } = await hydraAdmin.oauth2.getOAuth2ConsentRequest({ consentChallenge: challenge })
       // get user identity and fetch user claims from redis
-      const userClaims = JSON.parse((await redis.get('' + body.subject))!)
-      log.info('User Claims', userClaims)
       return hydraAdmin.oauth2
         .acceptOAuth2ConsentRequest({
           consentChallenge: challenge,
@@ -26,8 +22,9 @@ export const getConsent =
             grant_scope: body.requested_scope,
 
             session: {
-              access_token: userClaims.tokenAccess,
-              id_token: userClaims.tokenId,
+              id_token: {
+                credential: body.context,
+              },
             },
 
             // ORY Hydra checks if requested audiences are allowed by the client, so we can simply echo this.

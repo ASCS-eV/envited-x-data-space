@@ -1,10 +1,13 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
+import { equals, has, isEmpty, omit, prop } from 'ramda'
 import { match } from 'ts-pattern'
 
+import { db } from '../database/queries'
+import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
-import { Role } from '../types'
+import { CredentialType, Role } from '../types'
 import { Environment } from '../types'
 
 export const authOptions: NextAuthOptions = {
@@ -61,9 +64,16 @@ export const authOptions: NextAuthOptions = {
       jwks_endpoint: 'http://localhost:5004/.well-known/jwks.json',
       clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
       clientSecret: process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET,
-      profile: profile => ({
-        id: profile.sub,
-      }),
+      profile: async profile => {
+        const connection = await db()
+        const userRoles = await connection.getUserRolesById(profile.sub)
+
+        return {
+          id: profile.sub,
+          pkh: profile.sub,
+          role: userRoles[0].roleId,
+        }
+      },
     },
   ],
   secret: process.env.SECRET,
@@ -87,6 +97,29 @@ export const authOptions: NextAuthOptions = {
 
       if (user) {
         token.user = user
+      }
+
+      if (has('credential')(profile)) {
+        const credential = omit(['proof'])(prop('credential')(profile)) as Credential
+
+        const connection = await db()
+        const user = await connection.getUserById(credential.credentialSubject.id)
+
+        if (!isEmpty(user)) {
+          // User already exist
+          return token
+        }
+
+        if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
+          const principal = await connection.getUserById(credential.issuer)
+
+          if (isEmpty(principal)) {
+            // Principal not found
+            return token
+          }
+        }
+
+        await connection.insertUserTx(credential)
       }
 
       return token

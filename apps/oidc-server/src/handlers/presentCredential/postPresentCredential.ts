@@ -7,7 +7,7 @@ import { Redis } from 'ioredis'
 import { Log } from '../../common/logger'
 import { formatError } from '../../common/utils'
 import { HydraAdmin } from '../../types'
-import { extractClaims, isTrustedPresentation, verifyAuthenticationPresentation } from '../../utils'
+import { isTrustedPresentation, verifyAuthenticationPresentation } from '../../utils'
 
 export const postPresentCredential =
   ({ redis, hydraAdmin, log }: { redis: Redis; hydraAdmin: HydraAdmin; log: Log }) =>
@@ -30,8 +30,7 @@ export const postPresentCredential =
     }
 
     // Get the user claims
-    const userClaims = extractClaims(presentation)
-    const subject = presentation['holder']
+    const subject = presentation['verifiableCredential']['credentialSubject']['id']
     const login_id = presentation['proof']['challenge']
 
     const challenge = (await redis.get('' + login_id))!
@@ -64,14 +63,12 @@ export const postPresentCredential =
               //
               // If that variable is not set, the ACR value will be set to the default passed here ('0')
               acr: '0',
+              context: presentation.verifiableCredential,
             },
           })
           .then(({ data: body }) => {
             const MAX_AGE = 30 // 30 seconds
             const EXPIRY_MS = 'EX' // seconds
-
-            // save the user claims to redis
-            redis.set('' + subject, JSON.stringify(userClaims), EXPIRY_MS, MAX_AGE)
 
             // save the redirect address to redis for the browser
             redis.set('redirect' + login_id, String(body.redirect_to), EXPIRY_MS, MAX_AGE)

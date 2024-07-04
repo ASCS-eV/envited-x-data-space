@@ -44,12 +44,7 @@ export const USER_CREDENTIAL = {
   'issuanceDate': '2023-11-22T17:14:33Z',
   'expirationDate': '2102-09-15T17:14:33Z',
   'id': 'urn:uuid:cf1f329d-9c4c-458e-ba0a-a762a296b79c',
-  'issuer': {
-    id: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
-    type: 'AscsIssuer',
-    name: 'Testcompany GmbH',
-    url: 'https://test.de/',
-  },
+  'issuer': 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
   'credentialSubject': {
     id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
     type: 'AscsUser',

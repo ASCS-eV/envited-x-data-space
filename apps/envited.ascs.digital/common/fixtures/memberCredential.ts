@@ -47,12 +47,7 @@ export const MEMBER_CREDENTIAL = {
   'issuanceDate': '2023-11-22T17:14:33Z',
   'expirationDate': '2102-09-15T17:14:33Z',
   'id': 'urn:uuid:576fbefb-35e8-4b71-bb1a-53d1803c86de',
-  'issuer': {
-    id: 'did:pkh:tz:tz1ggujjYjA7oYoaZBzTg1tYSXn3VMjcgDuv',
-    type: 'AscsIssuer',
-    name: 'Automotive Solution Center for Simulation e.V.',
-    url: 'https://identity.ascs.digital/',
-  },
+  'issuer': 'did:pkh:tz:tz1ggujjYjA7oYoaZBzTg1tYSXn3VMjcgDuv',
   'credentialSubject': {
     id: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
     type: 'AscsMember',

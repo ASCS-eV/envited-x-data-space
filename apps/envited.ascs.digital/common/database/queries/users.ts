@@ -157,7 +157,7 @@ export const _txn =
         id: newIssuer,
         name: credentialTypes.includes('AscsMemberCredential') ? credentialSubject.name : '',
         url: credentialTypes.includes('AscsMemberCredential') ? propOr('', 'url')(credentialSubject) : '',
-        type: credentialTypes.includes('AscsMemberCredential') ? credentialSubject.type : '',
+        type: credentialTypes.includes('AscsMemberCredential') ? 'AscsIssuer' : '',
       })
       const { id } = issuer
 

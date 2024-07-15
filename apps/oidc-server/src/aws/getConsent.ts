@@ -14,8 +14,8 @@ const lambdaHandler = async (event: any, context: RedisHydraLogContext) => {
     const {
       queryStringParameters: { challenge },
     } = event
-    const { redis, hydraAdmin, log } = context
-    const result = getConsent({ redis, hydraAdmin, log })(challenge as string)
+    const { hydraAdmin, log } = context
+    const result = getConsent({ hydraAdmin, log })(challenge as string)
 
     return ok(result)
   } catch (error) {

@@ -159,7 +159,7 @@ describe('serverActions/profiles/get', () => {
       const slug = ''
 
       await expect(
-        SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug),
+        SUT._getProfileBySlug({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug),
       ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
       expect(getServerSessionStub).not.toHaveBeenCalledWith()
       expect(dbStub).not.toHaveBeenCalled()

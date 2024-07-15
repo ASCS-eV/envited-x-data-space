@@ -37,7 +37,9 @@ describe('serverActions/profiles/get', () => {
 
       const slug = 'PROFILE_SLUG'
 
-      const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug)
+      const result = await SUT._getProfileBySlug({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
+        slug,
+      )
       const db = await dbStub()
       expect(result).toEqual({
         name: 'USER_PRINCIPAL_NAME',
@@ -83,7 +85,9 @@ describe('serverActions/profiles/get', () => {
 
       const slug = 'PROFILE_SLUG'
 
-      const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug)
+      const result = await SUT._getProfileBySlug({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
+        slug,
+      )
       const db = await dbStub()
       expect(result).toEqual({
         name: 'USER_PRINCIPAL_NAME',
@@ -122,7 +126,9 @@ describe('serverActions/profiles/get', () => {
 
       const slug = 'PROFILE_SLUG'
 
-      const result = await SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug)
+      const result = await SUT._getProfileBySlug({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
+        slug,
+      )
       const db = await dbStub()
       expect(result).toEqual({
         name: 'USER_NAME',
@@ -180,9 +186,9 @@ describe('serverActions/profiles/get', () => {
 
     const slug = 'NON_EXISTANT_PROFILE_SLUG'
     const db = await dbStub()
-    await expect(SUT._get({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug)).rejects.toThrow(
-      ERRORS.INTERNAL_SERVER_ERROR,
-    )
+    await expect(
+      SUT._getProfileBySlug({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(slug),
+    ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
     expect(getServerSessionStub).toHaveBeenCalledWith()
     expect(dbStub).toHaveBeenCalledWith()
     expect(db.getProfileBySlug).toHaveBeenCalledWith(slug)

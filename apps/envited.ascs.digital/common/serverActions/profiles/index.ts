@@ -1,2 +1,2 @@
 export { update as updateProfile } from './update'
-export { get as getProfile, getPublishedProfiles } from './get'
+export { getProfile, getProfileBySlug, getPublishedProfiles } from './get'

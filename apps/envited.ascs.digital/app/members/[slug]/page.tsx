@@ -1,9 +1,9 @@
-import { getProfile } from '../../../common/serverActions'
+import { getProfileBySlug } from '../../../common/serverActions'
 import { Breadcrumbs } from '../../../modules/Breadcrumbs'
 import { Member } from '../../../modules/Member'
 
 export default async function Index({ params: { slug } }: { params: { slug: string } }) {
-  const profile = await getProfile(slug)
+  const profile = await getProfileBySlug(slug)
 
   return (
     <>

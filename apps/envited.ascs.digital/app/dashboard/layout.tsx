@@ -11,7 +11,7 @@ interface DashboardProps {
 }
 
 export default async function DashboardLayout({ children }: DashboardProps) {
-  const profile = await getProfile('testcompany-gmbh')
+  const profile = await getProfile()
 
   return (
     <>

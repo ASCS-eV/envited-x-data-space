@@ -20,7 +20,13 @@ import {
   insertBusinessCategoryByProfileId,
 } from './businessCategories'
 import { fetchTables } from './common'
-import { getProfileBySlug, getPublishedProfiles, maybeUpdatePublishedState, update as updateProfile } from './profiles'
+import {
+  getProfileByName,
+  getProfileBySlug,
+  getPublishedProfiles,
+  maybeUpdatePublishedState,
+  update as updateProfile,
+} from './profiles'
 import {
   deleteUserById,
   getUserById,
@@ -43,6 +49,7 @@ const queries = {
   insertUserTx,
   updateProfile,
   maybeUpdatePublishedState,
+  getProfileByName,
   getProfileBySlug,
   getPublishedProfiles,
   getUserByIssuerId,

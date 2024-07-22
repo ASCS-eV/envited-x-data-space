@@ -27,5 +27,8 @@ export const getProfileBySlug = (db: DatabaseConnection) => async (slug: string)
     },
   })
 
+export const getProfileByName = (db: DatabaseConnection) => async (name: string) =>
+  db.select().from(profile).where(eq(profile.name, name))
+
 export const getPublishedProfiles = (db: DatabaseConnection) => async () =>
   db.select().from(profile).where(eq(profile.isPublished, true))

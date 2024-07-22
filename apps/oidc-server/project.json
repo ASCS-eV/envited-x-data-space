@@ -57,6 +57,14 @@
       "options": {
         "jestConfig": "apps/oidc-server/jest.config.ts"
       }
+    },
+    "deploy:staging": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/oidc-server",
+        "commands": ["sst deploy OIDCServer --stage staging"],
+        "parallel": false
+      }
     }
   },
   "tags": []

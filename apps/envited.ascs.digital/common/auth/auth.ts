@@ -1,10 +1,13 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
+import { equals, has, isEmpty, omit, prop } from 'ramda'
 import { match } from 'ts-pattern'
 
+import { db } from '../database/queries'
+import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
-import { Role } from '../types'
+import { CredentialType, Role } from '../types'
 import { Environment } from '../types'
 
 export const authOptions: NextAuthOptions = {
@@ -61,26 +64,56 @@ export const authOptions: NextAuthOptions = {
       jwks_endpoint: 'http://localhost:5004/.well-known/jwks.json',
       clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
       clientSecret: process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET,
-      profile: profile => ({
-        id: profile.sub,
-      }),
+      profile: async profile => {
+        const connection = await db()
+        const userRoles = await connection.getUserRolesById(profile.sub)
+
+        return {
+          id: profile.sub,
+          pkh: profile.sub,
+          role: userRoles[0].roleId,
+        }
+      },
     },
   ],
   secret: process.env.SECRET,
   debug: true,
   callbacks: {
-    // async callback({ session, token, user }) {
-    //   console.log('CALLBACK')
-    //   console.log('session', session)
-    //   console.log('token', token)
-    //   console.log('user', user)
-    //   return Promise.resolve(session)
-    // },
-    // async signin(user, account, profile) {
-    //   console.log('user', user, account, profile)
-    //   return true
-    // },
-    async jwt({ token, user, account, profile }) {
+    async signIn({ profile }) {
+      try {
+        if (!has('credential')(profile)) {
+          return false
+        }
+
+        const credential = omit(['proof'])(prop('credential')(profile)) as Credential
+
+        const connection = await db()
+        const existingUser = await connection.getUserById(credential.credentialSubject.id)
+
+        if (!isEmpty(existingUser)) {
+          // User already exists
+          return true
+        }
+
+        if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
+          const principal = await connection.getUserById(credential.issuer)
+
+          if (isEmpty(principal)) {
+            // Principal not found
+            return false
+          }
+        }
+
+        await connection.insertUserTx(credential)
+
+        return true
+      } catch (error: unknown) {
+        console.log(error)
+        
+        return false
+      }
+    },
+    async jwt({ token, user, account }) {
       if (account?.access_token) {
         token.accessToken = account.access_token
       }

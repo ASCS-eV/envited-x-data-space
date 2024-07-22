@@ -1,6 +1,7 @@
 import { Footer } from '../modules/Footer'
 import { Header } from '../modules/Header'
 import { NotificationContainer } from '../modules/Notifications'
+import { NextAuthProvider } from './context/NextAuthProvider'
 import './global.css'
 
 export const metadata = {
@@ -23,10 +24,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#ffffff"></meta>
       </head>
       <body className="bg-white dark:bg-gray-800">
-        <Header />
-        <NotificationContainer />
-        {children}
-        <Footer />
+        <NextAuthProvider>
+          <Header />
+          <NotificationContainer />
+          {children}
+          <Footer />
+        </NextAuthProvider>
       </body>
     </html>
   )

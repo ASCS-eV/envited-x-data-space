@@ -19,7 +19,7 @@ import {
 
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
 
-export const extractIssuerIdFromCredential = pathOr('', ['issuer', 'id'])
+export const extractIssuerIdFromCredential = pathOr('', ['issuer'])
 
 export const extractTypeFromCredential = pathOr('', ['credentialSubject', 'type'])
 

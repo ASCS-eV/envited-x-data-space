@@ -1,13 +1,21 @@
+'use client'
+
 import { Button, Size } from '@envited-marketplace/design-system'
+import { useSession } from 'next-auth/react'
+import { isNil } from 'ramda'
 import React, { FC } from 'react'
 
-export const SignIn: FC = () => {
-  const signIn = () => {
-    console.log('signin in')
-  }
+import { signIn, signOut } from '../../common/auth'
 
-  return (
-    <Button onClick={signIn} isDisabled={false} size={Size.small}>
+export const SignIn: FC = () => {
+  const { data: session } = useSession()
+
+  return !isNil(session) ? (
+    <Button onClick={signOut} isDisabled={false} size={Size.small}>
+      Sign out
+    </Button>
+  ) : (
+    <Button onClick={() => signIn({ pkh: 'tz1PRINCIPAL' })} isDisabled={false} size={Size.small}>
       Sign in
     </Button>
   )

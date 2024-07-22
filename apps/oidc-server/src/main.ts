@@ -40,7 +40,7 @@ app.post('/present-credential', urlencodedParser, async (req, res) => {
 })
 
 app.get('/consent', async (req, res) => {
-  const result = await getConsent({ redis, hydraAdmin, log })(req.query.consent_challenge as string)
+  const result = await getConsent({ hydraAdmin, log })(req.query.consent_challenge as string)
   res.redirect(result)
 })
 

@@ -22,9 +22,7 @@ describe('common/serverActions/users/insert', () => {
         id: 'USER_DID',
         type: CredentialType.AscsUser,
       },
-      issuer: {
-        id: 'ISSUER_DID',
-      },
+      issuer: 'ISSUER_DID',
     } as any
 
     const result = await SUT._insert({ db: dbStub })(credential)

@@ -30,6 +30,9 @@ export const deleteUserById = (db: DatabaseConnection) => async (id: string) =>
 export const getUserById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id))
 
+export const getUserRolesById = (db: DatabaseConnection) => async (id: string) =>
+  db.select().from(usersToRoles).where(eq(usersToRoles.userId, id))
+
 export const getUserWithProfileById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id)).leftJoin(profile, eq(user.name, profile.name))
 
@@ -150,7 +153,12 @@ export const _txn =
       const [addressType] = await insertAddressTypeTx(tx)(credentialSubject.address.type)
       const { id: addressTypeId } = addressType
 
-      const [issuer] = await insertIssuerTx(tx)(newIssuer)
+      const [issuer] = await insertIssuerTx(tx)({
+        id: newIssuer,
+        name: credentialTypes.includes('AscsMemberCredential') ? credentialSubject.name : '',
+        url: credentialTypes.includes('AscsMemberCredential') ? propOr('', 'url')(credentialSubject) : '',
+        type: credentialTypes.includes('AscsMemberCredential') ? 'AscsIssuer' : '',
+      })
       const { id } = issuer
 
       const [newUser] = await tx

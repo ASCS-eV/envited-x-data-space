@@ -79,47 +79,41 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
   debug: true,
   callbacks: {
-    // async callback({ session, token, user }) {
-    //   console.log('CALLBACK')
-    //   console.log('session', session)
-    //   console.log('token', token)
-    //   console.log('user', user)
-    //   return Promise.resolve(session)
-    // },
-    // async signin(user, account, profile) {
-    //   console.log('user', user, account, profile)
-    //   return true
-    // },
-    async jwt({ token, user, account, profile }) {
+    async signIn({ profile }) {
+      if (!has('credential')(profile)) {
+        return false
+      }
+
+      const credential = omit(['proof'])(prop('credential')(profile)) as Credential
+
+      const connection = await db()
+      const existingUser = await connection.getUserById(credential.credentialSubject.id)
+
+      if (!isEmpty(existingUser)) {
+        // User already exists
+        return true
+      }
+
+      if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
+        const principal = await connection.getUserById(credential.issuer)
+
+        if (isEmpty(principal)) {
+          // Principal not found
+          return false
+        }
+      }
+
+      await connection.insertUserTx(credential)
+
+      return true
+    },
+    async jwt({ token, user, account }) {
       if (account?.access_token) {
         token.accessToken = account.access_token
       }
 
       if (user) {
         token.user = user
-      }
-
-      if (has('credential')(profile)) {
-        const credential = omit(['proof'])(prop('credential')(profile)) as Credential
-
-        const connection = await db()
-        const user = await connection.getUserById(credential.credentialSubject.id)
-
-        if (!isEmpty(user)) {
-          // User already exist
-          return token
-        }
-
-        if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
-          const principal = await connection.getUserById(credential.issuer)
-
-          if (isEmpty(principal)) {
-            // Principal not found
-            return token
-          }
-        }
-
-        await connection.insertUserTx(credential)
       }
 
       return token

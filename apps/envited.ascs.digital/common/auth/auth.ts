@@ -80,32 +80,38 @@ export const authOptions: NextAuthOptions = {
   debug: true,
   callbacks: {
     async signIn({ profile }) {
-      if (!has('credential')(profile)) {
-        return false
-      }
-
-      const credential = omit(['proof'])(prop('credential')(profile)) as Credential
-
-      const connection = await db()
-      const existingUser = await connection.getUserById(credential.credentialSubject.id)
-
-      if (!isEmpty(existingUser)) {
-        // User already exists
-        return true
-      }
-
-      if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
-        const principal = await connection.getUserById(credential.issuer)
-
-        if (isEmpty(principal)) {
-          // Principal not found
+      try {
+        if (!has('credential')(profile)) {
           return false
         }
+
+        const credential = omit(['proof'])(prop('credential')(profile)) as Credential
+
+        const connection = await db()
+        const existingUser = await connection.getUserById(credential.credentialSubject.id)
+
+        if (!isEmpty(existingUser)) {
+          // User already exists
+          return true
+        }
+
+        if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
+          const principal = await connection.getUserById(credential.issuer)
+
+          if (isEmpty(principal)) {
+            // Principal not found
+            return false
+          }
+        }
+
+        await connection.insertUserTx(credential)
+
+        return true
+      } catch (error: unknown) {
+        console.log(error)
+        
+        return false
       }
-
-      await connection.insertUserTx(credential)
-
-      return true
     },
     async jwt({ token, user, account }) {
       if (account?.access_token) {

@@ -10,7 +10,7 @@ import { RedisHydraContext } from '../types'
 const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraContext) => {
   try {
     const {
-      queryStringParameters: { loginId },
+      pathParameters: { loginId },
     } = event
     const { redis } = context
     const result = getRedirect({ redis })(loginId as string)

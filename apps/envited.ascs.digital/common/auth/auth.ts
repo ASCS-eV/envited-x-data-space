@@ -109,7 +109,7 @@ export const authOptions: NextAuthOptions = {
         return true
       } catch (error: unknown) {
         console.log(error)
-        
+
         return false
       }
     },

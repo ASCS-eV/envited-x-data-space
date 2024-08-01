@@ -12,7 +12,7 @@ import { RedisLogContext } from '../types'
 export const lambdaHandler = async (event: any, context: RedisLogContext) => {
   try {
     const { redis, log } = context
-    const loginChallenge = event.queryStringParameters?.loginChallenge
+    const loginChallenge = event.pathParameters?.challenge
 
     const result = getChallenge({ redis, log, keyToDID })(loginChallenge)
 

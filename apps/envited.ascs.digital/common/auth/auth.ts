@@ -81,35 +81,40 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ profile }) {
       try {
-        if (!has('credential')(profile)) {
-          return false
-        }
-
-        const credential = omit(['proof'])(prop('credential')(profile)) as Credential
-
-        const connection = await db()
-        const existingUser = await connection.getUserById(credential.credentialSubject.id)
-
-        if (!isEmpty(existingUser)) {
-          // User already exists
-          return true
-        }
-
-        if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
-          const principal = await connection.getUserById(credential.issuer)
-
-          if (isEmpty(principal)) {
-            // Principal not found
+        if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
+          if (!has('credential')(profile)) {
             return false
           }
-        }
 
-        await connection.insertUserTx(credential)
+          const credential = omit(['proof'])(prop('credential')(profile)) as Credential
+
+          // TODO - Check status in revocation smart contract
+
+          const connection = await db()
+          const existingUser = await connection.getUserById(credential.credentialSubject.id)
+
+          if (!isEmpty(existingUser)) {
+            // User already exists
+            return true
+          }
+
+          if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
+            const principal = await connection.getUserById(credential.issuer)
+
+            if (isEmpty(principal)) {
+              // Principal not found
+              // TODO - Throw message "Your company did not yet register at the ENVITED marketplace. Please contact your company principle to create a company profile"
+              return false
+            }
+          }
+
+          await connection.insertUserTx(credential)
+        }
 
         return true
       } catch (error: unknown) {
         console.log(error)
-        
+
         return false
       }
     },

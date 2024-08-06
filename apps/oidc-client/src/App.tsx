@@ -57,9 +57,17 @@ function App() {
           <img src="/envited-logo.png" alt="Envited Data Space" />
         </div>
       </header>
+
       <main className={styles.container}>
         <p>
           Sign in with your verified credentials to continue to <strong>Envited Data Space</strong>
+        </p>
+        <p className={styles.pSmall}>
+          By presenting your verifiable credential you agree to the{' '}
+          <a href={process.env.EXTERN_TERMS_AND_CODITIONS_URL} target="_blank">
+            Terms of Service
+          </a>{' '}
+          and using the information for creating your ENVITED X Dataspace account
         </p>
         {isLoading && <Loader />}
         {qrCodeValue && !isLoading && (
@@ -67,6 +75,12 @@ function App() {
             <QRCode value={qrCodeValue} />
           </div>
         )}
+        <p className={styles.pSmall}>
+          You don't have a credential?{' '}
+          <a href={process.env.EXTERN_DEMIM_URL} target="_blank">
+            Register here
+          </a>
+        </p>
         {error && (
           <div className={styles.error}>
             <h3 className={styles.errorTitle}>Error</h3>

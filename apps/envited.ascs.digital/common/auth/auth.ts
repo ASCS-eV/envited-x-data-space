@@ -81,7 +81,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ profile }) {
       try {
-        return '/error?error=PRINCIPAL_NOT_FOUND'
         if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
           if (!has('credential')(profile)) {
             return '/error?error=CREDENTIAL_NOT_FOUND'

@@ -83,7 +83,7 @@ export const authOptions: NextAuthOptions = {
       try {
         if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
           if (!has('credential')(profile)) {
-            return false
+            return '/login-error?type=credential-not-found'
           }
 
           const credential = omit(['proof'])(prop('credential')(profile)) as Credential
@@ -103,8 +103,7 @@ export const authOptions: NextAuthOptions = {
 
             if (isEmpty(principal)) {
               // Principal not found
-              // TODO - Throw message "Your company did not yet register at the ENVITED marketplace. Please contact your company principle to create a company profile"
-              return false
+              return '/login-error?type=principal-not-found'
             }
           }
 

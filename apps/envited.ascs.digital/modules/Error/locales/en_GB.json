@@ -1,5 +1,10 @@
 {
   "[Heading] error": "Error",
-  "[Description] something went wrong": "Ah oh, Something went wrong!",
+  "[Heading] DEFAULT_ERROR": "Ah oh, Something went wrong!",
+  "[Description] DEFAULT_ERROR": "Please try again or contact us.",
+  "[Heading] PRINCIPAL_NOT_FOUND": "Principal not found",
+  "[Description] PRINCIPAL_NOT_FOUND": "Please contact your company principle to create a company profile.",
+  "[Heading] CREDENTIAL_NOT_FOUND": "Credential not found",
+  "[Description] CREDENTIAL_NOT_FOUND": "There is no credential found.",
   "[Button] home": "Go back to Home"
 }

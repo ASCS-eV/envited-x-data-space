@@ -81,9 +81,10 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ profile }) {
       try {
+        return '/error?error=PRINCIPAL_NOT_FOUND'
         if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
           if (!has('credential')(profile)) {
-            return '/login-error?type=credential-not-found'
+            return '/error?error=CREDENTIAL_NOT_FOUND'
           }
 
           const credential = omit(['proof'])(prop('credential')(profile)) as Credential
@@ -103,7 +104,7 @@ export const authOptions: NextAuthOptions = {
 
             if (isEmpty(principal)) {
               // Principal not found
-              return '/login-error?type=principal-not-found'
+              return '/error?error=PRINCIPAL_NOT_FOUND'
             }
           }
 

@@ -6,7 +6,6 @@ import { FooterTranslation } from '../../modules/Footer'
 import { HeaderTranslation } from '../../modules/Header'
 import { HeroHeaderTranslation } from '../../modules/HeroHeader'
 import { ReinventingMobilityTranslation, SimulationDataTranslation, VisionTranslation } from '../../modules/LandingPage'
-import { LoginErrorTranslation } from '../../modules/LoginError'
 import { MemberTranslation } from '../../modules/Member'
 import { NotFoundTranslation } from '../../modules/NotFound'
 import { ProfileTranslation } from '../../modules/Profile'
@@ -23,7 +22,6 @@ const translationObject = mergeTranslations([
   FooterTranslation,
   HeaderTranslation,
   HeroHeaderTranslation,
-  LoginErrorTranslation,
   MemberTranslation,
   NotFoundTranslation,
   ProfileTranslation,

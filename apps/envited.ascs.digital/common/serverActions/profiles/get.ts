@@ -6,7 +6,7 @@ import { getServerSession } from '../../auth'
 import { RESTRICTED_PROFILE_FIELDS } from '../../constants'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isOwnProfile, isUsersCompanyProfile } from '../../guards'
+import { isOwnProfile, isPrincipal, isUsersCompanyProfile } from '../../guards'
 import { Log, log } from '../../logger'
 import { Session } from '../../types'
 import { badRequestError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
@@ -77,7 +77,7 @@ export const _getProfile =
       const connection = await db()
       const [user] = await connection.getUserById(session.user.id)
       const [issuer] = await connection.getUserById(user.issuerId)
-      const [profile] = await connection.getProfileByName(issuer.name)
+      const [profile] = await connection.getProfileByName(isPrincipal(session) ? user.name : issuer.name)
 
       if (isNil(profile) || isEmpty(profile)) {
         throw notFoundError({ resource: 'profiles', resourceId: issuer.name, userId: session?.user.id })

@@ -27,7 +27,7 @@ const Alert: FC<AlertProps> = ({ type, children }) => {
     <div className={`rounded-md p-4 ${typeStyleMap[type]}`}>
       <div className="flex">
         <div className="flex-shrink-0">{typeIconMap[type]}</div>
-        <div className="ml-3">{children}</div>
+        <div className="ml-3 w-full">{children}</div>
       </div>
     </div>
   )

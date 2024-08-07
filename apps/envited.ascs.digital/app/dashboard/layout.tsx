@@ -5,6 +5,7 @@ import { getProfile } from '../../common/serverActions'
 import { getImageUrl } from '../../common/utils'
 import { Breadcrumbs } from '../../modules/Breadcrumbs'
 import { DashboardNavigation } from '../../modules/DashboardNavigation'
+import { ProfileNotification } from '../../modules/Profile'
 
 interface DashboardProps {
   children: ReactNode
@@ -73,7 +74,10 @@ export default async function DashboardLayout({ children }: DashboardProps) {
           <div className="w-1/4">
             <DashboardNavigation items={NAVIGATION_DASHBOARD} />
           </div>
-          <div className="w-3/4">{children}</div>
+          <div className="w-3/4 flex flex-col gap-y-4">
+            {!profile.isPublished && <ProfileNotification />}
+            {children}
+          </div>
         </div>
       </main>
     </>

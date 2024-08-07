@@ -1,6 +1,6 @@
 export const FEATURE_FLAGS = {
   development: {
-    oidc: true,
+    oidc: false,
   },
   staging: {
     oidc: true,

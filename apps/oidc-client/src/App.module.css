@@ -21,6 +21,11 @@ p {
   text-align: center;
 }
 
+.pSmall {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .container {
   width: 100%;
   max-width: 30rem;

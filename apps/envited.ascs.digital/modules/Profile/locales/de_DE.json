@@ -37,5 +37,7 @@
   "[Label] offering": "Offering",
   "[Button] remove": "Remove offering",
   "[Button] add further offerings": "+ add further offerings",
-  "[Button] update profile": "Update profile"
+  "[Button] update profile": "Update profile",
+  "[Notification] welcome message": "Welcome to ENVITED X, please fill in your profile and it will be published",
+  "[Button] notification": "Edit profile"
 }

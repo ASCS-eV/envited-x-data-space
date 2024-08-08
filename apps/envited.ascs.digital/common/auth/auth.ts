@@ -1,12 +1,13 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { equals, has, isEmpty, omit, prop } from 'ramda'
+import { equals, has, isEmpty, omit, prop, replace } from 'ramda'
 import { match } from 'ts-pattern'
 
 import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
+import { USER_CREDENTIAL } from '../fixtures'
 import { CredentialType, Role } from '../types'
 import { Environment } from '../types'
 
@@ -88,7 +89,16 @@ export const authOptions: NextAuthOptions = {
 
           const credential = omit(['proof'])(prop('credential')(profile)) as Credential
 
-          // TODO - Check status in revocation smart contract
+          const revocationCheck = await checkRevocationRegistry(
+            credential.id,
+            credential.credentialSubject.id,
+            credential.issuer,
+            credential.credentialSubject.type,
+          )
+
+          if (!revocationCheck) {
+            return '/error?error=STATUS_NOT_ACTIVE'
+          }
 
           const connection = await db()
           const existingUser = await connection.getUserById(credential.credentialSubject.id)
@@ -167,3 +177,25 @@ export const signOut = () =>
   NASignOut({
     callbackUrl: '/',
   })
+
+export const checkRevocationRegistry = async (id: string, pkh: string, issuer: string, type: string) => {
+  const response = await fetch('http://localhost:5002/verify-user', {
+    method: 'POST',
+    body: JSON.stringify({
+      id,
+      pkh: replace('did:pkh:tz:', '')(pkh),
+      issuer: replace('did:pkh:tz:', '')(issuer),
+      type,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`)
+  }
+
+  const json = await response.json()
+
+  return json
+}

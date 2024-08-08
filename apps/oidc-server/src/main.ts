@@ -12,12 +12,14 @@ import { getClientMetadata } from './handlers/clientMetadata'
 import { getConsent } from './handlers/consent'
 import { getPresentCredential, postPresentCredential } from './handlers/presentCredential'
 import { getRedirect } from './handlers/redirect'
+import { verifyUser } from './handlers/verifyUser/verifyUser'
 
 const host = process.env.HOST ?? 'localhost'
 const port = process.env.PORT ? Number(process.env.PORT) : 5002
 
 const app = express()
 app.use(cors())
+app.use(bodyParser.json())
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -51,6 +53,18 @@ app.get('/challenge/:challenge', async (req, res) => {
 
 app.get('/redirect/:loginId', async (req, res) => {
   const result = await getRedirect({ redis })(req.params.loginId)
+  res.send(result)
+})
+
+app.post('/verify-user', async (req, res) => {
+  console.log('verify user - req', req.body)
+  const { id, pkh, issuer, type } = req.body
+  const result = await verifyUser(
+    id, //'urn:uuid:0bc4ae81-1da3-4d3f-8b95-d2336cb4cabf',
+    pkh,
+    issuer, //'tz1Kj1XAEhrcuPS3rvZ8BGsUGDjv78ykEkEi',
+    type,
+  )
   res.send(result)
 })
 

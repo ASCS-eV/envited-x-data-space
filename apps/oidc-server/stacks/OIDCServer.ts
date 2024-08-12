@@ -24,6 +24,7 @@ export function OIDCServer({ stack }: StackContext) {
       'GET /consent': './src/aws/getConsent.handler',
       'GET /challenge/:challenge': './src/aws/getChallenge.handler',
       'GET /redirect/:loginId': './src/aws/getRedirect.handler',
+      'POST /verify-user': './src/aws/postVerifyUser.handler',
     },
   })
 

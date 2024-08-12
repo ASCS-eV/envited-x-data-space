@@ -53,17 +53,17 @@ export const authOptions: NextAuthOptions = {
       type: 'oauth',
       version: '2.0',
       idToken: true,
-      issuer: 'http://localhost:5004',
+      issuer: 'https://public.oidc.ascs.digital',
       authorization: {
-        url: 'http://localhost:5004/oauth2/auth?response_type=code',
+        url: 'https://public.oidc.ascs.digital/oauth2/auth?response_type=code',
         params: {
           scope: 'openid',
         },
       },
-      token: 'http://localhost:5004/oauth2/token',
-      jwks_endpoint: 'http://localhost:5004/.well-known/jwks.json',
-      clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
-      clientSecret: process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET,
+      token: 'https://public.oidc.ascs.digital/oauth2/token',
+      jwks_endpoint: 'https://public.oidc.ascs.digital/.well-known/jwks.json',
+      clientId: process.env.OIDC_CLIENT_ID,
+      clientSecret: process.env.OIDC_CLIENT_SECRET,
       profile: async profile => {
         const connection = await db()
         const userRoles = await connection.getUserRolesById(profile.sub)

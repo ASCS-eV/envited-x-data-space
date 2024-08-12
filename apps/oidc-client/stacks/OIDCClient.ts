@@ -6,5 +6,9 @@ export function OIDCClient({ stack }: StackContext) {
     buildOutput: '../../dist/apps/oidc-client',
     buildCommand: 'cd ../../ && npx nx build oidc-client --prod',
     environment: {},
+    customDomain: {
+      domainName: 'signin.ascs.digital',
+      hostedZone: 'ascs.digital',
+    },
   })
 }

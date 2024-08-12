@@ -1,0 +1,41 @@
+{
+    "networkName": "ghostnet",
+    "accounts": {
+        "taqOperatorAccount": {
+            "publicKey": "edpkv9bVePZ9KfybfkcvFvn2LU48zRA1ymm8xmptqNeYME6kBB6dM4",
+            "publicKeyHash": "tz1cos2mxK9JWkbch6Xjv3y3wqBeV8RgRBv8",
+            "privateKey": "edskS3WMeZmSjh5WyH14v1NuX6VsJSZGGRa4VNDusZkGZYY2Wu7NAZEgYQov8FPj5yoniiPAiLygdQyVMtvH27HR6UK82KRsMA",
+            "mnemonic": "ability swarm language scale cereal museum plate gospel peanut shock aspect face"
+        },
+        "bob": {
+            "publicKey": "edpkuyn1jKFCcRJosFr8DjraqJxtSVwULPFrQfEgbHG1kgxXHgnTHV",
+            "publicKeyHash": "tz1SRCh25op7nTJqSNSKfvoUUqKLyPXTeNv3",
+            "privateKey": "edskRnrXLA2d6cx8oTmjPzmBRTE1jEpYhDTi49Yrs68pqTbSDgFHMwWvy1BuKor8zAAuhFHaDaFEaoYTnA2prTJi5NpMJjRqES",
+            "mnemonic": "priority myth fluid excess crane duck wire manual tomorrow wave prison fiber"
+        },
+        "alice": {
+            "publicKey": "edpkuqJuvDGtbF7HzJWcCERzRGkQmsp8gJopL5xx99t3jtziwkCg2D",
+            "publicKeyHash": "tz1horkA2zdGJxTqAGikQUxY2jP8Vthw1HQa",
+            "privateKey": "edskRcanqsa3sZ2A9T89av7VNRDk2pxfitcafoYJtSHHMi2oooUu3Dd3YPZUqjZVgnXwJnztSHaHLNXRfCFoADRGzvMhfsuxXm",
+            "mnemonic": "course deposit blush salad album cupboard true stem height mixture fringe pond"
+        },
+        "john": {
+            "publicKey": "edpkvSXdNndR1faKqd4RSrUMY76EpVRGPAr4oPbx6ELNdc3b4zrfb2",
+            "publicKeyHash": "tz1TuE85SHeTzUt7JdqEz8sWkyqTSvBjJepG",
+            "privateKey": "edskRuE1QmRZdCSFavnCLepganMTgiowgWcF1hKmHENYKoUyduz3WxBrw2GqVtQSTMR7h5ULYrvVEJCDs5LK7CrYgF3ayxW5G3",
+            "mnemonic": "head summer essence motor nuclear book public worry drastic heart fix ability"
+        },
+        "jane": {
+            "publicKey": "edpktuwSMo7gk8v36PaJF2uYdHKitqfHXxAGDQipi56bpWqTC79K2D",
+            "publicKeyHash": "tz1UwGtXhSaieKUizWjDNmF3FmMpeTermtxp",
+            "privateKey": "edskRx9q95gLbXdYfTXxf3KpPJN3CzCjDDmRoDsQqHF5aCnJ9iW6gdYAgpg7W2W8iMJtVQHqtBkW6gV2n96VL9Mx2gyRGPF43y",
+            "mnemonic": "quiz paddle just text trophy panic indoor science ski oblige crowd occur"
+        },
+        "joe": {
+            "publicKey": "edpkvQthvSurc8GYN7DP1bFx5cFnBqrsq8p9M8qNAxGZP7SbFKr9pQ",
+            "publicKeyHash": "tz1h79RHtpAkeMZTakwXtJT7rUsB9s5CCDQD",
+            "privateKey": "edskRy6P6eLEAB4QjP46hhKCXhxCQN3tWo4eKLQVtxMQSokwVmyGssVT4TP1TZyyKvFpbRwtnDmReUdJ1kwAeVAXAJzFoarEYz",
+            "mnemonic": "crawl sick track loop fog giggle ceiling bullet cradle truly demise page"
+        }
+    }
+}

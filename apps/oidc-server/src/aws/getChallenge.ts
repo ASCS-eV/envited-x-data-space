@@ -12,12 +12,12 @@ import { RedisLogContext } from '../types'
 export const lambdaHandler = async (event: any, context: RedisLogContext) => {
   try {
     const { redis, log } = context
-    const loginChallenge = event.queryStringParameters?.loginChallenge
-
-    const result = getChallenge({ redis, log, keyToDID })(loginChallenge)
+    const loginChallenge = event.pathParameters?.challenge
+    const result = await getChallenge({ redis, log, keyToDID })(loginChallenge)
 
     return ok(result)
   } catch (error) {
+    log.error(error)
     return internalServerError(error.message)
   }
 }

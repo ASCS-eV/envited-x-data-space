@@ -1,0 +1,81 @@
+{
+    "operations": {},
+    "tasks": {
+        "@taqueria/plugin-taquito.instantiate-account.1716817729005": {
+            "task": "instantiate-account",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1716817729005,
+            "output": "Accounts instantiated: bob, alice, john, jane, joe.\nPlease execute \"taq fund\" targeting the same environment to fund these accounts"
+        },
+        "@taqueria/plugin-taquito.fund.1716818041630": {
+            "task": "fund",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1716818041631,
+            "output": [
+                {
+                    "accountAlias": "bob",
+                    "accountAddress": "tz1SRCh25op7nTJqSNSKfvoUUqKLyPXTeNv3",
+                    "mutezFunded": "3"
+                },
+                {
+                    "accountAlias": "alice",
+                    "accountAddress": "tz1horkA2zdGJxTqAGikQUxY2jP8Vthw1HQa",
+                    "mutezFunded": "3"
+                },
+                {
+                    "accountAlias": "john",
+                    "accountAddress": "tz1TuE85SHeTzUt7JdqEz8sWkyqTSvBjJepG",
+                    "mutezFunded": "3"
+                },
+                {
+                    "accountAlias": "jane",
+                    "accountAddress": "tz1UwGtXhSaieKUizWjDNmF3FmMpeTermtxp",
+                    "mutezFunded": "3"
+                },
+                {
+                    "accountAlias": "joe",
+                    "accountAddress": "tz1h79RHtpAkeMZTakwXtJT7rUsB9s5CCDQD",
+                    "mutezFunded": "3"
+                }
+            ]
+        },
+        "@taqueria/plugin-taquito.fund.1716818948178": {
+            "task": "fund",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1716818948178,
+            "output": [
+                {
+                    "accountAlias": "bob",
+                    "accountAddress": "tz1SRCh25op7nTJqSNSKfvoUUqKLyPXTeNv3",
+                    "mutezFunded": "2999997"
+                },
+                {
+                    "accountAlias": "alice",
+                    "accountAddress": "tz1horkA2zdGJxTqAGikQUxY2jP8Vthw1HQa",
+                    "mutezFunded": "2999997"
+                },
+                {
+                    "accountAlias": "john",
+                    "accountAddress": "tz1TuE85SHeTzUt7JdqEz8sWkyqTSvBjJepG",
+                    "mutezFunded": "2999997"
+                },
+                {
+                    "accountAlias": "jane",
+                    "accountAddress": "tz1UwGtXhSaieKUizWjDNmF3FmMpeTermtxp",
+                    "mutezFunded": "2999997"
+                },
+                {
+                    "accountAlias": "joe",
+                    "accountAddress": "tz1h79RHtpAkeMZTakwXtJT7rUsB9s5CCDQD",
+                    "mutezFunded": "2999997"
+                }
+            ]
+        },
+        "@taqueria/plugin-taquito.fund.1716822726133": {
+            "task": "fund",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1716822726133,
+            "output": "All instantiated accounts in the current environment, \"testing\", are funded up to or beyond the declared amount"
+        }
+    }
+}

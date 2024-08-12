@@ -14,7 +14,7 @@ function App() {
   const loginChallenge = urlSearchParams.get('login_challenge')
 
   const { data, error, isLoading } = useSWR(
-    `${import.meta.env.VITE_AUTH_SERVER_URI}/challenge/${loginChallenge}`,
+    `${import.meta.env.VITE_API_URL}/challenge/${loginChallenge}`,
     fetcher,
   )
 
@@ -35,7 +35,7 @@ function App() {
     if (data) {
       const { loginId } = data
       const interval = setInterval(() => {
-        fetch(`${import.meta.env.VITE_AUTH_SERVER_URI}/redirect/${loginId}`)
+        fetch(`${import.meta.env.VITE_API_URL}/redirect/${loginId}`) 
           .then(res => res.json())
           .then(data => {
             if (data?.redirect?.destination) {

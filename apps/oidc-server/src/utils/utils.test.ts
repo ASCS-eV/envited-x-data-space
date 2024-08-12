@@ -528,4 +528,17 @@ describe('utils', () => {
       expect(result).toEqual(expected)
     })
   })
+
+  describe('queryStringToJSON', () => {
+    it('should convert a query string to JSON as expected', () => {
+      // when ... we want to convert a query string to JSON
+      // then ... we should convert a query string to JSON as expected
+      const result = SUT.queryStringToJSON('key1=value1&key2=value2')
+      const expected = {
+        key1: 'value1',
+        key2: 'value2',
+      }
+      expect(result).toEqual(expected)
+    })
+  })
 })

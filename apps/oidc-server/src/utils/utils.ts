@@ -7,13 +7,14 @@ import {
   verifyPresentation as spruceVerifyPresentation,
 } from '@spruceid/didkit-wasm-node'
 import crypto from 'crypto'
-import jp from 'jsonpath'
+import { JSONPath } from 'jsonpath-plus'
 import {
   __,
   addIndex,
   append,
   assoc,
   equals,
+  fromPairs,
   gt,
   has,
   isEmpty,
@@ -21,9 +22,11 @@ import {
   lensProp,
   map,
   over,
+  pipe,
   propSatisfies,
   reduce,
   reject,
+  split,
   when,
 } from 'ramda'
 
@@ -133,6 +136,142 @@ export const _verifyPresentation =
     ) {
       // Verify the signature on the VC
       const verifyOptionsString = '{}'
+      console.log(new Date().toISOString())
+      console.log('Verify attempt', await spruceVerifyCredential(JSON.stringify(VC), verifyOptionsString))
+      // TEST
+      const t = {
+        "@context": [
+            "https://www.w3.org/2018/credentials/v1",
+            {
+                "@protected": true,
+                "@version": 1.1,
+                "AscsMember": {
+                    "@context": {
+                        "@protected": true,
+                        "@version": 1.1,
+                        "address": "http://schema.org/address",
+                        "articlesOfAssociation": "https://schema.org/termsOfService",
+                        "contributionRules": "https://schema.org/termsOfService",
+                        "isAscsMember": "http://schema.org/Boolean",
+                        "isEnvitedMember": "http://schema.org/Boolean",
+                        "name": "https://schema.org/name",
+                        "privacyPolicy": "https://schema.org/termsOfService",
+                        "url": "https://schema.org/url",
+                        "vatID": "http://schema.org/vatID"
+                    },
+                    "@id": "https://schema.ascs.digital/AscsMemberCredential/v1#AscsMember"
+                },
+                "AscsMemberCredential": "https://schema.ascs.digital/AscsMemberCredential/v1#",
+                "PostalAddress": {
+                    "@context": {
+                        "@protected": true,
+                        "@version": 1.1,
+                        "addressCountry": "https://schema.org/addressCountry",
+                        "addressLocality": "http://schema.org/addressLocality",
+                        "postalCode": "http://schema.org/postalCode",
+                        "streetAddress": "http://schema.org/streetAddress"
+                    },
+                    "@id": "http://schema.org/PostalAddress"
+                }
+            }
+        ],
+        "credentialSubject": {
+            "address": {
+                "addressCountry": "+49",
+                "addressLocality": "Aschheim",
+                "postalCode": "85609",
+                "streetAddress": "Jägerweg 10",
+                "type": "PostalAddress"
+            },
+            "articlesOfAssociation": "https://asc-s.de/media/files/ascs_articles_of_association_2021-09-17.pdf",
+            "contributionRules": "https://asc-s.de/media/files/ascs_Contribution_Rules_as_of_2020-07-08_YNCA2wi.pdf",
+            "id": "did:pkh:tz:tz1Kj1XAEhrcuPS3rvZ8BGsUGDjv78ykEkEi",
+            "isAscsMember": true,
+            "isEnvitedMember": true,
+            "name": "New Company Inc.",
+            "privacyPolicy": "https://asc-s.de/datenschutz",
+            "type": "AscsMember",
+            "url": "",
+            "vatID": "DE717717"
+        },
+        "expirationDate": "2102-09-15T17:14:33Z",
+        "id": "urn:uuid:82384dff-454f-4a7a-87c4-d2be9dc93a90",
+        "issuanceDate": "2024-04-23T12:44:38.620Z",
+        "issuer": "did:pkh:tz:tz1ZBYB7Lwmoc7xbwq59mHK4GbiPhfPaEo2g",
+        "proof": {
+            "@context": {
+                "TezosMethod2021": "https://w3id.org/security#TezosMethod2021",
+                "TezosSignature2021": {
+                    "@context": {
+                        "@protected": true,
+                        "@version": 1.1,
+                        "challenge": "https://w3id.org/security#challenge",
+                        "created": {
+                            "@id": "http://purl.org/dc/terms/created",
+                            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+                        },
+                        "domain": "https://w3id.org/security#domain",
+                        "expires": {
+                            "@id": "https://w3id.org/security#expiration",
+                            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+                        },
+                        "id": "@id",
+                        "nonce": "https://w3id.org/security#nonce",
+                        "proofPurpose": {
+                            "@context": {
+                                "@protected": true,
+                                "@version": 1.1,
+                                "assertionMethod": {
+                                    "@container": "@set",
+                                    "@id": "https://w3id.org/security#assertionMethod",
+                                    "@type": "@id"
+                                },
+                                "authentication": {
+                                    "@container": "@set",
+                                    "@id": "https://w3id.org/security#authenticationMethod",
+                                    "@type": "@id"
+                                },
+                                "id": "@id",
+                                "type": "@type"
+                            },
+                            "@id": "https://w3id.org/security#proofPurpose",
+                            "@type": "@vocab"
+                        },
+                        "proofValue": "https://w3id.org/security#proofValue",
+                        "publicKeyJwk": {
+                            "@id": "https://w3id.org/security#publicKeyJwk",
+                            "@type": "@json"
+                        },
+                        "type": "@type",
+                        "verificationMethod": {
+                            "@id": "https://w3id.org/security#verificationMethod",
+                            "@type": "@id"
+                        }
+                    },
+                    "@id": "https://w3id.org/security#TezosSignature2021"
+                }
+            },
+            "created": "2024-04-23T12:44:38.624Z",
+            "proofPurpose": "assertionMethod",
+            "proofValue": "edsigtns9t53vTqh7LxPhBAj6y9CHkWAtg7R1TPQQZid1xtt1Wu5hAmVEawVGcbp4u44FHZzPksRszwT3vP1ZYEzefSQeusn4Qz",
+            "publicKeyJwk": {
+                "alg": "EdBlake2b",
+                "crv": "Ed25519",
+                "kty": "OKP",
+                "x": "wQwP7kofPqTHCBSs2FmH21jiK7Agg9N02VXiFmXeOMQ"
+            },
+            "type": "TezosSignature2021",
+            "verificationMethod": "did:pkh:tz:tz1ZBYB7Lwmoc7xbwq59mHK4GbiPhfPaEo2g#TezosMethod2021"
+        },
+        "type": [
+            "VerifiableCredential",
+            "AscsMemberCredential"
+        ]
+    }
+    console.log('Verify attempt T', await spruceVerifyCredential(JSON.stringify(t), verifyOptionsString))
+      // TEST
+
+
       const verifyResult = JSON.parse(await spruceVerifyCredential(JSON.stringify(VC), verifyOptionsString))
       // If credential verification is successful, verify the presentation
       if (verifyResult?.errors?.length === 0) {
@@ -149,7 +288,7 @@ export const _verifyPresentation =
         console.error(errorMessage)
       }
     } else {
-      const errorMessage = 'The credential subject does not match the VP holder.'
+      const errorMessage = 'The credential subject does not match the VP holder'
       console.error(errorMessage)
     }
     return false
@@ -168,6 +307,7 @@ export const _verifyAuthenticationPresentation = (verifyPresentation: any) => as
 
     for (const cred of creds) {
       if (!(await verifyPresentation(cred, VP))) {
+        console.log('Unable to verify presentation', cred, VP)
         return false
       }
     }
@@ -236,7 +376,7 @@ export const isCredentialFittingPattern = (cred: any, pattern: CredentialPattern
   }
 
   for (const claim of pattern.claims) {
-    if ((!has('required')(claim) || claim.required) && jp.paths(cred, claim.claimPath).length === 0) {
+    if ((!has('required')(claim) || claim.required) && JSONPath({ path: claim.claimPath, json: cred, resultType: 'path' }).length === 0) {
       return false
     }
   }
@@ -266,7 +406,7 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
       if (pattern.issuer === VC.issuer || pattern.issuer === '*') {
         const containsAllRequired =
           pattern.claims.filter((claim: ClaimEntry) => {
-            const claimPathLength = jp.paths(VC, claim.claimPath).length
+            const claimPathLength = JSONPath({ path: claim.claimPath, json: VC, resultType: 'path' }).length
             return claim.required && claimPathLength === 1
           }).length > 0 || pattern.claims.filter((claim: ClaimEntry) => claim.required).length === 0
 
@@ -280,7 +420,7 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
         }
 
         for (const claim of pattern.claims) {
-          const nodes = jp.nodes(VC, claim.claimPath)
+          const nodes = JSONPath({ path: claim.claimPath, json: VC, resultType: 'all' })
           let newPath = claim.newPath
           let value: any
 
@@ -305,7 +445,7 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
           }
 
           const claimTarget = claim.token === 'id_token' ? extractedClaims.tokenId : extractedClaims.tokenAccess
-          jp.value(claimTarget, newPath, value)
+          setJsonPathValue(claimTarget, newPath, value)
         }
 
         return extractedClaims
@@ -315,3 +455,48 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
 
   return {}
 }
+
+function setJsonPathValue(target: Record<string, any>, path: string, value: any) {
+  // Find the nodes that match the path
+  const nodes = JSONPath({ path: path, json: target, resultType: 'all' });
+
+  if (nodes.length > 0) {
+      // If the path exists, update the value at the last node
+      nodes.forEach(node => {
+          const parent = node.parent;
+          const lastKey = node.path[node.path.length - 1];
+          parent[lastKey] = value;
+      });
+  } else {
+      // If the path does not exist, you may need to create it manually
+      // Here, we'll create the path and set the value.
+      createPathAndSetValue(target, path, value);
+  }
+}
+
+function createPathAndSetValue(target: Record<string, any>, path: string, value: any) {
+  const keys = path.replace(/^\$|\[(\d+)\]/g, ".$1").split('.').slice(1);
+  let current = target;
+
+  for (let i = 0; i < keys.length - 1; i++) {
+      const key = keys[i];
+
+      if (!(key in current)) {
+          current[key] = isNaN(Number(keys[i + 1])) ? {} : [];
+      }
+
+      current = current[key];
+  }
+
+  current[keys[keys.length - 1]] = value;
+}
+
+export const queryStringToJSON = pipe(
+  split('&'),
+  map(pipe(
+    split('='),
+    map(decodeURIComponent), 
+    pair => [pair[0], pair[1] || ''] as [string, string] 
+  )),
+  fromPairs,
+)

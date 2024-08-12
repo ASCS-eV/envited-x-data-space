@@ -20,11 +20,12 @@ export const getPresentCredential =
   }: {
     log: Log
     importJWK: (jwk: jose.JWK, alg?: string) => Promise<jose.KeyLike | Uint8Array>
-    signJWT: (payload: jose.JWTPayload) => jose.SignJWT
+    signJWT: (payload: jose.JWTPayload) => void
     keyToVerificationMethod: any
     keyToDID: any
   }) =>
   async (loginId: string) => {
+    try {
     log.info('GET: Presenting credential')
     const presentationDefinition = generatePresentationDefinition(
       policies[process.env.LOGIN_POLICY || 'acceptAnything'],
@@ -51,7 +52,9 @@ export const getPresentCredential =
     log.info('CHALLENGE', challenge)
 
     const privateKey = await importJWK(JSON.parse(process.env.DID_KEY_JWK!), 'EdDSA')
-    const token = await signJWT(payload)
+    log.info('PRIVATE KEY', privateKey)
+    
+    const token = await new signJWT(payload)
       .setProtectedHeader({
         alg: 'EdDSA',
         kid: verificationMethod,
@@ -62,10 +65,12 @@ export const getPresentCredential =
       .setAudience('https://self-issued.me/v2') // by definition
       .setExpirationTime('1 hour')
       .sign(privateKey)
-      .catch(err => {
-        log.error(formatError(err))
-        throw err
+      .catch((err: unknown) => {
+        log.error(err)
       })
     log.info('TOKEN', token)
     return token
+    } catch (error: unknown) {
+      log.error(formatError(error))
+    }
   }

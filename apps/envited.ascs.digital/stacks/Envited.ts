@@ -158,10 +158,17 @@ export default function Envited({ stack }: StackContext) {
     permissions: ['secretsmanager:GetSecretValue'],
     environment: {
       RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
+      RDS_DB_NAME: process.env.RDS_DB_NAME!,
       REGION: process.env.region || 'eu-central-1',
       ENV: process.env.ENV!,
       NEXTAUTH_URL: process.env.NEXTAUTH_URL!,
       NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET!,
+      OIDC_CLIENT_ID: process.env.OIDC_CLIENT_ID!,
+      OIDC_CLIENT_SECRET: process.env.OIDC_CLIENT_SECRET!,
+      NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL!,
+      NEXT_PUBLIC_UPLOAD_BUCKET_NAME: process.env.NEXT_PUBLIC_UPLOAD_BUCKET_NAME!,
+      NEXT_PUBLIC_METADATA_BUCKET_NAME: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME!,
+      NEXT_PUBLIC_ASSET_BUCKET_NAME: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME!,
     },
   })
 

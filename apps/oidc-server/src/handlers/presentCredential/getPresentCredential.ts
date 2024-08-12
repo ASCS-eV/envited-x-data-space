@@ -20,7 +20,7 @@ export const getPresentCredential =
   }: {
     log: Log
     importJWK: (jwk: jose.JWK, alg?: string) => Promise<jose.KeyLike | Uint8Array>
-    signJWT: (payload: jose.JWTPayload) => void
+    signJWT: any
     keyToVerificationMethod: any
     keyToDID: any
   }) =>
@@ -54,7 +54,7 @@ export const getPresentCredential =
       const privateKey = await importJWK(JSON.parse(process.env.DID_KEY_JWK!), 'EdDSA')
       log.info('PRIVATE KEY', privateKey)
 
-      const token = await new signJWT(payload)
+      const token = await signJWT(payload)
         .setProtectedHeader({
           alg: 'EdDSA',
           kid: verificationMethod,

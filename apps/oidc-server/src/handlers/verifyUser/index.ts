@@ -1,1 +1,1 @@
-export { verifyUser } from './verifyUser'
+export { postVerifyUser } from './postVerifyUser'

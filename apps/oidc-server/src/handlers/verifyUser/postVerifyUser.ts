@@ -3,7 +3,7 @@ import { formatError } from '../../common/utils'
 import { confirmMemberRole, confirmUserRole } from '../../contract'
 import { getContractStorage } from '../../tezos'
 
-const _verifyUser =
+const _postVerifyUser =
   ({
     log,
     checkRevocationRegistry,
@@ -48,4 +48,4 @@ export const checkRevocationRegistry = _checkRevocationRegistry({
   confirmUserRole,
 })
 
-export const verifyUser = _verifyUser({ log, checkRevocationRegistry })
+export const postVerifyUser = _postVerifyUser({ log, checkRevocationRegistry })

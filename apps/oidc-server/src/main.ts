@@ -12,7 +12,7 @@ import { getClientMetadata } from './handlers/clientMetadata'
 import { getConsent } from './handlers/consent'
 import { getPresentCredential, postPresentCredential } from './handlers/presentCredential'
 import { getRedirect } from './handlers/redirect'
-import { verifyUser } from './handlers/verifyUser/verifyUser'
+import { postVerifyUser } from './handlers/verifyUser'
 
 const host = process.env.HOST ?? 'localhost'
 const port = process.env.PORT ? Number(process.env.PORT) : 5002
@@ -59,7 +59,7 @@ app.get('/redirect/:loginId', async (req, res) => {
 app.post('/verify-user', async (req, res) => {
   console.log('verify user - req', req.body)
   const { id, pkh, issuer, type } = req.body
-  const result = await verifyUser(
+  const result = await postVerifyUser(
     id, //'urn:uuid:0bc4ae81-1da3-4d3f-8b95-d2336cb4cabf',
     pkh,
     issuer, //'tz1Kj1XAEhrcuPS3rvZ8BGsUGDjv78ykEkEi',

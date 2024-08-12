@@ -26,7 +26,6 @@ const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraLogConte
     log.error(error)
     return internalServerError(error.message)
   }
-  return ok('ok')
 }
 
 export const handler = middy<APIGatewayProxyEvent, APIGatewayProxyResult>()

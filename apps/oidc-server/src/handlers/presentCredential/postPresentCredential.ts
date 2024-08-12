@@ -18,7 +18,6 @@ export const postPresentCredential =
     // Verify the presentation and the status of the credential
     if (await verifyAuthenticationPresentation(presentation)) {
       // Evaluate if the VP should be trusted
-      console.log('HERE')
       if (isTrustedPresentation(presentation)) {
         log.info('Presentation verified')
       } else {

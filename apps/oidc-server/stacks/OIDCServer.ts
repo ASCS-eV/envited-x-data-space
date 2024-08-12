@@ -1,7 +1,6 @@
 import { Api, StackContext } from 'sst/constructs'
 
 export function OIDCServer({ stack }: StackContext) {
-
   const api = new Api(stack, 'api', {
     defaults: {
       function: {

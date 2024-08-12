@@ -1,7 +1,7 @@
 import middy from '@middy/core'
 import { keyToDID, keyToVerificationMethod } from '@spruceid/didkit-wasm-node'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { importJWK, SignJWT } from 'jose'
+import { SignJWT, importJWK } from 'jose'
 
 import { log } from '../common/logger'
 import { internalServerError, ok } from '../common/responses'

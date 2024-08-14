@@ -16,7 +16,7 @@ export const lambdaHandler = async (event: any, context: LogJoseDIDContext) => {
     } = event
     const { log, importJWK, signJWT } = context
     const result = await getPresentCredential({ log, importJWK, signJWT, keyToDID, keyToVerificationMethod })(login_id)
-    
+
     return ok(result)
   } catch (error) {
     return internalServerError(error.message)

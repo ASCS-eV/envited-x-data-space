@@ -8,8 +8,7 @@ export const confirmMemberRole = async (memberRegistry: any, pkh: string) => {
 
     return status === 'active'
   } catch (error) {
-    console.error('Failed to determine role: ', error)
-    throw error
+    return error
   }
 }
 
@@ -23,7 +22,6 @@ export const confirmUserRole = async (memberRegistry: any, userRegistry: any, us
 
     return userStatus === 'active' && memberStatus === 'active'
   } catch (error) {
-    console.error('Failed to determine role: ', error)
-    throw error
+    return error
   }
 }

@@ -57,14 +57,8 @@ app.get('/redirect/:loginId', async (req, res) => {
 })
 
 app.post('/verify-user', async (req, res) => {
-  console.log('verify user - req', req.body)
   const { id, pkh, issuer, type } = req.body
-  const result = await postVerifyUser(
-    id, //'urn:uuid:0bc4ae81-1da3-4d3f-8b95-d2336cb4cabf',
-    pkh,
-    issuer, //'tz1Kj1XAEhrcuPS3rvZ8BGsUGDjv78ykEkEi',
-    type,
-  )
+  const result = await postVerifyUser(id, pkh, issuer, type)
   res.send(result)
 })
 

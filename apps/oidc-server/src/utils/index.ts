@@ -3,4 +3,5 @@ export {
   verifyAuthenticationPresentation,
   isTrustedPresentation,
   extractClaims,
+  queryStringToJSON,
 } from './utils'

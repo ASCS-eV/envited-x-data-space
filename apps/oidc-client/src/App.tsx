@@ -13,10 +13,7 @@ function App() {
   const urlSearchParams = new URLSearchParams(window.location.search)
   const loginChallenge = urlSearchParams.get('login_challenge')
 
-  const { data, error, isLoading } = useSWR(
-    `${import.meta.env.VITE_AUTH_SERVER_URI}/challenge/${loginChallenge}`,
-    fetcher,
-  )
+  const { data, error, isLoading } = useSWR(`${import.meta.env.VITE_API_URL}/challenge/${loginChallenge}`, fetcher)
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [qrCodeValue, setQrCodeValue] = useState<string | null>(null)
@@ -35,7 +32,7 @@ function App() {
     if (data) {
       const { loginId } = data
       const interval = setInterval(() => {
-        fetch(`${import.meta.env.VITE_AUTH_SERVER_URI}/redirect/${loginId}`)
+        fetch(`${import.meta.env.VITE_API_URL}/redirect/${loginId}`)
           .then(res => res.json())
           .then(data => {
             if (data?.redirect?.destination) {

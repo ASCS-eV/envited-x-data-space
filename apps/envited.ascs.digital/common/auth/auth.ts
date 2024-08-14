@@ -54,25 +54,21 @@ export const authOptions: NextAuthOptions = {
       type: 'oauth',
       version: '2.0',
       idToken: true,
-      issuer: 'http://localhost:5004',
+      issuer: process.env.ISSUER_URL,
       authorization: {
-        url: 'http://localhost:5004/oauth2/auth?response_type=code',
+        url: process.env.AUTHORIZATION_URL,
         params: {
           scope: 'openid',
         },
       },
-      token: 'http://localhost:5004/oauth2/token',
-      jwks_endpoint: 'http://localhost:5004/.well-known/jwks.json',
-      clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
-      clientSecret: process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET,
+      token: process.env.TOKEN_URL,
+      jwks_endpoint: process.env.JWKS_ENDPOINT,
+      clientId: process.env.OIDC_CLIENT_ID,
+      clientSecret: process.env.OIDC_CLIENT_SECRET,
       profile: async profile => {
-        const connection = await db()
-        const userRoles = await connection.getUserRolesById(profile.sub)
-
         return {
           id: profile.sub,
           pkh: profile.sub,
-          role: userRoles[0].roleId,
         }
       },
     },
@@ -130,11 +126,10 @@ export const authOptions: NextAuthOptions = {
         return true
       } catch (error: unknown) {
         console.log(error)
-
         return false
       }
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, profile }) {
       if (account?.access_token) {
         token.accessToken = account.access_token
       }
@@ -143,11 +138,15 @@ export const authOptions: NextAuthOptions = {
         token.user = user
       }
 
+      if (profile) {
+        const connection = await db()
+        const userRoles = await connection.getUserRolesById(profile.sub)
+        token.userRole = userRoles[0].roleId
+      }
+
       return token
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log(session)
-      console.log(token)
       if (session?.user) {
         session.user.pkh = token.user.pkh
         session.user.role = token.user.role
@@ -155,6 +154,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = undefined
         session.user.image = undefined
         session.user.name = token?.user?.id
+        session.user.role = token.userRole
       }
 
       return session

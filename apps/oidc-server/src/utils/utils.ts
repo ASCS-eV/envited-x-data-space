@@ -7,13 +7,15 @@ import {
   verifyPresentation as spruceVerifyPresentation,
 } from '@spruceid/didkit-wasm-node'
 import crypto from 'crypto'
-import jp from 'jsonpath'
+import { JSONPath } from 'jsonpath-plus'
 import {
   __,
   addIndex,
   append,
+  applySpec,
   assoc,
   equals,
+  fromPairs,
   gt,
   has,
   isEmpty,
@@ -21,9 +23,14 @@ import {
   lensProp,
   map,
   over,
+  pipe,
+  prepend,
+  prop,
   propSatisfies,
   reduce,
   reject,
+  replace,
+  split,
   when,
 } from 'ramda'
 
@@ -133,6 +140,7 @@ export const _verifyPresentation =
     ) {
       // Verify the signature on the VC
       const verifyOptionsString = '{}'
+
       const verifyResult = JSON.parse(await spruceVerifyCredential(JSON.stringify(VC), verifyOptionsString))
       // If credential verification is successful, verify the presentation
       if (verifyResult?.errors?.length === 0) {
@@ -149,7 +157,7 @@ export const _verifyPresentation =
         console.error(errorMessage)
       }
     } else {
-      const errorMessage = 'The credential subject does not match the VP holder.'
+      const errorMessage = 'The credential subject does not match the VP holder'
       console.error(errorMessage)
     }
     return false
@@ -168,6 +176,7 @@ export const _verifyAuthenticationPresentation = (verifyPresentation: any) => as
 
     for (const cred of creds) {
       if (!(await verifyPresentation(cred, VP))) {
+        console.log('Unable to verify presentation', cred, VP)
         return false
       }
     }
@@ -236,13 +245,22 @@ export const isCredentialFittingPattern = (cred: any, pattern: CredentialPattern
   }
 
   for (const claim of pattern.claims) {
-    if ((!has('required')(claim) || claim.required) && jp.paths(cred, claim.claimPath).length === 0) {
+    if (
+      (!has('required')(claim) || claim.required) &&
+      JSONPath({ path: claim.claimPath, json: cred, resultType: 'path' }).length === 0
+    ) {
       return false
     }
   }
 
   return true
 }
+
+const parsePath = pipe(
+  replace(/^\$|\['(.+?)'\]/g, '.$1'), // Convert JSONPath to dot notation
+  split('.'), // Split by dots to create array format
+  arr => prepend('$', arr.filter(Boolean)), // Prepend '$' to the array and filter out any empty strings
+)
 
 export const exportedForTesting = {
   hasUniquePath,
@@ -266,7 +284,7 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
       if (pattern.issuer === VC.issuer || pattern.issuer === '*') {
         const containsAllRequired =
           pattern.claims.filter((claim: ClaimEntry) => {
-            const claimPathLength = jp.paths(VC, claim.claimPath).length
+            const claimPathLength = JSONPath({ path: claim.claimPath, json: VC, resultType: 'path' }).length
             return claim.required && claimPathLength === 1
           }).length > 0 || pattern.claims.filter((claim: ClaimEntry) => claim.required).length === 0
 
@@ -280,7 +298,18 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
         }
 
         for (const claim of pattern.claims) {
-          const nodes = jp.nodes(VC, claim.claimPath)
+          const rawNodes = JSONPath({ path: claim.claimPath, json: VC, resultType: 'all' }).map(result => ({
+            value: result.value,
+            path: result.path,
+          })) as Array<{ value: any; path: string }>
+          const nodes = map(
+            applySpec({
+              value: prop('value'),
+              path: pipe(prop('path'), parsePath),
+            }),
+            rawNodes,
+          )
+
           let newPath = claim.newPath
           let value: any
 
@@ -305,7 +334,7 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
           }
 
           const claimTarget = claim.token === 'id_token' ? extractedClaims.tokenId : extractedClaims.tokenAccess
-          jp.value(claimTarget, newPath, value)
+          jsonpathSetValue(claimTarget, newPath, value)
         }
 
         return extractedClaims
@@ -315,3 +344,34 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
 
   return {}
 }
+
+function jsonpathSetValue(obj: Record<string, any>, path: string, value: any): Record<string, any> {
+  // Normalize the path to dot notation and split into an array
+  const keys = path
+    .replace(/^\$|\[(\d+)\]/g, '.$1') // Convert array indices and root to dot notation
+    .split('.')
+    .filter(Boolean) // Split into array and filter out empty strings
+
+  let current = obj
+
+  // Iterate over keys, creating objects/arrays as needed
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i]
+    if (!(key in current)) {
+      // Determine whether to create an object or array based on the next key
+      current[key] = isNaN(Number(keys[i + 1])) ? {} : []
+    }
+    current = current[key]
+  }
+
+  // Set the value at the final key
+  current[keys[keys.length - 1]] = value
+
+  return obj
+}
+
+export const queryStringToJSON = pipe(
+  split('&'),
+  map(pipe(split('='), map(decodeURIComponent), pair => [pair[0], pair[1] || ''] as [string, string])),
+  fromPairs,
+)

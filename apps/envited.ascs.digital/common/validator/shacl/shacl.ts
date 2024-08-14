@@ -22,11 +22,17 @@ export const _validateShaclFile =
   }) =>
   async (file: File) => {
     try {
-      const shaclDataPromise = getShaclDataFromZip(file)
-      const shaclSchemaPromise = fetchShaclSchema(Schemas.default)
+      const shaclData = await getShaclDataFromZip(file)
+      const json = JSON.parse(shaclData)
 
-      const shaclData = await shaclDataPromise
+      // const shaclDataPromise = getShaclDataFromZip(file)
+      // const shaclSchemaPromise = fetchShaclSchema(Schemas.default)
+      const shaclSchemaPromise = fetchShaclSchema(json['@type'])
+      // console.log(shaclSchemaPromise)
+
+      // const shaclData = await shaclDataPromise
       const shaclSchema = await shaclSchemaPromise
+      //console.log(shaclSchema)
 
       const schemaPromise = loadDataset(shaclSchema, ContentTypes.ttl)
       const dataPromise = loadDataset(shaclData, ContentTypes.jsonLd)
@@ -35,6 +41,8 @@ export const _validateShaclFile =
       const data = await dataPromise
 
       const report = await validateShacl(schema)(data)
+
+      console.log(report)
 
       if (!report.conforms) {
         return { isValid: false, data: {}, error: ERRORS.ASSET_INVALID }
@@ -55,7 +63,8 @@ export const _getShaclDataFromZip =
     read: (file: Entry) => Promise<string>
   }) =>
   async (asset: File) =>
-    extract(asset, 'data.jsonld').then(read)
+    extract(asset, 'metadata/domainMetadata.json').then(read)
+// extract(asset, 'data.jsonld').then(read)
 
 export const getShaclDataFromZip = _getShaclDataFromZip({ extract: extractFromFile, read })
 

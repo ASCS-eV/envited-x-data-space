@@ -140,8 +140,6 @@ export const _verifyPresentation =
     ) {
       // Verify the signature on the VC
       const verifyOptionsString = '{}'
-      console.log(new Date().toISOString())
-      console.log('Verify attempt', await spruceVerifyCredential(JSON.stringify(VC), verifyOptionsString))
 
       const verifyResult = JSON.parse(await spruceVerifyCredential(JSON.stringify(VC), verifyOptionsString))
       // If credential verification is successful, verify the presentation
@@ -336,9 +334,7 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
           }
 
           const claimTarget = claim.token === 'id_token' ? extractedClaims.tokenId : extractedClaims.tokenAccess
-          console.log(claimTarget, newPath, value)
           jsonpathSetValue(claimTarget, newPath, value)
-          console.log('EC', claimTarget)
         }
 
         return extractedClaims

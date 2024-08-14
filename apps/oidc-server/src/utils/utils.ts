@@ -261,7 +261,7 @@ export const isCredentialFittingPattern = (cred: any, pattern: CredentialPattern
 const parsePath = pipe(
   replace(/^\$|\['(.+?)'\]/g, '.$1'), // Convert JSONPath to dot notation
   split('.'), // Split by dots to create array format
-  arr => prepend('$', arr.filter(Boolean)) // Prepend '$' to the array and filter out any empty strings
+  arr => prepend('$', arr.filter(Boolean)), // Prepend '$' to the array and filter out any empty strings
 )
 
 export const exportedForTesting = {
@@ -302,14 +302,14 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
         for (const claim of pattern.claims) {
           const rawNodes = JSONPath({ path: claim.claimPath, json: VC, resultType: 'all' }).map(result => ({
             value: result.value,
-            path: result.path
+            path: result.path,
           })) as Array<{ value: any; path: string }>
           const nodes = map(
             applySpec({
               value: prop('value'),
-              path: pipe(prop('path'), parsePath)
+              path: pipe(prop('path'), parsePath),
             }),
-            rawNodes
+            rawNodes,
           )
 
           let newPath = claim.newPath
@@ -352,26 +352,26 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
 function jsonpathSetValue(obj: Record<string, any>, path: string, value: any): Record<string, any> {
   // Normalize the path to dot notation and split into an array
   const keys = path
-    .replace(/^\$|\[(\d+)\]/g, '.$1')  // Convert array indices and root to dot notation
+    .replace(/^\$|\[(\d+)\]/g, '.$1') // Convert array indices and root to dot notation
     .split('.')
-    .filter(Boolean);  // Split into array and filter out empty strings
+    .filter(Boolean) // Split into array and filter out empty strings
 
-  let current = obj;
+  let current = obj
 
   // Iterate over keys, creating objects/arrays as needed
   for (let i = 0; i < keys.length - 1; i++) {
-    const key = keys[i];
+    const key = keys[i]
     if (!(key in current)) {
       // Determine whether to create an object or array based on the next key
-      current[key] = isNaN(Number(keys[i + 1])) ? {} : [];
+      current[key] = isNaN(Number(keys[i + 1])) ? {} : []
     }
-    current = current[key];
+    current = current[key]
   }
 
   // Set the value at the final key
-  current[keys[keys.length - 1]] = value;
+  current[keys[keys.length - 1]] = value
 
-  return obj;
+  return obj
 }
 
 export const queryStringToJSON = pipe(

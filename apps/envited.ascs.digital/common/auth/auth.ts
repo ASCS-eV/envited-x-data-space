@@ -65,13 +65,9 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.OIDC_CLIENT_ID,
       clientSecret: process.env.OIDC_CLIENT_SECRET,
       profile: async profile => {
-        const connection = await db()
-        const userRoles = await connection.getUserRolesById(profile.sub)
-
         return {
           id: profile.sub,
           pkh: profile.sub,
-          role: userRoles[0].roleId,
         }
       },
     },
@@ -87,12 +83,10 @@ export const authOptions: NextAuthOptions = {
           }
 
           const credential = omit(['proof'])(prop('credential')(profile)) as Credential
-
           // TODO - Check status in revocation smart contract
 
           const connection = await db()
           const existingUser = await connection.getUserById(credential.credentialSubject.id)
-
           if (!isEmpty(existingUser)) {
             // User already exists
             return true
@@ -100,7 +94,6 @@ export const authOptions: NextAuthOptions = {
 
           if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
             const principal = await connection.getUserById(credential.issuer)
-
             if (isEmpty(principal)) {
               // Principal not found
               return '/error?error=PRINCIPAL_NOT_FOUND'
@@ -113,11 +106,11 @@ export const authOptions: NextAuthOptions = {
         return true
       } catch (error: unknown) {
         console.log(error)
-
         return false
       }
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, profile }) {
+
       if (account?.access_token) {
         token.accessToken = account.access_token
       }
@@ -126,11 +119,15 @@ export const authOptions: NextAuthOptions = {
         token.user = user
       }
 
+      if (profile) {
+        const connection = await db()
+        const userRoles = await connection.getUserRolesById(profile.sub)
+        token.userRole = userRoles[0].roleId
+      }
+
       return token
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log(session)
-      console.log(token)
       if (session?.user) {
         session.user.pkh = token.user.pkh
         session.user.role = token.user.role
@@ -138,6 +135,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = undefined
         session.user.image = undefined
         session.user.name = token?.user?.id
+        session.user.role = token.userRole
       }
 
       return session

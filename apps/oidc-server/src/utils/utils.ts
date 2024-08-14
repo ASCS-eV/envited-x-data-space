@@ -12,6 +12,7 @@ import {
   __,
   addIndex,
   append,
+  applySpec,
   assoc,
   equals,
   fromPairs,
@@ -23,9 +24,12 @@ import {
   map,
   over,
   pipe,
+  prepend,
+  prop,
   propSatisfies,
   reduce,
   reject,
+  replace,
   split,
   when,
 } from 'ramda'
@@ -254,6 +258,12 @@ export const isCredentialFittingPattern = (cred: any, pattern: CredentialPattern
   return true
 }
 
+const parsePath = pipe(
+  replace(/^\$|\['(.+?)'\]/g, '.$1'), // Convert JSONPath to dot notation
+  split('.'), // Split by dots to create array format
+  arr => prepend('$', arr.filter(Boolean)) // Prepend '$' to the array and filter out any empty strings
+)
+
 export const exportedForTesting = {
   hasUniquePath,
 }
@@ -290,7 +300,18 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
         }
 
         for (const claim of pattern.claims) {
-          const nodes = JSONPath({ path: claim.claimPath, json: VC, resultType: 'all' })
+          const rawNodes = JSONPath({ path: claim.claimPath, json: VC, resultType: 'all' }).map(result => ({
+            value: result.value,
+            path: result.path
+          })) as Array<{ value: any; path: string }>
+          const nodes = map(
+            applySpec({
+              value: prop('value'),
+              path: pipe(prop('path'), parsePath)
+            }),
+            rawNodes
+          )
+
           let newPath = claim.newPath
           let value: any
 
@@ -315,7 +336,9 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
           }
 
           const claimTarget = claim.token === 'id_token' ? extractedClaims.tokenId : extractedClaims.tokenAccess
-          setJsonPathValue(claimTarget, newPath, value)
+          console.log(claimTarget, newPath, value)
+          jsonpathSetValue(claimTarget, newPath, value)
+          console.log('EC', claimTarget)
         }
 
         return extractedClaims
@@ -326,42 +349,29 @@ export const extractClaimsFromVC = (VC: any, policy: LoginPolicy) => {
   return {}
 }
 
-function setJsonPathValue(target: Record<string, any>, path: string, value: any) {
-  // Find the nodes that match the path
-  const nodes = JSONPath({ path: path, json: target, resultType: 'all' })
-
-  if (nodes.length > 0) {
-    // If the path exists, update the value at the last node
-    nodes.forEach(node => {
-      const parent = node.parent
-      const lastKey = node.path[node.path.length - 1]
-      parent[lastKey] = value
-    })
-  } else {
-    // If the path does not exist, you may need to create it manually
-    // Here, we'll create the path and set the value.
-    createPathAndSetValue(target, path, value)
-  }
-}
-
-function createPathAndSetValue(target: Record<string, any>, path: string, value: any) {
+function jsonpathSetValue(obj: Record<string, any>, path: string, value: any): Record<string, any> {
+  // Normalize the path to dot notation and split into an array
   const keys = path
-    .replace(/^\$|\[(\d+)\]/g, '.$1')
+    .replace(/^\$|\[(\d+)\]/g, '.$1')  // Convert array indices and root to dot notation
     .split('.')
-    .slice(1)
-  let current = target
+    .filter(Boolean);  // Split into array and filter out empty strings
 
+  let current = obj;
+
+  // Iterate over keys, creating objects/arrays as needed
   for (let i = 0; i < keys.length - 1; i++) {
-    const key = keys[i]
-
+    const key = keys[i];
     if (!(key in current)) {
-      current[key] = isNaN(Number(keys[i + 1])) ? {} : []
+      // Determine whether to create an object or array based on the next key
+      current[key] = isNaN(Number(keys[i + 1])) ? {} : [];
     }
-
-    current = current[key]
+    current = current[key];
   }
 
-  current[keys[keys.length - 1]] = value
+  // Set the value at the final key
+  current[keys[keys.length - 1]] = value;
+
+  return obj;
 }
 
 export const queryStringToJSON = pipe(

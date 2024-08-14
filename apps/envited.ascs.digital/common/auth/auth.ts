@@ -54,15 +54,15 @@ export const authOptions: NextAuthOptions = {
       type: 'oauth',
       version: '2.0',
       idToken: true,
-      issuer: 'https://public.oidc.ascs.digital',
+      issuer: process.env.ISSUER_URL,
       authorization: {
-        url: 'https://public.oidc.ascs.digital/oauth2/auth?response_type=code',
+        url: process.env.AUTHORIZATION_URL,
         params: {
           scope: 'openid',
         },
       },
-      token: 'https://public.oidc.ascs.digital/oauth2/token',
-      jwks_endpoint: 'https://public.oidc.ascs.digital/.well-known/jwks.json',
+      token: process.env.TOKEN_URL,
+      jwks_endpoint: process.env.JWKS_ENDPOINT,
       clientId: process.env.OIDC_CLIENT_ID,
       clientSecret: process.env.OIDC_CLIENT_SECRET,
       profile: async profile => {
@@ -84,8 +84,6 @@ export const authOptions: NextAuthOptions = {
           }
 
           const credential = omit(['proof'])(prop('credential')(profile)) as Credential
-          // TODO - Check status in revocation smart contract
-
           const {
             id,
             issuer,

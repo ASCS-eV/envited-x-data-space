@@ -9,6 +9,7 @@ import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
 import { CredentialType, Role } from '../types'
 import { Environment } from '../types'
+import { extractAddressFromDid } from '../utils'
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -85,15 +86,36 @@ export const authOptions: NextAuthOptions = {
           const credential = omit(['proof'])(prop('credential')(profile)) as Credential
           // TODO - Check status in revocation smart contract
 
+          const {
+            id,
+            issuer,
+            credentialSubject: { id: credentialSubjectId, type: credentialSubjectType },
+          } = credential
+
+          if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].contract) {
+            const revocationCheck = await checkRevocationRegistry(
+              id,
+              credentialSubjectId,
+              issuer,
+              credentialSubjectType,
+            )
+
+            if (!revocationCheck) {
+              return '/error?error=STATUS_NOT_ACTIVE'
+            }
+          }
+
           const connection = await db()
-          const existingUser = await connection.getUserById(credential.credentialSubject.id)
+          const existingUser = await connection.getUserById(credentialSubjectId)
+
           if (!isEmpty(existingUser)) {
             // User already exists
             return true
           }
 
-          if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
-            const principal = await connection.getUserById(credential.issuer)
+          if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
+            const principal = await connection.getUserById(issuer)
+
             if (isEmpty(principal)) {
               // Principal not found
               return '/error?error=PRINCIPAL_NOT_FOUND'
@@ -164,3 +186,24 @@ export const signOut = () =>
   NASignOut({
     callbackUrl: '/',
   })
+
+export const checkRevocationRegistry = async (id: string, pkh: string, issuer: string, type: string) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_OIDC_SERVER_URL!}/verify-user`, {
+    method: 'POST',
+    body: JSON.stringify({
+      id,
+      pkh: extractAddressFromDid(pkh),
+      issuer: extractAddressFromDid(issuer),
+      type,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`)
+  }
+
+  return response.json()
+}

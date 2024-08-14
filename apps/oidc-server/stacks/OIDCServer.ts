@@ -40,6 +40,7 @@ export function OIDCServer({ stack }: StackContext) {
         },
       },
       'GET /redirect/{loginId}': './src/aws/getRedirect.handler',
+      'POST /verify-user': './src/aws/postVerifyUser.handler',
     },
     customDomain: {
       domainName: 'api.ascs.digital',

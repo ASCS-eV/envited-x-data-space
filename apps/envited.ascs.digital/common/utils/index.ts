@@ -11,6 +11,7 @@ export {
 } from './errors'
 
 export {
+  extractAddressFromDid,
   extractIdFromCredential,
   extractIssuerIdFromCredential,
   extractTypeFromCredential,

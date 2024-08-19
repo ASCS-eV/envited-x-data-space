@@ -31,18 +31,15 @@ export const _checkRevocationRegistry =
     confirmUserRole: (memberRegistry: any, userRegistry: any, userId: string, memberPkh: string) => Promise<boolean>
   }) =>
   async (id: string, pkh: string, issuer: string, type: string) => {
-    console.log(process.env.SMART_CONTRACT_ADDRESS, process.env.RPC_NODE_URL)
     const { member_registry, user_registry } = (await getContractStorage(
       process.env.SMART_CONTRACT_ADDRESS as string,
     )) as { member_registry: any; user_registry: any }
-    console.log('REG', member_registry, user_registry)
+    
     if (type === 'AscsMember') {
       return confirmMemberRole(member_registry, pkh)
     }
-    console.log(id, issuer)
-    const a = confirmUserRole(member_registry, user_registry, id, issuer)
-    console.log(a)
-    return a
+
+    return confirmUserRole(member_registry, user_registry, id, issuer)
   }
 
 export const checkRevocationRegistry = _checkRevocationRegistry({

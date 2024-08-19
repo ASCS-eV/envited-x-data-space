@@ -10,6 +10,7 @@ export const getConsent =
   ({ hydraAdmin, log }: { hydraAdmin: HydraAdmin; log: Log }) =>
   async (challenge: string) => {
     log.info('GET CONSENT')
+    log.info(challenge)
     try {
       const { data: body } = await hydraAdmin.oauth2.getOAuth2ConsentRequest({ consentChallenge: challenge })
       // get user identity and fetch user claims from redis
@@ -42,6 +43,7 @@ export const getConsent =
           // All we need to do now is to redirect the user back to hydra!
           return body.redirect_to
         })
+        .catch(error => {log.error(formatError(error))})
     } catch (error) {
       log.error(formatError(error))
       return error.message

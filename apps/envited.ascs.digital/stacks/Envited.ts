@@ -169,6 +169,11 @@ export default function Envited({ stack }: StackContext) {
       NEXT_PUBLIC_UPLOAD_BUCKET_NAME: process.env.NEXT_PUBLIC_UPLOAD_BUCKET_NAME!,
       NEXT_PUBLIC_METADATA_BUCKET_NAME: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME!,
       NEXT_PUBLIC_ASSET_BUCKET_NAME: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME!,
+      ISSUER_URL: process.env.ISSUER_URL!,
+      AUTHORIZATION_URL: process.env.AUTHORIZATION_URL!,
+      TOKEN_URL: process.env.TOKEN_URL!,
+      JWKS_ENDPOINT: process.env.JWKS_ENDPOINT!,
+      OIDC_SERVER_URL: process.env.OIDC_SERVER_URL!,
     },
   })
 

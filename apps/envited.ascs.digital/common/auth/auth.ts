@@ -186,7 +186,7 @@ export const signOut = () =>
   })
 
 export const checkRevocationRegistry = async (id: string, pkh: string, issuer: string, type: string) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_OIDC_SERVER_URL!}/verify-user`, {
+  const response = await fetch(`${process.env.OIDC_SERVER_URL!}/verify-user`, {
     method: 'POST',
     body: JSON.stringify({
       id,

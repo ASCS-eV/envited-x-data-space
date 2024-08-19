@@ -45,6 +45,7 @@ export const getConsent =
         })
         .catch(error => {log.error(formatError(error))})
     } catch (error) {
+      log.error('CONSENT ERROR')
       log.error(formatError(error))
       return error.message
     }

@@ -14,6 +14,8 @@ export function OIDCServer({ stack }: StackContext) {
           REDIS_HOST: process.env.REDIS_HOST!,
           REDIS_PORT: process.env.REDIS_PORT!,
           HYDRA_ADMIN_URL: process.env.HYDRA_ADMIN_URL!,
+          SMART_CONTRACT_ADDRESS: process.env.SMART_CONTRACT_ADDRESS!,
+          RPC_NODE_URL: process.env.RPC_NODE_URL!,
         },
         runtime: 'nodejs20.x',
       },

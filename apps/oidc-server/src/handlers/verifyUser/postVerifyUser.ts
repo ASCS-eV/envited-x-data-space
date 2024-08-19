@@ -39,8 +39,10 @@ export const _checkRevocationRegistry =
     if (type === 'AscsMember') {
       return confirmMemberRole(member_registry, pkh)
     }
-
-    return confirmUserRole(member_registry, user_registry, id, issuer)
+    console.log(id, issuer)
+    const a = confirmUserRole(member_registry, user_registry, id, issuer)
+    console.log(a)
+    return a
   }
 
 export const checkRevocationRegistry = _checkRevocationRegistry({

@@ -32,6 +32,16 @@ p {
   padding: 1rem;
 }
 
+.bold {
+  font-weight: bold;
+}
+
+.redirectingContainer {
+  font-weight: bold;
+  padding: 3rem 0 3rem 0;
+  font-size: 1.35rem;
+}
+
 .link {
   color: #000000;
 }

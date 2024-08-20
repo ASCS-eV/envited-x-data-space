@@ -24,6 +24,15 @@ jobs:
       NEXT_PUBLIC_UPLOAD_BUCKET_NAME: ${{ vars.NEXT_PUBLIC_UPLOAD_BUCKET_NAME }}
       NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
       NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+      RDS_DB_NAME: ${{ vars.RDS_DB_NAME }}
+      RDS_RESOURCE_ARN: ${{ vars.RDS_RESOURCE_ARN }}
+      OIDC_CLIENT_ID: ${{ vars.OIDC_CLIENT_ID }}
+      OIDC_CLIENT_SECRET: ${{ secrets.OIDC_CLIENT_SECRET }}
+      ISSUER_URL: ${{ vars.ISSUER_URL }}
+      AUTHORIZATION_URL: ${{ vars.AUTHORIZATION_URL }}
+      TOKEN_URL: ${{ vars.TOKEN_URL }}
+      JWKS_ENDPOINT: ${{ vars.JWKS_ENDPOINT }}
+      OIDC_SERVER_URL: ${{ vars.OIDC_SERVER_URL }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3

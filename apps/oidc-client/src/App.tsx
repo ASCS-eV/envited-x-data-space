@@ -17,6 +17,7 @@ function App() {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [qrCodeValue, setQrCodeValue] = useState<string | null>(null)
+  const [isRedirecting, setIsRedirecting] = useState<boolean>(false)
 
   useEffect(() => {
     try {
@@ -36,6 +37,8 @@ function App() {
           .then(res => res.json())
           .then(data => {
             if (data?.redirect?.destination) {
+              setIsRedirecting(true)
+              clearInterval(interval)
               window.location = data.redirect.destination
             }
           })
@@ -61,20 +64,21 @@ function App() {
         </p>
         <p className={styles.pSmall}>
           By presenting your verifiable credential you agree to the{' '}
-          <a href={process.env.EXTERN_TERMS_AND_CODITIONS_URL} target="_blank">
+          <a href={import.meta.env.VITE_EXTERNAL_TERMS_AND_CONDITIONS_URL} target="_blank">
             Terms of Service
           </a>{' '}
           and using the information for creating your ENVITED X Dataspace account
         </p>
         {isLoading && <Loader />}
-        {qrCodeValue && !isLoading && (
+        {qrCodeValue && !isLoading && !isRedirecting && (
           <div className={`${styles.qrCodeContainer} ${styles.shadow}`}>
             <QRCode value={qrCodeValue} />
           </div>
         )}
+        {isRedirecting && <div className={styles.redirectingContainer}>Redirecting</div>}
         <p className={styles.pSmall}>
-          You don't have a credential?{' '}
-          <a href={process.env.EXTERN_DEMIM_URL} target="_blank">
+          If you don't have a credential{' '}
+          <a href={import.meta.env.VITE_EXTERNAL_DEMIM_URL} target="_blank">
             Register here
           </a>
         </p>

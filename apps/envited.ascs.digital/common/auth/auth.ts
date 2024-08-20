@@ -7,6 +7,7 @@ import { match } from 'ts-pattern'
 import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
+import { log } from '../logger'
 import { CredentialType, Role } from '../types'
 import { Environment } from '../types'
 import { extractAddressFromDid } from '../utils'
@@ -77,9 +78,12 @@ export const authOptions: NextAuthOptions = {
   debug: true,
   callbacks: {
     async signIn({ profile }) {
+      log.info('Sign in checks')
       try {
         if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
+          log.info('Verifying credential')
           if (!has('credential')(profile)) {
+            log.error('Credential not found')
             return '/error?error=CREDENTIAL_NOT_FOUND'
           }
 
@@ -91,6 +95,7 @@ export const authOptions: NextAuthOptions = {
           } = credential
 
           if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].contract) {
+            log.info('Starting revocation registry check')
             const revocationCheck = await checkRevocationRegistry(
               id,
               credentialSubjectId,
@@ -99,6 +104,7 @@ export const authOptions: NextAuthOptions = {
             )
 
             if (!revocationCheck) {
+              log.error('Failed revocation check')
               return '/error?error=STATUS_NOT_ACTIVE'
             }
           }
@@ -108,29 +114,33 @@ export const authOptions: NextAuthOptions = {
 
           if (!isEmpty(existingUser)) {
             // User already exists
+            log.info('User exists, completing signin')
             return true
           }
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
+            log.info('User credential, checking principal credentials')
             const principal = await connection.getUserById(issuer)
 
             if (isEmpty(principal)) {
               // Principal not found
+              log.error('Principal not found or active')
               return '/error?error=PRINCIPAL_NOT_FOUND'
             }
           }
-
+          log.info('Inserting user')
           await connection.insertUserTx(credential)
         }
-
+        log.info('Completing signin')
         return true
       } catch (error: unknown) {
-        console.log(error)
+        log.error(error)
         return false
       }
     },
     async jwt({ token, user, account, profile }) {
       if (account?.access_token) {
+        log.info('Adding access token to JWT')
         token.accessToken = account.access_token
       }
 
@@ -141,12 +151,14 @@ export const authOptions: NextAuthOptions = {
       if (profile) {
         const connection = await db()
         const userRoles = await connection.getUserRolesById(profile.sub)
+        log.info('Adding user role to JWT', userRoles[0].roleId)
         token.userRole = userRoles[0].roleId
       }
 
       return token
     },
     async session({ session, token }: { session: any; token: any }) {
+      log.info('Building session')
       if (session?.user) {
         session.user.pkh = token.user.pkh
         session.user.role = token.user.role
@@ -186,7 +198,7 @@ export const signOut = () =>
   })
 
 export const checkRevocationRegistry = async (id: string, pkh: string, issuer: string, type: string) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_OIDC_SERVER_URL!}/verify-user`, {
+  const response = await fetch(`${process.env.OIDC_SERVER_URL!}/verify-user`, {
     method: 'POST',
     body: JSON.stringify({
       id,

@@ -34,7 +34,6 @@ export const _checkRevocationRegistry =
     const { member_registry, user_registry } = (await getContractStorage(
       process.env.SMART_CONTRACT_ADDRESS as string,
     )) as { member_registry: any; user_registry: any }
-
     if (type === 'AscsMember') {
       return confirmMemberRole(member_registry, pkh)
     }

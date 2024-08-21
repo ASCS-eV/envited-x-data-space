@@ -1,4 +1,5 @@
 import type { NextAuthOptions, Profile, User } from 'next-auth'
+import { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { equals, has, isEmpty, omit, prop } from 'ramda'
@@ -11,7 +12,6 @@ import { log } from '../logger'
 import { CredentialType, Role } from '../types'
 import { Environment } from '../types'
 import { extractAddressFromDid } from '../utils'
-import { JWT } from 'next-auth/jwt'
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -139,7 +139,6 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async jwt({ token, user, account, profile }) {
-      
       if (account?.access_token) {
         log.info('Adding access token to JWT')
         token.accessToken = account.access_token

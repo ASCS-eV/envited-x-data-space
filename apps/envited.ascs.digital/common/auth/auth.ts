@@ -1,4 +1,4 @@
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions, Profile, User } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { equals, has, isEmpty, omit, prop } from 'ramda'
@@ -11,6 +11,7 @@ import { log } from '../logger'
 import { CredentialType, Role } from '../types'
 import { Environment } from '../types'
 import { extractAddressFromDid } from '../utils'
+import { JWT } from 'next-auth/jwt'
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -23,7 +24,6 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         pkh: { label: 'Address', type: 'text', placeholder: 'tz...' },
       },
-
       async authorize(credentials) {
         if (!credentials) {
           return {
@@ -139,6 +139,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async jwt({ token, user, account, profile }) {
+      
       if (account?.access_token) {
         log.info('Adding access token to JWT')
         token.accessToken = account.access_token
@@ -152,23 +153,21 @@ export const authOptions: NextAuthOptions = {
         const connection = await db()
         const userRoles = await connection.getUserRolesById(profile.sub)
         log.info('Adding user role to JWT', userRoles[0].roleId)
-        token.userRole = userRoles[0].roleId
+        token.user.role = userRoles[0].roleId
       }
 
       return token
     },
-    async session({ session, token }: { session: any; token: any }) {
+    async session({ session, token }) {
       log.info('Building session')
       if (session?.user) {
         session.user.pkh = token.user.pkh
         session.user.role = token.user.role
-        session.user.id = token.sub
+        session.user.id = token.sub || ''
         session.user.email = undefined
         session.user.image = undefined
         session.user.name = token?.user?.id
-        session.user.role = token.userRole
       }
-
       return session
     },
   },

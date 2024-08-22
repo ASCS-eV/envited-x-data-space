@@ -92,4 +92,15 @@ describe('common/utils', () => {
       expect(SUT.allTrue(array)).toBe(result)
     })
   })
+
+  describe('extractAddressFromDid', () => {
+    it.each([
+      ['did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8', 'tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8'],
+      ['did:pkh:tz:tz1ggujjYjA7oYoaZBzTg1tYSXn3VMjcgDuv', 'tz1ggujjYjA7oYoaZBzTg1tYSXn3VMjcgDuv'],
+    ])('should, with value %s, return %s as expected', (did, result) => {
+      // when ... we want to get a address from did
+      // then ... we should get the address as expected
+      expect(SUT.extractAddressFromDid(did)).toBe(result)
+    })
+  })
 })

@@ -1,4 +1,5 @@
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions, Profile, User } from 'next-auth'
+import { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { equals, has, isEmpty, omit, prop } from 'ramda'
@@ -7,8 +8,10 @@ import { match } from 'ts-pattern'
 import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
+import { log } from '../logger'
 import { CredentialType, Role } from '../types'
 import { Environment } from '../types'
+import { extractAddressFromDid } from '../utils'
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -21,7 +24,6 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         pkh: { label: 'Address', type: 'text', placeholder: 'tz...' },
       },
-
       async authorize(credentials) {
         if (!credentials) {
           return {
@@ -53,25 +55,21 @@ export const authOptions: NextAuthOptions = {
       type: 'oauth',
       version: '2.0',
       idToken: true,
-      issuer: 'http://localhost:5004',
+      issuer: process.env.ISSUER_URL,
       authorization: {
-        url: 'http://localhost:5004/oauth2/auth?response_type=code',
+        url: process.env.AUTHORIZATION_URL,
         params: {
           scope: 'openid',
         },
       },
-      token: 'http://localhost:5004/oauth2/token',
-      jwks_endpoint: 'http://localhost:5004/.well-known/jwks.json',
-      clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
-      clientSecret: process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET,
+      token: process.env.TOKEN_URL,
+      jwks_endpoint: process.env.JWKS_ENDPOINT,
+      clientId: process.env.OIDC_CLIENT_ID,
+      clientSecret: process.env.OIDC_CLIENT_SECRET,
       profile: async profile => {
-        const connection = await db()
-        const userRoles = await connection.getUserRolesById(profile.sub)
-
         return {
           id: profile.sub,
           pkh: profile.sub,
-          role: userRoles[0].roleId,
         }
       },
     },
@@ -80,45 +78,69 @@ export const authOptions: NextAuthOptions = {
   debug: true,
   callbacks: {
     async signIn({ profile }) {
+      log.info('Sign in checks')
       try {
         if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
+          log.info('Verifying credential')
           if (!has('credential')(profile)) {
+            log.error('Credential not found')
             return '/error?error=CREDENTIAL_NOT_FOUND'
           }
 
           const credential = omit(['proof'])(prop('credential')(profile)) as Credential
+          const {
+            id,
+            issuer,
+            credentialSubject: { id: credentialSubjectId, type: credentialSubjectType },
+          } = credential
 
-          // TODO - Check status in revocation smart contract
+          if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].contract) {
+            log.info('Starting revocation registry check')
+            const revocationCheck = await checkRevocationRegistry(
+              id,
+              credentialSubjectId,
+              issuer,
+              credentialSubjectType,
+            )
 
-          const connection = await db()
-          const existingUser = await connection.getUserById(credential.credentialSubject.id)
-
-          if (!isEmpty(existingUser)) {
-            // User already exists
-            return true
-          }
-
-          if (equals(CredentialType.AscsUser)(credential.credentialSubject.type as CredentialType)) {
-            const principal = await connection.getUserById(credential.issuer)
-
-            if (isEmpty(principal)) {
-              // Principal not found
-              return '/error?error=PRINCIPAL_NOT_FOUND'
+            if (!revocationCheck) {
+              log.error('Failed revocation check')
+              return '/error?error=STATUS_NOT_ACTIVE'
             }
           }
 
+          const connection = await db()
+          const existingUser = await connection.getUserById(credentialSubjectId)
+
+          if (!isEmpty(existingUser)) {
+            // User already exists
+            log.info('User exists, completing signin')
+            return true
+          }
+
+          if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
+            log.info('User credential, checking principal credentials')
+            const principal = await connection.getUserById(issuer)
+
+            if (isEmpty(principal)) {
+              // Principal not found
+              log.error('Principal not found or active')
+              return '/error?error=PRINCIPAL_NOT_FOUND'
+            }
+          }
+          log.info('Inserting user')
           await connection.insertUserTx(credential)
         }
-
+        log.info('Completing signin')
         return true
       } catch (error: unknown) {
-        console.log(error)
-
+        log.error(error)
         return false
       }
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, profile }) {
       if (account?.access_token) {
+        log.info('Adding access token to JWT')
         token.accessToken = account.access_token
       }
 
@@ -126,20 +148,25 @@ export const authOptions: NextAuthOptions = {
         token.user = user
       }
 
+      if (profile) {
+        const connection = await db()
+        const userRoles = await connection.getUserRolesById(profile.sub)
+        log.info('Adding user role to JWT', userRoles[0].roleId)
+        token.user.role = userRoles[0].roleId
+      }
+
       return token
     },
-    async session({ session, token }: { session: any; token: any }) {
-      console.log(session)
-      console.log(token)
+    async session({ session, token }) {
+      log.info('Building session')
       if (session?.user) {
         session.user.pkh = token.user.pkh
         session.user.role = token.user.role
-        session.user.id = token.sub
+        session.user.id = token.sub || ''
         session.user.email = undefined
         session.user.image = undefined
         session.user.name = token?.user?.id
       }
-
       return session
     },
   },
@@ -167,3 +194,24 @@ export const signOut = () =>
   NASignOut({
     callbackUrl: '/',
   })
+
+export const checkRevocationRegistry = async (id: string, pkh: string, issuer: string, type: string) => {
+  const response = await fetch(`${process.env.OIDC_SERVER_URL!}/verify-user`, {
+    method: 'POST',
+    body: JSON.stringify({
+      id,
+      pkh: extractAddressFromDid(pkh),
+      issuer: extractAddressFromDid(issuer),
+      type,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`)
+  }
+
+  return response.json()
+}

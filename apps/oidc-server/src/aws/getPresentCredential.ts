@@ -1,19 +1,21 @@
 import middy from '@middy/core'
+import { keyToDID, keyToVerificationMethod } from '@spruceid/didkit-wasm-node'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+import { SignJWT, importJWK } from 'jose'
 
 import { log } from '../common/logger'
 import { internalServerError, ok } from '../common/responses'
 import { getPresentCredential } from '../handlers/presentCredential'
-import { loggerMiddleware } from '../middleware'
+import { joseMiddleware, loggerMiddleware } from '../middleware'
 import { LogJoseDIDContext } from '../types'
 
 export const lambdaHandler = async (event: any, context: LogJoseDIDContext) => {
   try {
     const {
-      queryStringParameters: { loginId },
+      queryStringParameters: { login_id },
     } = event
-    const { log, importJWK, signJWT, keyToDID, keyToVerificationMethod } = context
-    const result = getPresentCredential({ log, importJWK, signJWT, keyToDID, keyToVerificationMethod })(loginId)
+    const { log, importJWK, signJWT } = context
+    const result = await getPresentCredential({ log, importJWK, signJWT, keyToDID, keyToVerificationMethod })(login_id)
 
     return ok(result)
   } catch (error) {
@@ -23,4 +25,6 @@ export const lambdaHandler = async (event: any, context: LogJoseDIDContext) => {
 
 export const handler = middy<APIGatewayProxyEvent, APIGatewayProxyResult>()
   .use(loggerMiddleware(log))
+  .use(joseMiddleware({ importJWK, signJWT: SignJWT }))
+
   .handler(lambdaHandler)

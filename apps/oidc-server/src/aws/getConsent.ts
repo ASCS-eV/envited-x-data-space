@@ -15,10 +15,11 @@ const lambdaHandler = async (event: any, context: RedisHydraLogContext) => {
       queryStringParameters: { challenge },
     } = event
     const { hydraAdmin, log } = context
-    const result = getConsent({ hydraAdmin, log })(challenge as string)
+    const result = await getConsent({ hydraAdmin, log })(challenge as string)
 
     return ok(result)
   } catch (error) {
+    log.error(error)
     return internalServerError(error.message)
   }
 }

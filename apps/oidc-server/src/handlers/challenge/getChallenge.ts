@@ -18,6 +18,7 @@ export const getChallenge =
       }
 
       let loginId = await redis.get('' + loginChallenge)
+
       if (!loginId) {
         loginId = crypto.randomUUID()
         const MAX_AGE = 60 * 5 // 5 minutes
@@ -25,7 +26,6 @@ export const getChallenge =
         await redis.set('' + loginChallenge, '' + loginId, EXPIRY_MS, MAX_AGE)
         await redis.set('' + loginId, '' + loginChallenge, EXPIRY_MS, MAX_AGE)
       }
-
       const redirect = await redis.get('redirect' + loginId)
 
       if (redirect) {

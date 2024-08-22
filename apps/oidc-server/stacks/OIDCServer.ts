@@ -14,16 +14,39 @@ export function OIDCServer({ stack }: StackContext) {
           REDIS_HOST: process.env.REDIS_HOST!,
           REDIS_PORT: process.env.REDIS_PORT!,
           HYDRA_ADMIN_URL: process.env.HYDRA_ADMIN_URL!,
+          SMART_CONTRACT_ADDRESS: process.env.SMART_CONTRACT_ADDRESS!,
+          RPC_NODE_URL: process.env.RPC_NODE_URL!,
         },
+        runtime: 'nodejs20.x',
       },
     },
     routes: {
       'GET /client-metadata': './src/aws/getClientMetadata.handler',
-      'GET /present-credential': './src/aws/getPresentCredential.handler',
-      'POST /present-credential': './src/aws/postPresentCredential.handler',
+      'GET /present-credential': {
+        function: {
+          handler: './src/aws/getPresentCredential.handler',
+          copyFiles: [{ from: './src/aws/didkit_wasm_bg.wasm' }],
+        },
+      },
+      'POST /present-credential': {
+        function: {
+          handler: './src/aws/postPresentCredential.handler',
+          copyFiles: [{ from: './src/aws/didkit_wasm_bg.wasm' }],
+        },
+      },
       'GET /consent': './src/aws/getConsent.handler',
-      'GET /challenge/:challenge': './src/aws/getChallenge.handler',
-      'GET /redirect/:loginId': './src/aws/getRedirect.handler',
+      'GET /challenge/{challenge}': {
+        function: {
+          handler: './src/aws/getChallenge.handler',
+          copyFiles: [{ from: './src/aws/didkit_wasm_bg.wasm' }],
+        },
+      },
+      'GET /redirect/{loginId}': './src/aws/getRedirect.handler',
+      'POST /verify-user': './src/aws/postVerifyUser.handler',
+    },
+    customDomain: {
+      domainName: 'api.ascs.digital',
+      hostedZone: 'ascs.digital',
     },
   })
 

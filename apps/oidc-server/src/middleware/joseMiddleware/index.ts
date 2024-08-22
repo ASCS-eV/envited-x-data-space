@@ -1,1 +1,1 @@
-export { middleware as joseMiddleware } from './middleware'
+export { middleware } from './middleware'

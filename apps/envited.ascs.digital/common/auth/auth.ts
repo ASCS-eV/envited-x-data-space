@@ -1,4 +1,5 @@
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions, Profile, User } from 'next-auth'
+import { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { equals, has, isEmpty, omit, prop } from 'ramda'
@@ -23,7 +24,6 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         pkh: { label: 'Address', type: 'text', placeholder: 'tz...' },
       },
-
       async authorize(credentials) {
         if (!credentials) {
           return {
@@ -152,23 +152,21 @@ export const authOptions: NextAuthOptions = {
         const connection = await db()
         const userRoles = await connection.getUserRolesById(profile.sub)
         log.info('Adding user role to JWT', userRoles[0].roleId)
-        token.userRole = userRoles[0].roleId
+        token.user.role = userRoles[0].roleId
       }
 
       return token
     },
-    async session({ session, token }: { session: any; token: any }) {
+    async session({ session, token }) {
       log.info('Building session')
       if (session?.user) {
         session.user.pkh = token.user.pkh
         session.user.role = token.user.role
-        session.user.id = token.sub
+        session.user.id = token.sub || ''
         session.user.email = undefined
         session.user.image = undefined
         session.user.name = token?.user?.id
-        session.user.role = token.userRole
       }
-
       return session
     },
   },

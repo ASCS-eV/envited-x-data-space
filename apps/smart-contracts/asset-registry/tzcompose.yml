@@ -2,12 +2,10 @@ version: alpha
 
 pipelines:
   deploy-contracts:
-
-  - task: deploy
-    alias: nft-contract
-    script:
-      code:
-        file: artifacts/IncDec.json
-      storage:
-        file: artifacts/IncDec.default_storage.json
-        
+    - task: deploy
+      alias: nft-contract
+      script:
+        code:
+          file: artifacts/IncDec.json
+        storage:
+          file: artifacts/IncDec.default_storage.json

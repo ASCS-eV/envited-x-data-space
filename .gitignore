@@ -53,3 +53,8 @@ Thumbs.db
 sst-env.d.ts
 .open-next
 cdk.context.json
+
+# Smart Contracts
+artifacts
+.taq/*-state.json
+.taq/config.local.*.json

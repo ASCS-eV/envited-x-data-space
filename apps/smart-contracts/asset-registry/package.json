@@ -1,0 +1,27 @@
+{
+  "name": "asset-registry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:sandbox": "TAQ_FLEXTESA_IMAGE=\"oxheadalpha/flextesa:20230915\" taq start sandbox IncDec",
+    "stop:sandbox": "taq stop sandbox IncDec",
+    "listAccounts": "taq list accounts IncDec",
+    "compile:json": "taq compile IncDec.jsligo --json",
+    "compile": "taq compile IncDec.jsligo",
+    "originate:sandbox": "taq originate IncDec.tz",
+    "transfer:sandbox": "taq IncDec transfer",
+    "originate:ghostnet": "taq originate IncDec.tz --env development",
+    "transfer:ghostnet": "taq IncDec transfer --env development"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@taqueria/plugin-core": "^0.56.0",
+    "@taqueria/plugin-flextesa": "^0.56.0",
+    "@taqueria/plugin-ligo": "^0.56.0",
+    "@taqueria/plugin-taquito": "^0.56.0",
+    "@taqueria/plugin-tzcompose": "^0.56.0"
+  }
+}

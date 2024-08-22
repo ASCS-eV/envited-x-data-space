@@ -1,0 +1,8 @@
+{
+  "name": "smart-contracts",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/smart-contracts/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {}
+}

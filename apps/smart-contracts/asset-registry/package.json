@@ -3,17 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start:sandbox": "TAQ_FLEXTESA_IMAGE=\"oxheadalpha/flextesa:20230915\" taq start sandbox IncDec",
-    "stop:sandbox": "taq stop sandbox IncDec",
-    "listAccounts": "taq list accounts IncDec",
-    "compile:json": "taq compile IncDec.jsligo --json",
-    "compile": "taq compile IncDec.jsligo",
-    "originate:sandbox": "taq originate IncDec.tz",
-    "transfer:sandbox": "taq IncDec transfer",
-    "originate:ghostnet": "taq originate IncDec.tz --env development",
-    "transfer:ghostnet": "taq IncDec transfer --env development"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

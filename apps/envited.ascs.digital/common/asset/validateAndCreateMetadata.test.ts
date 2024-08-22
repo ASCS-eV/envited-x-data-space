@@ -35,7 +35,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
       // then ... it should get the type and validate with this schema
       const getFileFromByteArrayStub = jest
         .fn()
-        .mockResolvedValue(JSON.stringify({ '@type': 'Person', 'name': ['NAME'] })) as any
+        .mockResolvedValue(JSON.stringify({ '@context': { SHACL_SCHEMA: 'SCHEMA' }, 'name': ['NAME'] })) as any
       const fsCreateReadStreamStub = jest.fn().mockReturnValue({})
       const fsStub = {
         createReadStream: fsCreateReadStreamStub,
@@ -52,7 +52,10 @@ describe('common/asset/validateAndCreateMetadata', () => {
         fs: fsStub,
       })(byteArray as any, filename)
 
-      expect(result).toEqual({ report: { conforms: true }, data: { '@type': 'Person', 'name': ['NAME'] } })
+      expect(result).toEqual({
+        report: { conforms: true },
+        data: { '@context': { SHACL_SCHEMA: 'SCHEMA' }, 'name': ['NAME'] },
+      })
       expect(getFileFromByteArrayStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'data.jsonld')
       expect(fsCreateReadStreamStub).toHaveBeenCalledTimes(1)
     })

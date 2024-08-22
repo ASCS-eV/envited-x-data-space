@@ -53,7 +53,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
 
       expect(result).toEqual(undefined)
       expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
-      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'data.jsonld')
+      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'metadata/domainMetadata.json')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
       expect(writeStreamToS3Stub).toHaveBeenCalledTimes(1)
       expect(deleteObjectFromS3Stub).toHaveBeenCalledTimes(1)
@@ -110,7 +110,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
 
       expect(result).toEqual(undefined)
       expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
-      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'data.jsonld')
+      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'metadata/domainMetadata.json')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
       expect(updateAssetStatusStub).toHaveBeenCalledWith('OBJECT_KEY', 'OBJECT_KEY', 'not_accepted')
       expect(writeStreamToS3Stub).toHaveBeenCalledTimes(0)

@@ -1,6 +1,7 @@
 import { DatasetCore, Quad } from '@rdfjs/types'
 import { Dataset } from '@zazuko/env/lib/Dataset'
 import { Entry } from '@zip.js/zip.js'
+import { all, equals, keys, omit, pipe } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromFile, read } from '../../archive'
@@ -11,48 +12,63 @@ import { fetchShaclSchema, loadDataset, parseStreamToDataset, validateShacl } fr
 export const _validateShaclFile =
   ({
     getShaclDataFromZip,
-    fetchShaclSchema,
     loadDataset,
-    validateShacl,
+    validateShaclSchema,
   }: {
     getShaclDataFromZip: (file: File) => Promise<string>
-    fetchShaclSchema: (schema: Schemas) => Promise<string>
     loadDataset: (data: string, contentType: ContentTypes) => Promise<DatasetCore<Quad, Quad>>
-    validateShacl: (shapes: DatasetCore<Quad, Quad>) => (data: DatasetCore<Quad, Quad>) => Promise<ValidationReport>
+    validateShaclSchema: (data: DatasetCore<Quad, Quad>) => (type: Schemas) => Promise<boolean>
   }) =>
   async (file: File) => {
     try {
       const shaclData = await getShaclDataFromZip(file)
       const json = JSON.parse(shaclData)
+      const templates = pipe(omit(['sh', 'skos', 'xsd']), keys)(json['@context'])
 
-      // const shaclDataPromise = getShaclDataFromZip(file)
-      // const shaclSchemaPromise = fetchShaclSchema(Schemas.default)
-      const shaclSchemaPromise = fetchShaclSchema(json['@type'])
-      // console.log(shaclSchemaPromise)
+      const data = await loadDataset(shaclData, ContentTypes.jsonLd)
+      const validateShaclTemplate = validateShaclSchema(data)
+      const validationPromises = templates.map(type => validateShaclTemplate(type as Schemas))
 
-      // const shaclData = await shaclDataPromise
-      const shaclSchema = await shaclSchemaPromise
-      //console.log(shaclSchema)
+      const validationResults = await Promise.all(validationPromises)
 
-      const schemaPromise = loadDataset(shaclSchema, ContentTypes.ttl)
-      const dataPromise = loadDataset(shaclData, ContentTypes.jsonLd)
-
-      const schema = await schemaPromise
-      const data = await dataPromise
-
-      const report = await validateShacl(schema)(data)
-
-      console.log(report)
-
-      if (!report.conforms) {
+      if (!all(equals(true), validationResults)) {
         return { isValid: false, data: {}, error: ERRORS.ASSET_INVALID }
       }
 
-      return { isValid: report.conforms, data: report.dataset }
+      return { isValid: true, data: json }
     } catch {
       return { isValid: false, data: {}, error: ERRORS.ASSET_FILE_NOT_FOUND }
     }
   }
+
+export const _validateShaclSchema =
+  ({
+    fetchShaclSchema,
+    loadDataset,
+    validateShacl,
+  }: {
+    fetchShaclSchema: (schema: Schemas) => Promise<string>
+    loadDataset: (data: string, contentType: ContentTypes) => Promise<DatasetCore<Quad, Quad>>
+    validateShacl: (shapes: DatasetCore<Quad, Quad>) => (data: DatasetCore<Quad, Quad>) => Promise<ValidationReport>
+  }) =>
+  (data: DatasetCore<Quad, Quad>) =>
+  async (type: Schemas) => {
+    try {
+      const shaclSchema = await fetchShaclSchema(type)
+      const schema = await loadDataset(shaclSchema, ContentTypes.ttl)
+      const report = await validateShacl(schema)(data)
+
+      return report.conforms
+    } catch {
+      return false
+    }
+  }
+
+export const validateShaclSchema = _validateShaclSchema({
+  fetchShaclSchema,
+  loadDataset,
+  validateShacl,
+})
 
 export const _getShaclDataFromZip =
   ({
@@ -64,15 +80,13 @@ export const _getShaclDataFromZip =
   }) =>
   async (asset: File) =>
     extract(asset, 'metadata/domainMetadata.json').then(read)
-// extract(asset, 'data.jsonld').then(read)
 
 export const getShaclDataFromZip = _getShaclDataFromZip({ extract: extractFromFile, read })
 
 export const validateShaclFile = _validateShaclFile({
   getShaclDataFromZip,
-  fetchShaclSchema,
   loadDataset,
-  validateShacl,
+  validateShaclSchema,
 })
 
 export const _validateShaclDataWithSchema =

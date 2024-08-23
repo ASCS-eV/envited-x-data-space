@@ -34,4 +34,4 @@ const test_increment =
       return assert(Test.get_storage(contract.addr) == initial_storage + 1)
     }
   )();
-  
+ 

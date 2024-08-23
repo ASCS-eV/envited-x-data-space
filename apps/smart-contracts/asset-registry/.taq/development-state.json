@@ -1,71 +1,71 @@
 {
-    "operations": {},
-    "tasks": {
-        "@taqueria/plugin-ligo.compile.1724332690469": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1724332690469,
-            "output": [
-                {
-                    "source": "IncDec.jsligo/IncDec",
-                    "artifact": "artifacts/IncDec.tz\nartifacts/IncDec.default_storage.tz\nartifacts/IncDec.parameter.increment.tz\nartifacts/IncDec.parameter.decrement.tz"
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1724334062731": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1724334062731,
-            "output": [
-                {
-                    "source": "IncDec.jsligo/IncDec",
-                    "artifact": "artifacts/IncDec.json\nartifacts/IncDec.default_storage.json\nartifacts/IncDec.parameter.increment.json\nartifacts/IncDec.parameter.decrement.json"
-                }
-            ]
-        },
-        "@taqueria/plugin-flextesa.list accounts.1724335552908": {
-            "task": "list accounts",
-            "plugin": "@taqueria/plugin-flextesa",
-            "time": 1724335552908,
-            "output": [
-                {
-                    "account": "bob",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
-                },
-                {
-                    "account": "alice",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
-                },
-                {
-                    "account": "john",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1Zwoh1QCVAvJ4sVTojMp9pLYp6Ji4NoZy6"
-                },
-                {
-                    "account": "jane",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1aHUAC4oviwJuZF1EvVSvFz7cu9KMNYBph"
-                },
-                {
-                    "account": "joe",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1MVGjgD1YtAPwohsSfk8i3ZiT1yEGM2YXB"
-                }
-            ]
-        },
-        "@taqueria/plugin-taquito.deploy.1724335687150": {
-            "task": "deploy",
-            "plugin": "@taqueria/plugin-taquito",
-            "time": 1724335687150,
-            "output": [
-                {
-                    "contract": "IncDec.tz",
-                    "address": "KT1C9vhvR5CwcVsxo4VdjjxcirDCSzA3wMhC",
-                    "alias": "IncDec"
-                }
-            ]
+  "operations": {},
+  "tasks": {
+    "@taqueria/plugin-ligo.compile.1724332690469": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1724332690469,
+      "output": [
+        {
+          "source": "IncDec.jsligo/IncDec",
+          "artifact": "artifacts/IncDec.tz\nartifacts/IncDec.default_storage.tz\nartifacts/IncDec.parameter.increment.tz\nartifacts/IncDec.parameter.decrement.tz"
         }
+      ]
+    },
+    "@taqueria/plugin-ligo.compile.1724334062731": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1724334062731,
+      "output": [
+        {
+          "source": "IncDec.jsligo/IncDec",
+          "artifact": "artifacts/IncDec.json\nartifacts/IncDec.default_storage.json\nartifacts/IncDec.parameter.increment.json\nartifacts/IncDec.parameter.decrement.json"
+        }
+      ]
+    },
+    "@taqueria/plugin-flextesa.list accounts.1724335552908": {
+      "task": "list accounts",
+      "plugin": "@taqueria/plugin-flextesa",
+      "time": 1724335552908,
+      "output": [
+        {
+          "account": "bob",
+          "balance": "3000 ꜩ",
+          "address": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
+        },
+        {
+          "account": "alice",
+          "balance": "3000 ꜩ",
+          "address": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+        },
+        {
+          "account": "john",
+          "balance": "3000 ꜩ",
+          "address": "tz1Zwoh1QCVAvJ4sVTojMp9pLYp6Ji4NoZy6"
+        },
+        {
+          "account": "jane",
+          "balance": "3000 ꜩ",
+          "address": "tz1aHUAC4oviwJuZF1EvVSvFz7cu9KMNYBph"
+        },
+        {
+          "account": "joe",
+          "balance": "3000 ꜩ",
+          "address": "tz1MVGjgD1YtAPwohsSfk8i3ZiT1yEGM2YXB"
+        }
+      ]
+    },
+    "@taqueria/plugin-taquito.deploy.1724335687150": {
+      "task": "deploy",
+      "plugin": "@taqueria/plugin-taquito",
+      "time": 1724335687150,
+      "output": [
+        {
+          "contract": "IncDec.tz",
+          "address": "KT1C9vhvR5CwcVsxo4VdjjxcirDCSzA3wMhC",
+          "alias": "IncDec"
+        }
+      ]
     }
+  }
 }

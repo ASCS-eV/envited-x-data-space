@@ -7,12 +7,12 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { isFederator, isOwnProfile, isPrincipal } from '../../guards'
 import { Log, log } from '../../logger'
-import { Profile, Session } from '../../types'
+import { Profile, Session, User } from '../../types'
 import { badRequestError, forbiddenError, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
 
 export const _update =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
-  async (profile: Partial<Profile>, businessCategories?: string[]) => {
+  async (profile: Profile, businessCategories?: string[]) => {
     try {
       const session = await getServerSession()
       if (isNil(session)) {
@@ -29,7 +29,7 @@ export const _update =
       }
 
       const connection = await db()
-      const [user] = await connection.getUserWithProfileById(session.user.id)
+      const [user] = await connection.getUserWithProfileById(session.user.id) as [{ user: User }]
 
       if (isNil(user)) {
         throw badRequestError({

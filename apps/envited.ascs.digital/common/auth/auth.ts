@@ -1,5 +1,4 @@
-import type { NextAuthOptions, Profile, User } from 'next-auth'
-import { JWT } from 'next-auth/jwt'
+import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { equals, has, isEmpty, omit, prop } from 'ramda'
@@ -77,7 +76,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
   debug: true,
   callbacks: {
-    async signIn({ profile }) {
+    async signIn({ profile }: any) {
       log.info('Sign in checks')
       try {
         if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
@@ -87,7 +86,7 @@ export const authOptions: NextAuthOptions = {
             return '/error?error=CREDENTIAL_NOT_FOUND'
           }
 
-          const credential = omit(['proof'])(prop('credential')(profile)) as Credential
+          const credential = omit(['proof'] as (keyof Credential)[])(prop('credential')(profile as any)) as Credential
           const {
             id,
             issuer,

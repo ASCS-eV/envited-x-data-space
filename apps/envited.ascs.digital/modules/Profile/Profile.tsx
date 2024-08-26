@@ -26,7 +26,7 @@ interface BusinessCategories {
   businessCategoryId: string
 }
 interface Profiles extends ProfileType {
-  businessCategories: BusinessCategories[]
+  businessCategories?: BusinessCategories[]
 }
 interface ProfileProps {
   profile: Profiles

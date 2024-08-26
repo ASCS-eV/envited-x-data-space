@@ -9,6 +9,7 @@ import { log } from '../../common/logger'
 import { updateProfile } from '../../common/serverActions/profiles'
 import { badRequestError, formatError, internalServerErrorError, slugify } from '../../common/utils'
 import { ProfileSchema, ValidateProfileForm } from './Profile.schema'
+import { Profile } from '../../common/types'
 
 type ProfileForm = z.infer<typeof ProfileSchema>
 
@@ -43,7 +44,7 @@ export async function updateProfileForm(formData: FormData) {
 
       data = { ...data, logo: uniqueFilename }
     }
-    await updateProfile(dissoc('businessCategories')(data), data.businessCategories)
+    await updateProfile(dissoc('businessCategories')(data) as Profile, data.businessCategories)
 
     revalidatePath('/dashboard/profile')
   } catch (error: unknown) {

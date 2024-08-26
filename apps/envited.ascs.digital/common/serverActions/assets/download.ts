@@ -8,7 +8,7 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { isOwnAsset } from '../../guards'
 import { Log, log } from '../../logger'
-import { Session } from '../../types'
+import { Asset, Session } from '../../types'
 import {
   badRequestError,
   forbiddenError,
@@ -43,7 +43,7 @@ export const _download =
       }
 
       const connection = await db()
-      const [asset] = await connection.getAsset(id)
+      const [asset] = await connection.getAsset(id) as Asset[]
 
       if (isNil(asset) || isEmpty(asset)) {
         throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })

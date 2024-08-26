@@ -7,7 +7,7 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { isOwnAsset } from '../../guards'
 import { Log, log } from '../../logger'
-import { AssetStatus, Session } from '../../types'
+import { Asset, AssetStatus, Session } from '../../types'
 import { forbiddenError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
 
 export const _update =
@@ -20,7 +20,7 @@ export const _update =
       }
 
       const connection = await db()
-      const [asset] = await connection.getAsset(id)
+      const [asset] = await connection.getAsset(id) as Asset[]
 
       if (isNil(asset) || isEmpty(asset)) {
         throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })

@@ -55,7 +55,7 @@ export default async function DashboardLayout({ children }: DashboardProps) {
               <div className="flex">
                 <img
                   className="h-24 w-24 rounded-xl ring-4 ring-white sm:h-32 sm:w-32 bg-gray-300 p-4 object-contain"
-                  src={getImageUrl(profile.logo)}
+                  src={getImageUrl(profile?.logo as string)}
                   alt=""
                 />
               </div>

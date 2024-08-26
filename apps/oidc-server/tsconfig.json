@@ -2,14 +2,6 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": ["index.d.ts"],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ],
   "compilerOptions": {
     "esModuleInterop": true,
     "lib": ["es2022"]

@@ -46,6 +46,7 @@ export interface Credential {
   id: string
   issuer: string
   credentialSubject: AscsMember | AscsUser
+  proof?: any
 }
 
 export interface User {

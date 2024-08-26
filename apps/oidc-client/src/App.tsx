@@ -18,7 +18,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [qrCodeValue, setQrCodeValue] = useState<string | null>(null)
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false)
-
+  console.info('LOGIN ', qrCodeValue)
   useEffect(() => {
     try {
       const url = getOpenIdConnectUrl(data)

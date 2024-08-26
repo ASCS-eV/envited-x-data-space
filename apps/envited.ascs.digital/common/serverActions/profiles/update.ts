@@ -29,7 +29,7 @@ export const _update =
       }
 
       const connection = await db()
-      const [user] = await connection.getUserWithProfileById(session.user.id) as [{ user: User }]
+      const [user] = (await connection.getUserWithProfileById(session.user.id)) as [{ user: User }]
 
       if (isNil(user)) {
         throw badRequestError({

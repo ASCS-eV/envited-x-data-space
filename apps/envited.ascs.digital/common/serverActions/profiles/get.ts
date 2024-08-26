@@ -21,7 +21,7 @@ export const _getProfileBySlug =
 
       const session = await getServerSession()
       const connection = await db()
-      const profile = await connection.getProfileBySlug(slug) as Profile
+      const profile = (await connection.getProfileBySlug(slug)) as Profile
 
       if (isNil(profile) || isEmpty(profile)) {
         throw notFoundError({ resource: 'profiles', resourceId: slug, userId: session?.user.id })
@@ -77,7 +77,7 @@ export const _getProfile =
       const connection = await db()
       const [user] = await connection.getUserById(session.user.id)
       const [issuer] = await connection.getUserById(user.issuerId)
-      const [profile] = await connection.getProfileByName(isPrincipal(session) ? user.name : issuer.name) as [Profile]
+      const [profile] = (await connection.getProfileByName(isPrincipal(session) ? user.name : issuer.name)) as [Profile]
 
       if (isNil(profile) || isEmpty(profile)) {
         throw notFoundError({ resource: 'profiles', resourceId: issuer.name, userId: session?.user.id })
@@ -91,7 +91,7 @@ export const _getProfile =
         return profile
       }
 
-      return omit((RESTRICTED_PROFILE_FIELDS as (keyof Profile)[]))(profile) as Profile
+      return omit(RESTRICTED_PROFILE_FIELDS as (keyof Profile)[])(profile) as Profile
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()

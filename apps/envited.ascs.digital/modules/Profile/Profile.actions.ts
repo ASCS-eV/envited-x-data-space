@@ -7,9 +7,9 @@ import { z } from 'zod'
 import { getUniqueFilename, getUploadUrl } from '../../common/aws'
 import { log } from '../../common/logger'
 import { updateProfile } from '../../common/serverActions/profiles'
+import { Profile } from '../../common/types'
 import { badRequestError, formatError, internalServerErrorError, slugify } from '../../common/utils'
 import { ProfileSchema, ValidateProfileForm } from './Profile.schema'
-import { Profile } from '../../common/types'
 
 type ProfileForm = z.infer<typeof ProfileSchema>
 

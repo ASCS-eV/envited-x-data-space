@@ -1,0 +1,81 @@
+{
+  "name": "smart-contracts",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/smart-contracts/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "assetRegistry:tezos:start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq start sandbox assetRegistry"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:tezos:stop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq stop sandbox assetRegistry"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:tezos:listAccounts": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq list accounts assetRegistry"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:originate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq originate IncDec.tz"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:transfer": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq IncDec transfer"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:originate:ghostnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq originate IncDec.tz --env development"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:transfer:ghostnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq IncDec transfer --env development"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:compile:json": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq compile IncDec.jsligo --json"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:compile": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq compile IncDec.jsligo"],
+        "parallel": false
+      }
+    }
+  }
+}

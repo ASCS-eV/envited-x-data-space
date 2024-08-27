@@ -4,6 +4,14 @@ import preact from '@preact/preset-vite'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
+  root: __dirname,
+  build: {
+    outDir: '../../dist/apps/oidc-client',
+    reportCompressedSize: true,
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
+  },
   cacheDir: '../../node_modules/.vite/oidc-client',
 
   server: {
@@ -27,6 +35,11 @@ export default defineConfig({
   // },
 
   test: {
+    reporters: ['default'],
+    coverage: {
+      reportsDirectory: '../../coverage/apps/oidc-client',
+      provider: 'v8',
+    },
     globals: true,
     cache: {
       dir: '../../node_modules/.vitest',

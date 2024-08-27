@@ -51,9 +51,9 @@ export const _validateShaclSchema =
     try {
       const shaclSchema = await fetchShaclSchema(type)
       const schema = await loadDataset(shaclSchema, ContentTypes.ttl)
-      const report = await validateShacl(schema)(data)
+      const { conforms } = await validateShacl(schema)(data)
 
-      return report.conforms
+      return conforms
     } catch {
       return false
     }
@@ -89,13 +89,13 @@ export const _validateManifest =
     validateShaclSchema: (data: DatasetCore<Quad, Quad>) => (type: Schemas) => Promise<boolean>
   }) =>
   async (file: File) => {
-    const manifestData = await getShaclDataFromZip(file, 'manifest.json')
-    const manifestDataset = await loadDataset(manifestData, ContentTypes.jsonLd)
-    const manifestValidation = await validateShaclSchema(manifestDataset)(Schemas.manifest)
+    const data = await getShaclDataFromZip(file, 'manifest.json')
+    const dataset = await loadDataset(data, ContentTypes.jsonLd)
+    const validation = await validateShaclSchema(dataset)(Schemas.manifest)
 
     return {
-      conforms: manifestValidation,
-      data: JSON.parse(manifestData),
+      conforms: validation,
+      data: JSON.parse(data),
     }
   }
 

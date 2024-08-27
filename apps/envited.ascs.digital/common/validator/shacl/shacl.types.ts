@@ -5,11 +5,12 @@ export enum ContentTypes {
 
 export enum Schemas {
   default = 'default',
+  environmentModel = 'environment-model',
   general = 'general',
   georeference = 'georeference',
   gx = 'gx',
   hdmap = 'hdmap',
-  environmentModel = 'environment-model',
+  manifest = 'manifest',
   ositrace = 'ositrace',
   scenario = 'scenario',
   surfaceModel = 'surface-model',

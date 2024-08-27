@@ -13,7 +13,8 @@ describe('common/aws/handlers/processAssetUpload', () => {
         },
       }) as any
       const validateShaclDataWithSchemaStub = jest.fn().mockResolvedValue({
-        report: { conforms: true },
+        conforms: true,
+        reports: { conforms: true },
         metadata: 'METADATA',
         assetCID: 'ASSET_CID',
         metadataCID: 'METADATA_CID',
@@ -53,7 +54,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
 
       expect(result).toEqual(undefined)
       expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
-      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'metadata/domainMetadata.json')
+      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
       expect(writeStreamToS3Stub).toHaveBeenCalledTimes(1)
       expect(deleteObjectFromS3Stub).toHaveBeenCalledTimes(1)
@@ -70,7 +71,8 @@ describe('common/aws/handlers/processAssetUpload', () => {
         },
       }) as any
       const validateShaclDataWithSchemaStub = jest.fn().mockResolvedValue({
-        report: { conforms: false },
+        conforms: false,
+        reports: { conforms: false },
         metadata: 'METADATA',
         assetCID: 'ASSET_CID',
         metadataCID: 'METADATA_CID',
@@ -110,7 +112,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
 
       expect(result).toEqual(undefined)
       expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
-      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'metadata/domainMetadata.json')
+      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
       expect(updateAssetStatusStub).toHaveBeenCalledWith('OBJECT_KEY', 'OBJECT_KEY', 'not_accepted')
       expect(writeStreamToS3Stub).toHaveBeenCalledTimes(0)

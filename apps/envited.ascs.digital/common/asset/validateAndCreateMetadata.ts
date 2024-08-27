@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { all, equals, find, head, keys, omit, pipe, prop, propEq } from 'ramda'
+import { all, equals, filter, find, head, keys, omit, pipe, prop, propEq } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromByteArray, read } from '../archive'
@@ -26,6 +26,49 @@ export const createMetadata = ({ name }: { name: string }) => {
 
 export const _getShaclSchemaAndValidate =
   ({
+    validateManifest,
+    validateDomainMetadata,
+  }: {
+    validateManifest: (
+      byteArray: Uint8Array,
+    ) => Promise<{ conforms: boolean; report: ValidationReport<any> | { conforms: boolean }; data: any }>
+    validateDomainMetadata: (
+      byteArray: Uint8Array,
+    ) => Promise<{ conforms: boolean; reports: (ValidationReport<any> | { conforms: boolean })[]; data: any }>
+  }) =>
+  async (byteArray: Uint8Array) => {
+    try {
+      const manifestPromise = validateManifest(byteArray)
+      const domainMetadataPromise = validateDomainMetadata(byteArray)
+
+      const { conforms: manifestConforms, report: manifestReport, data: manifest } = await manifestPromise
+      const {
+        conforms: domainMetadataConforms,
+        reports: domainMetadataReports,
+        data: domainMetadata,
+      } = await domainMetadataPromise
+
+      if (!manifestConforms) {
+        return { conforms: manifestConforms, reports: [manifestReport], data: {} }
+      }
+
+      if (!domainMetadataConforms) {
+        return { conforms: domainMetadataConforms, reports: domainMetadataReports, data: {} }
+      }
+
+      return {
+        conforms: domainMetadataConforms,
+        data: { manifest, domainMetadata },
+        reports: [...domainMetadataReports, manifestReport],
+      }
+    } catch (err) {
+      console.log(err)
+      throw err
+    }
+  }
+
+export const _validateManifest =
+  ({
     getFileFromByteArray,
     validateShaclDataWithSchema,
     fs,
@@ -42,28 +85,16 @@ export const _getShaclSchemaAndValidate =
     >
     fs: any
   }) =>
-  async (byteArray: Uint8Array, filename: string) => {
+  async (byteArray: Uint8Array) => {
     try {
-      const data = await getFileFromByteArray(byteArray, filename)
-      const json = JSON.parse(data)
-      const schemaTypes = pipe(omit(['sh', 'skos', 'xsd']), keys)(json['@context']) as Schemas[]
-
-      const validationPromises = schemaTypes.map(type => {
-        const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP[type]}`)
-        return validateShaclDataWithSchema(data, schema)
-      })
-      const validationResults = await Promise.all(validationPromises)
-
-      if (!all(x => equals(true)(prop('conforms')(x)), validationResults)) {
-        return {
-          data: json,
-          report: find(propEq(false, 'conforms'))(validationResults),
-        }
-      }
+      const data = await getFileFromByteArray(byteArray, 'manifest.json')
+      const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP.manifest}`)
+      const validation = await validateShaclDataWithSchema(data, schema)
 
       return {
-        data: json,
-        report: head(validationResults),
+        conforms: validation.conforms,
+        report: validation,
+        data: JSON.parse(data),
       }
     } catch (err) {
       console.log(err)
@@ -71,10 +102,62 @@ export const _getShaclSchemaAndValidate =
     }
   }
 
-export const getShaclSchemaAndValidate = _getShaclSchemaAndValidate({
+export const validateManifest = _validateManifest({
   getFileFromByteArray,
   validateShaclDataWithSchema,
   fs,
+})
+
+export const _validateDomainMetadata =
+  ({
+    getFileFromByteArray,
+    validateShaclDataWithSchema,
+    fs,
+  }: {
+    getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any
+    validateShaclDataWithSchema: (
+      data: string,
+      stream: NodeJS.ReadableStream,
+    ) => Promise<
+      | ValidationReport<any>
+      | {
+          conforms: boolean
+        }
+    >
+    fs: any
+  }) =>
+  async (byteArray: Uint8Array) => {
+    try {
+      const data = await getFileFromByteArray(byteArray, 'metadata/domainMetadata.json')
+      const parsedData = JSON.parse(data)
+      const schemaTypes = pipe(omit(['sh', 'skos', 'xsd']), keys)(parsedData['@context']) as Schemas[]
+
+      const validationPromises = schemaTypes.map(type => {
+        const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP[type]}`)
+        return validateShaclDataWithSchema(data, schema)
+      })
+      const validationResults = await Promise.all(validationPromises)
+
+      return {
+        conforms: all(x => equals(true)(prop('conforms')(x)), validationResults),
+        reports: validationResults,
+        data: parsedData,
+      }
+    } catch (err) {
+      console.log(err)
+      throw err
+    }
+  }
+
+export const validateDomainMetadata = _validateDomainMetadata({
+  getFileFromByteArray,
+  validateShaclDataWithSchema,
+  fs,
+})
+
+export const getShaclSchemaAndValidate = _getShaclSchemaAndValidate({
+  validateManifest,
+  validateDomainMetadata,
 })
 
 export const _validateAndCreateMetadata =
@@ -83,20 +166,30 @@ export const _validateAndCreateMetadata =
     createMetadata,
     createFilename,
   }: {
-    getShaclSchemaAndValidate: (byteArray: Uint8Array, filename: string) => Promise<any>
+    getShaclSchemaAndValidate: (
+      byteArray: Uint8Array,
+    ) => Promise<
+      | {
+          conforms: boolean
+          reports: (ValidationReport<any> | { conforms: boolean })[]
+          data: { manifest?: undefined; domainMetadata?: undefined }
+        }
+      | { conforms: boolean; data: { manifest: any; domainMetadata: any }; reports: { conforms: boolean }[] }
+    >
     createMetadata: ({ name }: { name: string }) => AssetMetadata
     createFilename: (byteArray: Uint8Array) => Promise<string>
   }) =>
-  async (byteArray: Uint8Array, filename: string) => {
+  async (byteArray: Uint8Array) => {
     try {
-      const { report, data } = await getShaclSchemaAndValidate(byteArray, filename)
-      const metadata = createMetadata({ name: data.name[0] as string })
+      const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
+      const metadata = createMetadata({ name: data?.domainMetadata['@type'] as string })
 
       const assetCID = await createFilename(byteArray)
       const metadataCID = await createFilename(metadata as any)
 
       return {
-        report,
+        conforms,
+        reports,
         metadata,
         assetCID,
         metadataCID,

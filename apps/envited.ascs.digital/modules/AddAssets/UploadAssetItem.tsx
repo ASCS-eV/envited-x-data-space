@@ -22,6 +22,8 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, validHand
       try {
         const data = await validateShaclFile(file)
 
+        console.log(data)
+
         setAsset(data)
         validHandler(idx, data)
         setValidating(false)

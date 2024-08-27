@@ -40,11 +40,9 @@ export const _main =
       Bucket: string
       Key: string
     }) => Promise<DeleteObjectCommandOutput | undefined>
-    validateAndCreateMetadata: (
-      byteArray: Uint8Array,
-      filename: string,
-    ) => Promise<{
-      report: ValidationReport<any> | { conforms: boolean }
+    validateAndCreateMetadata: (byteArray: Uint8Array) => Promise<{
+      conforms: boolean
+      reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
       metadata: AssetMetadata
       assetCID: string
       metadataCID: string
@@ -65,12 +63,9 @@ export const _main =
       }
 
       const byteArray = await Body.transformToByteArray()
-      const { report, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(
-        byteArray,
-        'metadata/domainMetadata.json',
-      )
+      const { conforms, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(byteArray)
 
-      if (!report.conforms) {
+      if (!conforms) {
         await deleteObjectFromS3({ Bucket, Key })
         await updateAsset(Key, Key, AssetStatus.not_accepted)
 

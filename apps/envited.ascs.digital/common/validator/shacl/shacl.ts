@@ -11,31 +11,26 @@ import { fetchShaclSchema, loadDataset, parseStreamToDataset, validateShacl } fr
 
 export const _validateShaclFile =
   ({
-    getShaclDataFromZip,
-    loadDataset,
-    validateShaclSchema,
+    validateManifest,
+    validateDomainMetadata,
   }: {
-    getShaclDataFromZip: (file: File) => Promise<string>
-    loadDataset: (data: string, contentType: ContentTypes) => Promise<DatasetCore<Quad, Quad>>
-    validateShaclSchema: (data: DatasetCore<Quad, Quad>) => (type: Schemas) => Promise<boolean>
+    validateManifest: (file: File) => Promise<{ conforms: boolean; data: any }>
+    validateDomainMetadata: (file: File) => Promise<{ conforms: boolean; data: any }>
   }) =>
   async (file: File) => {
     try {
-      const shaclData = await getShaclDataFromZip(file)
-      const json = JSON.parse(shaclData)
-      const templates = pipe(omit(['sh', 'skos', 'xsd']), keys)(json['@context'])
+      const { conforms: manifestConforms, data: manifest } = await validateManifest(file)
+      const { conforms: domainMetadataConforms, data: domainMetadata } = await validateDomainMetadata(file)
 
-      const data = await loadDataset(shaclData, ContentTypes.jsonLd)
-      const validateShaclTemplate = validateShaclSchema(data)
-      const validationPromises = templates.map(type => validateShaclTemplate(type as Schemas))
-
-      const validationResults = await Promise.all(validationPromises)
-
-      if (!all(equals(true), validationResults)) {
+      if (!manifestConforms) {
         return { isValid: false, data: {}, error: ERRORS.ASSET_INVALID }
       }
 
-      return { isValid: true, data: json }
+      if (!domainMetadataConforms) {
+        return { isValid: false, data: {}, error: ERRORS.ASSET_INVALID }
+      }
+
+      return { isValid: true, data: { manifest, domainMetadata } }
     } catch {
       return { isValid: false, data: {}, error: ERRORS.ASSET_FILE_NOT_FOUND }
     }
@@ -78,15 +73,88 @@ export const _getShaclDataFromZip =
     extract: (archive: File, fileName: string) => Promise<Entry>
     read: (file: Entry) => Promise<string>
   }) =>
-  async (asset: File) =>
-    extract(asset, 'metadata/domainMetadata.json').then(read)
+  async (asset: File, fileName: string) =>
+    extract(asset, fileName).then(read)
 
 export const getShaclDataFromZip = _getShaclDataFromZip({ extract: extractFromFile, read })
 
-export const validateShaclFile = _validateShaclFile({
+export const _validateManifest =
+  ({
+    getShaclDataFromZip,
+    loadDataset,
+    validateShaclSchema,
+  }: {
+    getShaclDataFromZip: (file: File, fileName: string) => Promise<string>
+    loadDataset: (data: string, contentType: ContentTypes) => Promise<DatasetCore<Quad, Quad>>
+    validateShaclSchema: (data: DatasetCore<Quad, Quad>) => (type: Schemas) => Promise<boolean>
+  }) =>
+  async (file: File) => {
+    const manifestData = await getShaclDataFromZip(file, 'manifest.json')
+    const manifestDataset = await loadDataset(manifestData, ContentTypes.jsonLd)
+    const manifestValidation = await validateShaclSchema(manifestDataset)(Schemas.manifest)
+
+    return {
+      conforms: manifestValidation,
+      data: JSON.parse(manifestData),
+    }
+  }
+
+export const validateManifest = _validateManifest({
   getShaclDataFromZip,
   loadDataset,
   validateShaclSchema,
+})
+
+export const _validateDomainMetadata =
+  ({
+    getShaclDataFromZip,
+    loadDataset,
+    validateShaclSchema,
+  }: {
+    getShaclDataFromZip: (file: File, fileName: string) => Promise<string>
+    loadDataset: (data: string, contentType: ContentTypes) => Promise<DatasetCore<Quad, Quad>>
+    validateShaclSchema: (data: DatasetCore<Quad, Quad>) => (type: Schemas) => Promise<boolean>
+  }) =>
+  async (file: File) => {
+    try {
+      const data = await getShaclDataFromZip(file, 'metadata/domainMetadata.json')
+      const json = JSON.parse(data)
+      const templates = pipe(omit(['sh', 'skos', 'xsd']), keys)(json['@context'])
+
+      const dataset = await loadDataset(data, ContentTypes.jsonLd)
+      const validateShaclTemplate = validateShaclSchema(dataset)
+      const validationPromises = templates.map(type => validateShaclTemplate(type as Schemas))
+
+      const validationResults = await Promise.all(validationPromises)
+
+      if (!all(equals(true), validationResults)) {
+        return {
+          conforms: false,
+          data: {},
+        }
+      }
+
+      return {
+        conforms: true,
+        data: json,
+      }
+    } catch {
+      return {
+        conforms: false,
+        data: {},
+      }
+    }
+  }
+
+export const validateDomainMetadata = _validateDomainMetadata({
+  getShaclDataFromZip,
+  loadDataset,
+  validateShaclSchema,
+})
+
+export const validateShaclFile = _validateShaclFile({
+  validateDomainMetadata,
+  validateManifest,
 })
 
 export const _validateShaclDataWithSchema =

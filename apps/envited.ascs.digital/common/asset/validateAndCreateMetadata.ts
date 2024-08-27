@@ -166,9 +166,7 @@ export const _validateAndCreateMetadata =
     createMetadata,
     createFilename,
   }: {
-    getShaclSchemaAndValidate: (
-      byteArray: Uint8Array,
-    ) => Promise<
+    getShaclSchemaAndValidate: (byteArray: Uint8Array) => Promise<
       | {
           conforms: boolean
           reports: (ValidationReport<any> | { conforms: boolean })[]

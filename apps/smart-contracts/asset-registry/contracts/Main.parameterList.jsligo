@@ -1,4 +1,4 @@
-#import "IncDec.jsligo" "Contract"
+#import "Main.jsligo" "Main"
 
 const increment : parameter_of Contract.IncDec = Increment(1)
 const decrement : parameter_of Contract.IncDec = Decrement(1)

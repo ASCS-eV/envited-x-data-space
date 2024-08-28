@@ -14,4 +14,17 @@ export enum Schemas {
   ositrace = 'ositrace',
   scenario = 'scenario',
   surfaceModel = 'surface-model',
+  sh = 'sh',
+  skos = 'skos',
+  xsd = 'xsd',
 }
+
+export type ValidationSchemas =
+  | Schemas.environmentModel
+  | Schemas.general
+  | Schemas.georeference
+  | Schemas.gx
+  | Schemas.hdmap
+  | Schemas.manifest
+  | Schemas.ositrace
+  | Schemas.scenario

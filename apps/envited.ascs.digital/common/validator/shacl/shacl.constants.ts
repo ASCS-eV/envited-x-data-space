@@ -13,4 +13,4 @@ export const SCHEMA_MAP = {
   [Schemas.surfaceModel]: '/schemas/surface-model_shacl.ttl',
 }
 
-export const CONTEXT_DROP_SCHEMAS = ['sh', 'skos', 'xsd']
+export const CONTEXT_DROP_SCHEMAS = [Schemas.sh, Schemas.skos, Schemas.xsd]

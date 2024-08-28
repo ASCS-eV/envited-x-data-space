@@ -19,7 +19,7 @@ export enum Schemas {
   xsd = 'xsd',
 }
 
-export type ValidationSchemas =
+export type ValidationSchema =
   | Schemas.environmentModel
   | Schemas.general
   | Schemas.georeference

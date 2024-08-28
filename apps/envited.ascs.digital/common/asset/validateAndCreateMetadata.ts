@@ -6,7 +6,7 @@ import { extractFromByteArray, read } from '../archive'
 import { AssetMetadata } from '../types'
 import { validateShaclDataWithSchema } from '../validator'
 import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
-import { ValidationSchemas } from '../validator/shacl/shacl.types'
+import { ValidationSchema } from '../validator/shacl/shacl.types'
 import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from './constants'
 import { createFilename } from './validateAndCreateMetadata.utils'
 
@@ -131,9 +131,9 @@ export const _validateDomainMetadata =
     try {
       const data = await getFileFromByteArray(byteArray, DOMAIN_METADATA_FILE)
       const parsedData = JSON.parse(data)
-      const schemaTypes = pipe(omit(CONTEXT_DROP_SCHEMAS), keys)(parsedData['@context']) as ValidationSchemas[]
+      const schemaTypes = pipe(omit(CONTEXT_DROP_SCHEMAS), keys)(parsedData['@context']) as ValidationSchema[]
 
-      const validationPromises = schemaTypes.map((type: ValidationSchemas) => {
+      const validationPromises = schemaTypes.map((type: ValidationSchema) => {
         const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP[type]}`)
         return validateShaclDataWithSchema(data, schema)
       })

@@ -3,7 +3,7 @@ export enum ContentTypes {
   jsonLd = 'application/ld+json',
 }
 
-export enum Schemas {
+export enum Schema {
   default = 'default',
   environmentModel = 'environment-model',
   general = 'general',
@@ -20,11 +20,11 @@ export enum Schemas {
 }
 
 export type ValidationSchema =
-  | Schemas.environmentModel
-  | Schemas.general
-  | Schemas.georeference
-  | Schemas.gx
-  | Schemas.hdmap
-  | Schemas.manifest
-  | Schemas.ositrace
-  | Schemas.scenario
+  | Schema.environmentModel
+  | Schema.general
+  | Schema.georeference
+  | Schema.gx
+  | Schema.hdmap
+  | Schema.manifest
+  | Schema.ositrace
+  | Schema.scenario

@@ -8,7 +8,7 @@ import { extractFromFile, read } from '../../archive'
 import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from '../../asset/constants'
 import { ERRORS } from '../../constants'
 import { CONTEXT_DROP_SCHEMAS } from './shacl.constants'
-import { ContentTypes, Schemas, ValidationSchema } from './shacl.types'
+import { ContentTypes, Schema, ValidationSchema } from './shacl.types'
 import { fetchShaclSchema, loadDataset, parseStreamToDataset, validateShacl } from './shacl.utils'
 
 export const _validateShaclFile =
@@ -93,7 +93,7 @@ export const _validateManifest =
   async (file: File) => {
     const data = await getShaclDataFromZip(file, MANIFEST_FILE)
     const dataset = await loadDataset(data, ContentTypes.jsonLd)
-    const validation = await validateShaclSchema(dataset)(Schemas.manifest)
+    const validation = await validateShaclSchema(dataset)(Schema.manifest)
 
     return {
       conforms: validation,

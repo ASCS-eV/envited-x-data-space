@@ -1,16 +1,16 @@
-import { Schemas } from './shacl.types'
+import { Schema } from './shacl.types'
 
 export const SCHEMA_MAP = {
-  [Schemas.default]: '/shaclSchema.ttl',
-  [Schemas.environmentModel]: '/schemas/environment_shacl.ttl',
-  [Schemas.general]: '/schemas/general_shacl.ttl',
-  [Schemas.georeference]: '/schemas/georeference_shacl.ttl',
-  [Schemas.gx]: '/schemas/gx_shacl.ttl',
-  [Schemas.hdmap]: '/schemas/hdmap_shacl.ttl',
-  [Schemas.manifest]: '/schemas/manifest_shacl.ttl',
-  [Schemas.ositrace]: '/schemas/ositrace_shacl.ttl',
-  [Schemas.scenario]: '/schemas/scenario_shacl.ttl',
-  [Schemas.surfaceModel]: '/schemas/surface-model_shacl.ttl',
+  [Schema.default]: '/shaclSchema.ttl',
+  [Schema.environmentModel]: '/schemas/environment_shacl.ttl',
+  [Schema.general]: '/schemas/general_shacl.ttl',
+  [Schema.georeference]: '/schemas/georeference_shacl.ttl',
+  [Schema.gx]: '/schemas/gx_shacl.ttl',
+  [Schema.hdmap]: '/schemas/hdmap_shacl.ttl',
+  [Schema.manifest]: '/schemas/manifest_shacl.ttl',
+  [Schema.ositrace]: '/schemas/ositrace_shacl.ttl',
+  [Schema.scenario]: '/schemas/scenario_shacl.ttl',
+  [Schema.surfaceModel]: '/schemas/surface-model_shacl.ttl',
 }
 
-export const CONTEXT_DROP_SCHEMAS = [Schemas.sh, Schemas.skos, Schemas.xsd]
+export const CONTEXT_DROP_SCHEMAS = [Schema.sh, Schema.skos, Schema.xsd]

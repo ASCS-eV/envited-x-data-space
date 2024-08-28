@@ -1,5 +1,4 @@
-import type { NextAuthOptions, Profile, User } from 'next-auth'
-import { JWT } from 'next-auth/jwt'
+import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { equals, has, isEmpty, omit, prop } from 'ramda'

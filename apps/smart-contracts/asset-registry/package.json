@@ -1,0 +1,16 @@
+{
+  "name": "asset-registry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@taqueria/plugin-core": "^0.56.0",
+    "@taqueria/plugin-flextesa": "^0.56.0",
+    "@taqueria/plugin-ligo": "^0.56.0",
+    "@taqueria/plugin-taquito": "^0.56.0",
+    "@taqueria/plugin-tzcompose": "^0.56.0"
+  }
+}

@@ -6,7 +6,7 @@ import SHACLValidator from 'rdf-validate-shacl'
 import { Readable } from 'stream'
 
 import { SCHEMA_MAP } from './shacl.constants'
-import { ContentTypes, ValidationSchema } from './shacl.types'
+import { ContentType, ValidationSchema } from './shacl.types'
 
 export const validateShacl = (shapes: DatasetCore<Quad, Quad>) => async (data: DatasetCore<Quad, Quad>) => {
   const validator = new SHACLValidator(shapes, { factory: rdf })
@@ -16,7 +16,7 @@ export const validateShacl = (shapes: DatasetCore<Quad, Quad>) => async (data: D
 
 export const _parseStreamToDataset =
   ({ parser, environment }: { parser: RdfParser<Quad>; environment: DefaultEnv }) =>
-  (stream: NodeJS.ReadableStream, contentType: ContentTypes) => {
+  (stream: NodeJS.ReadableStream, contentType: ContentType) => {
     const quads = parser.parse(stream, { contentType })
 
     return environment.dataset().import(quads)
@@ -47,9 +47,9 @@ export const _loadDataset =
     parseStreamToDataset,
   }: {
     createReadableStream: (data: string) => any
-    parseStreamToDataset: (stream: NodeJS.ReadableStream, contentType: ContentTypes) => Promise<Dataset>
+    parseStreamToDataset: (stream: NodeJS.ReadableStream, contentType: ContentType) => Promise<Dataset>
   }) =>
-  (data: string, contentType: ContentTypes) =>
+  (data: string, contentType: ContentType) =>
     parseStreamToDataset(createReadableStream(data), contentType)
 
 export const loadDataset = _loadDataset({

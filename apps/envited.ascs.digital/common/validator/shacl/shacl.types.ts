@@ -1,4 +1,4 @@
-export enum ContentTypes {
+export enum ContentType {
   ttl = 'text/turtle',
   jsonLd = 'application/ld+json',
 }

@@ -1,4 +1,4 @@
-import { ContentTypes } from './shacl.types'
+import { ContentType } from './shacl.types'
 import * as SUT from './shacl.utils'
 
 describe('common/validator/shacl/shacl.utils', () => {
@@ -6,7 +6,7 @@ describe('common/validator/shacl/shacl.utils', () => {
     it('Should return a SHACL dataset', async () => {
       // when ... we want to parse a ttl file to rdf quads
       const stream = 'STREAM'
-      const contentType = ContentTypes.jsonLd
+      const contentType = ContentType.jsonLd
       const parseStub = jest.fn().mockReturnValue('QUADS')
       const parserStub = {
         parse: parseStub,
@@ -33,7 +33,7 @@ describe('common/validator/shacl/shacl.utils', () => {
     it('', async () => {
       // when ... we want to parse a file to rdf quads
       const data = 'DATA'
-      const contentType = ContentTypes.jsonLd
+      const contentType = ContentType.jsonLd
       const parseStreamToDatasetStub = jest.fn().mockReturnValue('QUADS')
       const createReadableStreamStub = jest.fn().mockReturnValue('READABLE_STREAM')
 

@@ -2,7 +2,7 @@ import { BlobReader, Entry, ZipReader } from '@zip.js/zip.js'
 import { find, propEq } from 'ramda'
 
 import { transformByteArrayToReadable } from './archive.utils'
-import { BlobTypes } from './types'
+import { BlobType } from './types'
 
 export const _extract =
   ({ ZipReader }: { ZipReader: any }) =>
@@ -24,7 +24,7 @@ export const _extract =
 export const extract = _extract({ ZipReader })
 
 export const extractFromByteArray = async (byteArray: Uint8Array, filename: string) =>
-  extract(transformByteArrayToReadable(byteArray, BlobTypes.zip), filename)
+  extract(transformByteArrayToReadable(byteArray, BlobType.zip), filename)
 
 export const extractFromFile = (file: File, filename: string) => extract(new BlobReader(file), filename)
 

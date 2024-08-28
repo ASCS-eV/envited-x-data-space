@@ -93,7 +93,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
     })
 
     describe('_validateDomainMetadata', () => {
-      it('should extract domainMetadta and validate against SHACL schemas', async () => {
+      it('should extract domainMetadata and validate against SHACL schemas', async () => {
         // when ... we want to validate data conform the data type
         // then ... it should get the type and validate with this schema
         const getFileFromByteArrayStub = jest

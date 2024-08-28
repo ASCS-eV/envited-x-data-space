@@ -5,7 +5,9 @@ import { all, equals, keys, omit, pipe } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromFile, read } from '../../archive'
+import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from '../../asset'
 import { ERRORS } from '../../constants'
+import { CONTEXT_DROP_SCHEMAS } from './shacl.constants'
 import { ContentTypes, Schemas } from './shacl.types'
 import { fetchShaclSchema, loadDataset, parseStreamToDataset, validateShacl } from './shacl.utils'
 
@@ -89,7 +91,7 @@ export const _validateManifest =
     validateShaclSchema: (data: DatasetCore<Quad, Quad>) => (type: Schemas) => Promise<boolean>
   }) =>
   async (file: File) => {
-    const data = await getShaclDataFromZip(file, 'manifest.json')
+    const data = await getShaclDataFromZip(file, MANIFEST_FILE)
     const dataset = await loadDataset(data, ContentTypes.jsonLd)
     const validation = await validateShaclSchema(dataset)(Schemas.manifest)
 
@@ -117,9 +119,9 @@ export const _validateDomainMetadata =
   }) =>
   async (file: File) => {
     try {
-      const data = await getShaclDataFromZip(file, 'metadata/domainMetadata.json')
+      const data = await getShaclDataFromZip(file, DOMAIN_METADATA_FILE)
       const json = JSON.parse(data)
-      const templates = pipe(omit(['sh', 'skos', 'xsd']), keys)(json['@context'])
+      const templates = pipe(omit(CONTEXT_DROP_SCHEMAS as Schemas[]), keys)(json['@context'])
 
       const dataset = await loadDataset(data, ContentTypes.jsonLd)
       const validateShaclTemplate = validateShaclSchema(dataset)

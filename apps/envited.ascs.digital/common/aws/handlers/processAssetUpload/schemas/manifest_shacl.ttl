@@ -1,0 +1,89 @@
+@prefix manifest: <https://github.com/ASCS-eV/EVES/tree/onboarding/ontologyManifest/> .
+@prefix gx: <https://registry.lab.gaia-x.eu/development/api/trusted-shape-registry/v1/shapes/jsonld/trustframework#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+manifest:ManifestShape a sh:NodeShape ;
+    sh:property             
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:node manifest:LinksShape ;
+            sh:order 1 ;
+            sh:path manifest:links ];         
+    sh:targetClass manifest:Manifest .
+    
+manifest:LinksShape a sh:NodeShape ;
+    sh:property 
+       [    skos:example "screenshot, video, routing, 3d preview" ;
+            sh:description "Reference to media data as relativePath"@en ;
+            sh:message "Validation of media failed!"@en ;
+            sh:name "media"@en ;
+            sh:node manifest:LinkShape ;
+            sh:order 3 ;
+            sh:path manifest:media 
+        ],
+        [   skos:example "link to data, e.g. ./hdmap.xodr" ;
+            sh:description "Reference to the data asset as relativePath"@en ;
+            sh:message "Validation of data failed!"@en ;
+            sh:minCount 1 ;
+            sh:name "data"@en ;
+            sh:node manifest:LinkShape ;
+            sh:order 2 ;
+            sh:path manifest:data 
+        ],
+        [   skos:example "link to data asset, e.g. ./asset.zip" ;
+            sh:description "Reference to the data asset as relativePath"@en ;
+            sh:message "Validation of asset failed!"@en ;
+            sh:minCount 1 ;
+            sh:name "asset"@en ;
+            sh:node manifest:LinkShape ;
+            sh:order 1 ;
+            sh:path manifest:asset 
+        ];
+
+    sh:targetClass manifest:Links .
+
+manifest:LinkShape a sh:NodeShape ;
+    sh:property 
+       [    sh:datatype xsd:string ;
+            sh:in ("owner" "registeredUser" "publicUser") ;
+            sh:message "Validation of accessRole failed!"@en ;
+            sh:description "Choose an accessRole." ;
+            sh:name "accessRole"@en ;
+            sh:order 3 ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path manifest:accessRole 
+        ],
+        [    sh:datatype xsd:string ;
+            sh:in ("pdf" "png" "mp4" "geojson" "zip" "json" "txt" "xodr" "md") ;
+            sh:message "Validation of format failed!"@en ;
+            sh:description "Choose an format." ;
+            sh:name "format"@en ;
+            sh:order 2 ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path manifest:format 
+        ],
+        [    sh:datatype xsd:string ;
+            sh:in ("Document" "Image" "Model" "Routing" "Video" "3DPreview" "Asset" "Metadata" "License" "Validation" "Data") ;
+            sh:message "Validation of type failed!"@en ;
+            sh:description "Choose type of link." ;
+            sh:name "type"@en ;
+            sh:order 1 ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path manifest:type 
+        ],
+        [   sh:datatype xsd:anyURI ;
+            sh:message "Validation of relativePath failed!"@en ;
+            sh:description "Enter link as URL or DID." ;
+            sh:name "relativePath"@en ;
+            sh:order 0 ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path manifest:relativePath 
+        ] ;
+    sh:targetClass manifest:Link .
+    

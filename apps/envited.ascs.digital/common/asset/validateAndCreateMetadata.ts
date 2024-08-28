@@ -1,12 +1,13 @@
 import fs from 'fs'
-import { all, equals, filter, find, head, keys, omit, pipe, prop, propEq } from 'ramda'
+import { all, equals, keys, omit, pipe, prop } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromByteArray, read } from '../archive'
 import { AssetMetadata } from '../types'
 import { validateShaclDataWithSchema } from '../validator'
-import { SCHEMA_MAP } from '../validator/shacl/shacl.constants'
+import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { Schemas } from '../validator/shacl/shacl.types'
+import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from './constants'
 import { createFilename } from './validateAndCreateMetadata.utils'
 
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
@@ -87,7 +88,7 @@ export const _validateManifest =
   }) =>
   async (byteArray: Uint8Array) => {
     try {
-      const data = await getFileFromByteArray(byteArray, 'manifest.json')
+      const data = await getFileFromByteArray(byteArray, MANIFEST_FILE)
       const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP.manifest}`)
       const validation = await validateShaclDataWithSchema(data, schema)
 
@@ -128,9 +129,9 @@ export const _validateDomainMetadata =
   }) =>
   async (byteArray: Uint8Array) => {
     try {
-      const data = await getFileFromByteArray(byteArray, 'metadata/domainMetadata.json')
+      const data = await getFileFromByteArray(byteArray, DOMAIN_METADATA_FILE)
       const parsedData = JSON.parse(data)
-      const schemaTypes = pipe(omit(['sh', 'skos', 'xsd']), keys)(parsedData['@context']) as Schemas[]
+      const schemaTypes = pipe(omit(CONTEXT_DROP_SCHEMAS as Schemas[]), keys)(parsedData['@context']) as Schemas[]
 
       const validationPromises = schemaTypes.map(type => {
         const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP[type]}`)

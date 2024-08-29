@@ -1,10 +1,5 @@
 export const ROLES = [
   {
-    id: 'admin',
-    name: 'Admin',
-    description: 'Admin role',
-  },
-  {
     id: 'federator',
     name: 'Federator',
     description: 'Federator role',

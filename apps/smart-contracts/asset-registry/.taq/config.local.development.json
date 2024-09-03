@@ -36,7 +36,7 @@
   "rpcUrl": "http://localhost:8732",
   "tzkt": {
     "disableAutostartWithSandbox": false,
-    "postgresqlPort": 5434,
-    "apiPort": 5002
+    "postgresqlPort": 5435,
+    "apiPort": 5003
   }
 }

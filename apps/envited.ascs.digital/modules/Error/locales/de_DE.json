@@ -3,8 +3,14 @@
   "[Heading] DEFAULT_ERROR": "Ah oh, Something went wrong!",
   "[Description] DEFAULT_ERROR": "Please try again or contact us.",
   "[Heading] PRINCIPAL_NOT_FOUND": "Principal not found",
-  "[Description] PRINCIPAL_NOT_FOUND": "Please contact your company principle to create a company profile.",
+  "[Description] PRINCIPAL_NOT_FOUND": "Please contact your company principal to create a company profile.",
   "[Heading] CREDENTIAL_NOT_FOUND": "Credential not found",
   "[Description] CREDENTIAL_NOT_FOUND": "There is no credential found.",
+  "[Heading] STATUS_NOT_ACTIVE": "Credential has been deactivated",
+  "[Description] STATUS_NOT_ACTIVE": "Your credential has been deactivated anymore",
+  "[Heading] PRINCIPAL_INACTIVE": "Company has been deactivated",
+  "[Description] PRINCIPAL_INACTIVE": "Your account has been deactivated contact your federator or principal",
+  "[Heading] USER_INACTIVE": "User has been deactivated",
+  "[Description] USER_INACTIVE": "Your account has been deactivated please contact your principal.",
   "[Button] home": "Go back to Home"
 }

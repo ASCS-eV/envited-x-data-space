@@ -1,8 +1,8 @@
-import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
-import { importKey, InMemorySigner } from '@taquito/signer';
-import { char2Bytes } from '@taquito/utils';
+import { InMemorySigner, importKey } from '@taquito/signer'
+import { MichelsonMap, TezosToolkit } from '@taquito/taquito'
+import { char2Bytes } from '@taquito/utils'
 
-const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com');
+const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com')
 
 const contract = `
 { parameter
@@ -1767,51 +1767,51 @@ const contract = `
          GET ;
          IF_NONE { NONE nat } { DROP ; PUSH nat 1 ; SOME } ;
          IF_NONE { PUSH bool False } { DROP ; PUSH bool True } } }
-`;
-const metadata = new MichelsonMap();
-metadata.set("", char2Bytes("tezos-storage:content"))
-metadata.set("content", char2Bytes(JSON.stringify({
-  version: "v1.0",
-  name: "Test NFT Contract",
-  authors:
-  [],
-  homepage: "https://",
-  interfaces: [
-    "TZIP-012",
-    "TZIP-016",
-  ],
-  license: {
-    name: "MIT"
-  },
-  views: ["get_balance"],
-})))
+`
+const metadata = new MichelsonMap()
+metadata.set('', char2Bytes('tezos-storage:content'))
+metadata.set(
+  'content',
+  char2Bytes(
+    JSON.stringify({
+      version: 'v1.0',
+      name: 'Test NFT Contract',
+      authors: [],
+      homepage: 'https://',
+      interfaces: ['TZIP-012', 'TZIP-016'],
+      license: {
+        name: 'MIT',
+      },
+      views: ['get_balance'],
+    }),
+  ),
+)
 
 const deploy = async () => {
-  await importKey(Tezos, "edsk3p882yegRLXMSUaTQt21vkPtXr8MRXRhmbcnpHncBAYWqntggg");
+  await importKey(Tezos, 'edsk3p882yegRLXMSUaTQt21vkPtXr8MRXRhmbcnpHncBAYWqntggg')
   return Tezos.contract
-  .originate({
-    code: contract,
-    storage: {
-      metadata: [],
-      assets: [],
-      token_metadata: [],
-      operators: [],
-      approvals: [],
-      proxy: "KT1Aj2TAF8Lw5GqNakf3C9WzW9tX9d5ts2d9",
-      extension: null
-    },
-  })
-  .then((originationOp) => {
-    console.log(`Waiting for confirmation of origination for ${originationOp.contractAddress}...`);
-    return originationOp.contract();
-  })
-  .then((contract) => {
-    console.log(contract);
-    console.log(`Origination completed.`);
-  })
-  .catch((error) => console.log(`Error: ${JSON.stringify(error, null, 2)}`));
+    .originate({
+      code: contract,
+      storage: {
+        metadata: [],
+        assets: [],
+        token_metadata: [],
+        operators: [],
+        approvals: [],
+        proxy: 'KT1Aj2TAF8Lw5GqNakf3C9WzW9tX9d5ts2d9',
+        extension: null,
+      },
+    })
+    .then(originationOp => {
+      console.log(`Waiting for confirmation of origination for ${originationOp.contractAddress}...`)
+      return originationOp.contract()
+    })
+    .then(contract => {
+      console.log(contract)
+      console.log(`Origination completed.`)
+    })
+    .catch(error => console.log(`Error: ${JSON.stringify(error, null, 2)}`))
 }
-
 
 deploy()
 

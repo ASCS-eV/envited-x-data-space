@@ -109,16 +109,15 @@ export const authOptions: NextAuthOptions = {
           }
 
           const connection = await db()
-          const existingUser = await connection.getUserById(credentialSubjectId)
-          if (!isEmpty(existingUser)) {
-            // User already exists
-            log.info('User exists, completing signin')
-            return true
-          }
+          const principal = await connection.getUserById(issuer)
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
             log.info('User credential, checking principal credentials')
-            const principal = await connection.getUserById(issuer)
+
+            if (!principal.isActive) {
+              log.info('Principal exists, but the account is deactivated')
+              return '/error?error=PRINCIPAL_INACTIVE'
+            }
 
             if (isEmpty(principal)) {
               // Principal not found
@@ -126,6 +125,20 @@ export const authOptions: NextAuthOptions = {
               return '/error?error=PRINCIPAL_NOT_FOUND'
             }
           }
+
+          const existingUser = await connection.getUserById(credentialSubjectId)
+
+          if (!isEmpty(existingUser)) {
+            // User already exists
+            if (!existingUser.isActive) {
+              log.info('User exists, but the account is deactivated')
+              return '/error?error=USER_INACTIVE'
+            }
+
+            log.info('User exists, completing signin')
+            return true
+          }
+
           log.info('Inserting user')
           await connection.insertUserTx(credential)
         }

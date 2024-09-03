@@ -79,7 +79,7 @@ export const authOptions: NextAuthOptions = {
     async signIn({ profile }) {
       log.info('Sign in checks')
       try {
-        if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
+        if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
           if (!has('credential')(profile)) {
             log.error('Credential not found')
@@ -93,7 +93,7 @@ export const authOptions: NextAuthOptions = {
             credentialSubject: { id: credentialSubjectId, type: credentialSubjectType },
           } = credential
 
-          if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].contract) {
+          if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].contract) {
             log.info('Starting revocation registry check')
             const revocationCheck = await checkRevocationRegistry(
               id,
@@ -173,7 +173,7 @@ export const authOptions: NextAuthOptions = {
 export const _signIn =
   (NASignIn: any) =>
   ({ pkh }: { pkh: string }) => {
-    if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
+    if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
       return NASignIn('siwt', {
         pkh,
         callbackUrl: '/dashboard',

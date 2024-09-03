@@ -110,7 +110,6 @@ export const authOptions: NextAuthOptions = {
 
           const connection = await db()
           const existingUser = await connection.getUserById(credentialSubjectId)
-
           if (!isEmpty(existingUser)) {
             // User already exists
             log.info('User exists, completing signin')

@@ -1,11 +1,11 @@
 {
-  "networkName": "ghostnet",
-  "accounts": {
-    "taqOperatorAccount": {
-      "publicKey": "edpktqPQBtXxUjpzMt13suMhRLXfswU3UhPdPGUdSZ447fNVpGhSdg",
-      "publicKeyHash": "tz1KobLotv3nAgLJ65pyF8z1a3USbkqNeb4P",
-      "privateKey": "edskS15F4AaDSdPREYt6ffdZFEn52oqyQdZ8trZdj8Kg8MyhxcSN3Sebdos5yGRCjGWV7SDAntfdYPGTsRwjRf7TpMzMrWdd7L",
-      "mnemonic": "soda pair rigid finger warm picture ramp crater truck danger gauge use"
+    "networkName": "ghostnet",
+    "accounts": {
+        "taqOperatorAccount": {
+            "publicKey": "edpktqPQBtXxUjpzMt13suMhRLXfswU3UhPdPGUdSZ447fNVpGhSdg",
+            "publicKeyHash": "tz1KobLotv3nAgLJ65pyF8z1a3USbkqNeb4P",
+            "privateKey": "edskS15F4AaDSdPREYt6ffdZFEn52oqyQdZ8trZdj8Kg8MyhxcSN3Sebdos5yGRCjGWV7SDAntfdYPGTsRwjRf7TpMzMrWdd7L",
+            "mnemonic": "soda pair rigid finger warm picture ramp crater truck danger gauge use"
+        }
     }
-  }
 }

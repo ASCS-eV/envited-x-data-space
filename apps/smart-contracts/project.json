@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq start sandbox assetRegistry"],
+        "commands": ["TAQ_FLEXTESA_IMAGE=\"oxheadalpha/flextesa:20230915\" taq start sandbox assetRegistry"],
         "parallel": false
       }
     },
@@ -74,6 +74,14 @@
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
         "commands": ["taq compile main.jsligo"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:originate:sandbox": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts",
+        "commands": ["ENV=sandbox node ./deploy/deploy.mjs"],
         "parallel": false
       }
     }

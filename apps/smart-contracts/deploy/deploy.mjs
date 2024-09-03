@@ -2,32 +2,40 @@ import { InMemorySigner, importKey } from '@taquito/signer'
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito'
 import { char2Bytes } from '@taquito/utils'
 
-const Tezos = new TezosToolkit('https://ghostnet.ecadinfra.com')
+let RPC = 'http://localhost:8732'
+
+if (process.env.ENV === 'staging') {
+  RPC = 'https://ghostnet.ecadinfra.com'
+}
+
+if (process.env.ENV === 'production') {
+  RPC = 'https://mainnet.ecadinfra.com'
+}
+
+const Tezos = new TezosToolkit(RPC)
 
 const contract = `
 { parameter
-    (or (list %import_ticket
-           (pair (address %to_) (list %tickets_to_import (ticket (pair nat (option bytes))))))
-        (or (pair %export_ticket
-               (option %destination address)
-               (list %requests
-                  (pair (address %to_)
-                        (list %ticketsToExport (pair (address %from_) (nat %token_id) (nat %amount))))))
-            (or (list %approve
-                   (pair (address %owner)
-                         (address %spender)
-                         (nat %token_id)
-                         (nat %old_value)
-                         (nat %new_value)))
-                (or (list %update_operators
-                       (or (pair %addOperator (address %owner) (address %operator) (nat %token_id))
-                           (pair %removeOperator (address %owner) (address %operator) (nat %token_id))))
-                    (or (pair %balance_of
-                           (list %requests (pair (address %owner) (nat %token_id)))
-                           (contract %callback
-                              (list (pair (pair %request (address %owner) (nat %token_id)) (nat %balance)))))
-                        (list %transfer
-                           (pair (address %from_) (list %txs (pair (address %to_) (nat %amount) (nat %token_id)))))))))) ;
+    (or (pair %mint
+           (address %to_)
+           (nat %token_id)
+           (nat %amount)
+           (option %token_info (map string bytes)))
+        (or (list %approve
+               (pair (address %owner)
+                     (address %spender)
+                     (nat %token_id)
+                     (nat %old_value)
+                     (nat %new_value)))
+            (or (list %update_operators
+                   (or (pair %addOperator (address %owner) (address %operator) (nat %token_id))
+                       (pair %removeOperator (address %owner) (address %operator) (nat %token_id))))
+                (or (pair %balance_of
+                       (list %requests (pair (address %owner) (nat %token_id)))
+                       (contract %callback
+                          (list (pair (pair %request (address %owner) (nat %token_id)) (nat %balance)))))
+                    (list %transfer
+                       (pair (address %from_) (list %txs (pair (address %to_) (nat %amount) (nat %token_id))))))))) ;
   storage
     (pair (big_map %metadata string bytes)
           (big_map %assets nat address)
@@ -37,9 +45,8 @@ const contract = `
           (address %proxy)
           (unit %extension)) ;
   code { PUSH string "FA2_TOKEN_UNDEFINED" ;
-         PUSH string "FA2.1_INVALID_DESTINATION" ;
+         PUSH string "FA2_INSUFFICIENT_BALANCE" ;
          PUSH string "FA2.1_INSUFFICIENT_ALLOWANCE" ;
-         PUSH string "Ticket cannot be created (amount is problably 0)" ;
          PUSH string "NFT transaction amount should be 1n" ;
          LAMBDA
            (pair (big_map (pair address address nat) nat) address address nat)
@@ -49,42 +56,6 @@ const contract = `
            (pair (big_map (pair address address nat) nat) address address nat nat)
            (big_map (pair address address nat) nat)
            { UNPAIR 5 ; DIG 4 ; SOME ; DIG 4 ; DIG 4 ; DIG 4 ; PAIR 3 ; UPDATE } ;
-         LAMBDA
-           (pair (pair (lambda
-                          (pair (big_map (pair address address nat) nat) address address nat nat)
-                          (big_map (pair address address nat) nat))
-                       (lambda (pair (big_map (pair address address nat) nat) address address nat) nat))
-                 (pair (big_map (pair address address nat) nat) address address nat nat))
-           (big_map (pair address address nat) nat)
-           { UNPAIR ;
-             UNPAIR ;
-             DIG 2 ;
-             UNPAIR 5 ;
-             DUP 4 ;
-             DUP 4 ;
-             DUP 4 ;
-             DUP 4 ;
-             PAIR 4 ;
-             DIG 7 ;
-             SWAP ;
-             EXEC ;
-             PUSH string "FA2_INSUFFICIENT_BALANCE" ;
-             DUP 7 ;
-             DUP 3 ;
-             COMPARE ;
-             GE ;
-             IF { DROP } { FAILWITH } ;
-             DIG 5 ;
-             SWAP ;
-             SUB ;
-             ABS ;
-             DUG 4 ;
-             PAIR 5 ;
-             EXEC } ;
-         DUP 3 ;
-         DUP 3 ;
-         PAIR ;
-         APPLY ;
          LAMBDA (pair (big_map nat address) nat) (option address) { UNPAIR ; SWAP ; GET } ;
          LAMBDA
            (pair (big_map nat address) address nat)
@@ -119,6 +90,10 @@ const contract = `
              COMPARE ;
              EQ ;
              IF { DROP ; UNIT } { FAILWITH } } ;
+         LAMBDA
+           (pair (big_map nat (pair nat (map string bytes))) nat (map string bytes))
+           (big_map nat (pair nat (map string bytes)))
+           { UNPAIR 3 ; DIG 2 ; DUP 3 ; PAIR ; SOME ; DIG 2 ; UPDATE } ;
          LAMBDA
            (pair (pair (lambda (pair (big_map nat address) address nat) (big_map nat address))
                        (lambda (pair (big_map nat address) nat) (option address))
@@ -234,173 +209,14 @@ const contract = `
              GET 3 ;
              PAIR 6 } ;
          DUP 9 ;
-         DUP 6 ;
-         DUP 6 ;
+         DUP 7 ;
+         DUP 7 ;
          PAIR 3 ;
          APPLY ;
-         DIG 3 ;
          DIG 4 ;
+         DIG 5 ;
          DIG 8 ;
          DROP 3 ;
-         LAMBDA
-           (pair (lambda
-                    (pair (big_map string bytes)
-                          (big_map nat address)
-                          (big_map nat (pair nat (map string bytes)))
-                          (option (big_map (pair address nat) (set address)))
-                          (big_map (pair address address nat) nat)
-                          address
-                          unit)
-                    (pair (big_map nat address)
-                          (big_map nat address)
-                          (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
-                          (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
-                          (lambda (pair (big_map nat address) address nat) nat)
-                          (lambda (pair (big_map nat address) nat) (option nat))))
-                 (pair (list (pair address (list (ticket (pair nat (option bytes))))))
-                       (big_map string bytes)
-                       (big_map nat address)
-                       (big_map nat (pair nat (map string bytes)))
-                       (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
-           (pair (list operation)
-                 (big_map string bytes)
-                 (big_map nat address)
-                 (big_map nat (pair nat (map string bytes)))
-                 (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
-           { UNPAIR ;
-             SWAP ;
-             UNPAIR ;
-             DUP 2 ;
-             DIG 3 ;
-             SWAP ;
-             EXEC ;
-             DUG 2 ;
-             NIL operation ;
-             NIL operation ;
-             DIG 4 ;
-             NIL (pair (option address) (list (pair (option address) nat nat))) ;
-             PAIR 3 ;
-             DIG 2 ;
-             ITER { SWAP ;
-                    UNPAIR 3 ;
-                    DIG 3 ;
-                    UNPAIR ;
-                    DIG 4 ;
-                    DIG 4 ;
-                    NIL (pair (option address) nat nat) ;
-                    PAIR 3 ;
-                    DIG 2 ;
-                    ITER { SWAP ;
-                           UNPAIR 3 ;
-                           DIG 2 ;
-                           DIG 3 ;
-                           READ_TICKET ;
-                           SWAP ;
-                           DROP ;
-                           UNPAIR ;
-                           SWAP ;
-                           UNPAIR ;
-                           CAR ;
-                           PUSH string "FA2.1_INVALID_TICKET" ;
-                           DIG 3 ;
-                           SELF_ADDRESS ;
-                           COMPARE ;
-                           EQ ;
-                           IF { DROP } { FAILWITH } ;
-                           DUP 2 ;
-                           DUP 2 ;
-                           DUP 8 ;
-                           DUP 8 ;
-                           CAR ;
-                           PAIR 4 ;
-                           DUP 6 ;
-                           GET 5 ;
-                           SWAP ;
-                           EXEC ;
-                           DUP 2 ;
-                           DUP 8 ;
-                           DUP 8 ;
-                           CAR ;
-                           PAIR 3 ;
-                           DUP 7 ;
-                           GET 9 ;
-                           SWAP ;
-                           EXEC ;
-                           DUP 4 ;
-                           INT ;
-                           DUP 5 ;
-                           DIG 2 ;
-                           ADD ;
-                           DUP 4 ;
-                           DUP 10 ;
-                           PAIR 4 ;
-                           EMIT %balance_update
-                             (pair (address %owner) (nat %token_id) (nat %new_balance) (int %diff)) ;
-                           NIL operation ;
-                           DIG 5 ;
-                           NIL operation ;
-                           SWAP ;
-                           ITER { CONS } ;
-                           ITER { CONS } ;
-                           SWAP ;
-                           CONS ;
-                           DIG 5 ;
-                           DIG 2 ;
-                           UPDATE 1 ;
-                           NIL (pair (option address) nat nat) ;
-                           DIG 5 ;
-                           NIL (pair (option address) nat nat) ;
-                           SWAP ;
-                           ITER { CONS } ;
-                           ITER { CONS } ;
-                           DIG 4 ;
-                           DIG 4 ;
-                           DUP 6 ;
-                           SOME ;
-                           PAIR 3 ;
-                           CONS ;
-                           PAIR 3 } ;
-                    SWAP ;
-                    DROP ;
-                    UNPAIR 3 ;
-                    DUG 2 ;
-                    NIL (pair (option address) (list (pair (option address) nat nat))) ;
-                    DIG 4 ;
-                    NIL (pair (option address) (list (pair (option address) nat nat))) ;
-                    SWAP ;
-                    ITER { CONS } ;
-                    ITER { CONS } ;
-                    DIG 3 ;
-                    NONE address ;
-                    PAIR ;
-                    CONS ;
-                    PAIR 3 } ;
-             UNPAIR 3 ;
-             DROP ;
-             SWAP ;
-             ITER { NIL operation ;
-                    DIG 3 ;
-                    NIL operation ;
-                    SWAP ;
-                    ITER { CONS } ;
-                    ITER { CONS } ;
-                    SWAP ;
-                    CONS ;
-                    SWAP } ;
-             DIG 2 ;
-             SWAP ;
-             CAR ;
-             UPDATE 3 ;
-             SWAP ;
-             PAIR } ;
-         DUP 2 ;
-         APPLY ;
          LAMBDA
            (pair (pair (lambda
                           (pair (big_map string bytes)
@@ -416,16 +232,11 @@ const contract = `
                                 (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
                                 (lambda (pair (big_map nat address) address nat) nat)
                                 (lambda (pair (big_map nat address) nat) (option nat))))
-                       (lambda (pair (big_map (pair address nat) (set address)) address nat) unit)
                        (lambda
-                          (pair (big_map (pair address address nat) nat) address address nat nat)
-                          (big_map (pair address address nat) nat))
-                       (lambda (pair (big_map (pair address address nat) nat) address address nat) nat)
-                       string
-                       string
-                       string
+                          (pair (big_map nat (pair nat (map string bytes))) nat (map string bytes))
+                          (big_map nat (pair nat (map string bytes))))
                        string)
-                 (pair (pair (option address) (list (pair address (list (pair address nat nat)))))
+                 (pair (pair address nat nat (option (map string bytes)))
                        (big_map string bytes)
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
@@ -442,8 +253,8 @@ const contract = `
                  address
                  unit)
            { UNPAIR ;
-             UNPAIR 8 ;
-             DIG 8 ;
+             UNPAIR 3 ;
+             DIG 3 ;
              UNPAIR ;
              DUP 2 ;
              DIG 3 ;
@@ -452,422 +263,154 @@ const contract = `
              DUG 2 ;
              NIL operation ;
              NIL operation ;
-             DIG 4 ;
-             DUP 5 ;
+             DUP 3 ;
+             GET 3 ;
+             DUP 6 ;
+             CAR ;
+             PAIR ;
+             DUP 6 ;
+             GET 10 ;
+             SWAP ;
+             EXEC ;
+             DIG 7 ;
+             SWAP ;
+             IF_NONE { FAILWITH } { SWAP ; DROP } ;
+             DUP 4 ;
+             GET 3 ;
              DUP 5 ;
              CAR ;
-             IF_NONE { PUSH bool True } { DROP ; PUSH bool False } ;
-             IF { DUP 5 ;
-                  CDR ;
-                  ITER { DUP ;
-                         CDR ;
-                         ITER { DIG 2 ;
-                                DROP ;
-                                DIG 2 ;
-                                SWAP ;
-                                DUP 7 ;
-                                SWAP ;
-                                UNPAIR 3 ;
-                                NIL operation ;
-                                DUP 5 ;
-                                GET 5 ;
-                                DUP 4 ;
-                                MEM ;
-                                NOT ;
-                                IF { DUP 18 ; FAILWITH } {} ;
-                                DUP 5 ;
-                                GET 9 ;
-                                DUP 4 ;
-                                SENDER ;
-                                DUP 5 ;
-                                DUP 4 ;
-                                PAIR 4 ;
-                                DUP 16 ;
-                                SWAP ;
-                                EXEC ;
-                                SENDER ;
-                                DUP 5 ;
-                                COMPARE ;
-                                EQ ;
-                                IF { SWAP }
-                                   { DUP 5 ;
-                                     SENDER ;
-                                     DUP 6 ;
-                                     DUP 5 ;
-                                     PAIR 4 ;
-                                     DUP 17 ;
-                                     SWAP ;
-                                     EXEC ;
-                                     PUSH nat 0 ;
-                                     DUP 2 ;
-                                     COMPARE ;
-                                     GT ;
-                                     IF { DUP 7 ;
-                                          SWAP ;
-                                          COMPARE ;
-                                          GE ;
-                                          IF { DUP 6 ; DUP 6 ; SENDER ; DUP 7 ; DIG 5 ; PAIR 5 ; DUP 15 ; SWAP ; EXEC }
-                                             { DUP 7 ;
-                                               GET 7 ;
-                                               IF_NONE
-                                                 { SWAP ; DROP ; DUP 17 ; FAILWITH }
-                                                 { DUP 6 ; DUP 6 ; DIG 2 ; PAIR 3 ; DUP 15 ; SWAP ; EXEC ; DROP ; SWAP } } }
-                                        { DROP ;
-                                          DUP 7 ;
-                                          GET 7 ;
-                                          IF_NONE
-                                            { SWAP ; DROP ; DUP 17 ; FAILWITH }
-                                            { DUP 6 ; DUP 6 ; DIG 2 ; PAIR 3 ; DUP 15 ; SWAP ; EXEC ; DROP ; SWAP } } } ;
-                                DUP 5 ;
-                                SENDER ;
-                                DUP 6 ;
-                                DUP 4 ;
-                                PAIR 4 ;
-                                DUP 17 ;
-                                SWAP ;
-                                EXEC ;
-                                DUP ;
-                                DUP 4 ;
-                                COMPARE ;
-                                NEQ ;
-                                IF { DIG 2 ;
-                                     DUP 2 ;
-                                     SUB ;
-                                     SWAP ;
-                                     DUP 6 ;
-                                     SENDER ;
-                                     DUP 7 ;
-                                     PAIR 5 ;
-                                     EMIT %allowance_update
-                                       (pair (address %owner)
-                                             (address %spender)
-                                             (nat %token_id)
-                                             (nat %new_allowance)
-                                             (int %diff)) ;
-                                     NIL operation ;
-                                     DIG 3 ;
-                                     NIL operation ;
-                                     SWAP ;
-                                     ITER { CONS } ;
-                                     ITER { CONS } ;
-                                     SWAP ;
-                                     CONS ;
-                                     SWAP }
-                                   { DIG 2 ; DROP 2 } ;
-                                DUP 4 ;
-                                DUP 4 ;
-                                DUP 9 ;
-                                CAR ;
-                                PAIR 3 ;
-                                DUP 8 ;
-                                GET 9 ;
-                                SWAP ;
-                                EXEC ;
-                                DUP 6 ;
-                                NEG ;
-                                DUP 7 ;
-                                DIG 2 ;
-                                SUB ;
-                                ABS ;
-                                DUP 6 ;
-                                DUP 6 ;
-                                PAIR 4 ;
-                                EMIT %balance_update
-                                  (pair (address %owner) (nat %token_id) (nat %new_balance) (int %diff)) ;
-                                NIL operation ;
-                                DIG 3 ;
-                                NIL operation ;
-                                SWAP ;
-                                ITER { CONS } ;
-                                ITER { CONS } ;
-                                SWAP ;
-                                CONS ;
-                                SWAP ;
-                                DUP 5 ;
-                                DUP 5 ;
-                                DIG 4 ;
-                                DUP 9 ;
-                                CAR ;
-                                PAIR 4 ;
-                                DUP 7 ;
-                                GET 7 ;
-                                SWAP ;
-                                EXEC ;
-                                DIG 6 ;
-                                SWAP ;
-                                UPDATE 1 ;
-                                DIG 5 ;
-                                DIG 2 ;
-                                UPDATE 9 ;
-                                DUP 2 ;
-                                CAR ;
-                                UPDATE 3 ;
-                                DIG 4 ;
-                                NONE bytes ;
-                                DIG 5 ;
-                                PAIR ;
-                                TICKET ;
-                                DUP 13 ;
-                                SWAP ;
-                                IF_NONE { FAILWITH } { SWAP ; DROP } ;
-                                SWAP ;
-                                DUG 2 ;
-                                DIG 3 ;
-                                DIG 2 ;
-                                DUG 4 ;
-                                NIL operation ;
-                                DIG 7 ;
-                                NIL operation ;
-                                SWAP ;
-                                ITER { CONS } ;
-                                ITER { CONS } ;
-                                SWAP ;
-                                NIL operation ;
-                                SWAP ;
-                                ITER { CONS } ;
-                                ITER { CONS } ;
-                                DUG 5 ;
-                                DUP 3 ;
-                                CAR ;
-                                CONTRACT (ticket (pair nat (option bytes))) ;
-                                IF_NONE { DUP 14 ; FAILWITH } {} ;
-                                NIL operation ;
-                                DIG 7 ;
-                                NIL operation ;
-                                SWAP ;
-                                ITER { CONS } ;
-                                ITER { CONS } ;
-                                SWAP ;
-                                PUSH mutez 0 ;
-                                DIG 3 ;
-                                TRANSFER_TOKENS ;
-                                CONS ;
-                                DUG 4 ;
-                                SWAP } ;
-                         DROP } }
-                {} ;
-             DUP 5 ;
+             DUP 8 ;
              CAR ;
-             IF_NONE { PUSH bool False } { DROP ; PUSH bool True } ;
-             IF { DUP 5 ;
-                  CDR ;
-                  ITER { DUP ;
-                         CDR ;
-                         ITER { DIG 2 ;
-                                DROP ;
-                                DIG 2 ;
-                                SWAP ;
-                                DUP 7 ;
-                                SWAP ;
-                                UNPAIR 3 ;
-                                NIL operation ;
-                                DUP 5 ;
-                                GET 5 ;
-                                DUP 4 ;
-                                MEM ;
-                                NOT ;
-                                IF { DUP 18 ; FAILWITH } {} ;
-                                DUP 5 ;
-                                GET 9 ;
-                                DUP 4 ;
-                                SENDER ;
-                                DUP 5 ;
-                                DUP 4 ;
-                                PAIR 4 ;
-                                DUP 16 ;
-                                SWAP ;
-                                EXEC ;
-                                SENDER ;
-                                DUP 5 ;
-                                COMPARE ;
-                                EQ ;
-                                IF { SWAP }
-                                   { DUP 5 ;
-                                     SENDER ;
-                                     DUP 6 ;
-                                     DUP 5 ;
-                                     PAIR 4 ;
-                                     DUP 17 ;
-                                     SWAP ;
-                                     EXEC ;
-                                     PUSH nat 0 ;
-                                     DUP 2 ;
-                                     COMPARE ;
-                                     GT ;
-                                     IF { DUP 7 ;
-                                          SWAP ;
-                                          COMPARE ;
-                                          GE ;
-                                          IF { DUP 6 ; DUP 6 ; SENDER ; DUP 7 ; DIG 5 ; PAIR 5 ; DUP 15 ; SWAP ; EXEC }
-                                             { DUP 7 ;
-                                               GET 7 ;
-                                               IF_NONE
-                                                 { SWAP ; DROP ; DUP 17 ; FAILWITH }
-                                                 { DUP 6 ; DUP 6 ; DIG 2 ; PAIR 3 ; DUP 15 ; SWAP ; EXEC ; DROP ; SWAP } } }
-                                        { DROP ;
-                                          DUP 7 ;
-                                          GET 7 ;
-                                          IF_NONE
-                                            { SWAP ; DROP ; DUP 17 ; FAILWITH }
-                                            { DUP 6 ; DUP 6 ; DIG 2 ; PAIR 3 ; DUP 15 ; SWAP ; EXEC ; DROP ; SWAP } } } ;
-                                DUP 5 ;
-                                SENDER ;
-                                DUP 6 ;
-                                DUP 4 ;
-                                PAIR 4 ;
-                                DUP 17 ;
-                                SWAP ;
-                                EXEC ;
-                                DUP ;
-                                DUP 4 ;
-                                COMPARE ;
-                                NEQ ;
-                                IF { DIG 2 ;
-                                     DUP 2 ;
-                                     SUB ;
-                                     SWAP ;
-                                     DUP 6 ;
-                                     SENDER ;
-                                     DUP 7 ;
-                                     PAIR 5 ;
-                                     EMIT %allowance_update
-                                       (pair (address %owner)
-                                             (address %spender)
-                                             (nat %token_id)
-                                             (nat %new_allowance)
-                                             (int %diff)) ;
-                                     NIL operation ;
-                                     DIG 3 ;
-                                     NIL operation ;
-                                     SWAP ;
-                                     ITER { CONS } ;
-                                     ITER { CONS } ;
-                                     SWAP ;
-                                     CONS ;
-                                     SWAP }
-                                   { DIG 2 ; DROP 2 } ;
-                                DUP 4 ;
-                                DUP 4 ;
-                                DUP 9 ;
-                                CAR ;
-                                PAIR 3 ;
-                                DUP 8 ;
-                                GET 9 ;
-                                SWAP ;
-                                EXEC ;
-                                DUP 6 ;
-                                NEG ;
-                                DUP 7 ;
-                                DIG 2 ;
-                                SUB ;
-                                ABS ;
-                                DUP 6 ;
-                                DUP 6 ;
-                                PAIR 4 ;
-                                EMIT %balance_update
-                                  (pair (address %owner) (nat %token_id) (nat %new_balance) (int %diff)) ;
-                                NIL operation ;
-                                DIG 3 ;
-                                NIL operation ;
-                                SWAP ;
-                                ITER { CONS } ;
-                                ITER { CONS } ;
-                                SWAP ;
-                                CONS ;
-                                SWAP ;
-                                DUP 5 ;
-                                DUP 5 ;
-                                DIG 4 ;
-                                DUP 9 ;
-                                CAR ;
-                                PAIR 4 ;
-                                DUP 7 ;
-                                GET 7 ;
-                                SWAP ;
-                                EXEC ;
-                                DIG 6 ;
-                                SWAP ;
-                                UPDATE 1 ;
-                                DIG 5 ;
-                                DIG 2 ;
-                                UPDATE 9 ;
-                                DUP 2 ;
-                                CAR ;
-                                UPDATE 3 ;
-                                DIG 4 ;
-                                NONE bytes ;
-                                DIG 5 ;
-                                PAIR ;
-                                TICKET ;
-                                DUP 13 ;
-                                SWAP ;
-                                IF_NONE { FAILWITH } { SWAP ; DROP } ;
-                                SWAP ;
-                                DUG 2 ;
-                                DIG 3 ;
-                                DIG 2 ;
-                                DUG 4 ;
-                                NIL operation ;
-                                DIG 7 ;
-                                NIL operation ;
-                                SWAP ;
-                                ITER { CONS } ;
-                                ITER { CONS } ;
-                                SWAP ;
-                                NIL operation ;
-                                SWAP ;
-                                ITER { CONS } ;
-                                ITER { CONS } ;
-                                DUG 5 ;
-                                DUP 14 ;
-                                DUP 8 ;
-                                CAR ;
-                                IF_NONE { DUP 15 ; FAILWITH } {} ;
-                                CONTRACT
-                                  (list (pair (address %to_) (list %ticketsToExport (ticket (pair nat (option bytes)))))) ;
-                                IF_NONE { FAILWITH } { SWAP ; DROP } ;
-                                NIL operation ;
-                                DIG 7 ;
-                                NIL operation ;
-                                SWAP ;
-                                ITER { CONS } ;
-                                ITER { CONS } ;
-                                SWAP ;
-                                PUSH mutez 0 ;
-                                NIL (pair address (list (ticket (pair nat (option bytes))))) ;
-                                NIL (ticket (pair nat (option bytes))) ;
-                                DIG 5 ;
-                                CONS ;
-                                DUP 7 ;
-                                CAR ;
-                                PAIR ;
-                                CONS ;
-                                TRANSFER_TOKENS ;
-                                CONS ;
-                                DUG 4 ;
-                                SWAP } ;
-                         DROP } ;
-                  DIG 4 ;
-                  DIG 5 ;
-                  DIG 6 ;
-                  DIG 7 ;
-                  DIG 8 ;
-                  DIG 9 ;
-                  DIG 10 ;
-                  DIG 11 ;
-                  DIG 12 ;
-                  DROP 9 }
-                { DIG 4 ;
-                  DIG 5 ;
-                  DIG 6 ;
-                  DIG 7 ;
-                  DIG 8 ;
-                  DIG 9 ;
-                  DIG 10 ;
-                  DIG 11 ;
-                  DIG 12 ;
-                  DROP 9 } ;
+             PAIR 3 ;
+             DUP 7 ;
+             GET 9 ;
+             SWAP ;
+             EXEC ;
+             DUP 5 ;
+             GET 5 ;
+             INT ;
+             DIG 2 ;
+             DUP 6 ;
+             GET 5 ;
+             ADD ;
+             DUP 6 ;
+             GET 3 ;
+             PAIR 3 ;
+             DUP 5 ;
+             GET 5 ;
+             INT ;
+             DUP 6 ;
+             GET 5 ;
              DIG 3 ;
+             ADD ;
+             DUP 6 ;
+             GET 3 ;
+             DUP 7 ;
+             CAR ;
+             PAIR 4 ;
+             EMIT %balance_update
+               (pair (address %owner) (nat %token_id) (nat %new_balance) (int %diff)) ;
+             SWAP ;
+             EMIT %total_supply_update
+               (pair (nat %token_id) (nat %new_total_supply) (int %diff)) ;
+             DUP 6 ;
+             GET 5 ;
+             DUP 6 ;
+             GET 3 ;
+             GET ;
+             IF_NONE { EMPTY_MAP string bytes } { CDR } ;
+             DUP ;
+             DUP 7 ;
+             GET 3 ;
+             DUP 9 ;
+             GET 5 ;
+             PAIR 3 ;
+             DUP 10 ;
+             SWAP ;
+             EXEC ;
+             PUSH nat 0 ;
+             DUP 8 ;
+             GET 6 ;
+             IF_NONE { EMPTY_MAP string bytes } {} ;
+             SIZE ;
+             COMPARE ;
+             EQ ;
+             PUSH nat 0 ;
+             DIG 3 ;
+             SIZE ;
+             COMPARE ;
+             EQ ;
+             AND ;
+             IF { DUP 6 ;
+                  GET 6 ;
+                  IF_NONE { PUSH string "Token info must be provided" ; FAILWITH } { DROP } }
+                {} ;
+             PUSH nat 0 ;
+             DUP 7 ;
+             GET 6 ;
+             IF_NONE { EMPTY_MAP string bytes } {} ;
+             SIZE ;
+             COMPARE ;
+             GT ;
+             IF { DROP ;
+                  DUP 5 ;
+                  GET 6 ;
+                  IF_NONE { EMPTY_MAP string bytes } {} ;
+                  DUP 6 ;
+                  GET 3 ;
+                  DUP 8 ;
+                  GET 5 ;
+                  PAIR 3 ;
+                  DIG 8 ;
+                  SWAP ;
+                  EXEC ;
+                  DUP 6 ;
+                  GET 6 ;
+                  DUP 7 ;
+                  GET 3 ;
+                  PAIR ;
+                  EMIT %token_metadata_update
+                    (pair (nat %token_id) (option %new_metadata (map string bytes))) ;
+                  NIL operation ;
+                  DIG 6 ;
+                  NIL operation ;
+                  SWAP ;
+                  ITER { CONS } ;
+                  ITER { CONS } ;
+                  SWAP ;
+                  CONS ;
+                  DUG 4 }
+                { DIG 8 ; DROP } ;
+             DUP 6 ;
+             GET 5 ;
+             DUP 7 ;
+             GET 3 ;
+             DIG 7 ;
+             CAR ;
+             DUP 10 ;
+             CAR ;
+             PAIR 4 ;
+             DUP 8 ;
+             GET 5 ;
+             SWAP ;
+             EXEC ;
+             NIL operation ;
+             DIG 6 ;
+             NIL operation ;
+             SWAP ;
+             ITER { CONS } ;
+             ITER { CONS } ;
+             DIG 3 ;
+             CONS ;
+             DUG 4 ;
+             NIL operation ;
+             DIG 5 ;
+             NIL operation ;
+             SWAP ;
+             ITER { CONS } ;
+             ITER { CONS } ;
+             DIG 3 ;
+             CONS ;
              ITER { NIL operation ;
                     DIG 4 ;
                     NIL operation ;
@@ -877,24 +420,25 @@ const contract = `
                     SWAP ;
                     CONS ;
                     DUG 2 } ;
+             DIG 4 ;
              SWAP ;
+             UPDATE 1 ;
              CAR ;
+             SWAP ;
+             DIG 3 ;
+             SWAP ;
+             UPDATE 5 ;
+             SWAP ;
              UPDATE 3 ;
              SWAP ;
              PAIR } ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 11 ;
-         DUP 11 ;
-         DUP 10 ;
-         PAIR 8 ;
+         DUP 9 ;
+         DUP 4 ;
+         DUP 4 ;
+         PAIR 3 ;
          APPLY ;
-         DIG 8 ;
-         DIG 10 ;
-         DROP 2 ;
+         DIG 2 ;
+         DROP ;
          LAMBDA
            (pair (pair (lambda
                           (pair (big_map (pair address address nat) nat) address address nat nat)
@@ -1035,12 +579,10 @@ const contract = `
              UPDATE 9 ;
              SWAP ;
              PAIR } ;
-         DUP 9 ;
-         DUP 9 ;
+         DUP 7 ;
+         DUP 7 ;
          PAIR ;
          APPLY ;
-         DIG 7 ;
-         DROP ;
          LAMBDA
            (pair (lambda address unit)
                  (pair (list (or (pair address address nat) (pair address address nat)))
@@ -1171,9 +713,9 @@ const contract = `
                          (address %sender)) ;
                  CONS ;
                  PAIR } } ;
-         DUP 6 ;
+         DUP 5 ;
          APPLY ;
-         DIG 5 ;
+         DIG 4 ;
          DROP ;
          LAMBDA
            (pair (pair (lambda
@@ -1247,7 +789,7 @@ const contract = `
              CONS ;
              PAIR } ;
          DUP 11 ;
-         DUP 7 ;
+         DUP 6 ;
          PAIR ;
          APPLY ;
          LAMBDA
@@ -1271,6 +813,7 @@ const contract = `
                           (big_map (pair address address nat) nat))
                        (lambda (pair (big_map (pair address address nat) nat) address address nat) nat)
                        string
+                       string
                        string)
                  (pair (list (pair address (list (pair address nat nat))))
                        (big_map string bytes)
@@ -1289,8 +832,8 @@ const contract = `
                  address
                  unit)
            { UNPAIR ;
-             UNPAIR 6 ;
-             DIG 6 ;
+             UNPAIR 7 ;
+             DIG 7 ;
              UNPAIR ;
              DUP 2 ;
              DIG 3 ;
@@ -1329,7 +872,7 @@ const contract = `
                            DUP 4 ;
                            MEM ;
                            NOT ;
-                           IF { DUP 16 ; FAILWITH } {} ;
+                           IF { DUP 17 ; FAILWITH } {} ;
                            DUP 3 ;
                            SENDER ;
                            DUP 11 ;
@@ -1359,7 +902,34 @@ const contract = `
                                      SWAP ;
                                      COMPARE ;
                                      GE ;
-                                     IF { DUP 3 ; DUP 5 ; SENDER ; DUP 13 ; DIG 12 ; PAIR 5 ; DUP 14 ; SWAP ; EXEC }
+                                     IF { DUP 3 ;
+                                          DUP 5 ;
+                                          SENDER ;
+                                          DUP 13 ;
+                                          DIG 12 ;
+                                          DUP 4 ;
+                                          DUP 4 ;
+                                          DUP 4 ;
+                                          DUP 4 ;
+                                          PAIR 4 ;
+                                          DUP 20 ;
+                                          SWAP ;
+                                          EXEC ;
+                                          DUP 22 ;
+                                          DUP 7 ;
+                                          DUP 3 ;
+                                          COMPARE ;
+                                          GE ;
+                                          IF { DROP } { FAILWITH } ;
+                                          DIG 5 ;
+                                          SWAP ;
+                                          SUB ;
+                                          ABS ;
+                                          DUG 4 ;
+                                          PAIR 5 ;
+                                          DUP 14 ;
+                                          SWAP ;
+                                          EXEC }
                                         { DUP 12 ;
                                           GET 7 ;
                                           IF_NONE
@@ -1569,7 +1139,8 @@ const contract = `
              DIG 5 ;
              DIG 6 ;
              DIG 7 ;
-             DROP 5 ;
+             DIG 8 ;
+             DROP 6 ;
              UNPAIR 5 ;
              DIG 6 ;
              DIG 2 ;
@@ -1679,29 +1250,29 @@ const contract = `
          DUP 12 ;
          DUP 12 ;
          DUP 12 ;
-         PAIR 6 ;
+         DUP 12 ;
+         PAIR 7 ;
          APPLY ;
+         DIG 5 ;
          DIG 6 ;
          DIG 7 ;
          DIG 8 ;
          DIG 9 ;
          DIG 10 ;
          DIG 11 ;
-         DROP 6 ;
-         PAIR 6 ;
+         DROP 7 ;
+         PAIR 5 ;
          SWAP ;
          UNPAIR ;
          IF_LEFT
-           { PAIR ; SWAP ; GET 10 ; SWAP ; EXEC }
+           { PAIR ; SWAP ; GET 8 ; SWAP ; EXEC }
            { IF_LEFT
-               { PAIR ; SWAP ; GET 9 ; SWAP ; EXEC }
+               { PAIR ; SWAP ; GET 7 ; SWAP ; EXEC }
                { IF_LEFT
-                   { PAIR ; SWAP ; GET 7 ; SWAP ; EXEC }
+                   { PAIR ; SWAP ; GET 5 ; SWAP ; EXEC }
                    { IF_LEFT
-                       { PAIR ; SWAP ; GET 5 ; SWAP ; EXEC }
-                       { IF_LEFT
-                           { PAIR ; SWAP ; GET 3 ; SWAP ; EXEC }
-                           { PAIR ; SWAP ; CAR ; SWAP ; EXEC } } } } } } ;
+                       { PAIR ; SWAP ; GET 3 ; SWAP ; EXEC }
+                       { PAIR ; SWAP ; CAR ; SWAP ; EXEC } } } } } ;
   view "get_balance"
        (pair (address %owner) (nat %token_id))
        nat
@@ -1788,7 +1359,7 @@ metadata.set(
 )
 
 const deploy = async () => {
-  await importKey(Tezos, 'edsk3p882yegRLXMSUaTQt21vkPtXr8MRXRhmbcnpHncBAYWqntggg')
+  await importKey(Tezos, 'edsk3RFfvaFaxbHx8BMtEW1rKQcPtDML3LXjNqMNLCzC3wLC1bWbAt')
   return Tezos.contract
     .originate({
       code: contract,
@@ -1815,6 +1386,6 @@ const deploy = async () => {
 
 deploy()
 
-// const signer = new InMemorySigner("edsk3p882yegRLXMSUaTQt21vkPtXr8MRXRhmbcnpHncBAYWqntggg");
+// const signer = new InMemorySigner("REPLACE WITH LOCAL SANDBOX KEY");
 // const bytes = "0xc0050707070707070a0000001601b752c7f3de31759bce246416a6823e86b9756c6c00000107070a0000000e5550444154454420504f4c4943590a00000016011d4eb86a702a4c4342943b4b1d9ef41ca299b641000707000000848b95ca0c";
 // const signature = signer.sign(bytes).then(console.log);

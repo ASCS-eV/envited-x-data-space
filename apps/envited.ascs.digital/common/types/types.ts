@@ -54,9 +54,9 @@ export interface IRole {
 }
 
 export enum Role {
-  admin = 'admin',
   user = 'user',
   principal = 'principal',
+  provider = 'provider',
   federator = 'federator',
 }
 

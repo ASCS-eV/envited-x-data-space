@@ -1,4 +1,5 @@
 #import "./data/ledger.jsligo" "Ledger"
+#import "./data/metadata.jsligo" "Metadata"
 
 export #import "./generic/fa2.1.jsligo" "Generic"
 
@@ -27,9 +28,9 @@ const specialisedViews : Generic.InterfaceViews<unit, Ledger.NFT.L> =
 @entry const balance_of = (p, s) => specialised.balance_of([p, s]);
 @entry const update_operators = (p, s) => specialised.update_operators([p, s]);
 @entry const approve = (p, s) => specialised.approve([p, s]);
-@entry const export_ticket = (p, s) => specialised.export_ticket([p, s]);
-@entry const lambda_export = (p, s) => specialised.lambda_export([p, s]);
-@entry const import_ticket = (p, s) => specialised.import_ticket([p, s]);
+// @entry const export_ticket = (p, s) => specialised.export_ticket([p, s]);
+// @entry const import_ticket = (p, s) => specialised.import_ticket([p, s]);
+@entry const mint = (p, s) => specialised.mint([p, s]);
 
 @view const get_balance = (p, s) => specialisedViews.get_balance([p, s]);
 @view const get_total_supply = (p, s) => specialisedViews.get_total_supply([p, s]);
@@ -39,4 +40,4 @@ const specialisedViews : Generic.InterfaceViews<unit, Ledger.NFT.L> =
 @view const is_token = (p, s) => specialisedViews.is_token([p, s]);
 
 /// You can then add your own entry points like you would do in any contract, by adding e.g.
-@view const get_marketplace_name = (_params: unit, _s: Storage) : string => "My NFT Marketplace";
+// @view const get_marketplace_name = (_params: unit, _s: Storage) : string => "My NFT Marketplace";

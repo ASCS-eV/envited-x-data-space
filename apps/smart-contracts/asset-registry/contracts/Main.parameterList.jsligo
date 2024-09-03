@@ -1,4 +1,9 @@
-#import "Main.jsligo" "Main"
+#import "main.jsligo" "Contract"
+#import "./data/operators.jsligo" "Operators"
 
-const increment : parameter_of Contract.IncDec = Increment(1)
-const decrement : parameter_of Contract.IncDec = Decrement(1)
+// When this file was created, the smart contract was defined with an entrypoint using `@entry` that was not within a namespace. As such, the examples below are written with that assumption in mind.
+
+// IMPORTANT: We suggest always explicitly typing your storage values:
+// E.g.: `const storage: int = 10` or `const storage: Contract.storage = 10`
+
+

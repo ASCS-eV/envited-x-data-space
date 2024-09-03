@@ -6,6 +6,6 @@ pipelines:
       alias: nft-contract
       script:
         code:
-          file: artifacts/IncDec.json
+          file: artifacts/main.json
         storage:
-          file: artifacts/IncDec.default_storage.json
+          file: artifacts/main.default_storage.json

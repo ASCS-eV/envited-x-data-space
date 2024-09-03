@@ -15,9 +15,7 @@ export #import "../entrypoints/transfer.jsligo" "Transfer"
 export #import "../entrypoints/balance_of.jsligo" "Balance_of"
 export #import "../entrypoints/update.jsligo" "Update"
 export #import "../entrypoints/approve.jsligo" "Approve"
-export #import "../entrypoints/export_ticket.jsligo" "Export_ticket"
-export #import "../entrypoints/lambda_export.jsligo" "Lambda_export"
-export #import "../entrypoints/import_ticket.jsligo" "Import_ticket"
+export #import "../entrypoints/mint.jsligo" "Mint"
 export #import "./views.jsligo" "Views"
 
 type LedgerModule = Ledger.ledger_module;
@@ -31,9 +29,7 @@ export type Interface<A, L> = {
    balance_of: (ps: [Balance_of.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
    update_operators: (ps : [Update.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
    approve: (ps : [Approve.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
-   export_ticket: (ps : [Export_ticket.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
-   lambda_export: (ps : [Lambda_export.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
-   import_ticket: (ps : [Import_ticket.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
+   mint: (ps : [Mint.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
 };
 
 export type InterfaceViews<A, L> = {
@@ -53,9 +49,7 @@ export const make = <A, L>(makeLedger: (l: L) => LedgerModule<L>) : Interface<A,
       balance_of:         ([p, s]) => Balance_of.balance_of(p, s, ledger(s)),
       update_operators:   ([p, s]) => Update.update_ops(p, s),
       approve:            ([p, s]) => Approve.approve(p, s),
-      export_ticket:      ([p, s]) => Export_ticket.export_tickets(p, s, ledger(s)),
-      lambda_export:      ([p, s]) => Lambda_export.lambda_export(p, s, ledger(s)),
-      import_ticket:      ([p, s]) => Import_ticket.import_tickets(p, s, ledger(s)),
+      mint:               ([p, s]) => Mint.mint(p, s, ledger(s)),
    };
 };
 

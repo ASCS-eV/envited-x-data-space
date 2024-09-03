@@ -1,0 +1,12 @@
+#import "main.jsligo" "Contract"
+// const default_storage : Contract..storage = 10;
+
+const default_storage: Contract.Storage = {
+  metadata: Big_map.empty,
+  assets: Big_map.empty,
+  token_metadata: Big_map.empty,
+  operators: Some(Big_map.empty),
+  approvals: Big_map.empty,
+  proxy: "KT1Aj2TAF8Lw5GqNakf3C9WzW9tX9d5ts2d9" as address,
+  extension: unit
+}

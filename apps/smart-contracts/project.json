@@ -73,7 +73,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq compile IncDec.jsligo"],
+        "commands": ["taq compile main.jsligo"],
         "parallel": false
       }
     }

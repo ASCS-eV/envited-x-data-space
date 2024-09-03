@@ -1,0 +1,32 @@
+#import "./errors.jsligo" "Errors"
+#import "./tzip12.datatypes.jsligo" "TZIP12Datatypes"
+#import "./tzip12.interfaces.jsligo" "TZIP12Interface"
+
+/**
+* Check if the Tx sender is the token's owner
+* @param owner : the address of the actual owner
+*/
+
+export const assert_update_permission = (owner: address): unit => {
+    return Assert.Error.assert(
+        (owner == (Tezos.get_sender())),
+        Errors.only_sender_manage_operators
+    )
+}
+
+/**
+* Check if the token id is already defined
+* @param token_metadata : bigmap of token definitions
+* @param token_id : the token id to test 
+*/
+
+export const assert_token_exist = (
+    token_metadata: TZIP12Datatypes.tokenMetadata,
+    token_id: nat
+): unit => {
+    const _ =
+        Option.value_with_error(
+            Errors.undefined_token,
+            Big_map.find_opt(token_id, token_metadata)
+        )
+};

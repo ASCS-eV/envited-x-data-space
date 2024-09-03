@@ -1,2 +1,0 @@
-#import "IncDec.jsligo" "Contract"
-const default_storage : Contract.IncDec.storage = 10;

@@ -1,8 +1,8 @@
 import { BlobReader } from '@zip.js/zip.js'
 
-import { BlobTypes } from './types'
+import { BlobType } from './types'
 
-export const _transformByteArrayToBlob = (blob: typeof Blob) => (byteArray: Uint8Array, type: BlobTypes) =>
+export const _transformByteArrayToBlob = (blob: typeof Blob) => (byteArray: Uint8Array, type: BlobType) =>
   new blob([byteArray], { type })
 
 export const transformByteArrayToBlob = _transformByteArrayToBlob(Blob)
@@ -13,9 +13,9 @@ export const _transformByteArrayToReadable =
     transformByteArrayToBlob,
   }: {
     BlobReader: any
-    transformByteArrayToBlob: (byteArray: Uint8Array, type: BlobTypes) => Blob
+    transformByteArrayToBlob: (byteArray: Uint8Array, type: BlobType) => Blob
   }) =>
-  (byteArray: Uint8Array, type: BlobTypes) =>
+  (byteArray: Uint8Array, type: BlobType) =>
     new BlobReader(transformByteArrayToBlob(byteArray, type))
 
 export const transformByteArrayToReadable = _transformByteArrayToReadable({ BlobReader, transformByteArrayToBlob })

@@ -1,5 +1,5 @@
 import * as SUT from './archive.utils'
-import { BlobTypes } from './types'
+import { BlobType } from './types'
 
 describe('common/archive.utils', () => {
   describe('_transformByteArrayToBlob', () => {
@@ -8,8 +8,8 @@ describe('common/archive.utils', () => {
       // then ... it should return a Blob
       const blobStub = jest.fn()
 
-      SUT._transformByteArrayToBlob(blobStub)('BYTE_ARRAY' as any, BlobTypes.zip)
-      expect(blobStub).toHaveBeenCalledWith(['BYTE_ARRAY'], { type: BlobTypes.zip })
+      SUT._transformByteArrayToBlob(blobStub)('BYTE_ARRAY' as any, BlobType.zip)
+      expect(blobStub).toHaveBeenCalledWith(['BYTE_ARRAY'], { type: BlobType.zip })
     })
   })
 
@@ -23,7 +23,7 @@ describe('common/archive.utils', () => {
       SUT._transformByteArrayToReadable({
         BlobReader: blobReaderStub,
         transformByteArrayToBlob: transformByteArrayToBlobStub,
-      })('BYTE_ARRAY' as any, BlobTypes.zip)
+      })('BYTE_ARRAY' as any, BlobType.zip)
       expect(blobReaderStub).toHaveBeenCalledWith('BLOB')
     })
   })

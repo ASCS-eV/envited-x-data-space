@@ -188,7 +188,11 @@ export const _txn =
         .returning()
 
       const roleFilterArray =
-        credentialSubject.type === 'AscsMember' ? ['principal', 'provider', 'user'] : ['provider', 'user']
+        credentialSubject.type === 'AscsMember'
+          ? credentialSubject.id === process.env.TRUST_ANCHOR_DID
+            ? ['federator', 'principal', 'provider', 'user']
+            : ['principal', 'provider', 'user']
+          : ['provider', 'user']
 
       const roles = await tx.select().from(role).where(inArray(role.id, roleFilterArray))
 

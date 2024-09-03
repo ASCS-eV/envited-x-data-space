@@ -1,4 +1,4 @@
-export enum BlobTypes {
+export enum BlobType {
   zip = 'application/zip',
   json = 'application/json',
 }

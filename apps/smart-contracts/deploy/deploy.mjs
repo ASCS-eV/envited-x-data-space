@@ -1,8 +1,10 @@
 import { InMemorySigner, importKey } from '@taquito/signer'
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito'
 import { char2Bytes } from '@taquito/utils'
+import { default as config } from '../asset-registry/.taq/config.local.development.json' with { type: "json" }
 
 let RPC = 'http://localhost:8732'
+const privateKey = config.accounts.bob.secretKey.replace('unencrypted:', '')
 
 if (process.env.ENV === 'staging') {
   RPC = 'https://ghostnet.ecadinfra.com'
@@ -41,9 +43,7 @@ const contract = `
           (big_map %assets nat address)
           (big_map %token_metadata nat (pair (nat %token_id) (map %token_info string bytes)))
           (option %operators (big_map (pair address nat) (set address)))
-          (big_map %approvals (pair address address nat) nat)
-          (address %proxy)
-          (unit %extension)) ;
+          (big_map %approvals (pair address address nat) nat)) ;
   code { PUSH string "FA2_TOKEN_UNDEFINED" ;
          PUSH string "FA2_INSUFFICIENT_BALANCE" ;
          PUSH string "FA2.1_INSUFFICIENT_ALLOWANCE" ;
@@ -102,9 +102,7 @@ const contract = `
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (big_map nat address)
                  (big_map nat address)
                  (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
@@ -223,9 +221,7 @@ const contract = `
                                 (big_map nat address)
                                 (big_map nat (pair nat (map string bytes)))
                                 (option (big_map (pair address nat) (set address)))
-                                (big_map (pair address address nat) nat)
-                                address
-                                unit)
+                                (big_map (pair address address nat) nat))
                           (pair (big_map nat address)
                                 (big_map nat address)
                                 (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
@@ -241,17 +237,13 @@ const contract = `
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR 3 ;
              DIG 3 ;
@@ -449,24 +441,20 @@ const contract = `
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR ;
              DIG 2 ;
              UNPAIR ;
              EMPTY_MAP (pair address address nat) (pair nat int) ;
              DUP 3 ;
-             GET 9 ;
+             GET 8 ;
              NIL operation ;
              DIG 3 ;
              ITER { DIG 2 ;
@@ -576,7 +564,7 @@ const contract = `
              SWAP ;
              DIG 2 ;
              SWAP ;
-             UPDATE 9 ;
+             UPDATE 8 ;
              SWAP ;
              PAIR } ;
          DUP 7 ;
@@ -590,17 +578,13 @@ const contract = `
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              SWAP ;
              UNPAIR ;
@@ -723,9 +707,7 @@ const contract = `
                                 (big_map nat address)
                                 (big_map nat (pair nat (map string bytes)))
                                 (option (big_map (pair address nat) (set address)))
-                                (big_map (pair address address nat) nat)
-                                address
-                                unit)
+                                (big_map (pair address address nat) nat))
                           (pair (big_map nat address)
                                 (big_map nat address)
                                 (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
@@ -738,17 +720,13 @@ const contract = `
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR ;
              DIG 2 ;
@@ -798,9 +776,7 @@ const contract = `
                                 (big_map nat address)
                                 (big_map nat (pair nat (map string bytes)))
                                 (option (big_map (pair address nat) (set address)))
-                                (big_map (pair address address nat) nat)
-                                address
-                                unit)
+                                (big_map (pair address address nat) nat))
                           (pair (big_map nat address)
                                 (big_map nat address)
                                 (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
@@ -820,17 +796,13 @@ const contract = `
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR 7 ;
              DIG 7 ;
@@ -845,7 +817,7 @@ const contract = `
              EMPTY_MAP (pair address nat) (pair nat int) ;
              NIL operation ;
              DUP 6 ;
-             GET 9 ;
+             GET 8 ;
              DIG 7 ;
              PAIR 5 ;
              DIG 2 ;
@@ -1144,7 +1116,7 @@ const contract = `
              UNPAIR 5 ;
              DIG 6 ;
              DIG 2 ;
-             UPDATE 9 ;
+             UPDATE 8 ;
              SWAP ;
              CAR ;
              UPDATE 3 ;
@@ -1318,7 +1290,7 @@ const contract = `
   view "get_allowance"
        (pair (address %owner) (address %spender) (nat %token_id))
        nat
-       { UNPAIR ; SWAP ; GET 9 ; SWAP ; GET ; IF_NONE { PUSH nat 0 } {} } ;
+       { UNPAIR ; SWAP ; GET 8 ; SWAP ; GET ; IF_NONE { PUSH nat 0 } {} } ;
   view "get_token_metadata"
        nat
        (map string bytes)
@@ -1359,7 +1331,7 @@ metadata.set(
 )
 
 const deploy = async () => {
-  await importKey(Tezos, 'edsk3RFfvaFaxbHx8BMtEW1rKQcPtDML3LXjNqMNLCzC3wLC1bWbAt')
+  await importKey(Tezos, privateKey)
   return Tezos.contract
     .originate({
       code: contract,
@@ -1369,8 +1341,6 @@ const deploy = async () => {
         token_metadata: [],
         operators: [],
         approvals: [],
-        proxy: 'KT1Aj2TAF8Lw5GqNakf3C9WzW9tX9d5ts2d9',
-        extension: null,
       },
     })
     .then(originationOp => {

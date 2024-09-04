@@ -27,8 +27,8 @@ export type T = balance_of;
 
 type LedgerModule = Ledger.ledger_module;
 
-const get_balance_info = <A, L>(
-   storage : Storage<A, L>,
+const get_balance_info = <L>(
+   storage : Storage<L>,
    ledger_module  : LedgerModule<L>,
    request : request
 ) : callback => {
@@ -38,11 +38,11 @@ const get_balance_info = <A, L>(
    return { request, balance : ledger_module.balance_of([ledger_module.data, owner, token_id]) };
 };
 
-export const balance_of = <A, L>(
+export const balance_of = <L>(
    balance: balance_of,
-   storage: Storage<A, L>,
+   storage: Storage<L>,
    ledgerModule: LedgerModule<L>
-) : [list<operation>, Storage<A, L>] => {
+) : [list<operation>, Storage<L>] => {
    const { requests, callback } = balance;
 
    return [list([

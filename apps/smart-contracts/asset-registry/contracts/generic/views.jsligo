@@ -17,9 +17,9 @@ type LedgerModule = Ledger.ledger_module;
 export type get_total_supply_T = Token.T;
 export type get_total_supply_R = nat;
 
-export const get_total_supply = <A, L>(
+export const get_total_supply = <L>(
     token_id: get_total_supply_T,
-    s: Storage<A, L>,
+    s: Storage<L>,
     ledgerModule: LedgerModule<L>
 ) : get_total_supply_R =>
   Option.value(0n, ledgerModule.supply([s.assets, token_id]));
@@ -34,9 +34,9 @@ export const get_total_supply = <A, L>(
 export type get_balance_T = {owner: address; token_id: Token.T};
 export type get_balance_R = nat;
 
-export const get_balance = <A, L>(
+export const get_balance = <L>(
     params: get_balance_T,
-    s: Storage<A, L>,
+    s: Storage<L>,
     ledgerModule: LedgerModule<L>
 ) : get_balance_R =>
   ledgerModule.balance_of([s.assets, params.owner, params.token_id]);
@@ -44,9 +44,9 @@ export const get_balance = <A, L>(
 export type is_token_T = Token.T;
 export type is_token_R = bool;
 
-export const is_token = <A, L>(
+export const is_token = <L>(
     token_id: is_token_T,
-    s: Storage<A, L>,
+    s: Storage<L>,
     ledgerModule: LedgerModule<L>
 ) : is_token_R =>
     match (ledgerModule.supply([s.assets, token_id])) {
@@ -57,9 +57,9 @@ export const is_token = <A, L>(
 export type get_token_metadata_T = Token.T;
 export type get_token_metadata_R = map<string, bytes>;
 
-export const get_token_metadata = <A, L>(
+export const get_token_metadata = <L>(
     token_id: get_token_metadata_T,
-    s: Storage<A, L>,
+    s: Storage<L>,
     _ledgerModule: LedgerModule<L>
 ) : get_token_metadata_R => {
     return match(Big_map.find_opt(token_id, s.token_metadata)) {
@@ -71,9 +71,9 @@ export const get_token_metadata = <A, L>(
 export type get_allowance_T = {owner: address; spender: address; token_id: nat};
 export type get_allowance_R = nat;
 
-export const get_allowance = <A, L>(
+export const get_allowance = <L>(
     params: get_allowance_T,
-    s: Storage<A, L>,
+    s: Storage<L>,
     _ledgerModule: LedgerModule<L>
 ) : get_allowance_R => {
     const key = [params.owner, params.spender, params.token_id];
@@ -86,9 +86,9 @@ export const get_allowance = <A, L>(
 export type is_operator_T = {owner: address; operator: address; token_id: nat};
 export type is_operator_R = bool;
 
-export const is_operator = <A, L>(
+export const is_operator = <L>(
     params: is_operator_T,
-    s: Storage<A, L>,
+    s: Storage<L>,
     _ledgerModule: LedgerModule<L>
 ) : is_operator_R => {
     return match(s.operators) {

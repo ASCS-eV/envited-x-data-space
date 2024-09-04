@@ -14,12 +14,12 @@ export #import "./generic/fa2.1.jsligo" "Generic"
 /// the ledger type and module would keep track of the amount owned by
 /// each "shareholder-like" account.
 
-export type Storage = Generic.Storage<unit, Ledger.NFT.L>;
+export type Storage = Generic.Storage<Ledger.NFT.L>;
 
-const specialised : Generic.Interface<unit, Ledger.NFT.L> =
+const specialised : Generic.Interface<Ledger.NFT.L> =
   Generic.make(Ledger.NFT.ledger_module);
 
-const specialisedViews : Generic.InterfaceViews<unit, Ledger.NFT.L> =
+const specialisedViews : Generic.InterfaceViews<Ledger.NFT.L> =
   Generic.makeViews(Ledger.NFT.ledger_module);
 
 /// Following that, the entry points and views are exported from the

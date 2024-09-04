@@ -3,3 +3,4 @@
 /coverage
 /.nx/cache
 /apps/envited.ascs.digital/drizzle
+deploy.mjs

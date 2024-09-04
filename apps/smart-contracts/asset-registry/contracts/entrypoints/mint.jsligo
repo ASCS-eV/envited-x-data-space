@@ -42,11 +42,11 @@ type metadata_update_type =
 type Mint = MintParam;
 export type T = MintParam;
 
-export const mint = <A, L>(
+export const mint = <L>(
   mint: Mint,
-  storage: Storage<A, L>,
+  storage: Storage<L>,
   ledger: LedgerModule<L>
-): [list<operation>, Storage<A, L>] => {
+): [list<operation>, Storage<L>] => {
     let operations = list([]);
     let finalOperations = list([]);
   // Assert.Error.assert(storage.extension.admin == Tezos.get_sender(), Errors.not_admin);

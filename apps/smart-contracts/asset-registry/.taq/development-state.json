@@ -1,136 +1,136 @@
 {
-    "operations": {},
-    "tasks": {
-        "@taqueria/plugin-flextesa.list accounts.1724335552908": {
-            "task": "list accounts",
-            "plugin": "@taqueria/plugin-flextesa",
-            "time": 1724335552908,
-            "output": [
-                {
-                    "account": "bob",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
-                },
-                {
-                    "account": "alice",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
-                },
-                {
-                    "account": "john",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1Zwoh1QCVAvJ4sVTojMp9pLYp6Ji4NoZy6"
-                },
-                {
-                    "account": "jane",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1aHUAC4oviwJuZF1EvVSvFz7cu9KMNYBph"
-                },
-                {
-                    "account": "joe",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1MVGjgD1YtAPwohsSfk8i3ZiT1yEGM2YXB"
-                }
-            ]
+  "operations": {},
+  "tasks": {
+    "@taqueria/plugin-flextesa.list accounts.1724335552908": {
+      "task": "list accounts",
+      "plugin": "@taqueria/plugin-flextesa",
+      "time": 1724335552908,
+      "output": [
+        {
+          "account": "bob",
+          "balance": "3000 ꜩ",
+          "address": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
         },
-        "@taqueria/plugin-taquito.deploy.1724335687150": {
-            "task": "deploy",
-            "plugin": "@taqueria/plugin-taquito",
-            "time": 1724335687150,
-            "output": [
-                {
-                    "contract": "IncDec.tz",
-                    "address": "KT1C9vhvR5CwcVsxo4VdjjxcirDCSzA3wMhC",
-                    "alias": "IncDec"
-                }
-            ]
+        {
+          "account": "alice",
+          "balance": "3000 ꜩ",
+          "address": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
         },
-        "@taqueria/plugin-flextesa.list accounts.1725370634858": {
-            "task": "list accounts",
-            "plugin": "@taqueria/plugin-flextesa",
-            "time": 1725370634858,
-            "output": [
-                {
-                    "account": "bob",
-                    "balance": "2994.024032 ꜩ",
-                    "address": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
-                },
-                {
-                    "account": "alice",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
-                },
-                {
-                    "account": "john",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1Zwoh1QCVAvJ4sVTojMp9pLYp6Ji4NoZy6"
-                },
-                {
-                    "account": "jane",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1aHUAC4oviwJuZF1EvVSvFz7cu9KMNYBph"
-                },
-                {
-                    "account": "joe",
-                    "balance": "3000 ꜩ",
-                    "address": "tz1MVGjgD1YtAPwohsSfk8i3ZiT1yEGM2YXB"
-                }
-            ]
+        {
+          "account": "john",
+          "balance": "3000 ꜩ",
+          "address": "tz1Zwoh1QCVAvJ4sVTojMp9pLYp6Ji4NoZy6"
         },
-        "@taqueria/plugin-ligo.compile.1725438255090": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1725438255090,
-            "output": [
-                {
-                    "source": "main.jsligo",
-                    "artifact": "No contract modules found in \"main.jsligo\".\nIf your contract is defined within a namespace, please ensure that it is exported from the contract file.\""
-                }
-            ]
+        {
+          "account": "jane",
+          "balance": "3000 ꜩ",
+          "address": "tz1aHUAC4oviwJuZF1EvVSvFz7cu9KMNYBph"
         },
-        "@taqueria/plugin-ligo.compile.1725438275829": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1725438275829,
-            "output": [
-                {
-                    "source": "main.jsligo",
-                    "artifact": "No contract modules found in \"main.jsligo\".\nIf your contract is defined within a namespace, please ensure that it is exported from the contract file.\""
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1725438336966": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1725438336966,
-            "output": [
-                {
-                    "source": "main.jsligo",
-                    "artifact": "No contract modules found in \"main.jsligo\".\nIf your contract is defined within a namespace, please ensure that it is exported from the contract file.\""
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1725438562848": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1725438562848,
-            "output": [
-                {
-                    "source": "main.jsligo",
-                    "artifact": "artifacts/main.tz\nartifacts/main.default_storage.tz"
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1725439079725": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1725439079725,
-            "output": [
-                {
-                    "source": "main.jsligo",
-                    "artifact": "artifacts/main.tz\nartifacts/main.default_storage.tz"
-                }
-            ]
+        {
+          "account": "joe",
+          "balance": "3000 ꜩ",
+          "address": "tz1MVGjgD1YtAPwohsSfk8i3ZiT1yEGM2YXB"
         }
+      ]
+    },
+    "@taqueria/plugin-taquito.deploy.1724335687150": {
+      "task": "deploy",
+      "plugin": "@taqueria/plugin-taquito",
+      "time": 1724335687150,
+      "output": [
+        {
+          "contract": "IncDec.tz",
+          "address": "KT1C9vhvR5CwcVsxo4VdjjxcirDCSzA3wMhC",
+          "alias": "IncDec"
+        }
+      ]
+    },
+    "@taqueria/plugin-flextesa.list accounts.1725370634858": {
+      "task": "list accounts",
+      "plugin": "@taqueria/plugin-flextesa",
+      "time": 1725370634858,
+      "output": [
+        {
+          "account": "bob",
+          "balance": "2994.024032 ꜩ",
+          "address": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
+        },
+        {
+          "account": "alice",
+          "balance": "3000 ꜩ",
+          "address": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+        },
+        {
+          "account": "john",
+          "balance": "3000 ꜩ",
+          "address": "tz1Zwoh1QCVAvJ4sVTojMp9pLYp6Ji4NoZy6"
+        },
+        {
+          "account": "jane",
+          "balance": "3000 ꜩ",
+          "address": "tz1aHUAC4oviwJuZF1EvVSvFz7cu9KMNYBph"
+        },
+        {
+          "account": "joe",
+          "balance": "3000 ꜩ",
+          "address": "tz1MVGjgD1YtAPwohsSfk8i3ZiT1yEGM2YXB"
+        }
+      ]
+    },
+    "@taqueria/plugin-ligo.compile.1725438255090": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1725438255090,
+      "output": [
+        {
+          "source": "main.jsligo",
+          "artifact": "No contract modules found in \"main.jsligo\".\nIf your contract is defined within a namespace, please ensure that it is exported from the contract file.\""
+        }
+      ]
+    },
+    "@taqueria/plugin-ligo.compile.1725438275829": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1725438275829,
+      "output": [
+        {
+          "source": "main.jsligo",
+          "artifact": "No contract modules found in \"main.jsligo\".\nIf your contract is defined within a namespace, please ensure that it is exported from the contract file.\""
+        }
+      ]
+    },
+    "@taqueria/plugin-ligo.compile.1725438336966": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1725438336966,
+      "output": [
+        {
+          "source": "main.jsligo",
+          "artifact": "No contract modules found in \"main.jsligo\".\nIf your contract is defined within a namespace, please ensure that it is exported from the contract file.\""
+        }
+      ]
+    },
+    "@taqueria/plugin-ligo.compile.1725438562848": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1725438562848,
+      "output": [
+        {
+          "source": "main.jsligo",
+          "artifact": "artifacts/main.tz\nartifacts/main.default_storage.tz"
+        }
+      ]
+    },
+    "@taqueria/plugin-ligo.compile.1725439079725": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1725439079725,
+      "output": [
+        {
+          "source": "main.jsligo",
+          "artifact": "artifacts/main.tz\nartifacts/main.default_storage.tz"
+        }
+      ]
     }
+  }
 }

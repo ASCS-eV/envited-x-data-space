@@ -7,6 +7,4 @@ const default_storage: Contract.Storage = {
   token_metadata: Big_map.empty,
   operators: Some(Big_map.empty),
   approvals: Big_map.empty,
-  proxy: "KT1Aj2TAF8Lw5GqNakf3C9WzW9tX9d5ts2d9" as address,
-  extension: unit
 }

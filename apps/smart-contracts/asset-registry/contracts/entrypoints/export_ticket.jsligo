@@ -56,11 +56,11 @@ export type T = ExportTicket;
 
 type LedgerModule = Ledger.ledger_module;
 
-const create_ticket = <A, L>(
-   storage: Storage<A, L>,
+const create_ticket = <L>(
+   storage: Storage<L>,
    ticketToExport : TicketToExport,
    ledger: LedgerModule<L>
-) : [list<operation>, ExportedTicket, LedgerModule<L>, Storage<A, L>] => {
+) : [list<operation>, ExportedTicket, LedgerModule<L>, Storage<L>] => {
    const { from_, token_id, amount } = ticketToExport;
    let operations : list<operation> = list([]);
 
@@ -104,11 +104,11 @@ const create_ticket = <A, L>(
    return [operations, ticket, newLedger, newStorage];
 };
 
-export const export_tickets = <A, L>(
+export const export_tickets = <L>(
    op : ExportTicket,
-   storage : Storage<A, L>,
+   storage : Storage<L>,
    ledger : LedgerModule<L>
-) : [list<operation>, Storage<A, L>] => {
+) : [list<operation>, Storage<L>] => {
    let operations : list<operation> = list([]);
    let finalOperations = list([]);
    let newLedger = ledger;

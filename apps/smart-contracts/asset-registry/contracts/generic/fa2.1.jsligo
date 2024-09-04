@@ -24,25 +24,25 @@ export type Storage = Storage.T;
 // A is the extension for the storage
 // L is the ledger type
 
-export type Interface<A, L> = {
-   transfer: (ps : [Transfer.t, Storage<A, L>]) => [list<operation>, Storage<A, L>],
-   balance_of: (ps: [Balance_of.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
-   update_operators: (ps : [Update.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
-   approve: (ps : [Approve.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
-   mint: (ps : [Mint.T, Storage<A, L>]) => [list<operation>, Storage<A, L>],
+export type Interface<L> = {
+   transfer: (ps : [Transfer.t, Storage<L>]) => [list<operation>, Storage<L>],
+   balance_of: (ps: [Balance_of.T, Storage<L>]) => [list<operation>, Storage<L>],
+   update_operators: (ps : [Update.T, Storage<L>]) => [list<operation>, Storage<L>],
+   approve: (ps : [Approve.T, Storage<L>]) => [list<operation>, Storage<L>],
+   mint: (ps : [Mint.T, Storage<L>]) => [list<operation>, Storage<L>],
 };
 
-export type InterfaceViews<A, L> = {
-   get_balance: (ps: [Views.get_balance_T, Storage<A, L>]) => Views.get_balance_R,
-   get_total_supply: (ps: [Views.get_total_supply_T, Storage<A, L>]) => Views.get_total_supply_R,
-   is_operator: (ps: [Views.is_operator_T, Storage<A, L>]) => Views.is_operator_R,
-   get_allowance: (ps: [Views.get_allowance_T, Storage<A, L>]) => Views.get_allowance_R,
-   get_token_metadata: (ps: [Views.get_token_metadata_T, Storage<A, L>]) => Views.get_token_metadata_R,
-   is_token: (ps: [Views.is_token_T, Storage<A, L>]) => Views.is_token_R,
+export type InterfaceViews<L> = {
+   get_balance: (ps: [Views.get_balance_T, Storage<L>]) => Views.get_balance_R,
+   get_total_supply: (ps: [Views.get_total_supply_T, Storage<L>]) => Views.get_total_supply_R,
+   is_operator: (ps: [Views.is_operator_T, Storage<L>]) => Views.is_operator_R,
+   get_allowance: (ps: [Views.get_allowance_T, Storage<L>]) => Views.get_allowance_R,
+   get_token_metadata: (ps: [Views.get_token_metadata_T, Storage<L>]) => Views.get_token_metadata_R,
+   is_token: (ps: [Views.is_token_T, Storage<L>]) => Views.is_token_R,
 };
 
-export const make = <A, L>(makeLedger: (l: L) => LedgerModule<L>) : Interface<A, L> => {
-   const ledger = (s : Storage<A, L>) : LedgerModule<L> => makeLedger(s.assets);
+export const make = <L>(makeLedger: (l: L) => LedgerModule<L>) : Interface<L> => {
+   const ledger = (s : Storage<L>) : LedgerModule<L> => makeLedger(s.assets);
 
    return {
       transfer:           ([p, s]) => Transfer.transfer(p, s, ledger(s)),
@@ -53,8 +53,8 @@ export const make = <A, L>(makeLedger: (l: L) => LedgerModule<L>) : Interface<A,
    };
 };
 
-export const makeViews = <A, L>(makeLedger: (l: L) => LedgerModule<L>) : InterfaceViews<A, L> => {
-   const ledger = (s : Storage<A, L>) : LedgerModule<L> => makeLedger(s.assets);
+export const makeViews = <L>(makeLedger: (l: L) => LedgerModule<L>) : InterfaceViews<L> => {
+   const ledger = (s : Storage<L>) : LedgerModule<L> => makeLedger(s.assets);
 
    return {
       get_balance:        ([p, s]) => Views.get_balance(p, s, ledger(s)),

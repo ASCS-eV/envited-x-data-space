@@ -24,9 +24,7 @@
           (big_map %assets nat address)
           (big_map %token_metadata nat (pair (nat %token_id) (map %token_info string bytes)))
           (option %operators (big_map (pair address nat) (set address)))
-          (big_map %approvals (pair address address nat) nat)
-          (address %proxy)
-          (unit %extension)) ;
+          (big_map %approvals (pair address address nat) nat)) ;
   code { PUSH string "FA2_TOKEN_UNDEFINED" ;
          PUSH string "FA2_INSUFFICIENT_BALANCE" ;
          PUSH string "FA2.1_INSUFFICIENT_ALLOWANCE" ;
@@ -85,9 +83,7 @@
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (big_map nat address)
                  (big_map nat address)
                  (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
@@ -206,9 +202,7 @@
                                 (big_map nat address)
                                 (big_map nat (pair nat (map string bytes)))
                                 (option (big_map (pair address nat) (set address)))
-                                (big_map (pair address address nat) nat)
-                                address
-                                unit)
+                                (big_map (pair address address nat) nat))
                           (pair (big_map nat address)
                                 (big_map nat address)
                                 (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
@@ -224,17 +218,13 @@
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR 3 ;
              DIG 3 ;
@@ -432,24 +422,20 @@
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR ;
              DIG 2 ;
              UNPAIR ;
              EMPTY_MAP (pair address address nat) (pair nat int) ;
              DUP 3 ;
-             GET 9 ;
+             GET 8 ;
              NIL operation ;
              DIG 3 ;
              ITER { DIG 2 ;
@@ -559,7 +545,7 @@
              SWAP ;
              DIG 2 ;
              SWAP ;
-             UPDATE 9 ;
+             UPDATE 8 ;
              SWAP ;
              PAIR } ;
          DUP 7 ;
@@ -573,17 +559,13 @@
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              SWAP ;
              UNPAIR ;
@@ -706,9 +688,7 @@
                                 (big_map nat address)
                                 (big_map nat (pair nat (map string bytes)))
                                 (option (big_map (pair address nat) (set address)))
-                                (big_map (pair address address nat) nat)
-                                address
-                                unit)
+                                (big_map (pair address address nat) nat))
                           (pair (big_map nat address)
                                 (big_map nat address)
                                 (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
@@ -721,17 +701,13 @@
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR ;
              DIG 2 ;
@@ -781,9 +757,7 @@
                                 (big_map nat address)
                                 (big_map nat (pair nat (map string bytes)))
                                 (option (big_map (pair address nat) (set address)))
-                                (big_map (pair address address nat) nat)
-                                address
-                                unit)
+                                (big_map (pair address address nat) nat))
                           (pair (big_map nat address)
                                 (big_map nat address)
                                 (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
@@ -803,17 +777,13 @@
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
                        (option (big_map (pair address nat) (set address)))
-                       (big_map (pair address address nat) nat)
-                       address
-                       unit))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
                  (option (big_map (pair address nat) (set address)))
-                 (big_map (pair address address nat) nat)
-                 address
-                 unit)
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR 7 ;
              DIG 7 ;
@@ -828,7 +798,7 @@
              EMPTY_MAP (pair address nat) (pair nat int) ;
              NIL operation ;
              DUP 6 ;
-             GET 9 ;
+             GET 8 ;
              DIG 7 ;
              PAIR 5 ;
              DIG 2 ;
@@ -1127,7 +1097,7 @@
              UNPAIR 5 ;
              DIG 6 ;
              DIG 2 ;
-             UPDATE 9 ;
+             UPDATE 8 ;
              SWAP ;
              CAR ;
              UPDATE 3 ;
@@ -1301,7 +1271,7 @@
   view "get_allowance"
        (pair (address %owner) (address %spender) (nat %token_id))
        nat
-       { UNPAIR ; SWAP ; GET 9 ; SWAP ; GET ; IF_NONE { PUSH nat 0 } {} } ;
+       { UNPAIR ; SWAP ; GET 8 ; SWAP ; GET ; IF_NONE { PUSH nat 0 } {} } ;
   view "get_token_metadata"
        nat
        (map string bytes)

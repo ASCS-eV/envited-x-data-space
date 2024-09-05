@@ -1,9 +1,9 @@
 import { EnvelopeOpenIcon, UsersIcon } from '@heroicons/react/24/outline'
+import { map } from 'ramda'
 
 import { getServerSession } from '../../common/auth'
 import { ROUTES } from '../../common/constants/routes'
 import { Dashboard } from '../../modules/Dashboard'
-import { map } from 'ramda'
 
 export default async function Index() {
   const session = await getServerSession()
@@ -19,7 +19,7 @@ export default async function Index() {
         <h3 className="text-base font-semibold leading-6 text-gray-900">Overview</h3>
 
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          {map((item: { id: number, icon: any, name: string, stat: string, route: string }) => (
+          {map((item: { id: number; icon: any; name: string; stat: string; route: string }) => (
             <div
               key={item.id}
               className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 border sm:px-6 sm:pt-6"

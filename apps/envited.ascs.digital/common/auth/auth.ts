@@ -109,9 +109,10 @@ export const authOptions: NextAuthOptions = {
           }
 
           const connection = await db()
-          const principal = await connection.getUserById(issuer)
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
+            const principal = await connection.getUserById(issuer)
+
             log.info('User credential, checking principal credentials')
 
             if (!principal.isActive) {

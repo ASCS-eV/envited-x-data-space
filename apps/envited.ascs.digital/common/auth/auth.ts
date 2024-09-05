@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { equals, has, head, isEmpty, omit, prop } from 'ramda'
+import { equals, has, isEmpty, isNil, omit, prop } from 'ramda'
 import { match } from 'ts-pattern'
 
 import { db } from '../database/queries'
@@ -115,7 +115,6 @@ export const authOptions: NextAuthOptions = {
             const [principal] = await connection.getUserById(issuer)
 
             log.info('User credential, checking principal credentials')
-            log.info(principal)
 
             if (!principal.isActive) {
               log.info('Principal exists, but the account is deactivated')
@@ -129,14 +128,11 @@ export const authOptions: NextAuthOptions = {
             }
           }
 
-          const existingUser = await connection.getUserById(credentialSubjectId)
+          const [existingUser] = await connection.getUserById(credentialSubjectId)
 
-          if (!isEmpty(existingUser)) {
-            const user = head(existingUser) as any
-            log.info('User exists')
-            log.info(user)
+          if (!isNil(existingUser)) {
             // User already exists
-            if (!user.isActive) {
+            if (!existingUser.isActive) {
               log.info('User exists, but the account is deactivated')
               return '/error?error=USER_INACTIVE'
             }

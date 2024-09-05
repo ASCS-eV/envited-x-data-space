@@ -112,7 +112,7 @@ export const authOptions: NextAuthOptions = {
           const connection = await db()
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
-            const principal = await connection.getUserById(issuer)
+            const [principal] = await connection.getUserById(issuer)
 
             log.info('User credential, checking principal credentials')
             log.info(principal)
@@ -129,7 +129,7 @@ export const authOptions: NextAuthOptions = {
             }
           }
 
-          const existingUser = await connection.getUserById(credentialSubjectId)
+          const [existingUser] = await connection.getUserById(credentialSubjectId)
 
           if (!isEmpty(existingUser)) {
             log.info('User exists')

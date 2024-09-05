@@ -174,6 +174,7 @@ export default function Envited({ stack }: StackContext) {
       TOKEN_URL: process.env.TOKEN_URL!,
       JWKS_ENDPOINT: process.env.JWKS_ENDPOINT!,
       OIDC_SERVER_URL: process.env.OIDC_SERVER_URL!,
+      TRUST_ANCHOR_DID: process.env.TRUST_ANCHOR_DID!,
     },
   })
 

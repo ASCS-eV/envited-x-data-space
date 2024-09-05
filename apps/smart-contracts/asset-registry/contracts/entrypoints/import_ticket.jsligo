@@ -88,11 +88,11 @@ export const import_tickets_to = <L>(
     return [list([transfer, ...transfers]), newLedger, events];
 };
 
-export const import_tickets = <A, L>(
+export const import_tickets = <L>(
     importTicket : import_ticket,
-    storage : Storage<A, L>,
+    storage : Storage<L>,
     ledger: LedgerModule<L>
-) : [list<operation>, Storage<A, L>] => {
+) : [list<operation>, Storage<L>] => {
     let operations = list([]);
     let finalOperations = list([]);
 

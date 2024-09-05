@@ -2,6 +2,6 @@
 
 export type T = address;
 
-// export const isCallerAdmin = <A, L>(s: Storage.T): bool => {
+// export const isCallerAdmin = <L>(s: Storage.T): bool => {
 //   return caller == admin;
 // };

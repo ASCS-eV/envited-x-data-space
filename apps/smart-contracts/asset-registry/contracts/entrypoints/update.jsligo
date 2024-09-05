@@ -68,10 +68,10 @@ const _update_ops = (
       };
 };
 
-export const update_ops = <A, L>(
+export const update_ops = <L>(
       updates: update_operators,
-      storage: Storage<A, L>
-) : [list<operation>, Storage<A, L>] => {
+      storage: Storage<L>
+) : [list<operation>, Storage<L>] => {
       const sender = Tezos.get_sender();
       return match(Storage.get_operators(storage)) {
             when(Some(operators)): do {

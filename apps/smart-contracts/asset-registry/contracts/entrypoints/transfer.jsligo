@@ -54,8 +54,8 @@ export type t = transfer;
 
 type ledger_module = Ledger.ledger_module;
 
-export const authorize_transfer = <A, L>(
-   storage: storage<A, L>,
+export const authorize_transfer = <L>(
+   storage: storage<L>,
    approvals: Approvals.T,
    from_: address,
    token_id: Token.T,
@@ -89,8 +89,8 @@ type event_map_key = [address, Token.T];
 type allowance_event_map_key = [address, address, Token.T];
 type event_map_value = [nat, int];
 
-const atomic_trans = <A, L>(
-   storage : storage<A, L>,
+const atomic_trans = <L>(
+   storage : storage<L>,
    from_ : address,
    [[ledger, approvals, operations, event_balance, event_allowance], transfer] : [[ledger_module<L>, Approvals.T, list<operation>, map<event_map_key, event_map_value>, map<allowance_event_map_key, event_map_value>], atomic_trans]
 ): [ledger_module<L>, Approvals.T, list<operation>, map<event_map_key, event_map_value>, map<allowance_event_map_key, event_map_value>] => {
@@ -157,8 +157,8 @@ const atomic_trans = <A, L>(
    return [Ledger.increase_token_amount_for_user(newLedger, to_, token_id, amount), authorizedApprovals, operationsEvent, event_balance_map, event_allowance_map];
 };
 
-const transfer_from = <A, L>(
-   storage: storage<A, L>,
+const transfer_from = <L>(
+   storage: storage<L>,
    [[ledger, approvals, operations, event_balance, event_allowance], transfer] : [[ledger_module<L>, Approvals.T, list<operation>, map<event_map_key, event_map_value>, map<allowance_event_map_key, event_map_value>], transfer_from]
 ): [ledger_module<L>, Approvals.T, list<operation>, map<event_map_key, event_map_value>, map<allowance_event_map_key, event_map_value>] => {
    const { from_, txs } = transfer;
@@ -169,11 +169,11 @@ const transfer_from = <A, L>(
    return List.fold_left(atomic_trans(storage, from_), [ledger, approvals, currentOperations, event_balance_map, event_allowance_map], txs);
 }
 
-export const transfer = <A, L>(
+export const transfer = <L>(
    transfer: transfer,
-   storage: storage<A, L>,
+   storage: storage<L>,
    ledger: ledger_module<L>
-): [list<operation>, storage<A, L>] => {
+): [list<operation>, storage<L>] => {
    let operations = list([]);
    let finalOperations = list([]);
    let event_balance_map: map<event_map_key, event_map_value> = Map.empty;

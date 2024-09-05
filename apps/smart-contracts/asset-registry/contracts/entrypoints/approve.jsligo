@@ -40,10 +40,10 @@ const _approve = (approve: approve, approvals: Approvals.T): Approvals.T => {
   return Approvals.set_amount(approvals, owner, spender, token_id, new_value);
 };
 
-export const approve = <A, L>(
+export const approve = <L>(
     to_approve: approvals,
-    storage: Storage<A, L>
-): [list<operation>, Storage<A, L>] => {
+    storage: Storage<L>
+): [list<operation>, Storage<L>] => {
     let event_approvals: map<event_map_key, event_map_value> = Map.empty;
     let newApprovals: Approvals.T = Storage.get_approvals(storage);
     let finalOperations = list([]);

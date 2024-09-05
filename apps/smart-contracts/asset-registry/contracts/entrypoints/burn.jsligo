@@ -49,11 +49,11 @@ export type T = BurnParam;
 type Burn = BurnParam;
 export type T = BurnParam;
 
-export const burn = <A, L>(
+export const burn = <L>(
   burnParam: BurnParam,
-  storage: Storage<A, L>,
+  storage: Storage<L>,
   ledger: LedgerModule<L>
-): [list<operation>, Storage<A, L>] => {
+): [list<operation>, Storage<L>] => {
   let operations = list([]);
   const { from_, token_id, amount } = burnParam;
   

@@ -2,12 +2,15 @@ import { InMemorySigner, importKey } from '@taquito/signer'
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito'
 import { char2Bytes } from '@taquito/utils'
 import { default as config } from '../asset-registry/.taq/config.local.development.json' with { type: "json" }
+import { default as configStaging } from '../asset-registry/.taq/config.local.testing.json' with { type: "json" }
+
 
 let RPC = 'http://localhost:8732'
-const privateKey = config.accounts.bob.secretKey.replace('unencrypted:', '')
+let privateKey = config.accounts.bob.secretKey.replace('unencrypted:', '')
 
 if (process.env.ENV === 'staging') {
   RPC = 'https://ghostnet.ecadinfra.com'
+  privateKey = configStaging.accounts.taqOperatorAccount.privateKey
 }
 
 if (process.env.ENV === 'production') {
@@ -45,7 +48,6 @@ const contract = `
           (option %operators (big_map (pair address nat) (set address)))
           (big_map %approvals (pair address address nat) nat)) ;
   code { PUSH string "FA2_TOKEN_UNDEFINED" ;
-         PUSH string "FA2_INSUFFICIENT_BALANCE" ;
          PUSH string "FA2.1_INSUFFICIENT_ALLOWANCE" ;
          PUSH string "NFT transaction amount should be 1n" ;
          LAMBDA
@@ -230,8 +232,7 @@ const contract = `
                                 (lambda (pair (big_map nat address) nat) (option nat))))
                        (lambda
                           (pair (big_map nat (pair nat (map string bytes))) nat (map string bytes))
-                          (big_map nat (pair nat (map string bytes))))
-                       string)
+                          (big_map nat (pair nat (map string bytes)))))
                  (pair (pair address nat nat (option (map string bytes)))
                        (big_map string bytes)
                        (big_map nat address)
@@ -245,8 +246,8 @@ const contract = `
                  (option (big_map (pair address nat) (set address)))
                  (big_map (pair address address nat) nat))
            { UNPAIR ;
-             UNPAIR 3 ;
-             DIG 3 ;
+             UNPAIR ;
+             DIG 2 ;
              UNPAIR ;
              DUP 2 ;
              DIG 3 ;
@@ -264,9 +265,7 @@ const contract = `
              GET 10 ;
              SWAP ;
              EXEC ;
-             DIG 7 ;
-             SWAP ;
-             IF_NONE { FAILWITH } { SWAP ; DROP } ;
+             IF_NONE { PUSH nat 0 } {} ;
              DUP 4 ;
              GET 3 ;
              DUP 5 ;
@@ -424,10 +423,9 @@ const contract = `
              UPDATE 3 ;
              SWAP ;
              PAIR } ;
-         DUP 9 ;
-         DUP 4 ;
-         DUP 4 ;
-         PAIR 3 ;
+         DUP 3 ;
+         DUP 3 ;
+         PAIR ;
          APPLY ;
          DIG 2 ;
          DROP ;
@@ -766,7 +764,7 @@ const contract = `
              TRANSFER_TOKENS ;
              CONS ;
              PAIR } ;
-         DUP 11 ;
+         DUP 10 ;
          DUP 6 ;
          PAIR ;
          APPLY ;
@@ -789,7 +787,6 @@ const contract = `
                           (big_map (pair address address nat) nat))
                        (lambda (pair (big_map (pair address address nat) nat) address address nat) nat)
                        string
-                       string
                        string)
                  (pair (list (pair address (list (pair address nat nat))))
                        (big_map string bytes)
@@ -804,8 +801,8 @@ const contract = `
                  (option (big_map (pair address nat) (set address)))
                  (big_map (pair address address nat) nat))
            { UNPAIR ;
-             UNPAIR 7 ;
-             DIG 7 ;
+             UNPAIR 6 ;
+             DIG 6 ;
              UNPAIR ;
              DUP 2 ;
              DIG 3 ;
@@ -844,7 +841,7 @@ const contract = `
                            DUP 4 ;
                            MEM ;
                            NOT ;
-                           IF { DUP 17 ; FAILWITH } {} ;
+                           IF { DUP 16 ; FAILWITH } {} ;
                            DUP 3 ;
                            SENDER ;
                            DUP 11 ;
@@ -887,7 +884,7 @@ const contract = `
                                           DUP 20 ;
                                           SWAP ;
                                           EXEC ;
-                                          DUP 22 ;
+                                          PUSH string "FA2_INSUFFICIENT_BALANCE" ;
                                           DUP 7 ;
                                           DUP 3 ;
                                           COMPARE ;
@@ -1111,8 +1108,7 @@ const contract = `
              DIG 5 ;
              DIG 6 ;
              DIG 7 ;
-             DIG 8 ;
-             DROP 6 ;
+             DROP 5 ;
              UNPAIR 5 ;
              DIG 6 ;
              DIG 2 ;
@@ -1216,14 +1212,13 @@ const contract = `
              ITER { CONS } ;
              ITER { CONS } ;
              PAIR } ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         PAIR 7 ;
+         DUP 11 ;
+         DUP 11 ;
+         DUP 11 ;
+         DUP 11 ;
+         DUP 11 ;
+         DUP 11 ;
+         PAIR 6 ;
          APPLY ;
          DIG 5 ;
          DIG 6 ;
@@ -1231,8 +1226,7 @@ const contract = `
          DIG 8 ;
          DIG 9 ;
          DIG 10 ;
-         DIG 11 ;
-         DROP 7 ;
+         DROP 6 ;
          PAIR 5 ;
          SWAP ;
          UNPAIR ;

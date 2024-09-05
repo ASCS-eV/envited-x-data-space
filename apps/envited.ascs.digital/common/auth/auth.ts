@@ -81,6 +81,7 @@ export const authOptions: NextAuthOptions = {
       try {
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
+          log.info(profile)
           if (!has('credential')(profile)) {
             log.error('Credential not found')
             return '/error?error=CREDENTIAL_NOT_FOUND'
@@ -114,6 +115,7 @@ export const authOptions: NextAuthOptions = {
             const principal = await connection.getUserById(issuer)
 
             log.info('User credential, checking principal credentials')
+            log.info(principal)
 
             if (!principal.isActive) {
               log.info('Principal exists, but the account is deactivated')
@@ -130,6 +132,8 @@ export const authOptions: NextAuthOptions = {
           const existingUser = await connection.getUserById(credentialSubjectId)
 
           if (!isEmpty(existingUser)) {
+            log.info('User exists')
+            log.info(existingUser)
             // User already exists
             if (!existingUser.isActive) {
               log.info('User exists, but the account is deactivated')

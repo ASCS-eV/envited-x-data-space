@@ -148,7 +148,13 @@ export const _txn =
   (credential: Credential) =>
   async (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) => {
     try {
-      const { issuer: credentialIssuer, type: credentialTypes, issuanceDate, expirationDate, credentialSubject } = credential
+      const {
+        issuer: credentialIssuer,
+        type: credentialTypes,
+        issuanceDate,
+        expirationDate,
+        credentialSubject,
+      } = credential
 
       const [addressType] = await insertAddressTypeTx(tx)(credentialSubject.address.type)
       const { id: addressTypeId } = addressType

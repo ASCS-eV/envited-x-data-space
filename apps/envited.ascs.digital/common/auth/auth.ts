@@ -109,12 +109,12 @@ export const authOptions: NextAuthOptions = {
           }
 
           const connection = await db()
-          
+
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
             const principal = await connection.getUserById(issuer)
 
             log.info('User credential, checking principal credentials')
- 
+
             if (!principal.isActive) {
               log.info('Principal exists, but the account is deactivated')
               return '/error?error=PRINCIPAL_INACTIVE'

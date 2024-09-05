@@ -33,6 +33,7 @@ jobs:
       TOKEN_URL: ${{ vars.TOKEN_URL }}
       JWKS_ENDPOINT: ${{ vars.JWKS_ENDPOINT }}
       OIDC_SERVER_URL: ${{ vars.OIDC_SERVER_URL }}
+      TRUST_ANCHOR_DID: ${{ vars.TRUST_ANCHOR_DID }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3

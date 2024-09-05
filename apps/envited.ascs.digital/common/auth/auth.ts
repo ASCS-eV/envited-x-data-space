@@ -187,7 +187,7 @@ export const authOptions: NextAuthOptions = {
 export const _signIn =
   (NASignIn: any) =>
   ({ pkh }: { pkh: string }) => {
-    if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
+    if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
       return NASignIn('siwt', {
         pkh,
         callbackUrl: '/dashboard',

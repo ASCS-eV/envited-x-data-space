@@ -21,4 +21,5 @@ export {
   mapIndexed,
   segmentsToPath,
   slugToLabel,
+  isTrustAnchor,
 } from './utils'

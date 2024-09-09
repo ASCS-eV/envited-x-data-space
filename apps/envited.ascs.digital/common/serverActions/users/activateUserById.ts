@@ -9,7 +9,7 @@ import { User } from '../../types'
 import { Session } from '../../types/types'
 import { forbiddenError, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
 
-export const _deleteUserById =
+export const _activateUserById =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async (id: string): Promise<User> => {
     try {
@@ -26,18 +26,18 @@ export const _deleteUserById =
         throw forbiddenError({
           resource: 'users',
           resourceId: id,
-          message: 'Not allowed to delete this resource',
+          message: 'Not allowed to activate this resource',
           userId: session.user.id,
         })
       }
 
-      const [deletedUser] = await connection.deleteUserById(user.id)
+      const [activatedUser] = await connection.activateUserById(user.id)
 
-      return deletedUser
+      return activatedUser
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()
     }
   }
 
-export const deleteUserById = _deleteUserById({ db, getServerSession, log })
+export const activateUserById = _activateUserById({ db, getServerSession, log })

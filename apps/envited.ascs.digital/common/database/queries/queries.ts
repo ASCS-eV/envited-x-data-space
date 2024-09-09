@@ -28,7 +28,8 @@ import {
   update as updateProfile,
 } from './profiles'
 import {
-  deleteUserById,
+  activateUserById,
+  deactivateUserById,
   getUserById,
   getUserByIssuerId,
   getUserRolesById,
@@ -38,7 +39,8 @@ import {
 } from './users'
 
 const queries = {
-  deleteUserById,
+  activateUserById,
+  deactivateUserById,
   deleteBusinessCategoriesByProfileId,
   fetchTables,
   getBusinessCategories,

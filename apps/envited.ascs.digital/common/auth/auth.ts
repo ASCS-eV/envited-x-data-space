@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { equals, has, isEmpty, omit, prop } from 'ramda'
+import { equals, has, isEmpty, isNil, omit, prop } from 'ramda'
 import { match } from 'ts-pattern'
 
 import { db } from '../database/queries'
@@ -81,6 +81,7 @@ export const authOptions: NextAuthOptions = {
       try {
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
+          log.info(profile)
           if (!has('credential')(profile)) {
             log.error('Credential not found')
             return '/error?error=CREDENTIAL_NOT_FOUND'
@@ -111,7 +112,7 @@ export const authOptions: NextAuthOptions = {
           const connection = await db()
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
-            const principal = await connection.getUserById(issuer)
+            const [principal] = await connection.getUserById(issuer)
 
             log.info('User credential, checking principal credentials')
 
@@ -127,9 +128,9 @@ export const authOptions: NextAuthOptions = {
             }
           }
 
-          const existingUser = await connection.getUserById(credentialSubjectId)
+          const [existingUser] = await connection.getUserById(credentialSubjectId)
 
-          if (!isEmpty(existingUser)) {
+          if (!isNil(existingUser)) {
             // User already exists
             if (!existingUser.isActive) {
               log.info('User exists, but the account is deactivated')

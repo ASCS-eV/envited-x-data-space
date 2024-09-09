@@ -84,6 +84,14 @@
         "commands": ["ENV=sandbox node ./deploy/deploy.mjs"],
         "parallel": false
       }
+    },
+    "assetRegistry:contract:originate:staging": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts",
+        "commands": ["ENV=staging node ./deploy/deploy.mjs"],
+        "parallel": false
+      }
     }
   }
 }

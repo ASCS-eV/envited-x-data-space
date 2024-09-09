@@ -22,4 +22,5 @@ export {
   segmentsToPath,
   slugToLabel,
   isTrustAnchor,
+  truncateDID,
 } from './utils'

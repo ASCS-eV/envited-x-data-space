@@ -20,10 +20,17 @@ import {
 } from '../schema'
 import { Credential, DatabaseConnection, Issuer, User } from '../types'
 
-export const deleteUserById = (db: DatabaseConnection) => async (id: string) =>
+export const deactivateUserById = (db: DatabaseConnection) => async (id: string) =>
   db
     .update(user)
     .set({ isActive: false, updatedAt: new Date() })
+    .where(eq(user.id, id))
+    .returning({ updatedId: user.id })
+
+export const activateUserById = (db: DatabaseConnection) => async (id: string) =>
+  db
+    .update(user)
+    .set({ isActive: true, updatedAt: new Date() })
     .where(eq(user.id, id))
     .returning({ updatedId: user.id })
 

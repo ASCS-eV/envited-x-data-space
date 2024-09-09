@@ -26,7 +26,6 @@
           (option %operators (big_map (pair address nat) (set address)))
           (big_map %approvals (pair address address nat) nat)) ;
   code { PUSH string "FA2_TOKEN_UNDEFINED" ;
-         PUSH string "FA2_INSUFFICIENT_BALANCE" ;
          PUSH string "FA2.1_INSUFFICIENT_ALLOWANCE" ;
          PUSH string "NFT transaction amount should be 1n" ;
          LAMBDA
@@ -211,8 +210,7 @@
                                 (lambda (pair (big_map nat address) nat) (option nat))))
                        (lambda
                           (pair (big_map nat (pair nat (map string bytes))) nat (map string bytes))
-                          (big_map nat (pair nat (map string bytes))))
-                       string)
+                          (big_map nat (pair nat (map string bytes)))))
                  (pair (pair address nat nat (option (map string bytes)))
                        (big_map string bytes)
                        (big_map nat address)
@@ -226,8 +224,8 @@
                  (option (big_map (pair address nat) (set address)))
                  (big_map (pair address address nat) nat))
            { UNPAIR ;
-             UNPAIR 3 ;
-             DIG 3 ;
+             UNPAIR ;
+             DIG 2 ;
              UNPAIR ;
              DUP 2 ;
              DIG 3 ;
@@ -245,9 +243,7 @@
              GET 10 ;
              SWAP ;
              EXEC ;
-             DIG 7 ;
-             SWAP ;
-             IF_NONE { FAILWITH } { SWAP ; DROP } ;
+             IF_NONE { PUSH nat 0 } {} ;
              DUP 4 ;
              GET 3 ;
              DUP 5 ;
@@ -405,10 +401,9 @@
              UPDATE 3 ;
              SWAP ;
              PAIR } ;
-         DUP 9 ;
-         DUP 4 ;
-         DUP 4 ;
-         PAIR 3 ;
+         DUP 3 ;
+         DUP 3 ;
+         PAIR ;
          APPLY ;
          DIG 2 ;
          DROP ;
@@ -747,7 +742,7 @@
              TRANSFER_TOKENS ;
              CONS ;
              PAIR } ;
-         DUP 11 ;
+         DUP 10 ;
          DUP 6 ;
          PAIR ;
          APPLY ;
@@ -770,7 +765,6 @@
                           (big_map (pair address address nat) nat))
                        (lambda (pair (big_map (pair address address nat) nat) address address nat) nat)
                        string
-                       string
                        string)
                  (pair (list (pair address (list (pair address nat nat))))
                        (big_map string bytes)
@@ -785,8 +779,8 @@
                  (option (big_map (pair address nat) (set address)))
                  (big_map (pair address address nat) nat))
            { UNPAIR ;
-             UNPAIR 7 ;
-             DIG 7 ;
+             UNPAIR 6 ;
+             DIG 6 ;
              UNPAIR ;
              DUP 2 ;
              DIG 3 ;
@@ -825,7 +819,7 @@
                            DUP 4 ;
                            MEM ;
                            NOT ;
-                           IF { DUP 17 ; FAILWITH } {} ;
+                           IF { DUP 16 ; FAILWITH } {} ;
                            DUP 3 ;
                            SENDER ;
                            DUP 11 ;
@@ -868,7 +862,7 @@
                                           DUP 20 ;
                                           SWAP ;
                                           EXEC ;
-                                          DUP 22 ;
+                                          PUSH string "FA2_INSUFFICIENT_BALANCE" ;
                                           DUP 7 ;
                                           DUP 3 ;
                                           COMPARE ;
@@ -1092,8 +1086,7 @@
              DIG 5 ;
              DIG 6 ;
              DIG 7 ;
-             DIG 8 ;
-             DROP 6 ;
+             DROP 5 ;
              UNPAIR 5 ;
              DIG 6 ;
              DIG 2 ;
@@ -1197,14 +1190,13 @@
              ITER { CONS } ;
              ITER { CONS } ;
              PAIR } ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         DUP 12 ;
-         PAIR 7 ;
+         DUP 11 ;
+         DUP 11 ;
+         DUP 11 ;
+         DUP 11 ;
+         DUP 11 ;
+         DUP 11 ;
+         PAIR 6 ;
          APPLY ;
          DIG 5 ;
          DIG 6 ;
@@ -1212,8 +1204,7 @@
          DIG 8 ;
          DIG 9 ;
          DIG 10 ;
-         DIG 11 ;
-         DROP 7 ;
+         DROP 6 ;
          PAIR 5 ;
          SWAP ;
          UNPAIR ;

@@ -1,4 +1,9 @@
 {
+  "contracts": {
+    "Main": {
+      "address": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro"
+    }
+  },
   "networkName": "ghostnet",
   "accounts": {
     "taqOperatorAccount": {

@@ -1,0 +1,20 @@
+{
+  "operations": {},
+  "tasks": {
+    "@taqueria/plugin-taquito.transfer.1725460229727": {
+      "task": "transfer",
+      "plugin": "@taqueria/plugin-taquito",
+      "time": 1725460229727,
+      "output": [
+        {
+          "contractAlias": "Main",
+          "contractAddress": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro",
+          "parameter": "(Pair \"tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6\"\n            0\n            1\n            (Some { Elt \"name\" 0x546f6b656e2031 }))\n",
+          "entrypoint": "mint",
+          "mutezTransfer": "0",
+          "destination": "https://ghostnet.ecadinfra.com"
+        }
+      ]
+    }
+  }
+}

@@ -6,4 +6,11 @@
 // IMPORTANT: We suggest always explicitly typing your storage values:
 // E.g.: `const storage: int = 10` or `const storage: Contract.storage = 10`
 
-
+const mint_parameter: parameter_of Contract = Mint({
+  to_: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address,
+  token_id: 0 as nat,
+  amount: 1 as nat,
+  token_info: Some(Map.literal([
+    ["name", bytes`Token 1`]
+  ]))
+});

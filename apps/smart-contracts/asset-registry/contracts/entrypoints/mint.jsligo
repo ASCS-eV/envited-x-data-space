@@ -52,7 +52,10 @@ export const mint = <L>(
   // Assert.Error.assert(storage.extension.admin == Tezos.get_sender(), Errors.not_admin);
 
   let oldSupplyOpt = Ledger.get_supply(ledger, mint.token_id);
-  let oldSupply = Option.value_with_error(Errors.ins_balance, oldSupplyOpt);
+  let oldSupply = match(oldSupplyOpt) {
+    when (Some(supply)): do { return supply; };
+    when (None): do { return (0 as nat); };
+  };
   const balance = Ledger.get_for_user(ledger, mint.to_, mint.token_id);
   const supply_update: total_supply_update_type =
                 {

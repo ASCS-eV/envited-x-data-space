@@ -20,6 +20,7 @@ import {
   insertBusinessCategoryByProfileId,
 } from './businessCategories'
 import { fetchTables } from './common'
+import { getMembers } from './members'
 import {
   getProfileByName,
   getProfileBySlug,
@@ -45,6 +46,7 @@ const queries = {
   fetchTables,
   getBusinessCategories,
   getBusinessCategoriesByProfileId,
+  getMembers,
   getUserById,
   getUserRolesById,
   getUserWithProfileById,

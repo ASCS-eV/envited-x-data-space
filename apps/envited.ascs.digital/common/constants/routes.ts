@@ -8,14 +8,14 @@ export const ROUTES = {
     ADD_ASSETS: '/dashboard/assets/add-assets',
     PROFILE: '/dashboard/profile',
     USERS: '/dashboard/users',
-    COMPANIES: '/dashboard/companies',
+    MEMBERS: '/dashboard/members',
     ACCOUNTING: '/dashboard/accounting',
   },
 }
 
 export const FEDERATOR_AUTHORIZED_ROUTES = [
   ROUTES.DASHBOARD.HOME,
-  ROUTES.DASHBOARD.COMPANIES,
+  ROUTES.DASHBOARD.MEMBERS,
   ROUTES.DASHBOARD.PROFILE,
   ROUTES.DASHBOARD.USERS,
   ROUTES.DASHBOARD.ASSETS,

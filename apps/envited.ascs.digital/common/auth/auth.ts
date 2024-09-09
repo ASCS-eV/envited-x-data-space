@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
           .with('tz1PRINCIPAL', () => ({
             id: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
             pkh: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
-            role: Role.principal,
+            role: Role.federator,
           }))
           .with('tz1NO_USER', () => null)
           .otherwise(() => null)

@@ -54,3 +54,5 @@ export const allTrue = allEqual(true)
 export const getImageUrl = (image: string) => `${process.env.NEXT_PUBLIC_URL || ''}/${image}`
 
 export const extractAddressFromDid = replace('did:pkh:tz:', '')
+
+export const isTrustAnchor = equals(process.env.TRUST_ANCHOR_DID)

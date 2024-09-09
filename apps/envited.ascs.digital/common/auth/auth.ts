@@ -109,9 +109,10 @@ export const authOptions: NextAuthOptions = {
           }
 
           const connection = await db()
-          const principal = await connection.getUserById(issuer)
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
+            const principal = await connection.getUserById(issuer)
+
             log.info('User credential, checking principal credentials')
 
             if (!principal.isActive) {
@@ -186,7 +187,7 @@ export const authOptions: NextAuthOptions = {
 export const _signIn =
   (NASignIn: any) =>
   ({ pkh }: { pkh: string }) => {
-    if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
+    if (FEATURE_FLAGS[(process.env.NEXT_PUBLIC_ENV as Environment) || 'development'].oidc) {
       return NASignIn('siwt', {
         pkh,
         callbackUrl: '/dashboard',

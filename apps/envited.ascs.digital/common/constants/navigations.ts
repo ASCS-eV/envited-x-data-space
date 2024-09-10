@@ -15,8 +15,8 @@ export const FEDERATOR_NAVIGATION_DASHBOARD = [
     icon: '',
   },
   {
-    href: ROUTES.DASHBOARD.COMPANIES,
-    name: 'Companies',
+    href: ROUTES.DASHBOARD.MEMBERS,
+    name: 'Members',
     icon: '',
   },
   {

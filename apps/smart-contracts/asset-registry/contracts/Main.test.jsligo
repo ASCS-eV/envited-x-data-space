@@ -1,0 +1,29 @@
+#import "./Main.jsligo" "Contract"
+
+const run_transfer_test = () => {
+    let initial_storage = {
+      metadata: Big_map.empty as Contract.Generic.Metadata.t,
+      assets: Big_map.empty as Contract.Generic.Ledger.NFT.L,
+      token_metadata: Big_map.empty as Contract.Generic.TokenMetadata.T,
+      operators: Some(Big_map.empty as Contract.Generic.Operators.t),
+      approvals: Big_map.empty as Contract.Generic.Approvals.T,
+    };
+
+    const _admin_account = Test.Next.Account.address(0n);
+    const user_account = Test.Next.Account.address(1n);
+
+    let orig = Test.Next.Originate.contract(contract_of(Contract), initial_storage, 0tez);
+    const result = Test.Next.Contract.transfer_exn(Test.Next.Typed_address.get_entrypoint("mint", orig.taddr), {
+      to_: user_account,
+      token_id: 0n,
+      amount: 1n,
+      token_info: Some(Map.literal([
+        ["", bytes`ipfs://tokenMetadataCID`]
+      ]))
+    }, 0tez);
+
+    Test.Next.IO.log(result);
+    // return Assert.assert(Test.equal(Test.Next.Typed_address.get_storage(orig.taddr), initial_storage + 5));
+};
+
+const test_transfer = run_transfer_test();

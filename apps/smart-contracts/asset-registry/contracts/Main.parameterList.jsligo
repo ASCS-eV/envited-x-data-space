@@ -11,6 +11,23 @@ const mint_parameter: parameter_of Contract = Mint({
   token_id: 0 as nat,
   amount: 1 as nat,
   token_info: Some(Map.literal([
-    ["name", bytes`Token 1`]
+    ["", bytes`ipfs://tokenMetadataCID`]
   ]))
 });
+
+const update_operator_parameter: parameter_of Contract = Update_operators([
+  AddOperator({
+    owner: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address,
+    operator: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb" as address,
+    token_id: 0 as nat
+  })
+]);
+
+const transfer_parameter: parameter_of Contract = Transfer([{
+  from_: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address,
+  txs: [{
+    to_: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb" as address,
+    token_id: 0 as nat,
+    amount: 1 as nat
+  }]
+}]);

@@ -12,7 +12,7 @@
   },
   "private": true,
   "dependencies": {
-    "@aws-sdk/client-s3": "3.583.0",
+    "@aws-sdk/client-s3": "3.649.0",
     "@aws-sdk/client-secrets-manager": "3.583.0",
     "@aws-sdk/lib-storage": "3.583.0",
     "@aws-sdk/s3-request-presigner": "3.583.0",
@@ -76,6 +76,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@preact/preset-vite": "^2.5.0",
     "@rollup/plugin-url": "^7.0.0",
+    "@smithy/types": "^3.4.0",
     "@storybook/addon-essentials": "7.6.5",
     "@storybook/addon-interactions": "^7.5.3",
     "@storybook/core-server": "7.6.5",

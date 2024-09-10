@@ -12,7 +12,9 @@ import type { getSignedUrl as TgetSignedUrl } from '@aws-sdk/s3-request-presigne
 
 import { createRandomString } from '../utils'
 
-const s3Client = new S3Client({})
+const s3Client = new S3Client({
+  region: process.env.region || 'eu-central-1',
+})
 const randomString = createRandomString(5)
 
 export const _getUniqueFilename = (randomString: string) => (slug: string, filename: string) =>
@@ -21,11 +23,11 @@ export const _getUniqueFilename = (randomString: string) => (slug: string, filen
 export const getUniqueFilename = _getUniqueFilename(randomString)
 
 export const _getS3SignedUrl =
-  ({ getSignedUrl, s3Client }: { getSignedUrl: typeof TgetSignedUrl; s3Client: S3Client }) =>
+  ({ getSignedUrl }: { getSignedUrl: typeof TgetSignedUrl }) =>
   (command: PutObjectCommand | GetObjectCommand) =>
     getSignedUrl(s3Client, command)
 
-export const getSignedUrl = _getS3SignedUrl({ getSignedUrl: AwsGetSignedUrl, s3Client })
+export const getSignedUrl = _getS3SignedUrl({ getSignedUrl: AwsGetSignedUrl })
 
 export const getSignedDownloadUrl = ({ Bucket, Key }: { Bucket: string; Key: string }) =>
   getSignedUrl(

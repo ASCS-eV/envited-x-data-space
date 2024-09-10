@@ -56,6 +56,8 @@ export const _main =
       const Key = s3Record.object.key
       const Bucket = s3Record.bucket.name
 
+      console.log('before readStreamFromS3', { Key, Bucket })
+
       const { Body } = await readStreamFromS3({ Key, Bucket })
 
       if (isNil(Body)) {

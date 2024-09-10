@@ -1,5 +1,3 @@
-'use client'
-
 import { Card, Heading, Table, TableBody, TableCell, TableHeader, TableRow } from '@envited-marketplace/design-system'
 import { map } from 'ramda'
 import React, { FC } from 'react'

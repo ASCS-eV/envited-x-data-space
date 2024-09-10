@@ -63,7 +63,10 @@ export const _main =
       }
 
       const byteArray = await Body.transformToByteArray()
-      const { conforms, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(byteArray)
+      const result = await validateAndCreateMetadata(byteArray)
+      console.log('validateAndCreateMetadata', result)
+
+      const { conforms, metadata, assetCID, metadataCID } = result
 
       if (!conforms) {
         await deleteObjectFromS3({ Bucket, Key })

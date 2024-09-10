@@ -180,7 +180,9 @@ export const _validateAndCreateMetadata =
   }) =>
   async (byteArray: Uint8Array) => {
     try {
-      const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
+      const result = await getShaclSchemaAndValidate(byteArray)
+      console.log('validateAndCreateMetadata', result)
+      const { conforms, reports, data } = result
       const metadata = createMetadata({ name: data?.domainMetadata['@type'] as string })
 
       const assetCID = await createFilename(byteArray)

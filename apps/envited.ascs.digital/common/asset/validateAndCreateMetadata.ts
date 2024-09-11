@@ -103,7 +103,7 @@ export const _validateManifest =
       const data = await getFileFromByteArray(byteArray, MANIFEST_FILE)
       console.log('validateManifest - data', data)
 
-      const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP.manifest}`)
+      const schema = fs.createReadStream(`${__dirname}${SCHEMA_MAP.manifest}`)
       console.log('validateManifest - data', schema)
       const validation = await validateShaclDataWithSchema(data, schema)
       console.log('validateManifest - validation', validation)
@@ -153,7 +153,7 @@ export const _validateDomainMetadata =
       console.log('validateDomainMetadata - schemaTypes', schemaTypes)
 
       const validationPromises = schemaTypes.map((type: ValidationSchema) => {
-        const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP[type]}`)
+        const schema = fs.createReadStream(`${__dirname}${SCHEMA_MAP[type]}`)
         console.log('validationPromises - schema', schema)
         return validateShaclDataWithSchema(data, schema)
       })

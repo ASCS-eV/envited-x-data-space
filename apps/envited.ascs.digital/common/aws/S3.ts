@@ -23,7 +23,7 @@ export const _getUniqueFilename = (randomString: string) => (slug: string, filen
 export const getUniqueFilename = _getUniqueFilename(randomString)
 
 export const _getS3SignedUrl =
-  ({ getSignedUrl, s3Client }: { getSignedUrl: typeof TgetSignedUrl, s3Client: S3Client }) =>
+  ({ getSignedUrl, s3Client }: { getSignedUrl: typeof TgetSignedUrl; s3Client: S3Client }) =>
   (command: PutObjectCommand | GetObjectCommand) =>
     getSignedUrl(s3Client, command)
 

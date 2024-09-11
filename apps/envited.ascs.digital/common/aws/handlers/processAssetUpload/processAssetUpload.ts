@@ -87,21 +87,25 @@ export const _main =
       const { conforms, metadata, assetCID, metadataCID } = result
 
       if (!conforms) {
-        await client.send(new DeleteObjectCommand({
-          Bucket,
-          Key,
-        }))
+        await client.send(
+          new DeleteObjectCommand({
+            Bucket,
+            Key,
+          }),
+        )
         // await deleteObjectFromS3({ Bucket, Key })
         await updateAsset(Key, Key, AssetStatus.not_accepted)
 
         return
       }
 
-      await client.send(new CopyObjectCommand({
-        Bucket,
-        CopySource: `${Bucket}/${Key}`,
-        Key: assetCID,
-      }))
+      await client.send(
+        new CopyObjectCommand({
+          Bucket,
+          CopySource: `${Bucket}/${Key}`,
+          Key: assetCID,
+        }),
+      )
       // await copyObjectToS3({
       //   Bucket,
       //   CopySource: `${Bucket}/${Key}`,
@@ -129,10 +133,12 @@ export const _main =
 
       await writeMetadata.done()
       await updateAsset(assetCID, Key, AssetStatus.pending, metadata)
-      await client.send(new DeleteObjectCommand({
-        Bucket,
-        Key,
-      }))
+      await client.send(
+        new DeleteObjectCommand({
+          Bucket,
+          Key,
+        }),
+      )
       // await deleteObjectFromS3({ Bucket, Key })
     } catch (err) {
       console.log(err)

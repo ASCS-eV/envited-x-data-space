@@ -53,7 +53,7 @@ export const _main =
     try {
       const s3Record = event.Records[0].s3
 
-      const Key = s3Record.object.key
+      const Key = 'containerjsonldzip-GWwhA.zip' //s3Record.object.key
       const Bucket = s3Record.bucket.name
 
       console.log('before readStreamFromS3', { Key, Bucket })

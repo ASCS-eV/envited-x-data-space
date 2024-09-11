@@ -1,8 +1,10 @@
 import {
   CopyObjectCommandOutput,
   DeleteObjectCommandOutput,
+  GetObjectCommand,
   GetObjectCommandOutput,
   PutObjectCommandInput,
+  S3Client
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
@@ -51,14 +53,22 @@ export const _main =
   }): S3Handler =>
   async event => {
     try {
+      const client = new S3Client({})
       const s3Record = event.Records[0].s3
 
-      const Key = 'containerjsonldzip-GWwhA.zip' //s3Record.object.key
+      const Key = s3Record.object.key
       const Bucket = s3Record.bucket.name
 
       console.log('before readStreamFromS3', { Key, Bucket })
 
-      const { Body } = await readStreamFromS3({ Key, Bucket })
+      const { Body } = await client.send(new GetObjectCommand({
+        Bucket,
+        Key,
+      }))
+
+      console.log(Body)
+
+      // const { Body } = await readStreamFromS3({ Key, Bucket })
 
       if (isNil(Body)) {
         return

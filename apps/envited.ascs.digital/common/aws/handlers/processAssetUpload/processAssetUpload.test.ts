@@ -53,7 +53,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
-      expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'containerjsonldzip-GWwhA.zip' })
+      expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
       expect(writeStreamToS3Stub).toHaveBeenCalledTimes(1)
@@ -111,19 +111,12 @@ describe('common/aws/handlers/processAssetUpload', () => {
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
-      expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'containerjsonldzip-GWwhA.zip' })
+      expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
-      expect(updateAssetStatusStub).toHaveBeenCalledWith(
-        'containerjsonldzip-GWwhA.zip',
-        'containerjsonldzip-GWwhA.zip',
-        'not_accepted',
-      )
+      expect(updateAssetStatusStub).toHaveBeenCalledWith('OBJECT_KEY', 'OBJECT_KEY', 'not_accepted')
       expect(writeStreamToS3Stub).toHaveBeenCalledTimes(0)
-      expect(deleteObjectFromS3Stub).toHaveBeenCalledWith({
-        Bucket: 'BUCKET_NAME',
-        Key: 'containerjsonldzip-GWwhA.zip',
-      })
+      expect(deleteObjectFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
     })
   })
 })

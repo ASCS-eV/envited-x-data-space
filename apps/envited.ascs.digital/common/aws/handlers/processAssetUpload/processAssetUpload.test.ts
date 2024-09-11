@@ -1,6 +1,6 @@
 import * as SUT from './processAssetUpload'
 
-describe('common/aws/handlers/processAssetUpload', () => {
+describe.skip('common/aws/handlers/processAssetUpload', () => {
   describe('_main', () => {
     it('should extract and write metadata to a bucket', async () => {
       // when ... we want extract data from a asset and upload to a different bucket

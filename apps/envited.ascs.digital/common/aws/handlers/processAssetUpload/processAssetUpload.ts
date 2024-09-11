@@ -53,7 +53,9 @@ export const _main =
   }): S3Handler =>
   async event => {
     try {
-      const client = new S3Client({})
+      const client = new S3Client({
+        region: 'eu-central-1',
+      })
       const s3Record = event.Records[0].s3
 
       const Key = s3Record.object.key

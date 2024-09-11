@@ -12,7 +12,9 @@ import type { getSignedUrl as TgetSignedUrl } from '@aws-sdk/s3-request-presigne
 
 import { createRandomString } from '../utils'
 
-const s3Client = new S3Client({})
+const s3Client = new S3Client({
+  region: process.env.region || 'eu-central-1',
+})
 const randomString = createRandomString(5)
 
 export const _getUniqueFilename = (randomString: string) => (slug: string, filename: string) =>

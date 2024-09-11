@@ -1,5 +1,7 @@
 import {
+  CopyObjectCommand,
   CopyObjectCommandOutput,
+  DeleteObjectCommand,
   DeleteObjectCommandOutput,
   GetObjectCommand,
   GetObjectCommandOutput,
@@ -85,29 +87,53 @@ export const _main =
       const { conforms, metadata, assetCID, metadataCID } = result
 
       if (!conforms) {
-        await deleteObjectFromS3({ Bucket, Key })
+        await client.send(new DeleteObjectCommand({
+          Bucket,
+          Key,
+        }))
+        // await deleteObjectFromS3({ Bucket, Key })
         await updateAsset(Key, Key, AssetStatus.not_accepted)
 
         return
       }
 
-      await copyObjectToS3({
+      await client.send(new CopyObjectCommand({
         Bucket,
         CopySource: `${Bucket}/${Key}`,
         Key: assetCID,
-      })
+      }))
+      // await copyObjectToS3({
+      //   Bucket,
+      //   CopySource: `${Bucket}/${Key}`,
+      //   Key: assetCID,
+      // })
 
-      const writeMetadata = writeStreamToS3({
-        Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
-        Key: metadataCID,
-        Body: Buffer.from(JSON.stringify(metadata)),
-        ContentEncoding: 'base64',
-        ContentType: 'application/json',
+      // const writeMetadata = writeStreamToS3({
+      //   Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+      //   Key: metadataCID,
+      //   Body: Buffer.from(JSON.stringify(metadata)),
+      //   ContentEncoding: 'base64',
+      //   ContentType: 'application/json',
+      // })
+
+      const writeMetadata = new Upload({
+        client: client,
+        params: {
+          Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+          Key: metadataCID,
+          Body: Buffer.from(JSON.stringify(metadata)),
+          ContentEncoding: 'base64',
+          ContentType: 'application/json',
+        },
       })
 
       await writeMetadata.done()
       await updateAsset(assetCID, Key, AssetStatus.pending, metadata)
-      await deleteObjectFromS3({ Bucket, Key })
+      await client.send(new DeleteObjectCommand({
+        Bucket,
+        Key,
+      }))
+      // await deleteObjectFromS3({ Bucket, Key })
     } catch (err) {
       console.log(err)
       throw err

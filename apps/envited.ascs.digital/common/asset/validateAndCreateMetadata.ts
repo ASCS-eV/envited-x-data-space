@@ -42,12 +42,24 @@ export const _getShaclSchemaAndValidate =
       const manifestPromise = validateManifest(byteArray)
       const domainMetadataPromise = validateDomainMetadata(byteArray)
 
-      const { conforms: manifestConforms, report: manifestReport, data: manifest } = await manifestPromise
+      const manifestResult = await manifestPromise
+      console.log('manifestPromise', manifestResult)
+      const { conforms: manifestConforms, report: manifestReport, data: manifest } = manifestResult
+
+      // const { conforms: manifestConforms, report: manifestReport, data: manifest } = await manifestPromise
+
+      const domainMetadataResult = await domainMetadataPromise
+      console.log('domainMetadataResult', domainMetadataResult)
       const {
         conforms: domainMetadataConforms,
         reports: domainMetadataReports,
         data: domainMetadata,
-      } = await domainMetadataPromise
+      } = domainMetadataResult
+      // const {
+      //   conforms: domainMetadataConforms,
+      //   reports: domainMetadataReports,
+      //   data: domainMetadata,
+      // } = await domainMetadataPromise
 
       if (!manifestConforms) {
         return { conforms: manifestConforms, reports: [manifestReport], data: {} }
@@ -89,6 +101,8 @@ export const _validateManifest =
   async (byteArray: Uint8Array) => {
     try {
       const data = await getFileFromByteArray(byteArray, MANIFEST_FILE)
+      console.log('_validateManifest', data)
+
       const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP.manifest}`)
       const validation = await validateShaclDataWithSchema(data, schema)
 
@@ -180,10 +194,11 @@ export const _validateAndCreateMetadata =
   }) =>
   async (byteArray: Uint8Array) => {
     try {
+      console.log('validateAndCreateMetadata byteArray', byteArray)
       const result = await getShaclSchemaAndValidate(byteArray)
-      console.log('validateAndCreateMetadata', result)
+      console.log('validateAndCreateMetadata getShaclSchemaAndValidate', result)
       const { conforms, reports, data } = result
-      const metadata = createMetadata({ name: data?.domainMetadata['@type'] as string })
+      const metadata = createMetadata({ name: data as string })
 
       const assetCID = await createFilename(byteArray)
       const metadataCID = await createFilename(metadata as any)

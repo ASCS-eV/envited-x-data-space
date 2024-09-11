@@ -4,7 +4,7 @@ import {
   GetObjectCommand,
   GetObjectCommandOutput,
   PutObjectCommandInput,
-  S3Client
+  S3Client,
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
@@ -61,10 +61,12 @@ export const _main =
 
       console.log('before readStreamFromS3', { Key, Bucket })
 
-      const { Body } = await client.send(new GetObjectCommand({
-        Bucket,
-        Key,
-      }))
+      const { Body } = await client.send(
+        new GetObjectCommand({
+          Bucket,
+          Key,
+        }),
+      )
 
       console.log(Body)
 

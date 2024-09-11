@@ -101,10 +101,12 @@ export const _validateManifest =
   async (byteArray: Uint8Array) => {
     try {
       const data = await getFileFromByteArray(byteArray, MANIFEST_FILE)
-      console.log('_validateManifest', data)
+      console.log('validateManifest - data', data)
 
       const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP.manifest}`)
+      console.log('validateManifest - data', schema)
       const validation = await validateShaclDataWithSchema(data, schema)
+      console.log('validateManifest - validation', validation)
 
       return {
         conforms: validation.conforms,
@@ -143,12 +145,16 @@ export const _validateDomainMetadata =
   }) =>
   async (byteArray: Uint8Array) => {
     try {
+      console.log('validateDomainMetadata - DomainMetadataFile ', DOMAIN_METADATA_FILE)
       const data = await getFileFromByteArray(byteArray, DOMAIN_METADATA_FILE)
       const parsedData = JSON.parse(data)
+      console.log('validateDomainMetadata - data', parsedData)
       const schemaTypes = pipe(omit(CONTEXT_DROP_SCHEMAS), keys)(parsedData['@context']) as ValidationSchema[]
+      console.log('validateDomainMetadata - schemaTypes', schemaTypes)
 
       const validationPromises = schemaTypes.map((type: ValidationSchema) => {
         const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP[type]}`)
+        console.log('validationPromises - schema', schema)
         return validateShaclDataWithSchema(data, schema)
       })
       const validationResults = await Promise.all(validationPromises)
@@ -194,7 +200,6 @@ export const _validateAndCreateMetadata =
   }) =>
   async (byteArray: Uint8Array) => {
     try {
-      console.log('validateAndCreateMetadata byteArray', byteArray)
       const result = await getShaclSchemaAndValidate(byteArray)
       console.log('validateAndCreateMetadata getShaclSchemaAndValidate', result)
       const { conforms, reports, data } = result

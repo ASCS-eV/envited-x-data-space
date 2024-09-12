@@ -165,6 +165,7 @@ export default function Envited({ stack }: StackContext) {
       NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET!,
       OIDC_CLIENT_ID: process.env.OIDC_CLIENT_ID!,
       OIDC_CLIENT_SECRET: process.env.OIDC_CLIENT_SECRET!,
+      NEXT_PUBLIC_ENV: process.env.ENV!,
       NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL!,
       NEXT_PUBLIC_UPLOAD_BUCKET_NAME: process.env.NEXT_PUBLIC_UPLOAD_BUCKET_NAME!,
       NEXT_PUBLIC_METADATA_BUCKET_NAME: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME!,
@@ -174,6 +175,7 @@ export default function Envited({ stack }: StackContext) {
       TOKEN_URL: process.env.TOKEN_URL!,
       JWKS_ENDPOINT: process.env.JWKS_ENDPOINT!,
       OIDC_SERVER_URL: process.env.OIDC_SERVER_URL!,
+      TRUST_ANCHOR_DID: process.env.TRUST_ANCHOR_DID!,
     },
   })
 

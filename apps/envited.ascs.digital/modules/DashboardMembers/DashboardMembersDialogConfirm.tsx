@@ -5,22 +5,22 @@ import { FC, useState } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { activateUser, deactivateUser } from './Users.actions'
+import { activateMember, deactivateMember } from './DashboardMembers.actions'
 
 interface DialogConfirmProps {
   id: string
   status: boolean
 }
 
-export const UserDialogConfirm: FC<DialogConfirmProps> = ({ id, status }) => {
-  const { t } = useTranslation('Users')
+export const DashboardMembersDialogConfirm: FC<DialogConfirmProps> = ({ id, status }) => {
+  const { t } = useTranslation('DashboardMembers')
   const { error, success } = useNotification()
   const [showDialog, setShowDialog] = useState(false)
   const [activate, setActivate] = useState(status)
 
-  const deactivateUserWithId = (id: string) => async () => {
+  const deactivateMemberWithId = (id: string) => async () => {
     try {
-      await deactivateUser(id)
+      await deactivateMember(id)
       success(t('[Notification] deactivated success'))
       setShowDialog(false)
     } catch (e) {
@@ -28,9 +28,9 @@ export const UserDialogConfirm: FC<DialogConfirmProps> = ({ id, status }) => {
     }
   }
 
-  const activateUserWithId = (id: string) => async () => {
+  const activateMemberWithId = (id: string) => async () => {
     try {
-      await activateUser(id)
+      await activateMember(id)
       success(t('[Notification] activated success'))
       setShowDialog(false)
     } catch (e) {
@@ -53,7 +53,7 @@ export const UserDialogConfirm: FC<DialogConfirmProps> = ({ id, status }) => {
         isOpen={showDialog}
         setShow={setShowDialog}
         action={
-          <form action={activate ? activateUserWithId(id) : deactivateUserWithId(id)}>
+          <form action={activate ? activateMemberWithId(id) : deactivateMemberWithId(id)}>
             <button
               className={`${
                 activate ? 'bg-green-600 hover:bg-green-500' : 'bg-red-600 hover:bg-red-500'

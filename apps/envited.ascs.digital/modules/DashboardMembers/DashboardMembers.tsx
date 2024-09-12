@@ -7,17 +7,17 @@ import React, { FC } from 'react'
 import { useTranslation } from '../../common/i18n'
 import { User } from '../../common/types/types'
 import { truncateDID } from '../../common/utils'
-import { UserDialogConfirm } from './UsersDialogConfirm'
+import { DashboardMembersDialogConfirm } from './DashboardMembersDialogConfirm'
 
 interface UsersProps {
-  users: User[]
+  members: User[]
 }
-export const Users: FC<UsersProps> = ({ users }) => {
-  const { t } = useTranslation('Users')
+export const DashboardMembers: FC<UsersProps> = ({ members }) => {
+  const { t } = useTranslation('DashboardMembers')
 
   return (
     <Card>
-      <Heading importance="h3">{t('[Heading] users')}</Heading>
+      <Heading importance="h3">{t('[Heading] members')}</Heading>
       <Table>
         <TableHeader>
           <TableRow>
@@ -43,7 +43,7 @@ export const Users: FC<UsersProps> = ({ users }) => {
               <TableCell>{email}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-x-2">
-                  <UserDialogConfirm id={id} status={isActive} />
+                  <DashboardMembersDialogConfirm id={id} status={isActive} />
                   <div
                     className={`${
                       isActive
@@ -56,7 +56,7 @@ export const Users: FC<UsersProps> = ({ users }) => {
                 </div>
               </TableCell>
             </TableRow>
-          ))(users)}
+          ))(members)}
         </TableBody>
       </Table>
     </Card>

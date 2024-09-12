@@ -146,6 +146,10 @@ describe('common/database/users', () => {
         name: 'NAME',
         slug: 'name',
         isPublished: false,
+        streetAddress: 'STREET_ADDRESS',
+        postalCode: 'POSTAL_CODE',
+        addressLocality: 'ADDRESS_LOCALITY',
+        addressCountry: 'ADDRESS_COUNTRY',
       })
 
       expect(tx.insert).toHaveBeenCalledWith(profile)
@@ -153,6 +157,10 @@ describe('common/database/users', () => {
         name: 'NAME',
         slug: 'name',
         isPublished: false,
+        streetAddress: 'STREET_ADDRESS',
+        postalCode: 'POSTAL_CODE',
+        addressLocality: 'ADDRESS_LOCALITY',
+        addressCountry: 'ADDRESS_COUNTRY',
         createdAt: new Date(),
         updatedAt: new Date(),
       })

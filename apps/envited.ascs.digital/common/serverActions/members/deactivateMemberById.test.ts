@@ -1,13 +1,15 @@
 import { ERRORS } from '../../constants'
-import * as SUT from './deleteUserById'
+import { Role } from '../../types'
+import * as SUT from './deactivateMemberById'
 
-describe('common/serverActions/users/deleteUserById', () => {
-  it('should return a deleted user as expected', async () => {
+describe('common/serverActions/members/deactivateUserById', () => {
+  it('should return a deactivated member as expected', async () => {
     // when ... we request a user by id
     // then ... it returns a user as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
         pkh: 'ISSUER_PKH',
+        role: Role.federator,
       },
     })
     const user = {
@@ -20,15 +22,17 @@ describe('common/serverActions/users/deleteUserById', () => {
     }
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue([user]),
-      deleteUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
+      deactivateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
     })
     const logStub = {
       error: jest.fn(),
     } as any
 
-    const result = await SUT._deleteUserById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
-      'USER_ID',
-    )
+    const result = await SUT._deactivateMemberById({
+      db: dbStub,
+      getServerSession: getServerSessionStub,
+      log: logStub,
+    })('USER_ID')
     expect(result).toEqual(expected)
   })
 
@@ -42,14 +46,14 @@ describe('common/serverActions/users/deleteUserById', () => {
     }
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue([user]),
-      deleteUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
+      deactivateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
     })
     const logStub = {
       error: jest.fn(),
     } as any
 
     await expect(
-      SUT._deleteUserById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_ID'),
+      SUT._deactivateMemberById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_ID'),
     ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
     expect(logStub.error).toHaveBeenCalledWith({ message: 'Unauthorized', name: 'UnauthorizedError' })
   })
@@ -60,6 +64,7 @@ describe('common/serverActions/users/deleteUserById', () => {
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
         pkh: 'ISSUER_PKH',
+        role: Role.principal,
       },
     })
     const user = {
@@ -68,17 +73,17 @@ describe('common/serverActions/users/deleteUserById', () => {
     }
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue([user]),
-      deleteUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
+      deactivateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
     })
     const logStub = {
       error: jest.fn(),
     } as any
 
     await expect(
-      SUT._deleteUserById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_ID'),
+      SUT._deactivateMemberById({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_ID'),
     ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
     expect(logStub.error).toHaveBeenCalledWith({
-      message: 'Not allowed to delete this resource',
+      message: 'Not allowed to deactivate this resource',
       name: 'ForbiddenError',
     })
   })

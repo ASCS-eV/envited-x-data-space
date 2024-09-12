@@ -2,7 +2,7 @@ import { Role } from '../types'
 
 export { ERRORS } from './errors'
 export { RESPONSES } from './response'
-export { NAVIGATION, NAVIGATION_DASHBOARD } from './navigations'
+export { NAVIGATION, NAVIGATION_DASHBOARD_MAP } from './navigations'
 export { ROLE_PROTECTED_ROUTES_MAP } from './routes'
 
 export const MINIMUM_PROFILE_REQUIREMENTS = ['name', 'category', 'logo', 'description']

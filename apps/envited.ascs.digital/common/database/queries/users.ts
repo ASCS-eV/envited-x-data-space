@@ -6,7 +6,7 @@ import postgres from 'postgres'
 import { isEmpty, prop, propOr } from 'ramda'
 
 import { Profile } from '../../types'
-import { slugify } from '../../utils'
+import { isTrustAnchor, slugify } from '../../utils'
 import * as schema from '../schema'
 import {
   addressType,
@@ -20,10 +20,17 @@ import {
 } from '../schema'
 import { Credential, DatabaseConnection, Issuer, User } from '../types'
 
-export const deleteUserById = (db: DatabaseConnection) => async (id: string) =>
+export const deactivateUserById = (db: DatabaseConnection) => async (id: string) =>
   db
     .update(user)
     .set({ isActive: false, updatedAt: new Date() })
+    .where(eq(user.id, id))
+    .returning({ updatedId: user.id })
+
+export const activateUserById = (db: DatabaseConnection) => async (id: string) =>
+  db
+    .update(user)
+    .set({ isActive: true, updatedAt: new Date() })
     .where(eq(user.id, id))
     .returning({ updatedId: user.id })
 
@@ -148,18 +155,32 @@ export const _txn =
   (credential: Credential) =>
   async (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) => {
     try {
-      const { issuer: newIssuer, type: credentialTypes, issuanceDate, expirationDate, credentialSubject } = credential
+      const {
+        issuer: credentialIssuer,
+        type: credentialTypes,
+        issuanceDate,
+        expirationDate,
+        credentialSubject,
+      } = credential
 
       const [addressType] = await insertAddressTypeTx(tx)(credentialSubject.address.type)
       const { id: addressTypeId } = addressType
 
-      const [issuer] = await insertIssuerTx(tx)({
-        id: newIssuer,
-        name: credentialTypes.includes('AscsMemberCredential') ? credentialSubject.name : '',
-        url: credentialTypes.includes('AscsMemberCredential') ? propOr('', 'url')(credentialSubject) : '',
-        type: credentialTypes.includes('AscsMemberCredential') ? 'AscsIssuer' : '',
+      if (credentialTypes.includes('AscsMemberCredential')) {
+        await insertIssuerTx(tx)({
+          id: credentialSubject.id,
+          name: credentialSubject.name,
+          url: propOr('', 'url')(credentialSubject),
+          type: credentialSubject.type,
+        })
+      }
+
+      const [{ id }] = await insertIssuerTx(tx)({
+        id: credentialIssuer,
+        name: '',
+        url: '',
+        type: '',
       })
-      const { id } = issuer
 
       const [newUser] = await tx
         .insert(user)
@@ -189,7 +210,7 @@ export const _txn =
 
       const roleFilterArray =
         credentialSubject.type === 'AscsMember'
-          ? credentialSubject.id === process.env.TRUST_ANCHOR_DID
+          ? isTrustAnchor(credentialSubject.id)
             ? ['federator', 'principal', 'provider', 'user']
             : ['principal', 'provider', 'user']
           : ['provider', 'user']

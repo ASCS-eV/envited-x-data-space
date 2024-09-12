@@ -3,14 +3,14 @@
 import { revalidatePath } from 'next/cache'
 
 import { log } from '../../common/logger'
-import { activateUserById, deactivateUserById } from '../../common/serverActions/users'
+import { activateMemberById, deactivateMemberById } from '../../common/serverActions/members'
 import { formatError, internalServerErrorError } from '../../common/utils'
 
-export async function deactivateUser(id: string) {
+export async function deactivateMember(id: string) {
   try {
-    await deactivateUserById(id)
+    await deactivateMemberById(id)
 
-    revalidatePath('/dashboard/users')
+    revalidatePath('/dashboard/members')
   } catch (error: unknown) {
     log.error(formatError(error))
 
@@ -18,11 +18,11 @@ export async function deactivateUser(id: string) {
   }
 }
 
-export async function activateUser(id: string) {
+export async function activateMember(id: string) {
   try {
-    await activateUserById(id)
+    await activateMemberById(id)
 
-    revalidatePath('/dashboard/users')
+    revalidatePath('/dashboard/members')
   } catch (error: unknown) {
     log.error(formatError(error))
 

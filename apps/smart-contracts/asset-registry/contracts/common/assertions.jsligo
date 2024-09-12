@@ -8,7 +8,7 @@
 */
 
 export const assert_update_permission = (owner: address): unit => {
-    return assert_with_error(
+    return Assert.Error.assert(
         (owner == (Tezos.get_sender())),
         Errors.only_sender_manage_operators
     )
@@ -20,12 +20,11 @@ export const assert_update_permission = (owner: address): unit => {
 * @param token_id : the token id to test 
 */
 
-export const assert_asset_id_exists = <L>(
-    assets,
-    token_id: nat
-): unit => {
-    return assert_with_error(
-        !Big_map.mem(token_id, assets),
+export const assert_asset_id_exists = (
+    supply: nat,
+) => {
+    return Assert.Error.assert(
+        supply == 0n,
         Errors.token_id_already_exists
     )
 };

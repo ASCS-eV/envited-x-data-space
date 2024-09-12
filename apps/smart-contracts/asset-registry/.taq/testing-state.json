@@ -1,80 +1,80 @@
 {
-    "operations": {},
-    "tasks": {
-        "@taqueria/plugin-taquito.transfer.1725871439467": {
-            "task": "transfer",
-            "plugin": "@taqueria/plugin-taquito",
-            "time": 1725871439468,
-            "output": [
-                {
-                    "contractAlias": "Main",
-                    "contractAddress": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro",
-                    "parameter": "(Pair \"tz1KobLotv3nAgLJ65pyF8z1a3USbkqNeb4P\"\n            1\n            1\n            (Some { Elt \"\" 0x697066733a2f2f746f6b656e4d65746164617461434944 }))\n\n",
-                    "entrypoint": "mint",
-                    "mutezTransfer": "0",
-                    "destination": "https://ghostnet.ecadinfra.com"
-                }
-            ]
-        },
-        "@taqueria/plugin-taquito.transfer.1725871740871": {
-            "task": "transfer",
-            "plugin": "@taqueria/plugin-taquito",
-            "time": 1725871740871,
-            "output": [
-                {
-                    "contractAlias": "Main",
-                    "contractAddress": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro",
-                    "parameter": "{ Pair \"tz1KobLotv3nAgLJ65pyF8z1a3USbkqNeb4P\"\n                   { Pair \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\" 1 0 } }\n\n",
-                    "entrypoint": "transfer",
-                    "mutezTransfer": "0",
-                    "destination": "https://ghostnet.ecadinfra.com"
-                }
-            ]
-        },
-        "@taqueria/plugin-taquito.transfer.1725875204802": {
-            "task": "transfer",
-            "plugin": "@taqueria/plugin-taquito",
-            "time": 1725875204802,
-            "output": [
-                {
-                    "contractAlias": "Main",
-                    "contractAddress": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro",
-                    "parameter": "(Pair \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\"\n            2\n            1\n            (Some { Elt \"\" 0x697066733a2f2f746f6b656e4d65746164617461434944 }))\n\n",
-                    "entrypoint": "mint",
-                    "mutezTransfer": "0",
-                    "destination": "https://ghostnet.ecadinfra.com"
-                }
-            ]
-        },
-        "@taqueria/plugin-taquito.transfer.1725875489655": {
-            "task": "transfer",
-            "plugin": "@taqueria/plugin-taquito",
-            "time": 1725875489655,
-            "output": [
-                {
-                    "contractAlias": "Main",
-                    "contractAddress": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro",
-                    "parameter": "{ Pair \"tz1KobLotv3nAgLJ65pyF8z1a3USbkqNeb4P\"\n                   { Pair \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\" 1 2 } }\n\n",
-                    "entrypoint": "transfer",
-                    "mutezTransfer": "0",
-                    "destination": "https://ghostnet.ecadinfra.com"
-                }
-            ]
-        },
-        "@taqueria/plugin-taquito.transfer.1726050287328": {
-            "task": "transfer",
-            "plugin": "@taqueria/plugin-taquito",
-            "time": 1726050287328,
-            "output": [
-                {
-                    "contractAlias": "Main",
-                    "contractAddress": "KT1PnXVgRyyCu15C3Z4k9F5C8UCQap7mUTZi",
-                    "parameter": "(Pair \"KT1PnXVgRyyCu15C3Z4k9F5C8UCQap7mUTZi\"\n            0\n            1\n            (Some { Elt \"\" 0x697066733a2f2f746f6b656e4d65746164617461434944 }))\n\n",
-                    "entrypoint": "mint",
-                    "mutezTransfer": "0",
-                    "destination": "https://ghostnet.ecadinfra.com"
-                }
-            ]
+  "operations": {},
+  "tasks": {
+    "@taqueria/plugin-taquito.transfer.1725871439467": {
+      "task": "transfer",
+      "plugin": "@taqueria/plugin-taquito",
+      "time": 1725871439468,
+      "output": [
+        {
+          "contractAlias": "Main",
+          "contractAddress": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro",
+          "parameter": "(Pair \"tz1KobLotv3nAgLJ65pyF8z1a3USbkqNeb4P\"\n            1\n            1\n            (Some { Elt \"\" 0x697066733a2f2f746f6b656e4d65746164617461434944 }))\n\n",
+          "entrypoint": "mint",
+          "mutezTransfer": "0",
+          "destination": "https://ghostnet.ecadinfra.com"
         }
+      ]
+    },
+    "@taqueria/plugin-taquito.transfer.1725871740871": {
+      "task": "transfer",
+      "plugin": "@taqueria/plugin-taquito",
+      "time": 1725871740871,
+      "output": [
+        {
+          "contractAlias": "Main",
+          "contractAddress": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro",
+          "parameter": "{ Pair \"tz1KobLotv3nAgLJ65pyF8z1a3USbkqNeb4P\"\n                   { Pair \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\" 1 0 } }\n\n",
+          "entrypoint": "transfer",
+          "mutezTransfer": "0",
+          "destination": "https://ghostnet.ecadinfra.com"
+        }
+      ]
+    },
+    "@taqueria/plugin-taquito.transfer.1725875204802": {
+      "task": "transfer",
+      "plugin": "@taqueria/plugin-taquito",
+      "time": 1725875204802,
+      "output": [
+        {
+          "contractAlias": "Main",
+          "contractAddress": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro",
+          "parameter": "(Pair \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\"\n            2\n            1\n            (Some { Elt \"\" 0x697066733a2f2f746f6b656e4d65746164617461434944 }))\n\n",
+          "entrypoint": "mint",
+          "mutezTransfer": "0",
+          "destination": "https://ghostnet.ecadinfra.com"
+        }
+      ]
+    },
+    "@taqueria/plugin-taquito.transfer.1725875489655": {
+      "task": "transfer",
+      "plugin": "@taqueria/plugin-taquito",
+      "time": 1725875489655,
+      "output": [
+        {
+          "contractAlias": "Main",
+          "contractAddress": "KT1A8tMnvwLjZmK8iZYMiXtuUZK7UDvFLTro",
+          "parameter": "{ Pair \"tz1KobLotv3nAgLJ65pyF8z1a3USbkqNeb4P\"\n                   { Pair \"tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb\" 1 2 } }\n\n",
+          "entrypoint": "transfer",
+          "mutezTransfer": "0",
+          "destination": "https://ghostnet.ecadinfra.com"
+        }
+      ]
+    },
+    "@taqueria/plugin-taquito.transfer.1726050287328": {
+      "task": "transfer",
+      "plugin": "@taqueria/plugin-taquito",
+      "time": 1726050287328,
+      "output": [
+        {
+          "contractAlias": "Main",
+          "contractAddress": "KT1PnXVgRyyCu15C3Z4k9F5C8UCQap7mUTZi",
+          "parameter": "(Pair \"KT1PnXVgRyyCu15C3Z4k9F5C8UCQap7mUTZi\"\n            0\n            1\n            (Some { Elt \"\" 0x697066733a2f2f746f6b656e4d65746164617461434944 }))\n\n",
+          "entrypoint": "mint",
+          "mutezTransfer": "0",
+          "destination": "https://ghostnet.ecadinfra.com"
+        }
+      ]
     }
+  }
 }

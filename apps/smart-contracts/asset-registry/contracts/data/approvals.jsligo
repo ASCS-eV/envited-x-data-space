@@ -8,10 +8,10 @@ export type spender  = address;
 export type T = big_map<[owner, spender, Token.T], Amount.T>;
 
 export const get_amount = (
-  approvals: T,
   owner: owner,
   spender: spender,
-  token_id: Token.T
+  token_id: Token.T,
+  approvals: T,
 ): Amount.T => {
   return match(Big_map.find_opt([owner, spender, token_id], approvals)) {
     when(Some(amount)): do {
@@ -40,7 +40,7 @@ export const decrease_approved_amount = (
   token_id: Token.T,
   amount_: Amount.T
 ): T => {
-  let balance_ = get_amount(approvals, from_, spender, token_id);
+  let balance_ = get_amount(from_, spender, token_id, approvals);
   Assert.Error.assert((balance_ >= amount_), Errors.ins_balance);
   balance_ = abs(balance_ - amount_);
 
@@ -54,7 +54,7 @@ const increase_approved_amount = (
   token_id: Token.T,
   amount_: Amount.T
 ): T => {
-  let balance_ = get_amount(approvals, to_, spender, token_id);
+  let balance_ = get_amount(to_, spender, token_id, approvals);
   balance_ = balance_ + amount_;
 
   return set_amount(approvals, to_, spender, token_id, balance_);

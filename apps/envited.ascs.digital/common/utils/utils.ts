@@ -1,20 +1,25 @@
 import {
+  __,
   addIndex,
   all,
   compose,
   concat,
   equals,
+  gt,
   head,
   join,
   juxt,
   map,
   pathOr,
   pipe,
+  propSatisfies,
   replace,
   tail,
   take,
+  takeLast,
   times,
   toUpper,
+  when,
 } from 'ramda'
 
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
@@ -54,3 +59,13 @@ export const allTrue = allEqual(true)
 export const getImageUrl = (image: string) => `${process.env.NEXT_PUBLIC_URL || ''}/${image}`
 
 export const extractAddressFromDid = replace('did:pkh:tz:', '')
+
+export const isTrustAnchor = equals(process.env.TRUST_ANCHOR_DID)
+
+export const truncate = (length: number) =>
+  when(
+    propSatisfies(gt(__, length), 'length'),
+    pipe((x: string) => [take(10, x), takeLast(10, x)], join('…')),
+  )
+
+export const truncateDID = truncate(20)

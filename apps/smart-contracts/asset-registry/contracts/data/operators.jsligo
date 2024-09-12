@@ -7,9 +7,9 @@ type operator = address;
 export type t = big_map<[owner, Token.T], set<operator>>;
 
 export const assert_authorisation = (
-   operators : t,
    from_ : address,
-   token_id : Token.T
+   token_id : Token.T,
+   operators : t
 ): unit => {
    const sender_ = Tezos.get_sender();
    if (sender_ == from_) {

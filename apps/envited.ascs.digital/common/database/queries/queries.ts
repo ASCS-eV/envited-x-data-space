@@ -20,6 +20,7 @@ import {
   insertBusinessCategoryByProfileId,
 } from './businessCategories'
 import { fetchTables } from './common'
+import { getMembers } from './members'
 import {
   getProfileByName,
   getProfileBySlug,
@@ -28,7 +29,8 @@ import {
   update as updateProfile,
 } from './profiles'
 import {
-  deleteUserById,
+  activateUserById,
+  deactivateUserById,
   getUserById,
   getUserByIssuerId,
   getUserRolesById,
@@ -38,11 +40,13 @@ import {
 } from './users'
 
 const queries = {
-  deleteUserById,
+  activateUserById,
+  deactivateUserById,
   deleteBusinessCategoriesByProfileId,
   fetchTables,
   getBusinessCategories,
   getBusinessCategoriesByProfileId,
+  getMembers,
   getUserById,
   getUserRolesById,
   getUserWithProfileById,

@@ -1,7 +1,11 @@
+import Link from 'next/link'
+import { includes } from 'ramda'
 import { ReactNode } from 'react'
 
-import { NAVIGATION_DASHBOARD } from '../../common/constants'
+import { getServerSession } from '../../common/auth'
+import { NAVIGATION_DASHBOARD_MAP } from '../../common/constants'
 import { getProfile } from '../../common/serverActions'
+import { Role } from '../../common/types'
 import { getImageUrl } from '../../common/utils'
 import { Breadcrumbs } from '../../modules/Breadcrumbs'
 import { DashboardNavigation } from '../../modules/DashboardNavigation'
@@ -12,6 +16,7 @@ interface DashboardProps {
 }
 
 export default async function DashboardLayout({ children }: DashboardProps) {
+  const session = await getServerSession()
   const profile = await getProfile()
 
   return (
@@ -60,8 +65,11 @@ export default async function DashboardLayout({ children }: DashboardProps) {
                 />
               </div>
               <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
-                <div className="mt-6 min-w-0 flex-1 sm:hidden md:block">
+                <div className="mt-0 min-w-0 flex-1 sm:hidden md:block">
                   <h1 className="truncate text-2xl font-bold text-white">{profile.name}</h1>
+                  <Link className="text-sm underline text-white" href={`/members/${profile.slug}`}>
+                    View profile
+                  </Link>
                 </div>
               </div>
             </div>
@@ -72,10 +80,12 @@ export default async function DashboardLayout({ children }: DashboardProps) {
         </div>
         <div className="flex gap-x-8 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="w-1/4">
-            <DashboardNavigation items={NAVIGATION_DASHBOARD} />
+            <DashboardNavigation items={NAVIGATION_DASHBOARD_MAP[session?.user.role as Role]} />
           </div>
           <div className="w-3/4 flex flex-col gap-y-4">
-            {!profile.isPublished && <ProfileNotification />}
+            {includes(session?.user.role)([Role.federator, Role.principal]) && !profile.isPublished && (
+              <ProfileNotification />
+            )}
             {children}
           </div>
         </div>

@@ -5,10 +5,16 @@
   "[Heading] did": "DID",
   "[Heading] status": "Status",
   "[Heading] deactivate account": "Deactivate account",
-  "[Description] deactivate account": "Are you sure you want to deactivate this account? All of your data will be permanently removed from our servers forever. This action cannot be undone.",
+  "[Description] deactivate account": "Are you sure you want to deactivate this account?",
+  "[Heading] delete account": "Delete account",
+  "[Description] delete account": "Are you sure you want to deactivate this account? All of your data will be permanently removed from our servers forever. This action cannot be undone.",
+  "[Heading] activate account": "Activate account",
+  "[Description] activate account": "Are you sure you want to activate this account?",
   "[Button] deactivate": "Deactivate",
+  "[Button] activate": "Activate",
   "[Label] active": "Active",
   "[Label] inactive": "Inactive",
-  "[Notification] success": "User is deactivated",
+  "[Notification] deactivated success": "User is deactivated",
+  "[Notification] activated success": "User is activated",
   "[Notification] error": "Something went wrong"
 }

@@ -37,11 +37,51 @@
         "parallel": false
       }
     },
-    "assetRegistry:contract:transfer": {
+    "assetRegistry:contract:mint:sandbox": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq IncDec transfer"],
+        "commands": ["taq transfer Main --entrypoint mint --param main.parameter.mint_parameter.tz --env development"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:mint:ghostnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq transfer Main --entrypoint mint --param main.parameter.mint_parameter.tz --env testing"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:transfer:sandbox": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq transfer Main --entrypoint transfer --param main.parameter.transfer_parameter.tz --env development"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:transfer:ghostnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq transfer Main --entrypoint transfer --param main.parameter.transfer_parameter.tz --env testing"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:update_operators:sandbox": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq transfer Main --entrypoint update_operators --param main.parameter.update_operators_parameter.tz --env development"],
+        "parallel": false
+      }
+    },
+    "assetRegistry:contract:update_operators:ghostnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/smart-contracts/asset-registry",
+        "commands": ["taq transfer Main --entrypoint update_operators --param main.parameter.update_operators_parameter.tz --env testing"],
         "parallel": false
       }
     },
@@ -50,14 +90,6 @@
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
         "commands": ["taq originate IncDec.tz --env development"],
-        "parallel": false
-      }
-    },
-    "assetRegistry:contract:transfer:ghostnet": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq IncDec transfer --env development"],
         "parallel": false
       }
     },

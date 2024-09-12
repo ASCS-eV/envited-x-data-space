@@ -57,7 +57,9 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq transfer Main --entrypoint transfer --param main.parameter.transfer_parameter.tz --env development"],
+        "commands": [
+          "taq transfer Main --entrypoint transfer --param main.parameter.transfer_parameter.tz --env development"
+        ],
         "parallel": false
       }
     },
@@ -65,7 +67,9 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq transfer Main --entrypoint transfer --param main.parameter.transfer_parameter.tz --env testing"],
+        "commands": [
+          "taq transfer Main --entrypoint transfer --param main.parameter.transfer_parameter.tz --env testing"
+        ],
         "parallel": false
       }
     },
@@ -73,7 +77,9 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq transfer Main --entrypoint update_operators --param main.parameter.update_operators_parameter.tz --env development"],
+        "commands": [
+          "taq transfer Main --entrypoint update_operators --param main.parameter.update_operators_parameter.tz --env development"
+        ],
         "parallel": false
       }
     },
@@ -81,7 +87,9 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq transfer Main --entrypoint update_operators --param main.parameter.update_operators_parameter.tz --env testing"],
+        "commands": [
+          "taq transfer Main --entrypoint update_operators --param main.parameter.update_operators_parameter.tz --env testing"
+        ],
         "parallel": false
       }
     },

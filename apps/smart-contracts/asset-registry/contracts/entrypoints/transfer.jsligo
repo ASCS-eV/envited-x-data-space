@@ -66,7 +66,7 @@ export const authorize_transfer = <L>(
     return approvals;
   }
 
-  const current_allowance: nat = Approvals.get_amount(approvals, from_, Tezos.get_sender(), token_id);
+  const current_allowance: nat = Approvals.get_amount(from_, Tezos.get_sender(), token_id, approvals);
   
   if (current_allowance > (0 as nat)) {
     if (current_allowance >= amount) {
@@ -76,7 +76,7 @@ export const authorize_transfer = <L>(
 
    return match(Storage.get_operators(storage)) {
       when(Some(operators)): do {
-         Operators.assert_authorisation(operators, from_, token_id);
+         Operators.assert_authorisation(from_, token_id, operators);
          return approvals;
       };
       when(None()): do {
@@ -101,11 +101,11 @@ const atomic_trans = <L>(
    const { to_, token_id, amount } = transfer;
    Storage.assert_token_exist(storage, token_id);
 
-   const oldApprovals = Approvals.get_amount(approvals, from_, Tezos.get_sender(), token_id);
+   const oldApprovals = Approvals.get_amount(from_, Tezos.get_sender(), token_id, approvals);
    const authorizedApprovals = authorize_transfer(storage, approvals, from_, token_id, amount);
-   const newApprovals = Approvals.get_amount(authorizedApprovals, from_, Tezos.get_sender(), token_id);
-   const balance_from = Ledger.get_for_user(ledger, from_, token_id);
-   const balance_to = Ledger.get_for_user(ledger, to_, token_id);
+   const newApprovals = Approvals.get_amount(from_, Tezos.get_sender(), token_id, authorizedApprovals);
+   const balance_from = Ledger.get_for_user(from_, token_id, ledger);
+   const balance_to = Ledger.get_for_user(to_, token_id, ledger);
 
    let diff_from: int = 0;
    let diff_to: int = 0;
@@ -154,7 +154,7 @@ const atomic_trans = <L>(
 
    const newLedger = Ledger.decrease_token_amount_for_user(ledger, from_, token_id, amount);
 
-   return [Ledger.increase_token_amount_for_user(newLedger, to_, token_id, amount), authorizedApprovals, operationsEvent, event_balance_map, event_allowance_map];
+   return [Ledger.increase_token_amount_for_user(to_, token_id, amount, newLedger), authorizedApprovals, operationsEvent, event_balance_map, event_allowance_map];
 };
 
 const transfer_from = <L>(

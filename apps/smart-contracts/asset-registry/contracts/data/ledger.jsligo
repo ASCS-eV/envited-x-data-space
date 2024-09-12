@@ -27,10 +27,10 @@ export const decrease_token_amount_for_user = <L>(
 
 //@inline
 export const increase_token_amount_for_user = <L>(
-  ledger_module: ledger_module<L>,
   to_: owner,
   token_id: Token.T,
-  amount_: nat
+  amount_: nat,
+  ledger_module: ledger_module<L>
 ): ledger_module<L> => {
   const data = ledger_module.increase([ledger_module.data, to_, token_id, amount_]);
 
@@ -39,16 +39,16 @@ export const increase_token_amount_for_user = <L>(
 
 //@inline
 export const get_supply = <L>(
-  ledger_module: ledger_module<L>,
-  token_id: Token.T
+  token_id: Token.T,
+  ledger_module: ledger_module<L>
 ): option<Amount.T> =>
   ledger_module.supply([ledger_module.data, token_id]);
 
 //@inline
 export const get_for_user = <L>(
-  ledger_module: ledger_module<L>,
   owner: owner,
-  token_id: Token.T
+  token_id: Token.T,
+  ledger_module: ledger_module<L>
 ): Amount.T => {
   return ledger_module.balance_of([ledger_module.data, owner, token_id]);
 };

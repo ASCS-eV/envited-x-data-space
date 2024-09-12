@@ -69,9 +69,9 @@ const create_ticket = <L>(
    Storage.assert_token_exist(storage, token_id);
    const approvals = Storage.get_approvals(storage);
 
-   const oldApprovals = Approvals.get_amount(approvals, from_, Tezos.get_sender(), token_id);
+   const oldApprovals = Approvals.get_amount(from_, Tezos.get_sender(), token_id, approvals);
    const authorizedApprovals = Transfer.authorize_transfer(storage, approvals, from_, token_id, amount);
-   const newApprovals = Approvals.get_amount(authorizedApprovals, from_, Tezos.get_sender(), token_id);
+   const newApprovals = Approvals.get_amount(from_, Tezos.get_sender(), token_id, authorizedApprovals);
 
    if (oldApprovals != newApprovals) {
        const allowance_update: allowance_update_type = {
@@ -84,7 +84,7 @@ const create_ticket = <L>(
        const allowance_event_op = Tezos.emit("%allowance_update", allowance_update);
        operations = list([allowance_event_op, ...operations]);
    }
-   const balance = Ledger.get_for_user(ledger, from_, token_id);
+   const balance = Ledger.get_for_user(from_, token_id, ledger);
    const balance_update: balance_event_data =
                 {
                    owner: from_,

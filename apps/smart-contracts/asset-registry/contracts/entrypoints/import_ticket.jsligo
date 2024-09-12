@@ -62,9 +62,9 @@ const import_ticket_to = <L>(
     let operationsEvent = operations;
     const [[ticketer, [[token_id, _data], amount]], _] = Tezos.Next.Ticket.read(imported_ticket);
     assert_ticketer_is_self_address(ticketer);
-    const newLedger = Ledger.increase_token_amount_for_user(ledger, to_, token_id, amount);
+    const newLedger = Ledger.increase_token_amount_for_user(to_, token_id, amount, ledger);
     const transaction = make_transaction(Some(to_), token_id, amount);
-    const balance = Ledger.get_for_user(ledger, to_, token_id);
+    const balance = Ledger.get_for_user(to_, token_id, ledger);
     const balance_update: balance_event_data =
                 {
                    owner: to_,

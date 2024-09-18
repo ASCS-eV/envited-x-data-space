@@ -41,7 +41,9 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq transfer Main/Main --entrypoint mint --param main.parameter.mint_parameter.tz --env development"],
+        "commands": [
+          "taq transfer Main/Main --entrypoint mint --param main.parameter.mint_parameter.tz --env development"
+        ],
         "parallel": false
       }
     },

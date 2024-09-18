@@ -13,6 +13,7 @@ type LedgerModule = Ledger.ledger_module;
 export type MintParam = 
 @layout("comb")
 {
+  from_uuid   : string;
   to_         : address;
   token_id    : Token.T;
   amount      : Amount.T;
@@ -55,6 +56,9 @@ export const mint = <L>(
   let finalOperations = list([]);
   // Assert.Error.assert(storage.extension.admin == Tezos.get_sender(), Errors.not_admin);
   
+  // Assert is user allowed to mint
+  Assertions.assert_minting_allowed(mint.from_uuid, mint.to_, storage.registry);
+
   let oldSupplyOpt = Ledger.get_supply( mint.token_id, ledger);
   let oldSupply = match(oldSupplyOpt) {
     when (Some(supply)): do { return supply; };

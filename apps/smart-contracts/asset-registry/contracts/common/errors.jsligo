@@ -12,6 +12,7 @@ export const rec_hook_undef  = "FA2_RECEIVER_HOOK_UNDEFINED"
 export const send_hook_under = "FA2_SENDER_HOOK_UNDEFINED"
 export const wrong_amount    = "WRONG_AMOUNT"
 export const token_id_already_exists = "Token ID already exists"
+export const minting_not_allowed = "Minting not allowed"
 
 
 export const only_sender_manage_operators = "The sender can only manage operators for his own token"

@@ -41,7 +41,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq transfer Main --entrypoint mint --param main.parameter.mint_parameter.tz --env development"],
+        "commands": ["taq transfer Main/Main --entrypoint mint --param main.parameter.mint_parameter.tz --env development"],
         "parallel": false
       }
     },
@@ -49,7 +49,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq transfer Main --entrypoint mint --param main.parameter.mint_parameter.tz --env testing"],
+        "commands": ["taq transfer Main/Main --entrypoint mint --param main.parameter.mint_parameter.tz --env testing"],
         "parallel": false
       }
     },
@@ -105,7 +105,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq compile IncDec.jsligo --json"],
+        "commands": ["taq compile Main.jsligo --json"],
         "parallel": false
       }
     },
@@ -113,7 +113,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/smart-contracts/asset-registry",
-        "commands": ["taq compile main.jsligo"],
+        "commands": ["taq compile Main.jsligo"],
         "parallel": false
       }
     },

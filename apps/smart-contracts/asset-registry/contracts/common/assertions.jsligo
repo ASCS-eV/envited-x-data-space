@@ -28,3 +28,22 @@ export const assert_asset_id_exists = (
         Errors.token_id_already_exists
     )
 };
+
+/**
+* Check if the sender is allowed to mint
+*/
+
+export const assert_minting_allowed = (from_uuid: string, member_pkh: address, registry_address: address) => {
+    // Check demim contract
+    const permissionsOpt: option<bool> = Tezos.Next.View.call(
+        "get_permissions",
+        [from_uuid, member_pkh],
+        registry_address
+    );
+    const permissions: bool = Option.value_with_error(Errors.minting_not_allowed, permissionsOpt);
+
+    return Assert.Error.assert(
+        permissions,
+        Errors.minting_not_allowed
+    )
+}

@@ -77,3 +77,23 @@ export namespace User {
     return user.status == Active() && member.status == Active();
   }
 }
+
+export namespace Entry {
+  export const get_entry = (uuid: string, member_address: address, store: Storage.Types.store) => {
+    const user = match(Big_map.find_opt(uuid, store.user_registry)) {
+      when(Some(user)): user
+      when(None()): failwith("User not found") as Storage.Types.user_credential_record
+    };
+
+    const member = match(Big_map.find_opt(member_address, store.member_registry)) {
+      when(Some(member)): member
+      when(None()): failwith("Member not found") as Storage.Types.member_credential_record
+    };
+
+    if (member.uuid != user.issuer) {
+      failwith("Member is not the issuer of the user");
+    };
+
+    return { user, member };
+  }
+}

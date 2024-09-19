@@ -15,6 +15,7 @@ export namespace Types {
   }
 
   export type user_credential_record = {
+    did: address,
     status: status,
     issuer: string,
     uuid: string,

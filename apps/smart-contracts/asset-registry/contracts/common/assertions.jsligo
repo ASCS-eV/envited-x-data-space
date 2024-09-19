@@ -2,6 +2,24 @@
 #import "./tzip12.datatypes.jsligo" "TZIP12Datatypes"
 #import "./tzip12.interfaces.jsligo" "TZIP12Interface"
 
+export type status = ["Active"] | ["Revoked"]
+export type Entry =
+@layout("comb")
+{
+  user: {
+    did: address,
+    uuid: string,
+    issuer: string,
+    status: status,
+  },
+  member: {
+    did: address,
+    status: status,
+    issuer: string,
+    uuid: string,
+  }
+};
+
 /**
 * Check if the Tx sender is the token's owner
 * @param owner : the address of the actual owner
@@ -33,17 +51,31 @@ export const assert_asset_id_exists = (
 * Check if the sender is allowed to mint
 */
 
-export const assert_minting_allowed = (from_uuid: string, member_pkh: address, registry_address: address) => {
+export const assert_minting_allowed = (from_uuid: string, member_did: address, registry_address: address) => {
     // Check demim contract
-    const permissionsOpt: option<bool> = Tezos.Next.View.call(
-        "get_permissions",
-        [from_uuid, member_pkh],
+    const entryOpt: option<{
+        member: {
+            did: address,
+            status: ["Active"] | ["Revoked"],
+            issuer: string,
+            uuid: string,
+        },
+        user: {
+            did: address,
+            status: ["Active"] | ["Revoked"],
+            issuer: string,
+            uuid: string,
+        }
+    }> = Tezos.Next.View.call(
+        "get_entry",
+        [from_uuid, member_did],
         registry_address
     );
-    const permissions: bool = Option.value_with_error(Errors.minting_not_allowed, permissionsOpt);
+
+    const entry = Option.value_with_error(Errors.minting_not_allowed, entryOpt);
 
     return Assert.Error.assert(
-        permissions,
-        Errors.minting_not_allowed
-    )
+        Tezos.get_sender() == entry.user.did,
+        "B"
+    );
 }

@@ -30,6 +30,7 @@ const registry_intial_storage = {
   },
   user_registry: Big_map.literal(list([
     ["urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab", ({
+      did: "tz1hkMbkLPkvhxyqsQoBoLPqb1mruSzZx3zy" as address,
       status: Active(),
       issuer: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff",
       uuid: "urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab"
@@ -41,6 +42,7 @@ const run_mint_test = () => {
     Test.Next.State.reset(3n, [] as list <tez>);
     const _admin = Test.Next.Account.address(0n);
     const bob = Test.Next.Account.address(1n);
+    const alice = Test.Next.Account.address(2n);
 
     const member_registry = Big_map.literal(list([
       [(bob as address), ({
@@ -49,10 +51,19 @@ const run_mint_test = () => {
         issuer: "urn:uuid:1b752c7f-3de3-1759-bce2-46416a6823e8",
         uuid: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff"
       })]
-    ]))
+    ]));
 
-    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry }, 0tez);
+    const user_registry = Big_map.literal(list([
+      ["urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab", ({
+        did: alice as address,
+        status: Active(),
+        issuer: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff",
+        uuid: "urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab"
+      })]
+    ]));
+    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry, user_registry }, 0tez);
     const registryAddress = Test.Next.Typed_address.to_address(registry.taddr);
+
     const storage = {...initial_storage, registry: registryAddress as address};
     const orig = Test.Next.Originate.contract(contract_of(Contract), storage, 10tez);
     
@@ -65,6 +76,8 @@ const run_mint_test = () => {
         ["", bytes`ipfs://tokenMetadataCID`]
       ]))
     };
+
+    Test.Next.State.set_source(alice);
     const _result = Test.Next.Contract.transfer_exn(Test.Next.Typed_address.get_entrypoint("mint", orig.taddr), args, 0tez);
 
     const new_storage = {
@@ -94,6 +107,7 @@ const run_failed_minting_not_allowed_invalid_user_test = () => {
     Test.Next.State.reset(3n, [] as list <tez>);
     const _admin = Test.Next.Account.address(0n);
     const bob = Test.Next.Account.address(1n);
+    const alice = Test.Next.Account.address(2n);
 
     const member_registry = Big_map.literal(list([
       [(bob as address), ({
@@ -102,9 +116,18 @@ const run_failed_minting_not_allowed_invalid_user_test = () => {
         issuer: "urn:uuid:1b752c7f-3de3-1759-bce2-46416a6823e8",
         uuid: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff"
       })]
-    ]))
+    ]));
 
-    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry }, 0tez);
+    const user_registry = Big_map.literal(list([
+      ["urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab", ({
+        did: alice as address,
+        status: Active(),
+        issuer: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff",
+        uuid: "urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab"
+      })]
+    ]));
+
+    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry, user_registry }, 0tez);
     const registryAddress = Test.Next.Typed_address.to_address(registry.taddr);
     const storage = {...initial_storage, registry: registryAddress as address};
     const orig = Test.Next.Originate.contract(contract_of(Contract), storage, 0tez);
@@ -131,6 +154,7 @@ const run_failed_minting_not_allowed_inactive_member_test = () => {
     Test.Next.State.reset(3n, [] as list <tez>);
     const _admin = Test.Next.Account.address(0n);
     const bob = Test.Next.Account.address(1n);
+    const alice = Test.Next.Account.address(2n);
 
     const member_registry = Big_map.literal(list([
       [(bob as address), ({
@@ -139,8 +163,17 @@ const run_failed_minting_not_allowed_inactive_member_test = () => {
         issuer: "urn:uuid:1b752c7f-3de3-1759-bce2-46416a6823e8",
         uuid: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff"
       })]
-    ]))
-    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry, }, 0tez);
+    ]));
+
+    const user_registry = Big_map.literal(list([
+      ["urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab", ({
+        did: alice as address,
+        status: Active(),
+        issuer: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff",
+        uuid: "urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab"
+      })]
+    ]));
+    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry, user_registry}, 0tez);
     const registryAddress = Test.Next.Typed_address.to_address(registry.taddr);
     
     const storage = {...initial_storage, registry: registryAddress as address};
@@ -168,6 +201,7 @@ const run_failed_mint_not_NFT_test = () => {
     Test.Next.State.reset(3n, [] as list <tez>);
     const _admin = Test.Next.Account.address(0n);
     const bob = Test.Next.Account.address(1n);
+    const alice = Test.Next.Account.address(2n);
 
     const member_registry = Big_map.literal(list([
       [(bob as address), ({
@@ -176,9 +210,18 @@ const run_failed_mint_not_NFT_test = () => {
         issuer: "urn:uuid:1b752c7f-3de3-1759-bce2-46416a6823e8",
         uuid: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff"
       })]
-    ]))
+    ]));
 
-    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry }, 0tez);
+    const user_registry = Big_map.literal(list([
+      ["urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab", ({
+        did: alice as address,
+        status: Active(),
+        issuer: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff",
+        uuid: "urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab"
+      })]
+    ]));
+
+    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry,  user_registry }, 0tez);
     const registryAddress = Test.Next.Typed_address.to_address(registry.taddr);
     const storage = {...initial_storage, registry: registryAddress as address};
     const orig = Test.Next.Originate.contract(contract_of(Contract), storage, 0tez);
@@ -205,6 +248,7 @@ const run_failed_mint_existing_token_test = () => {
     Test.Next.State.reset(3n, [] as list <tez>);
     const _admin = Test.Next.Account.address(0n);
     const bob = Test.Next.Account.address(1n);
+    const alice = Test.Next.Account.address(2n);
 
     const member_registry = Big_map.literal(list([
       [(bob as address), ({
@@ -213,9 +257,18 @@ const run_failed_mint_existing_token_test = () => {
         issuer: "urn:uuid:1b752c7f-3de3-1759-bce2-46416a6823e8",
         uuid: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff"
       })]
-    ]))
+    ]));
 
-    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry }, 0tez);
+    const user_registry = Big_map.literal(list([
+      ["urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab", ({
+        did: alice as address,
+        status: Active(),
+        issuer: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff",
+        uuid: "urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab"
+      })]
+    ]));
+
+    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry, user_registry }, 0tez);
     const registryAddress = Test.Next.Typed_address.to_address(registry.taddr);
     const storage = {...initial_storage, registry: registryAddress as address};
     const orig = Test.Next.Originate.contract(contract_of(Contract), storage, 0tez);
@@ -241,7 +294,7 @@ const test_failed_mint_existing_token = run_failed_mint_existing_token_test();
 
 const run_test_transfer = () => {
     Test.Next.State.reset(3n, [] as list <tez>);
-    const admin = Test.Next.Account.address(0n);
+    const _admin = Test.Next.Account.address(0n);
     const bob = Test.Next.Account.address(1n);
     const alice = Test.Next.Account.address(2n);
 
@@ -252,9 +305,18 @@ const run_test_transfer = () => {
         issuer: "urn:uuid:1b752c7f-3de3-1759-bce2-46416a6823e8",
         uuid: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff"
       })]
-    ]))
+    ]));
 
-    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry }, 0tez);
+    const user_registry = Big_map.literal(list([
+      ["urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab", ({
+        did: alice as address,
+        status: Active(),
+        issuer: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff",
+        uuid: "urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab"
+      })]
+    ]));
+
+    const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry, user_registry }, 0tez);
     const registryAddress = Test.Next.Typed_address.to_address(registry.taddr);
     const storage = {...initial_storage, registry: registryAddress as address};
     const orig = Test.Next.Originate.contract(contract_of(Contract), storage, 0tez);
@@ -268,7 +330,7 @@ const run_test_transfer = () => {
         ["", bytes`ipfs://tokenMetadataCID`]
       ]))
     };
-    Test.Next.State.set_source(admin);
+    Test.Next.State.set_source(alice);
     const _mint_result = Test.Next.Contract.transfer_exn(Test.Next.Typed_address.get_entrypoint("mint", orig.taddr), mint_args, 0tez);
 
     const transfer_args: Contract.Generic.Transfer.t = [{
@@ -291,9 +353,10 @@ const run_test_transfer = () => {
 const test_transfer = run_test_transfer();
 
 const run_test_update_operators = () => {
+  Test.Next.State.reset(3n, [] as list <tez>);
   const admin = Test.Next.Account.address(0n);
   const bob = Test.Next.Account.address(1n);
-
+  const alice = Test.Next.Account.address(2n);
 
   const member_registry = Big_map.literal(list([
     [(bob as address), ({
@@ -302,9 +365,18 @@ const run_test_update_operators = () => {
       issuer: "urn:uuid:1b752c7f-3de3-1759-bce2-46416a6823e8",
       uuid: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff"
     })]
-  ]))
+  ]));
 
-  const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry }, 0tez);
+  const user_registry = Big_map.literal(list([
+      ["urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab", ({
+        did: alice as address,
+        status: Active(),
+        issuer: "urn:uuid:ecb5685d-0708-4fa8-b9e4-966a0f1d12ff",
+        uuid: "urn:uuid:c0597222-5b0f-49fc-8078-7cbdc738c4ab"
+      })]
+    ]));
+
+  const registry = Test.Next.Originate.contract(contract_of(Registry), { ...registry_intial_storage, member_registry, user_registry }, 0tez);
   const registryAddress = Test.Next.Typed_address.to_address(registry.taddr);
   const storage = {...initial_storage, registry: registryAddress as address};
   const orig = Test.Next.Originate.contract(contract_of(Contract), storage, 0tez);
@@ -319,7 +391,7 @@ const run_test_update_operators = () => {
     ]))
   };
 
-  Test.Next.State.set_source(admin);
+  Test.Next.State.set_source(alice);
   const _mint_result = Test.Next.Contract.transfer_exn(Test.Next.Typed_address.get_entrypoint("mint", orig.taddr), mint_args, 0tez);
 
   const update_operators_args = [

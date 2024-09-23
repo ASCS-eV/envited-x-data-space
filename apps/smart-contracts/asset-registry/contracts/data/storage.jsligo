@@ -8,6 +8,7 @@
 #import "./proxy.jsligo" "Proxy"
 
 export type T<L> = {
+    registry: address;
     metadata: Metadata.t;
     assets: L;
     token_metadata: TokenMetadata.T;

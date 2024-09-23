@@ -2,6 +2,7 @@
 // const default_storage : Contract..storage = 10;
 
 const default_storage: Contract.Storage = {
+  registry: "KT1P2kUcD97mqQWi7WMJfJaWSKZ6yU7caGTh" as address,
   metadata: Big_map.empty,
   assets: Big_map.empty,
   token_metadata: Big_map.empty,

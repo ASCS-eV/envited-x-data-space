@@ -61,11 +61,11 @@ export const burn = <L>(
 
   const approvals = Storage.get_approvals(storage);
 
-  const oldApprovals = Approvals.get_amount(approvals, from_, Tezos.get_sender(), token_id);
+  const oldApprovals = Approvals.get_amount(from_, Tezos.get_sender(), token_id, approvals);
 
   const authorizedApprovals = Transfer.authorize_transfer(storage, approvals, from_, token_id, amount);
 
-  const newApprovals = Approvals.get_amount(authorizedApprovals, from_, Tezos.get_sender(), token_id);
+  const newApprovals = Approvals.get_amount(from_, Tezos.get_sender(), token_id, authorizedApprovals);
 
   if (oldApprovals != newApprovals) {
        const allowance_update: allowance_update_type = {
@@ -84,8 +84,12 @@ export const burn = <L>(
   let newStorage = Storage.set_approvals(storage, authorizedApprovals);
   newStorage = Storage.set_ledger(newStorage, newLedger.data);
 
-  let oldSupply = Ledger.get_supply(ledger, token_id);
-  const balance = Ledger.get_for_user(ledger, from_, token_id);
+  let oldSupplyOpt = Ledger.get_supply(token_id, ledger);
+  let oldSupply = match(oldSupplyOpt) {
+    when (Some(supply)): do { return supply; };
+    when (None): do { return (amount as nat); };
+  };
+  const balance = Ledger.get_for_user(from_, token_id, ledger);
   const supply_update: total_supply_update_type =
                 {
                    token_id: token_id,

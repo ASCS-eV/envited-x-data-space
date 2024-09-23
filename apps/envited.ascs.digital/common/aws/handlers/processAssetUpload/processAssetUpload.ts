@@ -74,7 +74,9 @@ export const _main =
 
       console.log(Body)
 
-      // const { Body } = await readStreamFromS3({ Key, Bucket })
+      const { Body: StreamBody } = await readStreamFromS3({ Key, Bucket })
+
+      console.log(StreamBody)
 
       if (isNil(Body)) {
         return

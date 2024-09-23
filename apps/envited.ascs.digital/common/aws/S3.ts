@@ -55,17 +55,21 @@ export const getAssetUploadUrl = (filename: string) =>
 export const getAssetDownloadUrl = (filename: string) =>
   getSignedDownloadUrl({ Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME || '', Key: filename })
 
-export const _sendS3Command = ({ s3Client }: { s3Client: S3Client }) => s3Client.send
+export const _sendS3Command = ({ s3Client }: { s3Client: S3Client }) => { 
+  console.log("_sendS3Command", { s3Client })
+  return s3Client.send }
 
 export const sendS3Command = _sendS3Command({ s3Client })
 
 export const readStreamFromS3 = ({ Bucket, Key }: { Bucket: string; Key: string }) =>
-  sendS3Command(
-    new GetObjectCommand({
-      Bucket,
-      Key,
-    }),
-  )
+  { 
+    console.log("readStreamFromS3", { Bucket, Key })
+    return sendS3Command(
+      new GetObjectCommand({
+        Bucket,
+        Key,
+      }),
+  ) }
 
 export const deleteObjectFromS3 = ({ Bucket, Key }: { Bucket: string; Key: string }) =>
   sendS3Command(

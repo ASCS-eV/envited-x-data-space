@@ -61,16 +61,18 @@ export const _sendS3Command = ({ s3Client }: { s3Client: S3Client }) => {
 
 export const sendS3Command = _sendS3Command({ s3Client })
 
-export const readStreamFromS3 = ({ Bucket, Key }: { Bucket: string; Key: string }) =>
+export const _readStreamFromS3 = ({ s3Client }: { s3Client: S3Client }) => ({ Bucket, Key }: { Bucket: string; Key: string }) =>
   { 
     console.log("readStreamFromS3", { Bucket, Key })
     console.log("sendS3Command", sendS3Command)
-    return sendS3Command(
+    return s3Client.send(
       new GetObjectCommand({
         Bucket,
         Key,
       }),
   ) }
+
+export const readStreamFromS3 = _readStreamFromS3({ s3Client })
 
 export const deleteObjectFromS3 = ({ Bucket, Key }: { Bucket: string; Key: string }) =>
   sendS3Command(

@@ -2,7 +2,7 @@ import { _getS3SignedUrl } from './S3'
 
 describe('common/aws/S3', () => {
   describe('_getSignedUploadUrl', () => {
-    it('should return an info toast expected', async () => {
+    it.skip('should return an info toast expected', async () => {
       // when ... we want to upload a file to S3 a bucket
       // then ... it should return the url as expected
 

@@ -3,7 +3,7 @@
 import { isEmpty, isNil } from 'ramda'
 
 import { getServerSession } from '../../auth'
-import { getAssetDownloadUrl } from '../../aws/S3'
+import { getAssetDownloadUrl } from '../../aws'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { isOwnAsset } from '../../guards'

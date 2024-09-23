@@ -64,6 +64,7 @@ export const sendS3Command = _sendS3Command({ s3Client })
 export const readStreamFromS3 = ({ Bucket, Key }: { Bucket: string; Key: string }) =>
   { 
     console.log("readStreamFromS3", { Bucket, Key })
+    console.log("sendS3Command", sendS3Command)
     return sendS3Command(
       new GetObjectCommand({
         Bucket,

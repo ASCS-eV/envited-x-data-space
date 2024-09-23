@@ -25,7 +25,7 @@ export const assert_token_exist = <L>(s: T<L>, token_id): unit => {
     };
 };
 
-const get_ledger = <L>(s: T<L>): L => {
+export const get_ledger = <L>(s: T<L>): L => {
     return s.assets;
 };
 

@@ -15,18 +15,16 @@ export const assert_update_permission = (owner: address): unit => {
 }
 
 /**
-* Check if the token id is already defined
-* @param token_metadata : bigmap of token definitions
+* Check if the token id already exists
+* @param assets : the assets already minted
 * @param token_id : the token id to test 
 */
 
-export const assert_token_exist = (
-    token_metadata: TZIP12Datatypes.tokenMetadata,
-    token_id: nat
-): unit => {
-    const _ =
-        Option.value_with_error(
-            Errors.undefined_token,
-            Big_map.find_opt(token_id, token_metadata)
-        )
+export const assert_asset_id_exists = (
+    supply: nat,
+) => {
+    return Assert.Error.assert(
+        supply == 0n,
+        Errors.token_id_already_exists
+    )
 };

@@ -4,6 +4,8 @@
 #import "../data/storage.jsligo" "Storage"
 #import "../data/token.jsligo" "Token"
 #import "../data/tokenMetadata.jsligo" "TokenMetadata"
+#import "../common/assertions.jsligo" "Assertions"
+#import "../common/errors.jsligo" "Errors"
 
 type Storage = Storage.T;
 type LedgerModule = Ledger.ledger_module;
@@ -52,12 +54,15 @@ export const mint = <L>(
   let operations = list([]);
   let finalOperations = list([]);
   // Assert.Error.assert(storage.extension.admin == Tezos.get_sender(), Errors.not_admin);
-
+  
   let oldSupplyOpt = Ledger.get_supply(mint.token_id, ledger);
   let oldSupply = match(oldSupplyOpt) {
     when (Some(supply)): do { return supply; };
     when (None): do { return (0 as nat); };
   };
+
+  Assertions.assert_asset_id_exists(oldSupply);
+  
   const balance = Ledger.get_for_user(mint.to_, mint.token_id, ledger);
   const supply_update: total_supply_update_type =
                 {

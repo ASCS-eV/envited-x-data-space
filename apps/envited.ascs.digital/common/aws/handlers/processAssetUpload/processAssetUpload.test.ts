@@ -1,13 +1,13 @@
 import * as SUT from './processAssetUpload'
 
-describe.skip('common/aws/handlers/processAssetUpload', () => {
+describe('common/aws/handlers/processAssetUpload', () => {
   describe('_main', () => {
     it('should extract and write metadata to a bucket', async () => {
       // when ... we want extract data from a asset and upload to a different bucket
       // then ... it should validate, extract and upload to a bucket
       const uploadStub = jest.fn().mockResolvedValue('UPLOAD_URL')
       const transformToByteArrayStub = jest.fn().mockResolvedValue('ASSET_BYTE_ARRAY')
-      const readStreamFromS3Stub = jest.fn().mockResolvedValue({
+      const readFileStub = jest.fn().mockResolvedValue({
         Body: {
           transformToByteArray: transformToByteArrayStub,
         },
@@ -19,11 +19,11 @@ describe.skip('common/aws/handlers/processAssetUpload', () => {
         assetCID: 'ASSET_CID',
         metadataCID: 'METADATA_CID',
       }) as any
-      const writeStreamToS3Stub = jest.fn().mockReturnValue({
+      const writeFileStub = jest.fn().mockReturnValue({
         done: uploadStub,
       }) as any
-      const copyObjectToS3Stub = jest.fn().mockResolvedValue('COPIED') as any
-      const deleteObjectFromS3Stub = jest.fn().mockReturnValue('SHACL_DATA') as any
+      const copyFileStub = jest.fn().mockResolvedValue('COPIED') as any
+      const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
 
       const event = {
@@ -44,20 +44,20 @@ describe.skip('common/aws/handlers/processAssetUpload', () => {
       const callback = () => {}
 
       const result = await SUT._main({
-        readStreamFromS3: readStreamFromS3Stub,
-        writeStreamToS3: writeStreamToS3Stub,
-        copyObjectToS3: copyObjectToS3Stub,
-        deleteObjectFromS3: deleteObjectFromS3Stub,
+        readFile: readFileStub,
+        writeFile: writeFileStub,
+        copyFile: copyFileStub,
+        deleteFile: deleteFileStub,
         validateAndCreateMetadata: validateShaclDataWithSchemaStub,
         updateAsset: updateAssetStatusStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
-      expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
+      expect(readFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
-      expect(writeStreamToS3Stub).toHaveBeenCalledTimes(1)
-      expect(deleteObjectFromS3Stub).toHaveBeenCalledTimes(1)
+      expect(writeFileStub).toHaveBeenCalledTimes(1)
+      expect(deleteFileStub).toHaveBeenCalledTimes(1)
     })
 
     it('should delete the asset if the validation does not conforms', async () => {
@@ -65,7 +65,7 @@ describe.skip('common/aws/handlers/processAssetUpload', () => {
       // then ... it should validate, extract and upload to a bucket
       const uploadStub = jest.fn().mockResolvedValue('UPLOAD_URL')
       const transformToByteArrayStub = jest.fn().mockResolvedValue('ASSET_BYTE_ARRAY')
-      const readStreamFromS3Stub = jest.fn().mockResolvedValue({
+      const readFileStub = jest.fn().mockResolvedValue({
         Body: {
           transformToByteArray: transformToByteArrayStub,
         },
@@ -77,11 +77,11 @@ describe.skip('common/aws/handlers/processAssetUpload', () => {
         assetCID: 'ASSET_CID',
         metadataCID: 'METADATA_CID',
       }) as any
-      const writeStreamToS3Stub = jest.fn().mockReturnValue({
+      const writeFileStub = jest.fn().mockReturnValue({
         done: uploadStub,
       }) as any
-      const copyObjectToS3Stub = jest.fn().mockResolvedValue('COPIED') as any
-      const deleteObjectFromS3Stub = jest.fn().mockReturnValue('SHACL_DATA') as any
+      const copyFileStub = jest.fn().mockResolvedValue('COPIED') as any
+      const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
 
       const event = {
@@ -102,21 +102,21 @@ describe.skip('common/aws/handlers/processAssetUpload', () => {
       const callback = () => {}
 
       const result = await SUT._main({
-        readStreamFromS3: readStreamFromS3Stub,
-        writeStreamToS3: writeStreamToS3Stub,
-        copyObjectToS3: copyObjectToS3Stub,
-        deleteObjectFromS3: deleteObjectFromS3Stub,
+        readFile: readFileStub,
+        writeFile: writeFileStub,
+        copyFile: copyFileStub,
+        deleteFile: deleteFileStub,
         validateAndCreateMetadata: validateShaclDataWithSchemaStub,
         updateAsset: updateAssetStatusStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
-      expect(readStreamFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
+      expect(readFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
       expect(updateAssetStatusStub).toHaveBeenCalledWith('OBJECT_KEY', 'OBJECT_KEY', 'not_accepted')
-      expect(writeStreamToS3Stub).toHaveBeenCalledTimes(0)
-      expect(deleteObjectFromS3Stub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
+      expect(writeFileStub).toHaveBeenCalledTimes(0)
+      expect(deleteFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
     })
   })
 })

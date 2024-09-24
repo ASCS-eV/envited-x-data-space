@@ -90,7 +90,6 @@ export default function Envited({ stack }: StackContext) {
           environment: {
             RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
             NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
-            REGION: process.env.region || 'eu-central-1',
           },
           permissions: [metadataBucket, 'secretsmanager:GetSecretValue'],
           copyFiles: [{ from: 'common/aws/handlers/processAssetUpload/schemas' }],

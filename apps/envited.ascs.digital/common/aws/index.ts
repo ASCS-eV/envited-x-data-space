@@ -20,13 +20,13 @@ const s3Client = new S3Client({
 
 export const getSignedUrl = _getS3SignedUrl({ getSignedUrl: AwsGetSignedUrl, s3Client })
 
-export const copyObjectToS3 = _copyObjectToS3({ s3Client })
+export const copyFile = _copyObjectToS3({ s3Client })
 
-export const deleteObjectFromS3 = _deleteObjectFromS3({ s3Client })
+export const deleteFile = _deleteObjectFromS3({ s3Client })
 
-export const writeStreamToS3 = _writeStreamToS3({ s3Client })
+export const writeFile = _writeStreamToS3({ s3Client })
 
-export const readStreamFromS3 = _readStreamFromS3({ s3Client })
+export const readFile = _readStreamFromS3({ s3Client })
 
 export const getUploadUrl = _getUploadUrl(getSignedUrl)
 

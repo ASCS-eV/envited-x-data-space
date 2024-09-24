@@ -10,21 +10,21 @@ import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { updateAsset, validateAndCreateMetadata } from '../../../asset'
+import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
-import { copyObjectToS3, deleteObjectFromS3, readStreamFromS3, writeStreamToS3 } from '../../S3'
 
 export const _main =
   ({
-    readStreamFromS3,
-    writeStreamToS3,
-    copyObjectToS3,
-    deleteObjectFromS3,
+    readFile,
+    writeFile,
+    copyFile,
+    deleteFile,
     validateAndCreateMetadata,
     updateAsset,
   }: {
-    readStreamFromS3: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
-    writeStreamToS3: (params: PutObjectCommandInput) => Upload
-    copyObjectToS3: ({
+    readFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
+    writeFile: (params: PutObjectCommandInput) => Upload
+    copyFile: ({
       Bucket,
       CopySource,
       Key,
@@ -33,13 +33,7 @@ export const _main =
       CopySource: string
       Key: string
     }) => Promise<CopyObjectCommandOutput | undefined>
-    deleteObjectFromS3: ({
-      Bucket,
-      Key,
-    }: {
-      Bucket: string
-      Key: string
-    }) => Promise<DeleteObjectCommandOutput | undefined>
+    deleteFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<DeleteObjectCommandOutput | undefined>
     validateAndCreateMetadata: (byteArray: Uint8Array) => Promise<{
       conforms: boolean
       reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
@@ -56,7 +50,7 @@ export const _main =
       const Key = s3Record.object.key
       const Bucket = s3Record.bucket.name
 
-      const { Body } = await readStreamFromS3({ Key, Bucket })
+      const { Body } = await readFile({ Key, Bucket })
 
       if (isNil(Body)) {
         return
@@ -66,19 +60,19 @@ export const _main =
       const { conforms, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(byteArray)
 
       if (!conforms) {
-        await deleteObjectFromS3({ Bucket, Key })
+        await deleteFile({ Bucket, Key })
         await updateAsset(Key, Key, AssetStatus.not_accepted)
 
         return
       }
 
-      await copyObjectToS3({
+      await copyFile({
         Bucket,
         CopySource: `${Bucket}/${Key}`,
         Key: assetCID,
       })
 
-      const writeMetadata = writeStreamToS3({
+      const writeMetadata = writeFile({
         Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
         Key: metadataCID,
         Body: Buffer.from(JSON.stringify(metadata)),
@@ -88,7 +82,7 @@ export const _main =
 
       await writeMetadata.done()
       await updateAsset(assetCID, Key, AssetStatus.pending, metadata)
-      await deleteObjectFromS3({ Bucket, Key })
+      await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)
       throw err
@@ -96,10 +90,10 @@ export const _main =
   }
 
 export const main = _main({
-  readStreamFromS3,
-  writeStreamToS3,
-  copyObjectToS3,
-  deleteObjectFromS3,
+  readFile,
+  writeFile,
+  copyFile,
+  deleteFile,
   validateAndCreateMetadata,
   updateAsset,
 })

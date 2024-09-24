@@ -89,7 +89,7 @@ export const _validateManifest =
   async (byteArray: Uint8Array) => {
     try {
       const data = await getFileFromByteArray(byteArray, MANIFEST_FILE)
-      const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP.manifest}`)
+      const schema = fs.createReadStream(`${__dirname}${SCHEMA_MAP.manifest}`)
       const validation = await validateShaclDataWithSchema(data, schema)
 
       return {
@@ -134,7 +134,7 @@ export const _validateDomainMetadata =
       const schemaTypes = pipe(omit(CONTEXT_DROP_SCHEMAS), keys)(parsedData['@context']) as ValidationSchema[]
 
       const validationPromises = schemaTypes.map((type: ValidationSchema) => {
-        const schema = fs.createReadStream(`${__dirname}/schemas/${SCHEMA_MAP[type]}`)
+        const schema = fs.createReadStream(`${__dirname}${SCHEMA_MAP[type]}`)
         return validateShaclDataWithSchema(data, schema)
       })
       const validationResults = await Promise.all(validationPromises)
@@ -181,7 +181,7 @@ export const _validateAndCreateMetadata =
   async (byteArray: Uint8Array) => {
     try {
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
-      const metadata = createMetadata({ name: data?.domainMetadata['@type'] as string })
+      const metadata = createMetadata({ name: data?.domainMetadata['@id'] as string })
 
       const assetCID = await createFilename(byteArray)
       const metadataCID = await createFilename(metadata as any)

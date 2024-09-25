@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { useTranslation } from '../../../common/i18n'
 
 export const Vision = () => {
@@ -28,7 +30,9 @@ export const Vision = () => {
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-600">{t('[Description] empowering innovators')}</p>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              <a className="underline text-blue cursor-pointer">{t('[Button] learn more')}</a>
+              <Link href={'/mission'} className="underline text-blue cursor-pointer">
+                {t('[Button] learn more')}
+              </Link>
             </p>
           </div>
         </div>

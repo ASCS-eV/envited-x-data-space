@@ -8,9 +8,9 @@ export default async function Index() {
 
   return (
     <>
+      <PageHeader heading="Members" description="" />
       <main className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
         <Breadcrumbs />
-        <PageHeader heading="Members" description="" />
         <Members members={profiles} />
       </main>
     </>

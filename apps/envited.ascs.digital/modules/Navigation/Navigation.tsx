@@ -14,7 +14,7 @@ const NavLink: FC<NavItemProps> = ({ href, name, icon = <></> }) => {
   const isActive = equals(pathname)(href)
 
   return (
-    <Link href={href} className={`${isActive ? 'text-blue' : 'text-gray-900'} text-sm font-semibold leading-6 `}>
+    <Link href={href} className={`${isActive ? 'text-blue' : 'text-white'} text-sm font-semibold leading-6 `}>
       {name}
     </Link>
   )

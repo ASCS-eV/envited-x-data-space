@@ -1,5 +1,5 @@
 import { translations } from './Header.intl'
 
-export { Header } from './Header'
+export { Header, HeaderPages } from './Header'
 
 export { translations as HeaderTranslation }

@@ -2,10 +2,11 @@ import { Role } from '../types'
 import { ROUTES } from './routes'
 
 export const NAVIGATION = [
-  { name: 'Home', href: '/' },
-  { name: 'Assets', href: '/assets' },
-  { name: 'Members', href: '/members' },
-  { name: 'Contact', href: '#' },
+  { name: 'Mission', href: '/mission' },
+  { name: 'Onboarding', href: '/onboarding' },
+  { name: 'Community', href: '/members' },
+  { name: 'Data & Services', href: '/assets' },
+  { name: 'About us', href: '/about-us' },
 ]
 
 export const FEDERATOR_NAVIGATION_DASHBOARD = [

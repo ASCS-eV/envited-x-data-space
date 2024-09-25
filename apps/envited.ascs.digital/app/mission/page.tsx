@@ -44,7 +44,8 @@ export default async function Index() {
   return (
     <>
       <div>
-        <div className="relative isolate overflow-hidden bg-gray-900 pb-16 pt-14 sm:pb-20 h-[500px]">
+        <div className="relative flex items-center justify-center h-[500px] overflow-hidden">
+          <div className="absolute top-0 z-10 h-full w-full bg-black opacity-60" />
           <img src="/mission.jpg" alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />
         </div>
         <div className="mx-auto max-w-2xl px-4 pb-20 sm:px-6 lg:max-w-7xl lg:px-8 bg-white py-24">
@@ -61,8 +62,6 @@ export default async function Index() {
           </div>
         </div>
       </div>
-      {/* <div className="bg-gray-900 py-24 sm:py-32 relative overflow-hidden before:block before:absolute before:top-0 before:-left-[25rem] before:w-[50vw] before:-mr-half before:h-full before:skew-x-12 before:bg-blue-900 before:opacity-5 before:z-0 after:block after:absolute after:top-0 after:-right-[25rem] after:w-[50vw] after:-mr-half after:h-full after:skew-x-12 after:bg-blue-900 after:opacity-5 after:z-0"> */}
-      {/* <div className="bg-gray-900 py-24 sm:py-32 relative overflow-hidden before:block before:absolute before:top-0 before:-left-[2rem] before:w-[55vw] before:-mr-half before:h-full before:skew-x-12 before:bg-blue-900 before:opacity-5 before:z-0"> */}
       <div className="bg-gray-900 py-24 sm:py-32 relative overflow-hidden">
         <div className="absolute top-0 inset-x-0 h-[37.5rem] bg-grid-slate-900/[0.04] bg-pattern [mask-image:linear-gradient(0deg,transparent,black)]"></div>
         <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
@@ -78,20 +77,6 @@ export default async function Index() {
             <p className="mt-6 text-lg leading-8 text-gray-200">We aspire to:</p>
           </div>
           <div className="mx-auto my-12 max-w-2xl lg:max-w-7xl">
-            {/* <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-3 lg:gap-y-16">
-              {features.map((feature) => (
-                <div key={feature.name} className="relative pl-16">
-                  <dt className="text-base font-semibold leading-7 text-gray-900">
-                    <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-800">
-                      <feature.icon aria-hidden="true" className="h-6 w-6 text-white" />
-                    </div>
-                    {feature.name}
-                  </dt>
-                  <dd className="mt-2 text-base leading-7 text-gray-600">{feature.description}</dd>
-                </div>
-              ))}
-            </dl>
-             */}
             <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-8 lg:max-w-none lg:grid-cols-3">
               {features.map(feature => (
                 <div
@@ -134,35 +119,6 @@ export default async function Index() {
           </div>
         </div>
       </div>
-
-      {/*
-      <div className="bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <div>
-              <h2 className="text-base font-semibold leading-7 text-indigo-600">Everything you need</h2>
-              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Future-proof development</p>
-              <p className="mt-6 text-base leading-7 text-gray-600">
-              Our ENVITED-X community mission is to create a trusted, dynamic, and interconnected B2B data ecosystem that harnesses the full potential of simulation and AI technologies in the mobility sector. By seamlessly integrating end users, data providers, and service providers into a domain-specific data space, we aim to accelerate innovation, enhance collaboration, and unlock new insights that drive smarter, safer, and more sustainable mobility solutions.
-              </p>
-            </div>
-            <div className="col-span-2 grid grid-cols-1 gap-x-8 gap-y-10 text-base leading-7 text-gray-600 sm:grid-cols-2 lg:gap-y-16">
-              {features.map((feature) => (
-                <div key={feature.name} className="relative pl-16">
-                  <dt className="text-base font-semibold leading-7 text-gray-900">
-                    <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-800">
-                      <feature.icon aria-hidden="true" className="h-6 w-6 text-white" />
-                    </div>
-                    {feature.name}
-                  </dt>
-                  <dd className="mt-2 text-base leading-7 text-gray-600">{feature.description}</dd>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      */}
     </>
   )
 }

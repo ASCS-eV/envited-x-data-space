@@ -7,7 +7,7 @@ export const SimulationData = () => {
     <div>
       <div className="relative isolate overflow-hidden bg-gray-900 pb-16 pt-14 sm:pb-20 h-96">
         <img
-          src="/images/AdobeStock_571252297_metamorworks.jpg"
+          src="/AdobeStock_571252297_metamorworks.jpg"
           alt=""
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />

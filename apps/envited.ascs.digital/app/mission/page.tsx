@@ -46,7 +46,7 @@ export default async function Index() {
       <div>
         <div className="relative flex items-center justify-center h-[500px] overflow-hidden">
           <div className="absolute top-0 z-10 h-full w-full bg-black opacity-60" />
-          <img src="/images/mission.jpg" alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />
+          <img src="/mission.jpg" alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />
         </div>
         <div className="mx-auto max-w-2xl px-4 pb-20 sm:px-6 lg:max-w-7xl lg:px-8 bg-white py-24">
           <div className="max-w-4xl px-6 lg:px-0">

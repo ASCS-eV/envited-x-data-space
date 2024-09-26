@@ -15,6 +15,6 @@ describe('Header', () => {
     // then ... should render as expected
     mockUseSession.mockReturnValue({})
     const { getByText } = render(<Header />)
-    expect(getByText('Sign in')).toBeInTheDocument()
+    expect(getByText('Connect')).toBeInTheDocument()
   })
 })

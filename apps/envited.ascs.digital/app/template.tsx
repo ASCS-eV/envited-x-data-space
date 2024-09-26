@@ -1,14 +1,15 @@
-import { Footer } from '../modules/Footer'
+'use client'
+
+import { usePathname } from 'next/navigation'
 import { Header, HeaderPages } from '../modules/Header'
-import { NotificationContainer } from '../modules/Notifications'
 
 export default function Template({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+
   return (
     <>
-      <HeaderPages />
-      <NotificationContainer />
+      {pathname.startsWith('/dashboard') ? <Header /> : <HeaderPages />}
       {children}
-      <Footer />
     </>
   )
 }

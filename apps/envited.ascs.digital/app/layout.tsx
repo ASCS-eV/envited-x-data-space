@@ -1,6 +1,7 @@
 import { NotificationContainer } from '../modules/Notifications'
 import { NextAuthProvider } from './context/NextAuthProvider'
 import './global.css'
+import { Footer } from '../modules/Footer'
 
 export const metadata = {
   title: 'Envited Marketplace',
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <NextAuthProvider>
           <NotificationContainer />
           {children}
+          <Footer />
         </NextAuthProvider>
       </body>
     </html>

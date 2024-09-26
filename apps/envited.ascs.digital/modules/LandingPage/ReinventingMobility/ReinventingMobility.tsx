@@ -7,7 +7,7 @@ export const ReinventingMobility = () => {
     <div>
       <div className="relative isolate overflow-hidden bg-gray-900 pb-16 pt-14 sm:pb-20 h-96">
         <img
-          src="/images/freepik_64459841_ckybe.jpg"
+          src="/freepik_64459841_ckybe.jpg"
           alt=""
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />

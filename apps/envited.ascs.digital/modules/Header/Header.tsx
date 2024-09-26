@@ -21,7 +21,7 @@ export const Header: FC<HeaderProps> = () => {
             </Link>
           </div>
           <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
-            <Navigation items={NAVIGATION} />
+            <Navigation items={NAVIGATION} light={false} />
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
             <SignIn />
@@ -47,7 +47,7 @@ export const HeaderPages: FC<HeaderProps> = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="flex justify-end lg:gap-x-12 py-4">
             <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
-              <Navigation items={NAVIGATION} />
+              <Navigation items={NAVIGATION} light={true} />
             </div>
             <div className="flex items-center gap-x-5 md:gap-x-8">
               <SignIn />

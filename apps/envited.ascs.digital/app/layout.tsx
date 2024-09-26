@@ -1,7 +1,7 @@
+import { Footer } from '../modules/Footer'
 import { NotificationContainer } from '../modules/Notifications'
 import { NextAuthProvider } from './context/NextAuthProvider'
 import './global.css'
-import { Footer } from '../modules/Footer'
 
 export const metadata = {
   title: 'Envited Marketplace',

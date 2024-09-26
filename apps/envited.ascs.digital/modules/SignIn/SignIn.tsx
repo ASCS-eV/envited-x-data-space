@@ -5,18 +5,17 @@ import { useSession } from 'next-auth/react'
 import { isNil } from 'ramda'
 import React, { FC } from 'react'
 
-import { signIn, signOut } from '../../common/auth'
+import { signIn } from '../../common/auth'
+import { DashboardNavigationDropdown } from '../../modules/DashboardNavigation'
 
 export const SignIn: FC = () => {
   const { data: session } = useSession()
 
   return !isNil(session) ? (
-    <Button onClick={signOut} isDisabled={false} size={Size.small}>
-      Sign out
-    </Button>
+    <DashboardNavigationDropdown />
   ) : (
     <Button onClick={() => signIn({ pkh: 'tz1PRINCIPAL' })} isDisabled={false} size={Size.small}>
-      Sign in
+      Connect
     </Button>
   )
 }

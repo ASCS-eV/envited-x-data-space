@@ -20,11 +20,13 @@ export const Header: FC<HeaderProps> = () => {
               <Image src="/ASCS_logo_envited-X_colour_alex.png" alt="ENVITED" priority height={40} width={170} />
             </Link>
           </div>
-          <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
-            <Navigation items={NAVIGATION} light={false} />
-          </div>
-          <div className="flex items-center gap-x-5 md:gap-x-8">
-            <SignIn />
+          <div className="flex justify-end lg:gap-x-12 py-4">
+            <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
+              <Navigation items={NAVIGATION} light={false} />
+            </div>
+            <div className="flex items-center gap-x-5 md:gap-x-4">
+              <SignIn />
+            </div>
           </div>
         </nav>
       </div>

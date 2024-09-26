@@ -25,7 +25,9 @@ const NavLink: FC<NavItemProps> = ({ href, name, icon = <></>, light }) => {
 export const Navigation: FC<{ items: NavItemProps[]; light: boolean }> = ({ items, light }) => {
   return (
     <>
-      {map(({ href, name, icon }: NavItemProps) => <NavLink key={href} href={href} name={name} icon={icon} light={light} />)(items)}
+      {map(({ href, name, icon }: NavItemProps) => (
+        <NavLink key={href} href={href} name={name} icon={icon} light={light} />
+      ))(items)}
     </>
   )
 }

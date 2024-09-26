@@ -1,6 +1,3 @@
-import { Footer } from '../../modules/Footer'
-import { Header, HeaderPages } from '../../modules/Header'
-import { NotificationContainer } from '../../modules/Notifications'
 import Link from 'next/link'
 import { includes } from 'ramda'
 
@@ -11,6 +8,9 @@ import { Role } from '../../common/types'
 import { getImageUrl } from '../../common/utils'
 import { Breadcrumbs } from '../../modules/Breadcrumbs'
 import { DashboardNavigation } from '../../modules/DashboardNavigation'
+import { Footer } from '../../modules/Footer'
+import { Header, HeaderPages } from '../../modules/Header'
+import { NotificationContainer } from '../../modules/Notifications'
 import { ProfileNotification } from '../../modules/Profile'
 
 export default async function Template({ children }: { children: React.ReactNode }) {

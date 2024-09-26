@@ -17,7 +17,7 @@ export const Header: FC<HeaderProps> = () => {
         <nav className="relative z-40 flex justify-between">
           <div className="flex items-center md:gap-x-12">
             <Link href="/" aria-label="Home">
-              <Image src="/ASCS_logo_envited-X_colour_alex.png" alt="ENVITED" priority height={40} width={170} />
+              <Image src="/images/ASCS_logo_envited-X_colour_alex.png" alt="ENVITED" priority height={40} width={170} />
             </Link>
           </div>
           <div className="flex justify-end lg:gap-x-12 py-4">

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { FC } from 'react'
 
 import { NAVIGATION } from '../../common/constants'
-import { Navigation } from '../Navigation'
+import { Navigation, NavigationDropdown } from '../Navigation'
 import { SignIn } from '../SignIn'
 
 export interface HeaderProps {}
@@ -26,6 +26,7 @@ export const Header: FC<HeaderProps> = () => {
             </div>
             <div className="flex items-center gap-x-5 md:gap-x-4">
               <SignIn />
+              <NavigationDropdown items={NAVIGATION} />
             </div>
           </div>
         </nav>
@@ -53,6 +54,7 @@ export const HeaderPages: FC<HeaderProps> = () => {
             </div>
             <div className="flex items-center gap-x-5 md:gap-x-8">
               <SignIn />
+              <NavigationDropdown items={NAVIGATION} />
             </div>
           </nav>
         </div>

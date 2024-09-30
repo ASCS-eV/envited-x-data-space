@@ -55,9 +55,9 @@ export const DashboardNavigation: FC<{ items: NavItemProps[] }> = ({ items }) =>
 export const DashboardNavigationDropdown: FC = () => (
   <Menu as="div" className="relative inline-block text-left">
     <div>
-      <MenuButton className="flex items-center rounded-md py-2 px-4 bg-blue-900 text-white hover:bg-blue focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+      <MenuButton className="flex items-center text-white">
         <span className="sr-only">Open options</span>
-        <UserIcon className="h-5 w-5" aria-hidden="true" />
+        <UserIcon className="h-6 w-6" aria-hidden="true" />
       </MenuButton>
     </div>
     <MenuItems

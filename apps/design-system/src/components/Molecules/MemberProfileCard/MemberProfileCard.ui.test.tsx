@@ -11,7 +11,7 @@ describe('compoments/Molecules/MemberProfileCard', () => {
 
     render(<MemberProfileCard title={title} logoUri={logoUri} />)
 
-    const CardElement = screen.getByText(title)
+    const CardElement = screen.getByAltText(title)
 
     // then ... should render as expected
     expect(CardElement).toBeInTheDocument()

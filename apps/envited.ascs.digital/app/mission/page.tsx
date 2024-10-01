@@ -98,7 +98,7 @@ export default async function Index() {
               </div>
               <img
                 alt=""
-                src="/mission.jpg"
+                src="/images/mission.jpg"
                 className="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
               />
             </div>

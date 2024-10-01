@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { useTranslation } from '../../../common/i18n'
 
 export const SimulationData = () => {
@@ -23,14 +25,14 @@ export const SimulationData = () => {
               </div>
               <div className="mt-10 flex">
                 <a className="rounded-md bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">
-                  {t('[Button] learn more')}
+                  {t('[Button] our community')}
                 </a>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="mx-auto max-w-7xl py-24 sm:py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl py-0 sm:py-24 sm:px-6 lg:px-8">
         <div className="relative isolate overflow-hidden bg-gray-900 px-6 pt-16 sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
           <svg
             viewBox="0 0 1024 1024"
@@ -45,21 +47,18 @@ export const SimulationData = () => {
               </radialGradient>
             </defs>
           </svg>
-          <div className="mx-auto text-center lg:mx-0 lg:flex-auto lg:py-20">
+          <div className="mx-auto text-center pb-16 lg:mx-0 lg:flex-auto lg:py-20">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
               {t('[Heading] start your journey')}
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">{t('[Description] start your journey')}</p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              {/* <a
-                href="#"
-                className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              <Link
+                href={'/onboarding'}
+                className="rounded-md bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
               >
                 {t('[Button] join us')}
-              </a> */}
-              <a href="#" className="text-sm font-semibold leading-6 text-white">
-                {t('[Button] join us')} <span aria-hidden="true">→</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

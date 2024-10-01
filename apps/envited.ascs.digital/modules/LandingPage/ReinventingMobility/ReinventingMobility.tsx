@@ -21,7 +21,7 @@ export const ReinventingMobility = () => {
                 href="#"
                 className="rounded-md bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
               >
-                {t('[Button] learn more')}
+                {t('[Button] dive into our offerings')}
               </a>
             </div>
           </div>

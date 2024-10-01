@@ -238,7 +238,7 @@ export default async function Index() {
               <img
                 alt=""
                 src="/images/federation.jpg"
-                className="mt-10 aspect-[6/5] w-full h-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
+                className="mt-10 aspect-[6/5] w-full md:h-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
               />
             </div>
           </div>

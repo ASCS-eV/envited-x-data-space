@@ -40,9 +40,14 @@ export const HeaderPages: FC<HeaderProps> = () => {
     <>
       <div className="fixed top-0 z-40 w-full">
         <div className="absolute top-0 w-full bg-white h-2"></div>
-        <div className="absolute z-40 bg-logo bg-no-repeat inline-flex justify-center px-24 pt-2 pb-4">
+        <div className="absolute z-40 bg-logo bg-no-repeat inline-flex justify-center px-24 pt-2 pb-4 hidden md:block">
           <Link href="/" aria-label="Home">
             <Image src="/ASCS_logo_envited-X_colour_alex.png" alt="ENVITED" priority height={40} width={170} />
+          </Link>
+        </div>
+        <div className="absolute z-40 bg-logo bg-no-repeat inline-flex justify-center px-20 pt-2 pb-4 md:hidden -left-16">
+          <Link href="/" aria-label="Home">
+            <Image src="/ASCS_logo_envited-X_colour_alex.png" alt="ENVITED" priority height={30} width={128} />
           </Link>
         </div>
       </div>

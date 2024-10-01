@@ -2,7 +2,7 @@
 
 import { Nav, NavItem } from '@envited-marketplace/design-system'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { UserIcon } from '@heroicons/react/24/solid'
+import { UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { equals, isEmpty, map } from 'ramda'

@@ -3,8 +3,8 @@ import { ROUTES } from './routes'
 
 export const NAVIGATION = [
   { name: 'Mission', href: '/mission' },
-  { name: 'Onboarding', href: '/onboarding' },
   { name: 'Community', href: '/community' },
+  { name: 'Onboarding', href: '/onboarding' },
   { name: 'Data & Services', href: '/assets' },
   { name: 'About us', href: '/about-us' },
 ]

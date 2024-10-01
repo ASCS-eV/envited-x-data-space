@@ -59,7 +59,7 @@ const sections = [
 export default async function Index() {
   return (
     <>
-      <div className="isolate relative overflow-hidden bg-gray-900 bg-cover bg-center bg-[url('/onboarding.jpg')]">
+      <div className="isolate relative overflow-hidden bg-gray-900 bg-cover bg-center bg-[url('/images/onboarding.jpg')]">
         <div className="absolute top-0 -z-10 h-full w-full bg-gray-900 opacity-90" />
         <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-48 lg:px-8">
           <div className="mx-auto max-w-4xl">
@@ -99,7 +99,7 @@ export default async function Index() {
                   <div>
                     <h3 className="text-base font-semibold leading-7 text-blue-900">Community member</h3>
                     <div className="mt-4 flex items-center justify-center gap-x-2 bg-gray-200 h-48">
-                      <img alt="" src="/community-member.png" />
+                      <img alt="" src="/images/community-member.png" />
                     </div>
                     <p className="mt-6 text-base leading-7 text-gray-600">
                       Explore, share, and consume data with limited services. Be visible to organizations seeking
@@ -117,7 +117,7 @@ export default async function Index() {
                   <div>
                     <h3 className="text-base font-semibold leading-7 text-blue-900">Association member</h3>
                     <div className="mt-4 flex items-center justify-center gap-x-2 bg-gray-200 h-48">
-                      <img alt="" src="/association-member.png" />
+                      <img alt="" src="/images/association-member.png" />
                     </div>
                     <p className="mt-6 text-base leading-7 text-gray-600">
                       Get full access to data and services, actively contribute, and have decision rights in governance,

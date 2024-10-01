@@ -26,7 +26,7 @@ export const ReinventingMobility = () => {
             </div>
           </div>
           <img
-            src="/freepik_64459841_ckybe.jpg"
+            src="/images/freepik_64459841_ckybe.jpg"
             alt=""
             className="mt-10 aspect-[6/5] w-full max-w-lg rounded-xl object-cover lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
           />

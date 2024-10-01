@@ -43,7 +43,7 @@ const features = [
 export default async function Index() {
   return (
     <>
-      <div className="isolate relative overflow-hidden bg-gray-900 bg-cover  bg-center bg-[url('/mission.jpg')]">
+      <div className="isolate relative overflow-hidden bg-gray-900 bg-cover  bg-center bg-[url('/images/mission.jpg')]">
         <div className="absolute top-0 -z-10 h-full w-full bg-gray-900 opacity-90" />
         <div className="mx-auto max-w-7xl px-6 py-24 text-center sm:py-48 lg:px-8">
           <div className="mx-auto max-w-4xl">

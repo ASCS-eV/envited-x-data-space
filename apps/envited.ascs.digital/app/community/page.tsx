@@ -51,7 +51,7 @@ export default async function Index() {
 
   return (
     <>
-      <div className="isolate relative overflow-hidden bg-gray-900 bg-cover bg-[url('/community.jpg')]">
+      <div className="isolate relative overflow-hidden bg-gray-900 bg-cover bg-[url('/images/community.jpg')]">
         <div className="absolute top-0 -z-10 h-full w-full bg-gray-900 opacity-90" />
         <div className="mx-auto max-w-7xl px-6 py-24 text-center sm:py-48 lg:px-8">
           <div className="mx-auto max-w-4xl">
@@ -103,7 +103,7 @@ export default async function Index() {
               </div>
               <img
                 alt=""
-                src="/mission.jpg"
+                src="/images/mission.jpg"
                 className="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
               />
             </div>
@@ -237,7 +237,7 @@ export default async function Index() {
               </div>
               <img
                 alt=""
-                src="/federation.jpg"
+                src="/images/federation.jpg"
                 className="mt-10 aspect-[6/5] w-full h-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
               />
             </div>

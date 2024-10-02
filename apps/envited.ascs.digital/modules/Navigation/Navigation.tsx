@@ -1,5 +1,6 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline'
+import { ColorScheme } from 'apps/envited.ascs.digital/common/types'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { equals, map } from 'ramda'
@@ -9,13 +10,15 @@ interface NavItemProps {
   href: string
   name: string
   icon?: JSX.Element | string
-  light?: boolean
+  colorScheme?: ColorScheme
 }
 
-const NavLink: FC<NavItemProps> = ({ href, name, icon = <></>, light }) => {
+const NavLink: FC<NavItemProps> = ({ href, name, icon = <></>, colorScheme = ColorScheme.dark }) => {
   const pathname = usePathname()
   const isActive = equals(pathname)(href)
-  const theme = light ? 'text-white hover:text-blue-800' : 'text-gray-600 hover:text-black'
+  const theme = equals(colorScheme)(ColorScheme.light)
+    ? 'text-white hover:text-blue-800'
+    : 'text-gray-600 hover:text-black'
 
   return (
     <Link href={href} className={`${isActive ? 'text-blue' : theme} text-sm font-semibold leading-6 `}>
@@ -24,22 +27,29 @@ const NavLink: FC<NavItemProps> = ({ href, name, icon = <></>, light }) => {
   )
 }
 
-export const Navigation: FC<{ items: NavItemProps[]; light: boolean }> = ({ items, light }) => {
+export const Navigation: FC<{ items: NavItemProps[]; colorScheme?: ColorScheme }> = ({
+  items,
+  colorScheme = ColorScheme.dark,
+}) => {
   return (
     <>
       {map(({ href, name, icon }: NavItemProps) => (
-        <NavLink key={href} href={href} name={name} icon={icon} light={light} />
+        <NavLink key={href} href={href} name={name} icon={icon} colorScheme={colorScheme} />
       ))(items)}
     </>
   )
 }
 
-export const NavigationDropdown: FC<{ items: NavItemProps[] }> = ({ items }) => {
+export const NavigationDropdown: FC<{ items: NavItemProps[]; colorScheme?: ColorScheme }> = ({
+  items,
+  colorScheme = ColorScheme.dark,
+}) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        {/* <MenuButton className="flex items-center rounded-md py-2 px-4 bg-blue-900 text-white hover:bg-blue focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"> */}
-        <MenuButton className="flex items-center text-white">
+        <MenuButton
+          className={`flex items-center ${equals(colorScheme)(ColorScheme.light) ? 'text-white' : 'text-black'}`}
+        >
           <span className="sr-only">Open options</span>
           <Bars3BottomLeftIcon className="h-6 w-6" aria-hidden="true" />
         </MenuButton>

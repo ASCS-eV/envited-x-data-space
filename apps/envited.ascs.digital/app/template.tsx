@@ -9,7 +9,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {pathname.startsWith('/dashboard') ? <Header /> : <HeaderPages />}
+      {pathname.startsWith('/dashboard') || pathname.startsWith('/assets/') ? <Header /> : <HeaderPages />}
       {children}
     </>
   )

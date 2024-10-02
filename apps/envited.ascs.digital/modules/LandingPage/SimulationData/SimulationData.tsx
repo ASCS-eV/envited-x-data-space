@@ -1,6 +1,6 @@
-import Link from 'next/link'
-
 import { useTranslation } from '../../../common/i18n'
+import { ColorScheme } from '../../../common/types'
+import { Button } from '../../Button'
 
 export const SimulationData = () => {
   const { t } = useTranslation('SimulationData')
@@ -24,9 +24,7 @@ export const SimulationData = () => {
                 <p className="mt-8">{t('[Description] simulation data invite')}</p>
               </div>
               <div className="mt-10 flex">
-                <a className="rounded-md bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">
-                  {t('[Button] our community')}
-                </a>
+                <Button href={'/community'}>{t('[Button] our community')}</Button>
               </div>
             </div>
           </div>
@@ -53,46 +51,13 @@ export const SimulationData = () => {
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">{t('[Description] start your journey')}</p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link
-                href={'/onboarding'}
-                className="rounded-md bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
-              >
+              <Button href={'/onboarding'} colorScheme={ColorScheme.dark}>
                 {t('[Button] join us')}
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className="relative isolate overflow-hidden bg-gray-900 pb-16 pt-14 sm:pb-20 h-96">
-        <img
-          src="/AdobeStock_571252297_metamorworks.jpg"
-          alt=""
-          className="absolute inset-0 -z-10 h-full w-full object-cover"
-        />
-      </div>
-      <div className="mx-auto max-w-2xl px-4 pb-20 sm:px-6 lg:max-w-7xl lg:px-8 bg-white py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:max-w-4xl">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              {t('[Heading] simulation data')}
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">{t('[Description] simulation data')}</p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">{t('[Description] simulation data invite')}</p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              <a className="rounded-md bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">{t('[Button] learn more')}</a>
-            </p>
-          </div>
-          <div className="mx-auto max-w-2xl lg:max-w-4xl mt-12">
-            <h2 className="mt-10 text-2xl font-bold tracking-tight text-gray-900">
-              {t('[Heading] start your journey')}
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">{t('[Description] start your journey')}</p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              <a className="rounded-md bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800">{t('[Button] join us')}</a>
-            </p>
-          </div>
-        </div>
-      </div> */}
     </>
   )
 }

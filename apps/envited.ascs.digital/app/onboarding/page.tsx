@@ -1,7 +1,8 @@
 import { CheckIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { is, prop } from 'ramda'
 
-import { PageHeader } from '../../modules/PageHeader'
+import { ButtonType, ColorScheme } from '../../common/types'
+import { Button } from '../../modules/Button'
 
 const tiers = [
   {
@@ -62,7 +63,7 @@ export default async function Index() {
       <div className="isolate relative overflow-hidden bg-gray-900 bg-cover bg-center bg-[url('/images/onboarding.jpg')]">
         <div className="absolute top-0 -z-10 h-full w-full bg-gray-900 opacity-90" />
         <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-48 lg:px-8">
-          <div className="mx-auto max-w-4xl">
+          <div className="mx-auto max-w-5xl">
             <h2 className="text-base font-semibold leading-7 text-blue-800">Onboarding</h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Join our Simulation Data Sharing Community
@@ -105,12 +106,11 @@ export default async function Index() {
                       Explore, share, and consume data with limited services. Be visible to organizations seeking
                       collaboration.
                     </p>
-                    <a
-                      href="#"
-                      className="mt-8 block rounded-md bg-blue-900 px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900"
-                    >
-                      Join us
-                    </a>
+                    <div className="mt-8">
+                      <Button href={'#'} type={ButtonType.block}>
+                        Join us
+                      </Button>
+                    </div>
                   </div>
                 </div>
                 <div className="flex flex-col justify-between rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10">
@@ -123,12 +123,11 @@ export default async function Index() {
                       Get full access to data and services, actively contribute, and have decision rights in governance,
                       work groups, and policies.
                     </p>
-                    <a
-                      href="#"
-                      className="mt-8 block rounded-md bg-blue-900 px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900"
-                    >
-                      Join us
-                    </a>
+                    <div className="mt-8">
+                      <Button href={'#'} type={ButtonType.block}>
+                        Join us
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -137,7 +136,7 @@ export default async function Index() {
         </div>
       </div>
       <div className="isolate relative">
-        <div className="mx-auto max-w-5xl px-6 pb-24 sm:pb-32 lg:px-8">
+        <div className="mx-auto max-w-7xl px-6 pb-24 sm:pb-32 lg:px-8">
           <div className="mb-20">
             {/* Feature comparison (up to lg) */}
             <section aria-labelledby="mobile-comparison-heading" className="lg:hidden">
@@ -363,15 +362,9 @@ export default async function Index() {
                 or institution and its users, as well as apply for and manage your membership with ASCS.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
-                <a
-                  href="#"
-                  className="rounded-md bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
-                >
-                  Get started
-                </a>
-                <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                  Learn more <span aria-hidden="true">→</span>
-                </a>
+                <Button href={'#'} colorScheme={ColorScheme.dark}>
+                  Join us
+                </Button>
               </div>
             </div>
             <iframe

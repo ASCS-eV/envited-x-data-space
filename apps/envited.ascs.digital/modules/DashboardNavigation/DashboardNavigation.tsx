@@ -10,6 +10,7 @@ import React, { FC } from 'react'
 
 import { signOut } from '../../common/auth'
 import { ROUTES } from '../../common/constants/routes'
+import { ColorScheme } from '../../common/types'
 
 interface NavItemProps {
   href: string
@@ -52,10 +53,12 @@ export const DashboardNavigation: FC<{ items: NavItemProps[] }> = ({ items }) =>
   )
 }
 
-export const DashboardNavigationDropdown: FC = () => (
+export const DashboardNavigationDropdown: FC<{ colorScheme?: ColorScheme }> = ({ colorScheme = ColorScheme.dark }) => (
   <Menu as="div" className="relative inline-block text-left">
     <div>
-      <MenuButton className="flex items-center text-white">
+      <MenuButton
+        className={`flex items-center ${equals(colorScheme)(ColorScheme.light) ? 'text-white' : 'text-black'}`}
+      >
         <span className="sr-only">Open options</span>
         <UserIcon className="h-6 w-6" aria-hidden="true" />
       </MenuButton>

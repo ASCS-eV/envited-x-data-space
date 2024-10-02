@@ -1,4 +1,6 @@
 import { useTranslation } from '../../../common/i18n'
+import { ColorScheme } from '../../../common/types'
+import { Button } from '../../Button'
 
 export const ReinventingMobility = () => {
   const { t } = useTranslation('ReinventingMobility')
@@ -17,12 +19,9 @@ export const ReinventingMobility = () => {
           <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
             <p className="text-lg leading-8 text-gray-400">{t('[Description] reinventing mobility')}</p>
             <div className="mt-10 flex items-center gap-x-6">
-              <a
-                href="#"
-                className="rounded-md bg-blue-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
-              >
+              <Button href={'/mission'} colorScheme={ColorScheme.dark}>
                 {t('[Button] dive into our offerings')}
-              </a>
+              </Button>
             </div>
           </div>
           <img

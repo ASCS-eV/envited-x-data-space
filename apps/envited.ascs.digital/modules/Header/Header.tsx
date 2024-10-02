@@ -1,5 +1,6 @@
 'use client'
 
+import { ColorScheme } from 'apps/envited.ascs.digital/common/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
@@ -21,12 +22,14 @@ export const Header: FC<HeaderProps> = () => {
             </Link>
           </div>
           <div className="flex justify-end lg:gap-x-12 py-4">
-            <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
-              <Navigation items={NAVIGATION} light={false} />
+            <div className="hidden md:flex lg:gap-x-12 lg:items-center">
+              <Navigation items={NAVIGATION} colorScheme={ColorScheme.dark} />
             </div>
             <div className="flex items-center gap-x-5 md:gap-x-4">
-              <SignIn />
-              <NavigationDropdown items={NAVIGATION} />
+              <SignIn colorScheme={ColorScheme.dark} />
+              <div className="md:hidden">
+                <NavigationDropdown items={NAVIGATION} colorScheme={ColorScheme.dark} />
+              </div>
             </div>
           </div>
         </nav>
@@ -55,11 +58,13 @@ export const HeaderPages: FC<HeaderProps> = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="flex justify-end lg:gap-x-12 py-4">
             <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
-              <Navigation items={NAVIGATION} light={true} />
+              <Navigation items={NAVIGATION} colorScheme={ColorScheme.light} />
             </div>
             <div className="flex items-center gap-x-5 md:gap-x-8">
-              <SignIn />
-              <NavigationDropdown items={NAVIGATION} />
+              <SignIn colorScheme={ColorScheme.light} />
+              <div className="md:hidden">
+                <NavigationDropdown items={NAVIGATION} colorScheme={ColorScheme.light} />
+              </div>
             </div>
           </nav>
         </div>

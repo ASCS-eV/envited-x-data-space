@@ -82,7 +82,7 @@ export const _getProfile =
       )
 
       if (isNil(profile) || isEmpty(profile)) {
-        throw notFoundError({ resource: 'profiles', resourceId: issuer.name, userId: session?.user.id })
+        throw notFoundError({ resource: 'profiles', resourceId: issuer?.name, userId: session?.user.id })
       }
 
       if (isOwnProfile(user)(profile)) {

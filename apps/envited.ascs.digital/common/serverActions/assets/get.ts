@@ -1,6 +1,6 @@
 'use server'
 
-import { equals, isEmpty, isNil } from 'ramda'
+import { isEmpty, isNil } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'

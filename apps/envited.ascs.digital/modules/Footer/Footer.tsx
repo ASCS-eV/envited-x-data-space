@@ -8,14 +8,13 @@ export interface FooterProps {}
 const navigation = {
   solutions: [
     { name: 'Home', href: '#' },
-    { name: 'Assets', href: '#' },
-    { name: 'Members', href: '#' },
-    { name: 'Imprint', href: '#' },
+    { name: 'Community', href: '/community' },
+    { name: 'Data & services', href: '/assets' },
   ],
   support: [
-    { name: 'Community', href: '#' },
-    { name: 'Events', href: '#' },
-    { name: 'News', href: '#' },
+    { name: 'Mission', href: '/mission' },
+    { name: 'Onboarding', href: '/onboarding' },
+    { name: 'About us', href: '/about-us' },
   ],
   social: [
     {

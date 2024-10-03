@@ -134,3 +134,7 @@ export interface Session {
     role: Role
   }
 }
+
+export enum FileType {
+  json = 'application/json',
+}

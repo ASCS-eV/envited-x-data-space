@@ -17,7 +17,7 @@ export const Vision = () => {
         <div className="absolute top-0 z-10 h-full w-full bg-black opacity-60" />
         <div className="relative z-20 mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:max-w-4xl py-32">
-            <div className="">
+            <div className="text-center">
               <h2 className="text-base font-semibold leading-7 text-blue">{t('[Heading] our vision')}</h2>
               <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
                 {t('[SubHeading] our vision')}

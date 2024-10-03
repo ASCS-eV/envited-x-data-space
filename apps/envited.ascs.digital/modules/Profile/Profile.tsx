@@ -520,7 +520,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <button
             type="submit"
-            className="bg-blue hover:bg-blue-900 text-white transition rounded-full font-bold py-2 px-4"
+            className="bg-blue hover:bg-blue-900 text-white transition rounded-md font-bold py-2 px-4"
             disabled={isSubmitting}
           >
             {isSubmitting ? <LoadingIndicator /> : t('[Button] update profile')}

@@ -35,6 +35,11 @@ export enum ColorScheme {
   dark = 'dark',
 }
 
+export enum ButtonType {
+  default = 'default',
+  block = 'block',
+}
+
 export enum UploadTypes {
   png = 'image/png',
   jpeg = 'image/jpeg',

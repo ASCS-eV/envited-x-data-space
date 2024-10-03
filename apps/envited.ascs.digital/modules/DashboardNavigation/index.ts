@@ -1,1 +1,1 @@
-export { DashboardNavigation } from './DashboardNavigation'
+export { DashboardNavigation, DashboardNavigationDropdown } from './DashboardNavigation'

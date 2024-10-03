@@ -6,6 +6,7 @@ import React from 'react'
 import { Header } from './Header'
 
 jest.mock('next-auth/react')
+jest.mock('@headlessui/react')
 
 const mockUseSession = useSession as jest.Mock
 
@@ -15,6 +16,6 @@ describe('Header', () => {
     // then ... should render as expected
     mockUseSession.mockReturnValue({})
     const { getByText } = render(<Header />)
-    expect(getByText('Sign in')).toBeInTheDocument()
+    expect(getByText('Connect')).toBeInTheDocument()
   })
 })

@@ -1,10 +1,16 @@
 'use client'
 
 import { Nav, NavItem } from '@envited-marketplace/design-system'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { equals, isEmpty, map } from 'ramda'
 import React, { FC } from 'react'
+
+import { signOut } from '../../common/auth'
+import { ROUTES } from '../../common/constants/routes'
+import { ColorScheme } from '../../common/types'
 
 interface NavItemProps {
   href: string
@@ -36,6 +42,49 @@ export const DashboardNavigation: FC<{ items: NavItemProps[] }> = ({ items }) =>
   return (
     <Nav>
       {map(({ href, name, icon }: NavItemProps) => <NavLink key={href} href={href} name={name} icon={icon} />)(items)}
+      <NavItem>
+        <button onClick={signOut}>
+          <div className="w-full py-4 px-5">
+            <p className="text-base font-medium">Sign out</p>
+          </div>
+        </button>
+      </NavItem>
     </Nav>
   )
 }
+
+export const DashboardNavigationDropdown: FC<{ colorScheme?: ColorScheme }> = ({ colorScheme = ColorScheme.dark }) => (
+  <Menu as="div" className="relative inline-block text-left">
+    <div>
+      <MenuButton
+        className={`flex items-center ${equals(colorScheme)(ColorScheme.light) ? 'text-white' : 'text-black'}`}
+      >
+        <span className="sr-only">Open options</span>
+        <UserIcon className="h-6 w-6" aria-hidden="true" />
+      </MenuButton>
+    </div>
+    <MenuItems
+      transition
+      className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+    >
+      <div className="py-1">
+        <MenuItem>
+          <Link
+            href={ROUTES.DASHBOARD.HOME}
+            className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+          >
+            Dashboard
+          </Link>
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={signOut}
+            className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+          >
+            Sign out
+          </button>
+        </MenuItem>
+      </div>
+    </MenuItems>
+  </Menu>
+)

@@ -8,14 +8,13 @@ export interface FooterProps {}
 const navigation = {
   solutions: [
     { name: 'Home', href: '#' },
-    { name: 'Assets', href: '#' },
-    { name: 'Members', href: '#' },
-    { name: 'Imprint', href: '#' },
+    { name: 'Community', href: '/community' },
+    { name: 'Data & services', href: '/assets' },
   ],
   support: [
-    { name: 'Community', href: '#' },
-    { name: 'Events', href: '#' },
-    { name: 'News', href: '#' },
+    { name: 'Mission', href: '/mission' },
+    { name: 'Onboarding', href: '/onboarding' },
+    { name: 'About us', href: '/about-us' },
   ],
   social: [
     {
@@ -54,10 +53,10 @@ export const Footer: FC<FooterProps> = () => {
             <Image src="/ASCS_logo_envited-X_black_alex.png" alt="ENVITED" priority height={40} width={170} />
             <p className="text-sm leading-6 text-gray-600 dark:text-gray-300">{t('[Description] envited')}</p>
           </div>
-          <div className="grid grid-cols-2 gap-8 xl:col-span-2">
-            <div className="md:grid md:grid-cols-2 md:gap-8" />
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 xl:col-span-2">
+            <div className="hidden md:grid md:grid-cols-2 md:gap-8" />
+            <div className="grid grid-cols-2 md:gap-8">
+              <div className="mt-10 md:mt-0">
                 <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                   {t('[Heading] data space')}
                 </h3>

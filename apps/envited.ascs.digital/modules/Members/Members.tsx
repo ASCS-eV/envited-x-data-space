@@ -13,39 +13,9 @@ interface MembersProps {
 export const Members: FC<MembersProps> = ({ members }) => {
   return (
     <GridRow columns={`four` as any}>
-      {map(
-        ({
-          name,
-          slug,
-          logo,
-          streetAddress,
-          addressLocality,
-          postalCode,
-          addressCountry,
-        }: {
-          name: string
-          slug: string
-          logo: string
-          streetAddress: string
-          addressLocality: string
-          postalCode: string
-          addressCountry: string
-        }) => {
-          return (
-            <GridItem
-              key={slug}
-              name={name}
-              slug={slug}
-              logo={logo}
-              street={streetAddress}
-              city={addressLocality}
-              postalCode={postalCode}
-              country={addressCountry}
-              businessCategories={['OEM', 'Supplier']}
-            />
-          )
-        },
-      )(members)}
+      {map(({ name, slug, logo }: { name: string; slug: string; logo: string }) => {
+        return <GridItem key={slug} name={name} slug={slug} logo={logo} />
+      })(members)}
     </GridRow>
   )
 }

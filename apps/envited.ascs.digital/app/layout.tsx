@@ -1,5 +1,4 @@
 import { Footer } from '../modules/Footer'
-import { Header } from '../modules/Header'
 import { NotificationContainer } from '../modules/Notifications'
 import { NextAuthProvider } from './context/NextAuthProvider'
 import './global.css'
@@ -25,7 +24,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-white dark:bg-gray-800">
         <NextAuthProvider>
-          <Header />
           <NotificationContainer />
           {children}
           <Footer />

@@ -5,9 +5,14 @@ import { equals, isEmpty, propOr } from 'ramda'
 
 import { useTranslation } from '../../common/i18n'
 import { Asset, AssetStatus } from '../../common/types'
+import { mintAssetById } from './UploadedAssets.actions'
 
 export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
   const { t } = useTranslation('UploadedAssets')
+
+  const mint = async (assetId: string) => {
+    await mintAssetById(assetId)
+  }
 
   return (
     <div className="mt-8">
@@ -76,6 +81,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                         <button
                           type="button"
                           className="inline-flex items-center rounded-md bg-blue-900 hover:bg-blue-800 px-2.5 py-1.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300"
+                          onClick={() => mint(asset.id)}
                         >
                           {t('[Button] mint')}
                         </button>

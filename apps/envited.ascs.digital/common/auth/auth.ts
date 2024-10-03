@@ -35,13 +35,13 @@ export const authOptions: NextAuthOptions = {
 
         return match(pkh)
           .with('tz1USER', () => ({
-            id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
-            pkh: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
+            id: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
+            pkh: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
             role: Role.user,
           }))
           .with('tz1PRINCIPAL', () => ({
-            id: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
-            pkh: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
+            id: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
+            pkh: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
             role: Role.federator,
           }))
           .with('tz1NO_USER', () => null)

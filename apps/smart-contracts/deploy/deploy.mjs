@@ -1,6 +1,6 @@
 import { InMemorySigner, importKey } from '@taquito/signer'
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito'
-import { char2Bytes } from '@taquito/utils'
+import { stringToBytes } from '@taquito/utils'
 import { default as config } from '../asset-registry/.taq/config.local.development.json' with { type: "json" }
 import { default as configStaging } from '../asset-registry/.taq/config.local.testing.json' with { type: "json" }
 
@@ -1304,10 +1304,10 @@ const contract = `
          IF_NONE { PUSH bool False } { DROP ; PUSH bool True } } }
 `
 const metadata = new MichelsonMap()
-metadata.set('', char2Bytes('tezos-storage:content'))
+metadata.set('', stringToBytes('tezos-storage:content'))
 metadata.set(
   'content',
-  char2Bytes(
+  stringToBytes(
     JSON.stringify({
       version: 'v1.0',
       name: 'Test NFT Contract',

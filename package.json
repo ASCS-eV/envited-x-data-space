@@ -39,6 +39,7 @@
     "multiformats": "^13.2.2",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
+    "pinata-web3": "^0.4.1",
     "postgres": "^3.4.3",
     "ramda": "^0.29.1",
     "rdf-parse": "^2.3.3",

@@ -54,7 +54,7 @@ export const HeaderPages: FC<HeaderProps> = () => {
           </Link>
         </div>
       </div>
-      <header className={`py-4 absolute top-0 z-20 w-full`}>
+      <header className={`py-4 fixed md:absolute top-0 z-20 w-full`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="flex justify-end lg:gap-x-12 py-4">
             <div className="hidden lg:flex lg:gap-x-12 lg:items-center">

@@ -7,7 +7,7 @@ export const SimulationData = () => {
 
   return (
     <>
-      <div className="py-24 sm:py-24">
+      <div className="py-10 md:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <img
@@ -30,8 +30,8 @@ export const SimulationData = () => {
           </div>
         </div>
       </div>
-      <div className="mx-auto max-w-7xl py-0 sm:py-24 sm:px-6 lg:px-8">
-        <div className="relative isolate overflow-hidden bg-gray-900 px-6 pt-16 sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
+      <div className="mx-auto max-w-7xl pb-10 pt-0 md:py-24 px-6 lg:px-8">
+        <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-12 rounded-md sm:rounded-3xl sm:px-16 md:py-24 lg:flex lg:gap-x-20 lg:px-24">
           <svg
             viewBox="0 0 1024 1024"
             aria-hidden="true"
@@ -45,7 +45,7 @@ export const SimulationData = () => {
               </radialGradient>
             </defs>
           </svg>
-          <div className="mx-auto text-center pb-16 lg:mx-0 lg:flex-auto lg:py-20">
+          <div className="mx-auto text-center lg:mx-0 lg:flex-auto">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
               {t('[Heading] start your journey')}
             </h2>

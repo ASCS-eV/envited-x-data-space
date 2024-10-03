@@ -14,8 +14,7 @@ export default async function Index() {
         OpenDrive-, OpenSceneGraph- and unity-files as well as software tools"
         backgroundImage="/images/onboarding.jpg"
       />
-      <div className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
-        <Breadcrumbs />
+      <div className="mx-auto max-w-2xl px-4 py-10 sm:py-40 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
         <Assets />
       </div>
     </main>

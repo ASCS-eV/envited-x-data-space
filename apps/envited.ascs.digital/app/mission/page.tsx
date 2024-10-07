@@ -48,10 +48,9 @@ export default async function Index() {
       <PageHeader
         heading="Mission"
         title="Reinventing mobility"
-        description="All the data available on the platform are harmonised to the latest standards and can be easily used in
-              your virtual development or testing process. We are providing all partners full transparency. Use the
-              search mask and meta tags to find your desired data and get an good overview about our OpenCRG-,
-              OpenDrive-, OpenSceneGraph- and unity-files as well as software tools"
+        description="Automated, electric and software-defined vehicles are revolutionizing transportation, enabling innovative mobility solutions. 
+        These systems rely heavily on sensing and interacting with their environment. Data-driven simulation across departments and company borders 
+        manages increasing product complexity, opens new solution spaces, and accelerates time-to-market."
         backgroundImage="/images/mission.jpg"
       />
       <div className="relative isolate overflow-hidden bg-gradient-to-b from-blue-900/20 pt-14">

@@ -76,7 +76,7 @@ export default async function Index() {
               ENVITED-X data space empowers you to innovate, collaborate, and lead in the mobility revolution.
             </p>
             <p className="mx-auto mt-4 max-w-2xl text-md leading-8 text-white/60">
-              In the beta phase of the ENVITED-X data space we offer two different participation models.
+              In the ENVITED-X data space we offer two different participation models.
             </p>
             <svg
               viewBox="0 0 1208 1024"
@@ -354,16 +354,13 @@ export default async function Index() {
             </h3>
             <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
               <p className="text-lg leading-8 text-gray-400">
-                With DEMIM you can create your online business identity for the trusted exchange of digital goods and
-                services with a worldwide community in the most secure way, thanks to the power of blockchain and
-                self-sovereign identity principles. DEMIM is a digital identity verification service that establishes a
-                chain of trust for a member community to empower remote business relationships like exchanging
-                simulation data on the ENVITED Dataspace. With DEMIM, you can create a digital identity for your company
-                or institution and its users, as well as apply for and manage your membership with ASCS.
+              At ENVITED-X, trust is the foundation of our community. We value collaboration, transparency, and security, which is why we developed DEMIM — our Decentralized Member Identity Management. 
+              In the ENVITED-X data space, verified digital identities are your key to secure access. Each identity is decentralized and blockchain-powered, ensuring that only authorized participants can log in and interact within the ecosystem. 
+              Once your company's digital identity and those of your employees are verified, you can use them for seamless and secure login. This ensures that every user accessing the data space is authenticated, protecting the integrity of the ecosystem and enabling transparent, trustworthy collaboration.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
-                <Button href={'#'} colorScheme={ColorScheme.dark}>
-                  Join us
+                <Button href={'https://identity.ascs.digital/'} colorScheme={ColorScheme.dark}>
+                  Create your digital identity
                 </Button>
               </div>
             </div>

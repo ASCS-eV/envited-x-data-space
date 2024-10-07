@@ -182,8 +182,8 @@ export default async function Index() {
                   ensuring alignment with the federation’s objectives, rules, and standards.
                 </p>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                The federation is structured in several interconnected layers, each responsible for specific aspects of governance, 
-                data sharing, and technical operations:
+                  The federation is structured in several interconnected layers, each responsible for specific aspects
+                  of governance, data sharing, and technical operations:
                 </p>
                 <ul className="mt-6 text-lg leading-8 text-gray-600 ps-5 space-y-4 list-disc list-inside">
                   <li>

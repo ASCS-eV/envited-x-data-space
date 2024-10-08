@@ -6,19 +6,19 @@ import { PageHeader } from '../../modules/PageHeader'
 
 const roles = [
   {
-    name: 'Data / service provider',
+    name: 'Data & service provider',
     description:
-      'As a data / service provider, you make your offerings visible in the ecosystem and manage their self-description, quality, maintenance, operation, improvements, and usage policies.',
+      'As a data & service provider, you make your offerings visible in the ecosystem and manage their self-description, quality, maintenance, operation, improvements, and usage policies.',
   },
   {
-    name: 'Data / service integrator',
+    name: 'Data & service integrator',
     description:
-      'As a data / service integrator, you create value by combining offerings for consumers, managing self-description, quality, maintenance, operation, improvements, and usage policies.',
+      'As a data & service integrator, you create value by combining offerings for consumers, managing self-description, quality, maintenance, operation, improvements, and usage policies.',
   },
   {
     name: 'Data & service evaluator',
     description:
-      'As a data / service evaluator you are responsible for assessing and evaluating characteristics of the offerings in the ecosystem, aiming at providing comparison parameters.',
+      'As a data & service evaluator you are responsible for assessing and evaluating characteristics of the offerings in the ecosystem, aiming at providing comparison parameters.',
   },
   {
     name: 'Quality certification provider',
@@ -37,7 +37,7 @@ const roles = [
   {
     name: 'Federation service provider',
     description:
-      'As an federation service provider you are esponsible for providing services that are necessary for the adequate functioning of the data ecosystem, being responsible for their quality, maintenance, operation, and continuous improvement.',
+      'As a federation service provider you are responsible for providing services that are necessary for the adequate functioning of the data ecosystem, being responsible for their quality, maintenance, operation, and continuous improvement.',
   },
   {
     name: 'Association member',
@@ -56,8 +56,8 @@ export default async function Index() {
         title="Advancing further, together"
         description="Across our diverse community - spanning industry players (from startups to large corporations), academia,
               standardization and certification bodies - we harness cutting-edge simulation and AI technologies to fuel
-              data-driven innovation. ENVITED-X builds a federated and secure data infrastructure, whereby data are
-              shared, with users retaining control over their data access and usage"
+              data-driven innovation. ENVITED-X builds a federated and secure data infrastructure, whereby data is
+              shared, with users retaining control over their data access and usage."
         backgroundImage="/images/community.jpg"
       />
       <div>
@@ -182,8 +182,8 @@ export default async function Index() {
                   ensuring alignment with the federation’s objectives, rules, and standards.
                 </p>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                  As the central governing entity, the ASCS association coordinates the actions of all participants,
-                  ensuring alignment with the federation’s objectives, rules, and standards.
+                  The federation is structured in several interconnected layers, each responsible for specific aspects
+                  of governance, data sharing, and technical operations:
                 </p>
                 <ul className="mt-6 text-lg leading-8 text-gray-600 ps-5 space-y-4 list-disc list-inside">
                   <li>

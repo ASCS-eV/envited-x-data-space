@@ -5,15 +5,15 @@ import { PageHeader } from '../../modules/PageHeader'
 
 const features = [
   {
-    name: 'Facilitate seamless data exchange',
+    name: 'Facilitate seamless exchange',
     description:
-      'Facilitate seamless data exchange and services between key stakeholders, enabling a rich environment where mobility simulations are powered by high-quality data.',
+      'Facilitate seamless exchange of data and services between key stakeholders, creating a rich environment where mobility simulations are powered by high-quality data.',
     icon: CloudArrowUpIcon,
   },
   {
     name: 'Foster collaboration',
     description:
-      'Foster collaborationbetween industry leaders, researchers, and innovators to address complex mobility challenges through new data-driven business cases.',
+      'Foster collaboration between industry leaders, researchers, and innovators to address complex mobility challenges through new data-driven business cases.',
     icon: LockClosedIcon,
   },
   {
@@ -48,10 +48,9 @@ export default async function Index() {
       <PageHeader
         heading="Mission"
         title="Reinventing mobility"
-        description="All the data available on the platform are harmonised to the latest standards and can be easily used in
-              your virtual development or testing process. We are providing all partners full transparency. Use the
-              search mask and meta tags to find your desired data and get an good overview about our OpenCRG-,
-              OpenDrive-, OpenSceneGraph- and unity-files as well as software tools"
+        description="Automated, electric and software-defined vehicles are revolutionizing transportation, enabling innovative mobility solutions. 
+        These systems rely heavily on sensing and interacting with their environment. Data-driven simulation across departments and company borders 
+        manages increasing product complexity, opens new solution spaces, and accelerates time-to-market."
         backgroundImage="/images/mission.jpg"
       />
       <div className="relative isolate overflow-hidden bg-gradient-to-b from-blue-900/20 pt-14">
@@ -127,7 +126,7 @@ export default async function Index() {
             </p>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              <Button href={`/members`}>To our community</Button>
+              <Button href={`/community`}>To our community</Button>
             </p>
           </div>
         </div>

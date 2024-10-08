@@ -35,7 +35,7 @@ const sections = [
   {
     name: 'Benefits',
     features: [
-      { name: 'Organization visability', tiers: { Community: true, Association: true } },
+      { name: 'Organization visibility', tiers: { Community: true, Association: true } },
       { name: 'Explore data & service offers', tiers: { Community: true, Association: true } },
       { name: 'Consume data & services', tiers: { Community: 'Limited', Association: 'Unlimited' } },
       { name: 'Provide data & services', tiers: { Community: 'Limited', Association: 'Unlimited' } },
@@ -43,16 +43,16 @@ const sections = [
       { name: 'Contribute to standards, metrics and labels', tiers: { Community: false, Association: true } },
       { name: 'Define architecture and rules', tiers: { Community: false, Association: true } },
       { name: 'Define governance and policy', tiers: { Community: false, Association: true } },
+      { name: 'Access to exclusive ENVITED member activities', tiers: { Community: false, Association: true } },
     ],
   },
   {
-    name: 'Feature development',
+    name: 'Future development',
     features: [
-      { name: 'Open-Source contribution', tiers: { Community: false, Association: true } },
+      { name: 'Open-Source contribution', tiers: { Community: true, Association: true } },
       { name: 'Work groups engagement', tiers: { Community: false, Association: true } },
       { name: 'Shape the roadmap', tiers: { Community: false, Association: true } },
       { name: 'Voting and decision rights', tiers: { Community: false, Association: true } },
-      { name: 'Membership ASCS e.V. and ENVITED research cluster', tiers: { Community: false, Association: true } },
     ],
   },
 ]
@@ -108,7 +108,7 @@ export default async function Index() {
                     </p>
                     <div className="mt-8">
                       <Button href={'#'} type={ButtonType.block}>
-                        Join us
+                        Start free
                       </Button>
                     </div>
                   </div>
@@ -124,8 +124,8 @@ export default async function Index() {
                       work groups, and policies.
                     </p>
                     <div className="mt-8">
-                      <Button href={'#'} type={ButtonType.block}>
-                        Join us
+                      <Button href={'https://asc-s.de/en/becoming-a-member'} type={ButtonType.block}>
+                        Learn more
                       </Button>
                     </div>
                   </div>
@@ -354,9 +354,14 @@ export default async function Index() {
             </h3>
             <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
               <p className="text-lg leading-8 text-gray-400">
-              At ENVITED-X, trust is the foundation of our community. We value collaboration, transparency, and security, which is why we developed DEMIM — our Decentralized Member Identity Management. 
-              In the ENVITED-X data space, verified digital identities are your key to secure access. Each identity is decentralized and blockchain-powered, ensuring that only authorized participants can log in and interact within the ecosystem. 
-              Once your company's digital identity and those of your employees are verified, you can use them for seamless and secure login. This ensures that every user accessing the data space is authenticated, protecting the integrity of the ecosystem and enabling transparent, trustworthy collaboration.
+                At ENVITED-X, trust is the foundation of our community. We value collaboration, transparency, and
+                security, which is why we developed DEMIM — our Decentralized Member Identity Management. In the
+                ENVITED-X data space, verified digital identities are your key to secure access. Each identity is
+                decentralized and blockchain-powered, ensuring that only authorized participants can log in and interact
+                within the ecosystem. Once your company's digital identity and those of your employees are verified, you
+                can use them for seamless and secure login. This ensures that every user accessing the data space is
+                authenticated, protecting the integrity of the ecosystem and enabling transparent, trustworthy
+                collaboration.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
                 <Button href={'https://identity.ascs.digital/'} colorScheme={ColorScheme.dark}>

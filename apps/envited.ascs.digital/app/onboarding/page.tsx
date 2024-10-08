@@ -10,7 +10,7 @@ const tiers = [
     id: 'tier-community',
     href: '#',
     featured: false,
-    description: 'All your essential business finances, taken care of.',
+    description: '',
     price: { monthly: '$15', annually: '$144' },
     mainFeatures: ['Basic invoicing', 'Easy to use accounting', 'Mutli-accounts'],
   },
@@ -19,7 +19,7 @@ const tiers = [
     id: 'tier-association',
     href: '#',
     featured: true,
-    description: 'The best financial services for your thriving business.',
+    description: '',
     price: { monthly: '$60', annually: '$576' },
     mainFeatures: [
       'Advanced invoicing',
@@ -33,26 +33,26 @@ const tiers = [
 ]
 const sections = [
   {
-    name: 'Benefits',
+    name: 'Data & Service Access and Contribution',
     features: [
       { name: 'Organization visibility', tiers: { Community: true, Association: true } },
       { name: 'Explore data & service offers', tiers: { Community: true, Association: true } },
       { name: 'Consume data & services', tiers: { Community: 'Limited', Association: 'Unlimited' } },
       { name: 'Provide data & services', tiers: { Community: 'Limited', Association: 'Unlimited' } },
-      { name: 'Apply standards, metrics and labels', tiers: { Community: 'Limited', Association: 'Unlimited' } },
-      { name: 'Contribute to standards, metrics and labels', tiers: { Community: false, Association: true } },
-      { name: 'Define architecture and rules', tiers: { Community: false, Association: true } },
-      { name: 'Define governance and policy', tiers: { Community: false, Association: true } },
-      { name: 'Access to exclusive association member activities', tiers: { Community: false, Association: true } },
+      { name: 'Benefit from standards, metrics and labels', tiers: { Community: 'Limited', Association: 'Unlimited' } },
+      { name: 'Open-Source contribution', tiers: { Community: true, Association: true } },
     ],
   },
   {
-    name: 'Future development',
+    name: 'Governance and Organizational Influence',
     features: [
-      { name: 'Open-Source contribution', tiers: { Community: true, Association: true } },
-      { name: 'Work groups engagement', tiers: { Community: false, Association: true } },
-      { name: 'Shape the roadmap', tiers: { Community: false, Association: true } },
+      { name: 'Access to exclusive association member activities', tiers: { Community: 'Limited', Association: true } },
+      { name: 'Shape the ENVITED-X roadmap', tiers: { Community: false, Association: true } },
       { name: 'Voting and decision rights', tiers: { Community: false, Association: true } },
+      { name: 'Define architecture and rules', tiers: { Community: false, Association: true } },
+      { name: 'Define governance and policy', tiers: { Community: false, Association: true } },
+      { name: 'Work groups engagement', tiers: { Community: false, Association: true } },
+      { name: 'Contribute to standards, metrics and labels', tiers: { Community: false, Association: true } },
     ],
   },
 ]

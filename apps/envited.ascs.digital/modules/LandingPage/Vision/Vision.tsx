@@ -38,7 +38,7 @@ export const Vision = () => {
               {t('[Heading] empowering innovators')}
             </h3>
             <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
-              <p className="text-lg leading-8 text-gray-600">{t('[Description] empowering innovators')}</p>
+              <p className="text-lg leading-8 text-gray-700">{t('[Description] empowering innovators')}</p>
               <div className="mt-10 flex items-center gap-x-6">
                 <Button href={'/mission'}>{t('[Button] learn more')}</Button>
               </div>

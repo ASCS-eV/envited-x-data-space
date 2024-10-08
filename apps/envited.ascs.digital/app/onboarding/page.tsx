@@ -43,7 +43,7 @@ const sections = [
       { name: 'Contribute to standards, metrics and labels', tiers: { Community: false, Association: true } },
       { name: 'Define architecture and rules', tiers: { Community: false, Association: true } },
       { name: 'Define governance and policy', tiers: { Community: false, Association: true } },
-      { name: 'Access to exclusive ENVITED member activities', tiers: { Community: false, Association: true } },
+      { name: 'Access to exclusive association member activities', tiers: { Community: false, Association: true } },
     ],
   },
   {

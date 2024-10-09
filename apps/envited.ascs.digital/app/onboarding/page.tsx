@@ -8,10 +8,12 @@ const tiers = [
   {
     name: 'Community',
     id: 'tier-community',
+    featured: false,
   },
   {
     name: 'Association',
     id: 'tier-association',
+    featured: true,
   },
 ]
 const sections = [
@@ -142,7 +144,6 @@ export default async function Index() {
                       >
                         {tier.name}
                       </h3>
-                      <p className="mt-1 text-sm leading-6 text-gray-600">{tier.description}</p>
                     </div>
 
                     <div className="mt-10 space-y-10">
@@ -231,7 +232,6 @@ export default async function Index() {
                       >
                         {tier.name}
                       </p>
-                      <p className="mt-1 text-sm leading-6 text-gray-600">{tier.description}</p>
                     </div>
                   </div>
                 ))}

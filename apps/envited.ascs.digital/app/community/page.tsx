@@ -183,9 +183,11 @@ export default async function Index() {
                 <p className="mt-6 text-md leading-8 text-gray-700">
                   Learn more about our onboarding process and how you can benefit from this federated structure.
                 </p>
-                <Button href={`/onboarding`} type={ButtonType.default}>
-                  Join us
-                </Button>
+                <div className="mt-6">
+                  <Button href={`/onboarding`} type={ButtonType.default}>
+                    Join us
+                  </Button>
+                </div>
               </div>
               <img
                 alt=""

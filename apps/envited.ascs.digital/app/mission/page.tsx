@@ -146,7 +146,7 @@ export default async function Index() {
               community.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button href={'/members'} colorScheme={ColorScheme.dark}>
+              <Button href={'/community'} colorScheme={ColorScheme.dark}>
                 Meet our community
               </Button>
             </div>

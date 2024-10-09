@@ -8,27 +8,10 @@ const tiers = [
   {
     name: 'Community',
     id: 'tier-community',
-    href: '#',
-    featured: false,
-    description: '',
-    price: { monthly: '$15', annually: '$144' },
-    mainFeatures: ['Basic invoicing', 'Easy to use accounting', 'Mutli-accounts'],
   },
   {
     name: 'Association',
     id: 'tier-association',
-    href: '#',
-    featured: true,
-    description: '',
-    price: { monthly: '$60', annually: '$576' },
-    mainFeatures: [
-      'Advanced invoicing',
-      'Easy to use accounting',
-      'Mutli-accounts',
-      'Tax planning toolkit',
-      'VAT & VATMOSS filing',
-      'Free bank transfers',
-    ],
   },
 ]
 const sections = [
@@ -107,7 +90,7 @@ export default async function Index() {
                       collaboration.
                     </p>
                     <div className="mt-8">
-                      <Button href={'#'} type={ButtonType.block}>
+                      <Button href={'#demim'} type={ButtonType.block}>
                         Start free
                       </Button>
                     </div>
@@ -124,7 +107,7 @@ export default async function Index() {
                       work groups, and policies.
                     </p>
                     <div className="mt-8">
-                      <Button href={'https://asc-s.de/en/becoming-a-member'} type={ButtonType.block}>
+                      <Button href={'https://asc-s.de/en/becoming-a-member'} type={ButtonType.block} target="_blank">
                         Learn more
                       </Button>
                     </div>
@@ -344,6 +327,7 @@ export default async function Index() {
       </div>
       <div className="relative isolate overflow-hidden bg-gradient-to-b to-gray-900 from-blue-900/40 pt-14 bg-gray-900">
         <div
+          id="demim"
           aria-hidden="true"
           className="absolute inset-y-0 right-1/2 -z-10 -mr-96 w-[200%] origin-top-right skew-x-[-30deg] bg-gray-900 shadow-xl shadow-blue-900 ring-1 ring-blue-900 sm:-mr-80 lg:-mr-96"
         />
@@ -352,19 +336,23 @@ export default async function Index() {
             <h3 className="max-w-2xl text-4xl font-bold tracking-tight text-white sm:text-6xl lg:col-span-2 xl:col-auto">
               Decentralized Member Identity Management
             </h3>
-            <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
-              <p className="text-lg leading-8 text-gray-400">
+            <div className="max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
+              <p className="mt-6 text-lg leading-8 text-gray-400">
                 At ENVITED-X, trust is the foundation of our community. We value collaboration, transparency, and
-                security, which is why we developed DEMIM — our Decentralized Member Identity Management. In the
-                ENVITED-X data space, verified digital identities are your key to secure access. Each identity is
+                security, which is why we developed DEMIM — our Decentralized Member Identity Management.
+              </p>
+              <p className="mt-6 text-lg leading-8 text-gray-400">
+                In the ENVITED-X data space, verified digital identities are your key to secure access. Each identity is
                 decentralized and blockchain-powered, ensuring that only authorized participants can log in and interact
-                within the ecosystem. Once your company's digital identity and those of your employees are verified, you
-                can use them for seamless and secure login. This ensures that every user accessing the data space is
-                authenticated, protecting the integrity of the ecosystem and enabling transparent, trustworthy
-                collaboration.
+                within the ecosystem.
+              </p>
+              <p className="mt-6 text-lg leading-8 text-gray-400">
+                Once your company's digital identity and those of your employees are verified, you can use them for
+                seamless and secure login. This ensures that every user accessing the data space is authenticated,
+                protecting the integrity of the ecosystem and enabling transparent, trustworthy collaboration.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
-                <Button href={'https://identity.ascs.digital/'} colorScheme={ColorScheme.dark}>
+                <Button href={'https://identity.ascs.digital/'} colorScheme={ColorScheme.dark} target="_blank">
                   Create your digital identity
                 </Button>
               </div>

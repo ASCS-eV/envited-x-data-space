@@ -13,7 +13,7 @@ export const SimulationData = () => {
             <img
               alt=""
               src="/images/AdobeStock_571252297_metamorworks.jpg"
-              className="relative overflow-hidden rounded-3xl lg:max-w-lg h-full object-cover"
+              className="relative overflow-hidden rounded-3xl lg:max-w-lg md:h-full object-cover"
             />
             <div className="text-base leading-7 lg:max-w-lg">
               <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">

@@ -26,7 +26,7 @@ export const ProfileSchema = z.object({
     .object({
       name: z.string().max(100),
       type: z.string().max(100),
-      functionalities: z.string().max(100),
+      functionalities: z.string().max(1000),
       supportedTools: z.string().max(200),
       supportedStandards: z.string().max(200),
     })

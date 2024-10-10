@@ -77,7 +77,7 @@ export const _getProfile =
       const connection = await db()
       const [user] = await connection.getUserById(session.user.id)
       const [issuer] = await connection.getUserById(user.issuerId)
-      const [profile] = await connection.getProfileByName(
+      const profile = await connection.getProfileByName(
         isPrincipal(session) || isFederator(session) ? user.name : issuer.name,
       )
 

@@ -1,3 +1,5 @@
+import { ButtonType } from 'apps/envited.ascs.digital/common/types'
+import { Button } from 'apps/envited.ascs.digital/modules/Button'
 import Link from 'next/link'
 
 import { getPublishedProfiles } from '../../common/serverActions'
@@ -72,7 +74,7 @@ export default async function Index() {
                 Collaboration and trust are the pillars of our ENVITED-X federation
               </h3>
               <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
-                <p className="text-lg leading-8 text-gray-600">
+                <p className="text-lg leading-8 text-gray-700">
                   Collaboration and trust are the pillars of our ENVITED-X federation, where we believe that collective
                   efforts lead to greater achievements. High-quality data and services form the foundation for future
                   development processes and operating models. To support this, we ensure transparency and governance to
@@ -100,30 +102,6 @@ export default async function Index() {
         </div>
       </div>
       <main>
-        {/* <div className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
-          <div className="mx-auto max-w-2xl pb-20 lg:max-w-7xl py-24">
-            <div className="max-w-4xl px-6 lg:px-0">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Collaboration and trust are the pillars of our ENVITED-X federation
-              </h2>
-              <p className="mt-6 text-lg leading-8 text-gray-600">
-                Across our diverse community - spanning industry players (from startups to large corporations),
-                academia, standardization and certification bodies - we harness cutting-edge simulation and AI
-                technologies to fuel data-driven innovation. ENVITED-X builds a federated and secure data
-                infrastructure, whereby data are shared, with users retaining control over their data access and usage.
-                <br />
-                <br />
-                Collaboration and trust are the pillars of our ENVITED-X federation, where we believe that collective
-                efforts lead to greater achievements. High-quality data and services form the foundation for future
-                development processes and operating models. To support this, we ensure transparency and governance to a
-                unique pool of data and services. By connecting providers, integrators, and evaluators with consumers,
-                we enable the creation of innovative, forward-thinking business models with a clear technical focus.
-              </p>
-              <h3 className="text-xl font-bold tracking-tight text-gray-900 mt-5 mb-5">Our community members</h3>
-            </div>
-            <Members members={profiles} />
-          </div>
-        </div> */}
         <div className="bg-gray-900 py-24 sm:py-32 relative overflow-hidden">
           <div className="absolute top-0 inset-x-0 h-[37.5rem] bg-grid-slate-900/[0.04] bg-pattern [mask-image:linear-gradient(0deg,transparent,black)]"></div>
           <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
@@ -145,7 +123,6 @@ export default async function Index() {
                     key={feature.name}
                     className="relative rounded-lg overflow-hidden group transition-all ease-in-out duration-300 shadow-xl shadow-blue-900/5 ring-1 ring-gray-800 h-52 bg-gradient-to-b to-gray-900 from-blue-900/40 bg-gray-900"
                   >
-                    {/* <div className="relative flex justify-center items-center p-6 bg-gray-900 rounded-lg h-full after:block after:absolute after:top-0 after:-right-[2.5rem] after:w-[15rem] after:-mr-half after:h-full after:-skew-x-12 after:bg-blue-900 after:opacity-5 after:z-0 hover:after:w-[40vw] after:transition-all after:ease-in-out after:duration-300"> */}
                     <div className="relative flex justify-center items-center p-6 rounded-lg h-full transition-all ease-in-out duration-300">
                       <div
                         aria-hidden="true"
@@ -167,25 +144,21 @@ export default async function Index() {
           </div>
         </div>
         <div className="relative isolate overflow-hidden bg-white pt-14">
-          {/* <div
-            aria-hidden="true"
-            className="absolute inset-y-0 right-1/2 -z-10 -mr-96 w-[200%] origin-top-right skew-x-[-30deg] bg-white shadow-xl shadow-blue-900/10 ring-1 ring-blue-900/5 sm:-mr-80 lg:-mr-96"
-          /> */}
           <div className="mx-auto max-w-7xl px-6 py-32 sm:py-40 lg:px-8">
             <div className="mx-auto max-w-2xl lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:gap-x-16 lg:gap-y-6 xl:grid-cols-1 xl:grid-rows-1 xl:gap-x-8">
               <h3 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 lg:col-span-2 xl:col-auto">
                 Federation
               </h3>
               <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
-                <p className="text-lg leading-8 text-gray-600">
+                <p className="text-md leading-8 text-gray-700">
                   As the central governing entity, the ASCS association coordinates the actions of all participants,
                   ensuring alignment with the federation’s objectives, rules, and standards.
                 </p>
-                <p className="mt-6 text-lg leading-8 text-gray-600">
+                <p className="mt-6 text-lg leading-8 text-gray-700">
                   The federation is structured in several interconnected layers, each responsible for specific aspects
                   of governance, data sharing, and technical operations:
                 </p>
-                <ul className="mt-6 text-lg leading-8 text-gray-600 ps-5 space-y-4 list-disc list-inside">
+                <ul className="mt-6 text-md leading-8 text-gray-700 ps-5 space-y-4 list-disc list-inside">
                   <li>
                     <strong>Governance Layer</strong>: Oversees the legal, regulatory, and compliance aspects. This
                     includes setting strategies and policies on onboarding, data access, usage, intellectual property,
@@ -207,13 +180,14 @@ export default async function Index() {
                     reliable, scalable, and secure.
                   </li>
                 </ul>
-                <p className="mt-6 text-lg leading-8 text-gray-600">
-                  Learn more about our onboarding process and how you can benefit from this federated structure.{' '}
-                  <Link href={`/onboarding`} className="underline text-blue cursor-pointer">
-                    Join us
-                  </Link>
-                  .
+                <p className="mt-6 text-md leading-8 text-gray-700">
+                  Learn more about our onboarding process and how you can benefit from this federated structure.
                 </p>
+                <div className="mt-6">
+                  <Button href={`/onboarding`} type={ButtonType.default}>
+                    Join us
+                  </Button>
+                </div>
               </div>
               <img
                 alt=""
@@ -224,54 +198,6 @@ export default async function Index() {
           </div>
           <div className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-white sm:h-32" />
         </div>
-        {/*         
-        <div className="relative flex items-center justify-center h-[500px] overflow-hidden">
-          <div className="absolute top-0 z-10 h-full w-full bg-black opacity-60" />
-          <img src="/mission.jpg" alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />
-        </div>
-        <div className="mx-auto max-w-2xl px-4 pb-20 sm:px-6 lg:max-w-7xl lg:px-8 bg-white py-24">
-          <div className="max-w-4xl px-6 lg:px-0">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Federation</h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              As the central governing entity, the ASCS association coordinates the actions of all participants,
-              ensuring alignment with the federation’s objectives, rules, and standards.
-            </p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              The federation is structured in several interconnected layers, each responsible for specific aspects of
-              governance, data sharing, and technical operations:
-            </p>
-            <ul className="mt-6 text-lg leading-8 text-gray-600 ps-5 space-y-4 list-disc list-inside">
-              <li>
-                <strong>Governance Layer</strong>: Oversees the legal, regulatory, and compliance aspects. This includes
-                setting strategies and policies on onboarding, data access, usage, intellectual property, and resolving
-                conflicts.
-              </li>
-              <li>
-                <strong>Data Space Management Layer</strong>: Focuses on defining the rules and processes for the
-                operation of the ENVITED-X data space, including data interoperability, data lifecycle management, and
-                metadata standards.
-              </li>
-              <li>
-                <strong>Service and Application Layer</strong>: Ensures that the technical tools and services are
-                interoperable, secure, and standardized. This could include defining APIs and creating tools for data
-                access, sharing, visualization, qualification and labeling.
-              </li>
-              <li>
-                <strong>Infrastructure Layer</strong>: Responsible for the underlying cloud and DLT infrastructure that
-                supports the federation. It ensures that computing resources, storage, and network services are
-                reliable, scalable, and secure.
-              </li>
-            </ul>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Learn more about our onboarding process and how you can benefit from this federated structure.{' '}
-              <Link href={`/onboarding`} className="underline text-blue cursor-pointer">
-                Join us
-              </Link>
-              .
-            </p>
-          </div>
-        </div>
-         */}
       </main>
     </>
   )

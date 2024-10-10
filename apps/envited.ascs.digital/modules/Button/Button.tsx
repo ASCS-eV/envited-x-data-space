@@ -1,15 +1,23 @@
-import { ButtonType, ColorScheme } from 'apps/envited.ascs.digital/common/types'
 import Link from 'next/link'
 import React, { FC } from 'react'
+
+import { ButtonType, ColorScheme } from '../../common/types'
 
 interface Props {
   href: string
   children: React.ReactNode
+  target?: string
   type?: ButtonType
   colorScheme?: ColorScheme
 }
 
-export const Button: FC<Props> = ({ children, href, type = ButtonType.default, colorScheme = ColorScheme.light }) => {
+export const Button: FC<Props> = ({
+  children,
+  href,
+  target = '',
+  type = ButtonType.default,
+  colorScheme = ColorScheme.light,
+}) => {
   const buttonStyleMap = {
     [ButtonType.default]: '',
     [ButtonType.block]: 'block w-full text-center',
@@ -27,6 +35,7 @@ export const Button: FC<Props> = ({ children, href, type = ButtonType.default, c
   return (
     <Link
       href={href}
+      target={target}
       className={`${buttonStyleMap[type]} ${buttonColorSchemeMap[colorScheme]} relative rounded-md px-5 py-2.5 overflow-hidden group bg-blue-900 hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-800 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-800 transition-all ease-out duration-300`}
     >
       <span

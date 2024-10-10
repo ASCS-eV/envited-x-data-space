@@ -12,6 +12,7 @@
   "[Label] about description": "Provide a brief summary of your company’s mission, key services, and expertise in the mobility sector. Focus on what sets you apart and how you contribute to the data space ecosystem. Max 500 characters.",
   "[Label] logo": "Logo",
   "[Button] change": "Change",
+  "[Button] add logo": "Add logo",
   "[Label] select new logo": "Select new logo",
   "[Description] select new logo": "Upload your company logo in PNG, JPG, GIF, or SVG format. Max file size: 10 MB. For best results, use a high-resolution image with a transparent background (for PNG or SVG) and a minimum size of 300x300 pixels.",
   "[Label] business categories": "Business categories",

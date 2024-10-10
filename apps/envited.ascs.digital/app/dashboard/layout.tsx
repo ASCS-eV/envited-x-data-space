@@ -61,7 +61,7 @@ export default async function Template({ children }: { children: React.ReactNode
             <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
               <div className="mt-0 min-w-0 flex-1 sm:hidden md:block">
                 <h1 className="truncate text-2xl font-bold text-white">{profile.name}</h1>
-                <Link className="text-sm underline text-white" href={`/members/${profile.slug}`}>
+                <Link className="text-sm underline text-white" href={`/community/${profile.slug}`}>
                   View profile
                 </Link>
               </div>

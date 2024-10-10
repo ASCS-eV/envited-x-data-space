@@ -172,6 +172,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                   render={({ field: { ref, value, ...field } }) => (
                     <Checkboxes
                       label={t('[Label] business categories')}
+                      description={t('[Description] business categories')}
                       inputRef={ref}
                       items={businessCategories}
                       values={value}
@@ -210,6 +211,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     render={({ field: { ref, onChange, value, ...field } }) => (
                       <DragAndDropField
                         label={t('[Label] select new logo')}
+                        description={t('[Description] select new logo')}
                         {...field}
                         inputRef={ref}
                         value={value?.name}
@@ -238,6 +240,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                   render={({ field: { ref, ...field } }) => (
                     <TextField
                       label={t('[Label] website')}
+                      description={t('[Description] website')}
                       inputRef={ref}
                       {...field}
                       error={pathOr('', ['website', 'message'])(errors)}
@@ -427,6 +430,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                       render={({ field: { ref, ...field } }) => (
                         <TextField
                           label={t('[Label] offering name')}
+                          description={t('[Description] offering name')}
                           inputRef={ref}
                           {...field}
                           error={pathOr('', ['offerings', index, 'name', 'message'])(errors)}

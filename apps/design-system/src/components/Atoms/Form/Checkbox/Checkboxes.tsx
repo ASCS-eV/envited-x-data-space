@@ -12,7 +12,7 @@ interface CheckboxProps {
   name: string
   values: string[]
   label: string | ReactElement<any, string | JSXElementConstructor<any>>
-  description?: string
+  description?: string | ReactElement<any, string | JSXElementConstructor<any>>
   error?: string
   inputRef: RefCallBack
   handleCheckbox: (id: string) => any
@@ -56,11 +56,6 @@ export const Checkboxes: FC<CheckboxProps> = ({
             <label htmlFor={`${name}-${id}`} className="font-medium leading-6 text-gray-900 dark:text-white">
               {itemName}
             </label>
-            {!isEmpty(itemDescription) && (
-              <p id={`${name}-${id}-description`} className="text-gray-500">
-                {itemDescription}
-              </p>
-            )}
           </div>
         </div>
       ))(items)}

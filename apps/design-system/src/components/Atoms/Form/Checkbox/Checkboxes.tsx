@@ -35,7 +35,6 @@ export const Checkboxes: FC<CheckboxProps> = ({
     <label htmlFor={name} className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
       {label}
     </label>
-    {!isEmpty(description) && <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">{description}</p>}
     <div className="grid gap-4 grid-cols-3 mt-2">
       {map(({ id, name: itemName, description: itemDescription }: CheckboxItem) => (
         <div key={id} className="relative flex items-start">
@@ -60,6 +59,7 @@ export const Checkboxes: FC<CheckboxProps> = ({
         </div>
       ))(items)}
     </div>
+    {!isEmpty(description) && <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">{description}</p>}
     {!isEmpty(error) && <p className="mt-3 text-sm leading-6 text-red-600 dark:text-red-400">{error}</p>}
   </>
 )

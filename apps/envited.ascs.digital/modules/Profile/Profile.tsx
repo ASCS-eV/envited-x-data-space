@@ -10,7 +10,7 @@ import {
   TextareaField,
 } from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { append, chain, dissoc, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
+import { append, chain, dissoc, equals, includes, isEmpty, isNil, pathOr, prop, propOr, reject } from 'ramda'
 import { FC, useState } from 'react'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
@@ -65,7 +65,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
   const { t } = useTranslation('Profile')
   const { error, success } = useNotification()
 
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(isEmpty(propOr('', 'logo')(profile)))
   const { name, logo } = profile
 
   const {
@@ -117,6 +117,8 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
     try {
       const formData = new FormData()
 
+      console.log(data)
+
       if (data.file) {
         formData.append('file', data.file)
       }
@@ -153,6 +155,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                 <Controller
                   name="description"
                   control={control}
+                  rules={{ required: true }}
                   render={({ field: { ref, ...field } }) => (
                     <TextareaField
                       label={t('[Label] about')}
@@ -169,6 +172,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                 <Controller
                   name="businessCategories"
                   control={control}
+                  rules={{ required: true }}
                   render={({ field: { ref, value, ...field } }) => (
                     <Checkboxes
                       label={t('[Label] business categories')}
@@ -202,6 +206,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     {!isNil(logo) ? t('[Button] change') : t('[Button] add logo')}
                   </button>
                 </div>
+                {/* {!isEmpty(pathOr('', ['file', 'message'])(errors)) && <p className="mt-3 text-sm leading-6 text-red-600 dark:text-red-400">{pathOr('', ['file', 'message'])(errors)}</p>} */}
                 {isOpen && (
                   <Controller
                     name="file"

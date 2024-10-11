@@ -169,7 +169,7 @@ export const Member: FC<MemberProps> = ({ member }) => {
                               {t('[Heading] offering supported tools')}
                             </dt>
                             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 space-x-2">
-                              {map((item: string) => <Pill key={item}>{item}</Pill>)(supportedTools.split(',') as [])}
+                              {map((item: string) => <Pill key={item}>{item}</Pill>)(supportedTools.split(';') as [])}
                             </dd>
                           </div>
                           <div className="border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
@@ -178,7 +178,7 @@ export const Member: FC<MemberProps> = ({ member }) => {
                             </dt>
                             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 space-x-2">
                               {map((item: string) => <Pill key={item}>{item}</Pill>)(
-                                supportedStandards.split(',') as [],
+                                supportedStandards.split(';') as [],
                               )}
                             </dd>
                           </div>

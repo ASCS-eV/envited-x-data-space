@@ -2,10 +2,10 @@
 
 import { MemberProfileCard } from '@envited-marketplace/design-system'
 import Link from 'next/link'
+import { isNil } from 'ramda'
 import React, { FC } from 'react'
 
 import { getImageUrl } from '../../common/utils'
-import { isNil } from 'ramda'
 
 interface ItemProps {
   name: string
@@ -14,9 +14,11 @@ interface ItemProps {
 }
 
 export const GridItem: FC<ItemProps> = ({ name, slug, logo }) => {
-  return !isNil(logo) && (
-    <Link href={`/community/${slug}`}>
-      <MemberProfileCard title={name} logoUri={getImageUrl(logo)} />
-    </Link>
+  return (
+    !isNil(logo) && (
+      <Link href={`/community/${slug}`}>
+        <MemberProfileCard title={name} logoUri={getImageUrl(logo)} />
+      </Link>
+    )
   )
 }

@@ -1,5 +1,6 @@
 import { CheckIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { BuildingOffice2Icon, EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline'
+import { AssociationMemberIcon, CommunityMemberIcon } from 'apps/envited.ascs.digital/modules/Icons'
 import { is, prop } from 'ramda'
 
 import { ButtonType, ColorScheme } from '../../common/types'
@@ -46,7 +47,7 @@ const sections = [
 export default async function Index() {
   return (
     <>
-      <div className="isolate relative overflow-hidden bg-gray-900 bg-cover bg-center bg-[url('/images/onboarding.jpg')]">
+      <div className="isolate relative overflow-hidden bg-gray-900 bg-cover bg-center bg-[url('/images/AdobeStock_811521204_ZeNDaY.jpeg')]">
         <div className="absolute top-0 -z-10 h-full w-full bg-gray-900 opacity-90" />
         <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-48 lg:px-8">
           <div className="mx-auto max-w-5xl">
@@ -86,7 +87,9 @@ export default async function Index() {
                   <div>
                     <h3 className="text-base font-semibold leading-7 text-blue-900">Community member</h3>
                     <div className="mt-4 flex items-center justify-center gap-x-2 bg-gray-200 h-48">
-                      <img alt="" src="/images/community-member.png" />
+                      <div className="w-24 h-24">
+                        <CommunityMemberIcon />
+                      </div>
                     </div>
                     <p className="mt-6 text-base leading-7 text-gray-600">
                       Explore, share, and consume data with limited services. Be visible to organizations seeking
@@ -103,7 +106,9 @@ export default async function Index() {
                   <div>
                     <h3 className="text-base font-semibold leading-7 text-blue-900">Association member</h3>
                     <div className="mt-4 flex items-center justify-center gap-x-2 bg-gray-200 h-48">
-                      <img alt="" src="/images/association-member.png" />
+                      <div className="w-24 h-24">
+                        <AssociationMemberIcon />
+                      </div>
                     </div>
                     <p className="mt-6 text-base leading-7 text-gray-600">
                       Get full access to data and services, actively contribute, and have decision rights in governance,
@@ -422,7 +427,10 @@ export default async function Index() {
               </p>
               <div className="mt-10 flex items-center gap-x-6">
                 <Button href={'https://identity.ascs.digital/'} colorScheme={ColorScheme.dark} target="_blank">
-                  Create your digital identity
+                  Ready to join?
+                </Button>
+                <Button href={'/about-us'} colorScheme={ColorScheme.dark}>
+                  More about us
                 </Button>
               </div>
             </div>

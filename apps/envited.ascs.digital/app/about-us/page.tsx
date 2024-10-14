@@ -8,13 +8,8 @@ export default async function Index() {
       <PageHeader
         heading="About us"
         title="ASCS association"
-        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-              et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-              aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-              gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
-        backgroundImage="/images/about-us.jpg"
+        description="The ENVITED-X data space is operated by the Automotive Solution Center for Simulation e.V. (ASCS), a non-profit association founded in Germany in 2008. Our mission is to use computer simulation, AI, and high-performance computing to advance mobility, making it faster, more efficient, and sustainable. By focusing on simulation, we accelerate research & development, optimize resource use, and support eco-friendly solutions. As multiplier, catalyst and accelerator in the mobility sector, ASCS connects stakeholders, providing a platform for collaboration, knowledge exchange, and innovation. Learn more about ASCS's work and membership benefits on our website [Link to www.asc-s.de]."
+        backgroundImage="/images/AdobeStock_824054193_goami.jpeg"
       />
       <div className="relative isolate overflow-hidden bg-gradient-to-b from-blue-900/20 pt-14">
         <div
@@ -24,42 +19,32 @@ export default async function Index() {
         <div className="mx-auto max-w-7xl px-6 pb-0 pt-10 sm:py-40 lg:px-8">
           <div className="mx-auto max-w-2xl lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:gap-x-16 lg:gap-y-6 xl:grid-cols-1 xl:grid-rows-1 xl:gap-x-8">
             <h3 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl lg:col-span-2 xl:col-auto">
-              ASCS association
+              ENVITED research cluster
             </h3>
             <div className="max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
               <p className="mt-6 text-lg leading-8 text-gray-700">
-                The ENVITED-X data space is operated by the{' '}
-                <strong>Automotive Solution Center for Simulation e.V. (ASCS)</strong>, a non-profit association founded
-                in Germany in 2008. Our mission is to harness the power of{' '}
-                <strong>computer simulation, artificial intelligence, and high-performance computing</strong> to drive
-                the future of mobility by making it <strong>faster, more efficient, and more sustainable</strong>. With
-                simulation at the core, we enable quicker development cycles, optimized resource use, and
-                environmentally friendly solutions.
+                ENVITED-X is part of the ENVITED research cluster of the ASCS. The primary goal of the ENVITED research
+                cluster is to accelerate{' '}
+                <strong>research and the adoption of cutting-edge simulation technologies</strong> for the virtual
+                development of highly automated and self-driving vehicles in intermodal mobility concepts. This
+                encompasses all computer-aided and data-driven development processes, including virtual function design,
+                validation, certification, and demonstration of system components up to complete systems.
               </p>
               <p className="mt-6 text-lg leading-8 text-gray-700">
-                As an association, we leverage our expertise, resources, and network to serve as a{' '}
-                <strong>bridge and integrator</strong> across various interfaces in the mobility sector. We provide a
-                platform where simulation is at the forefront, ensuring{' '}
-                <strong>reliable knowledge is accessible</strong> and empowering all stakeholders to innovate.
+                The ENVITED research cluster is a long-term, member-driven initiative that strategically coordinates,
+                consolidates, and connects a variety of activities and projects. Members can actively participate in
+                these initiatives, using them as a valuable source of knowledge and a springboard for launching new
+                projects and collaborations.
               </p>
               <p className="mt-6 text-lg leading-8 text-gray-700">
-                Together with our members and partners, we offer Europe’s leading platform for{' '}
-                <strong>collaboration, knowledge exchange, international cooperation, and research/education</strong> in
-                the field of simulation. Our goal is to make simulation a central force in achieving the{' '}
-                <strong>sustainable mobility of the future</strong>.
-              </p>
-              <p className="mt-6 text-lg leading-8 text-gray-700">
-                Learn more about the association's tasks, activities, organizational structure, and the benefits of
-                membership by visiting the{' '}
                 <Link href="www.asc-s.de" target="_blank">
-                  ASCS e.V. website
+                  Experience more about the ENVITED reserach cluster
                 </Link>
-                .
               </p>
             </div>
             <img
               alt=""
-              src="/images/about-us.jpg"
+              src="/images/AdobeStock_682810927_Gorodenkoff.jpeg"
               className="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl bg-center object-cover sm:mt-16 lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
             />
           </div>

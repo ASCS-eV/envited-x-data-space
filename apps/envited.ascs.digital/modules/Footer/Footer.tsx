@@ -113,7 +113,7 @@ export const Footer: FC<FooterProps> = () => {
               </div>
             </div>
             <div className="grid md:gap-8 justify-end">
-              <Image src="/images/funded-eu.png" alt="ENVITED" priority height={140} width={300} />
+              <Image src="/images/BMWK-EU_gefoerdert2023_en_RGB.png" alt="ENVITED" priority height={140} width={300} />
             </div>
           </div>
         </div>

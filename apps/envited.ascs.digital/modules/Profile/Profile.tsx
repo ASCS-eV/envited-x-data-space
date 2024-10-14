@@ -6,17 +6,32 @@ import {
   DragAndDropField,
   Heading,
   LoadingIndicator,
+  SelectField,
   TextField,
   TextareaField,
 } from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { append, chain, dissoc, equals, includes, isEmpty, isNil, pathOr, prop, propOr, reject } from 'ramda'
+import {
+  append,
+  chain,
+  dissoc,
+  equals,
+  findIndex,
+  includes,
+  isEmpty,
+  isNil,
+  pathOr,
+  prop,
+  propEq,
+  propOr,
+  reject,
+} from 'ramda'
 import { FC, useState } from 'react'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { Profile as ProfileType } from '../../common/types'
+import { Profile as ProfileType, User } from '../../common/types'
 import { getImageUrl, mapIndexed } from '../../common/utils'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
@@ -31,6 +46,7 @@ interface Profiles extends ProfileType {
 interface ProfileProps {
   profile: Profiles
   businessCategories: any[]
+  users: User[]
 }
 
 interface OfferingItem {
@@ -50,9 +66,11 @@ type ProfileInputs = {
   postalCode: string
   addressLocality: string
   addressCountry: string
+  salesContact: string
   salesName: string
   salesPhone: string
   salesEmail: string
+  principalContact: string
   principalName: string
   principalPhone: string
   principalEmail: string
@@ -61,7 +79,7 @@ type ProfileInputs = {
   offerings: OfferingItem[] | []
 }
 
-export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
+export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }) => {
   const { t } = useTranslation('Profile')
   const { error, success } = useNotification()
 
@@ -72,6 +90,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
     control,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ProfileInputs>({
     resolver: zodResolver(ProfileSchema),
@@ -83,9 +102,8 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
       postalCode: propOr('', 'postalCode')(profile),
       addressLocality: propOr('', 'addressLocality')(profile),
       addressCountry: propOr('', 'addressCountry')(profile),
-      salesName: propOr('', 'salesName')(profile),
-      salesPhone: propOr('', 'salesPhone')(profile),
       salesEmail: propOr('', 'salesEmail')(profile),
+      principalContact: propOr('', 'principalContact')(profile),
       principalName: propOr('', 'principalName')(profile),
       principalPhone: propOr('', 'principalPhone')(profile),
       principalEmail: propOr('', 'principalEmail')(profile),
@@ -206,7 +224,6 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     {!isNil(logo) ? t('[Button] change') : t('[Button] add logo')}
                   </button>
                 </div>
-                {/* {!isEmpty(pathOr('', ['file', 'message'])(errors)) && <p className="mt-3 text-sm leading-6 text-red-600 dark:text-red-400">{pathOr('', ['file', 'message'])(errors)}</p>} */}
                 {isOpen && (
                   <Controller
                     name="file"
@@ -302,8 +319,30 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
               {t('[Description] principal contact')}
             </p>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div className="sm:col-span-2 sm:col-start-1">
+            <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-6 sm:col-start-1">
+                <Controller
+                  name="principalContact"
+                  control={control}
+                  render={({ field: { ref, onChange, value, ...field } }) => (
+                    <SelectField
+                      label={'Select a user'}
+                      selected={isEmpty(value) ? users[0] : users[findIndex(propEq(value, 'id'))(users)]}
+                      options={users}
+                      inputRef={ref}
+                      onChange={id => {
+                        const selected = users[findIndex(propEq(id, 'id'))(users)]
+                        onChange(id)
+                        setValue('principalName', selected.name)
+                        setValue('principalEmail', propOr('', 'email')(selected))
+                      }}
+                      {...field}
+                      error={pathOr('', ['principalContact', 'message'])(errors)}
+                    />
+                  )}
+                />
+              </div>
+              <div className="sm:col-span-3 sm:col-start-1">
                 <Controller
                   name="principalName"
                   control={control}
@@ -311,6 +350,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     <TextField
                       label={t('[Label] name')}
                       inputRef={ref}
+                      disabled
                       {...field}
                       error={pathOr('', ['principalName', 'message'])(errors)}
                     />
@@ -318,22 +358,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                 />
               </div>
 
-              <div className="sm:col-span-2">
-                <Controller
-                  name="principalPhone"
-                  control={control}
-                  render={({ field: { ref, ...field } }) => (
-                    <TextField
-                      label={t('[Label] phone')}
-                      inputRef={ref}
-                      {...field}
-                      error={pathOr('', ['principalPhone', 'message'])(errors)}
-                    />
-                  )}
-                />
-              </div>
-
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-3">
                 <Controller
                   name="principalEmail"
                   control={control}
@@ -341,6 +366,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     <TextField
                       label={t('[Label] email')}
                       inputRef={ref}
+                      disabled
                       {...field}
                       error={pathOr('', ['principalEmail', 'message'])(errors)}
                     />
@@ -358,37 +384,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
               {t('[Description] sales contact')}
             </p>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div className="sm:col-span-2 sm:col-start-1">
-                <Controller
-                  name="salesName"
-                  control={control}
-                  render={({ field: { ref, ...field } }) => (
-                    <TextField
-                      label={t('[Label] name')}
-                      inputRef={ref}
-                      {...field}
-                      error={pathOr('', ['salesName', 'message'])(errors)}
-                    />
-                  )}
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <Controller
-                  name="salesPhone"
-                  control={control}
-                  render={({ field: { ref, ...field } }) => (
-                    <TextField
-                      label={t('[Label] phone')}
-                      inputRef={ref}
-                      {...field}
-                      error={pathOr('', ['salesPhone', 'message'])(errors)}
-                    />
-                  )}
-                />
-              </div>
-
+            <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8">
               <div className="sm:col-span-2">
                 <Controller
                   name="salesEmail"

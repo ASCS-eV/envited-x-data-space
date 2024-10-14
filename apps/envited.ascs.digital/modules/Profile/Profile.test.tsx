@@ -2,6 +2,8 @@ import { render } from '@testing-library/react'
 
 import { Profile } from './Profile'
 
+jest.mock('@headlessui/react')
+
 describe('Profile', () => {
   it('should render successfully', () => {
     const profile = {
@@ -24,9 +26,12 @@ describe('Profile', () => {
       businessCategories: [{ profileId: 'USER_ID', businessCategoryId: 'CATEGORY' }],
     }
 
+    const users = [{ id: 'ID', name: 'NAME' }]
+
     const { baseElement } = render(
       <Profile
         profile={profile}
+        users={users as any}
         businessCategories={[
           {
             id: 'CATEGORY',

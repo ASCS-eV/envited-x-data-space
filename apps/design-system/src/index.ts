@@ -6,7 +6,15 @@ export { Card } from './components/Atoms/Card'
 export { ContactPerson } from './components/Atoms/ContactPerson'
 export { Date } from './components/Atoms/Date'
 export { Dialog } from './components/Atoms/Dialog'
-export { Checkbox, Checkboxes, DragAndDropField, FileField, TextField, TextareaField } from './components/Atoms/Form'
+export {
+  Checkbox,
+  Checkboxes,
+  DragAndDropField,
+  FileField,
+  TextField,
+  TextareaField,
+  SelectField,
+} from './components/Atoms/Form'
 export { Grid, GridRow } from './components/Atoms/Grid'
 export { Heading } from './components/Atoms/Heading'
 export { HeadingWithTooltip } from './components/Atoms/HeadingWithTooltip'

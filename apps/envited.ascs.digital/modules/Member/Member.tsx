@@ -154,7 +154,7 @@ export const Member: FC<MemberProps> = ({ member }) => {
                             <dt className="text-sm font-medium leading-6 text-gray-900">
                               {t('[Heading] offering type')}
                             </dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 inline-flex space-2">
+                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 inline-flex space-x-2">
                               {map((item: string) => <Pill key={item}>{item}</Pill>)(type.split(';') as [])}
                             </dd>
                           </div>

@@ -356,7 +356,7 @@ export const Asset = () => {
                     href={product.href}
                     className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"
                   >
-                    View all
+                    View
                     <span aria-hidden="true"> &rarr;</span>
                   </a>
                 </div>

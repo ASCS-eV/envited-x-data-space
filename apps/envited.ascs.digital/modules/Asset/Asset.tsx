@@ -352,7 +352,6 @@ export const Asset = () => {
                 </h3>
                 <p className="text-sm text-gray-500">{product.description}</p>
                 <div className="flex justify-between pt-4">
-                  <p className="text-sm font-medium text-gray-900">{product.price}</p>
                   <a
                     href={product.href}
                     className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"

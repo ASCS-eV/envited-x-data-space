@@ -83,6 +83,13 @@ type ProfileInputs = {
 export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }) => {
   const { t } = useTranslation('Profile')
   const { error, success } = useNotification()
+  const availableUsers = [
+    {
+      id: '',
+      name: 'Select a user'
+    },
+    ...users
+  ]
 
   const [isOpen, setIsOpen] = useState<boolean>(isEmpty(propOr('', 'logo')(profile)))
   const { name, logo } = profile
@@ -326,14 +333,16 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
                   render={({ field: { ref, onChange, value, ...field } }) => (
                     <SelectField
                       label={'Select a user'}
-                      selected={isEmpty(value) ? users[0] : users[findIndex(propEq(value, 'id'))(users)]}
-                      options={users}
+                      selected={isEmpty(value) ? availableUsers[0] : availableUsers[findIndex(propEq(value, 'id'))(availableUsers)]}
+                      options={availableUsers}
                       inputRef={ref}
                       onChange={id => {
-                        const selected = users[findIndex(propEq(id, 'id'))(users)]
-                        onChange(id)
-                        setValue('principalName', selected.name)
-                        setValue('principalEmail', propOr('', 'email')(selected))
+                        if(!isEmpty(id)) {
+                          const selected = availableUsers[findIndex(propEq(id, 'id'))(availableUsers)]
+                          onChange(id)
+                          setValue('principalName', selected.name)
+                          setValue('principalEmail', propOr('', 'email')(selected))
+                        }
                       }}
                       {...field}
                       error={pathOr('', ['principalUserId', 'message'])(errors)}

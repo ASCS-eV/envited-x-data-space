@@ -117,8 +117,6 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
     try {
       const formData = new FormData()
 
-      console.log(data)
-
       if (data.file) {
         formData.append('file', data.file)
       }
@@ -206,7 +204,6 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     {!isNil(logo) ? t('[Button] change') : t('[Button] add logo')}
                   </button>
                 </div>
-                {/* {!isEmpty(pathOr('', ['file', 'message'])(errors)) && <p className="mt-3 text-sm leading-6 text-red-600 dark:text-red-400">{pathOr('', ['file', 'message'])(errors)}</p>} */}
                 {isOpen && (
                   <Controller
                     name="file"

@@ -1,7 +1,13 @@
-import { ArrowPathIcon, CloudArrowUpIcon, FingerPrintIcon, LockClosedIcon } from '@heroicons/react/24/outline'
-import { ColorScheme } from 'apps/envited.ascs.digital/common/types'
-
+import { ColorScheme } from '../../common/types'
 import { Button } from '../../modules/Button'
+import {
+  AccelerateTechnologyIcon,
+  FosterCollaborationIcon,
+  PersonalizedMobilityIcon,
+  SeamlessDataExchangeIcon,
+  SelfDrivingIcon,
+  SustainableCarIcon,
+} from '../../modules/Icons'
 import { PageHeader } from '../../modules/PageHeader'
 
 const features = [
@@ -9,37 +15,37 @@ const features = [
     name: 'Facilitate seamless exchange',
     description:
       'Facilitate seamless exchange of data and services between key stakeholders, creating a rich environment where mobility simulations are powered by high-quality data.',
-    icon: CloudArrowUpIcon,
+    icon: <SeamlessDataExchangeIcon />,
   },
   {
     name: 'Foster collaboration',
     description:
       'Foster collaboration between industry leaders, researchers, and innovators to address complex mobility challenges through new data-driven business cases.',
-    icon: LockClosedIcon,
+    icon: <FosterCollaborationIcon />,
   },
   {
     name: 'Accelerate technological advancements',
     description:
       'Accelerate technological advancements by translating application-oriented research into industry practices through continuous exchange within an expert community that bridges technical capabilities with continuously evolving demands.',
-    icon: ArrowPathIcon,
+    icon: <AccelerateTechnologyIcon />,
   },
   {
     name: 'Develop predictive and adaptive mobility solutions',
     description:
       'Develop predictive and adaptive mobility solutions by combining real-world data and trusted AI with simulation models that respond dynamically to changing needs, environments, and scenarios.',
-    icon: FingerPrintIcon,
+    icon: <SelfDrivingIcon />,
   },
   {
     name: 'Enable personalized and optimized mobility experiences',
     description:
       'Enable personalized and optimized mobility experiences for customers by integrating insights from simulations that reflect real-world scenarios and needs.',
-    icon: FingerPrintIcon,
+    icon: <PersonalizedMobilityIcon />,
   },
   {
     name: 'Champion safety and sustainability',
     description:
       'Champion safety and sustainability by using simulation data to predict, prevent, and improve mobility systems with minimal environmental impact and maximized safety outcomes.',
-    icon: FingerPrintIcon,
+    icon: <SustainableCarIcon />,
   },
 ]
 
@@ -52,7 +58,7 @@ export default async function Index() {
         description="Automated, electric and software-defined vehicles are revolutionizing transportation, enabling innovative mobility solutions. 
         These systems rely heavily on sensing and interacting with their environment. Data-driven simulation across departments and company borders 
         manages increasing product complexity, opens new solution spaces, and accelerates time-to-market."
-        backgroundImage="/images/mission.jpg"
+        backgroundImage="/images/AdobeStock_822448804_SKIMP Art.jpeg"
       />
       <div className="relative isolate overflow-hidden bg-gradient-to-b from-blue-900/20 pt-14">
         <div
@@ -79,7 +85,7 @@ export default async function Index() {
             </div>
             <img
               alt=""
-              src="/images/mission.jpg"
+              src="/images/AdobeStock_777175657_Creative_Bringer.jpeg"
               className="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
             />
           </div>
@@ -101,10 +107,9 @@ export default async function Index() {
                     className="absolute inset-y-0 right-1/2 z-0 w-[200%] -mr-10 group-hover:right-0 group-hover:-mr-32 origin-top-right skew-x-[-30deg] bg-gray-900 shadow-xl shadow-blue-900 ring-1 ring-blue-900 transition-all ease-in-out duration-300"
                   />
                   <div className="relative z-2 text-base font-semibold leading-7 text-white flex flex-col items-center justify-center gap-6 text-center">
-                    <feature.icon
-                      aria-hidden="true"
-                      className="h-12 w-12 text-blue-800 transition-all ease-in-out duration-300 group-hover:opacity-15"
-                    />
+                    <div className="h-12 w-12 text-blue-800 transition-all ease-in-out duration-300 group-hover:opacity-15">
+                      {feature.icon}
+                    </div>
                     <span className="transition-all ease-in-out duration-300 group-hover:opacity-0">
                       {feature.name}
                     </span>
@@ -147,7 +152,7 @@ export default async function Index() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Button href={'/community'} colorScheme={ColorScheme.dark}>
-                Meet our community
+                Our community
               </Button>
             </div>
           </div>

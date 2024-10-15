@@ -43,11 +43,13 @@ export const DashboardNavigation: FC<{ items: NavItemProps[] }> = ({ items }) =>
     <Nav>
       {map(({ href, name, icon }: NavItemProps) => <NavLink key={href} href={href} name={name} icon={icon} />)(items)}
       <NavItem>
-        <button onClick={signOut}>
-          <div className="w-full py-4 px-5">
-            <p className="text-base font-medium">Sign out</p>
-          </div>
-        </button>
+        <div className="mt-3 pt-3 w-full border-t border-gray-200">
+          <button onClick={signOut}>
+            <div className="w-full py-4 px-5">
+              <p className="text-base font-medium">Sign out</p>
+            </div>
+          </button>
+        </div>
       </NavItem>
     </Nav>
   )

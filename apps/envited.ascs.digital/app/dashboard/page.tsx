@@ -1,13 +1,9 @@
 import { EnvelopeOpenIcon, UsersIcon } from '@heroicons/react/24/outline'
 import { map } from 'ramda'
 
-import { getServerSession } from '../../common/auth'
 import { ROUTES } from '../../common/constants/routes'
-import { Dashboard } from '../../modules/Dashboard'
 
 export default async function Index() {
-  const session = await getServerSession()
-
   const stats = [
     { id: 1, name: 'Users', stat: '1', icon: UsersIcon, route: ROUTES.DASHBOARD.USERS },
     { id: 2, name: 'Assets', stat: '2', icon: EnvelopeOpenIcon, route: ROUTES.DASHBOARD.ASSETS },
@@ -44,13 +40,6 @@ export default async function Index() {
           ))(stats)}
         </dl>
       </div>
-      {session ? (
-        <>
-          <Dashboard id={session?.user?.id} address={session?.user?.pkh} role={session?.user?.role} />
-        </>
-      ) : (
-        <div>Not logged in</div>
-      )}
     </div>
   )
 }

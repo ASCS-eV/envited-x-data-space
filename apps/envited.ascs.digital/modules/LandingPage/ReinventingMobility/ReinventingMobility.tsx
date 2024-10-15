@@ -19,13 +19,13 @@ export const ReinventingMobility = () => {
           <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
             <p className="text-lg leading-8 text-gray-400">{t('[Description] reinventing mobility')}</p>
             <div className="mt-10 flex items-center gap-x-6">
-              <Button href={'/mission'} colorScheme={ColorScheme.dark}>
+              <Button href={'/assets'} colorScheme={ColorScheme.dark}>
                 {t('[Button] dive into our offerings')}
               </Button>
             </div>
           </div>
           <img
-            src="/images/freepik_64459841_ckybe.jpg"
+            src="/images/AdobeStock_892645802_Aisha.jpeg"
             alt=""
             className="mt-10 aspect-[6/5] w-full max-w-lg rounded-xl object-cover lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
           />

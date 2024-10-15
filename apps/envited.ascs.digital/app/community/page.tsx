@@ -1,8 +1,16 @@
-import { ButtonType } from 'apps/envited.ascs.digital/common/types'
-import { Button } from 'apps/envited.ascs.digital/modules/Button'
-import Link from 'next/link'
-
 import { getPublishedProfiles } from '../../common/serverActions'
+import { ButtonType } from '../../common/types'
+import { Button } from '../../modules/Button'
+import {
+  CommunityMemberIcon,
+  DataAdvisorIcon,
+  DataCertificationIcon,
+  DataConsumerIcon,
+  DataEvaluatorIcon,
+  DataIntegratorIcon,
+  DataProviderIcon,
+  FederationServiceProviderIcon,
+} from '../../modules/Icons'
 import { Members } from '../../modules/Members'
 import { PageHeader } from '../../modules/PageHeader'
 
@@ -11,40 +19,48 @@ const roles = [
     name: 'Data & service provider',
     description:
       'As a data & service provider, you make your offerings visible in the ecosystem and manage their self-description, quality, maintenance, operation, improvements, and usage policies.',
+    icon: <DataProviderIcon />,
   },
   {
     name: 'Data & service integrator',
     description:
       'As a data & service integrator, you create value by combining offerings for consumers, managing self-description, quality, maintenance, operation, improvements, and usage policies.',
+    icon: <DataIntegratorIcon />,
   },
   {
     name: 'Data & service evaluator',
     description:
       'As a data & service evaluator you are responsible for assessing and evaluating characteristics of the offerings in the ecosystem, aiming at providing comparison parameters.',
+    icon: <DataEvaluatorIcon />,
   },
   {
     name: 'Quality certification provider',
     description:
       'As a quality certification provider you are responsible for certifying the offerings in the ecosystem against selected standards, ensuring that quality parameters are being fulfilled.',
+    icon: <DataCertificationIcon />,
   },
   {
     name: 'Data & service consumer',
     description: 'As a data & service consumer you request and consume data and service offerings in the federation.',
+    icon: <DataConsumerIcon />,
   },
   {
     name: 'Advisor & consultant',
     description:
       'As an advisor and consultant, you assist current or potential federation participants with onboarding, integrating their infrastructure into the data space, exploring potential offerings, and developing business models within the ecosystem.',
+    icon: <DataAdvisorIcon />,
   },
   {
     name: 'Federation service provider',
     description:
       'As a federation service provider you are responsible for providing services that are necessary for the adequate functioning of the data ecosystem, being responsible for their quality, maintenance, operation, and continuous improvement.',
+    icon: <FederationServiceProviderIcon />,
   },
   {
     name: 'Association member',
     description:
       'As an association member, you use and shape the data space according to your needs and requirements and have access to other association activities.',
+    icon: <CommunityMemberIcon />,
   },
 ]
 
@@ -60,7 +76,7 @@ export default async function Index() {
               standardization and certification bodies - we harness cutting-edge simulation and AI technologies to fuel
               data-driven innovation. ENVITED-X builds a federated and secure data infrastructure, whereby data is
               shared, with users retaining control over their data access and usage."
-        backgroundImage="/images/community.jpg"
+        backgroundImage="/images/AdobeStock_814069778_Robert Kneschke.jpeg"
       />
       <div>
         <div className="relative isolate overflow-hidden bg-gradient-to-b from-blue-900/20 pt-14">
@@ -71,7 +87,7 @@ export default async function Index() {
           <div className="mx-auto max-w-7xl px-6 py-32 sm:py-40 lg:px-8">
             <div className="mx-auto max-w-2xl lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:gap-x-16 lg:gap-y-6 xl:grid-cols-1 xl:grid-rows-1 xl:gap-x-8">
               <h3 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 lg:col-span-2 xl:col-auto">
-                Collaboration and trust are the pillars of our ENVITED-X federation
+                Shared goals for long-term success
               </h3>
               <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
                 <p className="text-lg leading-8 text-gray-700">
@@ -85,7 +101,7 @@ export default async function Index() {
               </div>
               <img
                 alt=""
-                src="/images/mission.jpg"
+                src="/images/AdobeStock_287243623_REDPIXEL.jpeg"
                 className="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
               />
             </div>
@@ -129,6 +145,9 @@ export default async function Index() {
                         className="absolute inset-y-0 right-1/2 z-0 w-[200%] -mr-10 group-hover:right-0 group-hover:-mr-32 origin-top-right skew-x-[-30deg] bg-gray-900 shadow-xl shadow-blue-900 ring-1 ring-blue-900 transition-all ease-in-out duration-300"
                       />
                       <div className="relative z-2 text-base font-semibold leading-7 text-white flex flex-col items-center justify-center gap-6 text-center">
+                        <div className="h-12 w-12 text-blue-800 transition-all ease-in-out duration-300 group-hover:opacity-15">
+                          {feature.icon}
+                        </div>
                         <span className="transition-all ease-in-out duration-300 group-hover:opacity-0">
                           {feature.name}
                         </span>
@@ -191,7 +210,7 @@ export default async function Index() {
               </div>
               <img
                 alt=""
-                src="/images/federation.jpg"
+                src="/images/AdobeStock_949051393_VIK.jpeg"
                 className="mt-10 aspect-[6/5] w-full md:h-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 xl:row-span-2 xl:row-end-2 justify-self-end"
               />
             </div>

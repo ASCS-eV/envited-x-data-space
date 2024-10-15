@@ -4,7 +4,7 @@ import { FILE_TYPES, MAX_FILE_SIZE } from '../../common/constants'
 
 export const ProfileSchema = z.object({
   name: z.string(),
-  description: z.string(),
+  description: z.string().min(100, 'Please provide a company overview').max(500),
   logo: z.string().or(z.literal('')),
   file: z
     .unknown()
@@ -21,14 +21,14 @@ export const ProfileSchema = z.object({
   principalPhone: z.string(),
   principalEmail: z.string().email().optional().or(z.literal('')),
   website: z.string().url().optional().or(z.literal('')),
-  businessCategories: z.string().array().optional(),
+  businessCategories: z.string().array().min(1, 'Please provide at least one business category'),
   offerings: z
     .object({
       name: z.string().max(100),
       type: z.string().max(100),
-      functionalities: z.string().max(1000),
-      supportedTools: z.string().max(200),
-      supportedStandards: z.string().max(200),
+      functionalities: z.string().max(500),
+      supportedTools: z.string().max(150),
+      supportedStandards: z.string().max(150),
     })
     .array()
     .max(5)

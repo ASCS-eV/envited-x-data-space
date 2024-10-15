@@ -10,7 +10,7 @@ import {
   TextareaField,
 } from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { append, chain, dissoc, equals, includes, isNil, pathOr, prop, propOr, reject } from 'ramda'
+import { append, chain, dissoc, equals, includes, isEmpty, isNil, pathOr, prop, propOr, reject } from 'ramda'
 import { FC, useState } from 'react'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
@@ -65,7 +65,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
   const { t } = useTranslation('Profile')
   const { error, success } = useNotification()
 
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(isEmpty(propOr('', 'logo')(profile)))
   const { name, logo } = profile
 
   const {
@@ -153,6 +153,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                 <Controller
                   name="description"
                   control={control}
+                  rules={{ required: true }}
                   render={({ field: { ref, ...field } }) => (
                     <TextareaField
                       label={t('[Label] about')}
@@ -169,9 +170,11 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                 <Controller
                   name="businessCategories"
                   control={control}
+                  rules={{ required: true }}
                   render={({ field: { ref, value, ...field } }) => (
                     <Checkboxes
                       label={t('[Label] business categories')}
+                      description={t('[Description] business categories')}
                       inputRef={ref}
                       items={businessCategories}
                       values={value}
@@ -184,25 +187,23 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
               </div>
 
               <div className="col-span-full">
-                {!isNil(logo) && (
-                  <>
-                    <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
-                      {t('[Label] logo')}
-                    </label>
-                    <div className="mt-2 flex items-center gap-x-3">
-                      <img src={getImageUrl(logo)} alt={`Logo - ${name}`} className="h-20 w-20 object-contain" />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsOpen(!isOpen)
-                        }}
-                        className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        {t('[Button] change')}
-                      </button>
-                    </div>
-                  </>
-                )}
+                <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
+                  {t('[Label] logo')}
+                </label>
+                <div className="mt-2 flex items-center gap-x-3">
+                  {!isNil(logo) && (
+                    <img src={getImageUrl(logo)} alt={`Logo - ${name}`} className="h-20 w-20 object-contain" />
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsOpen(!isOpen)
+                    }}
+                    className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  >
+                    {!isNil(logo) ? t('[Button] change') : t('[Button] add logo')}
+                  </button>
+                </div>
                 {isOpen && (
                   <Controller
                     name="file"
@@ -210,6 +211,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     render={({ field: { ref, onChange, value, ...field } }) => (
                       <DragAndDropField
                         label={t('[Label] select new logo')}
+                        description={t('[Description] select new logo')}
                         {...field}
                         inputRef={ref}
                         value={value?.name}
@@ -238,6 +240,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                   render={({ field: { ref, ...field } }) => (
                     <TextField
                       label={t('[Label] website')}
+                      description={t('[Description] website')}
                       inputRef={ref}
                       {...field}
                       error={pathOr('', ['website', 'message'])(errors)}
@@ -427,6 +430,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                       render={({ field: { ref, ...field } }) => (
                         <TextField
                           label={t('[Label] offering name')}
+                          description={t('[Description] offering name')}
                           inputRef={ref}
                           {...field}
                           error={pathOr('', ['offerings', index, 'name', 'message'])(errors)}

@@ -13,6 +13,7 @@ const nextConfig = {
     svgr: false,
   },
   experimental: {
+    scrollRestoration: true,
     serverComponentsExternalPackages: ['@aws-sdk'],
   },
   webpack: (config, { isServer }) => {

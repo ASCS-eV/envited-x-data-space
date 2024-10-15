@@ -8,7 +8,12 @@ export default async function Index() {
       <PageHeader
         heading="About us"
         title="ASCS association"
-        description="The ENVITED-X data space is operated by the Automotive Solution Center for Simulation e.V. (ASCS), a non-profit association founded in Germany in 2008. Our mission is to use computer simulation, AI, and high-performance computing to advance mobility, making it faster, more efficient, and sustainable. By focusing on simulation, we accelerate research & development, optimize resource use, and support eco-friendly solutions. As multiplier, catalyst and accelerator in the mobility sector, ASCS connects stakeholders, providing a platform for collaboration, knowledge exchange, and innovation. Learn more about ASCS's work and membership benefits on our website [Link to www.asc-s.de]."
+        description="The ENVITED-X data space is operated by the Automotive Solution Center for Simulation e.V. (ASCS), a non-profit association founded in Germany in 2008. Our mission is to use computer simulation, AI, and high-performance computing to advance mobility, making it faster, more efficient, and sustainable. By focusing on simulation, we accelerate research & development, optimize resource use, and support eco-friendly solutions. As multiplier, catalyst and accelerator in the mobility sector, ASCS connects stakeholders, providing a platform for collaboration, knowledge exchange, and innovation."
+        link={
+          <Link href="https://asc-s.de/en/" target="_blank" className="text-white/60">
+            Learn more about ASCS's work and membership benefits on our website
+          </Link>
+        }
         backgroundImage="/images/AdobeStock_824054193_goami.jpeg"
       />
       <div className="relative isolate overflow-hidden bg-gradient-to-b from-blue-900/20 pt-14">
@@ -36,11 +41,11 @@ export default async function Index() {
                 these initiatives, using them as a valuable source of knowledge and a springboard for launching new
                 projects and collaborations.
               </p>
-              <p className="mt-6 text-lg leading-8 text-gray-700">
-                <Link href="www.asc-s.de" target="_blank">
+              {/* <p className="mt-6 text-lg leading-8 text-gray-700">
+                <Link href="https://www.asc-s.de" target="_blank">
                   Experience more about the ENVITED reserach cluster
                 </Link>
-              </p>
+              </p> */}
             </div>
             <img
               alt=""
@@ -51,7 +56,7 @@ export default async function Index() {
         </div>
         <div className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-white sm:h-32" />
       </div>
-      <div className="relative isolate overflow-hidden bg-gradient-to-b to-gray-900 from-blue-900/40 pt-14 bg-gray-900 bg-contain bg-right bg-[url('/images/AdobeStock_823134873.jpeg')]">
+      <div className="relative isolate overflow-hidden pt-14 bg-contain bg-right bg-[url('/images/AdobeStock_823134873.jpeg')]">
         <div
           aria-hidden="true"
           className="absolute inset-y-0 right-1/2 -z-10 -mr-96 w-[250%] origin-top-right skew-x-[-30deg] bg-gray-900 shadow-xl shadow-blue-900 ring-1 ring-blue-900 sm:-mr-80 lg:-mr-[30rem]"

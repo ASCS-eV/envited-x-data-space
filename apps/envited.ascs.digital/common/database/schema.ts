@@ -128,9 +128,8 @@ export const profile = pgTable('profile', {
   salesName: text('sales_name'),
   salesPhone: text('sales_phone'),
   salesEmail: text('sales_email'),
-  // principalUserId: text('principal_user_id')
-  //   .references(() => user.id),
-  // principalContact: text('principal_contact'),
+  principalUserId: text('principal_user_id')
+    .references(() => user.id),
   principalName: text('principal_name'),
   principalPhone: text('principal_phone'),
   principalEmail: text('principal_email'),

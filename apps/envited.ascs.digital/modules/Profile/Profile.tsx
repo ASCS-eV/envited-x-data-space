@@ -86,9 +86,9 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
   const availableUsers = [
     {
       id: '',
-      name: 'Select a user'
+      name: 'Select a user',
     },
-    ...users
+    ...users,
   ]
 
   const [isOpen, setIsOpen] = useState<boolean>(isEmpty(propOr('', 'logo')(profile)))
@@ -333,11 +333,15 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
                   render={({ field: { ref, onChange, value, ...field } }) => (
                     <SelectField
                       label={'Select a user'}
-                      selected={isEmpty(value) ? availableUsers[0] : availableUsers[findIndex(propEq(value, 'id'))(availableUsers)]}
+                      selected={
+                        isEmpty(value)
+                          ? availableUsers[0]
+                          : availableUsers[findIndex(propEq(value, 'id'))(availableUsers)]
+                      }
                       options={availableUsers}
                       inputRef={ref}
                       onChange={id => {
-                        if(!isEmpty(id)) {
+                        if (!isEmpty(id)) {
                           const selected = availableUsers[findIndex(propEq(id, 'id'))(availableUsers)]
                           onChange(id)
                           setValue('principalName', selected.name)

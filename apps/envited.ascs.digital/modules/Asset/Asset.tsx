@@ -1,8 +1,11 @@
 'use client'
 
-import { Button } from '@envited-marketplace/design-system'
 import { Tab } from '@headlessui/react'
+import { ButtonType, ColorScheme } from 'apps/envited.ascs.digital/common/types'
+import Link from 'next/link'
 import { Fragment } from 'react'
+
+import { Button } from '../Button'
 
 const product = {
   name: 'Motorway Testfield A8 Heimsheim <-> Leonberg (XODR)',
@@ -136,7 +139,14 @@ export const Asset = () => {
             <p className="mt-6 text-gray-500">{product.shortDescription}</p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4">
-              <Button onClick={() => {}}>Buy {product.price}</Button>
+              <Button
+                href={`mailto:example-asset@envited.de?subject=ENVITED X Request for offer: ${product.sku}&body=Dear Sales Team,%0D%0DI'm interested in your product ${process.env.NEXTAUTH_URL}/${product.sku}.%0DPlease get in touch with me with an offer.%0D%0DBest regards,`}
+                type={ButtonType.block}
+                colorScheme={ColorScheme.light}
+                target="_blank"
+              >
+                Contact sales
+              </Button>
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">

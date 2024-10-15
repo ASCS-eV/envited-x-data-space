@@ -16,7 +16,6 @@ const products = [
     href: '/assets/detail',
     description: 'A map section of the A8 highway from Heimsheim to Leonberg with a total length of 37.91 km. It was',
     options: 'XODR-3DM-23001',
-    price: '20 EUR',
     imageSrc: 'https://envited.market/media/OpenDRIVE_A9_final_bO9LFP7.png.500x320_q85_crop-scale.png',
     imageAlt: 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
   },
@@ -27,7 +26,6 @@ const products = [
     description:
       'San Francisco Union Square and adjacent streets. 3D Visualization of San Francisco HD maps, designed based on real-world OpenDRIVE data',
     options: 'CARLA-TGG-21001',
-    price: '300 EUR',
     imageSrc: 'https://envited.market/media/Kachel_San_Francisco_unreal.png.500x320_q85_crop-scale.png',
     imageAlt: 'Front of plain black t-shirt.',
   },
@@ -154,7 +152,7 @@ export const Member: FC<MemberProps> = ({ member }) => {
                             <dt className="text-sm font-medium leading-6 text-gray-900">
                               {t('[Heading] offering type')}
                             </dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 inline-flex space-2">
+                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 inline-flex space-x-2">
                               {map((item: string) => <Pill key={item}>{item}</Pill>)(type.split(';') as [])}
                             </dd>
                           </div>
@@ -222,12 +220,11 @@ export const Member: FC<MemberProps> = ({ member }) => {
                 </h3>
                 <p className="text-sm text-gray-500">{product.description}</p>
                 <div className="flex justify-between pt-4">
-                  <p className="text-sm font-medium text-gray-900">{product.price}</p>
                   <a
                     href={product.href}
                     className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"
                   >
-                    View all
+                    View
                     <span aria-hidden="true"> &rarr;</span>
                   </a>
                 </div>

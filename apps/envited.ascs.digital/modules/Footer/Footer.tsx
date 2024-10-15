@@ -7,7 +7,7 @@ export interface FooterProps {}
 
 const navigation = {
   solutions: [
-    { name: 'Home', href: '#' },
+    { name: 'Home', href: '/' },
     { name: 'Community', href: '/community' },
     { name: 'Data & services', href: '/assets' },
   ],
@@ -76,7 +76,7 @@ export const Footer: FC<FooterProps> = () => {
       <div className="mx-auto max-w-7xl px-6 pb-8 pt-20 sm:pt-24 lg:px-8 lg:pt-32">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
-            <a href="https://asc-s.de" target="_blank">
+            <a href="https://asc-s.de/en/" target="_blank">
               <Image src="/ascs_logo_2020.png" alt="ENVITED" priority height={60} width={240} />
             </a>
             <p className="text-sm leading-6 text-gray-600 dark:text-gray-300">{t('[Description] envited')}</p>

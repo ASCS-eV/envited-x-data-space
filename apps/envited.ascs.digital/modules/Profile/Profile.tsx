@@ -21,6 +21,7 @@ import {
   isEmpty,
   isNil,
   pathOr,
+  pipe,
   prop,
   propEq,
   propOr,
@@ -70,7 +71,7 @@ type ProfileInputs = {
   salesName: string
   salesPhone: string
   salesEmail: string
-  principalContact: string
+  principalUserId: string
   principalName: string
   principalPhone: string
   principalEmail: string
@@ -103,7 +104,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
       addressLocality: propOr('', 'addressLocality')(profile),
       addressCountry: propOr('', 'addressCountry')(profile),
       salesEmail: propOr('', 'salesEmail')(profile),
-      principalContact: propOr('', 'principalContact')(profile),
+      principalUserId: propOr('', 'principalUserId')(profile),
       principalName: propOr('', 'principalName')(profile),
       principalPhone: propOr('', 'principalPhone')(profile),
       principalEmail: propOr('', 'principalEmail')(profile),
@@ -134,8 +135,6 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
   const updateProfileAction: SubmitHandler<ProfileInputs> = async data => {
     try {
       const formData = new FormData()
-
-      console.log(data)
 
       if (data.file) {
         formData.append('file', data.file)
@@ -322,7 +321,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
             <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-6 sm:col-start-1">
                 <Controller
-                  name="principalContact"
+                  name="principalUserId"
                   control={control}
                   render={({ field: { ref, onChange, value, ...field } }) => (
                     <SelectField
@@ -337,7 +336,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
                         setValue('principalEmail', propOr('', 'email')(selected))
                       }}
                       {...field}
-                      error={pathOr('', ['principalContact', 'message'])(errors)}
+                      error={pathOr('', ['principalUserId', 'message'])(errors)}
                     />
                   )}
                 />
@@ -389,9 +388,10 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
                 <Controller
                   name="salesEmail"
                   control={control}
+                  // rules={{ required: true }}
                   render={({ field: { ref, ...field } }) => (
                     <TextField
-                      label={t('[Label] email')}
+                      label={t('[Label] sales email')}
                       inputRef={ref}
                       {...field}
                       error={pathOr('', ['salesEmail', 'message'])(errors)}

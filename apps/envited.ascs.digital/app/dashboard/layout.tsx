@@ -18,12 +18,13 @@ export default async function Template({ children }: { children: React.ReactNode
     <main className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
       <Breadcrumbs />
       <div className="mb-12">
-        <div className="relative -z-10 isolate overflow-hidden bg-gray-400 h-32 lg:h-48 rounded-xl">
+        <div className="relative -z-10 isolate overflow-hidden bg-gray-900 h-32 lg:h-48 rounded-xl">
           <img
-            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-y=.8&w=2830&h=1500&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply"
+            src="/images/AdobeStock_619508170_Onchira.jpeg"
             alt=""
-            className="inset-0 -z-10 h-full w-full object-cover opacity-40"
+            className="absolute inset-0 -z-10 h-full w-full object-cover"
           />
+          <div className="absolute top-0 -z-10 h-full w-full bg-gray-900 opacity-90" />
           <div
             className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
             aria-hidden="true"

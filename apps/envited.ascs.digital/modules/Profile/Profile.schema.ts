@@ -14,7 +14,7 @@ export const ProfileSchema = z.object({
     .refine(file => (file ? file.size <= MAX_FILE_SIZE : true), {
       message: `File size must be less than ${MAX_FILE_SIZE}MB`,
     }),
-  salesEmail: z.string().email().optional().or(z.literal('')),
+  salesEmail: z.string().email(), //.optional().or(z.literal('')),
   principalUserId: z.string(),
   principalName: z.string(),
   principalEmail: z.string().email().optional().or(z.literal('')),

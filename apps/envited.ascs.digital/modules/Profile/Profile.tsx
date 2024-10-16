@@ -216,7 +216,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
                   {t('[Label] logo')}
                 </label>
                 <div className="mt-2 flex items-center gap-x-3">
-                  {!isEmpty(logo) && (
+                  {!isEmpty(logo) && !isNil(logo) && (
                     <img src={getImageUrl(logo)} alt={`Logo - ${name}`} className="h-20 w-20 object-contain" />
                   )}
                   <button

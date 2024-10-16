@@ -21,7 +21,6 @@ import {
   isEmpty,
   isNil,
   pathOr,
-  pipe,
   prop,
   propEq,
   propOr,
@@ -217,7 +216,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
                   {t('[Label] logo')}
                 </label>
                 <div className="mt-2 flex items-center gap-x-3">
-                  {!isNil(logo) && (
+                  {!isEmpty(logo) && (
                     <img src={getImageUrl(logo)} alt={`Logo - ${name}`} className="h-20 w-20 object-contain" />
                   )}
                   <button
@@ -227,7 +226,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
                     }}
                     className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                   >
-                    {!isNil(logo) ? t('[Button] change') : t('[Button] add logo')}
+                    {!isEmpty(logo) ? t('[Button] change') : t('[Button] add logo')}
                   </button>
                 </div>
                 {isOpen && (

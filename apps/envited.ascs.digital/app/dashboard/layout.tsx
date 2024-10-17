@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { includes, isNil } from 'ramda'
+import { includes, isEmpty } from 'ramda'
 
 import { getServerSession } from '../../common/auth'
 import { NAVIGATION_DASHBOARD_MAP } from '../../common/constants'
@@ -53,7 +53,7 @@ export default async function Template({ children }: { children: React.ReactNode
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="-mt-20 sm:-mt-24 sm:flex sm:items-start sm:space-x-5">
             <div className="flex">
-              {!isNil(profile.logo) ? (
+              {!isEmpty(profile.logo) ? (
                 <img
                   className="h-24 w-24 rounded-xl ring-4 ring-white sm:h-32 sm:w-32 bg-gray-300 p-4 object-contain"
                   src={getImageUrl(profile.logo)}

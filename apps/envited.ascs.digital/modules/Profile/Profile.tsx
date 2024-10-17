@@ -400,7 +400,6 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
                 <Controller
                   name="salesEmail"
                   control={control}
-                  // rules={{ required: true }}
                   render={({ field: { ref, ...field } }) => (
                     <TextField
                       label={t('[Label] sales email')}

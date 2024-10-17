@@ -235,10 +235,10 @@ describe('common/database/users', () => {
         addressCountry: 'DE',
         addressLocality: 'Munich',
         addressTypeId: 'ADDRESS_TYPE_ID',
-        articlesOfAssociationAccepted: 'articlesOfAssociation',
-        contributionRulesAccepted: 'contributionRules',
+        articlesOfAssociationAccepted: '',
+        contributionRulesAccepted: '',
         createdAt: new Date(),
-        email: 'email',
+        email: 'mailto:user@test.de',
         expirationDate: new Date('2102-09-15T17:14:33.000Z'),
         id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
         isAscsMember: true,
@@ -250,7 +250,7 @@ describe('common/database/users', () => {
         privacyPolicyAccepted: 'https://media.ascs.digital/terms/ascs_privacy_policy_2020-07-08.pdf#SHA-256',
         streetAddress: 'Teststraße 1',
         updatedAt: new Date(),
-        vatId: 'vatId',
+        vatId: '',
         isActive: true,
       })
       expect(transaction).toEqual({

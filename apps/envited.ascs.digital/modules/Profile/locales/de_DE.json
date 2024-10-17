@@ -37,6 +37,7 @@
   "[Label] name": "Name",
   "[Label] phone": "Phone",
   "[Label] email": "Email address",
+  "[Label] sales email": "Email address *",
   "[Status] profile is updated": "Profile is updated",
   "[Status] something wrong": "Something went wrong",
   "[Label] offering": "Offering",

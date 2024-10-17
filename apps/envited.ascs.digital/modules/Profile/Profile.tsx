@@ -6,17 +6,32 @@ import {
   DragAndDropField,
   Heading,
   LoadingIndicator,
+  SelectField,
   TextField,
   TextareaField,
 } from '@envited-marketplace/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { append, chain, dissoc, equals, includes, isEmpty, isNil, pathOr, prop, propOr, reject } from 'ramda'
+import {
+  append,
+  chain,
+  dissoc,
+  equals,
+  findIndex,
+  includes,
+  isEmpty,
+  isNil,
+  pathOr,
+  prop,
+  propEq,
+  propOr,
+  reject,
+} from 'ramda'
 import { FC, useState } from 'react'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { Profile as ProfileType } from '../../common/types'
+import { Profile as ProfileType, User } from '../../common/types'
 import { getImageUrl, mapIndexed } from '../../common/utils'
 import { updateProfileForm } from './Profile.actions'
 import { ProfileSchema } from './Profile.schema'
@@ -31,6 +46,7 @@ interface Profiles extends ProfileType {
 interface ProfileProps {
   profile: Profiles
   businessCategories: any[]
+  users: User[]
 }
 
 interface OfferingItem {
@@ -50,9 +66,11 @@ type ProfileInputs = {
   postalCode: string
   addressLocality: string
   addressCountry: string
+  salesContact: string
   salesName: string
   salesPhone: string
   salesEmail: string
+  principalUserId: string
   principalName: string
   principalPhone: string
   principalEmail: string
@@ -61,9 +79,16 @@ type ProfileInputs = {
   offerings: OfferingItem[] | []
 }
 
-export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
+export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }) => {
   const { t } = useTranslation('Profile')
   const { error, success } = useNotification()
+  const availableUsers = [
+    {
+      id: '',
+      name: 'Select a user',
+    },
+    ...users,
+  ]
 
   const [isOpen, setIsOpen] = useState<boolean>(isEmpty(propOr('', 'logo')(profile)))
   const { name, logo } = profile
@@ -72,6 +97,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
     control,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ProfileInputs>({
     resolver: zodResolver(ProfileSchema),
@@ -83,9 +109,8 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
       postalCode: propOr('', 'postalCode')(profile),
       addressLocality: propOr('', 'addressLocality')(profile),
       addressCountry: propOr('', 'addressCountry')(profile),
-      salesName: propOr('', 'salesName')(profile),
-      salesPhone: propOr('', 'salesPhone')(profile),
       salesEmail: propOr('', 'salesEmail')(profile),
+      principalUserId: propOr('', 'principalUserId')(profile),
       principalName: propOr('', 'principalName')(profile),
       principalPhone: propOr('', 'principalPhone')(profile),
       principalEmail: propOr('', 'principalEmail')(profile),
@@ -191,7 +216,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                   {t('[Label] logo')}
                 </label>
                 <div className="mt-2 flex items-center gap-x-3">
-                  {!isNil(logo) && (
+                  {!isEmpty(logo) && !isNil(logo) && (
                     <img src={getImageUrl(logo)} alt={`Logo - ${name}`} className="h-20 w-20 object-contain" />
                   )}
                   <button
@@ -201,7 +226,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     }}
                     className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                   >
-                    {!isNil(logo) ? t('[Button] change') : t('[Button] add logo')}
+                    {!isEmpty(logo) ? t('[Button] change') : t('[Button] add logo')}
                   </button>
                 </div>
                 {isOpen && (
@@ -299,8 +324,36 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
               {t('[Description] principal contact')}
             </p>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div className="sm:col-span-2 sm:col-start-1">
+            <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-6 sm:col-start-1">
+                <Controller
+                  name="principalUserId"
+                  control={control}
+                  render={({ field: { ref, onChange, value, ...field } }) => (
+                    <SelectField
+                      label={'Select a user'}
+                      selected={
+                        isEmpty(value)
+                          ? availableUsers[0]
+                          : availableUsers[findIndex(propEq(value, 'id'))(availableUsers)]
+                      }
+                      options={availableUsers}
+                      inputRef={ref}
+                      onChange={id => {
+                        if (!isEmpty(id)) {
+                          const selected = availableUsers[findIndex(propEq(id, 'id'))(availableUsers)]
+                          onChange(id)
+                          setValue('principalName', selected.name)
+                          setValue('principalEmail', propOr('', 'email')(selected))
+                        }
+                      }}
+                      {...field}
+                      error={pathOr('', ['principalUserId', 'message'])(errors)}
+                    />
+                  )}
+                />
+              </div>
+              <div className="sm:col-span-3 sm:col-start-1">
                 <Controller
                   name="principalName"
                   control={control}
@@ -308,6 +361,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     <TextField
                       label={t('[Label] name')}
                       inputRef={ref}
+                      disabled
                       {...field}
                       error={pathOr('', ['principalName', 'message'])(errors)}
                     />
@@ -315,22 +369,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                 />
               </div>
 
-              <div className="sm:col-span-2">
-                <Controller
-                  name="principalPhone"
-                  control={control}
-                  render={({ field: { ref, ...field } }) => (
-                    <TextField
-                      label={t('[Label] phone')}
-                      inputRef={ref}
-                      {...field}
-                      error={pathOr('', ['principalPhone', 'message'])(errors)}
-                    />
-                  )}
-                />
-              </div>
-
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-3">
                 <Controller
                   name="principalEmail"
                   control={control}
@@ -338,6 +377,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
                     <TextField
                       label={t('[Label] email')}
                       inputRef={ref}
+                      disabled
                       {...field}
                       error={pathOr('', ['principalEmail', 'message'])(errors)}
                     />
@@ -355,44 +395,14 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories }) => {
               {t('[Description] sales contact')}
             </p>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div className="sm:col-span-2 sm:col-start-1">
-                <Controller
-                  name="salesName"
-                  control={control}
-                  render={({ field: { ref, ...field } }) => (
-                    <TextField
-                      label={t('[Label] name')}
-                      inputRef={ref}
-                      {...field}
-                      error={pathOr('', ['salesName', 'message'])(errors)}
-                    />
-                  )}
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <Controller
-                  name="salesPhone"
-                  control={control}
-                  render={({ field: { ref, ...field } }) => (
-                    <TextField
-                      label={t('[Label] phone')}
-                      inputRef={ref}
-                      {...field}
-                      error={pathOr('', ['salesPhone', 'message'])(errors)}
-                    />
-                  )}
-                />
-              </div>
-
+            <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8">
               <div className="sm:col-span-2">
                 <Controller
                   name="salesEmail"
                   control={control}
                   render={({ field: { ref, ...field } }) => (
                     <TextField
-                      label={t('[Label] email')}
+                      label={t('[Label] sales email')}
                       inputRef={ref}
                       {...field}
                       error={pathOr('', ['salesEmail', 'message'])(errors)}

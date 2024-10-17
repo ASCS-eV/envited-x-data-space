@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { dissoc } from 'ramda'
+import { dissoc, isEmpty, omit } from 'ramda'
 import { z } from 'zod'
 
 import { getUniqueFilename, getUploadUrl } from '../../common/aws'
@@ -43,7 +43,10 @@ export async function updateProfileForm(formData: FormData) {
 
       data = { ...data, logo: uniqueFilename }
     }
-    await updateProfile(dissoc('businessCategories')(data), data.businessCategories)
+    const updateData = isEmpty(data.principalUserId)
+      ? omit(['businessCategories', 'principalUserId'])(data)
+      : dissoc('businessCategories')(data)
+    await updateProfile(updateData, data.businessCategories)
 
     revalidatePath('/dashboard/profile')
   } catch (error: unknown) {

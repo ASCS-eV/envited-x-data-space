@@ -1,6 +1,6 @@
 'use client'
 
-import { Address, ContactPerson, Pill } from '@envited-marketplace/design-system'
+import { Address, Pill } from '@envited-marketplace/design-system'
 import { Tab } from '@headlessui/react'
 import { isNil, map, propOr } from 'ramda'
 import React, { FC, Fragment } from 'react'
@@ -55,17 +55,15 @@ export const Member: FC<MemberProps> = ({ member }) => {
 
           <div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-20 lg:max-w-none w-full">
             <div className="grid grid-cols-1 sm:grid-cols-2 space-x-8">
-              <div className="">
-                <h3 className="text-sm font-medium text-gray-900">{t('[Heading] address')}</h3>
-                <div className="mt-4">
-                  <Address
-                    street={propOr('', 'streetAddress')(member)}
-                    postalCode={propOr('', 'postalCode')(member)}
-                    city={propOr('', 'addressLocality')(member)}
-                    country={propOr('', 'addressCountry')(member)}
-                    website={propOr('', 'website')(member)}
-                  />
-                </div>
+              <div>
+                <Address
+                  street={propOr('', 'streetAddress')(member)}
+                  postalCode={propOr('', 'postalCode')(member)}
+                  city={propOr('', 'addressLocality')(member)}
+                  country={propOr('', 'addressCountry')(member)}
+                  website={propOr('', 'website')(member)}
+                  email={propOr('', 'salesEmail')(member)}
+                />
               </div>
 
               <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
@@ -87,31 +85,6 @@ export const Member: FC<MemberProps> = ({ member }) => {
                 {map(({ businessCategoryId }) => <Pill key={businessCategoryId}>{businessCategoryId}</Pill>)(
                   propOr([], 'businessCategories')(member),
                 )}
-              </div>
-            </div>
-
-            <div className="mt-10 border-t border-gray-200 pt-10">
-              <div className="grid grid-cols-1 sm:grid-cols-2 space-x-8">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">{t('[Heading] principal contact')}</h3>
-                  <div className="mt-4">
-                    <ContactPerson
-                      name={propOr('', 'principalName')(member)}
-                      email={propOr('', 'principalEmail')(member)}
-                      phone={propOr('', 'principalPhone')(member)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">{t('[Heading] sales contact')}</h3>
-                  <div className="mt-4">
-                    <ContactPerson
-                      name={propOr('', 'salesName')(member)}
-                      email={propOr('', 'salesEmail')(member)}
-                      phone={propOr('', 'salesPhone')(member)}
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>

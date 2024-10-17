@@ -6,7 +6,7 @@ describe('atoms/Checkbox', () => {
   describe('render', () => {
     it('should render Checkbox', () => {
       // when ... we rendering component
-      render(<Checkbox label="CHECKBOX" checked={true} inputRef={() => {}} name="NAME" />)
+      render(<Checkbox label="CHECKBOX" checked={true} inputRef={() => {}} onChange={() => {}} name="NAME" />)
 
       // then ... it should return as expected
       const element = screen.getByText('CHECKBOX')

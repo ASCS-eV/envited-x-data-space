@@ -1,11 +1,11 @@
 import { CheckIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { BuildingOffice2Icon, EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline'
-import { AssociationMemberIcon, CommunityMemberIcon } from 'apps/envited.ascs.digital/modules/Icons'
 import Link from 'next/link'
 import { is, prop } from 'ramda'
 
 import { ButtonType, ColorScheme } from '../../common/types'
 import { Button } from '../../modules/Button'
+import { AssociationMemberIcon, CommunityMemberIcon } from '../../modules/Icons'
 
 const tiers = [
   {

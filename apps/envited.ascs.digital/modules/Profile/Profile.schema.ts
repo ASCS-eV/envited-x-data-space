@@ -14,11 +14,9 @@ export const ProfileSchema = z.object({
     .refine(file => (file ? file.size <= MAX_FILE_SIZE : true), {
       message: `File size must be less than ${MAX_FILE_SIZE}MB`,
     }),
-  salesName: z.string().or(z.literal(null)),
-  salesPhone: z.string().or(z.literal(null)),
-  salesEmail: z.string().email().optional().or(z.literal('')),
+  salesEmail: z.string().email(),
+  principalUserId: z.string(),
   principalName: z.string(),
-  principalPhone: z.string(),
   principalEmail: z.string().email().optional().or(z.literal('')),
   website: z.string().url().optional().or(z.literal('')),
   businessCategories: z.string().array().min(1, 'Please provide at least one business category'),

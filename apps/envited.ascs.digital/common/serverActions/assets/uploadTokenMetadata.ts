@@ -25,6 +25,7 @@ export const uploadAssetTokenMetadataToIPFS =
     log: Log
   }) =>
   async (assetId: string) => {
+    log.info('uploadAssetTokenMetadataToIPFS', { assetId })
     if (isNil(assetId) || isEmpty(assetId)) {
       throw badRequestError({ resource: 'assets', resourceId: assetId, message: 'Missing ID' })
     }
@@ -34,7 +35,7 @@ export const uploadAssetTokenMetadataToIPFS =
     if (isNil(session)) {
       throw unauthorizedError({ resource: 'users' })
     }
-
+    
     if (!pathEq(Role.provider, ['user', 'role'])(session)) {
       throw forbiddenError({ resource: 'assets', message: 'Insufficient permissions', userId: session.user.id })
     }

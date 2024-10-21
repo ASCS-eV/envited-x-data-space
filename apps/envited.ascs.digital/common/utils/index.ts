@@ -23,4 +23,5 @@ export {
   slugToLabel,
   isTrustAnchor,
   truncateDID,
+  isServer,
 } from './utils'

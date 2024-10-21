@@ -5,15 +5,13 @@ import { equals, isEmpty, propOr } from 'ramda'
 
 import { useTranslation } from '../../common/i18n'
 import { Asset, AssetStatus } from '../../common/types'
-import { mintAssetById } from './UploadedAssets.actions'
+// import { mintToken, wallet } from '../../common/web3'
+// import { uploadTokenMetadata, getMintParams } from './UploadedAssets.actions'
+import { Mint } from '../Mint/Mint'
 
 export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
   const { t } = useTranslation('UploadedAssets')
-
-  const mint = async (assetId: string) => {
-    await mintAssetById(assetId)
-  }
-
+  
   return (
     <div className="mt-8">
       <div className="sm:flex sm:items-center">
@@ -78,13 +76,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                       </div>
                     ) : (
                       <>
-                        <button
-                          type="button"
-                          className="inline-flex items-center rounded-md bg-blue-900 hover:bg-blue-800 px-2.5 py-1.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300"
-                          onClick={() => mint(asset.id)}
-                        >
-                          {t('[Button] mint')}
-                        </button>
+                        <Mint assetId={asset.id} />
                         <a
                           href={`${asset.id}`}
                           className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"

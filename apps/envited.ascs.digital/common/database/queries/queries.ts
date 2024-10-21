@@ -38,6 +38,7 @@ import {
   getUsersByIssuerId,
   insertUserTx,
 } from './users'
+import { getIssuerById } from './issuers'
 
 const queries = {
   activateUserById,
@@ -51,6 +52,7 @@ const queries = {
   getUserRolesById,
   getUserWithProfileById,
   getUsersByIssuerId,
+  getIssuerById,
   insertBusinessCategoryByProfileId,
   insertUserTx,
   updateProfile,

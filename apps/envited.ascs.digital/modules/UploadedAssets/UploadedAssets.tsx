@@ -5,9 +5,7 @@ import { equals, isEmpty, propOr } from 'ramda'
 
 import { useTranslation } from '../../common/i18n'
 import { Asset, AssetStatus } from '../../common/types'
-// import { mintToken, wallet } from '../../common/web3'
-// import { uploadTokenMetadata, getMintParams } from './UploadedAssets.actions'
-import { Mint } from '../Mint/Mint'
+import { Mint } from '../Mint'
 
 export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
   const { t } = useTranslation('UploadedAssets')

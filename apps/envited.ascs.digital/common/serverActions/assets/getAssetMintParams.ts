@@ -1,31 +1,14 @@
-'use server'
-
 import { isEmpty, isNil, pathEq } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { CreateGroup, UploadJson, createGroup, uploadJson } from '../../ipfs'
-import { Log, log } from '../../logger'
 import { Role, Session } from '../../types'
-import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
+import { badRequestError, extractAddressFromDid, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
-export const uploadAssetTokenMetadataToIPFS =
-  ({
-    uploadJson,
-    createGroup,
-    db,
-    getServerSession,
-    log,
-  }: {
-    uploadJson: UploadJson
-    createGroup: CreateGroup
-    db: Database
-    getServerSession: () => Promise<Session | null>
-    log: Log
-  }) =>
+export const _getAssetMintParams =
+  ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
   async (assetId: string) => {
-    log.info('uploadAssetTokenMetadataToIPFS', { assetId })
     if (isNil(assetId) || isEmpty(assetId)) {
       throw badRequestError({ resource: 'assets', resourceId: assetId, message: 'Missing ID' })
     }
@@ -53,14 +36,12 @@ export const uploadAssetTokenMetadataToIPFS =
       throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })
     }
 
-    const group = await createGroup(user.issuerId)
-    return uploadJson({ data: asset.metadata, filename: 'token_info.json', group })
+    return {
+      from: 'urn:uuid:8bb912dc-6746-42c0-8628-9cfb8e9eb4d4',
+      owner: extractAddressFromDid(user.issuerId),
+      tokenId: assetId,
+      contractAddress: process.env.ASSETS_CONTRACT!,
+    }
   }
 
-export const uploadAssetTokenMetadata = uploadAssetTokenMetadataToIPFS({
-  uploadJson,
-  createGroup,
-  db,
-  getServerSession,
-  log,
-})
+export const getAssetMintParams = _getAssetMintParams({ db, getServerSession })

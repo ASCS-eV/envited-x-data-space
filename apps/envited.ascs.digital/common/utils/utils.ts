@@ -69,3 +69,5 @@ export const truncate = (length: number) =>
   )
 
 export const truncateDID = truncate(20)
+
+export const isServer = () => typeof window === 'undefined'

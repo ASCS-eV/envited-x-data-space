@@ -8,9 +8,8 @@
 
 const mint_parameter: parameter_of Contract = Mint({
   from_uuid: "b939315e-ae92-4cef-bc4c-3b1e1b43df6e",
-  member_did: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address,
   to_: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address,
-  token_id: 0 as nat,
+  token_id: "0",
   amount: 1 as nat,
   token_info: Some(Map.literal([
     ["", bytes`ipfs://tokenMetadataCID`]
@@ -21,7 +20,7 @@ const update_operator_parameter: parameter_of Contract = Update_operators([
   AddOperator({
     owner: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address,
     operator: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb" as address,
-    token_id: 0 as nat
+    token_id: "0"
   })
 ]);
 
@@ -29,7 +28,7 @@ const transfer_parameter: parameter_of Contract = Transfer([{
   from_: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address,
   txs: [{
     to_: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb" as address,
-    token_id: 0 as nat,
+    token_id: "0",
     amount: 1 as nat
   }]
 }]);

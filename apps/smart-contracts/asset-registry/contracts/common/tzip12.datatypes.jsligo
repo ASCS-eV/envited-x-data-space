@@ -24,7 +24,7 @@
 **/
 
 export type tokenMetadataData = {
-    token_id: nat,
+    token_id: string,
     token_info: map<string, bytes>
 };
 
@@ -41,7 +41,7 @@ export type tokenMetadata = big_map<nat, tokenMetadataData>;
 * A partial transaction (ignoring the from field)
 **/
 
-export type atomic_trans = { to_: address, token_id: nat, amount: nat };
+export type atomic_trans = { to_: address, token_id: string, amount: nat };
 
 /**
 * Some transaction from a common owner address but multiple destinations @see atomic_trans
@@ -60,7 +60,7 @@ export type transfer = list<transfer_from>;
 * @see balance_of request
 **/
 
-export type request = { owner: address, token_id: nat };
+export type request = { owner: address, token_id: string };
 
 /**
 * A callback object is a response from a @see request with a balance
@@ -88,7 +88,7 @@ export type balance_of = {
 * Operator update
 **/
 
-export type operator = { owner: address, operator: address, token_id: nat };
+export type operator = { owner: address, operator: address, token_id: string };
 
 /**
 * Add or Remove token operators variant with an @see operator update

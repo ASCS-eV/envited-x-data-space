@@ -9,7 +9,7 @@ import { Mint } from '../Mint'
 
 export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
   const { t } = useTranslation('UploadedAssets')
-  
+
   return (
     <div className="mt-8">
       <div className="sm:flex sm:items-center">

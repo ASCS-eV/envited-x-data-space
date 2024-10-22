@@ -1,27 +1,28 @@
 'use client'
 
-import { useTranslation } from '../../common/i18n'
-import React, { FC } from 'react'
-import { getMintParams, uploadTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
 import { mintToken } from 'apps/envited.ascs.digital/common/web3'
 import { tezos } from 'apps/envited.ascs.digital/common/web3'
+import React, { FC } from 'react'
+
+import { useTranslation } from '../../common/i18n'
+import { getMintParams, uploadTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
 
 interface MintProps {
   assetId: string
 }
 
-export const Mint:FC<MintProps> = ({ assetId }) => {
+export const Mint: FC<MintProps> = ({ assetId }) => {
   const { t } = useTranslation('UploadedAssets')
 
   const mintAsset = async (id: string) => {
     const { Tezos, wallet } = await tezos()
     await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })
     const account = await wallet?.client.getActiveAccount()
-    
+
     if (account) {
-        const fileLocation = await uploadTokenMetadata(id)
-        const mintParams = await getMintParams(id)
-        await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
+      const fileLocation = await uploadTokenMetadata(id)
+      const mintParams = await getMintParams(id)
+      await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
     } else {
       await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })
     }
@@ -33,5 +34,6 @@ export const Mint:FC<MintProps> = ({ assetId }) => {
       onClick={() => mintAsset(assetId)}
     >
       {t('[Button] mint')}
-    </button>)
+    </button>
+  )
 }

@@ -20,6 +20,7 @@ import {
   insertBusinessCategoryByProfileId,
 } from './businessCategories'
 import { fetchTables } from './common'
+import { getIssuerById } from './issuers'
 import { getMembers } from './members'
 import {
   getProfileByName,
@@ -38,7 +39,6 @@ import {
   getUsersByIssuerId,
   insertUserTx,
 } from './users'
-import { getIssuerById } from './issuers'
 
 const queries = {
   activateUserById,

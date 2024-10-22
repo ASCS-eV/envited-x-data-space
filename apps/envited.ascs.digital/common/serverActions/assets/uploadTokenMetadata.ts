@@ -35,7 +35,7 @@ export const uploadAssetTokenMetadataToIPFS =
     if (isNil(session)) {
       throw unauthorizedError({ resource: 'users' })
     }
-    
+
     if (!pathEq(Role.provider, ['user', 'role'])(session)) {
       throw forbiddenError({ resource: 'assets', message: 'Insufficient permissions', userId: session.user.id })
     }

@@ -24,7 +24,6 @@ export const authOptions: NextAuthOptions = {
         pkh: { label: 'Address', type: 'text', placeholder: 'tz...' },
       },
       async authorize(credentials) {
-        console.group('CredentialsProvider')
         if (!credentials) {
           return {
             id: '',

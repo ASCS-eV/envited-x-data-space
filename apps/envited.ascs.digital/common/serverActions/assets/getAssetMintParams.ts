@@ -4,7 +4,14 @@ import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { Role, Session } from '../../types'
-import { addUrnUuid, badRequestError, extractAddressFromDid, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
+import {
+  addUrnUuid,
+  badRequestError,
+  extractAddressFromDid,
+  forbiddenError,
+  notFoundError,
+  unauthorizedError,
+} from '../../utils'
 
 export const _getAssetMintParams =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>

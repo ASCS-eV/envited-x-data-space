@@ -176,7 +176,7 @@ export const profilesToBusinessCategoriesRelations = relations(profilesToBusines
   }),
 }))
 
-export const asset = pgTable('asset', {
+export const upload = pgTable('upload', {
   id: uuid('id').defaultRandom().primaryKey(),
   cid: text('cid'),
   metadata: jsonb('metadata'),
@@ -184,4 +184,14 @@ export const asset = pgTable('asset', {
   userId: text('user_id')
     .references(() => user.id)
     .notNull(),
+})
+
+export const asset = pgTable('asset', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  hash: text('hash'),
+  timestamp: text('timestamp'),
+  contract: text('contract'),
+  creator: text('creator'),
+  tokenId: text('token_id'),
+  tokenMetadata: jsonb('token_metadata'),
 })

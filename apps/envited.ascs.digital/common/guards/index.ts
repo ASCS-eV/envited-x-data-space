@@ -1,6 +1,6 @@
 export {
   isFederator,
-  isOwnAsset,
+  isOwnUpload,
   isOwnUser,
   isOwnProfile,
   isPrincipal,

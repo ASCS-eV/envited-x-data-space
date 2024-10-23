@@ -32,7 +32,7 @@ export const getUploadUrl = (getSignedUrl: (command: PutObjectCommand) => Promis
     }),
   )
 
-export const getAssetUploadUrl = (getSignedUrl: (command: PutObjectCommand) => Promise<string>) => (filename: string) =>
+export const getUploadUploadUrl = (getSignedUrl: (command: PutObjectCommand) => Promise<string>) => (filename: string) =>
   getSignedUrl(
     new PutObjectCommand({
       ACL: 'private',
@@ -41,7 +41,7 @@ export const getAssetUploadUrl = (getSignedUrl: (command: PutObjectCommand) => P
     }),
   )
 
-export const getAssetDownloadUrl =
+export const getUploadDownloadUrl =
   (getSignedUrl: (command: GetObjectCommand) => Promise<string>) => (filename: string) =>
     getSignedUrl(
       new GetObjectCommand({

@@ -1,14 +1,14 @@
-import { getAssets } from '../../../../common/serverActions'
+import { getUploads } from '../../../../common/serverActions'
 import { AddAssets } from '../../../../modules/AddAssets'
-import { UploadedAssets } from '../../../../modules/UploadedAssets'
+import { Uploads } from '../../../../modules/Uploads'
 
 export default async function Index() {
-  const assets = await getAssets()
+  const uploads = await getUploads()
 
   return (
     <>
       <AddAssets />
-      <UploadedAssets assets={assets} />
+      <Uploads uploads={uploads} />
     </>
   )
 }

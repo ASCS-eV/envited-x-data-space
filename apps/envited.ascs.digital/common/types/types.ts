@@ -10,7 +10,7 @@ export interface TranslationsMap {
   [Language.nl]: { [key: string]: { [key: string]: string } }
 }
 
-export enum AssetStatus {
+export enum UploadStatus {
   processing = 'processing',
   not_accepted = 'not_accepted',
   pending = 'pending',
@@ -70,15 +70,15 @@ export enum CredentialType {
   AscsUser = 'AscsUser',
 }
 
-export interface Asset {
+export interface Upload {
   id: string
   cid: string
   metadata: string
-  status: AssetStatus
+  status: UploadStatus
   userId: string
 }
 
-export interface AssetMetadata {
+export interface UploadMetadata {
   name: string
   symbol: string
   decimals: number

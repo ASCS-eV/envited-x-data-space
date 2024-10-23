@@ -5,14 +5,14 @@ import { fromPairs, map, pipe, toPairs } from 'ramda'
 import { connectDb } from '../database'
 import * as schema from '../schema'
 import {
-  getAsset,
-  getAssetByCID,
-  getAssets,
-  getAssetsByUserId,
-  insertAsset,
-  updateAsset,
-  updateAssetCID,
-} from './assets'
+  getUpload,
+  getUploadByCID,
+  getUploads,
+  getUploadsByUserId,
+  insertUpload,
+  updateUpload,
+  updateUploadCID,
+} from './uploads'
 import {
   deleteBusinessCategoriesByProfileId,
   getBusinessCategories,
@@ -61,13 +61,13 @@ const queries = {
   getProfileBySlug,
   getPublishedProfiles,
   getUserByIssuerId,
-  getAsset,
-  getAssets,
-  getAssetByCID,
-  getAssetsByUserId,
-  insertAsset,
-  updateAsset,
-  updateAssetCID,
+  getUpload,
+  getUploads,
+  getUploadByCID,
+  getUploadsByUserId,
+  insertUpload,
+  updateUpload,
+  updateUploadCID,
 }
 
 export const init =

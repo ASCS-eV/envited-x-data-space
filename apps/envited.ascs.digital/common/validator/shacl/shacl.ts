@@ -5,7 +5,7 @@ import { all, equals, keys, omit, pipe } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromFile, read } from '../../archive'
-import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from '../../asset/constants'
+import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from '../../upload/constants'
 import { ERRORS } from '../../constants'
 import { CONTEXT_DROP_SCHEMAS } from './shacl.constants'
 import { ContentType, Schema, ValidationSchema } from './shacl.types'

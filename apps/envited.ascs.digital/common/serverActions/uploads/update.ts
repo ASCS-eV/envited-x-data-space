@@ -7,7 +7,7 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { isOwnUpload } from '../../guards'
 import { Log, log } from '../../logger'
-import { UploadStatus, Session } from '../../types'
+import { Session, UploadStatus } from '../../types'
 import { forbiddenError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
 
 export const _update =

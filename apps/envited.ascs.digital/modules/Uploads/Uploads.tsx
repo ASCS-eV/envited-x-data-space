@@ -43,7 +43,9 @@ export const Uploads = ({ uploads }: { uploads: Upload[] }) => {
               return (
                 <tr key={upload.id}>
                   <td
-                    className={`${equals(uploadIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}
+                    className={`${
+                      equals(uploadIdx)(0) ? '' : 'border-t border-transparent'
+                    } relative py-4 pr-3 text-sm`}
                   >
                     <div className="font-medium text-gray-900">
                       {equals(upload.status)(UploadStatus.processing) ? upload.cid : propOr('', 'name')(metadata)}
@@ -89,7 +91,9 @@ export const Uploads = ({ uploads }: { uploads: Upload[] }) => {
                         </button>
                       </>
                     )}
-                    {!equals(uploadIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
+                    {!equals(uploadIdx)(0) ? (
+                      <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
+                    ) : null}
                   </td>
                 </tr>
               )

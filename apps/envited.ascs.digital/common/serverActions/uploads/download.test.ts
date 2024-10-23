@@ -1,5 +1,5 @@
 import { ERRORS } from '../../constants'
-import { UploadStatus, Role } from '../../types'
+import { Role, UploadStatus } from '../../types'
 import * as SUT from './download'
 
 describe('serverActions/assets/download', () => {

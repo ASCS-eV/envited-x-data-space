@@ -9,9 +9,9 @@ import { S3Handler } from 'aws-lambda'
 import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { updateUpload, validateAndCreateMetadata } from '../../../upload'
 import { copyFile, deleteFile, readFile, writeFile } from '../..'
 import { Upload, UploadMetadata, UploadStatus } from '../../../types'
+import { updateUpload, validateAndCreateMetadata } from '../../../upload'
 
 export const _main =
   ({

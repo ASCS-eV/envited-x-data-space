@@ -24,55 +24,48 @@ const contract = `
     (or (pair %mint
            (string %from_uuid)
            (address %to_)
-           (string %token_id)
-           (nat %amount)
            (option %token_info (map string bytes)))
         (or (list %approve
                (pair (address %owner)
                      (address %spender)
-                     (string %token_id)
+                     (nat %token_id)
                      (nat %old_value)
                      (nat %new_value)))
             (or (list %update_operators
-                   (or (pair %addOperator (address %owner) (address %operator) (string %token_id))
-                       (pair %removeOperator (address %owner) (address %operator) (string %token_id))))
+                   (or (pair %addOperator (address %owner) (address %operator) (nat %token_id))
+                       (pair %removeOperator (address %owner) (address %operator) (nat %token_id))))
                 (or (pair %balance_of
-                       (list %requests (pair (address %owner) (string %token_id)))
+                       (list %requests (pair (address %owner) (nat %token_id)))
                        (contract %callback
-                          (list (pair (pair %request (address %owner) (string %token_id)) (nat %balance)))))
+                          (list (pair (pair %request (address %owner) (nat %token_id)) (nat %balance)))))
                     (list %transfer
-                       (pair (address %from_)
-                             (list %txs (pair (address %to_) (nat %amount) (string %token_id))))))))) ;
+                       (pair (address %from_) (list %txs (pair (address %to_) (nat %amount) (nat %token_id))))))))) ;
   storage
     (pair (address %registry)
           (big_map %metadata string bytes)
-          (big_map %assets string address)
-          (big_map %token_metadata
-             string
-             (pair (string %token_id) (map %token_info string bytes)))
-          (option %operators (big_map (pair address string) (set address)))
-          (big_map %approvals (pair address address string) nat)) ;
+          (big_map %ledger nat address)
+          (big_map %token_metadata nat (pair (nat %token_id) (map %token_info string bytes)))
+          (nat %token_index)
+          (option %operators (big_map (pair address nat) (set address)))
+          (big_map %approvals (pair address address nat) nat)) ;
   code { PUSH string "FA2_TOKEN_UNDEFINED" ;
          PUSH string "FA2.1_INSUFFICIENT_ALLOWANCE" ;
          PUSH string "NFT transaction amount should be 1n" ;
          LAMBDA
-           (pair address address string (big_map (pair address address string) nat))
+           (pair address address nat (big_map (pair address address nat) nat))
            nat
            { UNPAIR 4 ; PAIR 3 ; GET ; IF_NONE { PUSH nat 0 } {} } ;
          LAMBDA
-           (pair (big_map (pair address address string) nat) address address string nat)
-           (big_map (pair address address string) nat)
+           (pair (big_map (pair address address nat) nat) address address nat nat)
+           (big_map (pair address address nat) nat)
            { UNPAIR 5 ; DIG 4 ; SOME ; DIG 4 ; DIG 4 ; DIG 4 ; PAIR 3 ; UPDATE } ;
+         LAMBDA (pair (big_map nat address) nat) (option address) { UNPAIR ; SWAP ; GET } ;
          LAMBDA
-           (pair (big_map string address) string)
-           (option address)
-           { UNPAIR ; SWAP ; GET } ;
-         LAMBDA
-           (pair (big_map string address) address string)
-           (big_map string address)
+           (pair (big_map nat address) address nat)
+           (big_map nat address)
            { UNPAIR 3 ; SWAP ; SOME ; DIG 2 ; UPDATE } ;
          LAMBDA
-           (pair address string (big_map (pair address string) (set address)))
+           (pair address nat (big_map (pair address nat) (set address)))
            unit
            { UNPAIR 3 ;
              SENDER ;
@@ -99,31 +92,33 @@ const contract = `
              EQ ;
              IF { DROP ; UNIT } { FAILWITH } } ;
          LAMBDA
-           (pair string (map string bytes) (big_map string (pair string (map string bytes))))
-           (big_map string (pair string (map string bytes)))
+           (pair nat (map string bytes) (big_map nat (pair nat (map string bytes))))
+           (big_map nat (pair nat (map string bytes)))
            { UNPAIR 3 ; DUG 2 ; DUP 3 ; PAIR ; SOME ; DIG 2 ; UPDATE } ;
+         PUSH string "Minting not allowed" ;
          LAMBDA
-           (pair (pair (lambda (pair (big_map string address) address string) (big_map string address))
-                       (lambda (pair (big_map string address) string) (option address))
+           (pair (pair (lambda (pair (big_map nat address) address nat) (big_map nat address))
+                       (lambda (pair (big_map nat address) nat) (option address))
                        string)
                  (pair address
                        (big_map string bytes)
-                       (big_map string address)
-                       (big_map string (pair string (map string bytes)))
-                       (option (big_map (pair address string) (set address)))
-                       (big_map (pair address address string) nat)))
-           (pair (big_map string address)
-                 (big_map string address)
-                 (lambda (pair (big_map string address) address string nat) (big_map string address))
-                 (lambda (pair (big_map string address) address string nat) (big_map string address))
-                 (lambda (pair (big_map string address) address string) nat)
-                 (lambda (pair (big_map string address) string) (option nat)))
+                       (big_map nat address)
+                       (big_map nat (pair nat (map string bytes)))
+                       nat
+                       (option (big_map (pair address nat) (set address)))
+                       (big_map (pair address address nat) nat)))
+           (pair (big_map nat address)
+                 (big_map nat address)
+                 (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
+                 (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
+                 (lambda (pair (big_map nat address) address nat) nat)
+                 (lambda (pair (big_map nat address) nat) (option nat)))
            { UNPAIR ;
              UNPAIR 3 ;
              DIG 3 ;
              LAMBDA
-               (pair (lambda (pair (big_map string address) string) (option address))
-                     (pair (big_map string address) string))
+               (pair (lambda (pair (big_map nat address) nat) (option address))
+                     (pair (big_map nat address) nat))
                (option nat)
                { UNPAIR ;
                  SWAP ;
@@ -132,8 +127,8 @@ const contract = `
              DUP 4 ;
              APPLY ;
              LAMBDA
-               (pair (lambda (pair (big_map string address) string) (option address))
-                     (pair (big_map string address) address string))
+               (pair (lambda (pair (big_map nat address) nat) (option address))
+                     (pair (big_map nat address) address nat))
                nat
                { UNPAIR ;
                  SWAP ;
@@ -150,11 +145,11 @@ const contract = `
              DUP 5 ;
              APPLY ;
              LAMBDA
-               (pair (pair (lambda (pair (big_map string address) address string) (big_map string address))
-                           (lambda (pair (big_map string address) string) (option address))
+               (pair (pair (lambda (pair (big_map nat address) address nat) (big_map nat address))
+                           (lambda (pair (big_map nat address) nat) (option address))
                            string)
-                     (pair (big_map string address) address string nat))
-               (big_map string address)
+                     (pair (big_map nat address) address nat nat))
+               (big_map nat address)
                { UNPAIR ;
                  UNPAIR 3 ;
                  DIG 3 ;
@@ -179,11 +174,11 @@ const contract = `
              PAIR 3 ;
              APPLY ;
              LAMBDA
-               (pair (pair (lambda (pair (big_map string address) address string) (big_map string address))
-                           (lambda (pair (big_map string address) string) (option address))
+               (pair (pair (lambda (pair (big_map nat address) address nat) (big_map nat address))
+                           (lambda (pair (big_map nat address) nat) (option address))
                            string)
-                     (pair (big_map string address) address string nat))
-               (big_map string address)
+                     (pair (big_map nat address) address nat nat))
+               (big_map nat address)
                { UNPAIR ;
                  UNPAIR 3 ;
                  DIG 3 ;
@@ -211,53 +206,57 @@ const contract = `
              DIG 6 ;
              DIG 7 ;
              DROP 3 ;
-             EMPTY_BIG_MAP string address ;
+             EMPTY_BIG_MAP nat address ;
              DIG 5 ;
              GET 5 ;
              PAIR 6 } ;
-         DUP 9 ;
-         DUP 7 ;
-         DUP 7 ;
+         DUP 10 ;
+         DUP 8 ;
+         DUP 8 ;
          PAIR 3 ;
          APPLY ;
-         DIG 4 ;
          DIG 5 ;
-         DIG 8 ;
+         DIG 6 ;
+         DIG 9 ;
          DROP 3 ;
          LAMBDA
            (pair (pair (lambda
                           (pair address
                                 (big_map string bytes)
-                                (big_map string address)
-                                (big_map string (pair string (map string bytes)))
-                                (option (big_map (pair address string) (set address)))
-                                (big_map (pair address address string) nat))
-                          (pair (big_map string address)
-                                (big_map string address)
-                                (lambda (pair (big_map string address) address string nat) (big_map string address))
-                                (lambda (pair (big_map string address) address string nat) (big_map string address))
-                                (lambda (pair (big_map string address) address string) nat)
-                                (lambda (pair (big_map string address) string) (option nat))))
+                                (big_map nat address)
+                                (big_map nat (pair nat (map string bytes)))
+                                nat
+                                (option (big_map (pair address nat) (set address)))
+                                (big_map (pair address address nat) nat))
+                          (pair (big_map nat address)
+                                (big_map nat address)
+                                (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
+                                (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
+                                (lambda (pair (big_map nat address) address nat) nat)
+                                (lambda (pair (big_map nat address) nat) (option nat))))
+                       string
                        (lambda
-                          (pair string (map string bytes) (big_map string (pair string (map string bytes))))
-                          (big_map string (pair string (map string bytes)))))
-                 (pair (pair string address string nat (option (map string bytes)))
+                          (pair nat (map string bytes) (big_map nat (pair nat (map string bytes))))
+                          (big_map nat (pair nat (map string bytes)))))
+                 (pair (pair string address (option (map string bytes)))
                        address
                        (big_map string bytes)
-                       (big_map string address)
-                       (big_map string (pair string (map string bytes)))
-                       (option (big_map (pair address string) (set address)))
-                       (big_map (pair address address string) nat)))
+                       (big_map nat address)
+                       (big_map nat (pair nat (map string bytes)))
+                       nat
+                       (option (big_map (pair address nat) (set address)))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  address
                  (big_map string bytes)
-                 (big_map string address)
-                 (big_map string (pair string (map string bytes)))
-                 (option (big_map (pair address string) (set address)))
-                 (big_map (pair address address string) nat))
+                 (big_map nat address)
+                 (big_map nat (pair nat (map string bytes)))
+                 nat
+                 (option (big_map (pair address nat) (set address)))
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
-             UNPAIR ;
-             DIG 2 ;
+             UNPAIR 3 ;
+             DIG 3 ;
              UNPAIR ;
              DUP 2 ;
              DIG 3 ;
@@ -284,8 +283,8 @@ const contract = `
                            (or %status (unit %active) (unit %revoked))
                            (string %issuer)
                            (string %uuid))) ;
-             IF_NONE { PUSH string "Minting not allowed" ; FAILWITH } {} ;
-             PUSH string "B" ;
+             IF_NONE { DUP 6 ; FAILWITH } {} ;
+             DIG 6 ;
              SWAP ;
              CDR ;
              CAR ;
@@ -293,12 +292,13 @@ const contract = `
              COMPARE ;
              EQ ;
              IF { DROP } { FAILWITH } ;
-             DUP 3 ;
-             GET 5 ;
-             DUP 6 ;
+             DUP 4 ;
+             GET 9 ;
+             DUP ;
+             DUP 7 ;
              CAR ;
              PAIR ;
-             DUP 6 ;
+             DUP 7 ;
              GET 10 ;
              SWAP ;
              EXEC ;
@@ -309,62 +309,51 @@ const contract = `
              COMPARE ;
              EQ ;
              IF {} { PUSH string "Token ID already exists" ; FAILWITH } ;
-             DUP 4 ;
-             GET 5 ;
-             DUP 5 ;
+             DUP 2 ;
+             DUP 6 ;
              GET 3 ;
-             DUP 8 ;
+             DUP 9 ;
              CAR ;
              PAIR 3 ;
-             DUP 7 ;
+             DUP 8 ;
              GET 9 ;
              SWAP ;
              EXEC ;
-             DUP 5 ;
-             GET 7 ;
-             INT ;
+             PUSH int 1 ;
              DIG 2 ;
-             DUP 6 ;
-             GET 7 ;
+             PUSH nat 1 ;
              ADD ;
-             DUP 6 ;
-             GET 5 ;
+             DUP 4 ;
              PAIR 3 ;
-             DUP 5 ;
-             GET 7 ;
-             INT ;
-             DUP 6 ;
-             GET 7 ;
+             PUSH int 1 ;
+             PUSH nat 1 ;
              DIG 3 ;
              ADD ;
-             DUP 6 ;
-             GET 5 ;
-             DUP 7 ;
+             DUP 4 ;
+             DUP 8 ;
              GET 3 ;
              PAIR 4 ;
              EMIT %balance_update
-               (pair (address %owner) (string %token_id) (nat %new_balance) (int %diff)) ;
+               (pair (address %owner) (nat %token_id) (nat %new_balance) (int %diff)) ;
              SWAP ;
              EMIT %total_supply_update
-               (pair (string %token_id) (nat %new_total_supply) (int %diff)) ;
-             DUP 6 ;
-             GET 7 ;
-             DUP 6 ;
-             GET 5 ;
-             GET ;
-             IF_NONE { EMPTY_MAP string bytes } { CDR } ;
+               (pair (nat %token_id) (nat %new_total_supply) (int %diff)) ;
              DUP 7 ;
              GET 7 ;
-             DUP 2 ;
+             DUP 4 ;
+             GET ;
+             IF_NONE { EMPTY_MAP string bytes } { CDR } ;
              DUP 8 ;
-             GET 5 ;
+             GET 7 ;
+             DUP 2 ;
+             DUP 6 ;
              PAIR 3 ;
-             DUP 10 ;
+             DUP 11 ;
              SWAP ;
              EXEC ;
              PUSH nat 0 ;
-             DUP 8 ;
-             GET 8 ;
+             DUP 9 ;
+             GET 4 ;
              IF_NONE { EMPTY_MAP string bytes } {} ;
              SIZE ;
              COMPARE ;
@@ -375,50 +364,46 @@ const contract = `
              COMPARE ;
              EQ ;
              AND ;
-             IF { DUP 6 ;
-                  GET 8 ;
+             IF { DUP 7 ;
+                  GET 4 ;
                   IF_NONE { PUSH string "Token info must be provided" ; FAILWITH } { DROP } }
                 {} ;
              PUSH nat 0 ;
-             DUP 7 ;
-             GET 8 ;
+             DUP 8 ;
+             GET 4 ;
              IF_NONE { EMPTY_MAP string bytes } {} ;
              SIZE ;
              COMPARE ;
              GT ;
              IF { DROP ;
-                  DUP 6 ;
-                  GET 7 ;
-                  DUP 6 ;
-                  GET 8 ;
-                  IF_NONE { EMPTY_MAP string bytes } {} ;
                   DUP 7 ;
-                  GET 5 ;
+                  GET 7 ;
+                  DUP 7 ;
+                  GET 4 ;
+                  IF_NONE { EMPTY_MAP string bytes } {} ;
+                  DUP 5 ;
                   PAIR 3 ;
-                  DIG 8 ;
+                  DIG 9 ;
                   SWAP ;
                   EXEC ;
-                  DUP 6 ;
-                  GET 8 ;
                   DUP 7 ;
-                  GET 5 ;
+                  GET 4 ;
+                  DUP 5 ;
                   PAIR ;
                   EMIT %token_metadata_update
-                    (pair (string %token_id) (option %new_metadata (map string bytes))) ;
+                    (pair (nat %token_id) (option %new_metadata (map string bytes))) ;
                   NIL operation ;
-                  DIG 6 ;
+                  DIG 7 ;
                   NIL operation ;
                   SWAP ;
                   ITER { CONS } ;
                   ITER { CONS } ;
                   SWAP ;
                   CONS ;
-                  DUG 4 }
-                { DIG 8 ; DROP } ;
-             DUP 6 ;
-             GET 7 ;
-             DUP 7 ;
-             GET 5 ;
+                  DUG 5 }
+                { DIG 9 ; DROP } ;
+             PUSH nat 1 ;
+             DIG 4 ;
              DIG 7 ;
              GET 3 ;
              DUP 10 ;
@@ -459,45 +444,54 @@ const contract = `
              UPDATE 1 ;
              CAR ;
              SWAP ;
-             DIG 3 ;
+             DUP 4 ;
+             PUSH nat 1 ;
+             DIG 5 ;
+             GET 9 ;
+             ADD ;
+             UPDATE 9 ;
              SWAP ;
              UPDATE 7 ;
              SWAP ;
              UPDATE 5 ;
              SWAP ;
              PAIR } ;
-         DUP 3 ;
-         DUP 3 ;
-         PAIR ;
+         DUP 4 ;
+         DUP 4 ;
+         DUP 4 ;
+         PAIR 3 ;
          APPLY ;
          DIG 2 ;
-         DROP ;
+         DIG 3 ;
+         DROP 2 ;
          LAMBDA
            (pair (pair (lambda
-                          (pair (big_map (pair address address string) nat) address address string nat)
-                          (big_map (pair address address string) nat))
-                       (lambda (pair address address string (big_map (pair address address string) nat)) nat))
-                 (pair (list (pair address address string nat nat))
+                          (pair (big_map (pair address address nat) nat) address address nat nat)
+                          (big_map (pair address address nat) nat))
+                       (lambda (pair address address nat (big_map (pair address address nat) nat)) nat))
+                 (pair (list (pair address address nat nat nat))
                        address
                        (big_map string bytes)
-                       (big_map string address)
-                       (big_map string (pair string (map string bytes)))
-                       (option (big_map (pair address string) (set address)))
-                       (big_map (pair address address string) nat)))
+                       (big_map nat address)
+                       (big_map nat (pair nat (map string bytes)))
+                       nat
+                       (option (big_map (pair address nat) (set address)))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  address
                  (big_map string bytes)
-                 (big_map string address)
-                 (big_map string (pair string (map string bytes)))
-                 (option (big_map (pair address string) (set address)))
-                 (big_map (pair address address string) nat))
+                 (big_map nat address)
+                 (big_map nat (pair nat (map string bytes)))
+                 nat
+                 (option (big_map (pair address nat) (set address)))
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR ;
              DIG 2 ;
              UNPAIR ;
-             EMPTY_MAP (pair address address string) (pair nat int) ;
+             EMPTY_MAP (pair address address nat) (pair nat int) ;
              DUP 3 ;
-             GET 10 ;
+             GET 12 ;
              NIL operation ;
              DIG 3 ;
              ITER { DIG 2 ;
@@ -556,7 +550,7 @@ const contract = `
              NIL operation ;
              DIG 3 ;
              LAMBDA
-               (pair (list operation) (pair address address string) nat int)
+               (pair (list operation) (pair address address nat) nat int)
                (list operation)
                { UNPAIR ;
                  SWAP ;
@@ -580,7 +574,7 @@ const contract = `
                       EMIT %allowance_update
                         (pair (address %owner)
                               (address %spender)
-                              (string %token_id)
+                              (nat %token_id)
                               (nat %new_allowance)
                               (int %diff)) ;
                       NIL operation ;
@@ -607,7 +601,7 @@ const contract = `
              SWAP ;
              DIG 2 ;
              SWAP ;
-             UPDATE 10 ;
+             UPDATE 12 ;
              SWAP ;
              PAIR } ;
          DUP 7 ;
@@ -616,31 +610,33 @@ const contract = `
          APPLY ;
          LAMBDA
            (pair (lambda address unit)
-                 (pair (list (or (pair address address string) (pair address address string)))
+                 (pair (list (or (pair address address nat) (pair address address nat)))
                        address
                        (big_map string bytes)
-                       (big_map string address)
-                       (big_map string (pair string (map string bytes)))
-                       (option (big_map (pair address string) (set address)))
-                       (big_map (pair address address string) nat)))
+                       (big_map nat address)
+                       (big_map nat (pair nat (map string bytes)))
+                       nat
+                       (option (big_map (pair address nat) (set address)))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  address
                  (big_map string bytes)
-                 (big_map string address)
-                 (big_map string (pair string (map string bytes)))
-                 (option (big_map (pair address string) (set address)))
-                 (big_map (pair address address string) nat))
+                 (big_map nat address)
+                 (big_map nat (pair nat (map string bytes)))
+                 nat
+                 (option (big_map (pair address nat) (set address)))
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              SWAP ;
              UNPAIR ;
              SENDER ;
              DUP 3 ;
-             GET 9 ;
+             GET 11 ;
              IF_NONE
                { DROP 4 ;
                  PUSH string "The storage does not support operators management" ;
                  FAILWITH }
-               { NIL (pair address address string bool) ;
+               { NIL (pair address address nat bool) ;
                  PAIR ;
                  DIG 2 ;
                  ITER { SWAP ;
@@ -676,9 +672,9 @@ const contract = `
                                  DUP 4 ;
                                  PAIR ;
                                  UPDATE } ;
-                            NIL (pair address address string bool) ;
+                            NIL (pair address address nat bool) ;
                             DIG 5 ;
-                            NIL (pair address address string bool) ;
+                            NIL (pair address address nat bool) ;
                             SWAP ;
                             ITER { CONS } ;
                             ITER { CONS } ;
@@ -712,9 +708,9 @@ const contract = `
                                  EQ ;
                                  IF { DROP ; DIG 4 ; NONE (set address) ; DUP 5 ; DUP 4 ; PAIR ; UPDATE }
                                     { DIG 5 ; SWAP ; SOME ; DUP 5 ; DUP 4 ; PAIR ; UPDATE } } ;
-                            NIL (pair address address string bool) ;
+                            NIL (pair address address nat bool) ;
                             DIG 5 ;
-                            NIL (pair address address string bool) ;
+                            NIL (pair address address nat bool) ;
                             SWAP ;
                             ITER { CONS } ;
                             ITER { CONS } ;
@@ -731,14 +727,14 @@ const contract = `
                  DIG 3 ;
                  DIG 2 ;
                  SOME ;
-                 UPDATE 9 ;
+                 UPDATE 11 ;
                  NIL operation ;
                  DIG 3 ;
                  DIG 3 ;
                  PAIR ;
                  EMIT %operator_update
                    (pair (list %newUpdates
-                            (pair (address %owner) (address %operator) (string %token_id) (bool %is_operator)))
+                            (pair (address %owner) (address %operator) (nat %token_id) (bool %is_operator)))
                          (address %sender)) ;
                  CONS ;
                  PAIR } } ;
@@ -750,31 +746,34 @@ const contract = `
            (pair (pair (lambda
                           (pair address
                                 (big_map string bytes)
-                                (big_map string address)
-                                (big_map string (pair string (map string bytes)))
-                                (option (big_map (pair address string) (set address)))
-                                (big_map (pair address address string) nat))
-                          (pair (big_map string address)
-                                (big_map string address)
-                                (lambda (pair (big_map string address) address string nat) (big_map string address))
-                                (lambda (pair (big_map string address) address string nat) (big_map string address))
-                                (lambda (pair (big_map string address) address string) nat)
-                                (lambda (pair (big_map string address) string) (option nat))))
+                                (big_map nat address)
+                                (big_map nat (pair nat (map string bytes)))
+                                nat
+                                (option (big_map (pair address nat) (set address)))
+                                (big_map (pair address address nat) nat))
+                          (pair (big_map nat address)
+                                (big_map nat address)
+                                (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
+                                (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
+                                (lambda (pair (big_map nat address) address nat) nat)
+                                (lambda (pair (big_map nat address) nat) (option nat))))
                        string)
-                 (pair (pair (list (pair address string)) (contract (list (pair (pair address string) nat))))
+                 (pair (pair (list (pair address nat)) (contract (list (pair (pair address nat) nat))))
                        address
                        (big_map string bytes)
-                       (big_map string address)
-                       (big_map string (pair string (map string bytes)))
-                       (option (big_map (pair address string) (set address)))
-                       (big_map (pair address address string) nat)))
+                       (big_map nat address)
+                       (big_map nat (pair nat (map string bytes)))
+                       nat
+                       (option (big_map (pair address nat) (set address)))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  address
                  (big_map string bytes)
-                 (big_map string address)
-                 (big_map string (pair string (map string bytes)))
-                 (option (big_map (pair address string) (set address)))
-                 (big_map (pair address address string) nat))
+                 (big_map nat address)
+                 (big_map nat (pair nat (map string bytes)))
+                 nat
+                 (option (big_map (pair address nat) (set address)))
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR ;
              DIG 2 ;
@@ -822,37 +821,40 @@ const contract = `
            (pair (pair (lambda
                           (pair address
                                 (big_map string bytes)
-                                (big_map string address)
-                                (big_map string (pair string (map string bytes)))
-                                (option (big_map (pair address string) (set address)))
-                                (big_map (pair address address string) nat))
-                          (pair (big_map string address)
-                                (big_map string address)
-                                (lambda (pair (big_map string address) address string nat) (big_map string address))
-                                (lambda (pair (big_map string address) address string nat) (big_map string address))
-                                (lambda (pair (big_map string address) address string) nat)
-                                (lambda (pair (big_map string address) string) (option nat))))
-                       (lambda (pair address string (big_map (pair address string) (set address))) unit)
+                                (big_map nat address)
+                                (big_map nat (pair nat (map string bytes)))
+                                nat
+                                (option (big_map (pair address nat) (set address)))
+                                (big_map (pair address address nat) nat))
+                          (pair (big_map nat address)
+                                (big_map nat address)
+                                (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
+                                (lambda (pair (big_map nat address) address nat nat) (big_map nat address))
+                                (lambda (pair (big_map nat address) address nat) nat)
+                                (lambda (pair (big_map nat address) nat) (option nat))))
+                       (lambda (pair address nat (big_map (pair address nat) (set address))) unit)
                        (lambda
-                          (pair (big_map (pair address address string) nat) address address string nat)
-                          (big_map (pair address address string) nat))
-                       (lambda (pair address address string (big_map (pair address address string) nat)) nat)
+                          (pair (big_map (pair address address nat) nat) address address nat nat)
+                          (big_map (pair address address nat) nat))
+                       (lambda (pair address address nat (big_map (pair address address nat) nat)) nat)
                        string
                        string)
-                 (pair (list (pair address (list (pair address nat string))))
+                 (pair (list (pair address (list (pair address nat nat))))
                        address
                        (big_map string bytes)
-                       (big_map string address)
-                       (big_map string (pair string (map string bytes)))
-                       (option (big_map (pair address string) (set address)))
-                       (big_map (pair address address string) nat)))
+                       (big_map nat address)
+                       (big_map nat (pair nat (map string bytes)))
+                       nat
+                       (option (big_map (pair address nat) (set address)))
+                       (big_map (pair address address nat) nat)))
            (pair (list operation)
                  address
                  (big_map string bytes)
-                 (big_map string address)
-                 (big_map string (pair string (map string bytes)))
-                 (option (big_map (pair address string) (set address)))
-                 (big_map (pair address address string) nat))
+                 (big_map nat address)
+                 (big_map nat (pair nat (map string bytes)))
+                 nat
+                 (option (big_map (pair address nat) (set address)))
+                 (big_map (pair address address nat) nat))
            { UNPAIR ;
              UNPAIR 6 ;
              DIG 6 ;
@@ -863,11 +865,11 @@ const contract = `
              EXEC ;
              DUG 2 ;
              NIL operation ;
-             EMPTY_MAP (pair address address string) (pair nat int) ;
-             EMPTY_MAP (pair address string) (pair nat int) ;
+             EMPTY_MAP (pair address address nat) (pair nat int) ;
+             EMPTY_MAP (pair address nat) (pair nat int) ;
              NIL operation ;
              DUP 6 ;
-             GET 10 ;
+             GET 12 ;
              DIG 7 ;
              PAIR 5 ;
              DIG 2 ;
@@ -953,13 +955,13 @@ const contract = `
                                           SWAP ;
                                           EXEC }
                                         { DUP 12 ;
-                                          GET 9 ;
+                                          GET 11 ;
                                           IF_NONE
                                             { DIG 8 ; DROP ; DUP 15 ; FAILWITH }
                                             { DUP 5 ; DUP 12 ; PAIR 3 ; DUP 14 ; SWAP ; EXEC ; DROP ; DIG 8 } } }
                                    { DROP ;
                                      DUP 12 ;
-                                     GET 9 ;
+                                     GET 11 ;
                                      IF_NONE
                                        { DIG 8 ; DROP ; DUP 15 ; FAILWITH }
                                        { DUP 5 ; DUP 12 ; PAIR 3 ; DUP 14 ; SWAP ; EXEC ; DROP ; DIG 8 } } } ;
@@ -1113,7 +1115,7 @@ const contract = `
                            DUP 12 ;
                            PAIR 4 ;
                            EMIT %transfer_event
-                             (pair (address %from_) (address %to_) (string %token_id) (nat %amount)) ;
+                             (pair (address %from_) (address %to_) (nat %token_id) (nat %amount)) ;
                            NIL operation ;
                            DIG 8 ;
                            NIL operation ;
@@ -1165,7 +1167,7 @@ const contract = `
              UNPAIR 5 ;
              DIG 6 ;
              DIG 2 ;
-             UPDATE 10 ;
+             UPDATE 12 ;
              SWAP ;
              CAR ;
              UPDATE 5 ;
@@ -1187,7 +1189,7 @@ const contract = `
                          CAR ;
                          PAIR 4 ;
                          EMIT %balance_update
-                           (pair (address %owner) (string %token_id) (nat %new_balance) (int %diff)) ;
+                           (pair (address %owner) (nat %token_id) (nat %new_balance) (int %diff)) ;
                          NIL operation ;
                          DIG 2 ;
                          NIL operation ;
@@ -1219,7 +1221,7 @@ const contract = `
                          EMIT %allowance_update
                            (pair (address %owner)
                                  (address %spender)
-                                 (string %token_id)
+                                 (nat %token_id)
                                  (nat %new_allowance)
                                  (int %diff)) ;
                          NIL operation ;
@@ -1293,7 +1295,7 @@ const contract = `
                        { PAIR ; SWAP ; GET 3 ; SWAP ; EXEC }
                        { PAIR ; SWAP ; CAR ; SWAP ; EXEC } } } } } ;
   view "get_balance"
-       (pair (address %owner) (string %token_id))
+       (pair (address %owner) (nat %token_id))
        nat
        { UNPAIR ;
          SWAP ;
@@ -1310,7 +1312,7 @@ const contract = `
              EQ ;
              IF { PUSH nat 1 } { PUSH nat 0 } } } ;
   view "get_total_supply"
-       string
+       nat
        nat
        { UNPAIR ;
          SWAP ;
@@ -1320,11 +1322,11 @@ const contract = `
          IF_NONE { NONE nat } { DROP ; PUSH nat 1 ; SOME } ;
          IF_NONE { PUSH nat 0 } {} } ;
   view "is_operator"
-       (pair (address %owner) (address %operator) (string %token_id))
+       (pair (address %owner) (address %operator) (nat %token_id))
        bool
        { UNPAIR ;
          SWAP ;
-         GET 9 ;
+         GET 11 ;
          IF_NONE
            { DROP ; PUSH bool False }
            { DUP 2 ;
@@ -1335,11 +1337,11 @@ const contract = `
              GET ;
              IF_NONE { DROP ; PUSH bool False } { SWAP ; GET 3 ; MEM } } } ;
   view "get_allowance"
-       (pair (address %owner) (address %spender) (string %token_id))
+       (pair (address %owner) (address %spender) (nat %token_id))
        nat
-       { UNPAIR ; SWAP ; GET 10 ; SWAP ; GET ; IF_NONE { PUSH nat 0 } {} } ;
+       { UNPAIR ; SWAP ; GET 12 ; SWAP ; GET ; IF_NONE { PUSH nat 0 } {} } ;
   view "get_token_metadata"
-       string
+       nat
        (map string bytes)
        { UNPAIR ;
          SWAP ;
@@ -1348,7 +1350,7 @@ const contract = `
          GET ;
          IF_NONE { EMPTY_MAP string bytes } { CDR } } ;
   view "is_token"
-       string
+       nat
        bool
        { UNPAIR ;
          SWAP ;
@@ -1357,8 +1359,6 @@ const contract = `
          GET ;
          IF_NONE { NONE nat } { DROP ; PUSH nat 1 ; SOME } ;
          IF_NONE { PUSH bool False } { DROP ; PUSH bool True } } }
-
-
 `
 const metadata = new MichelsonMap()
 metadata.set('', stringToBytes('tezos-storage:content'))
@@ -1386,8 +1386,9 @@ const deploy = async () => {
       code: contract,
       storage: {
         registry: 'KT1CvxjKzaK5P3A88zYFJe3ThHuzjBRCQorh',
-        metadata: [],
-        assets: [],
+        token_index: 0n,
+        metadata,
+        ledger: [],
         token_metadata: [],
         operators: [],
         approvals: [],

@@ -114,4 +114,26 @@ describe('common/utils', () => {
       expect(SUT.truncateDID(value)).toEqual(result)
     })
   })
+
+  describe('addUrn', () => {
+    it.each([
+      ['uuid', '1234', 'urn:uuid:1234'],
+      ['did:tz', '5678', 'urn:did:tz:5678'],
+    ])('should, with type %s and uuid %s, return %s as expected', (type, uuid, result) => {
+      // when ... we want to add urn to the uuid
+      // then ... we should get the urn as expected
+      expect(SUT.addUrn(type)(uuid)).toEqual(result)
+    })
+  })
+
+  describe('addUrnUuid', () => {
+    it.each([
+      ['1234', 'urn:uuid:1234'],
+      ['5678', 'urn:uuid:5678'],
+    ])('should, with uuid %s, return %s as expected', (uuid, result) => {
+      // when ... we want to add urn to the uuid
+      // then ... we should get the urn as expected
+      expect(SUT.addUrnUuid(uuid)).toEqual(result)
+    })
+  })
 })

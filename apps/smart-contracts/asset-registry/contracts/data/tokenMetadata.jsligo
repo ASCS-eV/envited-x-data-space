@@ -5,7 +5,7 @@ export type data = {
     token_info: map<string, bytes>;
 };
 
-export type T = big_map<string, data>;
+export type T = big_map<nat, data>;
 
 export const get_token_info = (tokenId: Token.T, tokenMetadata: T, ): map<string, bytes> => {
     return match(Big_map.find_opt(tokenId, tokenMetadata)) {

@@ -25,6 +25,8 @@
     "@swc/helpers": "~0.5.2",
     "@taquito/beacon-wallet": "^20.0.1",
     "@taquito/taquito": "^20.0.1",
+    "@taquito/tzip12": "^20.1.0",
+    "@taquito/tzip16": "^20.1.0",
     "@zazuko/env": "^2.1.1",
     "@zip.js/zip.js": "^2.7.40",
     "aws-lambda": "^1.0.7",

@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-listener",
+    "module": "commonjs",
+    "types": ["node"]
+  },
+  "exclude": ["common/listener/*.spec.ts", "common/listener/*.test.ts"],
+  "include": ["common/listener/*.ts"]
+}

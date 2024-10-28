@@ -1,20 +1,20 @@
 'use server'
 
-import { getAssetMintParams, uploadAssetTokenMetadata } from '../../common/serverActions'
+import { getMintParams, uploadTokenMetadata } from '../../common/serverActions'
 import { internalServerErrorError } from '../../common/utils'
 
-export async function uploadTokenMetadata(id: string) {
+export async function uploadAssetTokenMetadata(id: string) {
   try {
-    const fileLocation = await uploadAssetTokenMetadata(id)
+    const fileLocation = await uploadTokenMetadata(id)
     return fileLocation
   } catch (e) {
     throw internalServerErrorError()
   }
 }
 
-export async function getMintParams(id: string) {
+export async function getAssetMintParams(id: string) {
   try {
-    const mintParams = await getAssetMintParams(id)
+    const mintParams = await getMintParams(id)
     return mintParams
   } catch (e) {
     console.log(e)

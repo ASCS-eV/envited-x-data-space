@@ -13,7 +13,7 @@ import {
   unauthorizedError,
 } from '../../utils'
 
-export const _getAssetMintParams =
+export const _getMintParams =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
   async (assetId: string) => {
     if (isNil(assetId) || isEmpty(assetId)) {
@@ -50,4 +50,4 @@ export const _getAssetMintParams =
     }
   }
 
-export const getAssetMintParams = _getAssetMintParams({ db, getServerSession })
+export const getMintParams = _getMintParams({ db, getServerSession })

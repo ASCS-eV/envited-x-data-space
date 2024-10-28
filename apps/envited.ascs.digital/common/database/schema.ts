@@ -185,3 +185,15 @@ export const asset = pgTable('asset', {
     .references(() => user.id)
     .notNull(),
 })
+
+export const token = pgTable('token', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  hash: text('hash'),
+  timestamp: text('timestamp'),
+  contract: text('contract'),
+  creator: text('creator'),
+  tokenId: text('token_id'),
+  thumbnail: text('thumbnail'),
+  coverImage: text('cover_image'),
+  tokenMetadata: jsonb('token_metadata'),
+})

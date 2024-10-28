@@ -86,7 +86,7 @@ function App() {
             </p>
             {isLoading && <Loader />}
             {qrCodeValue && !isLoading && !isRedirecting && (
-              <div>
+              <div className="mt-6 flex justify-center">
                 <QRCode value={qrCodeValue} />
               </div>
             )}

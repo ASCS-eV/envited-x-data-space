@@ -1,15 +1,21 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
-
-import { uploadAssetTokenMetadata } from '../../common/serverActions'
+import { getAssetMintParams, uploadAssetTokenMetadata } from '../../common/serverActions'
 import { internalServerErrorError } from '../../common/utils'
 
-export async function mintAssetById(id: string) {
+export async function uploadTokenMetadata(id: string) {
   try {
     const fileLocation = await uploadAssetTokenMetadata(id)
-    console.log(fileLocation)
-    // revalidatePath('/dashboard/assets')
+    return fileLocation
+  } catch (e) {
+    throw internalServerErrorError()
+  }
+}
+
+export async function getMintParams(id: string) {
+  try {
+    const mintParams = await getAssetMintParams(id)
+    return mintParams
   } catch (e) {
     console.log(e)
     throw internalServerErrorError()

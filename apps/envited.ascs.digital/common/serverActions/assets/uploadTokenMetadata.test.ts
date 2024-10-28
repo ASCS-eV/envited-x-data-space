@@ -37,6 +37,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -91,6 +92,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -134,6 +136,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -184,6 +187,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -225,6 +229,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -274,6 +279,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 

@@ -1,1 +1,1 @@
-export type T = nat;
+export type T = string;

@@ -68,7 +68,7 @@ export const get_token_metadata = <L>(
     };
 };
 
-export type get_allowance_T = {owner: address; spender: address; token_id: nat};
+export type get_allowance_T = {owner: address; spender: address; token_id: string};
 export type get_allowance_R = nat;
 
 export const get_allowance = <L>(
@@ -83,7 +83,7 @@ export const get_allowance = <L>(
     };
 };
 
-export type is_operator_T = {owner: address; operator: address; token_id: nat};
+export type is_operator_T = {owner: address; operator: address; token_id: string};
 export type is_operator_R = bool;
 
 export const is_operator = <L>(

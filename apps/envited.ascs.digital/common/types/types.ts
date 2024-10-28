@@ -73,7 +73,7 @@ export enum CredentialType {
 export interface Asset {
   id: string
   cid: string
-  metadata: string
+  metadata: AssetMetadata
   status: AssetStatus
   userId: string
 }

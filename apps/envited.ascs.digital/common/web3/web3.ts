@@ -5,13 +5,11 @@ import { stringToBytes } from '@taquito/utils'
 export const mintToken =
   (web3: { Tezos: TezosToolkit | null; wallet: BeaconWallet | null }) =>
   async ({
-    tokenId,
     owner,
     from,
     contractAddress,
     tokenInfo,
   }: {
-    tokenId: string
     owner: string
     from: string
     contractAddress: string
@@ -25,8 +23,6 @@ export const mintToken =
       .mint({
         from_uuid: from,
         to_: owner,
-        token_id: tokenId,
-        amount: 1,
         token_info: token_info_map,
       })
       .send()

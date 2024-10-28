@@ -170,7 +170,7 @@ export interface FA2 {
   **/
 
   @view
-  const total_supply: (token_id: string, s: storage) => nat;
+  const total_supply: (token_id: nat, s: storage) => nat;
   /** returns the list of all the token IDs
 **/
 

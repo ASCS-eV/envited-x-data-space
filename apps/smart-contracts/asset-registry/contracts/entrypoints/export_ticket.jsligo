@@ -36,7 +36,7 @@ type balance_event_data =
   @layout("comb")
   {
     owner: address,
-    token_id: string,
+    token_id: nat,
     new_balance: nat,
     diff: int
   };
@@ -46,7 +46,7 @@ type allowance_update_type =
 {
    owner: address,
    spender: address,
-   token_id: string,
+   token_id: nat,
    new_allowance: nat,
    diff: int
 };

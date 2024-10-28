@@ -3,6 +3,7 @@ import { boolean, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-c
 
 export const user = pgTable('user', {
   id: text('id').unique().primaryKey(),
+  uuid: uuid('uuid').unique(),
   name: text('name').unique(),
   email: text('email'),
   isAscsMember: boolean('is_ascs_member'),

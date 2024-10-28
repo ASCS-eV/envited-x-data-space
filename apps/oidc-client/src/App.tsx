@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import ReactQRCode from 'react-qr-code'
 import useSWR from 'swr'
 
-import styles from './App.module.css'
 import { fetcher } from './common/fetcher'
+import './global.css'
 import { Loader } from './modules/loader'
 import { getOpenIdConnectUrl } from './utils'
 
@@ -51,45 +51,66 @@ function App() {
   }, [data])
 
   return (
-    <div className={styles.App}>
-      <header className={styles.header}>
-        <div className={styles.logo}>
-          <img src="/envited-logo.png" alt="Envited Data Space" />
+    <>
+      <header className="fixed top-0 z-40 w-full">
+        <div className="absolute top-0 w-full bg-white h-2"></div>
+        <div className="absolute z-40 bg-logo bg-no-repeat inline-flex justify-center px-24 pt-2 pb-4 hidden md:block">
+          <img src="/ASCS_logo_envited-X_colour_alex.png" alt="Envited Data Space" height={40} width={170} />
+        </div>
+        <div className="absolute z-40 bg-logo bg-no-repeat inline-flex justify-center px-20 pt-2 pb-4 md:hidden -left-16">
+          <img src="/ASCS_logo_envited-X_colour_alex.png" alt="Envited Data Space" height={30} width={128} />
         </div>
       </header>
+      <div className="relative isolate overflow-hidden bg-gradient-to-b to-gray-900 from-blue-900/40 pt-14 bg-gray-900 min-h-screen flex flex-col justify-center items-center">
+        <div
+          id="demim"
+          aria-hidden="true"
+          className="absolute inset-y-0 right-1/2 -z-10 -mr-96 w-[200%] origin-top-right skew-x-[-30deg] bg-gray-900 shadow-xl shadow-blue-900 ring-1 ring-blue-900 sm:-mr-80 lg:-mr-96"
+        />
+        <div className="mx-auto text-center">
+          <h3 className="max-w-2xl text-4xl font-bold tracking-tight text-white leading-normal">
+            Sign in with your verified credentials to continue to <strong>Envited Data Space</strong>
+          </h3>
 
-      <main className={styles.container}>
-        <p>
-          Sign in with your verified credentials to continue to <strong>Envited Data Space</strong>
-        </p>
-        <p className={styles.pSmall}>
-          By presenting your verifiable credential you agree to the{' '}
-          <a href={import.meta.env.VITE_EXTERNAL_TERMS_AND_CONDITIONS_URL} target="_blank">
-            Terms of Service
-          </a>{' '}
-          and using the information for creating your ENVITED X Dataspace account
-        </p>
-        {isLoading && <Loader />}
-        {qrCodeValue && !isLoading && !isRedirecting && (
-          <div className={`${styles.qrCodeContainer} ${styles.shadow}`}>
-            <QRCode value={qrCodeValue} />
+          <div className="mx-auto mt-12 max-w-lg rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10 text-center">
+            <p className="mt-6 text-lg leading-8 text-gray-700">
+              By presenting your verifiable credential you agree to the{' '}
+              <a
+                href={import.meta.env.VITE_EXTERNAL_TERMS_AND_CONDITIONS_URL}
+                target="_blank"
+                className="text-blue-900 underline hover:text-blue-800"
+              >
+                Terms of Service
+              </a>{' '}
+              and using the information for creating your ENVITED X Dataspace account
+            </p>
+            {isLoading && <Loader />}
+            {qrCodeValue && !isLoading && !isRedirecting && (
+              <div>
+                <QRCode value={qrCodeValue} />
+              </div>
+            )}
+            {isRedirecting && <div className="text-lg">Redirecting</div>}
+            {error && (
+              <div className="mt-6">
+                <h3 className="text-red-500">Error</h3>
+                <p className="text-red-500">{errorMessage}</p>
+              </div>
+            )}
+            <p className="mt-6 text-lg leading-8 text-gray-700">
+              If you don't have a credential{' '}
+              <a
+                href={import.meta.env.VITE_EXTERNAL_DEMIM_URL}
+                target="_blank"
+                className="text-blue-900 underline hover:text-blue-800"
+              >
+                Register here
+              </a>
+            </p>
           </div>
-        )}
-        {isRedirecting && <div className={styles.redirectingContainer}>Redirecting</div>}
-        <p className={styles.pSmall}>
-          If you don't have a credential{' '}
-          <a href={import.meta.env.VITE_EXTERNAL_DEMIM_URL} target="_blank">
-            Register here
-          </a>
-        </p>
-        {error && (
-          <div className={styles.error}>
-            <h3 className={styles.errorTitle}>Error</h3>
-            <p>{errorMessage}</p>
-          </div>
-        )}
-      </main>
-    </div>
+        </div>
+      </div>
+    </>
   )
 }
 

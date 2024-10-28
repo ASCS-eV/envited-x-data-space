@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 import { useTranslation } from '../../../common/i18n'
 import { Button } from '../../Button'
 
@@ -10,7 +8,7 @@ export const Vision = () => {
     <div>
       <div className="relative flex items-center justify-center h-screen overflow-hidden">
         <iframe
-          className="absolute z-10 w-auto min-w-full min-h-full max-w-none aspect-video"
+          className="absolute z-10 w-auto min-w-full min-h-full max-w-none aspect-video scale-125"
           src="https://www.youtube.com/embed/nvkmMvjVDIE?playlist=nvkmMvjVDIE&loop=1&autoplay=1&mute=1&controls=0"
           allow="autoplay"
         />

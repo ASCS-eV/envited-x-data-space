@@ -22,7 +22,7 @@ export const _insert =
         throw forbiddenError({
           resource: 'assets',
           resourceId: userId,
-          message: 'Not allowed to insert a asset',
+          message: 'Not allowed to insert a upload',
           userId: session.user.id,
         })
       }

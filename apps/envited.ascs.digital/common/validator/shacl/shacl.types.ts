@@ -17,6 +17,9 @@ export enum Schema {
   sh = 'sh',
   skos = 'skos',
   xsd = 'xsd',
+  domainMetadata = 'domainMetadata',
+  gxMetadata = 'gxMetadata',
+  marketplaceInfo = 'marketplaceInfo',
 }
 
 export type ValidationSchema =
@@ -28,3 +31,6 @@ export type ValidationSchema =
   | Schema.manifest
   | Schema.ositrace
   | Schema.scenario
+  | Schema.domainMetadata
+  | Schema.gxMetadata
+  | Schema.marketplaceInfo

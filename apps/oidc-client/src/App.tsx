@@ -71,7 +71,7 @@ function App() {
         </p>
         {isLoading && <Loader />}
         {qrCodeValue && !isLoading && !isRedirecting && (
-          <div className={`${styles.qrCodeContainer} ${styles.shadow}`}>
+          <div className="mx-auto mt-6 w-auto flex justify-center">
             <QRCode value={qrCodeValue} />
           </div>
         )}

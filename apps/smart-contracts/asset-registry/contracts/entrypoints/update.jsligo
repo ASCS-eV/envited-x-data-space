@@ -11,7 +11,7 @@ type operator =
 {
       owner    : address;
       operator : address;
-      token_id : string;
+      token_id : nat;
 };
 
 export type operator_update =

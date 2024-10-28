@@ -92,39 +92,6 @@
         }
       ]
     },
-    "@taqueria/plugin-ligo.compile.1727868018948": {
-      "task": "compile",
-      "plugin": "@taqueria/plugin-ligo",
-      "time": 1727868018948,
-      "output": [
-        {
-          "source": "Main.jsligo",
-          "artifact": "artifacts/Main.tz\nartifacts/Main.default_storage.tz\nmint_parameter in Main.parameterList.jsligo not compiled\nupdate_operator_parameter in Main.parameterList.jsligo not compiled\ntransfer_parameter in Main.parameterList.jsligo not compiled"
-        }
-      ]
-    },
-    "@taqueria/plugin-ligo.compile.1727868050937": {
-      "task": "compile",
-      "plugin": "@taqueria/plugin-ligo",
-      "time": 1727868050937,
-      "output": [
-        {
-          "source": "Main.jsligo",
-          "artifact": "artifacts/Main.tz\nartifacts/Main.default_storage.tz\nartifacts/Main.parameter.mint_parameter.tz\nartifacts/Main.parameter.update_operator_parameter.tz\nartifacts/Main.parameter.transfer_parameter.tz"
-        }
-      ]
-    },
-    "@taqueria/plugin-ligo.compile.1728126430201": {
-      "task": "compile",
-      "plugin": "@taqueria/plugin-ligo",
-      "time": 1728126430202,
-      "output": [
-        {
-          "source": "Main.jsligo",
-          "artifact": "artifacts/Main.tz\nartifacts/Main.default_storage.tz\nartifacts/Main.parameter.mint_parameter.tz\nartifacts/Main.parameter.update_operator_parameter.tz\nartifacts/Main.parameter.transfer_parameter.tz"
-        }
-      ]
-    },
     "@taqueria/plugin-ligo.compile.1729504748457": {
       "task": "compile",
       "plugin": "@taqueria/plugin-ligo",
@@ -140,6 +107,39 @@
       "task": "compile",
       "plugin": "@taqueria/plugin-ligo",
       "time": 1729505459902,
+      "output": [
+        {
+          "source": "Main.jsligo",
+          "artifact": "artifacts/Main.tz\nartifacts/Main.default_storage.tz\nartifacts/Main.parameter.mint_parameter.tz\nartifacts/Main.parameter.update_operator_parameter.tz\nartifacts/Main.parameter.transfer_parameter.tz"
+        }
+      ]
+    },
+    "@taqueria/plugin-ligo.compile.1729682389553": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1729682389553,
+      "output": [
+        {
+          "source": "Main.jsligo",
+          "artifact": "artifacts/Main.tz\nartifacts/Main.default_storage.tz\nartifacts/Main.parameter.mint_parameter.tz\nartifacts/Main.parameter.update_operator_parameter.tz\nartifacts/Main.parameter.transfer_parameter.tz"
+        }
+      ]
+    },
+    "@taqueria/plugin-ligo.compile.1729683442399": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1729683442399,
+      "output": [
+        {
+          "source": "Main.jsligo",
+          "artifact": "artifacts/Main.tz\nartifacts/Main.default_storage.tz\nmint_parameter in Main.parameterList.jsligo not compiled\nupdate_operator_parameter in Main.parameterList.jsligo not compiled\ntransfer_parameter in Main.parameterList.jsligo not compiled"
+        }
+      ]
+    },
+    "@taqueria/plugin-ligo.compile.1729683523876": {
+      "task": "compile",
+      "plugin": "@taqueria/plugin-ligo",
+      "time": 1729683523877,
       "output": [
         {
           "source": "Main.jsligo",

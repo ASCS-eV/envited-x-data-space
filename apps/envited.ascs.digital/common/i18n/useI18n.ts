@@ -8,6 +8,7 @@ import { HeaderTranslation } from '../../modules/Header'
 import { HeroHeaderTranslation } from '../../modules/HeroHeader'
 import { ReinventingMobilityTranslation, SimulationDataTranslation, VisionTranslation } from '../../modules/LandingPage'
 import { MemberTranslation } from '../../modules/Member'
+import { MintTranslation } from '../../modules/Mint'
 import { NotFoundTranslation } from '../../modules/NotFound'
 import { ProfileTranslation } from '../../modules/Profile'
 import { UploadedAssetsTranslation } from '../../modules/UploadedAssets'
@@ -32,6 +33,7 @@ const translationObject = mergeTranslations([
   ReinventingMobilityTranslation,
   SimulationDataTranslation,
   VisionTranslation,
+  MintTranslation,
 ]) as TranslationsMap
 
 export const translation = (translations: TranslationsMap) => (namespace: string) => {

@@ -69,7 +69,7 @@ function App() {
         />
         <div className="mx-auto text-center">
           <h3 className="max-w-2xl text-4xl font-bold tracking-tight text-white leading-normal">
-            Sign in with your verified credential to securely access and explore powerful resources inside the{' '}
+            Sign in with your verified credential to securely access the{' '}
             <strong>ENVITED-X data space</strong>.
           </h3>
 
@@ -83,7 +83,7 @@ function App() {
               >
                 Terms of Service
               </a>{' '}
-              and authorize the use of your credentials to create your ENVITED-X data space account.
+              and authorize the use of your credential to create your ENVITED-X data space account.
             </p>
             {isLoading && <Loader />}
             {qrCodeValue && !isLoading && !isRedirecting && (

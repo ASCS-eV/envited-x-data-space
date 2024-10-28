@@ -21,7 +21,7 @@ export const createMetadata = ({ name }: { name: string }) => {
     shouldPreferSymbol: true,
     thumbnailUri: 'THUMBNAIL_URI',
     attributes: [],
-    uploads: [],
+    assets: [],
   }
 }
 

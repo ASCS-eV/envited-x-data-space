@@ -35,6 +35,11 @@ jobs:
       JWKS_ENDPOINT: ${{ vars.JWKS_ENDPOINT }}
       OIDC_SERVER_URL: ${{ vars.OIDC_SERVER_URL }}
       TRUST_ANCHOR_DID: ${{ vars.TRUST_ANCHOR_DID }}
+      PINATA_API_KEY: ${{ vars.PINATA_API_KEY }}
+      PINATA_SECRET: ${{ secrets.PINATA_SECRET }}
+      PINATA_JWT: ${{ vars.PINATA_JWT }}
+      PINATA_GATEWAY: ${{ vars.PINATA_GATEWAY }}
+      ASSETS_CONTRACT: ${{ vars.ASSETS_CONTRACT }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3

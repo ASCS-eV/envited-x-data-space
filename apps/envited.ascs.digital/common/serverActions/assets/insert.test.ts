@@ -4,8 +4,8 @@ import * as SUT from './insert'
 
 describe('serverActions/assets/insert', () => {
   describe('insert', () => {
-    it('should insert the assets as expected', async () => {
-      // when ... we want to insert a assets
+    it('should insert the asset as expected', async () => {
+      // when ... we want to insert a asset
       // then ... it should return the result as expected
       const getServerSessionStub = jest.fn().mockResolvedValue({
         user: {
@@ -18,8 +18,8 @@ describe('serverActions/assets/insert', () => {
       const dbStub = jest.fn().mockResolvedValue({
         insertAsset: jest.fn().mockResolvedValue([
           {
-            id: 'UPLOAD_ID',
-            cid: 'UPLOAD_CID',
+            id: 'ASSET_ID',
+            cid: 'ASSET_CID',
             metadata: 'METADATA',
             status: AssetStatus.pending,
             userId: 'USER_PKH',
@@ -32,12 +32,12 @@ describe('serverActions/assets/insert', () => {
 
       const result = await SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
         'USER_PKH',
-        'UPLOAD_CID',
+        'ASSET_CID',
       )
       const db = await dbStub()
       expect(result).toEqual({
-        id: 'UPLOAD_ID',
-        cid: 'UPLOAD_CID',
+        id: 'ASSET_ID',
+        cid: 'ASSET_CID',
         metadata: 'METADATA',
         status: AssetStatus.pending,
         userId: 'USER_PKH',
@@ -47,7 +47,7 @@ describe('serverActions/assets/insert', () => {
     })
 
     it('should throw an error when there is no session', async () => {
-      // when ... we don't want to insert a assets without session
+      // when ... we don't want to insert a asset without session
       // then ... it should throw an error
       const getServerSessionStub = jest.fn().mockResolvedValue(null)
       const logStub = {
@@ -59,7 +59,7 @@ describe('serverActions/assets/insert', () => {
       })
 
       await expect(
-        SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_PKH', 'UPLOAD_CID'),
+        SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_PKH', 'ASSET_CID'),
       ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
     })
   })

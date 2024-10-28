@@ -15,12 +15,12 @@ export const _insert =
     try {
       const session = await getServerSession()
       if (isNil(session)) {
-        throw unauthorizedError({ resource: 'uploads', resourceId: userId })
+        throw unauthorizedError({ resource: 'assets', resourceId: userId })
       }
 
       if (!equals(userId)(session.user.id)) {
         throw forbiddenError({
-          resource: 'uploads',
+          resource: 'assets',
           resourceId: userId,
           message: 'Not allowed to insert a upload',
           userId: session.user.id,

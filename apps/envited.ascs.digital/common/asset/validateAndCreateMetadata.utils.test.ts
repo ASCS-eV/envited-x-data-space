@@ -1,6 +1,6 @@
 import * as SUT from './validateAndCreateMetadata.utils'
 
-describe('common/upload/validateAndCreateMetadata.utils', () => {
+describe('common/asset/validateAndCreateMetadata.utils', () => {
   describe('createFilename', () => {
     it('should create a filename', async () => {
       const byteArray = 'BYTE_ARRAY'

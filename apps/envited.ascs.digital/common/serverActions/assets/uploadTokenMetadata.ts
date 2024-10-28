@@ -24,10 +24,10 @@ export const uploadTokenMetadataToIPFS =
     getServerSession: () => Promise<Session | null>
     log: Log
   }) =>
-  async (uploadId: string) => {
-    log.info('uploadTokenMetadataToIPFS', { uploadId })
-    if (isNil(uploadId) || isEmpty(uploadId)) {
-      throw badRequestError({ resource: 'uploads', resourceId: uploadId, message: 'Missing ID' })
+  async (assetId: string) => {
+    log.info('uploadTokenMetadataToIPFS', { assetId })
+    if (isNil(assetId) || isEmpty(assetId)) {
+      throw badRequestError({ resource: 'assets', resourceId: assetId, message: 'Missing ID' })
     }
 
     const session = await getServerSession()
@@ -37,20 +37,20 @@ export const uploadTokenMetadataToIPFS =
     }
 
     if (!pathEq(Role.provider, ['user', 'role'])(session)) {
-      throw forbiddenError({ resource: 'uploads', message: 'Insufficient permissions', userId: session.user.id })
+      throw forbiddenError({ resource: 'assets', message: 'Insufficient permissions', userId: session.user.id })
     }
 
     const connection = await db()
-    const [asset] = await connection.getAsset(uploadId)
+    const [asset] = await connection.getAsset(assetId)
 
     if (isNil(asset) || isEmpty(asset)) {
-      throw notFoundError({ resource: 'uploads', resourceId: uploadId, userId: session?.user.id })
+      throw notFoundError({ resource: 'assets', resourceId: assetId, userId: session?.user.id })
     }
 
     const [user] = await connection.getUserById(session.user.id)
 
     if (isNil(user.issuerId) || isEmpty(user.issuerId)) {
-      throw forbiddenError({ resource: 'uploads', message: 'No issuer found', userId: session.user.id })
+      throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })
     }
 
     const group = await createGroup(user.issuerId)

@@ -37,14 +37,14 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
             </tr>
           </thead>
           <tbody>
-            {assets.map((asset, uploadIdx) => {
+            {assets.map((asset, assetIdx) => {
               const metadata = !isEmpty(asset.metadata) ? asset.metadata : {}
 
               return (
                 <tr key={asset.id}>
                   <td
                     className={`${
-                      equals(uploadIdx)(0) ? '' : 'border-t border-transparent'
+                      equals(assetIdx)(0) ? '' : 'border-t border-transparent'
                     } relative py-4 pr-3 text-sm`}
                   >
                     <div className="font-medium text-gray-900">
@@ -55,18 +55,18 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                       <span className="hidden sm:inline">·</span>
                       <span>{metadata.size}</span>
                     </div>
-                    {uploadIdx !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" /> : null}
+                    {assetIdx !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" /> : null}
                   </td>
                   <td
                     className={`${
-                      equals(uploadIdx)(0) ? '' : 'border-t border-gray-200'
+                      equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
                     } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
                   >
                     {equals(asset.status)(AssetStatus.processing) ? <>&hellip;</> : propOr('', 'symbol')(metadata)}
                   </td>
                   <td
                     className={`${
-                      equals(uploadIdx)(0) ? '' : 'border-t border-transparent'
+                      equals(assetIdx)(0) ? '' : 'border-t border-transparent'
                     } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
                   >
                     {equals(asset.status)(AssetStatus.processing) ? (
@@ -91,7 +91,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                         </button>
                       </>
                     )}
-                    {!equals(uploadIdx)(0) ? (
+                    {!equals(assetIdx)(0) ? (
                       <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
                     ) : null}
                   </td>

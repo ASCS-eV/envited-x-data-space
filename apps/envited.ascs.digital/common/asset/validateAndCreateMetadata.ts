@@ -3,7 +3,7 @@ import { all, equals, keys, omit, pipe, prop } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromByteArray, read } from '../archive'
-import { UploadMetadata } from '../types'
+import { AssetMetadata } from '../types'
 import { validateShaclDataWithSchema } from '../validator'
 import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { ValidationSchema } from '../validator/shacl/shacl.types'
@@ -175,7 +175,7 @@ export const _validateAndCreateMetadata =
         }
       | { conforms: boolean; data: { manifest: any; domainMetadata: any }; reports: { conforms: boolean }[] }
     >
-    createMetadata: ({ name }: { name: string }) => UploadMetadata
+    createMetadata: ({ name }: { name: string }) => AssetMetadata
     createFilename: (byteArray: Uint8Array) => Promise<string>
   }) =>
   async (byteArray: Uint8Array) => {
@@ -183,14 +183,14 @@ export const _validateAndCreateMetadata =
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
       const metadata = createMetadata({ name: data?.domainMetadata['@id'] as string })
 
-      const uploadCID = await createFilename(byteArray)
+      const assetCID = await createFilename(byteArray)
       const metadataCID = await createFilename(metadata as any)
 
       return {
         conforms,
         reports,
         metadata,
-        uploadCID,
+        assetCID,
         metadataCID,
       }
     } catch (err) {

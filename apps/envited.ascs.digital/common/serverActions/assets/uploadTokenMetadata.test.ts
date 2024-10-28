@@ -2,7 +2,7 @@ import { AssetStatus, Role } from '../../types'
 import * as SUT from './uploadTokenMetadata'
 
 describe('serverActions/assets/uploadTokenMetadata', () => {
-  describe('uploadAssetTokenMetadataToIPFS', () => {
+  describe('uploadTokenMetadataToIPFS', () => {
     it('should upload the asset token metadata to IPFS as expected', async () => {
       // when ... we want to upload the asset token metadata to IPFS
       // then ... it should upload and return the asset token metadata as expected

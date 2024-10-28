@@ -40,7 +40,7 @@ export enum ButtonType {
   block = 'block',
 }
 
-export enum AssetTypes {
+export enum UploadTypes {
   png = 'image/png',
   jpeg = 'image/jpeg',
 }

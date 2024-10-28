@@ -1,6 +1,6 @@
 import * as SUT from './validateAndCreateMetadata'
 
-describe('common/upload/validateAndCreateMetadata', () => {
+describe('common/asset/validateAndCreateMetadata', () => {
   describe('_validateAndCreateMetadata', () => {
     it('should validate and return a metadata buffer', async () => {
       // when ... we want to validate and create a metadata buffer
@@ -22,7 +22,7 @@ describe('common/upload/validateAndCreateMetadata', () => {
       expect(result).toEqual({
         reports: [{ conforms: true }],
         metadata: 'METADATA_BUFFER',
-        uploadCID: 'HASH',
+        assetCID: 'HASH',
         metadataCID: 'HASH',
       })
     })

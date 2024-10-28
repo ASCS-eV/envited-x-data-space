@@ -4,9 +4,9 @@ import { getSignedUrl as AwsGetSignedUrl } from '@aws-sdk/s3-request-presigner'
 import {
   copyObjectToS3 as _copyObjectToS3,
   deleteObjectFromS3 as _deleteObjectFromS3,
-  getAssetAssetUrl as _getAssetAssetUrl,
+  getAssetUploadUrl as _getAssetUploadUrl,
   getAssetDownloadUrl as _getAssetDownloadUrl,
-  getAssetUrl as _getAssetUrl,
+  getUploadUrl as _getUploadUrl,
   getS3SignedUrl as _getS3SignedUrl,
   readStreamFromS3 as _readStreamFromS3,
   writeStreamToS3 as _writeStreamToS3,
@@ -28,8 +28,8 @@ export const writeFile = _writeStreamToS3({ s3Client })
 
 export const readFile = _readStreamFromS3({ s3Client })
 
-export const getAssetUrl = _getAssetUrl(getSignedUrl)
+export const getUploadUrl = _getUploadUrl(getSignedUrl)
 
 export const getAssetDownloadUrl = _getAssetDownloadUrl(getSignedUrl)
 
-export const getAssetAssetUrl = _getAssetAssetUrl(getSignedUrl)
+export const getAssetUploadUrl = _getAssetUploadUrl(getSignedUrl)

@@ -4,13 +4,13 @@ import {
   GetObjectCommandOutput,
   PutObjectCommandInput,
 } from '@aws-sdk/client-s3'
-import { Upload as S3Upload } from '@aws-sdk/lib-storage'
+import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
 import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { copyFile, deleteFile, readFile, writeFile } from '../..'
 import { updateAsset, validateAndCreateMetadata } from '../../../asset'
+import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
 export const _main =
@@ -23,7 +23,7 @@ export const _main =
     updateAsset,
   }: {
     readFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
-    writeFile: (params: PutObjectCommandInput) => S3Upload
+    writeFile: (params: PutObjectCommandInput) => Upload
     copyFile: ({
       Bucket,
       CopySource,
@@ -38,7 +38,7 @@ export const _main =
       conforms: boolean
       reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
       metadata: AssetMetadata
-      uploadCID: string
+      assetCID: string
       metadataCID: string
     }>
     updateAsset: (newCid: string, oldCid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
@@ -57,7 +57,7 @@ export const _main =
       }
 
       const byteArray = await Body.transformToByteArray()
-      const { conforms, metadata, uploadCID, metadataCID } = await validateAndCreateMetadata(byteArray)
+      const { conforms, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(byteArray)
 
       if (!conforms) {
         await deleteFile({ Bucket, Key })
@@ -69,7 +69,7 @@ export const _main =
       await copyFile({
         Bucket,
         CopySource: `${Bucket}/${Key}`,
-        Key: uploadCID,
+        Key: assetCID,
       })
 
       const writeMetadata = writeFile({
@@ -81,7 +81,7 @@ export const _main =
       })
 
       await writeMetadata.done()
-      await updateAsset(uploadCID, Key, AssetStatus.pending, metadata)
+      await updateAsset(assetCID, Key, AssetStatus.pending, metadata)
       await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)

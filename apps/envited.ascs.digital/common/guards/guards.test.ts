@@ -96,7 +96,7 @@ describe('common/guards', () => {
         },
       } as any
       // then ... we should get the result as expected
-      const result = SUT.isOwnUpload(asset)(session)
+      const result = SUT.isOwnAsset(asset)(session)
 
       expect(result).toEqual(true)
     })

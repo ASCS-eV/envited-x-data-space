@@ -1,2 +1,2 @@
 export { validateAndCreateMetadata } from './validateAndCreateMetadata'
-export { updateUpload } from './updateUploadStatus'
+export { updateAsset } from './updateAssetStatus'

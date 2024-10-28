@@ -10,7 +10,7 @@ export interface TranslationsMap {
   [Language.nl]: { [key: string]: { [key: string]: string } }
 }
 
-export enum UploadStatus {
+export enum AssetStatus {
   processing = 'processing',
   not_accepted = 'not_accepted',
   pending = 'pending',
@@ -40,7 +40,7 @@ export enum ButtonType {
   block = 'block',
 }
 
-export enum UploadTypes {
+export enum AssetTypes {
   png = 'image/png',
   jpeg = 'image/jpeg',
 }
@@ -70,15 +70,15 @@ export enum CredentialType {
   AscsUser = 'AscsUser',
 }
 
-export interface Upload {
+export interface Asset {
   id: string
   cid: string
   metadata: string
-  status: UploadStatus
+  status: AssetStatus
   userId: string
 }
 
-export interface UploadMetadata {
+export interface AssetMetadata {
   name: string
   symbol: string
   decimals: number

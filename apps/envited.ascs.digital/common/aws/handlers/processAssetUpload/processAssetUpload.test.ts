@@ -1,6 +1,6 @@
-import * as SUT from './processUploadUpload'
+import * as SUT from './processAssetUpload'
 
-describe('common/aws/handlers/processUploadUpload', () => {
+describe('common/aws/handlers/processAssetUpload', () => {
   describe('_main', () => {
     it('should extract and write metadata to a bucket', async () => {
       // when ... we want extract data from a asset and upload to a different bucket
@@ -24,7 +24,7 @@ describe('common/aws/handlers/processUploadUpload', () => {
       }) as any
       const copyFileStub = jest.fn().mockResolvedValue('COPIED') as any
       const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
-      const updateUploadStatusStub = jest.fn().mockReturnValue('UPDATED') as any
+      const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
 
       const event = {
         Records: [
@@ -49,7 +49,7 @@ describe('common/aws/handlers/processUploadUpload', () => {
         copyFile: copyFileStub,
         deleteFile: deleteFileStub,
         validateAndCreateMetadata: validateShaclDataWithSchemaStub,
-        updateUpload: updateUploadStatusStub,
+        updateAsset: updateAssetStatusStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
@@ -82,7 +82,7 @@ describe('common/aws/handlers/processUploadUpload', () => {
       }) as any
       const copyFileStub = jest.fn().mockResolvedValue('COPIED') as any
       const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
-      const updateUploadStatusStub = jest.fn().mockReturnValue('UPDATED') as any
+      const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
 
       const event = {
         Records: [
@@ -107,14 +107,14 @@ describe('common/aws/handlers/processUploadUpload', () => {
         copyFile: copyFileStub,
         deleteFile: deleteFileStub,
         validateAndCreateMetadata: validateShaclDataWithSchemaStub,
-        updateUpload: updateUploadStatusStub,
+        updateAsset: updateAssetStatusStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
       expect(readFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
-      expect(updateUploadStatusStub).toHaveBeenCalledWith('OBJECT_KEY', 'OBJECT_KEY', 'not_accepted')
+      expect(updateAssetStatusStub).toHaveBeenCalledWith('OBJECT_KEY', 'OBJECT_KEY', 'not_accepted')
       expect(writeFileStub).toHaveBeenCalledTimes(0)
       expect(deleteFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
     })

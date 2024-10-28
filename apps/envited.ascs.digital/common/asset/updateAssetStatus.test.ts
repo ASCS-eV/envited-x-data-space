@@ -1,18 +1,18 @@
-import { UploadStatus } from '../types'
-import * as SUT from './updateUploadStatus'
+import { AssetStatus } from '../types'
+import * as SUT from './updateAssetStatus'
 
-describe('common/asset/updateUploadStatus', () => {
-  describe('updateUploadStatus', () => {
+describe('common/asset/updateAssetStatus', () => {
+  describe('updateAssetStatus', () => {
     it('should update the asset as expected', async () => {
       // when ... we want to get the asset by id
       // then ... it should update the asset as expected
       const dbStub = jest.fn().mockResolvedValue({
-        updateUploadCID: jest.fn().mockResolvedValue([
+        updateAssetCID: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
             cid: 'NEW_ASSET_CID',
             metadata: 'METADATA',
-            status: UploadStatus.pending,
+            status: AssetStatus.pending,
             userId: 'USER_PKH',
           },
         ]),
@@ -21,10 +21,10 @@ describe('common/asset/updateUploadStatus', () => {
         error: jest.fn(),
       } as any
 
-      const result = await SUT._updateUpload({ db: dbStub, log: logStub })(
+      const result = await SUT._updateAsset({ db: dbStub, log: logStub })(
         'NEW_ASSET_CID',
         'ASSET_CID',
-        UploadStatus.pending,
+        AssetStatus.pending,
         {} as any,
       )
       const db = await dbStub()
@@ -32,10 +32,10 @@ describe('common/asset/updateUploadStatus', () => {
         id: 'ASSET_ID',
         cid: 'NEW_ASSET_CID',
         metadata: 'METADATA',
-        status: UploadStatus.pending,
+        status: AssetStatus.pending,
         userId: 'USER_PKH',
       })
-      expect(db.updateUploadCID).toHaveBeenCalledWith(
+      expect(db.updateAssetCID).toHaveBeenCalledWith(
         {
           cid: 'NEW_ASSET_CID',
           metadata: '{}',

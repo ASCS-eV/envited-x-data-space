@@ -1,5 +1,5 @@
 import { ERRORS } from '../../constants'
-import { Role, UploadStatus } from '../../types'
+import { Role, AssetStatus } from '../../types'
 import * as SUT from './update'
 
 describe('serverActions/assets/update', () => {
@@ -16,21 +16,21 @@ describe('serverActions/assets/update', () => {
       })
 
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: jest.fn().mockResolvedValue([
+        getAsset: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
             cid: 'ASSET_CID',
             metadata: 'METADATA',
-            status: UploadStatus.processing,
+            status: AssetStatus.processing,
             userId: 'USER_PKH',
           },
         ]),
-        updateUpload: jest.fn().mockResolvedValue([
+        updateAsset: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
             cid: 'ASSET_CID',
             metadata: 'METADATA',
-            status: UploadStatus.pending,
+            status: AssetStatus.pending,
             userId: 'USER_PKH',
           },
         ]),
@@ -43,18 +43,18 @@ describe('serverActions/assets/update', () => {
         'USER_PKH',
         'ASSET_ID',
         '',
-        UploadStatus.pending,
+        AssetStatus.pending,
       )
       const db = await dbStub()
       expect(result).toEqual({
         id: 'ASSET_ID',
         cid: 'ASSET_CID',
         metadata: 'METADATA',
-        status: UploadStatus.pending,
+        status: AssetStatus.pending,
         userId: 'USER_PKH',
       })
       expect(getServerSessionStub).toHaveBeenCalledWith()
-      expect(db.updateUpload).toHaveBeenCalledWith('USER_PKH', 'ASSET_ID', {
+      expect(db.updateAsset).toHaveBeenCalledWith('USER_PKH', 'ASSET_ID', {
         cid: 'ASSET_CID',
         id: 'ASSET_ID',
         metadata: '',
@@ -72,16 +72,16 @@ describe('serverActions/assets/update', () => {
       } as any
 
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: jest.fn().mockResolvedValue([
+        getAsset: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
             cid: 'ASSET_CID',
             metadata: 'METADATA',
-            status: UploadStatus.processing,
+            status: AssetStatus.processing,
             userId: 'USER_PKH',
           },
         ]),
-        updateUpload: jest.fn().mockResolvedValue([]),
+        updateAsset: jest.fn().mockResolvedValue([]),
       })
 
       await expect(
@@ -89,7 +89,7 @@ describe('serverActions/assets/update', () => {
           'USER_PKH',
           'ASSET_CID',
           '',
-          UploadStatus.pending,
+          AssetStatus.pending,
         ),
       ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
     })

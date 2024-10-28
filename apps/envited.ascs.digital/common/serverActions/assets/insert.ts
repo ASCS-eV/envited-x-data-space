@@ -28,7 +28,7 @@ export const _insert =
       }
 
       const connection = await db()
-      const [result] = await connection.insertUpload(userId, cid)
+      const [result] = await connection.insertAsset(userId, cid)
 
       return result
     } catch (error: unknown) {

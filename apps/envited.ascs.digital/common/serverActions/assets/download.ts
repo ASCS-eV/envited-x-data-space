@@ -3,10 +3,10 @@
 import { isEmpty, isNil } from 'ramda'
 
 import { getServerSession } from '../../auth'
-import { getUploadDownloadUrl } from '../../aws'
+import { getAssetDownloadUrl } from '../../aws'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isOwnUpload } from '../../guards'
+import { isOwnAsset } from '../../guards'
 import { Log, log } from '../../logger'
 import { Session } from '../../types'
 import {
@@ -23,12 +23,12 @@ export const _download =
     db,
     getServerSession,
     log,
-    getUploadDownloadUrl,
+    getAssetDownloadUrl,
   }: {
     db: Database
     getServerSession: () => Promise<Session | null>
     log: Log
-    getUploadDownloadUrl: (filename: string) => Promise<string>
+    getAssetDownloadUrl: (filename: string) => Promise<string>
   }) =>
   async (id: string) => {
     try {
@@ -43,13 +43,13 @@ export const _download =
       }
 
       const connection = await db()
-      const [asset] = await connection.getUpload(id)
+      const [asset] = await connection.getAsset(id)
 
       if (isNil(asset) || isEmpty(asset)) {
         throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })
       }
 
-      if (!isOwnUpload(asset)(session)) {
+      if (!isOwnAsset(asset)(session)) {
         throw forbiddenError({
           resource: 'assets',
           resourceId: id,
@@ -58,11 +58,11 @@ export const _download =
         })
       }
 
-      return await getUploadDownloadUrl(asset.cid)
+      return await getAssetDownloadUrl(asset.cid)
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()
     }
   }
 
-export const download = _download({ db, getServerSession, log, getUploadDownloadUrl })
+export const download = _download({ db, getServerSession, log, getAssetDownloadUrl })

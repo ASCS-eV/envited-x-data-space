@@ -1,15 +1,15 @@
 import { db } from '../database/queries'
 import { Database } from '../database/types'
 import { Log, log } from '../logger'
-import { UploadMetadata, UploadStatus } from '../types'
+import { AssetMetadata, AssetStatus } from '../types'
 import { formatError, internalServerErrorError } from '../utils'
 
-export const _updateUpload =
+export const _updateAsset =
   ({ db, log }: { db: Database; log: Log }) =>
-  async (newCID: string, oldCid: string, status: UploadStatus, metadata: UploadMetadata | string = '') => {
+  async (newCID: string, oldCid: string, status: AssetStatus, metadata: AssetMetadata | string = '') => {
     try {
       const connection = await db()
-      const [result] = await connection.updateUploadCID(
+      const [result] = await connection.updateAssetCID(
         { metadata: JSON.stringify(metadata), status, cid: newCID },
         oldCid,
       )
@@ -21,4 +21,4 @@ export const _updateUpload =
     }
   }
 
-export const updateUpload = _updateUpload({ db, log })
+export const updateAsset = _updateAsset({ db, log })

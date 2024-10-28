@@ -21,14 +21,14 @@ import {
   update as updateProfile,
 } from './profiles'
 import {
-  getUpload,
-  getUploadByCID,
-  getUploads,
-  getUploadsByUserId,
-  insertUpload,
-  updateUpload,
-  updateUploadCID,
-} from './uploads'
+  getAsset,
+  getAssetByCID,
+  getAssets,
+  getAssetsByUserId,
+  insertAsset,
+  updateAsset,
+  updateAssetCID,
+} from './assets'
 import {
   activateUserById,
   deactivateUserById,
@@ -61,13 +61,13 @@ const queries = {
   getProfileBySlug,
   getPublishedProfiles,
   getUserByIssuerId,
-  getUpload,
-  getUploads,
-  getUploadByCID,
-  getUploadsByUserId,
-  insertUpload,
-  updateUpload,
-  updateUploadCID,
+  getAsset,
+  getAssets,
+  getAssetByCID,
+  getAssetsByUserId,
+  insertAsset,
+  updateAsset,
+  updateAssetCID,
 }
 
 export const init =

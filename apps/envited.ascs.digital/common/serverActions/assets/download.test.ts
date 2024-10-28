@@ -1,5 +1,5 @@
 import { ERRORS } from '../../constants'
-import { Role, UploadStatus } from '../../types'
+import { Role, AssetStatus } from '../../types'
 import * as SUT from './download'
 
 describe('serverActions/assets/download', () => {
@@ -16,12 +16,12 @@ describe('serverActions/assets/download', () => {
       })
 
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: jest.fn().mockResolvedValue([
+        getAsset: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
             cid: 'ASSET_CID',
             metadata: 'METADATA',
-            status: UploadStatus.pending,
+            status: AssetStatus.pending,
             userId: 'USER_PKH',
           },
         ]),
@@ -30,18 +30,18 @@ describe('serverActions/assets/download', () => {
         error: jest.fn(),
       } as any
 
-      const getUploadDownloadUrlStub = jest.fn().mockResolvedValue('DOWNLOAD_URL')
+      const getAssetDownloadUrlStub = jest.fn().mockResolvedValue('DOWNLOAD_URL')
 
       const result = await SUT._download({
         db: dbStub,
         getServerSession: getServerSessionStub,
         log: logStub,
-        getUploadDownloadUrl: getUploadDownloadUrlStub,
+        getAssetDownloadUrl: getAssetDownloadUrlStub,
       })('ASSET_ID')
       const db = await dbStub()
       expect(result).toEqual('DOWNLOAD_URL')
       expect(getServerSessionStub).toHaveBeenCalledWith()
-      expect(db.getUpload).toHaveBeenCalled()
+      expect(db.getAsset).toHaveBeenCalled()
     })
 
     it('should throw an error when there is no session', async () => {
@@ -53,17 +53,17 @@ describe('serverActions/assets/download', () => {
       } as any
 
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: jest.fn().mockResolvedValue([]),
+        getAsset: jest.fn().mockResolvedValue([]),
       })
 
-      const getUploadDownloadUrlStub = jest.fn().mockResolvedValue('DOWNLOAD_URL')
+      const getAssetDownloadUrlStub = jest.fn().mockResolvedValue('DOWNLOAD_URL')
 
       await expect(
         SUT._download({
           db: dbStub,
           getServerSession: getServerSessionStub,
           log: logStub,
-          getUploadDownloadUrl: getUploadDownloadUrlStub,
+          getAssetDownloadUrl: getAssetDownloadUrlStub,
         })('ASSET_ID'),
       ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
     })

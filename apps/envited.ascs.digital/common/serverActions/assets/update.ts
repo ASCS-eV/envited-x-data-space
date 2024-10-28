@@ -5,14 +5,14 @@ import { isEmpty, isNil } from 'ramda'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isOwnUpload } from '../../guards'
+import { isOwnAsset } from '../../guards'
 import { Log, log } from '../../logger'
-import { Session, UploadStatus } from '../../types'
+import { Session, AssetStatus } from '../../types'
 import { forbiddenError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
 
 export const _update =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
-  async (userId: string, id: string, metadata: string, status: UploadStatus) => {
+  async (userId: string, id: string, metadata: string, status: AssetStatus) => {
     try {
       const session = await getServerSession()
       if (isNil(session)) {
@@ -20,13 +20,13 @@ export const _update =
       }
 
       const connection = await db()
-      const [asset] = await connection.getUpload(id)
+      const [asset] = await connection.getAsset(id)
 
       if (isNil(asset) || isEmpty(asset)) {
         throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })
       }
 
-      if (!isOwnUpload(asset)(session)) {
+      if (!isOwnAsset(asset)(session)) {
         throw forbiddenError({
           resource: 'assets',
           resourceId: userId,
@@ -35,7 +35,7 @@ export const _update =
         })
       }
 
-      const [result] = await connection.updateUpload(userId, id, { ...asset, metadata, status })
+      const [result] = await connection.updateAsset(userId, id, { ...asset, metadata, status })
 
       return result
     } catch (error: unknown) {

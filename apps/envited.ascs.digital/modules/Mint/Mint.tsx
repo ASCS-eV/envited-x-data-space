@@ -5,14 +5,14 @@ import { tezos } from 'apps/envited.ascs.digital/common/web3'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
-import { getAssetMintParams, uploadAssetTokenMetadata } from '../Uploads/Uploads.actions'
+import { getAssetMintParams, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
 
 interface MintProps {
-  uploadId: string
+  assetId: string
 }
 
-export const Mint: FC<MintProps> = ({ uploadId }) => {
-  const { t } = useTranslation('Uploads')
+export const Mint: FC<MintProps> = ({ assetId }) => {
+  const { t } = useTranslation('Mint')
 
   const mintAsset = async (id: string) => {
     const { Tezos, wallet } = await tezos()
@@ -31,7 +31,7 @@ export const Mint: FC<MintProps> = ({ uploadId }) => {
     <button
       type="button"
       className="inline-flex items-center rounded-md bg-blue-900 hover:bg-blue-800 px-2.5 py-1.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300"
-      onClick={() => mintAsset(uploadId)}
+      onClick={() => mintAsset(assetId)}
     >
       {t('[Button] mint')}
     </button>

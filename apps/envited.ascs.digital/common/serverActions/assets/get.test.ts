@@ -1,5 +1,5 @@
 import { ERRORS } from '../../constants'
-import { Role, UploadStatus } from '../../types'
+import { Role, AssetStatus } from '../../types'
 import * as SUT from './get'
 
 describe('serverActions/assets/get', () => {
@@ -16,12 +16,12 @@ describe('serverActions/assets/get', () => {
       })
 
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: jest.fn().mockResolvedValue([
+        getAsset: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
             cid: 'ASSET_CID',
             metadata: 'METADATA',
-            status: UploadStatus.pending,
+            status: AssetStatus.pending,
             userId: 'USER_PKH',
           },
         ]),
@@ -36,11 +36,11 @@ describe('serverActions/assets/get', () => {
         id: 'ASSET_ID',
         cid: 'ASSET_CID',
         metadata: 'METADATA',
-        status: UploadStatus.pending,
+        status: AssetStatus.pending,
         userId: 'USER_PKH',
       })
       expect(getServerSessionStub).toHaveBeenCalledWith()
-      expect(db.getUpload).toHaveBeenCalled()
+      expect(db.getAsset).toHaveBeenCalled()
     })
 
     it('should throw an error when there is no session', async () => {
@@ -52,7 +52,7 @@ describe('serverActions/assets/get', () => {
       } as any
 
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: jest.fn().mockResolvedValue([]),
+        getAsset: jest.fn().mockResolvedValue([]),
       })
 
       await expect(
@@ -61,7 +61,7 @@ describe('serverActions/assets/get', () => {
     })
   })
 
-  describe('_getUploadsByUserId', () => {
+  describe('_getAssetsByUserId', () => {
     it('should get the asset as expected', async () => {
       // when ... we want to get the asset by id
       // then ... it should get the asset as expected
@@ -74,12 +74,12 @@ describe('serverActions/assets/get', () => {
       })
 
       const dbStub = jest.fn().mockResolvedValue({
-        getUploadsByUserId: jest.fn().mockResolvedValue([
+        getAssetsByUserId: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
             cid: 'ASSET_CID',
             metadata: 'METADATA',
-            status: UploadStatus.pending,
+            status: AssetStatus.pending,
             userId: 'USER_PKH',
           },
         ]),
@@ -88,19 +88,19 @@ describe('serverActions/assets/get', () => {
         error: jest.fn(),
       } as any
 
-      const result = await SUT._getUploads({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })()
+      const result = await SUT._getAssets({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })()
       const db = await dbStub()
       expect(result).toEqual([
         {
           id: 'ASSET_ID',
           cid: 'ASSET_CID',
           metadata: 'METADATA',
-          status: UploadStatus.pending,
+          status: AssetStatus.pending,
           userId: 'USER_PKH',
         },
       ])
       expect(getServerSessionStub).toHaveBeenCalledWith()
-      expect(db.getUploadsByUserId).toHaveBeenCalled()
+      expect(db.getAssetsByUserId).toHaveBeenCalled()
     })
 
     it('should throw an error when there is no session', async () => {
@@ -112,11 +112,11 @@ describe('serverActions/assets/get', () => {
       } as any
 
       const dbStub = jest.fn().mockResolvedValue({
-        getUploadsByUserId: jest.fn().mockResolvedValue([]),
+        getAssetsByUserId: jest.fn().mockResolvedValue([]),
       })
 
       await expect(
-        SUT._getUploads({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(),
+        SUT._getAssets({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(),
       ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
     })
   })

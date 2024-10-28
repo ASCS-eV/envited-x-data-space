@@ -23,7 +23,7 @@ export const getS3SignedUrl =
   (command: PutObjectCommand | GetObjectCommand) =>
     getSignedUrl(s3Client, command)
 
-export const getUploadUrl = (getSignedUrl: (command: PutObjectCommand) => Promise<string>) => (filename: string) =>
+export const getAssetUrl = (getSignedUrl: (command: PutObjectCommand) => Promise<string>) => (filename: string) =>
   getSignedUrl(
     new PutObjectCommand({
       ACL: 'private',
@@ -32,7 +32,7 @@ export const getUploadUrl = (getSignedUrl: (command: PutObjectCommand) => Promis
     }),
   )
 
-export const getUploadUploadUrl =
+export const getAssetAssetUrl =
   (getSignedUrl: (command: PutObjectCommand) => Promise<string>) => (filename: string) =>
     getSignedUrl(
       new PutObjectCommand({
@@ -42,7 +42,7 @@ export const getUploadUploadUrl =
       }),
     )
 
-export const getUploadDownloadUrl =
+export const getAssetDownloadUrl =
   (getSignedUrl: (command: GetObjectCommand) => Promise<string>) => (filename: string) =>
     getSignedUrl(
       new GetObjectCommand({

@@ -6,7 +6,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromFile, read } from '../../archive'
 import { ERRORS } from '../../constants'
-import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from '../../upload/constants'
+import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from '../../asset/constants'
 import { CONTEXT_DROP_SCHEMAS } from './shacl.constants'
 import { ContentType, Schema, ValidationSchema } from './shacl.types'
 import { fetchShaclSchema, loadDataset, parseStreamToDataset, validateShacl } from './shacl.utils'

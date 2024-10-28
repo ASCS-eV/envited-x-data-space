@@ -10,9 +10,10 @@ import { ReinventingMobilityTranslation, SimulationDataTranslation, VisionTransl
 import { MemberTranslation } from '../../modules/Member'
 import { NotFoundTranslation } from '../../modules/NotFound'
 import { ProfileTranslation } from '../../modules/Profile'
-import { UploadsTranslation } from '../../modules/Uploads'
+import { UploadedAssetsTranslation } from '../../modules/UploadedAssets'
 import { UsersTranslation } from '../../modules/Users'
 import { Locale, TranslationsMap } from './types'
+import { MintTranslation } from '../../modules/Mint'
 
 const getTranslationsForLanguage = (namespace: string) => (locale: Locale) => pathOr({}, [locale, namespace])
 
@@ -27,11 +28,12 @@ const translationObject = mergeTranslations([
   MemberTranslation,
   NotFoundTranslation,
   ProfileTranslation,
-  UploadsTranslation,
+  UploadedAssetsTranslation,
   UsersTranslation,
   ReinventingMobilityTranslation,
   SimulationDataTranslation,
   VisionTranslation,
+  MintTranslation,
 ]) as TranslationsMap
 
 export const translation = (translations: TranslationsMap) => (namespace: string) => {

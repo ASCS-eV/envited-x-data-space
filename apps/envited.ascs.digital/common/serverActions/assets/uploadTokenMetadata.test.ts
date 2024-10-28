@@ -1,8 +1,8 @@
-import { Role, UploadStatus } from '../../types'
+import { Role, AssetStatus } from '../../types'
 import * as SUT from './uploadTokenMetadata'
 
 describe('serverActions/assets/uploadTokenMetadata', () => {
-  describe('uploadUploadTokenMetadataToIPFS', () => {
+  describe('uploadAssetTokenMetadataToIPFS', () => {
     it('should upload the asset token metadata to IPFS as expected', async () => {
       // when ... we want to upload the asset token metadata to IPFS
       // then ... it should upload and return the asset token metadata as expected
@@ -14,12 +14,12 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
           role: Role.provider,
         },
       })
-      const getUploadStub = jest.fn().mockResolvedValue([
+      const getAssetStub = jest.fn().mockResolvedValue([
         {
           id: 'ASSET_ID',
           cid: 'ASSET_CID',
           metadata: 'METADATA',
-          status: UploadStatus.processing,
+          status: AssetStatus.processing,
           userId: 'USER_PKH',
         },
       ])
@@ -31,7 +31,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: getUploadStub,
+        getAsset: getAssetStub,
         getUserById: getUserByIdStub,
       })
       const logStub = {
@@ -52,7 +52,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
 
       expect(result).toEqual('IPFS URL')
       expect(getServerSessionStub).toHaveBeenCalledWith()
-      expect(getUploadStub).toHaveBeenCalledWith('ASSET_ID')
+      expect(getAssetStub).toHaveBeenCalledWith('ASSET_ID')
       expect(getUserByIdStub).toHaveBeenCalledWith('USER_ID')
       expect(createGroupStub).toHaveBeenCalledWith('ISSUER_ID')
       expect(uploadJsonStub).toHaveBeenCalledWith({ data: 'METADATA', filename: 'token_info.json', group: 'GROUP_ID' })
@@ -69,12 +69,12 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
           role: Role.provider,
         },
       })
-      const getUploadStub = jest.fn().mockResolvedValue([
+      const getAssetStub = jest.fn().mockResolvedValue([
         {
           id: 'ASSET_ID',
           cid: 'ASSET_CID',
           metadata: 'METADATA',
-          status: UploadStatus.processing,
+          status: AssetStatus.processing,
           userId: 'USER_PKH',
         },
       ])
@@ -86,7 +86,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: getUploadStub,
+        getAsset: getAssetStub,
         getUserById: getUserByIdStub,
       })
       const logStub = {
@@ -113,12 +113,12 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       // then ... it should throw a bad request error as expected
 
       const getServerSessionStub = jest.fn().mockResolvedValue(null)
-      const getUploadStub = jest.fn().mockResolvedValue([
+      const getAssetStub = jest.fn().mockResolvedValue([
         {
           id: 'ASSET_ID',
           cid: 'ASSET_CID',
           metadata: 'METADATA',
-          status: UploadStatus.processing,
+          status: AssetStatus.processing,
           userId: 'USER_PKH',
         },
       ])
@@ -130,7 +130,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: getUploadStub,
+        getAsset: getAssetStub,
         getUserById: getUserByIdStub,
       })
       const logStub = {
@@ -164,12 +164,12 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
           role: Role.principal,
         },
       })
-      const getUploadStub = jest.fn().mockResolvedValue([
+      const getAssetStub = jest.fn().mockResolvedValue([
         {
           id: 'ASSET_ID',
           cid: 'ASSET_CID',
           metadata: 'METADATA',
-          status: UploadStatus.processing,
+          status: AssetStatus.processing,
           userId: 'USER_PKH',
         },
       ])
@@ -181,7 +181,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: getUploadStub,
+        getAsset: getAssetStub,
         getUserById: getUserByIdStub,
       })
       const logStub = {
@@ -214,7 +214,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
           role: Role.provider,
         },
       })
-      const getUploadStub = jest.fn().mockResolvedValue([])
+      const getAssetStub = jest.fn().mockResolvedValue([])
 
       const getUserByIdStub = jest.fn().mockResolvedValue([
         {
@@ -223,7 +223,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: getUploadStub,
+        getAsset: getAssetStub,
         getUserById: getUserByIdStub,
       })
       const logStub = {
@@ -256,12 +256,12 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
           role: Role.provider,
         },
       })
-      const getUploadStub = jest.fn().mockResolvedValue([
+      const getAssetStub = jest.fn().mockResolvedValue([
         {
           id: 'ASSET_ID',
           cid: 'ASSET_CID',
           metadata: 'METADATA',
-          status: UploadStatus.processing,
+          status: AssetStatus.processing,
           userId: 'USER_PKH',
         },
       ])
@@ -273,7 +273,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
       const dbStub = jest.fn().mockResolvedValue({
-        getUpload: getUploadStub,
+        getAsset: getAssetStub,
         getUserById: getUserByIdStub,
       })
       const logStub = {

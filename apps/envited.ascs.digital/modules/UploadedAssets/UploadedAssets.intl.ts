@@ -4,9 +4,9 @@ import en from './locales/en_GB.json'
 
 export const translations: TranslationsMap = {
   [Locale.en_GB]: {
-    Uploads: en,
+    UploadedAssets: en,
   },
   [Locale.de_DE]: {
-    Uploads: de,
+    UploadedAssets: de,
   },
 }

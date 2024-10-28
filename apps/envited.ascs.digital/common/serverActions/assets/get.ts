@@ -5,7 +5,7 @@ import { isEmpty, isNil } from 'ramda'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isOwnUpload } from '../../guards'
+import { isOwnAsset } from '../../guards'
 import { Log, log } from '../../logger'
 import { Session } from '../../types'
 import {
@@ -22,7 +22,7 @@ export const _get =
   async (id: string) => {
     try {
       if (isNil(id) || isEmpty(id)) {
-        throw badRequestError({ resource: 'uploads', resourceId: id, message: 'Missing ID' })
+        throw badRequestError({ resource: 'assets', resourceId: id, message: 'Missing ID' })
       }
 
       const session = await getServerSession()
@@ -32,22 +32,22 @@ export const _get =
       }
 
       const connection = await db()
-      const [upload] = await connection.getUpload(id)
+      const [asset] = await connection.getAsset(id)
 
-      if (isNil(upload) || isEmpty(upload)) {
-        throw notFoundError({ resource: 'uploads', resourceId: id, userId: session?.user.id })
+      if (isNil(asset) || isEmpty(asset)) {
+        throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })
       }
 
-      if (!isOwnUpload(upload)(session)) {
+      if (!isOwnAsset(asset)(session)) {
         throw forbiddenError({
-          resource: 'uploads',
+          resource: 'assets',
           resourceId: id,
           message: 'Not allowed to fetch this resource',
           userId: session.user.id,
         })
       }
 
-      return upload
+      return asset
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()
@@ -56,24 +56,24 @@ export const _get =
 
 export const get = _get({ db, getServerSession, log })
 
-export const _getUploads =
+export const _getAssets =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async () => {
     try {
       const session = await getServerSession()
 
       if (isNil(session)) {
-        throw unauthorizedError({ resource: 'uploads' })
+        throw unauthorizedError({ resource: 'assets' })
       }
 
       const connection = await db()
-      const uploads = await connection.getUploadsByUserId(session.user.id)
+      const assets = await connection.getAssetsByUserId(session.user.id)
 
-      return uploads
+      return assets
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()
     }
   }
 
-export const getUploads = _getUploads({ db, getServerSession, log })
+export const getAssets = _getAssets({ db, getServerSession, log })

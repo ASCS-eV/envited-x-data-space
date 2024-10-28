@@ -1,21 +1,31 @@
+'use server'
+
 import { isEmpty, isNil, pathEq } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
+import { CreateGroup, UploadJson, createGroup, uploadJson } from '../../ipfs'
+import { Log, log } from '../../logger'
 import { Role, Session } from '../../types'
-import {
-  addUrnUuid,
-  badRequestError,
-  extractAddressFromDid,
-  forbiddenError,
-  notFoundError,
-  unauthorizedError,
-} from '../../utils'
+import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
-export const _getMintParams =
-  ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
+export const uploadTokenMetadataToIPFS =
+  ({
+    uploadJson,
+    createGroup,
+    db,
+    getServerSession,
+    log,
+  }: {
+    uploadJson: UploadJson
+    createGroup: CreateGroup
+    db: Database
+    getServerSession: () => Promise<Session | null>
+    log: Log
+  }) =>
   async (uploadId: string) => {
+    log.info('uploadTokenMetadataToIPFS', { uploadId })
     if (isNil(uploadId) || isEmpty(uploadId)) {
       throw badRequestError({ resource: 'uploads', resourceId: uploadId, message: 'Missing ID' })
     }
@@ -31,9 +41,9 @@ export const _getMintParams =
     }
 
     const connection = await db()
-    const [upload] = await connection.getUpload(uploadId)
+    const [asset] = await connection.getAsset(uploadId)
 
-    if (isNil(upload) || isEmpty(upload)) {
+    if (isNil(asset) || isEmpty(asset)) {
       throw notFoundError({ resource: 'uploads', resourceId: uploadId, userId: session?.user.id })
     }
 
@@ -43,11 +53,14 @@ export const _getMintParams =
       throw forbiddenError({ resource: 'uploads', message: 'No issuer found', userId: session.user.id })
     }
 
-    return {
-      from: addUrnUuid(user.uuid),
-      owner: extractAddressFromDid(user.issuerId),
-      contractAddress: process.env.ASSETS_CONTRACT!,
-    }
+    const group = await createGroup(user.issuerId)
+    return uploadJson({ data: asset.metadata, filename: 'token_info.json', group })
   }
 
-export const getMintParams = _getMintParams({ db, getServerSession })
+export const uploadTokenMetadata = uploadTokenMetadataToIPFS({
+  uploadJson,
+  createGroup,
+  db,
+  getServerSession,
+  log,
+})

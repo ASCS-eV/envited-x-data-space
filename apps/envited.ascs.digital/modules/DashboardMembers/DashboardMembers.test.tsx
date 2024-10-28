@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react'
 
 import { DashboardMembers } from './DashboardMembers'
+import { User } from 'apps/envited.ascs.digital/common/types'
 
 describe('DashboardMembers', () => {
   it('should render successfully', () => {
@@ -9,7 +10,7 @@ describe('DashboardMembers', () => {
         name: 'John Johnson',
         email: 'j.johnson@ascs.digital',
         id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
-      },
+      } as User,
     ]
 
     const { baseElement } = render(<DashboardMembers members={MEMBERS_MAP} />)

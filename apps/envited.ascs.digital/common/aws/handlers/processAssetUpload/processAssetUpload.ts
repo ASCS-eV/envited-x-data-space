@@ -10,8 +10,8 @@ import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { copyFile, deleteFile, readFile, writeFile } from '../..'
-import { Upload, UploadMetadata, UploadStatus } from '../../../types'
-import { updateUpload, validateAndCreateMetadata } from '../../../upload'
+import { Asset, AssetMetadata, AssetStatus } from '../../../types'
+import { updateAsset, validateAndCreateMetadata } from '../../../asset'
 
 export const _main =
   ({
@@ -20,7 +20,7 @@ export const _main =
     copyFile,
     deleteFile,
     validateAndCreateMetadata,
-    updateUpload,
+    updateAsset,
   }: {
     readFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
     writeFile: (params: PutObjectCommandInput) => S3Upload
@@ -37,11 +37,11 @@ export const _main =
     validateAndCreateMetadata: (byteArray: Uint8Array) => Promise<{
       conforms: boolean
       reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
-      metadata: UploadMetadata
+      metadata: AssetMetadata
       uploadCID: string
       metadataCID: string
     }>
-    updateUpload: (newCid: string, oldCid: string, status: UploadStatus, metadata?: UploadMetadata) => Promise<Upload>
+    updateAsset: (newCid: string, oldCid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {
@@ -61,7 +61,7 @@ export const _main =
 
       if (!conforms) {
         await deleteFile({ Bucket, Key })
-        await updateUpload(Key, Key, UploadStatus.not_accepted)
+        await updateAsset(Key, Key, AssetStatus.not_accepted)
 
         return
       }
@@ -81,7 +81,7 @@ export const _main =
       })
 
       await writeMetadata.done()
-      await updateUpload(uploadCID, Key, UploadStatus.pending, metadata)
+      await updateAsset(uploadCID, Key, AssetStatus.pending, metadata)
       await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)
@@ -95,5 +95,5 @@ export const main = _main({
   copyFile,
   deleteFile,
   validateAndCreateMetadata,
-  updateUpload,
+  updateAsset,
 })

@@ -1,11 +1,11 @@
 import { ERRORS } from '../../constants'
-import { Role, UploadStatus } from '../../types'
+import { Role, AssetStatus } from '../../types'
 import * as SUT from './insert'
 
-describe('serverActions/uploads/insert', () => {
+describe('serverActions/assets/insert', () => {
   describe('insert', () => {
-    it('should insert the upload as expected', async () => {
-      // when ... we want to insert a upload
+    it('should insert the assets as expected', async () => {
+      // when ... we want to insert a assets
       // then ... it should return the result as expected
       const getServerSessionStub = jest.fn().mockResolvedValue({
         user: {
@@ -16,12 +16,12 @@ describe('serverActions/uploads/insert', () => {
       })
 
       const dbStub = jest.fn().mockResolvedValue({
-        insertUpload: jest.fn().mockResolvedValue([
+        insertAsset: jest.fn().mockResolvedValue([
           {
             id: 'UPLOAD_ID',
             cid: 'UPLOAD_CID',
             metadata: 'METADATA',
-            status: UploadStatus.pending,
+            status: AssetStatus.pending,
             userId: 'USER_PKH',
           },
         ]),
@@ -39,15 +39,15 @@ describe('serverActions/uploads/insert', () => {
         id: 'UPLOAD_ID',
         cid: 'UPLOAD_CID',
         metadata: 'METADATA',
-        status: UploadStatus.pending,
+        status: AssetStatus.pending,
         userId: 'USER_PKH',
       })
       expect(getServerSessionStub).toHaveBeenCalledWith()
-      expect(db.insertUpload).toHaveBeenCalled()
+      expect(db.insertAsset).toHaveBeenCalled()
     })
 
     it('should throw an error when there is no session', async () => {
-      // when ... we don't want to insert a upload without session
+      // when ... we don't want to insert a assets without session
       // then ... it should throw an error
       const getServerSessionStub = jest.fn().mockResolvedValue(null)
       const logStub = {
@@ -55,7 +55,7 @@ describe('serverActions/uploads/insert', () => {
       } as any
 
       const dbStub = jest.fn().mockResolvedValue({
-        insertUpload: jest.fn().mockResolvedValue([]),
+        insertAsset: jest.fn().mockResolvedValue([]),
       })
 
       await expect(

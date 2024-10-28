@@ -8,12 +8,12 @@ import { HeaderTranslation } from '../../modules/Header'
 import { HeroHeaderTranslation } from '../../modules/HeroHeader'
 import { ReinventingMobilityTranslation, SimulationDataTranslation, VisionTranslation } from '../../modules/LandingPage'
 import { MemberTranslation } from '../../modules/Member'
+import { MintTranslation } from '../../modules/Mint'
 import { NotFoundTranslation } from '../../modules/NotFound'
 import { ProfileTranslation } from '../../modules/Profile'
 import { UploadedAssetsTranslation } from '../../modules/UploadedAssets'
 import { UsersTranslation } from '../../modules/Users'
 import { Locale, TranslationsMap } from './types'
-import { MintTranslation } from '../../modules/Mint'
 
 const getTranslationsForLanguage = (namespace: string) => (locale: Locale) => pathOr({}, [locale, namespace])
 

@@ -5,6 +5,15 @@ import { fromPairs, map, pipe, toPairs } from 'ramda'
 import { connectDb } from '../database'
 import * as schema from '../schema'
 import {
+  getAsset,
+  getAssetByCID,
+  getAssets,
+  getAssetsByUserId,
+  insertAsset,
+  updateAsset,
+  updateAssetCID,
+} from './assets'
+import {
   deleteBusinessCategoriesByProfileId,
   getBusinessCategories,
   getBusinessCategoriesByProfileId,
@@ -20,15 +29,6 @@ import {
   maybeUpdatePublishedState,
   update as updateProfile,
 } from './profiles'
-import {
-  getAsset,
-  getAssetByCID,
-  getAssets,
-  getAssetsByUserId,
-  insertAsset,
-  updateAsset,
-  updateAssetCID,
-} from './assets'
 import {
   activateUserById,
   deactivateUserById,

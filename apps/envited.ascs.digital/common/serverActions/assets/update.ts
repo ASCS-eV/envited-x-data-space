@@ -7,7 +7,7 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { isOwnAsset } from '../../guards'
 import { Log, log } from '../../logger'
-import { Session, AssetStatus } from '../../types'
+import { AssetStatus, Session } from '../../types'
 import { forbiddenError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
 
 export const _update =

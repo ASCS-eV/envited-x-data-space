@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
+import { User } from 'apps/envited.ascs.digital/common/types'
 
 import { DashboardMembers } from './DashboardMembers'
-import { User } from 'apps/envited.ascs.digital/common/types'
 
 describe('DashboardMembers', () => {
   it('should render successfully', () => {

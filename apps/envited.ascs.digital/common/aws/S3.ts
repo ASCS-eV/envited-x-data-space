@@ -32,15 +32,14 @@ export const getAssetUrl = (getSignedUrl: (command: PutObjectCommand) => Promise
     }),
   )
 
-export const getAssetAssetUrl =
-  (getSignedUrl: (command: PutObjectCommand) => Promise<string>) => (filename: string) =>
-    getSignedUrl(
-      new PutObjectCommand({
-        ACL: 'private',
-        Key: filename,
-        Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME || '',
-      }),
-    )
+export const getAssetAssetUrl = (getSignedUrl: (command: PutObjectCommand) => Promise<string>) => (filename: string) =>
+  getSignedUrl(
+    new PutObjectCommand({
+      ACL: 'private',
+      Key: filename,
+      Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME || '',
+    }),
+  )
 
 export const getAssetDownloadUrl =
   (getSignedUrl: (command: GetObjectCommand) => Promise<string>) => (filename: string) =>

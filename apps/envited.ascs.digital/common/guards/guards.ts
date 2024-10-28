@@ -1,6 +1,6 @@
 import { equals, pathOr, prop, propOr } from 'ramda'
 
-import { Role, Session, Asset, User } from '../../common/types'
+import { Asset, Role, Session, User } from '../../common/types'
 
 export const isFederator = (session: Session) => equals(Role.federator)(pathOr('' as Role, ['user', 'role'])(session))
 

@@ -1,4 +1,4 @@
-import { Role, AssetStatus } from '../../types'
+import { AssetStatus, Role } from '../../types'
 import * as SUT from './uploadTokenMetadata'
 
 describe('serverActions/assets/uploadTokenMetadata', () => {

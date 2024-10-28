@@ -10,8 +10,8 @@ import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { copyFile, deleteFile, readFile, writeFile } from '../..'
-import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 import { updateAsset, validateAndCreateMetadata } from '../../../asset'
+import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
 export const _main =
   ({

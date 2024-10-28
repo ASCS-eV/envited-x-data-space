@@ -72,45 +72,41 @@ function App() {
             Sign in with your verified credentials to continue to <strong>Envited Data Space</strong>
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
-            <div className="mx-auto mt-12 max-w-lg rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10 text-center">
-              <p className="mt-6 text-lg leading-8 text-gray-700">
-                By presenting your verifiable credential you agree to the{' '}
-                <a
-                  href={import.meta.env.VITE_EXTERNAL_TERMS_AND_CONDITIONS_URL}
-                  target="_blank"
-                  className="text-blue-900 underline hover:text-blue-800"
-                >
-                  Terms of Service
-                </a>{' '}
-                and using the information for creating your ENVITED X Dataspace account
-              </p>
-              {isLoading && <Loader />}
-              {qrCodeValue && !isLoading && !isRedirecting && (
-                <div>
-                  <QRCode value={qrCodeValue} />
-                </div>
-              )}
-              {isRedirecting && <div className="text-lg">Redirecting</div>}
-              {error && (
-                <div className="mt-6">
-                  <h3 className="text-red-500">Error</h3>
-                  <p className="text-red-500">{errorMessage}</p>
-                </div>
-              )}
-            </div>
-            <div className="mx-auto mt-12 max-w-lg rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10 text-center">
-              <p className="mt-6 text-lg leading-8 text-gray-700">
-                If you don't have a credential{' '}
-                <a
-                  href={import.meta.env.VITE_EXTERNAL_DEMIM_URL}
-                  target="_blank"
-                  className="text-blue-900 underline hover:text-blue-800"
-                >
-                  Register here
-                </a>
-              </p>
-            </div>
+          <div className="mx-auto mt-12 max-w-lg rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10 text-center">
+            <p className="mt-6 text-lg leading-8 text-gray-700">
+              By presenting your verifiable credential you agree to the{' '}
+              <a
+                href={import.meta.env.VITE_EXTERNAL_TERMS_AND_CONDITIONS_URL}
+                target="_blank"
+                className="text-blue-900 underline hover:text-blue-800"
+              >
+                Terms of Service
+              </a>{' '}
+              and using the information for creating your ENVITED X Dataspace account
+            </p>
+            {isLoading && <Loader />}
+            {qrCodeValue && !isLoading && !isRedirecting && (
+              <div>
+                <QRCode value={qrCodeValue} />
+              </div>
+            )}
+            {isRedirecting && <div className="text-lg">Redirecting</div>}
+            {error && (
+              <div className="mt-6">
+                <h3 className="text-red-500">Error</h3>
+                <p className="text-red-500">{errorMessage}</p>
+              </div>
+            )}
+            <p className="mt-6 text-lg leading-8 text-gray-700">
+              If you don't have a credential{' '}
+              <a
+                href={import.meta.env.VITE_EXTERNAL_DEMIM_URL}
+                target="_blank"
+                className="text-blue-900 underline hover:text-blue-800"
+              >
+                Register here
+              </a>
+            </p>
           </div>
         </div>
       </div>

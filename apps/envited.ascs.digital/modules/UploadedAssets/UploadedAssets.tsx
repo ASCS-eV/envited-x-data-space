@@ -43,9 +43,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
               return (
                 <tr key={asset.id}>
                   <td
-                    className={`${
-                      equals(assetIdx)(0) ? '' : 'border-t border-transparent'
-                    } relative py-4 pr-3 text-sm`}
+                    className={`${equals(assetIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}
                   >
                     <div className="font-medium text-gray-900">
                       {equals(asset.status)(AssetStatus.processing) ? asset.cid : propOr('', 'name')(metadata)}
@@ -91,9 +89,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                         </button>
                       </>
                     )}
-                    {!equals(assetIdx)(0) ? (
-                      <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
-                    ) : null}
+                    {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
                   </td>
                 </tr>
               )

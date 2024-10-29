@@ -28,6 +28,8 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
       },
     ]
     const dbStub = jest.fn().mockResolvedValue({
+      getUserWithCredentialTypesById: jest.fn().mockResolvedValue(user),
+      getUserById: jest.fn().mockResolvedValue(user),
       getUsersByIssuerId: jest.fn().mockResolvedValue(user),
     })
     const logStub = {
@@ -57,6 +59,8 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
       },
     ]
     const dbStub = jest.fn().mockResolvedValue({
+      getUserWithCredentialTypesById: jest.fn().mockResolvedValue(user),
+      getUserById: jest.fn().mockResolvedValue(user),
       getUsersByIssuerId: jest.fn().mockResolvedValue(user),
     })
     const logStub = {
@@ -92,6 +96,8 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
       },
     ]
     const dbStub = jest.fn().mockResolvedValue({
+      getUserWithCredentialTypesById: jest.fn().mockResolvedValue(user),
+      getUserById: jest.fn().mockResolvedValue(user),
       getUsersByIssuerId: jest.fn().mockResolvedValue(user),
     })
     const logStub = {

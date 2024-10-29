@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { equals, has, isEmpty, isNil, omit, prop } from 'ramda'
+import { equals, find, has, isEmpty, isNil, omit, prop, propEq } from 'ramda'
 import { match } from 'ts-pattern'
 
 import { db } from '../database/queries'
@@ -32,17 +32,30 @@ export const authOptions: NextAuthOptions = {
           }
         }
         const { pkh } = credentials
+        const address = 'did:pkh:tz:tz1Kj1XAEhrcuPS3rvZ8BGsUGDjv78ykEkEi' // Company
+        // const address = 'did:pkh:tz:tz1gp7pWdFFEHXS7rVNjzWHKLkBuvHCTnM26' // Jeroen
+        // const address = 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE' // Daniel
+
+        const connection = await db()
+        const userRoles = await connection.getUserRolesById(address)
+
+        return {
+          name: address,
+          id: address,
+          pkh: address,
+          role: assignSingleRole(userRoles),
+        }
 
         return match(pkh)
           .with('tz1USER', () => ({
-            id: 'did:pkh:tz:tz1N4RXGjYTAgr79PCpmUVPvHfE3BKQo7JgU',
-            pkh: 'did:pkh:tz:tz1N4RXGjYTAgr79PCpmUVPvHfE3BKQo7JgU',
-            role: Role.provider,
+            id: address,
+            pkh: address,
+            role: assignSingleRole(userRoles),
           }))
           .with('tz1PRINCIPAL', () => ({
-            id: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
-            pkh: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
-            role: Role.provider,
+            id: address,
+            pkh: address,
+            role: assignSingleRole(userRoles),
           }))
           .with('tz1NO_USER', () => null)
           .otherwise(() => null)
@@ -164,8 +177,8 @@ export const authOptions: NextAuthOptions = {
       if (profile) {
         const connection = await db()
         const userRoles = await connection.getUserRolesById(profile.sub)
-        log.info('Adding user role to JWT', userRoles[0].roleId)
-        token.user.role = userRoles[0].roleId
+        log.info('Adding user role to JWT', assignSingleRole(userRoles))
+        token.user.role = assignSingleRole(userRoles)
       }
 
       return token
@@ -227,4 +240,24 @@ export const checkRevocationRegistry = async (id: string, pkh: string, issuer: s
   }
 
   return response.json()
+}
+
+export const assignSingleRole = (roles: { userId: string; roleId: Role }[]) => {
+  if (find(propEq(Role.federator, 'roleId'))(roles)) {
+    return Role.federator
+  }
+
+  if (find(propEq(Role.principal, 'roleId'))(roles)) {
+    return Role.principal
+  }
+
+  if (find(propEq(Role.provider, 'roleId'))(roles)) {
+    return Role.provider
+  }
+
+  if (find(propEq(Role.user, 'roleId'))(roles)) {
+    return Role.user
+  }
+
+  return null
 }

@@ -1,11 +1,11 @@
 'use server'
 
-import { isNil } from 'ramda'
+import { equals, isNil, prop } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isFederator, isOwnProfile, isPrincipal } from '../../guards'
+import { isFederator, isOwnProfile, isPrincipal, isPrincipalContact } from '../../guards'
 import { Log, log } from '../../logger'
 import { Profile, Session } from '../../types'
 import { badRequestError, forbiddenError, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
@@ -40,7 +40,9 @@ export const _update =
         })
       }
 
-      if (!isOwnProfile(user.user)(profile)) {
+      const currentProfile = await connection.getProfileByName(profile.name)
+
+      if (!isOwnProfile(user.user)(profile) && !isPrincipalContact(user.user)(currentProfile)) {
         throw forbiddenError({
           resource: 'profiles',
           resourceId: profile.id,
@@ -50,6 +52,13 @@ export const _update =
       }
 
       const [updatedProfile] = await connection.updateProfile(profile)
+
+      if (!equals(currentProfile.principalUserId)(profile.principalUserId)) {
+        if (!isNil(currentProfile.principalUserId)) {
+          await connection.removeUserFromRole({ userId: prop('principalUserId')(currentProfile), roleId: 'principal' })
+        }
+        await connection.addUserToRole({ userId: profile.principalUserId, roleId: 'principal' })
+      }
 
       if (businessCategories) {
         await connection.deleteBusinessCategoriesByProfileId(updatedProfile.id)

@@ -1,4 +1,6 @@
-import { isNil } from 'ramda'
+'use server'
+
+import { find, isNil, pathEq } from 'ramda'
 import { cache } from 'react'
 
 import { getServerSession } from '../../auth'
@@ -25,7 +27,15 @@ export const _getUsersByIssuerId =
       }
 
       const connection = await db()
-      const users = await connection.getUsersByIssuerId(session?.user?.pkh)
+      const user = await connection.getUserWithCredentialTypesById(session?.user?.id)
+
+      let issuerId = session?.user?.pkh
+      if (find(pathEq('AscsUserCredential', ['credentialType', 'name']))(user?.usersToCredentialTypes)) {
+        const [principal] = await connection.getUserById(user.issuerId)
+        issuerId = principal.id
+      }
+
+      const users = await connection.getUsersByIssuerId(issuerId)
 
       return users
     } catch (error: unknown) {

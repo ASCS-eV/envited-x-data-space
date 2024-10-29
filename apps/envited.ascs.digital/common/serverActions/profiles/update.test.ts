@@ -13,6 +13,11 @@ describe('serverActions/profiles/update', () => {
           role: Role.principal,
         },
       })
+      const currentProfile = {
+        description: 'CURRENT DESCRIPTION',
+        name: 'USER_NAME',
+      } as any
+
       const newProfile = {
         description: 'NEW DESCRIPTION',
         name: 'USER_NAME',
@@ -28,6 +33,7 @@ describe('serverActions/profiles/update', () => {
       } as any
 
       const dbStub = jest.fn().mockResolvedValue({
+        getProfileByName: jest.fn().mockResolvedValue(currentProfile),
         getUserWithProfileById: jest.fn().mockResolvedValue([user]),
         updateProfile: jest.fn().mockResolvedValue([newProfile]),
         maybeUpdatePublishedState: jest.fn().mockResolvedValue([newProfile]),
@@ -49,6 +55,11 @@ describe('serverActions/profiles/update', () => {
     // when ... we want to update the profile without an active session
     // then ... it should throw as expected
     const getServerSessionStub = jest.fn().mockResolvedValue(null)
+    const currentProfile = {
+      description: 'CURRENT DESCRIPTION',
+      name: 'USER_NAME',
+    } as any
+
     const newProfile = {
       description: 'NEW DESCRIPTION',
     } as any
@@ -63,6 +74,7 @@ describe('serverActions/profiles/update', () => {
     } as any
 
     const dbStub = jest.fn().mockResolvedValue({
+      getProfileByName: jest.fn().mockResolvedValue(currentProfile),
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
       updateProfile: jest.fn().mockResolvedValue(newProfile),
     })
@@ -85,6 +97,11 @@ describe('serverActions/profiles/update', () => {
         role: Role.user,
       },
     })
+    const currentProfile = {
+      description: 'CURRENT DESCRIPTION',
+      name: 'USER_NAME',
+    } as any
+
     const newProfile = {
       description: 'NEW DESCRIPTION',
     } as any
@@ -99,6 +116,7 @@ describe('serverActions/profiles/update', () => {
     } as any
 
     const dbStub = jest.fn().mockResolvedValue({
+      getProfileByName: jest.fn().mockResolvedValue(currentProfile),
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
       updateProfile: jest.fn().mockResolvedValue(newProfile),
     })
@@ -121,6 +139,10 @@ describe('serverActions/profiles/update', () => {
         role: Role.principal,
       },
     })
+    const currentProfile = {
+      description: 'CURRENT DESCRIPTION',
+      name: 'USER_NAME',
+    } as any
     const newProfile = {
       description: 'NEW DESCRIPTION',
     } as any
@@ -128,6 +150,7 @@ describe('serverActions/profiles/update', () => {
     const user = null
 
     const dbStub = jest.fn().mockResolvedValue({
+      getProfileByName: jest.fn().mockResolvedValue(currentProfile),
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
       updateProfile: jest.fn().mockResolvedValue(newProfile),
     })
@@ -150,6 +173,10 @@ describe('serverActions/profiles/update', () => {
         role: Role.principal,
       },
     })
+    const currentProfile = {
+      description: 'CURRENT DESCRIPTION',
+      name: 'USER_NAME',
+    } as any
     const newProfile = {
       description: 'NEW DESCRIPTION',
       name: 'OTHER_USER_NAME',
@@ -163,6 +190,7 @@ describe('serverActions/profiles/update', () => {
     } as any
 
     const dbStub = jest.fn().mockResolvedValue({
+      getProfileByName: jest.fn().mockResolvedValue(currentProfile),
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
       updateProfile: jest.fn().mockResolvedValue(newProfile),
     })

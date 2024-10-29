@@ -1,4 +1,4 @@
-import { ExtractTablesWithRelations, eq, inArray } from 'drizzle-orm'
+import { ExtractTablesWithRelations, and, eq, inArray } from 'drizzle-orm'
 import { PgTransaction } from 'drizzle-orm/pg-core'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { PostgresJsQueryResultHKT } from 'drizzle-orm/postgres-js'
@@ -37,6 +37,23 @@ export const activateUserById = (db: DatabaseConnection) => async (id: string) =
 export const getUserById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id))
 
+export const getUserWithCredentialTypesById = (db: DatabaseConnection) => async (id: string) =>
+  db.query.user.findFirst({
+    where: eq(user.id, id),
+    with: {
+      usersToCredentialTypes: {
+        columns: {},
+        with: {
+          credentialType: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
 export const getUserRolesById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(usersToRoles).where(eq(usersToRoles.userId, id))
 
@@ -48,6 +65,19 @@ export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: st
 
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.select().from(user).where(eq(user.issuerId, issuerId))
+
+export const addUserToRole =
+  (db: DatabaseConnection) =>
+  async ({ userId, roleId }: { userId: string; roleId: string }) =>
+    db.insert(usersToRoles).values({ userId, roleId }).onConflictDoNothing().returning()
+
+export const removeUserFromRole =
+  (db: DatabaseConnection) =>
+  async ({ userId, roleId }: { userId: string; roleId: string }) =>
+    db
+      .delete(usersToRoles)
+      .where(and(eq(usersToRoles.userId, userId), eq(usersToRoles.roleId, roleId)))
+      .returning()
 
 export const insertUsersToRolesTx =
   (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>

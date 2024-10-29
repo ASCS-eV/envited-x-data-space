@@ -31,13 +31,16 @@ import {
 } from './profiles'
 import {
   activateUserById,
+  addUserToRole,
   deactivateUserById,
   getUserById,
   getUserByIssuerId,
   getUserRolesById,
+  getUserWithCredentialTypesById,
   getUserWithProfileById,
   getUsersByIssuerId,
   insertUserTx,
+  removeUserFromRole,
 } from './users'
 
 const queries = {
@@ -48,8 +51,11 @@ const queries = {
   getBusinessCategories,
   getBusinessCategoriesByProfileId,
   getMembers,
+  addUserToRole,
+  removeUserFromRole,
   getUserById,
   getUserRolesById,
+  getUserWithCredentialTypesById,
   getUserWithProfileById,
   getUsersByIssuerId,
   getIssuerById,

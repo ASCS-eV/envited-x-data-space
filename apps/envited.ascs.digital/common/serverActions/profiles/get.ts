@@ -1,12 +1,12 @@
 'use server'
 
-import { isEmpty, isNil, omit } from 'ramda'
+import { find, isEmpty, isNil, omit, pathEq } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { RESTRICTED_PROFILE_FIELDS } from '../../constants'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isFederator, isOwnProfile, isPrincipal, isUsersCompanyProfile } from '../../guards'
+import { isOwnProfile, isPrincipalContact, isUsersCompanyProfile } from '../../guards'
 import { Log, log } from '../../logger'
 import { Session } from '../../types'
 import { badRequestError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
@@ -75,21 +75,25 @@ export const _getProfile =
       }
 
       const connection = await db()
-      const [user] = await connection.getUserById(session.user.id)
+      const user = await connection.getUserWithCredentialTypesById(session.user.id)
       const [issuer] = await connection.getIssuerById(user.issuerId)
-      const profile = await connection.getProfileByName(
-        isPrincipal(session) || isFederator(session) ? user.name : issuer.name,
-      )
+      let name = issuer.name
+      if (find(pathEq('AscsUserCredential', ['credentialType', 'name']))(user.usersToCredentialTypes)) {
+        const [principal] = await connection.getUserById(user.issuerId)
+        name = principal.name
+      }
+
+      if (find(pathEq('AscsMemberCredential', ['credentialType', 'name']))(user.usersToCredentialTypes)) {
+        name = user.name
+      }
+
+      const profile = await connection.getProfileByName(name)
 
       if (isNil(profile) || isEmpty(profile)) {
         throw notFoundError({ resource: 'profiles', resourceId: issuer?.name, userId: session?.user.id })
       }
 
-      if (isOwnProfile(user)(profile)) {
-        return profile
-      }
-
-      if (isUsersCompanyProfile(issuer)(profile)) {
+      if (isOwnProfile(user)(profile) || isPrincipalContact(user)(profile) || isUsersCompanyProfile(issuer)(profile)) {
         return profile
       }
 

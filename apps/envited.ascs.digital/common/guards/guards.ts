@@ -18,4 +18,7 @@ export const userIsIssuedByLoggedInUser = (user: User) => (session: Session) =>
 export const isOwnProfile = (user: User) => (profile: { name?: string }) =>
   equals(prop('name')(user))(propOr('', 'name')(profile))
 
+export const isPrincipalContact = (user: User) => (profile: { name?: string }) =>
+  equals(prop('id')(user))(propOr('', 'principalUserId')(profile))
+
 export const isUsersCompanyProfile = isOwnProfile

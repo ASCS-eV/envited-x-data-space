@@ -1,22 +1,22 @@
 import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 import { Tzip12Module, tzip12 } from '@taquito/tzip12'
 
-const Tezos = new TezosToolkit(process.env.NEXT_PUBLIC_WEB3_RPC_URL || 'https://ghostnet.ecadinfra.com')
-
-export const contractListener = async () => {
-  Tezos.setStreamProvider(
-    Tezos.getFactory(PollingSubscribeProvider)({
+export const listenToAssetContract = ({ tezos }: { tezos: TezosToolkit }) => async () => {
+  tezos.setStreamProvider(
+    tezos.getFactory(PollingSubscribeProvider)({
       shouldObservableSubscriptionRetry: true,
       pollingIntervalMilliseconds: 1500,
     }),
   )
-
+  console.log('Contract listener started listening on:', process.env.ASSETS_CONTRACT)    
   try {
-    const sub = Tezos.stream.subscribeOperation({
-      destination: process.env.NEXT_PUBLIC_ASSETS_CONTRACT || 'KT1JzYzRCMMFQbsKSPrtxmXCf4vSVX4k3AtT',
+    const subscription = tezos.stream.subscribeOperation({
+      destination: process.env.ASSETS_CONTRACT || 'KT1JzYzRCMMFQbsKSPrtxmXCf4vSVX4k3AtT',
     })
+    console.log('Subscription:', subscription)
 
-    sub.on('data', async (data: any) => {
+    subscription.on('data', async (data: any) => {
+      console.log('Data:', data)
       if (data?.parameters?.entrypoint === 'mint') {
         const { hash, destination, metadata, parameters } = data
         const creator = parameters.value.args[1].args[0].string
@@ -27,7 +27,7 @@ export const contractListener = async () => {
         }
 
         // Fetch Token metadata from contract
-        const tokenMetadata = await getTokenMetadata(destination, tokenId)
+        const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         // Save token to DB
         const asset = await insertAsset(hash, creator, destination, tokenId, tokenMetadata)
 
@@ -39,8 +39,7 @@ export const contractListener = async () => {
   }
 }
 
-export const getTokenMetadata = async (contractAddress: string, id: string) => {
-  const tezos = new TezosToolkit(process.env.NEXT_PUBLIC_WEB3_RPC_URL || 'https://ghostnet.ecadinfra.com')
+export const getTokenMetadata = ({ tezos }: { tezos: TezosToolkit }) => async (contractAddress: string, id: string) => {
   tezos.addExtension(new Tzip12Module())
 
   try {

@@ -1,7 +1,7 @@
 'use client'
 
-import { mintToken } from 'apps/envited.ascs.digital/common/web3'
-import { tezos } from 'apps/envited.ascs.digital/common/web3'
+import { mintToken } from '../../common/web3'
+import { tezos } from '../../common/web3'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'

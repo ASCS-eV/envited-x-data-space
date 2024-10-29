@@ -19,7 +19,7 @@
         "production": {}
       }
     },
-    "build:listener": {
+    "listener:build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "development",
@@ -28,8 +28,8 @@
         "outputPath": "dist/listener",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/envited.ascs.digital/common/listener/index.ts",
-        "tsConfig": "apps/envited.ascs.digital/tsconfig.app.json",
+        "main": "apps/envited.ascs.digital/listener/index.ts",
+        "tsConfig": "apps/envited.ascs.digital/tsconfig.listener.json",
         "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": false,
@@ -42,18 +42,6 @@
             "outputPath": "apps/listener"
           }
         }
-      }
-    },
-    "serve:listener": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "apps/envited.ascs.digital",
-        "commands": [
-          "npx nx build:listener envited.ascs.digital",
-          "npx pm2 delete deploy/deploy.mjs",
-          "npx pm2 start deploy/deploy.mjs --log"
-        ],
-        "parallel": false
       }
     },
     "serve": {

@@ -27,10 +27,10 @@ export const _getUsersByIssuerId =
       }
 
       const connection = await db()
-      const user = await connection.getUserWithCredentialTypesById(session?.user?.id)
+      const user = await connection.getUserWithCredentialTypesById(session?.user?.pkh)
 
       let issuerId = session?.user?.pkh
-      if (find(pathEq('AscsUserCredential', ['credentialType', 'name']))(user?.usersToCredentialTypes)) {
+      if (find(pathEq('AscsUserCredential', ['credentialType', 'name']))(user.usersToCredentialTypes)) {
         const [principal] = await connection.getUserById(user.issuerId)
         issuerId = principal.id
       }

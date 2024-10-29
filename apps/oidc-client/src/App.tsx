@@ -69,8 +69,7 @@ function App() {
         />
         <div className="mx-auto text-center">
           <h3 className="max-w-2xl text-4xl font-bold tracking-tight text-white leading-normal">
-            Sign in with your verified credential to securely access the{' '}
-            <strong>ENVITED-X data space</strong>.
+            Sign in with your verified credential to securely access the <strong>ENVITED-X data space</strong>.
           </h3>
 
           <div className="mx-auto mt-12 max-w-lg rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10 text-center">

@@ -42,7 +42,7 @@ const Address: FC<AddressProps> = ({
             <LinkIcon className="h-7 w-6 text-gray-400" aria-hidden="true" />
           </dt>
           <dd>
-            <a className="hover:text-white" href={website}>
+            <a className="text-gray-400 hover:text-black" href={website}>
               {website}
             </a>
           </dd>
@@ -55,7 +55,7 @@ const Address: FC<AddressProps> = ({
             <PhoneIcon className="h-7 w-6 text-gray-400" aria-hidden="true" />
           </dt>
           <dd>
-            <a className="hover:text-white" href={`tel:${phone}`}>
+            <a className="text-gray-400 hover:text-black" href={`tel:${phone}`}>
               {phone}
             </a>
           </dd>
@@ -68,7 +68,7 @@ const Address: FC<AddressProps> = ({
             <EnvelopeIcon className="h-7 w-6 text-gray-400" aria-hidden="true" />
           </dt>
           <dd>
-            <a className="hover:text-white" href={`mailto:${email}`}>
+            <a className="text-gray-400 hover:text-black" href={`mailto:${email}`}>
               {email}
             </a>
           </dd>

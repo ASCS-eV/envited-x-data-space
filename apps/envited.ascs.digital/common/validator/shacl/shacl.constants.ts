@@ -11,6 +11,9 @@ export const SCHEMA_MAP = {
   [Schema.ositrace]: '/schemas/ositrace_shacl.ttl',
   [Schema.scenario]: '/schemas/scenario_shacl.ttl',
   [Schema.surfaceModel]: '/schemas/surface-model_shacl.ttl',
+  [Schema.domainMetadata]: '/schemas/domainMetadata_shacl.ttl',
+  [Schema.gxMetadata]: '/schemas/gxMetadata_shacl.ttl',
+  [Schema.marketplaceInfo]: '/schemas/marketplace-info_shacl.ttl',
 }
 
 export const CONTEXT_DROP_SCHEMAS = [Schema.sh, Schema.skos, Schema.xsd]

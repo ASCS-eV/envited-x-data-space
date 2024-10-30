@@ -76,6 +76,6 @@ export const assert_minting_allowed = (from_uuid: string, member_did: address, r
 
     return Assert.Error.assert(
         Tezos.get_sender() == entry.user.did,
-        "B"
+        Errors.minting_not_allowed
     );
 }

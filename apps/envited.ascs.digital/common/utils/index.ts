@@ -11,6 +11,7 @@ export {
 } from './errors'
 
 export {
+  addUrnUuid,
   extractAddressFromDid,
   extractIdFromCredential,
   extractIssuerIdFromCredential,
@@ -23,4 +24,5 @@ export {
   slugToLabel,
   isTrustAnchor,
   truncateDID,
+  isServer,
 } from './utils'

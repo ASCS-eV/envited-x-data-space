@@ -11,7 +11,7 @@ import {
   getAssetsByUserId,
   insertAsset,
   updateAsset,
-  updateAssetCID,
+  updateAssetByCID,
 } from './assets'
 import {
   deleteBusinessCategoriesByProfileId,
@@ -20,6 +20,7 @@ import {
   insertBusinessCategoryByProfileId,
 } from './businessCategories'
 import { fetchTables } from './common'
+import { getIssuerById } from './issuers'
 import { getMembers } from './members'
 import {
   getProfileByName,
@@ -51,6 +52,7 @@ const queries = {
   getUserRolesById,
   getUserWithProfileById,
   getUsersByIssuerId,
+  getIssuerById,
   insertBusinessCategoryByProfileId,
   insertUserTx,
   updateProfile,
@@ -65,7 +67,7 @@ const queries = {
   getAssetsByUserId,
   insertAsset,
   updateAsset,
-  updateAssetCID,
+  updateAssetByCID,
 }
 
 export const init =

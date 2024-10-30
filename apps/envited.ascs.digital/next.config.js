@@ -13,9 +13,10 @@ const nextConfig = {
     svgr: false,
   },
   experimental: {
+    scrollRestoration: true,
     serverComponentsExternalPackages: ['@aws-sdk'],
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack }) => {
     if (!isServer) {
       config.resolve = {
         ...config.resolve,
@@ -27,6 +28,14 @@ const nextConfig = {
           fs: false,
         },
       }
+    }
+
+    if (config.plugins) {
+      config.plugins.push(
+        new webpack.IgnorePlugin({
+          resourceRegExp: /^(lokijs|pino-pretty|encoding)$/,
+        }),
+      )
     }
 
     return config

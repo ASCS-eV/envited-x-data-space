@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { includes } from 'ramda'
+import { includes, isEmpty } from 'ramda'
 
 import { getServerSession } from '../../common/auth'
 import { NAVIGATION_DASHBOARD_MAP } from '../../common/constants'
@@ -18,12 +18,13 @@ export default async function Template({ children }: { children: React.ReactNode
     <main className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
       <Breadcrumbs />
       <div className="mb-12">
-        <div className="relative -z-10 isolate overflow-hidden bg-gray-400 h-32 lg:h-48 rounded-xl">
+        <div className="relative -z-10 isolate overflow-hidden bg-gray-900 h-32 lg:h-48 rounded-xl">
           <img
-            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-y=.8&w=2830&h=1500&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply"
+            src="/images/AdobeStock_619508170_Onchira.jpeg"
             alt=""
-            className="inset-0 -z-10 h-full w-full object-cover opacity-40"
+            className="absolute inset-0 -z-10 h-full w-full object-cover"
           />
+          <div className="absolute top-0 -z-10 h-full w-full bg-gray-900 opacity-90" />
           <div
             className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
             aria-hidden="true"
@@ -52,16 +53,20 @@ export default async function Template({ children }: { children: React.ReactNode
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="-mt-20 sm:-mt-24 sm:flex sm:items-start sm:space-x-5">
             <div className="flex">
-              <img
-                className="h-24 w-24 rounded-xl ring-4 ring-white sm:h-32 sm:w-32 bg-gray-300 p-4 object-contain"
-                src={getImageUrl(profile.logo)}
-                alt=""
-              />
+              {!isEmpty(profile.logo) ? (
+                <img
+                  className="h-24 w-24 rounded-xl ring-4 ring-white sm:h-32 sm:w-32 bg-gray-300 p-4 object-contain"
+                  src={getImageUrl(profile.logo)}
+                  alt={profile.name}
+                />
+              ) : (
+                <div className="h-24 w-24 rounded-xl ring-4 ring-white sm:h-32 sm:w-32 bg-gray-300 p-4" />
+              )}
             </div>
             <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
               <div className="mt-0 min-w-0 flex-1 sm:hidden md:block">
                 <h1 className="truncate text-2xl font-bold text-white">{profile.name}</h1>
-                <Link className="text-sm underline text-white" href={`/members/${profile.slug}`}>
+                <Link className="text-sm underline text-white" href={`/community/${profile.slug}`}>
                   View profile
                 </Link>
               </div>

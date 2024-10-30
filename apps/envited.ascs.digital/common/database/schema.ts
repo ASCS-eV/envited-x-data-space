@@ -3,6 +3,7 @@ import { boolean, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-c
 
 export const user = pgTable('user', {
   id: text('id').unique().primaryKey(),
+  uuid: uuid('uuid').unique(),
   name: text('name').unique(),
   email: text('email'),
   isAscsMember: boolean('is_ascs_member'),
@@ -128,6 +129,7 @@ export const profile = pgTable('profile', {
   salesName: text('sales_name'),
   salesPhone: text('sales_phone'),
   salesEmail: text('sales_email'),
+  principalUserId: text('principal_user_id').references(() => user.id),
   principalName: text('principal_name'),
   principalPhone: text('principal_phone'),
   principalEmail: text('principal_email'),
@@ -182,4 +184,16 @@ export const asset = pgTable('asset', {
   userId: text('user_id')
     .references(() => user.id)
     .notNull(),
+})
+
+export const token = pgTable('token', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  hash: text('hash'),
+  timestamp: text('timestamp'),
+  contract: text('contract'),
+  creator: text('creator'),
+  tokenId: text('token_id'),
+  thumbnail: text('thumbnail'),
+  coverImage: text('cover_image'),
+  tokenMetadata: jsonb('token_metadata'),
 })

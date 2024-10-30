@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { filter, isEmpty, isNil, omit, pick, pipe } from 'ramda'
 
 import { MINIMUM_PROFILE_REQUIREMENTS } from '../../constants'
@@ -9,7 +9,7 @@ import { DatabaseConnection } from '../types'
 export const update = (db: DatabaseConnection) => async (data: Profile) =>
   db
     .update(profile)
-    .set({ ...omit(['id'])(data), updatedAt: new Date() })
+    .set({ ...omit(['id'])(data), updatedAt: new Date(), offerings: sql`${data.offerings}::json` })
     .where(eq(profile.name, data.name))
     .returning()
 
@@ -28,7 +28,12 @@ export const getProfileBySlug = (db: DatabaseConnection) => async (slug: string)
   })
 
 export const getProfileByName = (db: DatabaseConnection) => async (name: string) =>
-  db.select().from(profile).where(eq(profile.name, name))
+  db.query.profile.findFirst({
+    where: eq(profile.name, name),
+    with: {
+      businessCategories: true,
+    },
+  })
 
 export const getPublishedProfiles = (db: DatabaseConnection) => async () =>
   db.select().from(profile).where(eq(profile.isPublished, true))

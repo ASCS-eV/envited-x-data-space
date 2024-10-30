@@ -8,6 +8,6 @@ describe('Footer', () => {
     // when ... rendering component
     // then ... should render as expected
     const { getByText } = render(<Footer />)
-    expect(getByText('Envited')).toBeInTheDocument()
+    expect(getByText('Mission')).toBeInTheDocument()
   })
 })

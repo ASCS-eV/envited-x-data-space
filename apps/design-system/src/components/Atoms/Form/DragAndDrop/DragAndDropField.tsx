@@ -5,6 +5,7 @@ import { RefCallBack } from 'react-hook-form'
 
 interface DragAndDropFieldProps {
   label: string | ReactElement<any, string | JSXElementConstructor<any>>
+  description: string | ReactElement<any, string | JSXElementConstructor<any>>
   name: string
   value: any
   error?: string
@@ -15,6 +16,7 @@ interface DragAndDropFieldProps {
 
 export const DragAndDropField: FC<DragAndDropFieldProps> = ({
   label,
+  description,
   name,
   value,
   error = '',
@@ -53,7 +55,7 @@ export const DragAndDropField: FC<DragAndDropFieldProps> = ({
       >
         <div className="text-center">
           <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-          <div className="mt-4 flex text-sm leading-6 text-gray-600 dark:text-gray-400">
+          <div className="mt-4 flex justify-center text-sm leading-6 text-gray-600 dark:text-gray-400">
             <label
               htmlFor={name}
               className="relative cursor-pointer rounded-md bg-transparent font-semibold text-black dark:text-gray-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-blue-800"
@@ -71,7 +73,7 @@ export const DragAndDropField: FC<DragAndDropFieldProps> = ({
             </label>
             <p className="pl-1">or drag and drop</p>
           </div>
-          <p className="text-xs leading-5 text-gray-600 dark:text-gray-500">PNG, JPG, GIF or SVG up to 10MB</p>
+          <p className="w-full text-xs leading-5 text-gray-600 dark:text-gray-500">{description}</p>
         </div>
       </div>
       {value}

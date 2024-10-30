@@ -7,12 +7,14 @@ interface PageHeaderProps {
   title: string
   description: string
   backgroundImage?: string
+  link?: any
 }
 export const PageHeader: FC<PageHeaderProps> = ({
   heading,
   title,
   description,
   backgroundImage = 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-y=.8&w=2830&h=1500&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply',
+  link = '',
 }) => {
   return (
     <div className={`isolate relative overflow-hidden bg-gray-900`}>
@@ -25,6 +27,7 @@ export const PageHeader: FC<PageHeaderProps> = ({
         </div>
         <div className="relative mt-6">
           <p className="mx-auto max-w-4xl text-lg leading-8 text-white/60">{description}</p>
+          {link && <div className="mt-6 mx-auto max-w-4xl">{link}</div>}
           <svg
             viewBox="0 0 1208 1024"
             className="absolute -top-10 left-1/2 -z-10 h-[80rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0"

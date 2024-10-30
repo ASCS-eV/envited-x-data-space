@@ -1,6 +1,6 @@
 'use client'
 
-import { Address, ContactPerson, Pill } from '@envited-marketplace/design-system'
+import { Address, Pill } from '@envited-marketplace/design-system'
 import { Tab } from '@headlessui/react'
 import { isNil, map, propOr } from 'ramda'
 import React, { FC, Fragment } from 'react'
@@ -16,7 +16,6 @@ const products = [
     href: '/assets/detail',
     description: 'A map section of the A8 highway from Heimsheim to Leonberg with a total length of 37.91 km. It was',
     options: 'XODR-3DM-23001',
-    price: '20 EUR',
     imageSrc: 'https://envited.market/media/OpenDRIVE_A9_final_bO9LFP7.png.500x320_q85_crop-scale.png',
     imageAlt: 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
   },
@@ -27,7 +26,6 @@ const products = [
     description:
       'San Francisco Union Square and adjacent streets. 3D Visualization of San Francisco HD maps, designed based on real-world OpenDRIVE data',
     options: 'CARLA-TGG-21001',
-    price: '300 EUR',
     imageSrc: 'https://envited.market/media/Kachel_San_Francisco_unreal.png.500x320_q85_crop-scale.png',
     imageAlt: 'Front of plain black t-shirt.',
   },
@@ -57,17 +55,15 @@ export const Member: FC<MemberProps> = ({ member }) => {
 
           <div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-20 lg:max-w-none w-full">
             <div className="grid grid-cols-1 sm:grid-cols-2 space-x-8">
-              <div className="">
-                <h3 className="text-sm font-medium text-gray-900">{t('[Heading] address')}</h3>
-                <div className="mt-4">
-                  <Address
-                    street={propOr('', 'streetAddress')(member)}
-                    postalCode={propOr('', 'postalCode')(member)}
-                    city={propOr('', 'addressLocality')(member)}
-                    country={propOr('', 'addressCountry')(member)}
-                    website={propOr('', 'website')(member)}
-                  />
-                </div>
+              <div>
+                <Address
+                  street={propOr('', 'streetAddress')(member)}
+                  postalCode={propOr('', 'postalCode')(member)}
+                  city={propOr('', 'addressLocality')(member)}
+                  country={propOr('', 'addressCountry')(member)}
+                  website={propOr('', 'website')(member)}
+                  email={propOr('', 'salesEmail')(member)}
+                />
               </div>
 
               <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
@@ -89,31 +85,6 @@ export const Member: FC<MemberProps> = ({ member }) => {
                 {map(({ businessCategoryId }) => <Pill key={businessCategoryId}>{businessCategoryId}</Pill>)(
                   propOr([], 'businessCategories')(member),
                 )}
-              </div>
-            </div>
-
-            <div className="mt-10 border-t border-gray-200 pt-10">
-              <div className="grid grid-cols-1 sm:grid-cols-2 space-x-8">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">{t('[Heading] principal contact')}</h3>
-                  <div className="mt-4">
-                    <ContactPerson
-                      name={propOr('', 'principalName')(member)}
-                      email={propOr('', 'principalEmail')(member)}
-                      phone={propOr('', 'principalPhone')(member)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">{t('[Heading] sales contact')}</h3>
-                  <div className="mt-4">
-                    <ContactPerson
-                      name={propOr('', 'salesName')(member)}
-                      email={propOr('', 'salesEmail')(member)}
-                      phone={propOr('', 'salesPhone')(member)}
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -154,7 +125,7 @@ export const Member: FC<MemberProps> = ({ member }) => {
                             <dt className="text-sm font-medium leading-6 text-gray-900">
                               {t('[Heading] offering type')}
                             </dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 gap-2">
+                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 inline-flex space-x-2">
                               {map((item: string) => <Pill key={item}>{item}</Pill>)(type.split(';') as [])}
                             </dd>
                           </div>
@@ -168,13 +139,19 @@ export const Member: FC<MemberProps> = ({ member }) => {
                             <dt className="text-sm font-medium leading-6 text-gray-900">
                               {t('[Heading] offering supported tools')}
                             </dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{supportedTools}</dd>
+                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 space-x-2">
+                              {map((item: string) => <Pill key={item}>{item}</Pill>)(supportedTools.split(';') as [])}
+                            </dd>
                           </div>
                           <div className="border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                             <dt className="text-sm font-medium leading-6 text-gray-900">
                               {t('[Heading] offering supported standards')}
                             </dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{supportedStandards}</dd>
+                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 space-x-2">
+                              {map((item: string) => <Pill key={item}>{item}</Pill>)(
+                                supportedStandards.split(';') as [],
+                              )}
+                            </dd>
                           </div>
                         </dl>
                       </div>
@@ -216,12 +193,11 @@ export const Member: FC<MemberProps> = ({ member }) => {
                 </h3>
                 <p className="text-sm text-gray-500">{product.description}</p>
                 <div className="flex justify-between pt-4">
-                  <p className="text-sm font-medium text-gray-900">{product.price}</p>
                   <a
                     href={product.href}
                     className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"
                   >
-                    View all
+                    View
                     <span aria-hidden="true"> &rarr;</span>
                   </a>
                 </div>

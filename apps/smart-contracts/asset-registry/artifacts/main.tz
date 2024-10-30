@@ -1,10 +1,7 @@
 { parameter
     (or (pair %mint
            (string %from_uuid)
-           (address %member_did)
            (address %to_)
-           (nat %token_id)
-           (nat %amount)
            (option %token_info (map string bytes)))
         (or (list %approve
                (pair (address %owner)
@@ -24,8 +21,9 @@
   storage
     (pair (address %registry)
           (big_map %metadata string bytes)
-          (big_map %assets nat address)
+          (big_map %ledger nat address)
           (big_map %token_metadata nat (pair (nat %token_id) (map %token_info string bytes)))
+          (nat %token_index)
           (option %operators (big_map (pair address nat) (set address)))
           (big_map %approvals (pair address address nat) nat)) ;
   code { PUSH string "FA2_TOKEN_UNDEFINED" ;
@@ -84,6 +82,7 @@
                        (big_map string bytes)
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
+                       nat
                        (option (big_map (pair address nat) (set address)))
                        (big_map (pair address address nat) nat)))
            (pair (big_map nat address)
@@ -204,6 +203,7 @@
                                 (big_map string bytes)
                                 (big_map nat address)
                                 (big_map nat (pair nat (map string bytes)))
+                                nat
                                 (option (big_map (pair address nat) (set address)))
                                 (big_map (pair address address nat) nat))
                           (pair (big_map nat address)
@@ -216,11 +216,12 @@
                        (lambda
                           (pair nat (map string bytes) (big_map nat (pair nat (map string bytes))))
                           (big_map nat (pair nat (map string bytes)))))
-                 (pair (pair string address address nat nat (option (map string bytes)))
+                 (pair (pair string address (option (map string bytes)))
                        address
                        (big_map string bytes)
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
+                       nat
                        (option (big_map (pair address nat) (set address)))
                        (big_map (pair address address nat) nat)))
            (pair (list operation)
@@ -228,6 +229,7 @@
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
+                 nat
                  (option (big_map (pair address nat) (set address)))
                  (big_map (pair address address nat) nat))
            { UNPAIR ;
@@ -241,20 +243,40 @@
              DUG 2 ;
              NIL operation ;
              NIL operation ;
-             PUSH address "KT1P2kUcD97mqQWi7WMJfJaWSKZ6yU7caGTh" ;
              DUP 4 ;
-             GET 5 ;
-             SENDER ;
-             PAIR ;
-             VIEW "get_permissions" bool ;
-             IF_NONE { DUP 6 ; FAILWITH } {} ;
-             IF { DIG 5 ; DROP } { DIG 5 ; FAILWITH } ;
-             DUP 3 ;
-             GET 7 ;
-             DUP 6 ;
+             CAR ;
+             DUP 4 ;
+             GET 3 ;
+             DUP 5 ;
              CAR ;
              PAIR ;
-             DUP 6 ;
+             VIEW "get_entry"
+                  (pair (pair %member
+                           (address %did)
+                           (or %status (unit %active) (unit %revoked))
+                           (string %issuer)
+                           (string %uuid))
+                        (pair %user
+                           (address %did)
+                           (or %status (unit %active) (unit %revoked))
+                           (string %issuer)
+                           (string %uuid))) ;
+             IF_NONE { DUP 6 ; FAILWITH } {} ;
+             DIG 6 ;
+             SWAP ;
+             CDR ;
+             CAR ;
+             SENDER ;
+             COMPARE ;
+             EQ ;
+             IF { DROP } { FAILWITH } ;
+             DUP 4 ;
+             GET 9 ;
+             DUP ;
+             DUP 7 ;
+             CAR ;
+             PAIR ;
+             DUP 7 ;
              GET 10 ;
              SWAP ;
              EXEC ;
@@ -265,62 +287,51 @@
              COMPARE ;
              EQ ;
              IF {} { PUSH string "Token ID already exists" ; FAILWITH } ;
-             DUP 4 ;
-             GET 7 ;
-             DUP 5 ;
-             GET 5 ;
-             DUP 8 ;
+             DUP 2 ;
+             DUP 6 ;
+             GET 3 ;
+             DUP 9 ;
              CAR ;
              PAIR 3 ;
-             DUP 7 ;
+             DUP 8 ;
              GET 9 ;
              SWAP ;
              EXEC ;
-             DUP 5 ;
-             GET 9 ;
-             INT ;
+             PUSH int 1 ;
              DIG 2 ;
-             DUP 6 ;
-             GET 9 ;
+             PUSH nat 1 ;
              ADD ;
-             DUP 6 ;
-             GET 7 ;
+             DUP 4 ;
              PAIR 3 ;
-             DUP 5 ;
-             GET 9 ;
-             INT ;
-             DUP 6 ;
-             GET 9 ;
+             PUSH int 1 ;
+             PUSH nat 1 ;
              DIG 3 ;
              ADD ;
-             DUP 6 ;
-             GET 7 ;
-             DUP 7 ;
-             GET 5 ;
+             DUP 4 ;
+             DUP 8 ;
+             GET 3 ;
              PAIR 4 ;
              EMIT %balance_update
                (pair (address %owner) (nat %token_id) (nat %new_balance) (int %diff)) ;
              SWAP ;
              EMIT %total_supply_update
                (pair (nat %token_id) (nat %new_total_supply) (int %diff)) ;
-             DUP 6 ;
-             GET 7 ;
-             DUP 6 ;
-             GET 7 ;
-             GET ;
-             IF_NONE { EMPTY_MAP string bytes } { CDR } ;
              DUP 7 ;
              GET 7 ;
-             DUP 2 ;
+             DUP 4 ;
+             GET ;
+             IF_NONE { EMPTY_MAP string bytes } { CDR } ;
              DUP 8 ;
              GET 7 ;
+             DUP 2 ;
+             DUP 6 ;
              PAIR 3 ;
-             DUP 10 ;
+             DUP 11 ;
              SWAP ;
              EXEC ;
              PUSH nat 0 ;
-             DUP 8 ;
-             GET 10 ;
+             DUP 9 ;
+             GET 4 ;
              IF_NONE { EMPTY_MAP string bytes } {} ;
              SIZE ;
              COMPARE ;
@@ -331,52 +342,48 @@
              COMPARE ;
              EQ ;
              AND ;
-             IF { DUP 6 ;
-                  GET 10 ;
+             IF { DUP 7 ;
+                  GET 4 ;
                   IF_NONE { PUSH string "Token info must be provided" ; FAILWITH } { DROP } }
                 {} ;
              PUSH nat 0 ;
-             DUP 7 ;
-             GET 10 ;
+             DUP 8 ;
+             GET 4 ;
              IF_NONE { EMPTY_MAP string bytes } {} ;
              SIZE ;
              COMPARE ;
              GT ;
              IF { DROP ;
-                  DUP 6 ;
-                  GET 7 ;
-                  DUP 6 ;
-                  GET 10 ;
-                  IF_NONE { EMPTY_MAP string bytes } {} ;
                   DUP 7 ;
                   GET 7 ;
+                  DUP 7 ;
+                  GET 4 ;
+                  IF_NONE { EMPTY_MAP string bytes } {} ;
+                  DUP 5 ;
                   PAIR 3 ;
-                  DIG 8 ;
+                  DIG 9 ;
                   SWAP ;
                   EXEC ;
-                  DUP 6 ;
-                  GET 10 ;
                   DUP 7 ;
-                  GET 7 ;
+                  GET 4 ;
+                  DUP 5 ;
                   PAIR ;
                   EMIT %token_metadata_update
                     (pair (nat %token_id) (option %new_metadata (map string bytes))) ;
                   NIL operation ;
-                  DIG 6 ;
+                  DIG 7 ;
                   NIL operation ;
                   SWAP ;
                   ITER { CONS } ;
                   ITER { CONS } ;
                   SWAP ;
                   CONS ;
-                  DUG 4 }
-                { DIG 8 ; DROP } ;
-             DUP 6 ;
-             GET 9 ;
-             DUP 7 ;
-             GET 7 ;
+                  DUG 5 }
+                { DIG 9 ; DROP } ;
+             PUSH nat 1 ;
+             DIG 4 ;
              DIG 7 ;
-             GET 5 ;
+             GET 3 ;
              DUP 10 ;
              CAR ;
              PAIR 4 ;
@@ -415,7 +422,12 @@
              UPDATE 1 ;
              CAR ;
              SWAP ;
-             DIG 3 ;
+             DUP 4 ;
+             PUSH nat 1 ;
+             DIG 5 ;
+             GET 9 ;
+             ADD ;
+             UPDATE 9 ;
              SWAP ;
              UPDATE 7 ;
              SWAP ;
@@ -440,6 +452,7 @@
                        (big_map string bytes)
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
+                       nat
                        (option (big_map (pair address nat) (set address)))
                        (big_map (pair address address nat) nat)))
            (pair (list operation)
@@ -447,6 +460,7 @@
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
+                 nat
                  (option (big_map (pair address nat) (set address)))
                  (big_map (pair address address nat) nat))
            { UNPAIR ;
@@ -455,7 +469,7 @@
              UNPAIR ;
              EMPTY_MAP (pair address address nat) (pair nat int) ;
              DUP 3 ;
-             GET 10 ;
+             GET 12 ;
              NIL operation ;
              DIG 3 ;
              ITER { DIG 2 ;
@@ -565,7 +579,7 @@
              SWAP ;
              DIG 2 ;
              SWAP ;
-             UPDATE 10 ;
+             UPDATE 12 ;
              SWAP ;
              PAIR } ;
          DUP 7 ;
@@ -579,6 +593,7 @@
                        (big_map string bytes)
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
+                       nat
                        (option (big_map (pair address nat) (set address)))
                        (big_map (pair address address nat) nat)))
            (pair (list operation)
@@ -586,6 +601,7 @@
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
+                 nat
                  (option (big_map (pair address nat) (set address)))
                  (big_map (pair address address nat) nat))
            { UNPAIR ;
@@ -593,7 +609,7 @@
              UNPAIR ;
              SENDER ;
              DUP 3 ;
-             GET 9 ;
+             GET 11 ;
              IF_NONE
                { DROP 4 ;
                  PUSH string "The storage does not support operators management" ;
@@ -689,7 +705,7 @@
                  DIG 3 ;
                  DIG 2 ;
                  SOME ;
-                 UPDATE 9 ;
+                 UPDATE 11 ;
                  NIL operation ;
                  DIG 3 ;
                  DIG 3 ;
@@ -710,6 +726,7 @@
                                 (big_map string bytes)
                                 (big_map nat address)
                                 (big_map nat (pair nat (map string bytes)))
+                                nat
                                 (option (big_map (pair address nat) (set address)))
                                 (big_map (pair address address nat) nat))
                           (pair (big_map nat address)
@@ -724,6 +741,7 @@
                        (big_map string bytes)
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
+                       nat
                        (option (big_map (pair address nat) (set address)))
                        (big_map (pair address address nat) nat)))
            (pair (list operation)
@@ -731,6 +749,7 @@
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
+                 nat
                  (option (big_map (pair address nat) (set address)))
                  (big_map (pair address address nat) nat))
            { UNPAIR ;
@@ -782,6 +801,7 @@
                                 (big_map string bytes)
                                 (big_map nat address)
                                 (big_map nat (pair nat (map string bytes)))
+                                nat
                                 (option (big_map (pair address nat) (set address)))
                                 (big_map (pair address address nat) nat))
                           (pair (big_map nat address)
@@ -802,6 +822,7 @@
                        (big_map string bytes)
                        (big_map nat address)
                        (big_map nat (pair nat (map string bytes)))
+                       nat
                        (option (big_map (pair address nat) (set address)))
                        (big_map (pair address address nat) nat)))
            (pair (list operation)
@@ -809,6 +830,7 @@
                  (big_map string bytes)
                  (big_map nat address)
                  (big_map nat (pair nat (map string bytes)))
+                 nat
                  (option (big_map (pair address nat) (set address)))
                  (big_map (pair address address nat) nat))
            { UNPAIR ;
@@ -825,7 +847,7 @@
              EMPTY_MAP (pair address nat) (pair nat int) ;
              NIL operation ;
              DUP 6 ;
-             GET 10 ;
+             GET 12 ;
              DIG 7 ;
              PAIR 5 ;
              DIG 2 ;
@@ -911,13 +933,13 @@
                                           SWAP ;
                                           EXEC }
                                         { DUP 12 ;
-                                          GET 9 ;
+                                          GET 11 ;
                                           IF_NONE
                                             { DIG 8 ; DROP ; DUP 15 ; FAILWITH }
                                             { DUP 5 ; DUP 12 ; PAIR 3 ; DUP 14 ; SWAP ; EXEC ; DROP ; DIG 8 } } }
                                    { DROP ;
                                      DUP 12 ;
-                                     GET 9 ;
+                                     GET 11 ;
                                      IF_NONE
                                        { DIG 8 ; DROP ; DUP 15 ; FAILWITH }
                                        { DUP 5 ; DUP 12 ; PAIR 3 ; DUP 14 ; SWAP ; EXEC ; DROP ; DIG 8 } } } ;
@@ -1123,7 +1145,7 @@
              UNPAIR 5 ;
              DIG 6 ;
              DIG 2 ;
-             UPDATE 10 ;
+             UPDATE 12 ;
              SWAP ;
              CAR ;
              UPDATE 5 ;
@@ -1282,7 +1304,7 @@
        bool
        { UNPAIR ;
          SWAP ;
-         GET 9 ;
+         GET 11 ;
          IF_NONE
            { DROP ; PUSH bool False }
            { DUP 2 ;
@@ -1295,7 +1317,7 @@
   view "get_allowance"
        (pair (address %owner) (address %spender) (nat %token_id))
        nat
-       { UNPAIR ; SWAP ; GET 10 ; SWAP ; GET ; IF_NONE { PUSH nat 0 } {} } ;
+       { UNPAIR ; SWAP ; GET 12 ; SWAP ; GET ; IF_NONE { PUSH nat 0 } {} } ;
   view "get_token_metadata"
        nat
        (map string bytes)

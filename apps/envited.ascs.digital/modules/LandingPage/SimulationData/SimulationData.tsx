@@ -12,19 +12,19 @@ export const SimulationData = () => {
           <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <img
               alt=""
-              src="/images/AdobeStock_571252297_metamorworks.jpg"
-              className="relative overflow-hidden rounded-3xl lg:max-w-lg h-full object-cover"
+              src="/images/AdobeStock_571252297_metamorworks.jpeg"
+              className="relative overflow-hidden rounded-3xl lg:max-w-lg md:h-full object-cover"
             />
-            <div className="text-base leading-7 text-gray-700 lg:max-w-lg">
-              <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <div className="text-base leading-7 lg:max-w-lg">
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
                 {t('[Heading] simulation data')}
               </h1>
               <div className="max-w-xl">
-                <p className="mt-6">{t('[Description] simulation data')}</p>
-                <p className="mt-8">{t('[Description] simulation data invite')}</p>
+                <p className="mt-6 text-lg leading-8 text-gray-700">{t('[Description] simulation data')}</p>
+                <p className="mt-8 text-lg leading-8 text-gray-700">{t('[Description] simulation data invite')}</p>
               </div>
               <div className="mt-10 flex">
-                <Button href={'/community'}>{t('[Button] our community')}</Button>
+                <Button href={'/community'}>{t('[Button] meet our community')}</Button>
               </div>
             </div>
           </div>

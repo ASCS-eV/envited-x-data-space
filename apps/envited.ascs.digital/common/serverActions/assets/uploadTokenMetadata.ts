@@ -10,7 +10,7 @@ import { Log, log } from '../../logger'
 import { Role, Session } from '../../types'
 import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
-export const uploadAssetTokenMetadataToIPFS =
+export const uploadTokenMetadataToIPFS =
   ({
     uploadJson,
     createGroup,
@@ -25,6 +25,7 @@ export const uploadAssetTokenMetadataToIPFS =
     log: Log
   }) =>
   async (assetId: string) => {
+    log.info('uploadTokenMetadataToIPFS', { assetId })
     if (isNil(assetId) || isEmpty(assetId)) {
       throw badRequestError({ resource: 'assets', resourceId: assetId, message: 'Missing ID' })
     }
@@ -56,7 +57,7 @@ export const uploadAssetTokenMetadataToIPFS =
     return uploadJson({ data: asset.metadata, filename: 'token_info.json', group })
   }
 
-export const uploadAssetTokenMetadata = uploadAssetTokenMetadataToIPFS({
+export const uploadTokenMetadata = uploadTokenMetadataToIPFS({
   uploadJson,
   createGroup,
   db,

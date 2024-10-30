@@ -1,10 +1,8 @@
-import { get } from 'http'
-
 import { AssetStatus, Role } from '../../types'
 import * as SUT from './uploadTokenMetadata'
 
 describe('serverActions/assets/uploadTokenMetadata', () => {
-  describe('uploadAssetTokenMetadataToIPFS', () => {
+  describe('uploadTokenMetadataToIPFS', () => {
     it('should upload the asset token metadata to IPFS as expected', async () => {
       // when ... we want to upload the asset token metadata to IPFS
       // then ... it should upload and return the asset token metadata as expected
@@ -37,13 +35,14 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_ID')
       const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
 
-      const result = await SUT.uploadAssetTokenMetadataToIPFS({
+      const result = await SUT.uploadTokenMetadataToIPFS({
         uploadJson: uploadJsonStub,
         createGroup: createGroupStub,
         db: dbStub,
@@ -91,6 +90,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -98,7 +98,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
-        SUT.uploadAssetTokenMetadataToIPFS({
+        SUT.uploadTokenMetadataToIPFS({
           uploadJson: uploadJsonStub,
           createGroup: createGroupStub,
           db: dbStub,
@@ -134,6 +134,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -141,7 +142,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
-        SUT.uploadAssetTokenMetadataToIPFS({
+        SUT.uploadTokenMetadataToIPFS({
           uploadJson: uploadJsonStub,
           createGroup: createGroupStub,
           db: dbStub,
@@ -184,6 +185,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -191,7 +193,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
-        SUT.uploadAssetTokenMetadataToIPFS({
+        SUT.uploadTokenMetadataToIPFS({
           uploadJson: uploadJsonStub,
           createGroup: createGroupStub,
           db: dbStub,
@@ -225,6 +227,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -232,7 +235,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
-        SUT.uploadAssetTokenMetadataToIPFS({
+        SUT.uploadTokenMetadataToIPFS({
           uploadJson: uploadJsonStub,
           createGroup: createGroupStub,
           db: dbStub,
@@ -274,6 +277,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         getUserById: getUserByIdStub,
       })
       const logStub = {
+        info: jest.fn(),
         error: jest.fn(),
       } as any
 
@@ -281,7 +285,7 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
-        SUT.uploadAssetTokenMetadataToIPFS({
+        SUT.uploadTokenMetadataToIPFS({
           uploadJson: uploadJsonStub,
           createGroup: createGroupStub,
           db: dbStub,

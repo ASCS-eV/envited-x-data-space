@@ -1,10 +1,10 @@
 'use client'
 
-import { mintToken } from '../../common/web3'
-import { tezos } from '../../common/web3'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
+import { mintToken } from '../../common/web3'
+import { tezos } from '../../common/web3'
 import { getAssetMintParams, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
 
 interface MintProps {

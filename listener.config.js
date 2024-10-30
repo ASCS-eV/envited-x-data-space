@@ -1,24 +1,20 @@
 module.exports = {
   apps : [{
-    name: 'listener',
-    script: './dist/listener/index.js',
+    name: 'Listener',
+    script: './apps/envited.ascs.digital/listener/index.ts',
     watch: '.',
     env_staging: {
-      NODE_ENV: 'staging',
+      ENV: 'staging',
       ASSETS_CONTRACT: 'KT1NUDsQ5qCpf5Mxmeo2dqRdnKqqL8kpj2LG',
-    },  
+      RDS_SECRET_ARN: 'arn:aws:secretsmanager:eu-central-1:597778497612:secret:EnvitedSecretD661DE26-KcCzWiLKyXmK-9z9dYl',
+    },
+    env_development: {
+      ENV: 'development',
+      ASSETS_CONTRACT: 'KT1NUDsQ5qCpf5Mxmeo2dqRdnKqqL8kpj2LG',
+      POSTGRES_PORT: 5436,
+      POSTGRES_DATABASE_NAME: 'envited',
+      POSTGRES_DATABASE_USER: 'admin',
+      POSTGRES_DATABASE_PASSWORD: '123456',
+    }, 
   }],
-
-  // deploy : {
-  //   production : {
-  //     user : 'SSH_USERNAME',
-  //     host : 'SSH_HOSTMACHINE',
-  //     ref  : 'origin/master',
-  //     repo : 'GIT_REPOSITORY',
-  //     path : 'DESTINATION_PATH',
-  //     'pre-deploy-local': '',
-  //     'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production',
-  //     'pre-setup': ''
-  //   }
-  // }
 };

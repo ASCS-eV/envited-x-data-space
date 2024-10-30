@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { boolean, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { boolean, jsonb, pgTable, text, timestamp, uuid, integer } from 'drizzle-orm/pg-core'
 
 export const user = pgTable('user', {
   id: text('id').unique().primaryKey(),
@@ -189,11 +189,10 @@ export const asset = pgTable('asset', {
 export const token = pgTable('token', {
   id: uuid('id').defaultRandom().primaryKey(),
   hash: text('hash'),
-  timestamp: text('timestamp'),
+  createdAt: timestamp('created_at'),
   contract: text('contract'),
   creator: text('creator'),
-  tokenId: text('token_id'),
+  tokenId: integer('token_id'),
   thumbnail: text('thumbnail'),
-  coverImage: text('cover_image'),
   tokenMetadata: jsonb('token_metadata'),
 })

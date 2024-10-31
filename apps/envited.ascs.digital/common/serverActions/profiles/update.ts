@@ -48,7 +48,7 @@ export const _update =
           userId: session.user.id,
         })
       }
-
+      log.info('Updating profile', { profile, businessCategories })
       const [updatedProfile] = await connection.updateProfile(profile)
 
       if (businessCategories) {

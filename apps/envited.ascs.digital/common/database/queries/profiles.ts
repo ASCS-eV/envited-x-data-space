@@ -9,7 +9,7 @@ import { DatabaseConnection } from '../types'
 export const update = (db: DatabaseConnection) => async (data: Profile) =>
   db
     .update(profile)
-    .set({ ...omit(['id'])(data), updatedAt: new Date(), offerings: sql`${data.offerings}::json` })
+    .set({ ...omit(['id'])(data), updatedAt: new Date(), offerings: data.offerings })
     .where(eq(profile.name, data.name))
     .returning()
 

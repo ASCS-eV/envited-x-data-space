@@ -48,9 +48,9 @@ export const _update =
           userId: session.user.id,
         })
       }
-
+      log.info('Updating profile', { profile, businessCategories })
       const [updatedProfile] = await connection.updateProfile(profile)
-
+      log.info('Updated profile', updatedProfile)
       if (businessCategories) {
         await connection.deleteBusinessCategoriesByProfileId(updatedProfile.id)
 

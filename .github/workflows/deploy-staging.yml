@@ -4,7 +4,7 @@ on:
     branches:
       - develop
   worklow_dispatch:
-git push
+    
 # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
 concurrency:
   group: merge-${{ github.ref }}

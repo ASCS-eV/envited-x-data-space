@@ -203,22 +203,28 @@ export const _validateAndCreateMetadata =
       const assetCID = await createFilename(byteArray)
       const domainMetadataCID = await createFilename(data.domainMetadata)
 
+      console.log('manifest', data.manifest)
+      console.log('domainMetadata', data.domainMetadata)
+
       const modifiedManifest = createModifiedManifest({
         assetCID,
         domainMetadataCID,
       })(data.manifest)
-      const modifiedManifestCID = await createFilename(modifiedManifest)
 
+      const modifiedManifestCID = await createFilename(modifiedManifest)
+      console.log('modifiedManifest', modifiedManifest)
+      
       const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
       const licenseCID = await createFilename(license as any)
-
-      const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
-        data.manifest['manifest:data']['manifest:contentData'],
-      ) as any
-      const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
-      const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
-      const displayUriCID = await createFilename(displayUri as any)
-
+      console.log('license', license)
+      
+      // const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
+      //   data.manifest['manifest:data']['manifest:contentData'],
+      // ) as any
+      // const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
+      // const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
+      // const displayUriCID = await createFilename(displayUri as any)
+      
       const tokenMetadata = createTokenMetadata({
         assetCID,
         manifestCID: modifiedManifestCID,
@@ -229,7 +235,8 @@ export const _validateAndCreateMetadata =
         manifest: data.manifest,
         domainMetadata: data.domainMetadata,
       })
-
+      console.log('tokenMetadata', tokenMetadata)
+        
       const tokenMetadataCID = await createFilename(tokenMetadata)
 
       return {

@@ -22,7 +22,7 @@ describe('common/serverActions/users/getUserById', () => {
       isEnvitedMember: true,
     }
     const dbStub = jest.fn().mockResolvedValue({
-      getUserById: jest.fn().mockResolvedValue([user]),
+      getUserById: jest.fn().mockResolvedValue(user),
     })
     const logStub = {
       error: jest.fn(),
@@ -50,7 +50,7 @@ describe('common/serverActions/users/getUserById', () => {
       isEnvitedMember: true,
     }
     const dbStub = jest.fn().mockResolvedValue({
-      getUserById: jest.fn().mockResolvedValue([user]),
+      getUserById: jest.fn().mockResolvedValue(user),
     })
     const logStub = {
       error: jest.fn(),
@@ -83,7 +83,7 @@ describe('common/serverActions/users/getUserById', () => {
       isEnvitedMember: true,
     }
     const dbStub = jest.fn().mockResolvedValue({
-      getUserById: jest.fn().mockResolvedValue([user]),
+      getUserById: jest.fn().mockResolvedValue(user),
     })
     const logStub = {
       error: jest.fn(),

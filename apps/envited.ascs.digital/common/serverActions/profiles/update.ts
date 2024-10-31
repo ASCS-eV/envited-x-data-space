@@ -1,11 +1,11 @@
 'use server'
 
-import { isNil } from 'ramda'
+import { equals, isNil, prop } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isFederator, isOwnProfile, isPrincipal } from '../../guards'
+import { isFederator, isOwnProfile, isPrincipal, isPrincipalContact } from '../../guards'
 import { Log, log } from '../../logger'
 import { Profile, Session } from '../../types'
 import { badRequestError, forbiddenError, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
@@ -15,6 +15,7 @@ export const _update =
   async (profile: Partial<Profile>, businessCategories?: string[]) => {
     try {
       const session = await getServerSession()
+
       if (isNil(session)) {
         throw unauthorizedError({ resource: 'profiles', resourceId: profile.id })
       }
@@ -40,7 +41,8 @@ export const _update =
         })
       }
 
-      if (!isOwnProfile(user.user)(profile)) {
+      const currentProfile = await connection.getProfileByName(profile.name)
+      if (!isOwnProfile(user.user)(profile) && !isPrincipalContact(session)(currentProfile)) {
         throw forbiddenError({
           resource: 'profiles',
           resourceId: profile.id,
@@ -49,8 +51,16 @@ export const _update =
         })
       }
       log.info('Updating profile', { profile, businessCategories })
+
       const [updatedProfile] = await connection.updateProfile(profile)
-      log.info('Updated profile', updatedProfile)
+
+      if (!equals(currentProfile.principalUserId)(profile.principalUserId)) {
+        if (!isNil(currentProfile.principalUserId)) {
+          await connection.removeUserFromRole({ userId: prop('principalUserId')(currentProfile), roleId: 'principal' })
+        }
+        await connection.addUserToRole({ userId: profile.principalUserId, roleId: 'principal' })
+      }
+
       if (businessCategories) {
         await connection.deleteBusinessCategoriesByProfileId(updatedProfile.id)
 
@@ -60,6 +70,7 @@ export const _update =
 
         await Promise.all(insertProfilesToBusinessCategoriesPromises)
       }
+
       const [result] = await connection.maybeUpdatePublishedState(updatedProfile)
       return result
     } catch (error: unknown) {

@@ -12,7 +12,7 @@ import { User } from '../../types'
 import { Session } from '../../types/types'
 import { forbiddenError, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
 
-export const _getUsersByIssuerId =
+export const _getActiveUsersByIssuerId =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async (): Promise<User[]> => {
     try {
@@ -35,7 +35,7 @@ export const _getUsersByIssuerId =
         issuerId = principal.id
       }
 
-      const users = await connection.getUsersByIssuerId(issuerId)
+      const users = await connection.getActiveUsersByIssuerId(issuerId)
 
       return users
     } catch (error: unknown) {
@@ -44,4 +44,4 @@ export const _getUsersByIssuerId =
     }
   }
 
-export const getUsersByIssuerId = cache(_getUsersByIssuerId({ db, getServerSession, log }))
+export const getActiveUsersByIssuerId = cache(_getActiveUsersByIssuerId({ db, getServerSession, log }))

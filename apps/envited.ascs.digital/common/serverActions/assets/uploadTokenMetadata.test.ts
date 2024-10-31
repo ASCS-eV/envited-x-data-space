@@ -24,12 +24,10 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
 
-      const getUserByIdStub = jest.fn().mockResolvedValue([
-        {
-          id: 'USER_ID',
-          issuerId: 'ISSUER_ID',
-        },
-      ])
+      const getUserByIdStub = jest.fn().mockResolvedValue({
+        id: 'USER_ID',
+        issuerId: 'ISSUER_ID',
+      })
       const dbStub = jest.fn().mockResolvedValue({
         getAsset: getAssetStub,
         getUserById: getUserByIdStub,
@@ -79,12 +77,10 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
 
-      const getUserByIdStub = jest.fn().mockResolvedValue([
-        {
-          id: 'USER_ID',
-          issuerId: 'ISSUER_ID',
-        },
-      ])
+      const getUserByIdStub = jest.fn().mockResolvedValue({
+        id: 'USER_ID',
+        issuerId: 'ISSUER_ID',
+      })
       const dbStub = jest.fn().mockResolvedValue({
         getAsset: getAssetStub,
         getUserById: getUserByIdStub,
@@ -123,12 +119,10 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
 
-      const getUserByIdStub = jest.fn().mockResolvedValue([
-        {
-          id: 'USER_ID',
-          issuerId: 'ISSUER_ID',
-        },
-      ])
+      const getUserByIdStub = jest.fn().mockResolvedValue({
+        id: 'USER_ID',
+        issuerId: 'ISSUER_ID',
+      })
       const dbStub = jest.fn().mockResolvedValue({
         getAsset: getAssetStub,
         getUserById: getUserByIdStub,
@@ -174,12 +168,10 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
         },
       ])
 
-      const getUserByIdStub = jest.fn().mockResolvedValue([
-        {
-          id: 'USER_ID',
-          issuerId: 'ISSUER_ID',
-        },
-      ])
+      const getUserByIdStub = jest.fn().mockResolvedValue({
+        id: 'USER_ID',
+        issuerId: 'ISSUER_ID',
+      })
       const dbStub = jest.fn().mockResolvedValue({
         getAsset: getAssetStub,
         getUserById: getUserByIdStub,

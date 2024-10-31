@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm'
-import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { AwsDataApiPgDatabase } from 'drizzle-orm/aws-data-api/pg'
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
 import * as schema from '../common/database/schema'
 

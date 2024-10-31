@@ -7,7 +7,7 @@ describe('common/asset/updateAssetStatus', () => {
       // when ... we want to get the asset by id
       // then ... it should update the asset as expected
       const dbStub = jest.fn().mockResolvedValue({
-        updateAssetCID: jest.fn().mockResolvedValue([
+        updateAssetByCID: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
             cid: 'NEW_ASSET_CID',
@@ -35,7 +35,7 @@ describe('common/asset/updateAssetStatus', () => {
         status: AssetStatus.pending,
         userId: 'USER_PKH',
       })
-      expect(db.updateAssetCID).toHaveBeenCalledWith(
+      expect(db.updateAssetByCID).toHaveBeenCalledWith(
         {
           cid: 'NEW_ASSET_CID',
           metadata: '{}',

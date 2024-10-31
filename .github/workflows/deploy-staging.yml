@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - develop
-      - 320_extend_user_roles_main_contact
+  workflow_dispatch:
 
 # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
 concurrency:

@@ -37,12 +37,12 @@ export const authOptions: NextAuthOptions = {
           .with('tz1USER', () => ({
             id: 'did:pkh:tz:tz1N4RXGjYTAgr79PCpmUVPvHfE3BKQo7JgU',
             pkh: 'did:pkh:tz:tz1N4RXGjYTAgr79PCpmUVPvHfE3BKQo7JgU',
-            role: Role.provider,
+            role: Role.principal,
           }))
           .with('tz1PRINCIPAL', () => ({
             id: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
             pkh: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
-            role: Role.provider,
+            role: Role.principal,
           }))
           .with('tz1NO_USER', () => null)
           .otherwise(() => null)

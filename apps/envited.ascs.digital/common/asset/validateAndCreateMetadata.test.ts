@@ -61,12 +61,10 @@ describe('common/asset/validateAndCreateMetadata', () => {
           ],
         },
       }
-      const getShaclSchemaAndValidateStub = jest
-        .fn()
-        .mockResolvedValue({
-          reports: [{ conforms: true }],
-          data: { domainMetadata: { '@type': 'NAME' }, manifest },
-        }) as any
+      const getShaclSchemaAndValidateStub = jest.fn().mockResolvedValue({
+        reports: [{ conforms: true }],
+        data: { domainMetadata: { '@type': 'NAME' }, manifest },
+      }) as any
       const createMetadataStub = jest.fn().mockReturnValue('METADATA_BUFFER') as any
       const createModifiedManifestStub = jest.fn().mockReturnValue('MODIFIED_MANIFEST_BUFFER') as any
       const createFilenameStub = jest.fn().mockReturnValue('HASH') as any

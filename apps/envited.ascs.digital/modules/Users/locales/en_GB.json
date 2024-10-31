@@ -14,6 +14,7 @@
   "[Button] activate": "Activate",
   "[Label] active": "Active",
   "[Label] inactive": "Inactive",
+  "[Label] main contact": "Main contact",
   "[Notification] deactivated success": "User is deactivated",
   "[Notification] activated success": "User is activated",
   "[Notification] error": "Something went wrong"

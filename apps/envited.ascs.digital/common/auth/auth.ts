@@ -2,13 +2,13 @@ import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { equals, has, isEmpty, isNil, omit, prop } from 'ramda'
-import { match } from 'ts-pattern'
 
 import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
 import { log } from '../logger'
-import { CredentialType, Role } from '../types'
+import { assignSingleRole } from '../roles'
+import { CredentialType } from '../types'
 import { Environment } from '../types'
 import { extractAddressFromDid } from '../utils'
 
@@ -31,21 +31,18 @@ export const authOptions: NextAuthOptions = {
             role: '',
           }
         }
+
         const { pkh } = credentials
 
-        return match(pkh)
-          .with('tz1USER', () => ({
-            id: 'did:pkh:tz:tz1N4RXGjYTAgr79PCpmUVPvHfE3BKQo7JgU',
-            pkh: 'did:pkh:tz:tz1N4RXGjYTAgr79PCpmUVPvHfE3BKQo7JgU',
-            role: Role.principal,
-          }))
-          .with('tz1PRINCIPAL', () => ({
-            id: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
-            pkh: 'did:pkh:tz:tz1cwef8BHv5Knc6nx6efHo9wDyLMim3EP2m',
-            role: Role.principal,
-          }))
-          .with('tz1NO_USER', () => null)
-          .otherwise(() => null)
+        const connection = await db()
+        const userRoles = await connection.getUserRolesById(pkh)
+
+        return {
+          name: pkh,
+          id: pkh,
+          pkh: pkh,
+          role: assignSingleRole(userRoles),
+        }
       },
     }),
     {
@@ -112,7 +109,7 @@ export const authOptions: NextAuthOptions = {
           const connection = await db()
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
-            const [principal] = await connection.getUserById(issuer)
+            const principal = await connection.getUserById(issuer)
 
             log.info('User credential, checking principal credentials')
 
@@ -128,7 +125,7 @@ export const authOptions: NextAuthOptions = {
             }
           }
 
-          const [existingUser] = await connection.getUserById(credentialSubjectId)
+          const existingUser = await connection.getUserById(credentialSubjectId)
 
           if (!isNil(existingUser)) {
             // User already exists
@@ -164,8 +161,8 @@ export const authOptions: NextAuthOptions = {
       if (profile) {
         const connection = await db()
         const userRoles = await connection.getUserRolesById(profile.sub)
-        log.info('Adding user role to JWT', userRoles[0].roleId)
-        token.user.role = userRoles[0].roleId
+        log.info('Adding user role to JWT', assignSingleRole(userRoles))
+        token.user.role = assignSingleRole(userRoles)
       }
 
       return token

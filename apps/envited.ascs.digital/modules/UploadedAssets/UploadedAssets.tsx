@@ -48,11 +48,6 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                     <div className="font-medium text-gray-900">
                       {equals(asset.status)(AssetStatus.processing) ? asset.cid : propOr('', 'name')(metadata)}
                     </div>
-                    <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
-                      <span>{metadata.type}</span>
-                      <span className="hidden sm:inline">·</span>
-                      <span>{metadata.size}</span>
-                    </div>
                     {assetIdx !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" /> : null}
                   </td>
                   <td

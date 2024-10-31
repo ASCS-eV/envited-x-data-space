@@ -1,3 +1,3 @@
-# ENVITED-X Icons
+# ENVITED-X Data Space Icons
 
-All icons are not under open-source license.
+All icons are licensed for the Automotive Solution Center for Simulation e.V.

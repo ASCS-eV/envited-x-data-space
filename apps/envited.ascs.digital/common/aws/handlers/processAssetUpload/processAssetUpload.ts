@@ -37,7 +37,7 @@ export const _main =
     validateAndCreateMetadata: (byteArray: Uint8Array) => Promise<{
       conforms: boolean
       reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
-      metadata: AssetMetadata
+      metadata: any
       assetCID: string
       metadataCID: string
     }>

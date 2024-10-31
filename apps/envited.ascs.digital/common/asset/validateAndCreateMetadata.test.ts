@@ -5,23 +5,90 @@ describe('common/asset/validateAndCreateMetadata', () => {
     it('should validate and return a metadata buffer', async () => {
       // when ... we want to validate and create a metadata buffer
       // then ... it should validate, extract and create a metadata buffer
+      const manifest = {
+        'manifest:data': {
+          'manifest:contentData': [
+            {
+              '@type': 'manifest:Link',
+              'manifest:accessRole': 'publicUser',
+              'manifest:type': 'metadata',
+              'manifest:format': 'json',
+              'manifest:relativePath': {
+                '@value': './metadata/domainMetadata.json',
+                '@type': 'xsd:anyURI',
+              },
+            },
+            {
+              '@type': 'manifest:Link',
+              'manifest:accessRole': 'registeredUser',
+              'manifest:type': 'documentation',
+              'manifest:format': 'pdf',
+              'manifest:relativePath': {
+                '@value': './documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation.pdf',
+                '@type': 'xsd:anyURI',
+              },
+            },
+            {
+              '@type': 'manifest:Link',
+              'manifest:accessRole': 'registeredUser',
+              'manifest:type': 'documentation',
+              'manifest:format': 'txt',
+              'manifest:relativePath': {
+                '@value': './documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation_stats.txt',
+                '@type': 'xsd:anyURI',
+              },
+            },
+            {
+              '@type': 'manifest:Link',
+              'manifest:accessRole': 'registeredUser',
+              'manifest:type': 'validation',
+              'manifest:format': 'txt',
+              'manifest:relativePath': {
+                '@value': './validation/qcReport.txt',
+                '@type': 'xsd:anyURI',
+              },
+            },
+            {
+              '@type': 'manifest:Link',
+              'manifest:accessRole': 'publicUser',
+              'manifest:type': 'visualization',
+              'manifest:format': 'png',
+              'manifest:relativePath': {
+                '@value': './visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
+                '@type': 'xsd:anyURI',
+              },
+            },
+          ],
+        },
+      }
       const getShaclSchemaAndValidateStub = jest
         .fn()
-        .mockResolvedValue({ reports: [{ conforms: true }], data: { domainMetadata: { '@type': 'NAME' } } }) as any
+        .mockResolvedValue({
+          reports: [{ conforms: true }],
+          data: { domainMetadata: { '@type': 'NAME' }, manifest },
+        }) as any
       const createMetadataStub = jest.fn().mockReturnValue('METADATA_BUFFER') as any
+      const createModifiedManifestStub = jest.fn().mockReturnValue('MODIFIED_MANIFEST_BUFFER') as any
       const createFilenameStub = jest.fn().mockReturnValue('HASH') as any
+      const getFileFromByteArrayStub = jest.fn().mockResolvedValue('FILE DATA') as any
 
       const byteArray = 'ASSET_BYTE_ARRAY'
 
       const result = await SUT._validateAndCreateMetadata({
         getShaclSchemaAndValidate: getShaclSchemaAndValidateStub,
-        createMetadata: createMetadataStub,
+        createTokenMetadata: createMetadataStub,
+        createModifiedManifest: jest.fn().mockReturnValue(createModifiedManifestStub),
         createFilename: createFilenameStub,
+        getFileFromByteArray: getFileFromByteArrayStub,
       })(byteArray as any)
 
       expect(result).toEqual({
         reports: [{ conforms: true }],
-        metadata: 'METADATA_BUFFER',
+        metadata: {
+          tokenMetadata: 'METADATA_BUFFER',
+          modifiedManifest: 'MODIFIED_MANIFEST_BUFFER',
+          displayUriCID: 'HASH',
+        },
         assetCID: 'HASH',
         metadataCID: 'HASH',
       })

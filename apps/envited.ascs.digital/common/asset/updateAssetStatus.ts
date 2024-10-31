@@ -9,7 +9,7 @@ export const _updateAsset =
   async (newCID: string, oldCid: string, status: AssetStatus, metadata: AssetMetadata | string = '') => {
     try {
       const connection = await db()
-      const [result] = await connection.updateAssetCID(
+      const [result] = await connection.updateAssetByCID(
         { metadata: JSON.stringify(metadata), status, cid: newCID },
         oldCid,
       )

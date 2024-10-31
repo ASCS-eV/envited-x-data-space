@@ -35,9 +35,6 @@ export const activateUserById = (db: DatabaseConnection) => async (id: string) =
     .returning({ updatedId: user.id })
 
 export const getUserById = (db: DatabaseConnection) => async (id: string) =>
-  db.select().from(user).where(eq(user.id, id))
-
-export const getUserWithCredentialTypesById = (db: DatabaseConnection) => async (id: string) =>
   db.query.user.findFirst({
     where: eq(user.id, id),
     with: {
@@ -65,6 +62,12 @@ export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: st
 
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.select().from(user).where(eq(user.issuerId, issuerId))
+
+export const getActiveUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
+  db
+    .select()
+    .from(user)
+    .where(and(eq(user.issuerId, issuerId), eq(user.isActive, true)))
 
 export const addUserToRole =
   (db: DatabaseConnection) =>

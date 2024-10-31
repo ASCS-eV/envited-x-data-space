@@ -6,7 +6,7 @@ import { getServerSession } from '../../auth'
 import { RESTRICTED_PROFILE_FIELDS } from '../../constants'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isOwnProfile, isPrincipalContact, isUsersCompanyProfile } from '../../guards'
+import { hasCredentialType, isOwnProfile, isPrincipalContact, isUsersCompanyProfile } from '../../guards'
 import { Log, log } from '../../logger'
 import { Session } from '../../types'
 import { badRequestError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
@@ -28,7 +28,7 @@ export const _getProfileBySlug =
       }
 
       if (!isNil(session)) {
-        const [user] = await connection.getUserById(session.user.id)
+        const user = await connection.getUserById(session.user.id)
 
         if (isOwnProfile(user)(profile)) {
           return profile
@@ -75,19 +75,19 @@ export const _getProfile =
       }
 
       const connection = await db()
-      const user = await connection.getUserWithCredentialTypesById(session.user.id)
+      const user = await connection.getUserById(session.user.id)
       const [issuer] = await connection.getIssuerById(user.issuerId)
-      let name = issuer.name
-      if (find(pathEq('AscsUserCredential', ['credentialType', 'name']))(user.usersToCredentialTypes)) {
-        const [principal] = await connection.getUserById(user.issuerId)
-        name = principal.name
+      let profileName = issuer.name
+      if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
+        const principal = await connection.getUserById(user.issuerId)
+        profileName = principal.name
       }
 
-      if (find(pathEq('AscsMemberCredential', ['credentialType', 'name']))(user.usersToCredentialTypes)) {
-        name = user.name
+      if (hasCredentialType('AscsMemberCredential')(user.usersToCredentialTypes)) {
+        profileName = user.name
       }
 
-      const profile = await connection.getProfileByName(name)
+      const profile = await connection.getProfileByName(profileName)
 
       if (isNil(profile) || isEmpty(profile)) {
         throw notFoundError({ resource: 'profiles', resourceId: issuer?.name, userId: session?.user.id })

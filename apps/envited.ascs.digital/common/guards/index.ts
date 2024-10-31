@@ -1,4 +1,6 @@
 export {
+  hasCredentialType,
+  hasRole,
   isFederator,
   isOwnAsset,
   isOwnUser,

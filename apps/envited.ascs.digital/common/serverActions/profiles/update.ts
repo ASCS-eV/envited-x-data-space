@@ -40,9 +40,7 @@ export const _update =
         })
       }
 
-      const currentProfile = await connection.getProfileByName(profile.name)
-
-      if (!isOwnProfile(user.user)(profile) && !isPrincipalContact(user.user)(currentProfile)) {
+      if (!isOwnProfile(user.user)(profile) && !isPrincipal(session)) {
         throw forbiddenError({
           resource: 'profiles',
           resourceId: profile.id,
@@ -51,6 +49,7 @@ export const _update =
         })
       }
 
+      const currentProfile = await connection.getProfileByName(profile.name)
       const [updatedProfile] = await connection.updateProfile(profile)
 
       if (!equals(currentProfile.principalUserId)(profile.principalUserId)) {

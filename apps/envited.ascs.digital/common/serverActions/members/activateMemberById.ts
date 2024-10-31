@@ -29,7 +29,7 @@ export const _activateMemberById =
       }
 
       const connection = await db()
-      const [user] = await connection.getUserById(id)
+      const user = await connection.getUserById(id)
       const [activatedUser] = await connection.activateUserById(user.id)
 
       return activatedUser

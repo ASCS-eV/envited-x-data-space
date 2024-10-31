@@ -8,6 +8,7 @@ import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
 import { log } from '../logger'
+import { assignSingleRole } from '../roles'
 import { CredentialType, Role } from '../types'
 import { Environment } from '../types'
 import { extractAddressFromDid } from '../utils'
@@ -32,9 +33,9 @@ export const authOptions: NextAuthOptions = {
           }
         }
         const { pkh } = credentials
-        const address = 'did:pkh:tz:tz1Kj1XAEhrcuPS3rvZ8BGsUGDjv78ykEkEi' // Company
+        // const address = 'did:pkh:tz:tz1Kj1XAEhrcuPS3rvZ8BGsUGDjv78ykEkEi' // Company
         // const address = 'did:pkh:tz:tz1gp7pWdFFEHXS7rVNjzWHKLkBuvHCTnM26' // Jeroen
-        // const address = 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE' // Daniel
+        const address = 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE' // Daniel
 
         const connection = await db()
         const userRoles = await connection.getUserRolesById(address)
@@ -125,7 +126,7 @@ export const authOptions: NextAuthOptions = {
           const connection = await db()
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
-            const [principal] = await connection.getUserById(issuer)
+            const principal = await connection.getUserById(issuer)
 
             log.info('User credential, checking principal credentials')
 
@@ -141,7 +142,7 @@ export const authOptions: NextAuthOptions = {
             }
           }
 
-          const [existingUser] = await connection.getUserById(credentialSubjectId)
+          const existingUser = await connection.getUserById(credentialSubjectId)
 
           if (!isNil(existingUser)) {
             // User already exists
@@ -240,24 +241,4 @@ export const checkRevocationRegistry = async (id: string, pkh: string, issuer: s
   }
 
   return response.json()
-}
-
-export const assignSingleRole = (roles: { userId: string; roleId: Role }[]) => {
-  if (find(propEq(Role.federator, 'roleId'))(roles)) {
-    return Role.federator
-  }
-
-  if (find(propEq(Role.principal, 'roleId'))(roles)) {
-    return Role.principal
-  }
-
-  if (find(propEq(Role.provider, 'roleId'))(roles)) {
-    return Role.provider
-  }
-
-  if (find(propEq(Role.user, 'roleId'))(roles)) {
-    return Role.user
-  }
-
-  return null
 }

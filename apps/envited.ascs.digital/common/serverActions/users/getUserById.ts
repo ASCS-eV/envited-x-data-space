@@ -21,7 +21,7 @@ export const _getUserById =
       }
 
       const connection = await db()
-      const [user] = await connection.getUserById(id)
+      const user = await connection.getUserById(id)
 
       if (!userIsIssuedByLoggedInUser(user)(session) && !isOwnUser(user)(session)) {
         throw forbiddenError({

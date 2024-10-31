@@ -37,7 +37,7 @@ export const _getMintParams =
       throw notFoundError({ resource: 'assets', resourceId: assetId, userId: session?.user.id })
     }
 
-    const [user] = await connection.getUserById(session.user.id)
+    const user = await connection.getUserById(session.user.id)
 
     if (isNil(user.issuerId) || isEmpty(user.issuerId)) {
       throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })

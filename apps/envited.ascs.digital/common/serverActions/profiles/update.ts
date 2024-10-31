@@ -15,6 +15,7 @@ export const _update =
   async (profile: Partial<Profile>, businessCategories?: string[]) => {
     try {
       const session = await getServerSession()
+
       if (isNil(session)) {
         throw unauthorizedError({ resource: 'profiles', resourceId: profile.id })
       }
@@ -49,6 +50,7 @@ export const _update =
           userId: session.user.id,
         })
       }
+      log.info('Updating profile', { profile, businessCategories })
 
       const [updatedProfile] = await connection.updateProfile(profile)
 

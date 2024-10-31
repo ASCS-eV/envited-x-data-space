@@ -1,17 +1,18 @@
-import { and, eq, sql } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
+import { AwsDataApiPgDatabase } from 'drizzle-orm/aws-data-api/pg'
 
-import { token } from '../common/database/schema'
+import * as schema from '../common/database/schema'
 
-export type DatabaseConnection = PostgresJsDatabase<any>
+export type DatabaseConnection = PostgresJsDatabase<typeof schema> | AwsDataApiPgDatabase<typeof schema>
 
 export const getTokenByTokenId =
   ({ database }: { database: DatabaseConnection }) =>
   async ({ contract, tokenId }: { tokenId: number; contract: string }) =>
     database
       .select()
-      .from(token)
-      .where(and(eq(token.tokenId, tokenId), eq(token.contract, contract)))
+      .from(schema.token)
+      .where(and(eq(schema.token.tokenId, tokenId), eq(schema.token.contract, contract)))
 
 export const insertToken =
   ({ database }: { database: DatabaseConnection }) =>
@@ -30,12 +31,12 @@ export const insertToken =
     tokenMetadata: any
     thumbnail: string
   }) =>
-    database.insert(token).values({
+    database.insert(schema.token).values({
       hash,
       contract,
       creator,
       tokenId,
       thumbnail,
-      tokenMetadata: sql`${tokenMetadata}::jsonb`,
+      tokenMetadata,
       createdAt: new Date(),
     })

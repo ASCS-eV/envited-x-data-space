@@ -23,8 +23,10 @@ export const listenToAssetContract =
       try {
         const { hash, destination, metadata, parameters } = data
         const creator = parameters.value.args[1].args[0].string
-        const tokenId = metadata.operation_result.lazy_storage_diff[2].diff.updates[0].key.int
+        const tokenId = parseInt(metadata.operation_result.lazy_storage_diff[2].diff.updates[0].key.int, 10)
         const [existingToken] = await getTokenByTokenId({ contract: process.env.ASSETS_CONTRACT, tokenId })
+
+        console.log('Registering token ', tokenId)
 
         if (existingToken) {
           return
@@ -32,7 +34,7 @@ export const listenToAssetContract =
 
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
-        console.log(tokenMetadata)
+
         // Save token to DB
         const asset = await insertToken({
           hash,
@@ -53,12 +55,12 @@ export const listenToAssetContract =
 
 export const getTokenMetadata =
   ({ tezos }: { tezos: TezosToolkit }) =>
-  async (contractAddress: string, id: string) => {
+  async (contractAddress: string, id: number) => {
     tezos.addExtension(new Tzip12Module())
 
     try {
       const contract = await tezos.contract.at(contractAddress, tzip12)
-      const tokenMetadata = await contract.tzip12().getTokenMetadata(Number(id))
+      const tokenMetadata = await contract.tzip12().getTokenMetadata(id)
 
       return tokenMetadata
     } catch (e) {

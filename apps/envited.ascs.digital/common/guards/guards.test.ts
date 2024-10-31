@@ -84,15 +84,17 @@ describe('common/guards', () => {
   describe('isPrincipalContact', () => {
     it('should check if logged in user is a principal', () => {
       // when ... we want to check if the user has the principal
-      const user = {
-        id: 'USER_ID',
-      } as User
+      const session = {
+        user: {
+          pkh: 'USER_ID',
+        },
+      } as Session
 
       const profile = {
         principalUserId: 'USER_ID',
       }
       // then ... we should get the result as expected
-      const result = SUT.isPrincipalContact(user)(profile)
+      const result = SUT.isPrincipalContact(session)(profile)
 
       expect(result).toEqual(true)
     })

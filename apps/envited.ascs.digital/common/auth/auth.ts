@@ -1,15 +1,14 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { equals, find, has, isEmpty, isNil, omit, prop, propEq } from 'ramda'
-import { match } from 'ts-pattern'
+import { equals, has, isEmpty, isNil, omit, prop } from 'ramda'
 
 import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
 import { log } from '../logger'
 import { assignSingleRole } from '../roles'
-import { CredentialType, Role } from '../types'
+import { CredentialType } from '../types'
 import { Environment } from '../types'
 import { extractAddressFromDid } from '../utils'
 
@@ -32,34 +31,18 @@ export const authOptions: NextAuthOptions = {
             role: '',
           }
         }
+
         const { pkh } = credentials
-        // const address = 'did:pkh:tz:tz1Kj1XAEhrcuPS3rvZ8BGsUGDjv78ykEkEi' // Company
-        // const address = 'did:pkh:tz:tz1gp7pWdFFEHXS7rVNjzWHKLkBuvHCTnM26' // Jeroen
-        const address = 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE' // Daniel
 
         const connection = await db()
-        const userRoles = await connection.getUserRolesById(address)
+        const userRoles = await connection.getUserRolesById(pkh)
 
         return {
-          name: address,
-          id: address,
-          pkh: address,
+          name: pkh,
+          id: pkh,
+          pkh: pkh,
           role: assignSingleRole(userRoles),
         }
-
-        return match(pkh)
-          .with('tz1USER', () => ({
-            id: address,
-            pkh: address,
-            role: assignSingleRole(userRoles),
-          }))
-          .with('tz1PRINCIPAL', () => ({
-            id: address,
-            pkh: address,
-            role: assignSingleRole(userRoles),
-          }))
-          .with('tz1NO_USER', () => null)
-          .otherwise(() => null)
       },
     }),
     {

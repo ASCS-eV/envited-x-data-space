@@ -40,7 +40,8 @@ export const _update =
         })
       }
 
-      if (!isOwnProfile(user.user)(profile) && !isPrincipal(session)) {
+      const currentProfile = await connection.getProfileByName(profile.name)
+      if (!isOwnProfile(user.user)(profile) && !isPrincipalContact(session)(currentProfile)) {
         throw forbiddenError({
           resource: 'profiles',
           resourceId: profile.id,
@@ -49,7 +50,6 @@ export const _update =
         })
       }
 
-      const currentProfile = await connection.getProfileByName(profile.name)
       const [updatedProfile] = await connection.updateProfile(profile)
 
       if (!equals(currentProfile.principalUserId)(profile.principalUserId)) {
@@ -68,6 +68,7 @@ export const _update =
 
         await Promise.all(insertProfilesToBusinessCategoriesPromises)
       }
+
       const [result] = await connection.maybeUpdatePublishedState(updatedProfile)
       return result
     } catch (error: unknown) {

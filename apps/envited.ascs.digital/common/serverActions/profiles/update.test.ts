@@ -176,10 +176,11 @@ describe('serverActions/profiles/update', () => {
     const currentProfile = {
       description: 'CURRENT DESCRIPTION',
       name: 'USER_NAME',
+      principalUserId: 'USER_PKH',
     } as any
     const newProfile = {
       description: 'NEW DESCRIPTION',
-      name: 'OTHER_USER_NAME',
+      name: 'USER_NAME',
     } as any
 
     const user = {

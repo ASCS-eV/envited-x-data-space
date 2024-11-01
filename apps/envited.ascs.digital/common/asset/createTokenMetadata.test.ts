@@ -409,7 +409,7 @@ describe('common/asset/createTokenMetadata', () => {
               unit: 'px',
             },
             fileSize: 2400256,
-            fileName: 'TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
+            fileName: '',
           },
         ],
         attributes: [

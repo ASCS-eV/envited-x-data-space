@@ -28,7 +28,8 @@ export const insertAsset = (db: DatabaseConnection) => async (userId: string, ci
     .returning()
 
 export const updateAsset = (db: DatabaseConnection) => async (data: Asset) =>
-  db.update(asset)
+  db
+    .update(asset)
     .set({
       ...omit(['id', 'userId'])(data),
       metadata: sql`${data.metadata}::jsonb`,

@@ -41,7 +41,7 @@ export const _main =
       assetCID: string
       metadataCID: string
     }>
-    updateAsset: (newCid: string, oldCid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
+    updateAsset: (newCid: string, oldCid: string, status: AssetStatus, metadata?: string) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {
@@ -81,7 +81,7 @@ export const _main =
       })
 
       await writeMetadata.done()
-      await updateAsset(assetCID, Key, AssetStatus.pending, metadata)
+      await updateAsset(assetCID, Key, AssetStatus.pending, JSON.stringify(metadata))
       await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)

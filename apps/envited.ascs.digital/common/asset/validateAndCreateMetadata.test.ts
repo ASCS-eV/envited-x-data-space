@@ -86,7 +86,6 @@ describe('common/asset/validateAndCreateMetadata', () => {
         metadata: {
           tokenMetadata: 'METADATA_BUFFER',
           modifiedManifest: 'MODIFIED_MANIFEST_BUFFER',
-          displayUriCID: 'HASH',
         },
         assetCID: 'HASH',
         metadataCID: 'HASH',

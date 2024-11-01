@@ -36,7 +36,6 @@ export const formatManifestUri =
   (accessRole: AccessRole, path: string, type: string, format: string) => {
     if (includes(type, ['visualization'])) {
       // CREATE UNIQUE CID FOR PUBLIC USER FILE
-      // console.log(path)
       return formatIpfsUri('CREATE_UNIQUE_CID') // OWN CID
     }
 

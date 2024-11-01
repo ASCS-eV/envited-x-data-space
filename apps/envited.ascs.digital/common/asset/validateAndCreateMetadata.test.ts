@@ -81,11 +81,12 @@ describe('common/asset/validateAndCreateMetadata', () => {
       })(byteArray as any)
 
       expect(result).toEqual({
+        conforms: undefined,
         reports: [{ conforms: true }],
         metadata: {
           tokenMetadata: 'METADATA_BUFFER',
           modifiedManifest: 'MODIFIED_MANIFEST_BUFFER',
-          displayUriCID: 'HASH',
+          // displayUriCID: 'HASH',
         },
         assetCID: 'HASH',
         metadataCID: 'HASH',

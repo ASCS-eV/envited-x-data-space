@@ -245,7 +245,7 @@ export const _validateAndCreateMetadata =
         metadata: {
           tokenMetadata,
           modifiedManifest,
-          displayUriCID,
+          // displayUriCID,
         },
         assetCID,
         metadataCID: tokenMetadataCID,

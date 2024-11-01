@@ -81,7 +81,7 @@ export const _main =
       })
 
       await writeMetadata.done()
-      await updateAsset(assetCID, Key, AssetStatus.pending, metadata)
+      await updateAsset(assetCID, Key, AssetStatus.pending, JSON.stringify(metadata))
       await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)

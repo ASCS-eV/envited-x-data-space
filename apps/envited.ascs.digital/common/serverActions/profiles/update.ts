@@ -1,6 +1,6 @@
 'use server'
 
-import { equals, isNil, prop } from 'ramda'
+import { equals, has, isNil, prop } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
@@ -54,7 +54,7 @@ export const _update =
 
       const [updatedProfile] = await connection.updateProfile(profile)
 
-      if (!equals(currentProfile.principalUserId)(profile.principalUserId)) {
+      if (has('principalUserId')(profile) && !equals(currentProfile.principalUserId)(profile.principalUserId)) {
         if (!isNil(currentProfile.principalUserId)) {
           await connection.removeUserFromRole({ userId: prop('principalUserId')(currentProfile), roleId: 'principal' })
         }

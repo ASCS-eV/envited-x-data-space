@@ -172,6 +172,8 @@ export const _validateAndCreateMetadata =
       manifestCID,
       domainMetadataCID,
       licenseCID,
+      displayUriCID,
+      displayUri,
       minter,
       creator,
       manifest,
@@ -181,6 +183,8 @@ export const _validateAndCreateMetadata =
       manifestCID: string
       domainMetadataCID: string
       licenseCID: string
+      displayUriCID: string
+      displayUri: string
       minter: string
       creator: string
       manifest: Manifest
@@ -219,18 +223,20 @@ export const _validateAndCreateMetadata =
       const licenseCID = await createFilename(license as any)
       console.log('license', license)
 
-      // const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
-      //   data.manifest['manifest:data']['manifest:contentData'],
-      // ) as any
-      // const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
-      // const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
-      // const displayUriCID = await createFilename(displayUri as any)
+      const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
+        data.manifest['manifest:data']['manifest:contentData'],
+      ) as any
+      const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
+      const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
+      const displayUriCID = await createFilename(displayUri as any)
 
       const tokenMetadata = createTokenMetadata({
         assetCID,
         manifestCID: modifiedManifestCID,
         domainMetadataCID: domainMetadataCID,
         licenseCID: licenseCID,
+        displayUriCID,
+        displayUri,
         minter: 'MINTER',
         creator: 'CREATOR',
         manifest: data.manifest,
@@ -246,7 +252,7 @@ export const _validateAndCreateMetadata =
         metadata: {
           tokenMetadata,
           modifiedManifest,
-          // displayUriCID,
+          displayUriCID,
         },
         assetCID,
         metadataCID: tokenMetadataCID,

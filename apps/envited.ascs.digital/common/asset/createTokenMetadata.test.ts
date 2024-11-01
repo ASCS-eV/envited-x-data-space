@@ -384,7 +384,7 @@ describe('common/asset/createTokenMetadata', () => {
         artifactUri: 'https://assets.envited-x.net/ASSET_CID',
         identifier: 'ASSET_CID',
         externalUri: 'ipfs://MODIFIED_MANIFEST_CID',
-        displayUri: 'ipfs://QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
+        displayUri: 'ipfs://DISPLAY_URI_CID',
         formats: [
           {
             uri: 'https://assets.envited-x.net/ASSET_CID',
@@ -401,15 +401,15 @@ describe('common/asset/createTokenMetadata', () => {
             fileName: 'manifest.json',
           },
           {
-            uri: 'ipfs://QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
-            hash: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
+            uri: 'ipfs://DISPLAY_URI_CID',
+            hash: 'DISPLAY_URI_CID',
             mimeType: 'image/png',
             dimensions: {
               value: '1095x850',
               unit: 'px',
             },
             fileSize: 2400256,
-            fileName: '',
+            fileName: 'DISPLAY_URI',
           },
         ],
         attributes: [
@@ -441,6 +441,8 @@ describe('common/asset/createTokenMetadata', () => {
         manifestCID: 'MODIFIED_MANIFEST_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
         licenseCID: 'LICENSE_CID',
+        displayUriCID: 'DISPLAY_URI_CID',
+        displayUri: 'DISPLAY_URI',
         minter: 'MINTER',
         creator: 'CREATOR',
         manifest: manifest as any,

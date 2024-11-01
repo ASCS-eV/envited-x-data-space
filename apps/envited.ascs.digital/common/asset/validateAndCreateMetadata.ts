@@ -213,6 +213,7 @@ export const _validateAndCreateMetadata =
 
       const modifiedManifestCID = await createFilename(modifiedManifest)
       console.log('modifiedManifest', modifiedManifest)
+      console.log('modifiedManifest - data', modifiedManifest['manifest:data'])
 
       const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
       const licenseCID = await createFilename(license as any)

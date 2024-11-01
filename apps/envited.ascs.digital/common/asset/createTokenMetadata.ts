@@ -31,7 +31,9 @@ export const createTokenMetadata = ({
   const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
     manifest['manifest:data']['manifest:contentData'],
   ) as any
-  const displayUri = firstMediaElement['manifest:relativePath']['@value']
+  console.log('firstMediaElement', firstMediaElement)
+  // const displayUri = firstMediaElement['manifest:relativePath']['@value']
+  const displayUri = ''
 
   // const manifestCID = 'QmRteS2bP2jCcA8MVL4kdLGV5yzNPS85uNazWxWEY9Goff'
   const displayUriCID = 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg'

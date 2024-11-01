@@ -32,7 +32,7 @@ export const updateAsset = (db: DatabaseConnection) => async (data: Asset) =>
     .update(asset)
     .set({
       ...omit(['id', 'userId'])(data),
-      metadata: data.metadata,
+      metadata: sql`${data.metadata}::json`,
     })
     .where(eq(asset.cid, data.cid))
     .returning()

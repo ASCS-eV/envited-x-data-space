@@ -92,7 +92,6 @@ export const _validateManifest =
   }) =>
   async (file: File) => {
     const data = await getShaclDataFromZip(file, MANIFEST_FILE)
-    console.log('Manifest', data)
     const dataset = await loadDataset(data, ContentType.jsonLd)
     const validation = await validateShaclSchema(dataset)(Schema.manifest)
 

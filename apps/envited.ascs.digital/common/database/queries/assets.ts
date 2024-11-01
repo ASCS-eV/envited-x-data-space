@@ -27,15 +27,18 @@ export const insertAsset = (db: DatabaseConnection) => async (userId: string, ci
     })
     .returning()
 
-export const updateAsset = (db: DatabaseConnection) => async (data: Asset) =>
+export const updateAsset = (db: DatabaseConnection) => async (data: Asset) => {
   db
     .update(asset)
     .set({
-      ...omit(['id', 'userId'])(data),
-      metadata: data.metadata,
+      ...omit(['id', 'userId', 'metadata'])(data),
+      // metadata: data.metadata,
     })
     .where(eq(asset.cid, data.cid))
     .returning()
+
+  db.execute(sql`UPDATE asset set metadata = ${data.metadata} WHERE id = ${data.id}`)
+}
 
 export const updateAssetByCID = (db: DatabaseConnection) => async (data: Asset, cid: string) =>
   db

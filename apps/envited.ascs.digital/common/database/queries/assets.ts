@@ -21,7 +21,7 @@ export const insertAsset = (db: DatabaseConnection) => async (userId: string, ci
     .insert(asset)
     .values({
       cid,
-      metadata: sql`${{}}::json`,
+      metadata: {},
       status: AssetStatus.processing,
       userId,
     })
@@ -32,7 +32,7 @@ export const updateAsset = (db: DatabaseConnection) => async (data: Asset) =>
     .update(asset)
     .set({
       ...omit(['id', 'userId'])(data),
-      metadata: sql`${data.metadata}::json`,
+      metadata: data.metadata,
     })
     .where(eq(asset.cid, data.cid))
     .returning()
@@ -42,7 +42,7 @@ export const updateAssetByCID = (db: DatabaseConnection) => async (data: Asset, 
     .update(asset)
     .set({
       ...omit(['id', 'userId'])(data),
-      metadata: sql`${data.metadata}::json`,
+      metadata: data.metadata,
     })
     .where(eq(asset.cid, cid))
     .returning()

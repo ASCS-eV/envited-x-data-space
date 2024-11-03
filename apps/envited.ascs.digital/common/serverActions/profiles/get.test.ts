@@ -20,11 +20,9 @@ describe('serverActions/profiles/get', () => {
           description: 'USER_DESCRIPTION',
           principalName: 'USER_PRINCIPAL_NAME',
         }),
-        getUserById: jest.fn().mockResolvedValue([
-          {
-            name: 'USER_PRINCIPAL_NAME',
-          },
-        ]),
+        getUserById: jest.fn().mockResolvedValue({
+          name: 'USER_PRINCIPAL_NAME',
+        }),
         getUserByIssuerId: jest.fn().mockResolvedValue([
           {
             name: 'USER_PRINCIPAL_NAME',
@@ -68,11 +66,9 @@ describe('serverActions/profiles/get', () => {
           description: 'USER_DESCRIPTION',
           principalName: 'USER_PRINCIPAL_NAME',
         }),
-        getUserById: jest.fn().mockResolvedValue([
-          {
-            name: 'USER_NAME',
-          },
-        ]),
+        getUserById: jest.fn().mockResolvedValue({
+          name: 'USER_NAME',
+        }),
         getUserByIssuerId: jest.fn().mockResolvedValue([
           {
             name: 'USER_PRINCIPAL_NAME',
@@ -111,14 +107,12 @@ describe('serverActions/profiles/get', () => {
           description: 'USER_DESCRIPTION',
           principalName: 'USER_PRINCIPAL_NAME',
         }),
-        getUserById: jest.fn().mockResolvedValue([
-          {
+        getUserById: jest.fn().mockResolvedValue({
+          name: 'USER_NAME',
+          profile: {
             name: 'USER_NAME',
-            profile: {
-              name: 'USER_NAME',
-            },
           },
-        ]),
+        }),
       })
       const logStub = {
         error: jest.fn(),

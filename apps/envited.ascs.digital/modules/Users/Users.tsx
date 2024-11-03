@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, Heading, Table, TableBody, TableCell, TableHeader, TableRow } from '@envited-marketplace/design-system'
-import { map } from 'ramda'
+import { equals, map } from 'ramda'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
@@ -11,8 +11,9 @@ import { UserDialogConfirm } from './UsersDialogConfirm'
 
 interface UsersProps {
   users: User[]
+  principalUserId?: string
 }
-export const Users: FC<UsersProps> = ({ users }) => {
+export const Users: FC<UsersProps> = ({ users, principalUserId = '' }) => {
   const { t } = useTranslation('Users')
 
   return (
@@ -42,18 +43,24 @@ export const Users: FC<UsersProps> = ({ users }) => {
               <TableCell>{name}</TableCell>
               <TableCell>{email}</TableCell>
               <TableCell>
-                <div className="flex items-center gap-x-2">
-                  <UserDialogConfirm id={id} status={isActive} />
-                  <div
-                    className={`${
-                      isActive
-                        ? 'bg-green-100 text-green-600 dark:bg-green-600'
-                        : 'bg-red-100 text-red-600 dark:bg-red-600'
-                    } dark:text-white pl-1 pr-1.5 py-0.5 text-xs text-center rounded-xl`}
-                  >
-                    {t(isActive ? '[Label] active' : '[Label] inactive')}
+                {!equals(principalUserId)(id) ? (
+                  <div className="flex items-center gap-x-2">
+                    <UserDialogConfirm id={id} status={isActive} />
+                    <div
+                      className={`${
+                        isActive
+                          ? 'bg-green-100 text-green-600 dark:bg-green-600'
+                          : 'bg-red-100 text-red-600 dark:bg-red-600'
+                      } dark:text-white pl-1 pr-1.5 py-0.5 text-xs text-center rounded-xl`}
+                    >
+                      {t(isActive ? '[Label] active' : '[Label] inactive')}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="bg-gray-300 text-gray-700 pl-1 pr-1.5 py-0.5 text-xs text-center rounded-xl">
+                    {t('[Label] main contact')}
+                  </div>
+                )}
               </TableCell>
             </TableRow>
           ))(users)}

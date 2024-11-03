@@ -21,7 +21,7 @@ describe('common/serverActions/members/activateMemberById', () => {
       updatedId: 'USER_PKH',
     }
     const dbStub = jest.fn().mockResolvedValue({
-      getUserById: jest.fn().mockResolvedValue([user]),
+      getUserById: jest.fn().mockResolvedValue(user),
       activateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
     })
     const logStub = {
@@ -43,7 +43,7 @@ describe('common/serverActions/members/activateMemberById', () => {
       issuerId: 'ISSUER_PKH',
     }
     const dbStub = jest.fn().mockResolvedValue({
-      getUserById: jest.fn().mockResolvedValue([user]),
+      getUserById: jest.fn().mockResolvedValue(user),
       activateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
     })
     const logStub = {
@@ -70,7 +70,7 @@ describe('common/serverActions/members/activateMemberById', () => {
       issuerId: 'FEDERATOR_PKH',
     }
     const dbStub = jest.fn().mockResolvedValue({
-      getUserById: jest.fn().mockResolvedValue([user]),
+      getUserById: jest.fn().mockResolvedValue(user),
       activateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
     })
     const logStub = {

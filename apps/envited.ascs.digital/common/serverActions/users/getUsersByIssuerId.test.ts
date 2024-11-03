@@ -13,7 +13,22 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
         role: Role.federator,
       },
     })
-    const user = [
+
+    const user = {
+      id: 'USER_PKH',
+      name: 'USER_NAME',
+      email: 'USER_EMAIL',
+      vatId: 'USER_VAT_ID',
+      issuerId: 'USER_ISSUER_ID',
+      privacyPolicyAccepted: 'USER_PRIVACY_POLICY_ACCEPTED',
+      articlesOfAssociationAccepted: 'USER_ARTICLES_OF_ASSOCIATION_ACCEPTED',
+      contributionRulesAccepted: 'USER_CONTRIBUTION_RULES_ACCEPTED',
+      isAscsMember: true,
+      isEnvitedMember: true,
+      usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
+    }
+
+    const users = [
       {
         id: 'USER_PKH',
         name: 'USER_NAME',
@@ -28,21 +43,37 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
       },
     ]
     const dbStub = jest.fn().mockResolvedValue({
-      getUsersByIssuerId: jest.fn().mockResolvedValue(user),
+      getUserById: jest.fn().mockResolvedValue(user),
+      getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {
       error: jest.fn(),
     } as any
 
     const result = await SUT._getUsersByIssuerId({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })()
-    expect(result).toEqual(user)
+    expect(result).toEqual(users)
   })
 
   it('should throw because of missing session', async () => {
     // when ... we request a user by id without a session
     // then ... it throws as expected
     const getServerSessionStub = jest.fn().mockResolvedValue(null)
-    const user = [
+
+    const user = {
+      id: 'USER_PKH',
+      issuerId: 'FEDERATOR_PKH',
+      name: 'USER_NAME',
+      email: 'USER_EMAIL',
+      vatId: 'USER_VAT_ID',
+      privacyPolicyAccepted: 'USER_PRIVACY_POLICY_ACCEPTED',
+      articlesOfAssociationAccepted: 'USER_ARTICLES_OF_ASSOCIATION_ACCEPTED',
+      contributionRulesAccepted: 'USER_CONTRIBUTION_RULES_ACCEPTED',
+      isAscsMember: true,
+      isEnvitedMember: true,
+      usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
+    }
+
+    const users = [
       {
         id: 'USER_PKH',
         name: 'USER_NAME',
@@ -57,7 +88,8 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
       },
     ]
     const dbStub = jest.fn().mockResolvedValue({
-      getUsersByIssuerId: jest.fn().mockResolvedValue(user),
+      getUserById: jest.fn().mockResolvedValue(user),
+      getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {
       error: jest.fn(),
@@ -74,10 +106,26 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
     // then ... it throws as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
+        id: 'USER_ISSUER_ID',
         pkh: 'ISSUER_PKH',
       },
     })
-    const user = [
+
+    const user = {
+      id: 'USER_PKH',
+      issuerId: 'FEDERATOR_PKH',
+      name: 'USER_NAME',
+      email: 'USER_EMAIL',
+      vatId: 'USER_VAT_ID',
+      privacyPolicyAccepted: 'USER_PRIVACY_POLICY_ACCEPTED',
+      articlesOfAssociationAccepted: 'USER_ARTICLES_OF_ASSOCIATION_ACCEPTED',
+      contributionRulesAccepted: 'USER_CONTRIBUTION_RULES_ACCEPTED',
+      isAscsMember: true,
+      isEnvitedMember: true,
+      usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
+    }
+
+    const users = [
       {
         id: 'USER_PKH',
         issuerId: 'FEDERATOR_PKH',
@@ -92,7 +140,8 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
       },
     ]
     const dbStub = jest.fn().mockResolvedValue({
-      getUsersByIssuerId: jest.fn().mockResolvedValue(user),
+      getUserById: jest.fn().mockResolvedValue(user),
+      getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {
       error: jest.fn(),

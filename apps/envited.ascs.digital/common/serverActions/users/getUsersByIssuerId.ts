@@ -1,10 +1,12 @@
+'use server'
+
 import { isNil } from 'ramda'
 import { cache } from 'react'
 
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isFederator, isPrincipal } from '../../guards'
+import { hasCredentialType, isFederator, isPrincipal } from '../../guards'
 import { Log, log } from '../../logger'
 import { User } from '../../types'
 import { Session } from '../../types/types'
@@ -25,7 +27,15 @@ export const _getUsersByIssuerId =
       }
 
       const connection = await db()
-      const users = await connection.getUsersByIssuerId(session?.user?.pkh)
+      const user = await connection.getUserById(session?.user?.pkh)
+
+      let issuerId = session?.user?.pkh
+      if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
+        const principal = await connection.getUserById(user.issuerId)
+        issuerId = principal.id
+      }
+
+      const users = await connection.getUsersByIssuerId(issuerId)
 
       return users
     } catch (error: unknown) {

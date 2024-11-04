@@ -1,3 +1,3 @@
-# ENVITED-X Images
+# ENVITED-X Data Space Images
 
-All images are not under open-source license.
+All images are licensed for the Automotive Solution Center for Simulation e.V.

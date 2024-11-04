@@ -82,9 +82,11 @@ npx nx test envited.ascs.digital —watch
 ## Start the app
 
 To start the development server run:
+
 ```bash
 npx nx serve envited.ascs.digital
 ```
+
 Open your browser and navigate to http://localhost:4200/
 
 Happy coding!

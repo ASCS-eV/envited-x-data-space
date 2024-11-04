@@ -12,6 +12,7 @@ export const initTezos =
     const wallet = new (await import('@taquito/beacon-wallet')).BeaconWallet({
       name: process.env.WALLET_NAME || 'Envited Data Space',
       network: { type: 'ghostnet' as any },
+      featuredWallets: ['altme', 'temple'],
     })
     // @ts-expect-error BeaconWallet typing seems to be outdated
     Tezos.setWalletProvider(wallet)

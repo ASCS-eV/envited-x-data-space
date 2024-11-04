@@ -7,6 +7,7 @@ import { useNotification } from '../../common/notifications'
 import { mintToken } from '../../common/web3'
 import { tezos } from '../../common/web3'
 import { getAssetMintParams, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
+import { ShowSpecificBeaconWallets } from './Mint.utils'
 
 interface MintProps {
   assetId: string
@@ -31,6 +32,7 @@ export const Mint: FC<MintProps> = ({ assetId }) => {
       // error(t('[Status] something wrong'))
     } else {
       await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })
+      ShowSpecificBeaconWallets()
     }
   }
   return (

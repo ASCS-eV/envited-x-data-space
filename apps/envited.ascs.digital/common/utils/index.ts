@@ -13,6 +13,7 @@ export {
 export {
   addUrnUuid,
   extractAddressFromDid,
+  extractUuidFromUrn,
   extractIdFromCredential,
   extractIssuerIdFromCredential,
   extractTypeFromCredential,

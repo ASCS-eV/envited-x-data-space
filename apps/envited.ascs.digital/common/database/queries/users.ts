@@ -6,7 +6,7 @@ import postgres from 'postgres'
 import { isEmpty, prop, propOr } from 'ramda'
 
 import { Profile } from '../../types'
-import { isTrustAnchor, slugify } from '../../utils'
+import { extractUuidFromUrn, isTrustAnchor, slugify } from '../../utils'
 import * as schema from '../schema'
 import {
   addressType,
@@ -219,7 +219,7 @@ export const _txn =
       const [newUser] = await tx
         .insert(user)
         .values({
-          uuid,
+          uuid: extractUuidFromUrn(uuid),
           id: prop('id')(credentialSubject),
           name: prop('name')(credentialSubject),
           email: propOr('', 'email')(credentialSubject),

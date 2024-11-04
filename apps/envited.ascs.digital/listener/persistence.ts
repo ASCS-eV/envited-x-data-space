@@ -183,19 +183,17 @@ export const insertToken =
         })
 
         // RDS Data api does not support concurrent transactions so we need to insert tags and attributes sequentially
-        tags.map(async (tag: string) => {
-          await insertTokenTagTx(tx)(tag)
-          return true
-        })
+        for (let i = 0; i < tags.length; i++) {
+          await insertTokenTagTx(tx)(tags[i])
+        }
         const tokenTags = await getTokenTags(tx)(tags)
-        tokenTags.map(async tokenTag => {
-          await insertTokensToTokenTagsTx(tx)(insertedToken.id, tokenTag.id)
+        for (let i = 0; i < tokenTags.length; i++) {
+          await insertTokensToTokenTagsTx(tx)(insertedToken.id, tokenTags[i].id)
+        }
+        for (let i = 0; i < attributes.length; i++) {
+          await insertTokenAttributeTx(tx)(insertedToken.id, attributes[i].name, attributes[i].value)
           return true
-        })
-        attributes.map(async ({ name, value }: any) => {
-          await insertTokenAttributeTx(tx)(insertedToken.id, name, value)
-          return true
-        })
+        }
 
         return true
       } catch (error) {

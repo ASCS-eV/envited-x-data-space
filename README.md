@@ -4,20 +4,20 @@
 
 - [Miro Board](https://miro.com/app/board/uXjVNeZRbEw=/)
 
-### Prerequisites
+## Prerequisites
 
 - Node.js >= 18.20.2, [Installation instructions](https://github.com/nvm-sh/nvm)
 - Postgres DB, for example using [Docker](https://hub.docker.com/_/postgres) automatically downloaded later
 
-### Installation
+## Installation
 
-#### Clone the repository
+### Clone the repository
 
 ```bash
 git clone git@github.com:ASCS-eV/envited-x-data-space.git
 ```
 
-#### Update repository
+### Update repository
 
 ```bash
 git fetch origin # get new branches
@@ -34,7 +34,7 @@ node --version
 npm install --legacy-peer-deps # due to dependencies
 ```
 
-#### Database Connection
+### Database Connection
 
 > The local database schema may change so you have to make sure to clean up by removing existing container and images just to be sure:
 
@@ -69,12 +69,22 @@ docker start envited
 docker container ls
 ```
 
-#### Setting up the environment
+### Setting up the environment
 
 In `apps/envited.ascs.digital` rename `.env.example` to `.env.development` and fill out the required values.
 
+## Test the app
+
+```bash
+npx nx test envited.ascs.digital —watch
+```
+
 ## Start the app
 
-To start the development server run `npx nx serve envited.ascs.digital`. Open your browser and navigate to http://localhost:4200/.
+To start the development server run:
+```bash
+npx nx serve envited.ascs.digital
+```
+Open your browser and navigate to http://localhost:4200/
 
 Happy coding!

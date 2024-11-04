@@ -232,13 +232,13 @@ export const _validateAndCreateMetadata =
 
       const connection = await db()
       const user = await connection.getUserById(asset.userId)
-
+      console.log(user)
       if (!user) {
         throw new Error('User not found')
       }
 
       const [issuer] = await connection.getUserWithProfileById(user.issuerId)
-
+      console.log(issuer)
       if (!issuer) {
         throw new Error('Issuer not found')
       }

@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Automotive Solution Center for Simulation e.V. <info@asc-s.de>
+ *
+ * SPDX-License-Identifier: LicenseRef-All-Rights-Reserved
+ */
 export const AssociationMemberIcon = ({ props }: { props?: any }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

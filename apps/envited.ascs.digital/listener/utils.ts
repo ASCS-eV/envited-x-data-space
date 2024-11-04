@@ -39,9 +39,8 @@ export const extractKeyValuePairs = (obj, parentKey = '') => {
   return pipe(
     // @ts-expect-error - ramda typing
     toPairs, // Convert the object into key-value pairs
-    
-    chain(
-      ([key, value]): any => {
+
+    chain(([key, value]): any => {
       // @ts-expect-error - ramda
       const newKey = parentKey ? `${parentKey}:${key}` : key
 

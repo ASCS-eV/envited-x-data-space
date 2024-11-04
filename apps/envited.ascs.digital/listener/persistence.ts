@@ -1,9 +1,9 @@
 import { ExtractTablesWithRelations, and, eq, inArray } from 'drizzle-orm'
 import { AwsDataApiPgDatabase, AwsDataApiPgQueryResultHKT } from 'drizzle-orm/aws-data-api/pg'
 import { PgQueryResultHKT, PgTransaction } from 'drizzle-orm/pg-core'
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
 import * as schema from '../common/database/schema'
-import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
 export type DatabaseConnection = PostgresJsDatabase<typeof schema> | AwsDataApiPgDatabase<typeof schema>
 
@@ -16,13 +16,25 @@ export const getTokenByTokenId =
       .where(and(eq(schema.token.tokenId, tokenId), eq(schema.token.contract, contract)))
 
 export const getTokenTags =
-  (tx: PgTransaction<AwsDataApiPgQueryResultHKT | PgQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
+  (
+    tx: PgTransaction<
+      AwsDataApiPgQueryResultHKT | PgQueryResultHKT,
+      typeof schema,
+      ExtractTablesWithRelations<typeof schema>
+    >,
+  ) =>
   async (tags: string[]) => {
     return tx.select().from(schema.tokenTag).where(inArray(schema.tokenTag.name, tags))
   }
 
 export const insertTokenTx =
-  (tx: PgTransaction<AwsDataApiPgQueryResultHKT | PgQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
+  (
+    tx: PgTransaction<
+      AwsDataApiPgQueryResultHKT | PgQueryResultHKT,
+      typeof schema,
+      ExtractTablesWithRelations<typeof schema>
+    >,
+  ) =>
   async ({
     hash,
     contract,
@@ -89,17 +101,35 @@ export const insertTokenTx =
       .returning()
 
 export const insertTokenTagTx =
-  (tx: PgTransaction<AwsDataApiPgQueryResultHKT | PgQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
+  (
+    tx: PgTransaction<
+      AwsDataApiPgQueryResultHKT | PgQueryResultHKT,
+      typeof schema,
+      ExtractTablesWithRelations<typeof schema>
+    >,
+  ) =>
   (name: string) =>
     tx.insert(schema.tokenTag).values({ name }).onConflictDoNothing({ target: schema.tokenTag.name }).returning()
 
 export const insertTokensToTokenTagsTx =
-  (tx: PgTransaction<AwsDataApiPgQueryResultHKT | PgQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
+  (
+    tx: PgTransaction<
+      AwsDataApiPgQueryResultHKT | PgQueryResultHKT,
+      typeof schema,
+      ExtractTablesWithRelations<typeof schema>
+    >,
+  ) =>
   (tokenId: string, tagId: number) =>
     tx.insert(schema.tokensToTokenTags).values({ tokenId, tagId }).returning()
 
 export const insertTokenAttributeTx =
-  (tx: PgTransaction<AwsDataApiPgQueryResultHKT | PgQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
+  (
+    tx: PgTransaction<
+      AwsDataApiPgQueryResultHKT | PgQueryResultHKT,
+      typeof schema,
+      ExtractTablesWithRelations<typeof schema>
+    >,
+  ) =>
   (tokenId: string, name: string, value: string) =>
     tx.insert(schema.tokenAttributes).values({ tokenId, name, value }).returning()
 

@@ -46,7 +46,9 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                     className={`${equals(assetIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}
                   >
                     <div className="font-medium text-gray-900">
-                      {equals(asset.status)(AssetStatus.processing) ? asset.cid : pathOr('', ['token_metadata', 'name'])(metadata)}
+                      {equals(asset.status)(AssetStatus.processing)
+                        ? asset.cid
+                        : pathOr('', ['token_metadata', 'name'])(metadata)}
                     </div>
                     <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
                       <span>{propOr('', 'type')(metadata)}</span>

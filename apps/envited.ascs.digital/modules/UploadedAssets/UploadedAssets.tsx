@@ -1,7 +1,7 @@
 'use client'
 
 import { LoadingIndicator } from '@envited-marketplace/design-system'
-import { equals, isEmpty, pathOr, propOr } from 'ramda'
+import { equals, isEmpty, last, pathOr, propOr } from 'ramda'
 
 import { useTranslation } from '../../common/i18n'
 import { Asset, AssetStatus } from '../../common/types'
@@ -44,8 +44,6 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                   : asset.metadata
                 : {}
 
-              console.log(metadata)
-
               return (
                 <tr key={asset.id}>
                   <td
@@ -54,7 +52,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                     <div className="font-medium text-gray-900">
                       {equals(asset.status)(AssetStatus.processing)
                         ? asset.cid
-                        : pathOr('', ['token_metadata', 'name'])(metadata)}
+                        : pathOr('', ['tokenMetadata', 'name'])(metadata)}
                     </div>
                     <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
                       <span>{propOr('', 'type')(metadata)}</span>
@@ -68,7 +66,11 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                       equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
                     } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
                   >
-                    {equals(asset.status)(AssetStatus.processing) ? <>&hellip;</> : propOr('', 'symbol')(metadata)}
+                    {equals(asset.status)(AssetStatus.processing) ? (
+                      <>&hellip;</>
+                    ) : (
+                      last(pathOr('', ['tokenMetadata', 'tags'])(metadata))
+                    )}
                   </td>
                   <td
                     className={`${

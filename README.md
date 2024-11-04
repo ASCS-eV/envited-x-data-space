@@ -1,4 +1,4 @@
-# ENVITED Marketplace
+# ENVITED-X Data Space
 
 ## Resources
 
@@ -6,17 +6,15 @@
 
 ### Prerequisites
 
-- Node.js >= 18.18, [Installation instructions](https://github.com/nvm-sh/nvm)
+- Node.js >= 18.20.2, [Installation instructions](https://github.com/nvm-sh/nvm)
 - Postgres DB, for example using [Docker](https://hub.docker.com/_/postgres) automatically downloaded later
-
-#### Installing dependencies
 
 ### Installation
 
 #### Clone the repository
 
 ```bash
-git clone git@github.com:ASCS-eV/envited-marketplace
+git clone git@github.com:ASCS-eV/envited-x-data-space.git
 ```
 
 #### Update repository
@@ -31,9 +29,9 @@ From the root directory run:
 
 ```bash
 nvm ls # show installed node versions
-nvm use VERSION # >= 18.17
+nvm use VERSION # >= 18.20.2
 node --version
-npm install
+npm install --legacy-peer-deps # due to dependencies
 ```
 
 #### Database Connection
@@ -77,4 +75,6 @@ In `apps/envited.ascs.digital` rename `.env.example` to `.env.development` and f
 
 ## Start the app
 
-To start the development server run `npx nx serve envited.ascs.digital`. Open your browser and navigate to http://localhost:4200/. Happy coding!
+To start the development server run `npx nx serve envited.ascs.digital`. Open your browser and navigate to http://localhost:4200/.
+
+Happy coding!

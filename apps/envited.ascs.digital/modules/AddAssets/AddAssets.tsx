@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-marketplace/design-system'
+import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-x-data-space/design-system'
 import { isEmpty, isNil, pathOr, times } from 'ramda'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'

@@ -1,6 +1,6 @@
 'use client'
 
-import { LoadingIndicator, bytesToMegaBytes } from '@envited-marketplace/design-system'
+import { LoadingIndicator, bytesToMegaBytes } from '@envited-x-data-space/design-system'
 import { CheckCircleIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { pathOr, prop } from 'ramda'
 import { FC, useEffect, useState } from 'react'

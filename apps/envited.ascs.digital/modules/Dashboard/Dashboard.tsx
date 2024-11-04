@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@envited-marketplace/design-system'
+import { Button } from '@envited-x-data-space/design-system'
 import React, { FC } from 'react'
 
 import { signOut } from '../../common/auth'

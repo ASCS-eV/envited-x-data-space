@@ -1,6 +1,6 @@
 'use client'
 
-import { LoadingIndicator } from '@envited-marketplace/design-system'
+import { LoadingIndicator } from '@envited-x-data-space/design-system'
 import { equals, isEmpty, last, pathOr, propOr } from 'ramda'
 
 import { useTranslation } from '../../common/i18n'

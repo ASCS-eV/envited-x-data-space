@@ -13,8 +13,8 @@ export const initTezos =
       name: process.env.WALLET_NAME || 'Envited Data Space',
       network: { type: 'ghostnet' as any },
     })
-
-    Tezos.setProvider({ wallet })
+    // @ts-expect-error BeaconWallet typing seems to be outdated
+    Tezos.setWalletProvider(wallet)
 
     return { Tezos, wallet }
   }

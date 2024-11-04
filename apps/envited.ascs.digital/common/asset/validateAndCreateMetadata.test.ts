@@ -72,7 +72,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const getUserByIdStub = jest.fn().mockResolvedValue({ id: 'USER_ID', issuerId: 'ISSUER_ID' }) as any
       const getUserWithProfileByIdStub = jest
         .fn()
-        .mockResolvedValue([{ id: 'ISSUER_ID', profile: { name: 'NAME' } }]) as any
+        .mockResolvedValue([{ user: { id: 'ISSUER_ID' }, profile: { name: 'NAME' } }]) as any
       const dbStub = jest.fn().mockResolvedValue({
         getUserById: getUserByIdStub,
         getUserWithProfileById: getUserWithProfileByIdStub,
@@ -105,8 +105,8 @@ describe('common/asset/validateAndCreateMetadata', () => {
       expect(getUserByIdStub).toHaveBeenCalledWith('USER_ID')
       expect(getUserWithProfileByIdStub).toHaveBeenCalledWith('ISSUER_ID')
       expect(createMetadataStub).toHaveBeenCalledWith({
-        assetCID: 'QmSWVmNaFQEDaf36oqjEvzSV7EfFbkAFMoopsSQV6gSCSS',
-        manifestCID: 'QmRteS2bP2jCcA8MVL4kdLGV5yzNPS85uNazWxWEY9Goff',
+        assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH',
+        manifestCID: 'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
         domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB',
         licenseCID: 'QmPt3UiJj4br8Zv6Jkb6kzdie36jtJM6wBvpFF1nA2ZU4L',
         displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',

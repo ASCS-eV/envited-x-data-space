@@ -1,10 +1,10 @@
 'use client'
 
-import { mintToken } from 'apps/envited.ascs.digital/common/web3'
-import { tezos } from 'apps/envited.ascs.digital/common/web3'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
+import { mintToken } from '../../common/web3'
+import { tezos } from '../../common/web3'
 import { getAssetMintParams, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
 
 interface MintProps {
@@ -22,6 +22,7 @@ export const Mint: FC<MintProps> = ({ assetId }) => {
     if (account) {
       const fileLocation = await uploadAssetTokenMetadata(id)
       const mintParams = await getAssetMintParams(id)
+
       await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
     } else {
       await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })

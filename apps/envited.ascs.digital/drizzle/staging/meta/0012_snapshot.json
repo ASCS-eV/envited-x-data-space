@@ -24,6 +24,18 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -42,8 +54,66 @@
       "isRLSEnabled": false,
       "checkConstraints": {}
     },
-    "public.companyCategory": {
-      "name": "companyCategory",
+    "public.asset": {
+      "name": "asset",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "cid": {
+          "name": "cid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "asset_user_id_user_id_fk": {
+          "name": "asset_user_id_user_id_fk",
+          "tableFrom": "asset",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "tableTo": "user",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
+    },
+    "public.businessCategory": {
+      "name": "businessCategory",
       "schema": "",
       "columns": {
         "id": {
@@ -63,21 +133,33 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "companyCategory_id_unique": {
-          "name": "companyCategory_id_unique",
+        "businessCategory_id_unique": {
+          "name": "businessCategory_id_unique",
           "columns": [
             "id"
           ],
           "nullsNotDistinct": false
         },
-        "companyCategory_name_unique": {
-          "name": "companyCategory_name_unique",
+        "businessCategory_name_unique": {
+          "name": "businessCategory_name_unique",
           "columns": [
             "name"
           ],
@@ -108,6 +190,18 @@
         "description": {
           "name": "description",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false
         }
@@ -147,6 +241,18 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -180,7 +286,13 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "description": {
           "name": "description",
@@ -218,26 +330,44 @@
           "primaryKey": false,
           "notNull": false
         },
-        "first_name": {
-          "name": "first_name",
+        "sales_name": {
+          "name": "sales_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "last_name": {
-          "name": "last_name",
+        "sales_phone": {
+          "name": "sales_phone",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "phone": {
-          "name": "phone",
+        "sales_email": {
+          "name": "sales_email",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "email": {
-          "name": "email",
+        "principal_user_id": {
+          "name": "principal_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "principal_name": {
+          "name": "principal_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "principal_phone": {
+          "name": "principal_phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "principal_email": {
+          "name": "principal_email",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -260,10 +390,49 @@
           "primaryKey": false,
           "notNull": false,
           "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "profile_name_user_name_fk": {
+          "name": "profile_name_user_name_fk",
+          "tableFrom": "profile",
+          "columnsFrom": [
+            "name"
+          ],
+          "tableTo": "user",
+          "columnsTo": [
+            "name"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        },
+        "profile_principal_user_id_user_id_fk": {
+          "name": "profile_principal_user_id_user_id_fk",
+          "tableFrom": "profile",
+          "columnsFrom": [
+            "principal_user_id"
+          ],
+          "tableTo": "user",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "profile_name_unique": {
@@ -272,14 +441,21 @@
             "name"
           ],
           "nullsNotDistinct": false
+        },
+        "profile_slug_unique": {
+          "name": "profile_slug_unique",
+          "columns": [
+            "slug"
+          ],
+          "nullsNotDistinct": false
         }
       },
       "policies": {},
       "isRLSEnabled": false,
       "checkConstraints": {}
     },
-    "public.profilesToCompanyCategories": {
-      "name": "profilesToCompanyCategories",
+    "public.profilesToBusinessCategories": {
+      "name": "profilesToBusinessCategories",
       "schema": "",
       "columns": {
         "profile_id": {
@@ -288,8 +464,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "company_category_id": {
-          "name": "company_category_id",
+        "business_category_id": {
+          "name": "business_category_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -297,28 +473,26 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "profilesToCompanyCategories_profile_id_profile_id_fk": {
-          "name": "profilesToCompanyCategories_profile_id_profile_id_fk",
-          "tableFrom": "profilesToCompanyCategories",
+        "profilesToBusinessCategories_profile_id_profile_id_fk": {
+          "name": "profilesToBusinessCategories_profile_id_profile_id_fk",
+          "tableFrom": "profilesToBusinessCategories",
           "columnsFrom": [
             "profile_id"
           ],
           "tableTo": "profile",
-          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
           "onUpdate": "no action",
           "onDelete": "no action"
         },
-        "profilesToCompanyCategories_company_category_id_companyCategory_id_fk": {
-          "name": "profilesToCompanyCategories_company_category_id_companyCategory_id_fk",
-          "tableFrom": "profilesToCompanyCategories",
+        "profilesToBusinessCategories_business_category_id_businessCategory_id_fk": {
+          "name": "profilesToBusinessCategories_business_category_id_businessCategory_id_fk",
+          "tableFrom": "profilesToBusinessCategories",
           "columnsFrom": [
-            "company_category_id"
+            "business_category_id"
           ],
-          "tableTo": "companyCategory",
-          "schemaTo": "public",
+          "tableTo": "businessCategory",
           "columnsTo": [
             "id"
           ],
@@ -353,6 +527,18 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -371,6 +557,68 @@
       "isRLSEnabled": false,
       "checkConstraints": {}
     },
+    "public.token": {
+      "name": "token",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "hash": {
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contract": {
+          "name": "contract",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creator": {
+          "name": "creator",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "token_id": {
+          "name": "token_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "thumbnail": {
+          "name": "thumbnail",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "token_metadata": {
+          "name": "token_metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
+    },
     "public.user": {
       "name": "user",
       "schema": "",
@@ -380,6 +628,12 @@
           "type": "text",
           "primaryKey": true,
           "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         },
         "name": {
           "name": "name",
@@ -477,6 +731,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -499,7 +760,6 @@
             "issuer_id"
           ],
           "tableTo": "issuer",
-          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
@@ -513,7 +773,6 @@
             "address_type_id"
           ],
           "tableTo": "addressType",
-          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
@@ -527,6 +786,20 @@
           "name": "user_id_unique",
           "columns": [
             "id"
+          ],
+          "nullsNotDistinct": false
+        },
+        "user_uuid_unique": {
+          "name": "user_uuid_unique",
+          "columns": [
+            "uuid"
+          ],
+          "nullsNotDistinct": false
+        },
+        "user_name_unique": {
+          "name": "user_name_unique",
+          "columns": [
+            "name"
           ],
           "nullsNotDistinct": false
         }
@@ -561,7 +834,6 @@
             "user_id"
           ],
           "tableTo": "user",
-          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
@@ -575,7 +847,6 @@
             "credential_type_id"
           ],
           "tableTo": "credentialType",
-          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
@@ -615,7 +886,6 @@
             "user_id"
           ],
           "tableTo": "user",
-          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
@@ -629,7 +899,6 @@
             "role_id"
           ],
           "tableTo": "role",
-          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
@@ -651,8 +920,8 @@
     "tables": {},
     "columns": {}
   },
-  "id": "53f4ab03-c3d2-484a-a9b4-3e6ec7437d15",
-  "prevId": "bf45c78e-c299-4435-bcb8-eaa63edd87fb",
+  "id": "1dab1e56-0cef-48a1-a697-26c89361b45e",
+  "prevId": "90d4fa51-856b-411b-aa8b-01a880e2bf02",
   "sequences": {},
   "policies": {},
   "views": {},

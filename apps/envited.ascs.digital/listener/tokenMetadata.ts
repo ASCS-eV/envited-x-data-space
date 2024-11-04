@@ -34,6 +34,8 @@ interface TokenMetadata {
   }[]
 }
 
+
+
 export const getTokenMetadata =
   ({ tezos }: { tezos: TezosToolkit }) =>
   async (contractAddress: string, id: number): Promise<TokenMetadata | undefined> => {

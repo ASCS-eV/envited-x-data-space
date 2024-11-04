@@ -84,7 +84,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/envited.ascs.digital",
-        "commands": ["ENV=development drizzle-kit generate:pg"]
+        "commands": ["ENV=development drizzle-kit generate"]
       }
     },
     "db:migrate": {

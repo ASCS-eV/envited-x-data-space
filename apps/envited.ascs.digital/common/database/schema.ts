@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { boolean, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { boolean, integer, jsonb, pgTable, primaryKey, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 export const user = pgTable('user', {
   id: text('id').unique().primaryKey(),
@@ -189,10 +189,47 @@ export const asset = pgTable('asset', {
 export const token = pgTable('token', {
   id: uuid('id').defaultRandom().primaryKey(),
   hash: text('hash'),
-  createdAt: timestamp('created_at'),
   contract: text('contract'),
-  creator: text('creator'),
+  minter: text('minter'),
   tokenId: integer('token_id'),
-  thumbnail: text('thumbnail'),
+  name: text('name'),
+  description: text('description'),
+  creators: jsonb('creators'),
+  publishers: jsonb('publishers'),
+  date: timestamp('date'),
+  type: text('type'),
+  rights: text('rights'),
+  rightsUri: text('rights_uri'),
+  language: text('language'),
+  artifactUri: text('artifact_uri'),
+  identifier: text('identifier'),
+  externalUri: text('external_uri'),
+  displayUri: text('display_uri'),
   tokenMetadata: jsonb('token_metadata'),
+  createdAt: timestamp('created_at'),
+  modifiedAt: timestamp('modified_at'),
 })
+
+export const tokenTag = pgTable('tokenTag', {
+  id: serial('id').primaryKey(),
+  name: text('name').unique().notNull(),
+})
+
+export const tokensToTokenTags = pgTable('tokensToTokenTags', {
+  tokenId: uuid('token_id')
+    .references(() => token.id)
+    .notNull(),
+  tagId: integer('tag_id')
+    .references(() => tokenTag.id)
+    .notNull(),
+})
+
+export const tokenAttributes = pgTable('tokenAttributes', {
+  tokenId: uuid('token_id'),
+  name: text('name').notNull(),
+  value: text('value').notNull(),
+}, (table) => [primaryKey({ columns: [table.tokenId, table.name] })])
+
+export const tokenRelations = relations(token, ({ many }) => ({
+  tokenAttributes: many(tokenAttributes),
+}))

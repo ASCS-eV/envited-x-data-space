@@ -16,16 +16,19 @@ export const getAssets = (db: DatabaseConnection) => async () => db.select().fro
 export const getAssetByCID = (db: DatabaseConnection) => async (cid: string) =>
   db.select().from(asset).where(eq(asset.cid, cid))
 
-export const insertAsset = (db: DatabaseConnection) => async (userId: string, cid: string) =>
-  db
-    .insert(asset)
-    .values({
-      cid,
-      metadata: {},
-      status: AssetStatus.processing,
-      userId,
-    })
-    .returning()
+export const insertAsset =
+  (db: DatabaseConnection) =>
+  async ({ userId, cid, ownerId }: { userId: string; cid: string; ownerId: string }) =>
+    db
+      .insert(asset)
+      .values({
+        cid,
+        metadata: {},
+        status: AssetStatus.processing,
+        userId,
+        owner: ownerId,
+      })
+      .returning()
 
 export const updateAsset = (db: DatabaseConnection) => async (data: Asset) =>
   db

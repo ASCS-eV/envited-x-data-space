@@ -41,7 +41,7 @@ export async function addAssetsForm(formData: FormData) {
         },
       })
 
-      await insertAsset(session.user.id, uniqueFilename)
+      await insertAsset(uniqueFilename)
 
       return uploadResult
     })

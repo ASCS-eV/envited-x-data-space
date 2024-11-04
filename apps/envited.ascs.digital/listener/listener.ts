@@ -1,9 +1,9 @@
-import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 import { PutObjectCommand } from '@aws-sdk/client-s3'
+import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 
+import { s3Client } from '../common/aws'
 import { getTokenMetadata } from './tokenMetadata'
 import { convertIpfsUrlToGateway, extractAttributesUri, extractKeyValuePairs, getFileTypeFromBuffer } from './utils'
-import { s3Client } from '../common/aws'
 
 const createLocalCopy = async (uri: string) => {
   const { url, filename } = convertIpfsUrlToGateway(uri)
@@ -11,20 +11,20 @@ const createLocalCopy = async (uri: string) => {
   const response = await fetch(url)
   const arrayBuffer = await response.arrayBuffer()
   const fileType = await getFileTypeFromBuffer(arrayBuffer)
-  
+
   const uploadParams = {
     Bucket: process.env.ASSET_BUCKET_NAME,
     Key: filename,
     Body: Buffer.from(arrayBuffer),
     ContentType: fileType ? fileType.mime : 'application/octet-stream',
-    ContentDisposition: 'inline'
+    ContentDisposition: 'inline',
   }
 
   try {
-    await s3Client.send(new PutObjectCommand(uploadParams));
+    await s3Client.send(new PutObjectCommand(uploadParams))
     return `${process.env.ASSET_URL}/${filename}`
   } catch (err) {
-    console.log("Error", err);
+    console.log('Error', err)
   }
 }
 
@@ -56,15 +56,15 @@ export const listenToAssetContract =
         if (existingToken) {
           return
         }
-        
+
         console.log('Registering token ', tokenId)
-        
+
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         const localDisplayUri = await createLocalCopy(tokenMetadata?.displayUri || '')
         const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
         console.log('Attributes URI', attributesUri)
-        const manifest = await fetch(convertIpfsUrlToGateway(attributesUri as string).url).then((res) => res.json())
+        const manifest = await fetch(convertIpfsUrlToGateway(attributesUri as string).url).then(res => res.json())
         console.log('Manifest', manifest)
         const attributes = extractKeyValuePairs(manifest)
         console.log('Attributes', attributes)

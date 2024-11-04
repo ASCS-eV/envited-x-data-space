@@ -8,28 +8,28 @@ describe('listener/utils', () => {
 
       const attributes = [
         {
-          name: "ASSET_NAME.ASSET_TYPE",
-          value: "ASSET_URI",
-          type: "uri"
+          name: 'ASSET_NAME.ASSET_TYPE',
+          value: 'ASSET_URI',
+          type: 'uri',
         },
         {
-          name: "ASSET_NAME.ASSET_TYPE",
-          value: "ASSET_IPFS_URI",
-          type: "application/json"
+          name: 'ASSET_NAME.ASSET_TYPE',
+          value: 'ASSET_IPFS_URI',
+          type: 'application/json',
         },
         {
-          name: "ASSET_NAME.manifest",
-          value: "ASSET_DEFINITION_URI",
-          type: "uri"
+          name: 'ASSET_NAME.manifest',
+          value: 'ASSET_DEFINITION_URI',
+          type: 'uri',
         },
         {
-          name: "ASSET_NAME.manifest",
-          value: "ASSET_MANIFEST_IFPS_URI",
-          type: "application/json"
-        }
+          name: 'ASSET_NAME.manifest',
+          value: 'ASSET_MANIFEST_IFPS_URI',
+          type: 'application/json',
+        },
       ]
 
-      const expected = "ASSET_IPFS_URI"
+      const expected = 'ASSET_IPFS_URI'
 
       const result = SUT.extractAttributesUri(attributes)
 

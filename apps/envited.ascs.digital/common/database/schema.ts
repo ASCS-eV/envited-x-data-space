@@ -224,11 +224,15 @@ export const tokensToTokenTags = pgTable('tokensToTokenTags', {
     .notNull(),
 })
 
-export const tokenAttributes = pgTable('tokenAttributes', {
-  tokenId: uuid('token_id'),
-  name: text('name').notNull(),
-  value: text('value').notNull(),
-}, (table) => [primaryKey({ columns: [table.tokenId, table.name] })])
+export const tokenAttributes = pgTable(
+  'tokenAttributes',
+  {
+    tokenId: uuid('token_id'),
+    name: text('name').notNull(),
+    value: text('value').notNull(),
+  },
+  table => [primaryKey({ columns: [table.tokenId, table.name] })],
+)
 
 export const tokenRelations = relations(token, ({ many }) => ({
   tokenAttributes: many(tokenAttributes),

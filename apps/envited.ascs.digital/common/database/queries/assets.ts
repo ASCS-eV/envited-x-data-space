@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { omit } from 'ramda'
 
 import { Asset, AssetStatus } from '../../types'

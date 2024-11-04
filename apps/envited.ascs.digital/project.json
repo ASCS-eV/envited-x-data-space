@@ -19,6 +19,31 @@
         "production": {}
       }
     },
+    "listener:build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "development",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/listener",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/envited.ascs.digital/listener/index.ts",
+        "tsConfig": "apps/envited.ascs.digital/tsconfig.listener.json",
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": false,
+          "outExtension": {
+            ".js": ".js"
+          }
+        },
+        "configurations": {
+          "development": {
+            "outputPath": "apps/listener"
+          }
+        }
+      }
+    },
     "serve": {
       "executor": "@nx/next:server",
       "defaultConfiguration": "development",
@@ -59,7 +84,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/envited.ascs.digital",
-        "commands": ["ENV=development drizzle-kit generate:pg"]
+        "commands": ["ENV=development drizzle-kit generate"]
       }
     },
     "db:migrate": {

@@ -1,10 +1,8 @@
 {
-  "id": "8fbe3d01-c68f-48ae-9a7f-49222e392a4a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "addressType": {
+    "public.addressType": {
       "name": "addressType",
       "schema": "",
       "columns": {
@@ -34,14 +32,17 @@
       "uniqueConstraints": {
         "addressType_name_unique": {
           "name": "addressType_name_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "credentialType": {
+    "public.credentialType": {
       "name": "credentialType",
       "schema": "",
       "columns": {
@@ -68,9 +69,12 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "issuer": {
+    "public.issuer": {
       "name": "issuer",
       "schema": "",
       "columns": {
@@ -105,14 +109,17 @@
       "uniqueConstraints": {
         "issuer_id_unique": {
           "name": "issuer_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "role": {
+    "public.role": {
       "name": "role",
       "schema": "",
       "columns": {
@@ -141,14 +148,17 @@
       "uniqueConstraints": {
         "role_id_unique": {
           "name": "role_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -272,44 +282,47 @@
         "user_issuer_id_issuer_id_fk": {
           "name": "user_issuer_id_issuer_id_fk",
           "tableFrom": "user",
-          "tableTo": "issuer",
-          "schemaTo": "public",
           "columnsFrom": [
             "issuer_id"
           ],
+          "tableTo": "issuer",
+          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "user_address_type_id_addressType_id_fk": {
           "name": "user_address_type_id_addressType_id_fk",
           "tableFrom": "user",
-          "tableTo": "addressType",
-          "schemaTo": "public",
           "columnsFrom": [
             "address_type_id"
           ],
+          "tableTo": "addressType",
+          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "user_id_unique": {
           "name": "user_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "usersToCredentialTypes": {
+    "public.usersToCredentialTypes": {
       "name": "usersToCredentialTypes",
       "schema": "",
       "columns": {
@@ -331,36 +344,39 @@
         "usersToCredentialTypes_user_id_user_id_fk": {
           "name": "usersToCredentialTypes_user_id_user_id_fk",
           "tableFrom": "usersToCredentialTypes",
-          "tableTo": "user",
-          "schemaTo": "public",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
+          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "usersToCredentialTypes_credential_type_id_credentialType_id_fk": {
           "name": "usersToCredentialTypes_credential_type_id_credentialType_id_fk",
           "tableFrom": "usersToCredentialTypes",
-          "tableTo": "credentialType",
-          "schemaTo": "public",
           "columnsFrom": [
             "credential_type_id"
           ],
+          "tableTo": "credentialType",
+          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "usersToRoles": {
+    "public.usersToRoles": {
       "name": "usersToRoles",
       "schema": "",
       "columns": {
@@ -382,41 +398,50 @@
         "usersToRoles_user_id_user_id_fk": {
           "name": "usersToRoles_user_id_user_id_fk",
           "tableFrom": "usersToRoles",
-          "tableTo": "user",
-          "schemaTo": "public",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
+          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "usersToRoles_role_id_role_id_fk": {
           "name": "usersToRoles_role_id_role_id_fk",
           "tableFrom": "usersToRoles",
-          "tableTo": "role",
-          "schemaTo": "public",
           "columnsFrom": [
             "role_id"
           ],
+          "tableTo": "role",
+          "schemaTo": "public",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     }
   },
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "8fbe3d01-c68f-48ae-9a7f-49222e392a4a",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "sequences": {},
+  "policies": {},
+  "views": {},
+  "roles": {}
 }

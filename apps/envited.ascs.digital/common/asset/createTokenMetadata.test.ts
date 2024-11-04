@@ -251,17 +251,6 @@ describe('common/asset/createTokenMetadata', () => {
               },
             },
           ],
-          'manifest:licenseType': 'openSource',
-          'manifest:licenseData': {
-            '@type': 'manifest:Link',
-            'manifest:accessRole': 'publicUser',
-            'manifest:type': 'license',
-            'manifest:format': 'md',
-            'manifest:relativePath': {
-              '@value': './LICENSE',
-              '@type': 'xsd:anyURI',
-            },
-          },
           'manifest:contentData': [
             {
               '@type': 'manifest:Link',
@@ -365,6 +354,23 @@ describe('common/asset/createTokenMetadata', () => {
             },
           ],
         },
+        "manifest:license": {
+          "@type": "manifest:License",
+          "manifest:spdxIdentifier": {
+            "@value": "MIT",
+            "@type": "xsd:string"
+          },
+          "manifest:licenseData": {
+            "@type": "manifest:Link",
+            "manifest:accessRole": "publicUser",
+            "manifest:type": "license",
+            "manifest:format": "html",
+            "manifest:path": {
+              "@value": "https://opensource.org/license/mit",
+              "@type": "xsd:anyURI"
+            }
+          }
+        }
       }
 
       const expected = {
@@ -375,11 +381,11 @@ describe('common/asset/createTokenMetadata', () => {
         tags: ['GaiaX', 'ASCS', 'ENVITED-X', 'EVES', 'nft', 'ASAM OpenDRIVE 1.6'],
         minter: 'MINTER',
         creators: ['CREATOR'],
-        publishers: ['CREATOR', 'ENVITED-X Data Space'],
+        publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],
         date: '2024-10-29T00:00:00+00:00',
         type: 'EVES-003 https://github.com/ASCS-eV/EVES',
-        rights: 'openSource',
-        rightsUri: 'ipfs://LICENSE_CID',
+        rights: 'MIT',
+        rightsUri: 'https://opensource.org/license/mit',
         language: 'en',
         artifactUri: 'https://assets.envited-x.net/ASSET_CID',
         identifier: 'ASSET_CID',
@@ -440,7 +446,6 @@ describe('common/asset/createTokenMetadata', () => {
         assetCID: 'ASSET_CID',
         manifestCID: 'MODIFIED_MANIFEST_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
-        licenseCID: 'LICENSE_CID',
         displayUriCID: 'DISPLAY_URI_CID',
         displayUri: 'DISPLAY_URI',
         minter: 'MINTER',

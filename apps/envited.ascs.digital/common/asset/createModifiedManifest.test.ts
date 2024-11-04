@@ -23,7 +23,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'owner',
               'manifest:type': 'assetData',
               'manifest:format': 'xodr',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
                 '@type': 'xsd:anyURI',
               },
@@ -33,30 +33,19 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'owner',
               'manifest:type': 'assetData',
               'manifest:format': 'xodr',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
                 '@type': 'xsd:anyURI',
               },
             },
           ],
-          'manifest:licenseType': 'providerSpecific',
-          'manifest:licenseData': {
-            '@type': 'manifest:Link',
-            'manifest:accessRole': 'publicUser',
-            'manifest:type': 'license',
-            'manifest:format': 'md',
-            'manifest:relativePath': {
-              '@value': './LICENSE',
-              '@type': 'xsd:anyURI',
-            },
-          },
           'manifest:contentData': [
             {
               '@type': 'manifest:Link',
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'metadata',
               'manifest:format': 'json',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './metadata/domainMetadata.json',
                 '@type': 'xsd:anyURI',
               },
@@ -66,7 +55,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'registeredUser',
               'manifest:type': 'documentation',
               'manifest:format': 'pdf',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation.pdf',
                 '@type': 'xsd:anyURI',
               },
@@ -76,7 +65,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'registeredUser',
               'manifest:type': 'documentation',
               'manifest:format': 'txt',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation_stats.txt',
                 '@type': 'xsd:anyURI',
               },
@@ -86,7 +75,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'registeredUser',
               'manifest:type': 'validation',
               'manifest:format': 'txt',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './validation/qcReport.txt',
                 '@type': 'xsd:anyURI',
               },
@@ -96,7 +85,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'png',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
                 '@type': 'xsd:anyURI',
               },
@@ -106,7 +95,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'png',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './visualization/TestfeldNiedersachsen_ALKS_ODR_sample_02.png',
                 '@type': 'xsd:anyURI',
               },
@@ -116,7 +105,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'png',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './visualization/TestfeldNiedersachsen_ALKS_ODR_sample_03.png',
                 '@type': 'xsd:anyURI',
               },
@@ -126,7 +115,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './visualization/bbox.geojson',
                 '@type': 'xsd:anyURI',
               },
@@ -136,7 +125,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './visualization/roadNetwork.geojson',
                 '@type': 'xsd:anyURI',
               },
@@ -146,13 +135,30 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'registeredUser',
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': './visualization/detailRoadNetwork.geojson',
                 '@type': 'xsd:anyURI',
               },
             },
           ],
         },
+        "manifest:license": {
+          "@type": "manifest:License",
+          "manifest:spdxIdentifier": {
+            "@value": "MIT",
+            "@type": "xsd:string"
+          },
+          "manifest:licenseData": {
+            "@type": "manifest:Link",
+            "manifest:accessRole": "publicUser",
+            "manifest:type": "license",
+            "manifest:format": "html",
+            "manifest:path": {
+              "@value": "https://opensource.org/license/mit",
+              "@type": "xsd:anyURI"
+            }
+          }
+        }
       }
 
       const expected = {
@@ -173,7 +179,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'owner',
               'manifest:type': 'assetData',
               'manifest:format': 'xodr',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': 'https://assets.envited-x.net/ASSET_CID/data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
                 '@type': 'xsd:anyURI',
               },
@@ -183,31 +189,20 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'owner',
               'manifest:type': 'assetData',
               'manifest:format': 'xodr',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value':
                   'https://assets.envited-x.net/ASSET_CID/data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
                 '@type': 'xsd:anyURI',
               },
             },
           ],
-          'manifest:licenseType': 'providerSpecific',
-          'manifest:licenseData': {
-            '@type': 'manifest:Link',
-            'manifest:accessRole': 'publicUser',
-            'manifest:type': 'license',
-            'manifest:format': 'md',
-            'manifest:relativePath': {
-              '@value': 'https://metadata.envited-x.net/ASSET_CID/LICENSE',
-              '@type': 'xsd:anyURI',
-            },
-          },
           'manifest:contentData': [
             {
               '@type': 'manifest:Link',
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'metadata',
               'manifest:format': 'json',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': 'ipfs://DOMAIN_METADATA_CID',
                 '@type': 'xsd:anyURI',
               },
@@ -217,7 +212,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'registeredUser',
               'manifest:type': 'documentation',
               'manifest:format': 'pdf',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value':
                   'https://metadata.envited-x.net/ASSET_CID/documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation.pdf',
                 '@type': 'xsd:anyURI',
@@ -228,7 +223,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'registeredUser',
               'manifest:type': 'documentation',
               'manifest:format': 'txt',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value':
                   'https://metadata.envited-x.net/ASSET_CID/documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation_stats.txt',
                 '@type': 'xsd:anyURI',
@@ -239,7 +234,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'registeredUser',
               'manifest:type': 'validation',
               'manifest:format': 'txt',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': 'https://metadata.envited-x.net/ASSET_CID/validation/qcReport.txt',
                 '@type': 'xsd:anyURI',
               },
@@ -249,7 +244,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'png',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': 'ipfs://CREATE_UNIQUE_CID',
                 '@type': 'xsd:anyURI',
               },
@@ -259,7 +254,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'png',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': 'ipfs://CREATE_UNIQUE_CID',
                 '@type': 'xsd:anyURI',
               },
@@ -269,7 +264,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'png',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': 'ipfs://CREATE_UNIQUE_CID',
                 '@type': 'xsd:anyURI',
               },
@@ -279,7 +274,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': 'ipfs://CREATE_UNIQUE_CID',
                 '@type': 'xsd:anyURI',
               },
@@ -289,7 +284,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'publicUser',
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': 'ipfs://CREATE_UNIQUE_CID',
                 '@type': 'xsd:anyURI',
               },
@@ -299,13 +294,30 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:accessRole': 'registeredUser',
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
-              'manifest:relativePath': {
+              'manifest:path': {
                 '@value': 'ipfs://CREATE_UNIQUE_CID',
                 '@type': 'xsd:anyURI',
               },
             },
           ],
         },
+        "manifest:license": {
+          "@type": "manifest:License",
+          "manifest:spdxIdentifier": {
+            "@value": "MIT",
+            "@type": "xsd:string"
+          },
+          "manifest:licenseData": {
+            "@type": "manifest:Link",
+            "manifest:accessRole": "publicUser",
+            "manifest:type": "license",
+            "manifest:format": "html",
+            "manifest:path": {
+              "@value": "https://opensource.org/license/mit",
+              "@type": "xsd:anyURI"
+            }
+          }
+        }
       }
 
       const result = await SUT.createModifiedManifest({

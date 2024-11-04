@@ -20,11 +20,11 @@ export const createModifiedManifest = ({
 
 export const modifyManifestLink = (assetCID: string, domainMetadataCID: string) => (link: ManifestLink) => ({
   ...link,
-  'manifest:relativePath': {
-    ...link['manifest:relativePath'],
+  'manifest:path': {
+    ...link['manifest:path'],
     '@value': formatManifestUri(assetCID, domainMetadataCID)(
       link['manifest:accessRole'],
-      link['manifest:relativePath']['@value'],
+      link['manifest:path']['@value'],
       link['manifest:type'],
       link['manifest:format'],
     ),

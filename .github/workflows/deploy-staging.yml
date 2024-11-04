@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - develop
-      - 337_update_token_metadata_based_on_example
   workflow_dispatch:
 
 # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish

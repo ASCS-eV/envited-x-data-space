@@ -35,7 +35,10 @@ export const _main =
       Key: string
     }) => Promise<CopyObjectCommandOutput | undefined>
     deleteFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<DeleteObjectCommandOutput | undefined>
-    validateAndCreateMetadata: (byteArray: Uint8Array, asset: Asset) => Promise<{
+    validateAndCreateMetadata: (
+      byteArray: Uint8Array,
+      asset: Asset,
+    ) => Promise<{
       conforms: boolean
       reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
       metadata: any

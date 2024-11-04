@@ -3,6 +3,7 @@ import { all, equals, find, keys, omit, pipe, prop, propEq, replace } from 'ramd
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromByteArray, read } from '../archive'
+import { Asset } from '../types'
 import { validateShaclDataWithSchema } from '../validator'
 import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { ValidationSchema } from '../validator/shacl/shacl.types'
@@ -11,7 +12,6 @@ import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
 import { Manifest } from './types'
 import { createFilename } from './validateAndCreateMetadata.utils'
-import { Asset } from '../types'
 
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)

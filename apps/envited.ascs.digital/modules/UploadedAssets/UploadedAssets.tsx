@@ -38,7 +38,13 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
           </thead>
           <tbody>
             {assets.map((asset, assetIdx) => {
-              const metadata = !isEmpty(asset.metadata) ? JSON.parse(asset.metadata) : {}
+              const metadata = !isEmpty(asset.metadata)
+                ? typeof asset.metadata === 'string'
+                  ? JSON.parse(asset.metadata)
+                  : asset.metadata
+                : {}
+
+              console.log(metadata)
 
               return (
                 <tr key={asset.id}>

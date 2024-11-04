@@ -10,11 +10,20 @@ const navigation = {
     { name: 'Home', href: '/' },
     { name: 'Community', href: '/community' },
     { name: 'Data & services', href: '/assets' },
+    {
+      name: 'Smart contract',
+      href: `${process.env.NEXT_PUBLIC_INDEXER_URL}/${process.env.NEXT_PUBLIC_ASSETS_CONTRACT}`,
+    },
   ],
   support: [
     { name: 'Mission', href: '/mission' },
     { name: 'Onboarding', href: '/onboarding' },
     { name: 'About us', href: '/about-us' },
+  ],
+  copyright: [
+    { name: 'Legal notice', href: 'https://asc-s.de/impressum' },
+    { name: 'Privacy policy', href: 'https://asc-s.de/datenschutz' },
+    { name: 'Terms of service', href: '/terms-of-service' },
   ],
   social: [
     {
@@ -119,6 +128,11 @@ export const Footer: FC<FooterProps> = () => {
         </div>
         <div className="mt-16 border-t border-gray-900/10 dark:border-white/10 pt-8 sm:mt-20 md:flex md:items-center md:justify-between lg:mt-24">
           <div className="flex space-x-6 md:order-2">
+            {navigation.copyright.map(item => (
+              <a key={item.name} href={item.href} className="text-gray-500 hover:text-gray-400" target="_blank">
+                {item.name}
+              </a>
+            ))}
             {navigation.social.map(item => (
               <a key={item.name} href={item.href} className="text-gray-500 hover:text-gray-400" target="_blank">
                 <span className="sr-only">{item.name}</span>

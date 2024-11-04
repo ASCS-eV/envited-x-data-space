@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { omit } from 'ramda'
 
 import { Asset, AssetStatus } from '../../types'
@@ -21,7 +21,7 @@ export const insertAsset = (db: DatabaseConnection) => async (userId: string, ci
     .insert(asset)
     .values({
       cid,
-      metadata: '',
+      metadata: {},
       status: AssetStatus.processing,
       userId,
     })
@@ -32,15 +32,17 @@ export const updateAsset = (db: DatabaseConnection) => async (data: Asset) =>
     .update(asset)
     .set({
       ...omit(['id', 'userId'])(data),
+      metadata: data.metadata,
     })
     .where(eq(asset.cid, data.cid))
     .returning()
 
-export const updateAssetCID = (db: DatabaseConnection) => async (data: Asset, cid: string) =>
+export const updateAssetByCID = (db: DatabaseConnection) => async (data: Asset, cid: string) =>
   db
     .update(asset)
     .set({
       ...omit(['id', 'userId'])(data),
+      metadata: data.metadata,
     })
     .where(eq(asset.cid, cid))
     .returning()

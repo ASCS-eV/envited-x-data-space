@@ -11,7 +11,7 @@ import {
   getAssetsByUserId,
   insertAsset,
   updateAsset,
-  updateAssetCID,
+  updateAssetByCID,
 } from './assets'
 import {
   deleteBusinessCategoriesByProfileId,
@@ -31,13 +31,16 @@ import {
 } from './profiles'
 import {
   activateUserById,
+  addUserToRole,
   deactivateUserById,
+  getActiveUsersByIssuerId,
   getUserById,
   getUserByIssuerId,
   getUserRolesById,
   getUserWithProfileById,
   getUsersByIssuerId,
   insertUserTx,
+  removeUserFromRole,
 } from './users'
 
 const queries = {
@@ -48,6 +51,9 @@ const queries = {
   getBusinessCategories,
   getBusinessCategoriesByProfileId,
   getMembers,
+  addUserToRole,
+  removeUserFromRole,
+  getActiveUsersByIssuerId,
   getUserById,
   getUserRolesById,
   getUserWithProfileById,
@@ -67,7 +73,7 @@ const queries = {
   getAssetsByUserId,
   insertAsset,
   updateAsset,
-  updateAssetCID,
+  updateAssetByCID,
 }
 
 export const init =

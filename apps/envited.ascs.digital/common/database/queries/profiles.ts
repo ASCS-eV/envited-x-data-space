@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { filter, isEmpty, isNil, omit, pick, pipe } from 'ramda'
 
 import { MINIMUM_PROFILE_REQUIREMENTS } from '../../constants'
@@ -9,7 +9,7 @@ import { DatabaseConnection } from '../types'
 export const update = (db: DatabaseConnection) => async (data: Profile) =>
   db
     .update(profile)
-    .set({ ...omit(['id'])(data), updatedAt: new Date() })
+    .set({ ...omit(['id'])(data), updatedAt: new Date(), offerings: data.offerings })
     .where(eq(profile.name, data.name))
     .returning()
 

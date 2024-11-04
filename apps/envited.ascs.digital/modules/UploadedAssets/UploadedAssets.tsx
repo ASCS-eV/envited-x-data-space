@@ -49,9 +49,9 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                       {equals(asset.status)(AssetStatus.processing) ? asset.cid : propOr('', 'name')(metadata)}
                     </div>
                     <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
-                      <span>{metadata.type}</span>
+                      <span>{propOr('', 'type')(metadata)}</span>
                       <span className="hidden sm:inline">·</span>
-                      <span>{metadata.size}</span>
+                      <span>{propOr('', 'size')(metadata)}</span>
                     </div>
                     {assetIdx !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" /> : null}
                   </td>

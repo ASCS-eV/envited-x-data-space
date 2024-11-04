@@ -73,7 +73,7 @@ export enum CredentialType {
 export interface Asset {
   id: string
   cid: string
-  metadata: string
+  metadata: AssetMetadata
   status: AssetStatus
   userId: string
 }
@@ -130,6 +130,7 @@ export interface Profile {
   principalName?: string | null
   principalPhone?: string | null
   principalEmail?: string | null
+  principalUserId?: string | null
 }
 
 export interface Session {

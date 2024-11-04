@@ -38,7 +38,11 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
           </thead>
           <tbody>
             {assets.map((asset, assetIdx) => {
-              const metadata = !isEmpty(asset.metadata) ? asset.metadata : {}
+              const metadata = !isEmpty(asset.metadata)
+                ? typeof asset.metadata === 'string'
+                  ? JSON.parse(asset.metadata)
+                  : asset.metadata
+                : {}
 
               return (
                 <tr key={asset.id}>
@@ -46,7 +50,9 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                     className={`${equals(assetIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}
                   >
                     <div className="font-medium text-gray-900">
-                      {equals(asset.status)(AssetStatus.processing) ? asset.cid : propOr('', 'name')(metadata)}
+                      {equals(asset.status)(AssetStatus.processing)
+                        ? asset.cid
+                        : pathOr('', ['tokenMetadata', 'name'])(metadata)}
                     </div>
                     <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
                       <span>{propOr('', 'type')(metadata)}</span>

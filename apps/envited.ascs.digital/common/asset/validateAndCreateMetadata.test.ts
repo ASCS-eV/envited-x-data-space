@@ -71,6 +71,9 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const getFileFromByteArrayStub = jest.fn().mockResolvedValue('FILE DATA') as any
 
       const byteArray = 'ASSET_BYTE_ARRAY'
+      const asset = {
+        userId: 'USER_ID',
+      }
 
       const result = await SUT._validateAndCreateMetadata({
         getShaclSchemaAndValidate: getShaclSchemaAndValidateStub,
@@ -78,7 +81,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
         createModifiedManifest: jest.fn().mockReturnValue(createModifiedManifestStub),
         createFilename: createFilenameStub,
         getFileFromByteArray: getFileFromByteArrayStub,
-      })(byteArray as any)
+      })(byteArray as any, asset as any)
 
       expect(result).toEqual({
         conforms: undefined,

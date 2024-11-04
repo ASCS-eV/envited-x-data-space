@@ -11,6 +11,7 @@ import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
 import { Manifest } from './types'
 import { createFilename } from './validateAndCreateMetadata.utils'
+import { Asset } from '../types'
 
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)
@@ -200,7 +201,7 @@ export const _validateAndCreateMetadata =
     createFilename: (byteArray: Uint8Array) => Promise<string>
     getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any
   }) =>
-  async (byteArray: Uint8Array) => {
+  async (byteArray: Uint8Array, asset: Asset) => {
     try {
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
 
@@ -231,7 +232,7 @@ export const _validateAndCreateMetadata =
         licenseCID: licenseCID,
         displayUriCID,
         displayUri,
-        minter: 'MINTER',
+        minter: asset.userId,
         creator: 'CREATOR',
         manifest: data.manifest,
         domainMetadata: data.domainMetadata,

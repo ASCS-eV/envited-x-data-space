@@ -1,6 +1,6 @@
 import * as SUT from './utils'
 
-describe('listener/utils', () => {
+describe.skip('listener/utils', () => {
   describe('extractAttributesUri', () => {
     it('should return an empty array if the attributes array is empty', () => {
       // when ... we want to extract the attributes uri

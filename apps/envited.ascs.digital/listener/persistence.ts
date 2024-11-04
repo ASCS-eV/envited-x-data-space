@@ -192,7 +192,6 @@ export const insertToken =
         }
         for (let i = 0; i < attributes.length; i++) {
           await insertTokenAttributeTx(tx)(insertedToken.id, attributes[i].name, attributes[i].value)
-          return true
         }
 
         return true

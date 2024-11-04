@@ -6,7 +6,7 @@ module.exports = {
       watch: '.',
       env_staging: {
         ENV: 'staging',
-        ASSETS_CONTRACT: 'KT1NUDsQ5qCpf5Mxmeo2dqRdnKqqL8kpj2LG',
+        ASSETS_CONTRACT: 'KT1MTFm7uvEDpjLLze7fQwqQyWzJ6JrvH7y7',
         ASSET_BUCKET_NAME: 'staging-envitedascsdigital-en-assetsbucket5f3b285a-ug4zozpjyshd',
         ASSET_URL: 'https://d234i0z2knz9va.cloudfront.net',
         RDS_SECRET_ARN:

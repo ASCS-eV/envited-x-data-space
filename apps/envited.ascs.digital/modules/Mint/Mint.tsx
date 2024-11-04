@@ -26,10 +26,8 @@ export const Mint: FC<MintProps> = ({ assetId }) => {
       const fileLocation = await uploadAssetTokenMetadata(id)
       const mintParams = await getAssetMintParams(id)
 
-      const result = await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
-      console.log('mintToken', result)
+      await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
       success(t('[Status] token is minted'))
-      // error(t('[Status] something wrong'))
     } else {
       await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })
       ShowSpecificBeaconWallets()

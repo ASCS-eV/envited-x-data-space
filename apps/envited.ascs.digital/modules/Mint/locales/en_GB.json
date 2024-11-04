@@ -1,3 +1,4 @@
 {
-  "[Button] mint": "Mint"
+  "[Button] mint": "Mint",
+  "[Status] token is minted": "The asset is succesfully minted"
 }

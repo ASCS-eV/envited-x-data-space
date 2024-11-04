@@ -251,7 +251,7 @@ export const _validateAndCreateMetadata =
         licenseCID: 'QmPt3UiJj4br8Zv6Jkb6kzdie36jtJM6wBvpFF1nA2ZU4L',
         displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
         displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
-        minter: extractAddressFromDid(issuer.id),
+        minter: extractAddressFromDid(issuer.user.id),
         creator: issuer.profile.name,
         manifest: data.manifest,
         domainMetadata: data.domainMetadata,

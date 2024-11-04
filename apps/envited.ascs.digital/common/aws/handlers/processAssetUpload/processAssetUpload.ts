@@ -9,9 +9,9 @@ import { S3Handler } from 'aws-lambda'
 import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { updateAsset, validateAndCreateMetadata } from '../../../asset'
+import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
-import { Asset, AssetMetadata, AssetStatus } from '../../../types'
+import { Asset, AssetStatus } from '../../../types'
 
 export const _main =
   ({
@@ -20,6 +20,7 @@ export const _main =
     copyFile,
     deleteFile,
     validateAndCreateMetadata,
+    getAsset,
     updateAsset,
   }: {
     readFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
@@ -34,14 +35,18 @@ export const _main =
       Key: string
     }) => Promise<CopyObjectCommandOutput | undefined>
     deleteFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<DeleteObjectCommandOutput | undefined>
-    validateAndCreateMetadata: (byteArray: Uint8Array) => Promise<{
+    validateAndCreateMetadata: (
+      byteArray: Uint8Array,
+      asset: Asset,
+    ) => Promise<{
       conforms: boolean
       reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
-      metadata: AssetMetadata
+      metadata: any
       assetCID: string
       metadataCID: string
     }>
-    updateAsset: (newCid: string, oldCid: string, status: AssetStatus, metadata?: AssetMetadata) => Promise<Asset>
+    getAsset: (cid: string) => Promise<Asset>
+    updateAsset: (newCid: string, oldCid: string, status: AssetStatus, metadata?: string) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {
@@ -57,7 +62,8 @@ export const _main =
       }
 
       const byteArray = await Body.transformToByteArray()
-      const { conforms, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(byteArray)
+      const asset = await getAsset(Key)
+      const { conforms, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(byteArray, asset)
 
       if (!conforms) {
         await deleteFile({ Bucket, Key })
@@ -95,5 +101,6 @@ export const main = _main({
   copyFile,
   deleteFile,
   validateAndCreateMetadata,
+  getAsset,
   updateAsset,
 })

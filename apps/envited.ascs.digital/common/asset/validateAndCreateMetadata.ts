@@ -1,29 +1,20 @@
 import fs from 'fs'
-import { all, equals, keys, omit, pipe, prop } from 'ramda'
+import { all, equals, find, keys, omit, pipe, prop, propEq, replace } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromByteArray, read } from '../archive'
-import { AssetMetadata } from '../types'
+import { Asset } from '../types'
 import { validateShaclDataWithSchema } from '../validator'
 import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { ValidationSchema } from '../validator/shacl/shacl.types'
-import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from './constants'
+import { DOMAIN_METADATA_FILE, LICENSE_FILE, MANIFEST_FILE } from './constants'
+import { createModifiedManifest } from './createModifiedManifest'
+import { createTokenMetadata } from './createTokenMetadata'
+import { Manifest } from './types'
 import { createFilename } from './validateAndCreateMetadata.utils'
 
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)
-
-export const createMetadata = ({ name }: { name: string }) => {
-  return {
-    name,
-    symbol: 'ENVITED',
-    decimals: 2,
-    shouldPreferSymbol: true,
-    thumbnailUri: 'THUMBNAIL_URI',
-    attributes: [],
-    assets: [],
-  }
-}
 
 export const _getShaclSchemaAndValidate =
   ({
@@ -164,8 +155,10 @@ export const getShaclSchemaAndValidate = _getShaclSchemaAndValidate({
 export const _validateAndCreateMetadata =
   ({
     getShaclSchemaAndValidate,
-    createMetadata,
+    createTokenMetadata,
+    createModifiedManifest,
     createFilename,
+    getFileFromByteArray,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array) => Promise<
       | {
@@ -175,23 +168,87 @@ export const _validateAndCreateMetadata =
         }
       | { conforms: boolean; data: { manifest: any; domainMetadata: any }; reports: { conforms: boolean }[] }
     >
-    createMetadata: ({ name }: { name: string }) => AssetMetadata
+    createTokenMetadata: ({
+      assetCID,
+      manifestCID,
+      domainMetadataCID,
+      licenseCID,
+      displayUriCID,
+      displayUri,
+      minter,
+      creator,
+      manifest,
+      domainMetadata,
+    }: {
+      assetCID: string
+      manifestCID: string
+      domainMetadataCID: string
+      licenseCID: string
+      displayUriCID: string
+      displayUri: string
+      minter: string
+      creator: string
+      manifest: Manifest
+      domainMetadata: any
+    }) => any
+    createModifiedManifest: ({
+      assetCID,
+      domainMetadataCID,
+    }: {
+      assetCID: string
+      domainMetadataCID: string
+    }) => (manifest: Manifest) => any
     createFilename: (byteArray: Uint8Array) => Promise<string>
+    getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any
   }) =>
-  async (byteArray: Uint8Array) => {
+  async (byteArray: Uint8Array, asset: Asset) => {
     try {
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
-      const metadata = createMetadata({ name: data?.domainMetadata['@id'] as string })
 
       const assetCID = await createFilename(byteArray)
-      const metadataCID = await createFilename(metadata as any)
+      const domainMetadataCID = await createFilename(data.domainMetadata)
+
+      const modifiedManifest = createModifiedManifest({
+        assetCID,
+        domainMetadataCID,
+      })(data.manifest)
+
+      const modifiedManifestCID = await createFilename(modifiedManifest)
+
+      const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
+      const licenseCID = await createFilename(license as any)
+
+      const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
+        data.manifest['manifest:data']['manifest:contentData'],
+      ) as any
+      const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
+      const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
+      const displayUriCID = await createFilename(displayUri as any)
+
+      const tokenMetadata = createTokenMetadata({
+        assetCID,
+        manifestCID: modifiedManifestCID,
+        domainMetadataCID: domainMetadataCID,
+        licenseCID: licenseCID,
+        displayUriCID,
+        displayUri,
+        minter: asset.userId,
+        creator: 'CREATOR',
+        manifest: data.manifest,
+        domainMetadata: data.domainMetadata,
+      })
+
+      const tokenMetadataCID = await createFilename(tokenMetadata)
 
       return {
         conforms,
         reports,
-        metadata,
+        metadata: {
+          tokenMetadata,
+          modifiedManifest,
+        },
         assetCID,
-        metadataCID,
+        metadataCID: tokenMetadataCID,
       }
     } catch (err) {
       console.log(err)
@@ -201,6 +258,8 @@ export const _validateAndCreateMetadata =
 
 export const validateAndCreateMetadata = _validateAndCreateMetadata({
   getShaclSchemaAndValidate,
-  createMetadata,
+  createTokenMetadata,
+  createModifiedManifest,
   createFilename,
+  getFileFromByteArray,
 })

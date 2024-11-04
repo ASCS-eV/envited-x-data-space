@@ -1,8 +1,11 @@
+import { getTokens } from '../../common/serverActions/tokens'
 import { Assets } from '../../modules/Assets'
-import { Breadcrumbs } from '../../modules/Breadcrumbs'
 import { PageHeader } from '../../modules/PageHeader'
 
 export default async function Index() {
+  const tokens = await getTokens()
+
+  console.log(tokens)
   return (
     <main>
       <PageHeader

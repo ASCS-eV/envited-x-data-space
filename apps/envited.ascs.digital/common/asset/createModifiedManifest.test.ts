@@ -245,7 +245,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'png',
               'manifest:path': {
-                '@value': 'ipfs://CREATE_UNIQUE_CID',
+                '@value': 'ipfs://QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -255,7 +255,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'png',
               'manifest:path': {
-                '@value': 'ipfs://CREATE_UNIQUE_CID',
+                '@value': 'ipfs://QmVgViCWeYCgu1Xv2rAJGFApCd4qUgmHWNVskPcYRAgsuf',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -265,7 +265,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'png',
               'manifest:path': {
-                '@value': 'ipfs://CREATE_UNIQUE_CID',
+                '@value': 'ipfs://QmTcZJaHir2CGJKaGjUV316GiTkUYhHbai9jxKEodAAfFf',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -275,7 +275,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
               'manifest:path': {
-                '@value': 'ipfs://CREATE_UNIQUE_CID',
+                '@value': 'ipfs://QmXmRRCutfE3LN9g4ggmVkKb1WdBMLWVKFngdqdkh64q3S',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -285,7 +285,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
               'manifest:path': {
-                '@value': 'ipfs://CREATE_UNIQUE_CID',
+                '@value': 'ipfs://QmUkN3ktmtqF8muBP8VLxMC9JWr8u8iqnswNo2BtWGVWZ7',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -295,7 +295,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
               'manifest:path': {
-                '@value': 'ipfs://CREATE_UNIQUE_CID',
+                '@value': 'ipfs://Qmf7FLUveSyy6jjXt7EbnokWQRPSbbm3tT47HZ1KAWPYjr',
                 '@type': 'xsd:anyURI',
               },
             },

@@ -142,23 +142,23 @@ describe('common/asset/createModifiedManifest', () => {
             },
           ],
         },
-        "manifest:license": {
-          "@type": "manifest:License",
-          "manifest:spdxIdentifier": {
-            "@value": "MIT",
-            "@type": "xsd:string"
+        'manifest:license': {
+          '@type': 'manifest:License',
+          'manifest:spdxIdentifier': {
+            '@value': 'MIT',
+            '@type': 'xsd:string',
           },
-          "manifest:licenseData": {
-            "@type": "manifest:Link",
-            "manifest:accessRole": "publicUser",
-            "manifest:type": "license",
-            "manifest:format": "html",
-            "manifest:path": {
-              "@value": "https://opensource.org/license/mit",
-              "@type": "xsd:anyURI"
-            }
-          }
-        }
+          'manifest:licenseData': {
+            '@type': 'manifest:Link',
+            'manifest:accessRole': 'publicUser',
+            'manifest:type': 'license',
+            'manifest:format': 'html',
+            'manifest:path': {
+              '@value': 'https://opensource.org/license/mit',
+              '@type': 'xsd:anyURI',
+            },
+          },
+        },
       }
 
       const expected = {
@@ -301,23 +301,23 @@ describe('common/asset/createModifiedManifest', () => {
             },
           ],
         },
-        "manifest:license": {
-          "@type": "manifest:License",
-          "manifest:spdxIdentifier": {
-            "@value": "MIT",
-            "@type": "xsd:string"
+        'manifest:license': {
+          '@type': 'manifest:License',
+          'manifest:spdxIdentifier': {
+            '@value': 'MIT',
+            '@type': 'xsd:string',
           },
-          "manifest:licenseData": {
-            "@type": "manifest:Link",
-            "manifest:accessRole": "publicUser",
-            "manifest:type": "license",
-            "manifest:format": "html",
-            "manifest:path": {
-              "@value": "https://opensource.org/license/mit",
-              "@type": "xsd:anyURI"
-            }
-          }
-        }
+          'manifest:licenseData': {
+            '@type': 'manifest:Link',
+            'manifest:accessRole': 'publicUser',
+            'manifest:type': 'license',
+            'manifest:format': 'html',
+            'manifest:path': {
+              '@value': 'https://opensource.org/license/mit',
+              '@type': 'xsd:anyURI',
+            },
+          },
+        },
       }
 
       const result = await SUT.createModifiedManifest({

@@ -22,6 +22,7 @@ export const Mint: FC<MintProps> = ({ assetId }) => {
     if (account) {
       const fileLocation = await uploadAssetTokenMetadata(id)
       const mintParams = await getAssetMintParams(id)
+
       await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
     } else {
       await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })

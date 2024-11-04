@@ -14,7 +14,7 @@ import {
 
 export { getUniqueFilename } from './S3'
 
-const s3Client = new S3Client({
+export const s3Client = new S3Client({
   region: process.env.region || 'eu-central-1',
 })
 

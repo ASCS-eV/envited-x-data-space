@@ -251,7 +251,7 @@ describe('common/database/users', () => {
         streetAddress: 'Teststraße 1',
         updatedAt: new Date(),
         vatId: '',
-        "uuid": "urn:uuid:cf1f329d-9c4c-458e-ba0a-a762a296b79c",
+        uuid: 'urn:uuid:cf1f329d-9c4c-458e-ba0a-a762a296b79c',
         isActive: true,
       })
       expect(transaction).toEqual({

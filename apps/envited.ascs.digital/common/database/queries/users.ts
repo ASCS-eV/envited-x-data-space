@@ -194,6 +194,7 @@ export const _txn =
         issuanceDate,
         expirationDate,
         credentialSubject,
+        id: uuid,
       } = credential
 
       const [addressType] = await insertAddressTypeTx(tx)(credentialSubject.address.type)
@@ -218,6 +219,7 @@ export const _txn =
       const [newUser] = await tx
         .insert(user)
         .values({
+          uuid,
           id: prop('id')(credentialSubject),
           name: prop('name')(credentialSubject),
           email: propOr('', 'email')(credentialSubject),

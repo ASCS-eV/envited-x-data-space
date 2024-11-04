@@ -227,7 +227,7 @@ export const _validateAndCreateMetadata =
       // const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
       // const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
       // const displayUriCID = await createFilename(displayUri as any)
-
+      console.log(asset)
       const connection = await db()
       const user = await connection.getUserById(asset.userId)
       console.log(user)

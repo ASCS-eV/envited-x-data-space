@@ -182,7 +182,7 @@ export const asset = pgTable('asset', {
   metadata: jsonb('metadata'),
   manifest: jsonb('manifest'),
   status: text('status', { enum: ['processing', 'not_accepted', 'pending', 'completed'] }),
-  owner: text('owner'),
+  owner: text('owner').references(() => user.id),
   userId: text('user_id')
     .references(() => user.id)
     .notNull(),

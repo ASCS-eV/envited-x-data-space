@@ -231,7 +231,7 @@ export const _validateAndCreateMetadata =
       // const displayUriCID = await createFilename(displayUri as any)
 
       const connection = await db()
-      const [user] = await connection.getUserById(asset.userId)
+      const user = await connection.getUserById(asset.userId)
 
       if (!user) {
         throw new Error('User not found')

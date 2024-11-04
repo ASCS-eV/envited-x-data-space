@@ -21,9 +21,9 @@ const navigation = {
     { name: 'About us', href: '/about-us' },
   ],
   copyright: [
-    { name: 'Legal notice', href: 'https://asc-s.de/impressum' },
-    { name: 'Privacy policy', href: 'https://asc-s.de/datenschutz' },
-    { name: 'Terms of service', href: '/terms-of-service' },
+    { name: 'Legal notice', href: 'https://asc-s.de/impressum', target: '_blank' },
+    { name: 'Privacy policy', href: 'https://asc-s.de/datenschutz', target: '_blank' },
+    { name: 'Terms of service', href: '/terms-of-service', target: '' },
   ],
   social: [
     {
@@ -127,9 +127,14 @@ export const Footer: FC<FooterProps> = () => {
           </div>
         </div>
         <div className="mt-16 border-t border-gray-900/10 dark:border-white/10 pt-8 sm:mt-20 md:flex md:items-center md:justify-between lg:mt-24">
-          <div className="flex space-x-6 md:order-2">
+          <div className="flex items-center space-x-6 md:order-2">
             {navigation.copyright.map(item => (
-              <a key={item.name} href={item.href} className="text-gray-500 hover:text-gray-400" target="_blank">
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-gray-500 hover:text-gray-400 text-xs"
+                target={item.target}
+              >
                 {item.name}
               </a>
             ))}

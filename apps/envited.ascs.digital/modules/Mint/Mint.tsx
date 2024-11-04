@@ -3,9 +3,11 @@
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
+import { useNotification } from '../../common/notifications'
 import { mintToken } from '../../common/web3'
 import { tezos } from '../../common/web3'
 import { getAssetMintParams, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
+import { ShowSpecificBeaconWallets } from './Mint.utils'
 
 interface MintProps {
   assetId: string
@@ -13,6 +15,7 @@ interface MintProps {
 
 export const Mint: FC<MintProps> = ({ assetId }) => {
   const { t } = useTranslation('Mint')
+  const { error, success } = useNotification()
 
   const mintAsset = async (id: string) => {
     const { Tezos, wallet } = await tezos()
@@ -24,8 +27,10 @@ export const Mint: FC<MintProps> = ({ assetId }) => {
       const mintParams = await getAssetMintParams(id)
 
       await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
+      success(t('[Status] token is minted'))
     } else {
       await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })
+      ShowSpecificBeaconWallets()
     }
   }
   return (

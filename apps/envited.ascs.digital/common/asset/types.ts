@@ -11,10 +11,9 @@ export interface Manifest {
   'manifest:data': {
     '@type': string
     'manifest:assetData': ManifestLink[]
-    'manifest:licenseType': string
-    'manifest:licenseData': ManifestLink
     'manifest:contentData': ManifestLink[]
   }
+  'manifest:license': ManifestLicense
 }
 
 export interface ManifestLink {
@@ -22,10 +21,19 @@ export interface ManifestLink {
   'manifest:accessRole': AccessRole
   'manifest:type': string
   'manifest:format': string
-  'manifest:relativePath': {
+  'manifest:path': {
     '@value': string
     '@type': string
   }
+}
+
+export interface ManifestLicense {
+  '@type': string
+  'manifest:spdxIdentifier': {
+    '@value': string
+    '@type': string
+  }
+  'manifest:licenseData': ManifestLink
 }
 
 export interface TokenFormat {

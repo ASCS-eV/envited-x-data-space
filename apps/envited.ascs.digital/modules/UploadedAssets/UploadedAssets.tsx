@@ -1,7 +1,7 @@
 'use client'
 
 import { LoadingIndicator } from '@envited-marketplace/design-system'
-import { equals, isEmpty, propOr } from 'ramda'
+import { equals, isEmpty, pathOr, propOr } from 'ramda'
 
 import { useTranslation } from '../../common/i18n'
 import { Asset, AssetStatus } from '../../common/types'
@@ -23,7 +23,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
           <thead>
             <tr>
               <th scope="col" className="py-3.5 text-left text-sm font-semibold text-gray-900">
-                {t('[Label] upload')}
+                {t('[Label] asset')}
               </th>
               <th
                 scope="col"
@@ -38,7 +38,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
           </thead>
           <tbody>
             {assets.map((asset, assetIdx) => {
-              const metadata = !isEmpty(asset.metadata) ? asset.metadata : {}
+              const metadata = !isEmpty(asset.metadata) ? JSON.parse(asset.metadata) : {}
 
               return (
                 <tr key={asset.id}>
@@ -46,7 +46,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                     className={`${equals(assetIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}
                   >
                     <div className="font-medium text-gray-900">
-                      {equals(asset.status)(AssetStatus.processing) ? asset.cid : propOr('', 'name')(metadata)}
+                      {equals(asset.status)(AssetStatus.processing) ? asset.cid : pathOr('', ['token_metadata', 'name'])(metadata)}
                     </div>
                     <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
                       <span>{propOr('', 'type')(metadata)}</span>
@@ -73,21 +73,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                         <p className="text-xs">Processing...</p>
                       </div>
                     ) : (
-                      <>
-                        <Mint assetId={asset.id} />
-                        <a
-                          href={`${asset.id}`}
-                          className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-                        >
-                          {t('[Button] preview')}
-                        </a>
-                        <button
-                          type="button"
-                          className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-                        >
-                          {t('[Button] delete')}
-                        </button>
-                      </>
+                      <Mint assetId={asset.id} />
                     )}
                     {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
                   </td>

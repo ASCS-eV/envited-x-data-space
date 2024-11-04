@@ -1,10 +1,8 @@
 {
-  "id": "dfb0949c-01ce-4d47-b0d0-99312493d7e5",
-  "prevId": "8538ec90-dd0a-4e57-9067-814902a3eb34",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "addressType": {
+    "public.addressType": {
       "name": "addressType",
       "schema": "",
       "columns": {
@@ -46,14 +44,17 @@
       "uniqueConstraints": {
         "addressType_name_unique": {
           "name": "addressType_name_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "asset": {
+    "public.asset": {
       "name": "asset",
       "schema": "",
       "columns": {
@@ -94,21 +95,24 @@
         "asset_user_id_user_id_fk": {
           "name": "asset_user_id_user_id_fk",
           "tableFrom": "asset",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "businessCategory": {
+    "public.businessCategory": {
       "name": "businessCategory",
       "schema": "",
       "columns": {
@@ -149,21 +153,24 @@
       "uniqueConstraints": {
         "businessCategory_id_unique": {
           "name": "businessCategory_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         },
         "businessCategory_name_unique": {
           "name": "businessCategory_name_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "credentialType": {
+    "public.credentialType": {
       "name": "credentialType",
       "schema": "",
       "columns": {
@@ -202,9 +209,12 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "issuer": {
+    "public.issuer": {
       "name": "issuer",
       "schema": "",
       "columns": {
@@ -251,14 +261,17 @@
       "uniqueConstraints": {
         "issuer_id_unique": {
           "name": "issuer_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "profile": {
+    "public.profile": {
       "name": "profile",
       "schema": "",
       "columns": {
@@ -396,49 +409,52 @@
         "profile_name_user_name_fk": {
           "name": "profile_name_user_name_fk",
           "tableFrom": "profile",
-          "tableTo": "user",
           "columnsFrom": [
             "name"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "name"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "profile_principal_user_id_user_id_fk": {
           "name": "profile_principal_user_id_user_id_fk",
           "tableFrom": "profile",
-          "tableTo": "user",
           "columnsFrom": [
             "principal_user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "profile_name_unique": {
           "name": "profile_name_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ]
+          ],
+          "nullsNotDistinct": false
         },
         "profile_slug_unique": {
           "name": "profile_slug_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "slug"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "profilesToBusinessCategories": {
+    "public.profilesToBusinessCategories": {
       "name": "profilesToBusinessCategories",
       "schema": "",
       "columns": {
@@ -460,34 +476,37 @@
         "profilesToBusinessCategories_profile_id_profile_id_fk": {
           "name": "profilesToBusinessCategories_profile_id_profile_id_fk",
           "tableFrom": "profilesToBusinessCategories",
-          "tableTo": "profile",
           "columnsFrom": [
             "profile_id"
           ],
+          "tableTo": "profile",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "profilesToBusinessCategories_business_category_id_businessCategory_id_fk": {
           "name": "profilesToBusinessCategories_business_category_id_businessCategory_id_fk",
           "tableFrom": "profilesToBusinessCategories",
-          "tableTo": "businessCategory",
           "columnsFrom": [
             "business_category_id"
           ],
+          "tableTo": "businessCategory",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "role": {
+    "public.role": {
       "name": "role",
       "schema": "",
       "columns": {
@@ -528,14 +547,17 @@
       "uniqueConstraints": {
         "role_id_unique": {
           "name": "role_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -666,49 +688,52 @@
         "user_issuer_id_issuer_id_fk": {
           "name": "user_issuer_id_issuer_id_fk",
           "tableFrom": "user",
-          "tableTo": "issuer",
           "columnsFrom": [
             "issuer_id"
           ],
+          "tableTo": "issuer",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "user_address_type_id_addressType_id_fk": {
           "name": "user_address_type_id_addressType_id_fk",
           "tableFrom": "user",
-          "tableTo": "addressType",
           "columnsFrom": [
             "address_type_id"
           ],
+          "tableTo": "addressType",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "user_id_unique": {
           "name": "user_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         },
         "user_name_unique": {
           "name": "user_name_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "name"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "usersToCredentialTypes": {
+    "public.usersToCredentialTypes": {
       "name": "usersToCredentialTypes",
       "schema": "",
       "columns": {
@@ -730,34 +755,37 @@
         "usersToCredentialTypes_user_id_user_id_fk": {
           "name": "usersToCredentialTypes_user_id_user_id_fk",
           "tableFrom": "usersToCredentialTypes",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "usersToCredentialTypes_credential_type_id_credentialType_id_fk": {
           "name": "usersToCredentialTypes_credential_type_id_credentialType_id_fk",
           "tableFrom": "usersToCredentialTypes",
-          "tableTo": "credentialType",
           "columnsFrom": [
             "credential_type_id"
           ],
+          "tableTo": "credentialType",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
-    "usersToRoles": {
+    "public.usersToRoles": {
       "name": "usersToRoles",
       "schema": "",
       "columns": {
@@ -779,39 +807,48 @@
         "usersToRoles_user_id_user_id_fk": {
           "name": "usersToRoles_user_id_user_id_fk",
           "tableFrom": "usersToRoles",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "usersToRoles_role_id_role_id_fk": {
           "name": "usersToRoles_role_id_role_id_fk",
           "tableFrom": "usersToRoles",
-          "tableTo": "role",
           "columnsFrom": [
             "role_id"
           ],
+          "tableTo": "role",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     }
   },
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "dfb0949c-01ce-4d47-b0d0-99312493d7e5",
+  "prevId": "8538ec90-dd0a-4e57-9067-814902a3eb34",
+  "sequences": {},
+  "policies": {},
+  "views": {},
+  "roles": {}
 }

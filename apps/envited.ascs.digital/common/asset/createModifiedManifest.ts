@@ -13,9 +13,11 @@ export const createModifiedManifest = ({
   evolve({
     'manifest:data': {
       'manifest:assetData': map(modifyManifestLink(assetCID, domainMetadataCID)),
-      'manifest:licenseData': modifyManifestLink(assetCID, domainMetadataCID),
       'manifest:contentData': map(modifyManifestLink(assetCID, domainMetadataCID)),
     },
+    // 'manifest:license': {
+    //   'manifest:licenseData': modifyManifestLink(assetCID, domainMetadataCID),
+    // }
   })
 
 export const modifyManifestLink = (assetCID: string, domainMetadataCID: string) => (link: ManifestLink) => ({
@@ -62,7 +64,7 @@ export const formatManifestUri =
 
     if (
       equals(accessRole)(AccessRole.registeredUser) ||
-      (equals(accessRole)(AccessRole.publicUser) && format === 'md')
+      (equals(accessRole)(AccessRole.publicUser) && type === 'license')
     ) {
       return `${formatMetadataUri(assetCID)}${tail(path)}`
     }

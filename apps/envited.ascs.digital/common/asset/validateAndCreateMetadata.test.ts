@@ -108,7 +108,6 @@ describe('common/asset/validateAndCreateMetadata', () => {
         assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH',
         manifestCID: 'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
         domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB',
-        licenseCID: 'QmPt3UiJj4br8Zv6Jkb6kzdie36jtJM6wBvpFF1nA2ZU4L',
         displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
         displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
         minter: 'ISSUER_ID',

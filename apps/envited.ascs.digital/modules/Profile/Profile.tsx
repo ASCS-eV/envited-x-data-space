@@ -97,7 +97,7 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
     control,
     handleSubmit,
     getValues,
-    setValue,
+    resetField,
     formState: { errors, isSubmitting },
   } = useForm<ProfileInputs>({
     resolver: zodResolver(ProfileSchema),
@@ -329,28 +329,30 @@ export const Profile: FC<ProfileProps> = ({ profile, businessCategories, users }
                 <Controller
                   name="principalUserId"
                   control={control}
-                  render={({ field: { ref, onChange, value, ...field } }) => (
-                    <SelectField
-                      label={'Select a user'}
-                      selected={
-                        isEmpty(value)
-                          ? availableUsers[0]
-                          : availableUsers[findIndex(propEq(value, 'id'))(availableUsers)]
-                      }
-                      options={availableUsers}
-                      inputRef={ref}
-                      onChange={id => {
-                        if (!isEmpty(id)) {
-                          const selected = availableUsers[findIndex(propEq(id, 'id'))(availableUsers)]
-                          onChange(id)
-                          setValue('principalName', selected.name)
-                          setValue('principalEmail', propOr('', 'email')(selected))
-                        }
-                      }}
-                      {...field}
-                      error={pathOr('', ['principalUserId', 'message'])(errors)}
-                    />
-                  )}
+                  render={({ field: { ref, onChange, value, ...field } }) => {
+                    const selected = isEmpty(value)
+                      ? availableUsers[0]
+                      : availableUsers[findIndex(propEq(value, 'id'))(availableUsers)]
+
+                    return (
+                      <SelectField
+                        label={'Select a user'}
+                        selected={selected}
+                        options={availableUsers}
+                        inputRef={ref}
+                        onChange={id => {
+                          if (!isEmpty(id)) {
+                            const selected = availableUsers[findIndex(propEq(id, 'id'))(availableUsers)]
+                            resetField('principalName', { defaultValue: selected.name })
+                            resetField('principalEmail', { defaultValue: propOr('', 'email')(selected) })
+                            onChange(id)
+                          }
+                        }}
+                        {...field}
+                        error={pathOr('', ['principalUserId', 'message'])(errors)}
+                      />
+                    )
+                  }}
                 />
               </div>
               <div className="sm:col-span-3 sm:col-start-1">

@@ -29,7 +29,7 @@ export const _deactivateMemberById =
       }
 
       const connection = await db()
-      const [user] = await connection.getUserById(id)
+      const user = await connection.getUserById(id)
       const [deactivatedUser] = await connection.deactivateUserById(user.id)
 
       return deactivatedUser

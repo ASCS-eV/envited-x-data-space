@@ -130,6 +130,7 @@ export interface Profile {
   principalName?: string | null
   principalPhone?: string | null
   principalEmail?: string | null
+  principalUserId?: string | null
 }
 
 export interface Session {

@@ -16,10 +16,10 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
 
     const user = {
       id: 'USER_PKH',
+      issuerId: 'FEDERATOR_PKH',
       name: 'USER_NAME',
       email: 'USER_EMAIL',
       vatId: 'USER_VAT_ID',
-      issuerId: 'USER_ISSUER_ID',
       privacyPolicyAccepted: 'USER_PRIVACY_POLICY_ACCEPTED',
       articlesOfAssociationAccepted: 'USER_ARTICLES_OF_ASSOCIATION_ACCEPTED',
       contributionRulesAccepted: 'USER_CONTRIBUTION_RULES_ACCEPTED',

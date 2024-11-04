@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Automotive Solution Center for Simulation e.V. <info@asc-s.de>
+ *
+ * SPDX-License-Identifier: LicenseRef-All-Rights-Reserved
+ */
 export const SeamlessDataExchangeIcon = ({ props }: { props?: any }) => (
   <svg fill="currentColor" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path d="m104.58 96.78s-1.59 1.77-3.81 4a52.16 52.16 0 0 1 -70 3.23h7.23a2 2 0 0 0 0-4h-12a2 2 0 0 0 -2 2v12a2 2 0 0 0 4 0v-7.12a56.15 56.15 0 0 0 75.6-3.28c2.3-2.3 3.9-4.08 4-4.16a2 2 0 0 0 -3-2.67z" />

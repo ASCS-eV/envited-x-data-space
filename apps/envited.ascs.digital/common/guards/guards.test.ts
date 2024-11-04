@@ -81,6 +81,25 @@ describe('common/guards', () => {
     })
   })
 
+  describe('isPrincipalContact', () => {
+    it('should check if logged in user is a principal', () => {
+      // when ... we want to check if the user has the principal
+      const session = {
+        user: {
+          pkh: 'USER_ID',
+        },
+      } as Session
+
+      const profile = {
+        principalUserId: 'USER_ID',
+      }
+      // then ... we should get the result as expected
+      const result = SUT.isPrincipalContact(session)(profile)
+
+      expect(result).toEqual(true)
+    })
+  })
+
   describe('isOwnAsset', () => {
     it('should check if the profile to be updated is the profile of the logged in user', () => {
       // when ... we want to check if the asset is owned by the logged in user
@@ -139,6 +158,56 @@ describe('common/guards', () => {
         name: 'NAME',
       } as any
       const result = SUT.isUsersCompanyProfile(principal)(profile)
+
+      expect(result).toEqual(true)
+    })
+  })
+
+  describe('hasCredentialType', () => {
+    it('should check if role exist', () => {
+      // when ... we want to check if we have a credential type
+      // then ... we should get the result as expected
+      const credentialTypes = [
+        {
+          credentialType: {
+            name: 'TYPE',
+          },
+        },
+        {
+          credentialType: {
+            name: 'TYPE 1',
+          },
+        },
+      ] as any
+      const result = SUT.hasCredentialType('TYPE 1')(credentialTypes)
+
+      expect(result).toEqual(true)
+    })
+  })
+
+  describe('hasRole', () => {
+    it('should check if role exist', () => {
+      // when ... we want to check if a role exists
+      // then ... we should get the result as expected
+      const roles = [
+        {
+          userId: 'USER_ID',
+          roleId: Role.federator,
+        },
+        {
+          userId: 'USER_ID',
+          roleId: Role.user,
+        },
+        {
+          userId: 'USER_ID',
+          roleId: Role.principal,
+        },
+        {
+          userId: 'USER_ID',
+          roleId: Role.provider,
+        },
+      ] as any
+      const result = SUT.hasRole(Role.federator)(roles)
 
       expect(result).toEqual(true)
     })

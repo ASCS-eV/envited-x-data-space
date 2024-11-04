@@ -352,7 +352,11 @@ export default async function Index() {
               </blockquote>
             </div>
             <div className="col-end-1 w-16 lg:row-span-4 lg:w-72">
-              <img alt="" src="/images/alexander.png" className="rounded-xl bg-indigo-50 lg:rounded-3xl" />
+              <img
+                alt=""
+                src="/images/20241031_ascs_managing_director.png"
+                className="rounded-xl bg-indigo-50 lg:rounded-3xl"
+              />
             </div>
             <figcaption className="text-base lg:col-start-1 lg:row-start-3">
               <div>

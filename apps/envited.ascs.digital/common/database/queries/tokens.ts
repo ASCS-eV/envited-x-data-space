@@ -17,7 +17,7 @@ export const getTokenById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(token).where(eq(token.id, id))
 
 export const getTokenAttributesById = (db: DatabaseConnection) => async (id: string) =>
-  db.select().from(tokenAttributes).where(eq(token.id, id))
+  db.select().from(tokenAttributes).where(eq(tokenAttributes.tokenId, id))
 
 export const getTokenByTokenId =
   (db: DatabaseConnection) =>

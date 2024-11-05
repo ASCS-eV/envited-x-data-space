@@ -18,7 +18,9 @@ export const _getTokenById =
 
       const connection = await db()
       const token = await connection.getTokenById(id)
+      console.log({ token })
       const tokenAttributes = await connection.getTokenAttributesById(id)
+      console.log({ tokenAttributes })
       console.log('_getTokenById', token)
 
       return {

@@ -28,3 +28,6 @@ export const getTokenByTokenId =
       .select()
       .from(token)
       .where(and(eq(token.tokenId, tokenId), eq(token.contract, contract)))
+
+export const getTokensByIssuerId = (db: DatabaseConnection) => async (issuer: string) =>
+  db.select().from(token).where(eq(token.minter, issuer))

@@ -1,9 +1,9 @@
 'use client'
 
 import { Tab } from '@headlessui/react'
-import { ButtonType, ColorScheme } from 'apps/envited.ascs.digital/common/types'
+import { ButtonType, ColorScheme, Token } from '../../common/types'
 import Link from 'next/link'
-import { Fragment } from 'react'
+import { FC, Fragment } from 'react'
 
 import { Button } from '../Button'
 
@@ -103,7 +103,11 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 
-export const Asset = () => {
+interface AssetProps {
+  item: Token
+}
+
+export const Asset: FC<AssetProps> = ({ item }) => {
   return (
     <>
       <div>

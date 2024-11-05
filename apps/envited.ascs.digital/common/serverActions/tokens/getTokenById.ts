@@ -1,0 +1,27 @@
+import { isEmpty, isNil } from 'ramda'
+
+import { db } from '../../database/queries'
+import { Database } from '../../database/types'
+import { Log, log } from '../../logger'
+import { badRequestError, formatError, internalServerErrorError } from '../../utils'
+import { Token } from '../../types'
+
+export const _getTokenById =
+  ({ db, log }: { db: Database; log: Log }) =>
+  async (id: string): Promise<Token> => {
+    try {
+      if (isNil(id) || isEmpty(id)) {
+        throw badRequestError({ resource: 'token', resourceId: id, message: 'Missing ID' })
+      }
+
+      const connection = await db()
+      const token = await connection.getTokenById(id)
+
+      return token
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const getTokenById = _getTokenById({ db, log })

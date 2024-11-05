@@ -86,6 +86,30 @@ export interface AssetMetadata {
   thumbnailUri: string
 }
 
+export interface Token {
+  id: string
+  hash: string
+  createdAt: string
+  contract: string
+  minter: string
+  tokenId: number
+  displayUri: string
+  tokenMetadata: string
+  name: string
+  description: string
+  creators: string[]
+  publishers: string[]
+  date: string
+  type: string
+  rights: string
+  rightsUri: string
+  language: string
+  artifactUri: string
+  identifier: string
+  externalUri: string
+  modifiedAt: string
+}
+
 export interface User {
   id: string
   issuerId: string

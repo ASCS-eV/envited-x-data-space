@@ -2,7 +2,7 @@
 
 import { Address, Pill } from '@envited-marketplace/design-system'
 import { Tab } from '@headlessui/react'
-import { isNil, map, propOr } from 'ramda'
+import { isEmpty, isNil, map, propOr } from 'ramda'
 import React, { FC, Fragment } from 'react'
 
 import { useTranslation } from '../../common/i18n'
@@ -173,30 +173,8 @@ export const Member: FC<MemberProps> = ({ member, tokens }) => {
           </a>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
-          {map(
-            ({
-              id,
-              hash,
-              createdAt,
-              contract,
-              minter,
-              tokenId,
-              displayUri,
-              tokenMetadata,
-              name,
-              description,
-              creators,
-              publishers,
-              date,
-              type,
-              rights,
-              rightsUri,
-              language,
-              artifactUri,
-              identifier,
-              externalUri,
-              modifiedAt,
-            }: Token) => (
+          {!isEmpty(tokens) &&
+            map(({ id, displayUri, name, description }: Token) => (
               <div
                 key={id}
                 className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
@@ -228,8 +206,7 @@ export const Member: FC<MemberProps> = ({ member, tokens }) => {
                   </div>
                 </div>
               </div>
-            ),
-          )(tokens)}
+            ))(tokens)}
         </div>
       </div>
     </>

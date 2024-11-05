@@ -253,8 +253,8 @@ export const tokenRelations = relations(token, ({ many }) => ({
 }))
 
 export const tokenAttributesRelations = relations(tokenAttributes, ({ one }) => ({
-	token: one(token, {
-		fields: [tokenAttributes.tokenId],
-		references: [token.id],
-	}),
+  token: one(token, {
+    fields: [tokenAttributes.tokenId],
+    references: [token.id],
+  }),
 }))

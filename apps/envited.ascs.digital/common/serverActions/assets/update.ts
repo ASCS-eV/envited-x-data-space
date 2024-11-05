@@ -48,7 +48,7 @@ export const update = _update({ db, getServerSession, log })
 
 export const _updateStatus =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
-  async ({id, hash, status}: { id: string, hash: string, status: AssetStatus }) => {
+  async ({ id, hash, status }: { id: string; hash: string; status: AssetStatus }) => {
     try {
       const session = await getServerSession()
       const userId = session?.user.id

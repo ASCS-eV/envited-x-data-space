@@ -2,7 +2,7 @@
 
 import { LoadingIndicator } from '@envited-marketplace/design-system'
 import { equals, isEmpty, last, pathOr, propOr } from 'ramda'
-import { match } from 'ts-pattern' 
+import { match } from 'ts-pattern'
 
 import { useTranslation } from '../../common/i18n'
 import { Asset, AssetStatus } from '../../common/types'
@@ -81,13 +81,10 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                           <p className="text-xs">{t('[Status] processing')}</p>
                         </div>
                       ))
-                      .with(AssetStatus.minted, () => (
-                        <span className="text-green-600">{t('[Status] minted')}</span>
-                      ))
+                      .with(AssetStatus.minted, () => <span className="text-green-600">{t('[Status] minted')}</span>)
                       .otherwise(() => (
                         <Mint assetId={asset.id} />
-                      ))
-                    }
+                      ))}
                     {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
                   </td>
                 </tr>

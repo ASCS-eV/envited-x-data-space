@@ -28,9 +28,9 @@ export const createTokenMetadata = ({
   const version = domainMetadata['hdmap:format']['hdmap:version']['@value']
   const rights = manifest['manifest:license']['manifest:spdxIdentifier']['@value']
   const rightsUri = manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value']
-  const today = new Date();
-  const date = today.toISOString().split('T')[0];
-  
+  const today = new Date()
+  const date = today.toISOString().split('T')[0]
+
   return {
     decimals: 0,
     isBooleanAmount: true,

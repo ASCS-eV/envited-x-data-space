@@ -21,6 +21,7 @@ interface AssetProps {
 
 export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
   const attributes = formatTokenAttributes(tokenAttributes) as any
+  console.log(attributes)
 
   return (
     <>
@@ -83,14 +84,16 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                   <li>
                     <strong>Version:</strong> {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
                   </li>
-                  <li>{/* <strong>Upload Time:</strong> {token.createdAt} */}</li>
+                  <li>
+                    <strong>Upload Time:</strong> {token.createdAt}
+                  </li>
                 </ul>
               </div>
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
               <h3 className="text-sm font-medium text-gray-900">License</h3>
-              {/* <ul role="list" className="mt-4 text-sm text-gray-500">
+              <ul role="list" className="mt-4 text-sm text-gray-500">
                 <li>
                   <strong>Type:</strong> {token.rights}
                 </li>
@@ -100,7 +103,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                     {token.rightsUri}
                   </a>
                 </li>
-              </ul> */}
+              </ul>
             </div>
           </div>
 
@@ -147,7 +150,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                 </Tab.List>
               </div>
               <Tab.Panels as={Fragment}>
-                <Tab.Panel className="text-sm text-gray-500">
+                <Tab.Panel className="pt-10">
                   <h3 className="sr-only">Content</h3>
                   {/* <div className="mt-0">
                     <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
@@ -230,7 +233,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                     </dl>
                   </div>
                 </Tab.Panel>
-                <Tab.Panel className="text-sm text-gray-500">
+                <Tab.Panel className="pt-10">
                   <h3 className="sr-only">Product details</h3>
                   <h3 className="text-lg font-medium">Qualtity</h3>
                   <div className="mt-0">

@@ -14,14 +14,9 @@ export const _getTokenById =
         throw badRequestError({ resource: 'token', resourceId: id, message: 'Missing ID' })
       }
 
-      console.log('_getTokenById', id)
-
       const connection = await db()
-      const token = await connection.getTokenById(id)
-      console.log({ token })
+      const [token] = await connection.getTokenById(id)
       const tokenAttributes = await connection.getTokenAttributesById(id)
-      console.log({ tokenAttributes })
-      console.log('_getTokenById', token)
 
       return {
         token,

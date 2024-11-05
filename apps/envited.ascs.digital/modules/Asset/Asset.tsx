@@ -433,6 +433,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                             'projectLocation',
                             'georeference',
                             'boundingBox',
+                            'georeference',
                             'xMin',
                           ])(attributes)}
                         </dd>
@@ -447,6 +448,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                             'projectLocation',
                             'georeference',
                             'boundingBox',
+                            'georeference',
                             'yMin',
                           ])(attributes)}
                         </dd>
@@ -461,6 +463,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                             'projectLocation',
                             'georeference',
                             'boundingBox',
+                            'georeference',
                             'xMax',
                           ])(attributes)}
                         </dd>
@@ -475,6 +478,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                             'projectLocation',
                             'georeference',
                             'boundingBox',
+                            'georeference',
                             'yMax',
                           ])(attributes)}
                         </dd>

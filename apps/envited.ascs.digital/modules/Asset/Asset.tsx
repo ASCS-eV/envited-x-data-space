@@ -114,14 +114,14 @@ export const Asset: FC<AssetProps> = ({ item }) => {
         <div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
           <div className="lg:col-span-4 lg:row-end-1">
             <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
-              <img src={product.imageSrc} alt={product.imageAlt} className="object-cover object-center" />
+              <img src={item.displayUri} alt={item.name} className="object-cover object-center" />
             </div>
           </div>
 
           <div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
             <div className="flex flex-col-reverse">
               <div className="mt-4">
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.name}</h1>
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl break-all">{item.name}</h1>
 
                 <h2 id="information-heading" className="sr-only">
                   Product information
@@ -135,16 +135,16 @@ export const Asset: FC<AssetProps> = ({ item }) => {
               <div>
                 <h3 className="sr-only">Reviews</h3>
                 <div className="flex items-center">
-                  <p className="mt-2 text-sm text-gray-500">{product.sku}</p>
+                  <p className="mt-2 text-sm text-gray-500">{item.id}</p>
                 </div>
               </div>
             </div>
 
-            <p className="mt-6 text-gray-500">{product.shortDescription}</p>
+            <p className="mt-6 text-gray-500">{item.description}</p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4">
               <Button
-                href={`mailto:example-asset@envited.de?subject=ENVITED X Request for offer: ${product.sku}&body=Dear Sales Team,%0D%0DI'm interested in your product ${process.env.NEXTAUTH_URL}/${product.sku}.%0DPlease get in touch with me with an offer.%0D%0DBest regards,`}
+                href={`mailto:example-asset@envited.de?subject=ENVITED X Request for offer: ${item.id}&body=Dear Sales Team,%0D%0DI'm interested in your product ${process.env.NEXTAUTH_URL}/${item.id}.%0DPlease get in touch with me with an offer.%0D%0DBest regards,`}
                 type={ButtonType.block}
                 colorScheme={ColorScheme.light}
                 target="_blank"
@@ -215,18 +215,6 @@ export const Asset: FC<AssetProps> = ({ item }) => {
                   >
                     Google Road Map
                   </Tab>
-                  <Tab
-                    className={({ selected }) =>
-                      classNames(
-                        selected
-                          ? 'border-blue-800 text-blue-800'
-                          : 'border-transparent text-gray-700 hover:border-gray-300 hover:text-gray-800',
-                        'whitespace-nowrap border-b-2 py-6 text-sm font-medium outline-none',
-                      )
-                    }
-                  >
-                    Comments
-                  </Tab>
                 </Tab.List>
               </div>
               <Tab.Panels as={Fragment}>
@@ -296,29 +284,6 @@ export const Asset: FC<AssetProps> = ({ item }) => {
                     height="400"
                     className="w-full h-96"
                   />
-                </Tab.Panel>
-
-                <Tab.Panel className="-mb-10">
-                  <h3 className="sr-only">Comments</h3>
-
-                  {reviews.featured.map((review, reviewIdx) => (
-                    <div key={review.id} className="flex space-x-4 text-sm text-gray-500">
-                      <div className="flex-none py-10">
-                        <img src={review.avatarSrc} alt="" className="h-10 w-10 rounded-full bg-gray-100" />
-                      </div>
-                      <div className={classNames(reviewIdx === 0 ? '' : 'border-t border-gray-200', 'py-10')}>
-                        <h3 className="font-medium text-gray-900">{review.author}</h3>
-                        <p>
-                          <time dateTime={review.datetime}>{review.date}</time>
-                        </p>
-
-                        <div
-                          className="prose prose-sm mt-4 max-w-none text-gray-500"
-                          dangerouslySetInnerHTML={{ __html: review.content }}
-                        />
-                      </div>
-                    </div>
-                  ))}
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>

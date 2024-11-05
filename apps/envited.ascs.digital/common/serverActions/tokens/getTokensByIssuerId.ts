@@ -8,12 +8,7 @@ import { hasCredentialType } from '../../guards'
 import { Log, log } from '../../logger'
 import { Token } from '../../types'
 import { Session } from '../../types/types'
-import {
-  extractAddressFromDid,
-  formatError,
-  internalServerErrorError,
-  unauthorizedError,
-} from '../../utils'
+import { extractAddressFromDid, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
 
 export const _getTokensByIssuerId =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>

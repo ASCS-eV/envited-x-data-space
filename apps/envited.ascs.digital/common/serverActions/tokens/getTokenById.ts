@@ -8,18 +8,14 @@ import { badRequestError, formatError, internalServerErrorError } from '../../ut
 
 export const _getTokenById =
   ({ db, log }: { db: Database; log: Log }) =>
-  async (id: string): Promise<Token> => {
+  async (id: string): Promise<Token[]> => {
     try {
       if (isNil(id) || isEmpty(id)) {
         throw badRequestError({ resource: 'token', resourceId: id, message: 'Missing ID' })
       }
 
-      console.log('_getTokenById id', id)
-
       const connection = await db()
       const token = await connection.getTokenById(id)
-
-      console.log('_getTokenById token', id)
 
       return token
     } catch (error: unknown) {

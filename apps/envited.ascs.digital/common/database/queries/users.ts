@@ -57,6 +57,9 @@ export const getUserRolesById = (db: DatabaseConnection) => async (id: string) =
 export const getUserWithProfileById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id)).leftJoin(profile, eq(user.name, profile.name))
 
+export const getUserByName = (db: DatabaseConnection) => async (name: string) =>
+  db.select().from(user).where(eq(user.name, name))
+
 export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.select().from(user).where(eq(user.id, issuerId))
 

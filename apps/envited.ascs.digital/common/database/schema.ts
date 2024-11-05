@@ -180,7 +180,9 @@ export const asset = pgTable('asset', {
   id: uuid('id').defaultRandom().primaryKey(),
   cid: text('cid'),
   metadata: jsonb('metadata'),
+  manifest: jsonb('manifest'),
   status: text('status', { enum: ['processing', 'not_accepted', 'pending', 'completed'] }),
+  owner: text('owner').references(() => user.id),
   userId: text('user_id')
     .references(() => user.id)
     .notNull(),

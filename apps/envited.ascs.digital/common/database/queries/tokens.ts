@@ -1,31 +1,30 @@
-import { eq, and } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 
 import { token } from '../schema'
 import { DatabaseConnection } from '../types'
 
-export const getTokens = (db: DatabaseConnection) => async () =>
-  db.select().from(token)
+export const getTokens = (db: DatabaseConnection) => async () => db.select().from(token)
 
 export const getToken =
-  ({ database }: { database: DatabaseConnection }) =>
+  (db: DatabaseConnection) =>
   async ({ contract, tokenId }: { tokenId: number; contract: string }) =>
-    database
+    db
       .select()
       .from(token)
       .where(and(eq(token.tokenId, tokenId), eq(token.contract, contract)))
 
 export const getTokenById =
-  ({ database }: { database: DatabaseConnection }) =>
-  async (id: string) =>
-    database
+  (db: DatabaseConnection) =>
+  async ({ contract, tokenId }: { tokenId: number; contract: string }) =>
+    db
       .select()
       .from(token)
-      .where(eq(token.id, id))
+      .where(and(eq(token.tokenId, tokenId), eq(token.contract, contract)))
 
 export const getTokenByTokenId =
-  ({ database }: { database: DatabaseConnection }) =>
+  (db: DatabaseConnection) =>
   async ({ contract, tokenId }: { tokenId: number; contract: string }) =>
-    database
+    db
       .select()
       .from(token)
       .where(and(eq(token.tokenId, tokenId), eq(token.contract, contract)))

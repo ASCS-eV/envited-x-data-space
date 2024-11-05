@@ -182,12 +182,17 @@ export const insertToken =
           tokenMetadata,
         })
 
-        await Promise.all(tags.map(async (tag: string) => insertTokenTagTx(tx)(tag)))
+        // RDS Data api does not support concurrent transactions so we need to insert tags and attributes sequentially
+        for (let i = 0; i < tags.length; i++) {
+          await insertTokenTagTx(tx)(tags[i])
+        }
         const tokenTags = await getTokenTags(tx)(tags)
-        await Promise.all(tokenTags.map(async tokenTag => insertTokensToTokenTagsTx(tx)(insertedToken.id, tokenTag.id)))
-        await Promise.all(
-          attributes.map(({ name, value }: any) => insertTokenAttributeTx(tx)(insertedToken.id, name, value)),
-        )
+        for (let i = 0; i < tokenTags.length; i++) {
+          await insertTokensToTokenTagsTx(tx)(insertedToken.id, tokenTags[i].id)
+        }
+        for (let i = 0; i < attributes.length; i++) {
+          await insertTokenAttributeTx(tx)(insertedToken.id, attributes[i].name, attributes[i].value)
+        }
 
         return true
       } catch (error) {

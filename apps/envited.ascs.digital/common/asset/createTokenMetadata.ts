@@ -5,7 +5,6 @@ export const createTokenMetadata = ({
   assetCID,
   manifestCID,
   domainMetadataCID,
-  licenseCID,
   displayUriCID,
   displayUri,
   minter,
@@ -16,7 +15,6 @@ export const createTokenMetadata = ({
   assetCID: string
   manifestCID: string
   domainMetadataCID: string
-  licenseCID: string
   displayUriCID: string
   displayUri: string
   minter: string
@@ -28,7 +26,8 @@ export const createTokenMetadata = ({
   const description = domainMetadata['hdmap:general']['general:description']['general:description']['@value']
   const formatType = domainMetadata['hdmap:format']['hdmap:formatType']
   const version = domainMetadata['hdmap:format']['hdmap:version']['@value']
-  const rights = manifest['manifest:data']['manifest:licenseType']
+  const rights = manifest['manifest:license']['manifest:spdxIdentifier']['@value']
+  const rightsUri = manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value']
 
   return {
     decimals: 0,
@@ -38,11 +37,11 @@ export const createTokenMetadata = ({
     tags: ['GaiaX', 'ASCS', 'ENVITED-X', 'EVES', 'nft', `${formatType} ${version}`],
     minter,
     creators: [creator],
-    publishers: [creator, 'ENVITED-X Data Space'],
+    publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],
     date: '2024-10-29T00:00:00+00:00',
     type: 'EVES-003 https://github.com/ASCS-eV/EVES',
     rights,
-    rightsUri: formatIpfsUri(licenseCID),
+    rightsUri,
     language: 'en',
     artifactUri: formatAssetUri(assetCID),
     identifier: assetCID,

@@ -41,6 +41,7 @@ jobs:
       PINATA_JWT: ${{ vars.PINATA_JWT }}
       PINATA_GATEWAY: ${{ vars.PINATA_GATEWAY }}
       ASSETS_CONTRACT: ${{ vars.ASSETS_CONTRACT }}
+      NEXT_PUBLIC_WEB3_RPC_URL: ${{ vars.NEXT_PUBLIC_WEB3_RPC_URL }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3

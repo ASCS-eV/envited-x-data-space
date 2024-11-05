@@ -16,6 +16,11 @@ describe('serverActions/assets/insert', () => {
       })
 
       const dbStub = jest.fn().mockResolvedValue({
+        getUserById: jest.fn().mockResolvedValue([
+          {
+            issuerId: 'ISSUER_ID',
+          },
+        ]),
         insertAsset: jest.fn().mockResolvedValue([
           {
             id: 'ASSET_ID',
@@ -23,6 +28,7 @@ describe('serverActions/assets/insert', () => {
             metadata: 'METADATA',
             status: AssetStatus.pending,
             userId: 'USER_PKH',
+            owner: 'ISSUER_ID',
           },
         ]),
       })
@@ -31,16 +37,17 @@ describe('serverActions/assets/insert', () => {
       } as any
 
       const result = await SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
-        'USER_PKH',
         'ASSET_CID',
       )
       const db = await dbStub()
+
       expect(result).toEqual({
         id: 'ASSET_ID',
         cid: 'ASSET_CID',
         metadata: 'METADATA',
         status: AssetStatus.pending,
         userId: 'USER_PKH',
+        owner: 'ISSUER_ID',
       })
       expect(getServerSessionStub).toHaveBeenCalledWith()
       expect(db.insertAsset).toHaveBeenCalled()
@@ -59,7 +66,7 @@ describe('serverActions/assets/insert', () => {
       })
 
       await expect(
-        SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('USER_PKH', 'ASSET_CID'),
+        SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('ASSET_CID'),
       ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
     })
   })

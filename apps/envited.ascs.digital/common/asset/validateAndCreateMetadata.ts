@@ -1,13 +1,16 @@
 import fs from 'fs'
-import { all, equals, find, keys, omit, pipe, prop, propEq, replace } from 'ramda'
+import { all, equals, keys, omit, pipe, prop } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromByteArray, read } from '../archive'
+import { db } from '../database/queries'
+import { Database } from '../database/types'
 import { Asset } from '../types'
+import { extractAddressFromDid } from '../utils'
 import { validateShaclDataWithSchema } from '../validator'
 import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { ValidationSchema } from '../validator/shacl/shacl.types'
-import { DOMAIN_METADATA_FILE, LICENSE_FILE, MANIFEST_FILE } from './constants'
+import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
 import { Manifest } from './types'
@@ -159,6 +162,7 @@ export const _validateAndCreateMetadata =
     createModifiedManifest,
     createFilename,
     getFileFromByteArray,
+    db,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array) => Promise<
       | {
@@ -172,7 +176,6 @@ export const _validateAndCreateMetadata =
       assetCID,
       manifestCID,
       domainMetadataCID,
-      licenseCID,
       displayUriCID,
       displayUri,
       minter,
@@ -183,7 +186,6 @@ export const _validateAndCreateMetadata =
       assetCID: string
       manifestCID: string
       domainMetadataCID: string
-      licenseCID: string
       displayUriCID: string
       displayUri: string
       minter: string
@@ -200,6 +202,7 @@ export const _validateAndCreateMetadata =
     }) => (manifest: Manifest) => any
     createFilename: (byteArray: Uint8Array) => Promise<string>
     getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any
+    db: Database
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
     try {
@@ -213,27 +216,39 @@ export const _validateAndCreateMetadata =
         domainMetadataCID,
       })(data.manifest)
 
-      const modifiedManifestCID = await createFilename(modifiedManifest)
+      // const modifiedManifestCID = await createFilename(modifiedManifest)
 
-      const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
-      const licenseCID = await createFilename(license as any)
+      // const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
+      // const licenseCID = await createFilename(license as any)
 
-      const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
-        data.manifest['manifest:data']['manifest:contentData'],
-      ) as any
-      const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
-      const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
-      const displayUriCID = await createFilename(displayUri as any)
+      // const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
+      //   data.manifest['manifest:data']['manifest:contentData'],
+      // ) as any
+      // const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
+      // const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
+      // const displayUriCID = await createFilename(displayUri as any)
+      const connection = await db()
+      const user = await connection.getUserById(asset.userId)
+      console.log(user)
+      if (!user) {
+        throw new Error('User not found')
+      }
 
+      const [issuer] = await connection.getUserWithProfileById(user.issuerId)
+      console.log(issuer)
+      if (!issuer) {
+        throw new Error('Issuer not found')
+      }
+
+      // metadata temporarily hardcoded
       const tokenMetadata = createTokenMetadata({
-        assetCID,
-        manifestCID: modifiedManifestCID,
-        domainMetadataCID: domainMetadataCID,
-        licenseCID: licenseCID,
-        displayUriCID,
-        displayUri,
-        minter: asset.userId,
-        creator: 'CREATOR',
+        assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH',
+        manifestCID: 'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
+        domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB',
+        displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
+        displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
+        minter: extractAddressFromDid(issuer.user.id),
+        creator: issuer.profile.name,
         manifest: data.manifest,
         domainMetadata: data.domainMetadata,
       })
@@ -243,10 +258,8 @@ export const _validateAndCreateMetadata =
       return {
         conforms,
         reports,
-        metadata: {
-          tokenMetadata,
-          modifiedManifest,
-        },
+        metadata: tokenMetadata,
+        manifest: modifiedManifest,
         assetCID,
         metadataCID: tokenMetadataCID,
       }
@@ -262,4 +275,5 @@ export const validateAndCreateMetadata = _validateAndCreateMetadata({
   createModifiedManifest,
   createFilename,
   getFileFromByteArray,
+  db,
 })

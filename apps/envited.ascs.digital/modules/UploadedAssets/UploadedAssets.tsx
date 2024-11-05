@@ -66,11 +66,7 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                       equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
                     } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
                   >
-                    {equals(asset.status)(AssetStatus.processing) ? (
-                      <>&hellip;</>
-                    ) : (
-                      last(pathOr('', ['tokenMetadata', 'tags'])(metadata))
-                    )}
+                    {equals(asset.status)(AssetStatus.processing) ? <>&hellip;</> : last(propOr('', 'tags')(metadata))}
                   </td>
                   <td
                     className={`${

@@ -38,7 +38,8 @@ describe('common/asset/updateAssetStatus', () => {
       expect(db.updateAssetByCID).toHaveBeenCalledWith(
         {
           cid: 'NEW_ASSET_CID',
-          metadata: '{}',
+          metadata: {},
+          manifest: {},
           status: 'pending',
         },
         'ASSET_CID',

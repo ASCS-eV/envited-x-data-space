@@ -45,7 +45,7 @@ export const _getMintParams =
 
     return {
       from: addUrnUuid(user.uuid),
-      owner: extractAddressFromDid(user.issuerId),
+      owner: extractAddressFromDid(asset.owner),
       contractAddress: process.env.ASSETS_CONTRACT!,
     }
   }

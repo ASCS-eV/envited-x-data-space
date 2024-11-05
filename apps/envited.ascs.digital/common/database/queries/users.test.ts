@@ -1,4 +1,5 @@
 import { USER_CREDENTIAL } from '../../fixtures'
+import { extractUuidFromUrn } from '../../utils'
 import { addressType, credentialType, issuer, profile, usersToRoles } from '../schema'
 import { Credential } from '../types'
 import * as SUT from './users'
@@ -251,6 +252,7 @@ describe('common/database/users', () => {
         streetAddress: 'Teststraße 1',
         updatedAt: new Date(),
         vatId: '',
+        uuid: extractUuidFromUrn('urn:uuid:cf1f329d-9c4c-458e-ba0a-a762a296b79c'),
         isActive: true,
       })
       expect(transaction).toEqual({

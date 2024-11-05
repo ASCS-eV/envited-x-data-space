@@ -69,10 +69,19 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const createModifiedManifestStub = jest.fn().mockReturnValue('MODIFIED_MANIFEST_BUFFER') as any
       const createFilenameStub = jest.fn().mockReturnValue('HASH') as any
       const getFileFromByteArrayStub = jest.fn().mockResolvedValue('FILE DATA') as any
+      const getUserByIdStub = jest.fn().mockResolvedValue({ id: 'USER_ID', issuerId: 'ISSUER_ID' }) as any
+      const getUserWithProfileByIdStub = jest
+        .fn()
+        .mockResolvedValue([{ user: { id: 'ISSUER_ID' }, profile: { name: 'NAME' } }]) as any
+      const dbStub = jest.fn().mockResolvedValue({
+        getUserById: getUserByIdStub,
+        getUserWithProfileById: getUserWithProfileByIdStub,
+      })
 
       const byteArray = 'ASSET_BYTE_ARRAY'
       const asset = {
         userId: 'USER_ID',
+        issuerId: 'ISSUER_ID',
       }
 
       const result = await SUT._validateAndCreateMetadata({
@@ -81,17 +90,30 @@ describe('common/asset/validateAndCreateMetadata', () => {
         createModifiedManifest: jest.fn().mockReturnValue(createModifiedManifestStub),
         createFilename: createFilenameStub,
         getFileFromByteArray: getFileFromByteArrayStub,
+        db: dbStub,
       })(byteArray as any, asset as any)
 
       expect(result).toEqual({
         conforms: undefined,
         reports: [{ conforms: true }],
-        metadata: {
-          tokenMetadata: 'METADATA_BUFFER',
-          modifiedManifest: 'MODIFIED_MANIFEST_BUFFER',
-        },
+        metadata: 'METADATA_BUFFER',
+        manifest: 'MODIFIED_MANIFEST_BUFFER',
         assetCID: 'HASH',
         metadataCID: 'HASH',
+      })
+
+      expect(getUserByIdStub).toHaveBeenCalledWith('USER_ID')
+      expect(getUserWithProfileByIdStub).toHaveBeenCalledWith('ISSUER_ID')
+      expect(createMetadataStub).toHaveBeenCalledWith({
+        assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH',
+        manifestCID: 'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
+        domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB',
+        displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
+        displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
+        minter: 'ISSUER_ID',
+        creator: 'NAME',
+        manifest: manifest,
+        domainMetadata: { '@type': 'NAME' },
       })
     })
   })

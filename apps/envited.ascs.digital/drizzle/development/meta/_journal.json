@@ -148,6 +148,20 @@
       "when": 1730486394115,
       "tag": "0020_fair_maria_hill",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1730728419843,
+      "tag": "0021_chemical_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1730746802000,
+      "tag": "0022_brave_cannonball",
+      "breakpoints": true
     }
   ]
 }

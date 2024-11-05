@@ -162,6 +162,13 @@
       "when": 1730746802000,
       "tag": "0022_brave_cannonball",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1730808274653,
+      "tag": "0023_wide_ted_forrester",
+      "breakpoints": true
     }
   ]
 }

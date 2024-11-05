@@ -181,11 +181,12 @@ export const asset = pgTable('asset', {
   cid: text('cid'),
   metadata: jsonb('metadata'),
   manifest: jsonb('manifest'),
-  status: text('status', { enum: ['processing', 'not_accepted', 'pending', 'completed'] }),
+  status: text('status', { enum: ['processing', 'not_accepted', 'pending', 'minted', 'completed'] }),
   owner: text('owner').references(() => user.id),
   userId: text('user_id')
     .references(() => user.id)
     .notNull(),
+  hash: text('hash'),
 })
 
 export const token = pgTable('token', {
@@ -226,6 +227,17 @@ export const tokensToTokenTags = pgTable('tokensToTokenTags', {
     .notNull(),
 })
 
+export const tokensToTokenTagsRelations = relations(tokensToTokenTags, ({ one }) => ({
+  token: one(token, {
+    fields: [tokensToTokenTags.tokenId],
+    references: [token.id],
+  }),
+  tokenTag: one(tokenTag, {
+    fields: [tokensToTokenTags.tagId],
+    references: [tokenTag.id],
+  }),
+}))
+
 export const tokenAttributes = pgTable(
   'tokenAttributes',
   {
@@ -238,4 +250,11 @@ export const tokenAttributes = pgTable(
 
 export const tokenRelations = relations(token, ({ many }) => ({
   tokenAttributes: many(tokenAttributes),
+}))
+
+export const tokenAttributesRelations = relations(tokenAttributes, ({ one }) => ({
+  token: one(token, {
+    fields: [tokenAttributes.tokenId],
+    references: [token.id],
+  }),
 }))

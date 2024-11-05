@@ -12,6 +12,7 @@ import {
   insertAsset,
   updateAsset,
   updateAssetByCID,
+  updateAssetHashAndStatus,
 } from './assets'
 import {
   deleteBusinessCategoriesByProfileId,
@@ -81,6 +82,7 @@ const queries = {
   insertAsset,
   updateAsset,
   updateAssetByCID,
+  updateAssetHashAndStatus,
 }
 
 export const init =

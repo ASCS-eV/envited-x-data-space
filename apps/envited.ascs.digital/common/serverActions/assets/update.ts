@@ -45,3 +45,40 @@ export const _update =
   }
 
 export const update = _update({ db, getServerSession, log })
+
+export const _updateStatus =
+  ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
+  async ({ id, hash, status }: { id: string; hash: string; status: AssetStatus }) => {
+    try {
+      const session = await getServerSession()
+      const userId = session?.user.id
+      if (isNil(session)) {
+        throw unauthorizedError({ resource: 'assets', resourceId: userId })
+      }
+
+      const connection = await db()
+      const [asset] = await connection.getAsset(id)
+
+      if (isNil(asset) || isEmpty(asset)) {
+        throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })
+      }
+
+      if (!isOwnAsset(asset)(session)) {
+        throw forbiddenError({
+          resource: 'assets',
+          resourceId: userId,
+          message: 'Not allowed to update this resource',
+          userId: session.user.id,
+        })
+      }
+
+      const [result] = await connection.updateAssetHashAndStatus(id, hash, status)
+
+      return result
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const updateStatus = _updateStatus({ db, getServerSession, log })

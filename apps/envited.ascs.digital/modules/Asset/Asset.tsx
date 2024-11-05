@@ -2,10 +2,10 @@
 
 import { Tab } from '@headlessui/react'
 import Link from 'next/link'
-import { forEach, reduce } from 'ramda'
 import { FC, Fragment } from 'react'
 
 import { ButtonType, ColorScheme, Token } from '../../common/types'
+import { formatTokenAttributes } from '../../common/utils'
 import { Button } from '../Button'
 
 const product = {
@@ -84,32 +84,8 @@ interface AssetProps {
   }
 }
 
-const buildHierarchy = (data: any) => {
-  const result = {}
-
-  forEach(({ name, value }) => {
-    const keys = name.split(':')
-
-    reduce(
-      (acc: any, key: any, index: any) => {
-        if (index === keys.length - 1) {
-          acc[key] = value
-        } else {
-          acc[key] = acc[key] || {}
-        }
-        return acc[key]
-      },
-      result,
-      keys,
-    )
-  }, data)
-
-  return result
-}
-
 export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
-  const attributes = buildHierarchy(tokenAttributes)
-
+  const attributes = formatTokenAttributes(tokenAttributes)
   console.log({ attributes })
 
   return (

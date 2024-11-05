@@ -5,6 +5,7 @@ import {
   compose,
   concat,
   equals,
+  forEach,
   gt,
   head,
   join,
@@ -13,6 +14,7 @@ import {
   pathOr,
   pipe,
   propSatisfies,
+  reduce,
   replace,
   tail,
   take,
@@ -77,3 +79,28 @@ export const isServer = () => typeof window === 'undefined'
 export const addUrn = (type: string) => (uuid: string) => `urn:${type}:${uuid}`
 
 export const addUrnUuid = addUrn('uuid')
+
+export const reduceIndexed = addIndex(reduce)
+
+export const formatTokenAttributes = (data: any) => {
+  const result = {}
+
+  forEach(({ name, value }) => {
+    const keys = name.split(':')
+
+    reduceIndexed(
+      (acc: any, key: any, index: any) => {
+        if (index === keys.length - 1) {
+          acc[key] = value
+        } else {
+          acc[key] = acc[key] || {}
+        }
+        return acc[key]
+      },
+      result,
+      keys,
+    )
+  }, data)
+
+  return result
+}

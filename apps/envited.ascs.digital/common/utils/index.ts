@@ -17,6 +17,7 @@ export {
   extractIdFromCredential,
   extractIssuerIdFromCredential,
   extractTypeFromCredential,
+  formatTokenAttributes,
   getImageUrl,
   slugify,
   createRandomString,

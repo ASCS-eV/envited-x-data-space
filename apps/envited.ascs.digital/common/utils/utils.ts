@@ -60,6 +60,8 @@ export const getImageUrl = (image: string) => `${process.env.NEXT_PUBLIC_URL || 
 
 export const extractAddressFromDid = replace('did:pkh:tz:', '')
 
+export const extractUuidFromUrn = replace('urn:uuid:', '')
+
 export const isTrustAnchor = equals(process.env.TRUST_ANCHOR_DID)
 
 export const truncate = (length: number) =>

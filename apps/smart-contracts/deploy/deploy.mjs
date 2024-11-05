@@ -1385,7 +1385,7 @@ const deploy = async () => {
     .originate({
       code: contract,
       storage: {
-        registry: 'KT1CvxjKzaK5P3A88zYFJe3ThHuzjBRCQorh',
+        registry: 'KT1PaDvx6vApsvZchR7m3LCRQLJ1cR6C778y',
         token_index: 0n,
         metadata,
         ledger: [],

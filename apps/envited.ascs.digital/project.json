@@ -115,7 +115,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/envited.ascs.digital",
-        "commands": ["ENV=staging drizzle-kit generate:pg"]
+        "commands": ["ENV=staging drizzle-kit generate"]
       }
     },
     "db:migrate:staging": {

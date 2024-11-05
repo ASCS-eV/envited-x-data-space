@@ -11,7 +11,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
-import { Asset, AssetStatus } from '../../../types'
+import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
 export const _main =
   ({
@@ -42,11 +42,18 @@ export const _main =
       conforms: boolean
       reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
       metadata: any
+      manifest: Record<string, unknown>
       assetCID: string
       metadataCID: string
     }>
     getAsset: (cid: string) => Promise<Asset>
-    updateAsset: (newCid: string, oldCid: string, status: AssetStatus, metadata?: string) => Promise<Asset>
+    updateAsset: (
+      newCid: string,
+      oldCid: string,
+      status: AssetStatus,
+      metadata?: AssetMetadata | string,
+      manifest?: Record<string, unknown>,
+    ) => Promise<Asset>
   }): S3Handler =>
   async event => {
     try {
@@ -63,7 +70,7 @@ export const _main =
 
       const byteArray = await Body.transformToByteArray()
       const asset = await getAsset(Key)
-      const { conforms, metadata, assetCID, metadataCID } = await validateAndCreateMetadata(byteArray, asset)
+      const { conforms, metadata, assetCID, metadataCID, manifest } = await validateAndCreateMetadata(byteArray, asset)
 
       if (!conforms) {
         await deleteFile({ Bucket, Key })
@@ -87,7 +94,7 @@ export const _main =
       })
 
       await writeMetadata.done()
-      await updateAsset(assetCID, Key, AssetStatus.pending, metadata)
+      await updateAsset(assetCID, Key, AssetStatus.pending, metadata, manifest)
       await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)

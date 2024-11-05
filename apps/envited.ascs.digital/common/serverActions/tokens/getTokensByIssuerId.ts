@@ -4,13 +4,12 @@ import { cache } from 'react'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { hasCredentialType, isFederator, isPrincipal } from '../../guards'
+import { hasCredentialType } from '../../guards'
 import { Log, log } from '../../logger'
 import { Token } from '../../types'
 import { Session } from '../../types/types'
 import {
   extractAddressFromDid,
-  forbiddenError,
   formatError,
   internalServerErrorError,
   unauthorizedError,
@@ -24,10 +23,6 @@ export const _getTokensByIssuerId =
 
       if (isNil(session)) {
         throw unauthorizedError({ resource: 'tokens' })
-      }
-
-      if (!isFederator(session) && !isPrincipal(session)) {
-        throw forbiddenError({ resource: 'tokens', message: 'Incorrect role', userId: session.user.id })
       }
 
       const connection = await db()

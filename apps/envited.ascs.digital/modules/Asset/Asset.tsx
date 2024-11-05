@@ -84,7 +84,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                   <li>
                     <strong>Version:</strong> {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
                   </li>
-                  <li>{/* <strong>Upload Time:</strong> {token.createdAt} */}</li>
+                  {/* <li><strong>Upload Time:</strong> {token.createdAt}</li> */}
                 </ul>
               </div>
             </div>
@@ -92,7 +92,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
             <div className="mt-10 border-t border-gray-200 pt-10">
               <h3 className="text-sm font-medium text-gray-900">License</h3>
               <ul role="list" className="mt-4 text-sm text-gray-500">
-                {/* <li>
+                <li>
                   <strong>Type:</strong> {token.rights}
                 </li>
                 <li>
@@ -100,7 +100,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                   <a href={token.rightsUri} className="font-medium text-blue-900 hover:text-blue-800">
                     {token.rightsUri}
                   </a>
-                </li> */}
+                </li>
               </ul>
             </div>
           </div>

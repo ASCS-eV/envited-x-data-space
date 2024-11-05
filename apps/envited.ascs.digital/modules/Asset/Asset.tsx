@@ -85,6 +85,7 @@ interface AssetProps {
 }
 
 export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
+  console.log({ token, tokenAttributes })
   const attributes = formatTokenAttributes(tokenAttributes)
   console.log({ attributes })
 

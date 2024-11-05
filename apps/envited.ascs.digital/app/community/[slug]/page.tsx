@@ -7,8 +7,6 @@ export default async function Index({ params: { slug } }: { params: { slug: stri
   const profile = await getProfileBySlug(slug)
   const tokens = await getTokensByProfileSlug(slug)
 
-  console.log('pages/community/[slug]', tokens)
-
   return (
     <>
       <PageHeader

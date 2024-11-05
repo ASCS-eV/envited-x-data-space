@@ -29,8 +29,6 @@ export const _getTokensByIssuerId =
         issuerId = principal.id
       }
 
-      console.log('_getTokensByIssuerId - issuerId', issuerId)
-
       const tokens = await connection.getTokensByIssuerId(extractAddressFromDid(issuerId))
 
       return tokens

@@ -3,8 +3,8 @@ import { isEmpty, isNil } from 'ramda'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { Log, log } from '../../logger'
-import { badRequestError, formatError, internalServerErrorError } from '../../utils'
 import { Token } from '../../types'
+import { badRequestError, formatError, internalServerErrorError } from '../../utils'
 
 export const _getTokenById =
   ({ db, log }: { db: Database; log: Log }) =>
@@ -14,8 +14,12 @@ export const _getTokenById =
         throw badRequestError({ resource: 'token', resourceId: id, message: 'Missing ID' })
       }
 
+      console.log('_getTokenById id', id)
+
       const connection = await db()
       const token = await connection.getTokenById(id)
+
+      console.log('_getTokenById token', id)
 
       return token
     } catch (error: unknown) {

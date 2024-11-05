@@ -1,10 +1,10 @@
 'use client'
 
 import { Tab } from '@headlessui/react'
-import { ButtonType, ColorScheme, Token } from '../../common/types'
 import Link from 'next/link'
 import { FC, Fragment } from 'react'
 
+import { ButtonType, ColorScheme, Token } from '../../common/types'
 import { Button } from '../Button'
 
 const product = {

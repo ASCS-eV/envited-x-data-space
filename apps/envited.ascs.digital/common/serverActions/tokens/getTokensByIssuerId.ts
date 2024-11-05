@@ -24,16 +24,19 @@ export const _getTokensByIssuerId =
         throw forbiddenError({ resource: 'tokens', message: 'Incorrect role', userId: session.user.id })
       }
 
+      
       const connection = await db()
       const user = await connection.getUserById(session?.user?.pkh)
-
+      
       let issuerId = session?.user?.pkh
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserById(user.issuerId)
         issuerId = principal.id
       }
 
-      const tokens = await connection.getTokensByOwner(issuerId)
+      console.log('_getTokensByIssuerId - issuerId', issuerId)
+
+      const tokens = await connection.getTokensByIssuerId(issuerId)
 
       return tokens
     } catch (error: unknown) {

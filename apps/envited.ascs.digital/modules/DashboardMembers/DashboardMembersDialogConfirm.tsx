@@ -1,6 +1,6 @@
 'use client'
 
-import { Dialog, Switch } from '@envited-marketplace/design-system'
+import { Dialog, Switch } from '@envited-x-data-space/design-system'
 import { FC, useState } from 'react'
 
 import { useTranslation } from '../../common/i18n'

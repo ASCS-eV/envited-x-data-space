@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Heading, Table, TableBody, TableCell, TableHeader, TableRow } from '@envited-marketplace/design-system'
+import { Card, Heading, Table, TableBody, TableCell, TableHeader, TableRow } from '@envited-x-data-space/design-system'
 import { equals, map } from 'ramda'
 import React, { FC } from 'react'
 

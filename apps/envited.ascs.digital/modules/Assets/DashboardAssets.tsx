@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading } from '@envited-marketplace/design-system'
+import { Heading } from '@envited-x-data-space/design-system'
 import Link from 'next/link'
 import { map } from 'ramda'
 import { FC } from 'react'

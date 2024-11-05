@@ -9,7 +9,7 @@ import {
   SelectField,
   TextField,
   TextareaField,
-} from '@envited-marketplace/design-system'
+} from '@envited-x-data-space/design-system'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   append,

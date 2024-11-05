@@ -1,7 +1,7 @@
 {
-  "name": "@envited-marketplace/source",
-  "version": "0.0.0",
-  "license": "MIT",
+  "name": "@envited-x-data-space/source",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
   "scripts": {
     "prepare": "husky install",
     "start:listener:staging": "pm2 start ./listener.config.js --env staging"

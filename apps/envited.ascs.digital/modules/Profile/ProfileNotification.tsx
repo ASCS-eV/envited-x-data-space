@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, AlertType } from '@envited-marketplace/design-system'
+import { Alert, AlertType } from '@envited-x-data-space/design-system'
 import Link from 'next/link'
 import { FC } from 'react'
 

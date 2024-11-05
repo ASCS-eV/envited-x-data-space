@@ -1,6 +1,6 @@
 'use client'
 
-import { Nav, NavItem } from '@envited-marketplace/design-system'
+import { Nav, NavItem } from '@envited-x-data-space/design-system'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'

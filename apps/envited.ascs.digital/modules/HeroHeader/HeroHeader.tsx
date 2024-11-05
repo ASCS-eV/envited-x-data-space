@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Grid, GridRow } from '@envited-marketplace/design-system'
+import { Button, Grid, GridRow } from '@envited-x-data-space/design-system'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import React, { FC, useState } from 'react'

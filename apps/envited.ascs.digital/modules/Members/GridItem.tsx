@@ -1,6 +1,6 @@
 'use client'
 
-import { MemberProfileCard } from '@envited-marketplace/design-system'
+import { MemberProfileCard } from '@envited-x-data-space/design-system'
 import Link from 'next/link'
 import { isNil } from 'ramda'
 import React, { FC } from 'react'

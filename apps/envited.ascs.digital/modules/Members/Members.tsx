@@ -1,6 +1,6 @@
 'use client'
 
-import { GridRow } from '@envited-marketplace/design-system'
+import { GridRow } from '@envited-x-data-space/design-system'
 import { map } from 'ramda'
 import React, { FC } from 'react'
 

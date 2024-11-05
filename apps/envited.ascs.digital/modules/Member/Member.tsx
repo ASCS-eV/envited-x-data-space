@@ -1,6 +1,6 @@
 'use client'
 
-import { Address, Pill } from '@envited-marketplace/design-system'
+import { Address, Pill } from '@envited-x-data-space/design-system'
 import { Tab } from '@headlessui/react'
 import { isNil, map, propOr } from 'ramda'
 import React, { FC, Fragment } from 'react'

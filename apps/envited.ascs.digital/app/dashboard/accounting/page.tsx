@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading } from '@envited-marketplace/design-system'
+import { Heading } from '@envited-x-data-space/design-system'
 
 export default async function Index() {
   return (

@@ -24,18 +24,6 @@ const filters = [
       { value: 'Unreal Engine (Carla)', label: 'Unreal Engine (Carla)' },
     ],
   },
-  {
-    id: 'sizes',
-    name: 'Sizes',
-    options: [
-      { value: 'xs', label: 'XS' },
-      { value: 's', label: 'S' },
-      { value: 'm', label: 'M' },
-      { value: 'l', label: 'L' },
-      { value: 'xl', label: 'XL' },
-      { value: '2xl', label: '2XL' },
-    ],
-  },
 ]
 
 function classNames(...classes: any) {

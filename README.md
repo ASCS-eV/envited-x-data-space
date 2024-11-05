@@ -90,3 +90,26 @@ npx nx serve envited.ascs.digital
 Open your browser and navigate to http://localhost:4200/
 
 Happy coding!
+
+## Smart contracts and deployment
+
+### Main: envited-x.net
+
+The ENVITED-X Data Space is still experimental and has no main deployment yet.
+
+```text
+trust anchor did: 'tz1YeiPapCiHfpwVcEUjMaSC3TDh9iMzkAKr'
+trust anchor uuid: 'urn:uuid:0ec57c66-8b78-11ee-b9d1-0242ac120002'
+
+contractAddress: ''
+```
+
+### Staging: staging.envited-x.net
+
+The staging branch is deployed on [Tezos Ghostnet](https://better-call.dev/ghostnet/KT1XC2fTBNqoafnrhEb7TuToRCzewgbHAhnA/operations) using the following information:
+
+```text
+test account did: 'tz1KobLotv3nAgLJ65pyF8z1a3USbkqNeb4P'
+
+contractAddress: 'KT1XC2fTBNqoafnrhEb7TuToRCzewgbHAhnA'
+```

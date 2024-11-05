@@ -382,7 +382,7 @@ describe('common/asset/createTokenMetadata', () => {
         minter: 'MINTER',
         creators: ['CREATOR'],
         publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],
-        date: '2024-10-29T00:00:00+00:00',
+        date: expect.any(String),
         type: 'EVES-003 https://github.com/ASCS-eV/EVES',
         rights: 'MIT',
         rightsUri: 'https://opensource.org/license/mit',

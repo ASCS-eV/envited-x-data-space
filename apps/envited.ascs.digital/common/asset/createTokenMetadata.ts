@@ -28,6 +28,8 @@ export const createTokenMetadata = ({
   const version = domainMetadata['hdmap:format']['hdmap:version']['@value']
   const rights = manifest['manifest:license']['manifest:spdxIdentifier']['@value']
   const rightsUri = manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value']
+  const today = new Date()
+  const date = today.toISOString().split('T')[0]
 
   return {
     decimals: 0,
@@ -38,7 +40,7 @@ export const createTokenMetadata = ({
     minter,
     creators: [creator],
     publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],
-    date: '2024-10-29T00:00:00+00:00',
+    date,
     type: 'EVES-003 https://github.com/ASCS-eV/EVES',
     rights,
     rightsUri,

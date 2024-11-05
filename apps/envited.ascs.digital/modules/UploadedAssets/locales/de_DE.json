@@ -7,5 +7,7 @@
   "[Label] select": "Select",
   "[Button] mint": "Mint",
   "[Button] preview": "Preview",
-  "[Button] delete": "Delete"
+  "[Button] delete": "Delete",
+  "[Status] minted": "Minted",
+  "[Status] processing": "Processing..."
 }

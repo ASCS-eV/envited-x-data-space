@@ -3,7 +3,7 @@ import { Asset } from '../../../modules/Asset'
 import { Breadcrumbs } from '../../../modules/Breadcrumbs'
 
 export default async function Index({ params: { id } }: { params: { id: string } }) {
-  const [token] = await getTokenById(id)
+  const token = await getTokenById(id)
 
   console.log('assets/[id]/page.tsx', token)
 

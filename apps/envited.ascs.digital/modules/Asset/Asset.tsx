@@ -77,24 +77,27 @@ function classNames(...classes: any) {
 }
 
 interface AssetProps {
-  item: Token
+  item: {
+    token: Token
+    tokenAttributes: any
+  }
 }
 
-export const Asset: FC<AssetProps> = ({ item }) => {
+export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
   return (
     <>
       <div>
         <div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
           <div className="lg:col-span-4 lg:row-end-1">
             <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
-              <img src={item.displayUri} alt={item.name} className="object-cover object-center" />
+              <img src={token.displayUri} alt={token.name} className="object-cover object-center" />
             </div>
           </div>
 
           <div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
             <div className="flex flex-col-reverse">
               <div className="mt-4">
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl break-all">{item.name}</h1>
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl break-all">{token.name}</h1>
 
                 <h2 id="information-heading" className="sr-only">
                   Product information
@@ -108,16 +111,16 @@ export const Asset: FC<AssetProps> = ({ item }) => {
               <div>
                 <h3 className="sr-only">Reviews</h3>
                 <div className="flex items-center">
-                  <p className="mt-2 text-sm text-gray-500">{item.id}</p>
+                  <p className="mt-2 text-sm text-gray-500">{token.id}</p>
                 </div>
               </div>
             </div>
 
-            <p className="mt-6 text-gray-500">{item.description}</p>
+            <p className="mt-6 text-gray-500">{token.description}</p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4">
               <Button
-                href={`mailto:example-asset@envited.de?subject=ENVITED X Request for offer: ${item.id}&body=Dear Sales Team,%0D%0DI'm interested in your product ${process.env.NEXTAUTH_URL}/${item.id}.%0DPlease get in touch with me with an offer.%0D%0DBest regards,`}
+                href={`mailto:example-asset@envited.de?subject=ENVITED X Request for offer: ${token.id}&body=Dear Sales Team,%0D%0DI'm interested in your product ${process.env.NEXTAUTH_URL}/${token.id}.%0DPlease get in touch with me with an offer.%0D%0DBest regards,`}
                 type={ButtonType.block}
                 colorScheme={ColorScheme.light}
                 target="_blank"

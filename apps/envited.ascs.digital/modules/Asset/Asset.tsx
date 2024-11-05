@@ -83,9 +83,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                   <li>
                     <strong>Version:</strong> {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
                   </li>
-                  <li>
-                    {/* <strong>Upload Time:</strong> {token.createdAt} */}
-                  </li>
+                  <li>{/* <strong>Upload Time:</strong> {token.createdAt} */}</li>
                 </ul>
               </div>
             </div>
@@ -483,17 +481,6 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                       </div>
                     </dl>
                   </div>
-                </Tab.Panel>
-
-                <Tab.Panel className="pt-10 -mb-10">
-                  <h3 className="sr-only">3D-Viewer</h3>
-
-                  <iframe
-                    src="https://www.google.com/maps/d/u/1/embed?mid=1nt7dEym9fom0bQQkX4JrEQF72Qk4FbE&amp;ehbc=2E312F&amp;noprof=1"
-                    width="770"
-                    height="400"
-                    className="w-full h-96"
-                  />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>

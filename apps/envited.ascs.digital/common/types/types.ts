@@ -110,6 +110,12 @@ export interface Token {
   modifiedAt: string
 }
 
+export interface TokenAttributes {
+  tokenId: string
+  name: string
+  value: string
+}
+
 export interface User {
   id: string
   issuerId: string

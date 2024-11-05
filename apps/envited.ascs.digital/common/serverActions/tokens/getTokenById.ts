@@ -3,12 +3,12 @@ import { isEmpty, isNil } from 'ramda'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { Log, log } from '../../logger'
-import { Token } from '../../types'
+import { Token, TokenAttributes } from '../../types'
 import { badRequestError, formatError, internalServerErrorError } from '../../utils'
 
 export const _getTokenById =
   ({ db, log }: { db: Database; log: Log }) =>
-  async (id: string): Promise<Token> => {
+  async (id: string): Promise<{ token: Token, tokenAttributes: TokenAttributes[] }> => {
     try {
       if (isNil(id) || isEmpty(id)) {
         throw badRequestError({ resource: 'token', resourceId: id, message: 'Missing ID' })

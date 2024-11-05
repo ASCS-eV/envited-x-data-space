@@ -18,9 +18,13 @@ export const _getTokenById =
 
       const connection = await db()
       const token = await connection.getTokenById(id)
+      const tokenAttributes = await connection.getTokenAttributesById(id)
       console.log('_getTokenById', token)
 
-      return token
+      return {
+        token,
+        tokenAttributes,
+      }
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()

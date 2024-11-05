@@ -9,28 +9,6 @@ import { useTranslation } from '../../common/i18n'
 import { Profile, Token } from '../../common/types'
 import { getImageUrl } from '../../common/utils'
 
-const products = [
-  {
-    id: 1,
-    name: 'Motorway Testfield A8 Heimsheim <-> Leonberg (XODR)',
-    href: '/assets/detail',
-    description: 'A map section of the A8 highway from Heimsheim to Leonberg with a total length of 37.91 km. It was',
-    options: 'XODR-3DM-23001',
-    imageSrc: 'https://envited.market/media/OpenDRIVE_A9_final_bO9LFP7.png.500x320_q85_crop-scale.png',
-    imageAlt: 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
-  },
-  {
-    id: 2,
-    name: 'San Francisco Sample (Unreal-Carla)',
-    href: '/assets/detail',
-    description:
-      'San Francisco Union Square and adjacent streets. 3D Visualization of San Francisco HD maps, designed based on real-world OpenDRIVE data',
-    options: 'CARLA-TGG-21001',
-    imageSrc: 'https://envited.market/media/Kachel_San_Francisco_unreal.png.500x320_q85_crop-scale.png',
-    imageAlt: 'Front of plain black t-shirt.',
-  },
-]
-
 interface MemberProps {
   member: Profile
   tokens: Token[]

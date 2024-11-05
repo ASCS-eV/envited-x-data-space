@@ -12,14 +12,14 @@ export const _getTokensByProfileSlug =
   async (slug: string): Promise<Token[]> => {
     try {
       if (isNil(slug) || isEmpty(slug)) {
-        throw badRequestError({ resource: 'profiles', resourceId: slug, message: 'Missing slug' })
+        throw badRequestError({ resource: 'tokens', resourceId: slug, message: 'Missing slug' })
       }
 
       const connection = await db()
 
       const profile = await connection.getProfileBySlug(slug)
       console.log('_getTokensByProfileSlug', profile)
-      const user = await connection.getUserByName(profile.name)
+      const [user] = await connection.getUserByName(profile.name)
       console.log('_getTokensByProfileSlug', user)
       const tokens = await connection.getTokensByIssuerId(extractAddressFromDid(user.id))
       console.log('_getTokensByProfileSlug', tokens)

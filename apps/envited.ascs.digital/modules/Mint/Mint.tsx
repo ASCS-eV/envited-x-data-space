@@ -4,9 +4,8 @@ import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { mintToken } from '../../common/web3'
-import { tezos } from '../../common/web3'
-import { getAssetMintParams, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
+import { mintToken, tezos } from '../../common/web3'
+import { updateStatus, getAssetMintParams, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
 import { ShowSpecificBeaconWallets } from './Mint.utils'
 
 interface MintProps {
@@ -25,9 +24,16 @@ export const Mint: FC<MintProps> = ({ assetId }) => {
     if (account) {
       const fileLocation = await uploadAssetTokenMetadata(id)
       const mintParams = await getAssetMintParams(id)
-
-      await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
-      success(t('[Status] token is minted'))
+      const operation = await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
+      await operation?.confirmation(3)
+        .then(async () => {
+          await updateStatus(id, operation.opHash)
+          success(t('[Status] token is minted'))
+        })
+        .catch(() => {
+          error(t('[Status] token minting failed'))
+        })
+      
     } else {
       await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })
       ShowSpecificBeaconWallets()

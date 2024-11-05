@@ -14,6 +14,7 @@ export enum AssetStatus {
   processing = 'processing',
   not_accepted = 'not_accepted',
   pending = 'pending',
+  minted = 'minted',
   completed = 'completed',
 }
 

@@ -2,6 +2,7 @@
 
 import { LoadingIndicator } from '@envited-marketplace/design-system'
 import { equals, isEmpty, last, pathOr, propOr } from 'ramda'
+import { match } from 'ts-pattern' 
 
 import { useTranslation } from '../../common/i18n'
 import { Asset, AssetStatus } from '../../common/types'
@@ -73,14 +74,20 @@ export const UploadedAssets = ({ assets }: { assets: Asset[] }) => {
                       equals(assetIdx)(0) ? '' : 'border-t border-transparent'
                     } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
                   >
-                    {equals(asset.status)(AssetStatus.processing) ? (
-                      <div className="inline-flex gap-x-2 text-sm text-gray-500">
-                        <LoadingIndicator />
-                        <p className="text-xs">Processing...</p>
-                      </div>
-                    ) : (
-                      <Mint assetId={asset.id} />
-                    )}
+                    {match(asset.status)
+                      .with(AssetStatus.processing, () => (
+                        <div className="inline-flex gap-x-2 text-sm text-gray-500">
+                          <LoadingIndicator />
+                          <p className="text-xs">{t('[Status] processing')}</p>
+                        </div>
+                      ))
+                      .with(AssetStatus.minted, () => (
+                        <span className="text-green-600">{t('[Status] minted')}</span>
+                      ))
+                      .otherwise(() => (
+                        <Mint assetId={asset.id} />
+                      ))
+                    }
                     {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
                   </td>
                 </tr>

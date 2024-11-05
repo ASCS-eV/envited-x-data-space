@@ -13,13 +13,8 @@ export const getToken =
       .from(token)
       .where(and(eq(token.tokenId, tokenId), eq(token.contract, contract)))
 
-export const getTokenById =
-  (db: DatabaseConnection) =>
-  async ({ contract, tokenId }: { tokenId: number; contract: string }) =>
-    db
-      .select()
-      .from(token)
-      .where(and(eq(token.tokenId, tokenId), eq(token.contract, contract)))
+export const getTokenById = (db: DatabaseConnection) => async (id: string) =>
+  db.select().from(token).where(eq(token.id, id))
 
 export const getTokenByTokenId =
   (db: DatabaseConnection) =>

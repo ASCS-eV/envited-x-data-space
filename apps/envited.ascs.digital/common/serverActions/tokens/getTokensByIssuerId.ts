@@ -8,7 +8,13 @@ import { hasCredentialType, isFederator, isPrincipal } from '../../guards'
 import { Log, log } from '../../logger'
 import { Token } from '../../types'
 import { Session } from '../../types/types'
-import { forbiddenError, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
+import {
+  extractAddressFromDid,
+  forbiddenError,
+  formatError,
+  internalServerErrorError,
+  unauthorizedError,
+} from '../../utils'
 
 export const _getTokensByIssuerId =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
@@ -24,10 +30,9 @@ export const _getTokensByIssuerId =
         throw forbiddenError({ resource: 'tokens', message: 'Incorrect role', userId: session.user.id })
       }
 
-      
       const connection = await db()
       const user = await connection.getUserById(session?.user?.pkh)
-      
+
       let issuerId = session?.user?.pkh
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserById(user.issuerId)
@@ -36,7 +41,7 @@ export const _getTokensByIssuerId =
 
       console.log('_getTokensByIssuerId - issuerId', issuerId)
 
-      const tokens = await connection.getTokensByIssuerId(issuerId)
+      const tokens = await connection.getTokensByIssuerId(extractAddressFromDid(issuerId))
 
       return tokens
     } catch (error: unknown) {

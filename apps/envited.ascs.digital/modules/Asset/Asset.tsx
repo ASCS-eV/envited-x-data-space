@@ -21,7 +21,6 @@ interface AssetProps {
 
 export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
   const attributes = formatTokenAttributes(tokenAttributes) as any
-  console.log({ attributes })
 
   return (
     <>
@@ -85,7 +84,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                     <strong>Version:</strong> {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
                   </li>
                   <li>
-                    <strong>Upload Time:</strong> {token.createdAt}
+                    {/* <strong>Upload Time:</strong> {token.createdAt} */}
                   </li>
                 </ul>
               </div>
@@ -93,7 +92,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
 
             <div className="mt-10 border-t border-gray-200 pt-10">
               <h3 className="text-sm font-medium text-gray-900">License</h3>
-              <ul role="list" className="mt-4 text-sm text-gray-500">
+              {/* <ul role="list" className="mt-4 text-sm text-gray-500">
                 <li>
                   <strong>Type:</strong> {token.rights}
                 </li>
@@ -103,7 +102,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                     {token.rightsUri}
                   </a>
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
 

@@ -10,3 +10,4 @@ export {
 export { getBusinessCategories } from './businessCategories'
 export { updateProfile, getProfile, getProfileBySlug, getPublishedProfiles } from './profiles'
 export { getActiveUsersByIssuerId, getUserById, getUsersByIssuerId, insertUser } from './users'
+export { getTokenById, getTokensByIssuerId, getTokens, getTokensByProfileSlug } from './tokens'

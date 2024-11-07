@@ -21,7 +21,6 @@ interface AssetProps {
 
 export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
   const attributes = formatTokenAttributes(tokenAttributes) as any
-  console.log(token, attributes)
 
   return (
     <>
@@ -67,7 +66,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
             <div className="mt-10 border-t border-gray-200 pt-10">
               <h3 className="text-sm font-medium text-gray-900">Asset information</h3>
               <div className="prose prose-sm mt-4 text-gray-500">
-                <ul role="list">
+                <ul role="list" className="text-sm font-medium leading-8 text-gray-900">
                   <li>
                     <strong>Format:</strong> ASAM OpenDrive 1.6
                   </li>
@@ -79,19 +78,16 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                     <strong>Recording time:</strong>{' '}
                     {pathOr('', ['hdmap', 'general', 'general', 'data', 'general', 'recordingTime'])(attributes)}
                   </li>
-                </ul>
-                <ul role="list">
                   <li>
                     <strong>Version:</strong> {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
                   </li>
-                  {/* <li><strong>Upload Time:</strong> {token.createdAt}</li> */}
                 </ul>
               </div>
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
               <h3 className="text-sm font-medium text-gray-900">License</h3>
-              <ul role="list" className="mt-4 text-sm text-gray-500">
+              <ul role="list" className="mt-4 text-sm font-medium leading-8 text-gray-900">
                 <li>
                   <strong>Type:</strong> {token.rights}
                 </li>
@@ -233,7 +229,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                 </Tab.Panel>
                 <Tab.Panel>
                   <h3 className="sr-only">Product details</h3>
-                  <h3 className="text-lg font-medium">Qualtity</h3>
+                  <h3 className="text-lg font-medium">Quality</h3>
                   <div className="mt-0">
                     <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
@@ -393,7 +389,7 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Coördinate System</dt>
+                        <dt className="text-sm font-medium leading-6 text-gray-900">Coordinate System</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
                             'hdmap',

@@ -60,6 +60,8 @@ export const allTrue = allEqual(true)
 
 export const getImageUrl = (image: string) => `${process.env.NEXT_PUBLIC_URL || ''}/${image}`
 
+export const addDidToAddress = (address: string) => `did:pkh:tz:${address}`
+
 export const extractAddressFromDid = replace('did:pkh:tz:', '')
 
 export const extractUuidFromUrn = replace('urn:uuid:', '')

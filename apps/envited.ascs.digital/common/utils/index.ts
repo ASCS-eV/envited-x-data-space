@@ -12,11 +12,13 @@ export {
 
 export {
   addUrnUuid,
+  addDidToAddress,
   extractAddressFromDid,
   extractUuidFromUrn,
   extractIdFromCredential,
   extractIssuerIdFromCredential,
   extractTypeFromCredential,
+  formatTokenAttributes,
   getImageUrl,
   slugify,
   createRandomString,

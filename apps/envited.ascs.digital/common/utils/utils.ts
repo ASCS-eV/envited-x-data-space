@@ -58,7 +58,7 @@ export const allEqual = (x: any) => all(equals(x))
 
 export const allTrue = allEqual(true)
 
-export const getImageUrl = (image: string) => `${process.env.NEXT_PUBLIC_URL || ''}/${image}`
+export const getImageUrl = (image: string) => `${process.env.NEXT_UPLOADS_URL || ''}/${image}`
 
 export const addDidToAddress = (address: string) => `did:pkh:tz:${address}`
 

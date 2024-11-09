@@ -234,7 +234,7 @@ export const _validateAndCreateMetadata =
       }
 
       const [issuer] = await connection.getUserWithProfileById(user.issuerId)
-      
+
       if (!issuer) {
         throw new Error('Issuer not found')
       }

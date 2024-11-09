@@ -30,7 +30,13 @@ import {
   maybeUpdatePublishedState,
   update as updateProfile,
 } from './profiles'
-import { getTokenAttributesByTokenId, getTokenById, getTokens, getTokensByIssuerId, getTokenWithAttributesById } from './tokens'
+import {
+  getTokenAttributesByTokenId,
+  getTokenById,
+  getTokenWithAttributesById,
+  getTokens,
+  getTokensByIssuerId,
+} from './tokens'
 import {
   activateUserById,
   addUserToRole,

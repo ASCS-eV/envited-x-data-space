@@ -8,7 +8,7 @@ import { addDidToAddress, badRequestError, formatError, internalServerErrorError
 
 export const _getTokenById =
   ({ db, log }: { db: Database; log: Log }) =>
-  async (id: string): Promise<{ token: Token & { tokenAttributes: TokenAttribute[] } ; profile: Profile }> => {
+  async (id: string): Promise<{ token: Token & { tokenAttributes: TokenAttribute[] }; profile: Profile }> => {
     try {
       if (isNil(id) || isEmpty(id)) {
         throw badRequestError({ resource: 'token', resourceId: id, message: 'Missing ID' })

@@ -4,8 +4,8 @@ import { Tab } from '@headlessui/react'
 import { pathOr } from 'ramda'
 import { FC, Fragment } from 'react'
 
-import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
 import { useTranslation } from '../../common/i18n'
+import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
 import { formatTokenAttributes } from '../../common/utils'
 import { Button } from '../Button'
 
@@ -14,8 +14,7 @@ function classNames(...classes: any) {
 }
 
 interface AssetProps {
-  token: { token: Token & { tokenAttributes: TokenAttribute[]},  profile: Profile }
-  
+  token: { token: Token & { tokenAttributes: TokenAttribute[] }; profile: Profile }
 }
 
 export const Asset: FC<AssetProps> = ({ token: { token } }) => {
@@ -79,7 +78,8 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                     {pathOr('', ['hdmap', 'general', 'general', 'data', 'general', 'recordingTime'])(attributes)}
                   </li>
                   <li>
-                    <strong>{t('[Term] version')}</strong> {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
+                    <strong>{t('[Term] version')}</strong>{' '}
+                    {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
                   </li>
                 </ul>
               </div>

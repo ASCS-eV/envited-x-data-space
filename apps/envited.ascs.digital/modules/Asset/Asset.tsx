@@ -4,7 +4,8 @@ import { Tab } from '@headlessui/react'
 import { pathOr } from 'ramda'
 import { FC, Fragment } from 'react'
 
-import { ButtonType, ColorScheme, Token } from '../../common/types'
+import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
+import { useTranslation } from '../../common/i18n'
 import { formatTokenAttributes } from '../../common/utils'
 import { Button } from '../Button'
 
@@ -13,14 +14,13 @@ function classNames(...classes: any) {
 }
 
 interface AssetProps {
-  item: {
-    token: Token
-    tokenAttributes: any
-  }
+  token: { token: Token & { tokenAttributes: TokenAttribute[]},  profile: Profile }
+  
 }
 
-export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
-  const attributes = formatTokenAttributes(tokenAttributes) as any
+export const Asset: FC<AssetProps> = ({ token: { token } }) => {
+  const attributes = formatTokenAttributes(token.tokenAttributes) as any
+  const { t } = useTranslation('Asset')
 
   return (
     <>
@@ -38,12 +38,12 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
                 <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl break-all">{token.name}</h1>
 
                 <h2 id="information-heading" className="sr-only">
-                  Product information
+                  {t('[Header] product information')}
                 </h2>
               </div>
 
               <div>
-                <h3 className="sr-only">Reviews</h3>
+                <h3 className="sr-only">{t('[Header] reviews')}</h3>
                 <div className="flex items-center">
                   <p className="mt-2 text-sm text-gray-500">{token.id}</p>
                 </div>
@@ -54,32 +54,32 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4">
               <Button
-                href={`mailto:example-asset@envited.de?subject=ENVITED X Request for offer: ${token.id}&body=Dear Sales Team,%0D%0DI'm interested in your product ${process.env.NEXTAUTH_URL}/${token.id}.%0DPlease get in touch with me with an offer.%0D%0DBest regards,`}
+                href={`mailto:example-asset@envited.de?subject=ENVITED X Request for offer: ${token.id}&body=Dear Sales Team,%0D%0DI'm interested in your product ${process.env.NEXT_PUBLIC_UI_URL}/assets/${token.id}.%0DPlease get in touch with me with an offer.%0D%0DBest regards,`}
                 type={ButtonType.block}
                 colorScheme={ColorScheme.light}
                 target="_blank"
               >
-                Contact sales
+                {t('[Button] contact sales')}
               </Button>
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-              <h3 className="text-sm font-medium text-gray-900">Asset information</h3>
+              <h3 className="text-sm font-medium text-gray-900">{t('[Header] asset information')}</h3>
               <div className="prose prose-sm mt-4 text-gray-500">
                 <ul role="list" className="text-sm font-medium leading-8 text-gray-900">
                   <li>
-                    <strong>Format:</strong> ASAM OpenDrive 1.6
+                    <strong>{t('[Term] format')}</strong> ASAM OpenDrive 1.6
                   </li>
                   <li>
-                    <strong>Size:</strong>{' '}
+                    <strong>{t('[Term] size')}</strong>{' '}
                     {pathOr('', ['hdmap', 'general', 'general', 'data', 'general', 'size'])(attributes)}
                   </li>
                   <li>
-                    <strong>Recording time:</strong>{' '}
+                    <strong>{t('[Term] recording time')}</strong>{' '}
                     {pathOr('', ['hdmap', 'general', 'general', 'data', 'general', 'recordingTime'])(attributes)}
                   </li>
                   <li>
-                    <strong>Version:</strong> {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
+                    <strong>{t('[Term] version')}</strong> {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
                   </li>
                 </ul>
               </div>
@@ -89,10 +89,10 @@ export const Asset: FC<AssetProps> = ({ item: { token, tokenAttributes } }) => {
               <h3 className="text-sm font-medium text-gray-900">License</h3>
               <ul role="list" className="mt-4 text-sm font-medium leading-8 text-gray-900">
                 <li>
-                  <strong>Type:</strong> {token.rights}
+                  <strong>{t('[Term] type')}</strong> {token.rights}
                 </li>
                 <li>
-                  <strong>License type:</strong>{' '}
+                  <strong>{t('[Term] license')}</strong>{' '}
                   <a href={token.rightsUri} className="font-medium text-blue-900 hover:text-blue-800">
                     {token.rightsUri}
                   </a>

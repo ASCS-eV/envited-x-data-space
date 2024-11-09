@@ -30,7 +30,7 @@ import {
   maybeUpdatePublishedState,
   update as updateProfile,
 } from './profiles'
-import { getTokenAttributesById, getTokenById, getTokens, getTokensByIssuerId } from './tokens'
+import { getTokenAttributesByTokenId, getTokenById, getTokens, getTokensByIssuerId, getTokenWithAttributesById } from './tokens'
 import {
   activateUserById,
   addUserToRole,
@@ -75,7 +75,8 @@ const queries = {
   getAssets,
   getAssetByCID,
   getAssetsByUserId,
-  getTokenAttributesById,
+  getTokenAttributesByTokenId,
+  getTokenWithAttributesById,
   getTokens,
   getTokenById,
   getTokensByIssuerId,

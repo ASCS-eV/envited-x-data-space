@@ -7,47 +7,33 @@ import { FC } from 'react'
 
 import { ROUTES } from '../../common/constants/routes'
 import { Token } from '../../common/types'
+import { useTranslation } from '../../common/i18n'
 
 interface AssetsProps {
-  items: Token[]
+  tokens: Token[]
 }
 
-export const DashboardAssets: FC<AssetsProps> = ({ items }) => {
+export const DashboardAssets: FC<AssetsProps> = ({ tokens }) => {
+  const { t } = useTranslation('Assets')
+
   return (
     <>
       <div className="flex justify-between mb-6 pb-6 border-b">
-        <Heading importance="h3">Assets</Heading>
+        <Heading importance="h3">{t('[Header] assets')}</Heading>
         <Link
           href={ROUTES.DASHBOARD.ADD_ASSETS}
           className="bg-blue-900 hover:bg-blue-800 text-white py-2 px-4 text-xs sm:text-sm disabled:opacity-50 font-bold leading-none transition duration-300 ease-in-out rounded-md"
         >
-          Add assets
+          {t('[Button] add assets')}
         </Link>
       </div>
       <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8">
         {map(
           ({
             id,
-            hash,
-            createdAt,
-            contract,
-            minter,
-            tokenId,
             displayUri,
-            tokenMetadata,
             name,
             description,
-            creators,
-            publishers,
-            date,
-            type,
-            rights,
-            rightsUri,
-            language,
-            artifactUri,
-            identifier,
-            externalUri,
-            modifiedAt,
           }: Token) => (
             <div
               key={id}
@@ -70,14 +56,14 @@ export const DashboardAssets: FC<AssetsProps> = ({ items }) => {
                     href={`/assets/${id}`}
                     className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"
                   >
-                    View
+                    {t('[Link] view')}
                     <span aria-hidden="true"> &rarr;</span>
                   </a>
                 </div>
               </div>
             </div>
           ),
-        )(items)}
+        )(tokens)}
       </div>
     </>
   )

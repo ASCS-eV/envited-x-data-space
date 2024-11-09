@@ -9,5 +9,5 @@ export type {
   Profile,
   Environment,
   Token,
-  TokenAttributes,
+  TokenAttribute,
 } from './types'

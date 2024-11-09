@@ -111,7 +111,7 @@ export interface Token {
   modifiedAt: string
 }
 
-export interface TokenAttributes {
+export interface TokenAttribute {
   tokenId: string
   name: string
   value: string

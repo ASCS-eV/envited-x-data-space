@@ -10,7 +10,7 @@ import { Token } from '../../types'
 import { Session } from '../../types/types'
 import { extractAddressFromDid, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
 
-export const _getTokensByIssuerId =
+export const _getTokensForLoggedInUser =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async (): Promise<Token[]> => {
     try {
@@ -38,4 +38,4 @@ export const _getTokensByIssuerId =
     }
   }
 
-export const getTokensByIssuerId = cache(_getTokensByIssuerId({ db, getServerSession, log }))
+export const getTokensForLoggedInUser = cache(_getTokensForLoggedInUser({ db, getServerSession, log }))

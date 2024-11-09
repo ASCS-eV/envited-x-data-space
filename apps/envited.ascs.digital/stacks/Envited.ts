@@ -141,9 +141,7 @@ export default function Envited({ stack }: StackContext) {
   })
 
   const customDomain =
-    stack.stage === 'staging'
-      ? { domainName: 'staging.envited-x.net' }
-      : { domainName: 'envited-x.net' }
+    stack.stage === 'staging' ? { domainName: 'staging.envited-x.net' } : { domainName: 'envited-x.net' }
 
   // Create the Next.js site
   const site = new NextjsSite(stack, 'envited_ascs_digital', {

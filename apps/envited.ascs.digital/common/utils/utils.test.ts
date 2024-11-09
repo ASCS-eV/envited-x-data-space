@@ -136,4 +136,40 @@ describe('common/utils', () => {
       expect(SUT.addUrnUuid(uuid)).toEqual(result)
     })
   })
+
+  describe('formatTokenAttributes', () => {
+    it('should return an object with token attributes as expexcted', () => {
+      // when ... we want to format a token attributes object
+      // then ... we should fromat as expected
+      const attributes = [
+        {
+          tokenId: 'TOKEN_ID',
+          name: 'hdmap:georeference:georeference:projectLocation:georeference:city',
+          value: 'CITY',
+        },
+        {
+          tokenId: 'TOKEN_ID',
+          name: 'hdmap:georeference:georeference:projectLocation:georeference:relationOrArea',
+          value: 'AREA',
+        },
+      ]
+
+      const result = {
+        hdmap: {
+          georeference: {
+            georeference: {
+              projectLocation: {
+                georeference: {
+                  city: 'CITY',
+                  relationOrArea: 'AREA',
+                },
+              },
+            },
+          },
+        },
+      }
+
+      expect(SUT.formatTokenAttributes(attributes)).toEqual(result)
+    })
+  })
 })

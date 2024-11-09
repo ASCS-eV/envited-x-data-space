@@ -2,77 +2,61 @@
 
 import { Heading } from '@envited-x-data-space/design-system'
 import Link from 'next/link'
+import { map } from 'ramda'
+import { FC } from 'react'
 
 import { ROUTES } from '../../common/constants/routes'
+import { useTranslation } from '../../common/i18n'
+import { Token } from '../../common/types'
 
-const products = [
-  {
-    id: 1,
-    name: 'Motorway Testfield A8 Heimsheim <-> Leonberg (XODR)',
-    href: '/assets/detail',
-    description: 'A map section of the A8 highway from Heimsheim to Leonberg with a total length of 37.91 km. It was',
-    options: 'XODR-3DM-23001',
-    imageSrc: 'https://envited.market/media/OpenDRIVE_A9_final_bO9LFP7.png.500x320_q85_crop-scale.png',
-    imageAlt: 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
-  },
-  {
-    id: 2,
-    name: 'San Francisco Sample (Unreal-Carla)',
-    href: '/assets/detail',
-    description:
-      'San Francisco Union Square and adjacent streets. 3D Visualization of San Francisco HD maps, designed based on real-world OpenDRIVE data',
-    options: 'CARLA-TGG-21001',
-    imageSrc: 'https://envited.market/media/Kachel_San_Francisco_unreal.png.500x320_q85_crop-scale.png',
-    imageAlt: 'Front of plain black t-shirt.',
-  },
-]
+interface AssetsProps {
+  tokens: Token[]
+}
 
-export const DashboardAssets = () => {
+export const DashboardAssets: FC<AssetsProps> = ({ tokens }) => {
+  const { t } = useTranslation('Assets')
+
   return (
     <>
       <div className="flex justify-between mb-6 pb-6 border-b">
-        <Heading importance="h3">Assets</Heading>
+        <Heading importance="h3">{t('[Header] assets')}</Heading>
         <Link
           href={ROUTES.DASHBOARD.ADD_ASSETS}
           className="bg-blue-900 hover:bg-blue-800 text-white py-2 px-4 text-xs sm:text-sm disabled:opacity-50 font-bold leading-none transition duration-300 ease-in-out rounded-md"
         >
-          Add assets
+          {t('[Button] add assets')}
         </Link>
       </div>
       <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8">
-        {products.map(product => (
+        {map(({ id, displayUri, name, description }: Token) => (
           <div
-            key={product.id}
+            key={id}
             className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
           >
             <div className="aspect-h-3 aspect-w-4 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-48">
-              <img
-                src={product.imageSrc}
-                alt={product.imageAlt}
-                className="h-48 w-full object-cover object-center sm:h-48 sm:w-full"
-              />
+              <img src={displayUri} alt={name} className="h-48 w-full object-cover object-center sm:h-48 sm:w-full" />
             </div>
             <div className="flex flex-1 flex-col space-y-2 p-4">
-              <p className="text-sm italic text-gray-500">{product.options}</p>
+              <p className="text-sm italic text-gray-500">{id}</p>
               <h3 className="text-sm font-medium text-gray-900">
-                <a href={product.href}>
+                <a href={`/assets/${id}`} className="break-all">
                   <span aria-hidden="true" className="absolute inset-0" />
-                  {product.name}
+                  {name}
                 </a>
               </h3>
-              <p className="text-sm text-gray-500">{product.description}</p>
+              <p className="text-sm text-gray-500">{description}</p>
               <div className="flex justify-between pt-4">
                 <a
-                  href={product.href}
+                  href={`/assets/${id}`}
                   className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"
                 >
-                  View
+                  {t('[Link] view')}
                   <span aria-hidden="true"> &rarr;</span>
                 </a>
               </div>
             </div>
           </div>
-        ))}
+        ))(tokens)}
       </div>
     </>
   )

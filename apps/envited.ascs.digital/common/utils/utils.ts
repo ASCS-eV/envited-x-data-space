@@ -5,6 +5,7 @@ import {
   compose,
   concat,
   equals,
+  forEach,
   gt,
   head,
   join,
@@ -13,6 +14,7 @@ import {
   pathOr,
   pipe,
   propSatisfies,
+  reduce,
   replace,
   tail,
   take,
@@ -58,6 +60,8 @@ export const allTrue = allEqual(true)
 
 export const getImageUrl = (image: string) => `${process.env.NEXT_PUBLIC_URL || ''}/${image}`
 
+export const addDidToAddress = (address: string) => `did:pkh:tz:${address}`
+
 export const extractAddressFromDid = replace('did:pkh:tz:', '')
 
 export const extractUuidFromUrn = replace('urn:uuid:', '')
@@ -77,3 +81,28 @@ export const isServer = () => typeof window === 'undefined'
 export const addUrn = (type: string) => (uuid: string) => `urn:${type}:${uuid}`
 
 export const addUrnUuid = addUrn('uuid')
+
+export const reduceIndexed = addIndex(reduce)
+
+export const formatTokenAttributes = (data: any) => {
+  const result = {}
+
+  forEach(({ name, value }) => {
+    const keys = name.split(':')
+
+    reduceIndexed(
+      (acc: any, key: any, index: any) => {
+        if (index === keys.length - 1) {
+          acc[key] = value
+        } else {
+          acc[key] = acc[key] || {}
+        }
+        return acc[key]
+      },
+      result,
+      keys,
+    )
+  }, data)
+
+  return result
+}

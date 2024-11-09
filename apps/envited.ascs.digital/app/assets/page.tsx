@@ -5,7 +5,6 @@ import { PageHeader } from '../../modules/PageHeader'
 export default async function Index() {
   const tokens = await getTokens()
 
-  console.log(tokens)
   return (
     <main>
       <PageHeader
@@ -18,7 +17,7 @@ export default async function Index() {
         backgroundImage="/images/AdobeStock_838127622_Rich4289.jpeg"
       />
       <div className="mx-auto max-w-2xl px-4 py-10 sm:py-40 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
-        <Assets />
+        <Assets items={tokens} />
       </div>
     </main>
   )

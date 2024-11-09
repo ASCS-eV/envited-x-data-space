@@ -2,39 +2,19 @@
 
 import { Address, Pill } from '@envited-x-data-space/design-system'
 import { Tab } from '@headlessui/react'
-import { isNil, map, propOr } from 'ramda'
+import { isEmpty, isNil, map, propOr } from 'ramda'
 import React, { FC, Fragment } from 'react'
 
 import { useTranslation } from '../../common/i18n'
-import { Profile } from '../../common/types'
+import { Profile, Token } from '../../common/types'
 import { getImageUrl } from '../../common/utils'
-
-const products = [
-  {
-    id: 1,
-    name: 'Motorway Testfield A8 Heimsheim <-> Leonberg (XODR)',
-    href: '/assets/detail',
-    description: 'A map section of the A8 highway from Heimsheim to Leonberg with a total length of 37.91 km. It was',
-    options: 'XODR-3DM-23001',
-    imageSrc: 'https://envited.market/media/OpenDRIVE_A9_final_bO9LFP7.png.500x320_q85_crop-scale.png',
-    imageAlt: 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
-  },
-  {
-    id: 2,
-    name: 'San Francisco Sample (Unreal-Carla)',
-    href: '/assets/detail',
-    description:
-      'San Francisco Union Square and adjacent streets. 3D Visualization of San Francisco HD maps, designed based on real-world OpenDRIVE data',
-    options: 'CARLA-TGG-21001',
-    imageSrc: 'https://envited.market/media/Kachel_San_Francisco_unreal.png.500x320_q85_crop-scale.png',
-    imageAlt: 'Front of plain black t-shirt.',
-  },
-]
 
 interface MemberProps {
   member: Profile
+  tokens: Token[]
 }
-export const Member: FC<MemberProps> = ({ member }) => {
+
+export const Member: FC<MemberProps> = ({ member, tokens }) => {
   const { t } = useTranslation('Member')
 
   return (
@@ -171,39 +151,40 @@ export const Member: FC<MemberProps> = ({ member }) => {
           </a>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
-          {products.map(product => (
-            <div
-              key={product.id}
-              className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
-            >
-              <div className="aspect-h-3 aspect-w-4 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-48">
-                <img
-                  src={product.imageSrc}
-                  alt={product.imageAlt}
-                  className="h-48 w-full object-cover object-center sm:h-48 sm:w-full"
-                />
-              </div>
-              <div className="flex flex-1 flex-col space-y-2 p-4">
-                <p className="text-sm italic text-gray-500">{product.options}</p>
-                <h3 className="text-sm font-medium text-gray-900">
-                  <a href={product.href}>
-                    <span aria-hidden="true" className="absolute inset-0" />
-                    {product.name}
-                  </a>
-                </h3>
-                <p className="text-sm text-gray-500">{product.description}</p>
-                <div className="flex justify-between pt-4">
-                  <a
-                    href={product.href}
-                    className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"
-                  >
-                    View
-                    <span aria-hidden="true"> &rarr;</span>
-                  </a>
+          {!isEmpty(tokens) &&
+            map(({ id, displayUri, name, description }: Token) => (
+              <div
+                key={id}
+                className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
+              >
+                <div className="aspect-h-3 aspect-w-4 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-48">
+                  <img
+                    src={displayUri}
+                    alt={name}
+                    className="h-48 w-full object-cover object-center sm:h-48 sm:w-full"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col space-y-2 p-4">
+                  <p className="text-sm italic text-gray-500">{id}</p>
+                  <h3 className="text-sm font-medium text-gray-900">
+                    <a href={`/assets/${id}`} className="break-all">
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {name}
+                    </a>
+                  </h3>
+                  <p className="text-sm text-gray-500">{description}</p>
+                  <div className="flex justify-between pt-4">
+                    <a
+                      href={`/assets/${id}`}
+                      className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"
+                    >
+                      View
+                      <span aria-hidden="true"> &rarr;</span>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))(tokens)}
         </div>
       </div>
     </>

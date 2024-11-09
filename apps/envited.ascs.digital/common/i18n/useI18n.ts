@@ -1,6 +1,8 @@
 import { compose, mergeDeepRight, pathOr, propOr, reduce } from 'ramda'
 
 import { AddAssetsTranslation } from '../../modules/AddAssets'
+import { AssetTranslation } from '../../modules/Asset'
+import { AssetsTranslations } from '../../modules/Assets'
 import { DashboardMembersTranslation } from '../../modules/DashboardMembers'
 import { ErrorTranslation } from '../../modules/Error'
 import { FooterTranslation } from '../../modules/Footer'
@@ -20,6 +22,8 @@ const getTranslationsForLanguage = (namespace: string) => (locale: Locale) => pa
 const mergeTranslations = reduce(mergeDeepRight, { [Locale.en_GB]: {}, [Locale.de_DE]: {} })
 const translationObject = mergeTranslations([
   AddAssetsTranslation,
+  AssetTranslation,
+  AssetsTranslations,
   DashboardMembersTranslation,
   ErrorTranslation,
   FooterTranslation,

@@ -66,7 +66,7 @@ export const getManifestFilesAndFormatPaths = (manifest: Manifest) =>
 
 export const _getFilesFromByteArray =
   ({ getFileFromByteArray }: { getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any }) =>
-  (byteArray: Uint8Array, files: string[]) => {
+  async (byteArray: Uint8Array, files: string[]) => {
     const filesPromises = files.map((path: string) => {
       const buffer = getFileFromByteArray(byteArray, path)
 

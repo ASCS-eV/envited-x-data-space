@@ -64,17 +64,29 @@ export const getPathsOfManifestFiles = (links: ManifestLink[]) =>
 export const getManifestFilesAndFormatPaths = (manifest: Manifest) =>
   pipe(getAllManifestLinks, getPathsOfManifestFiles)(manifest)
 
-export const _getFilesFromByteArray =
+export const _getFileWithPathAndBuffer =
   ({ getFileFromByteArray }: { getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any }) =>
-  async (byteArray: Uint8Array, files: string[]) => {
-    const filesPromises = files.map((path: string) => {
-      const buffer = getFileFromByteArray(byteArray, path)
+  async (byteArray: Uint8Array, path: string) => {
+    const buffer = await getFileFromByteArray(byteArray, path)
 
-      return {
-        path,
-        buffer,
-      }
-    })
+    return {
+      path,
+      buffer,
+    }
+  }
+
+export const getFileWithPathAndBuffer = _getFileWithPathAndBuffer({
+  getFileFromByteArray,
+})
+
+export const _getFilesFromByteArray =
+  ({
+    getFileWithPathAndBuffer,
+  }: {
+    getFileWithPathAndBuffer: (byteArray: Uint8Array, path: string) => Promise<{ path: string; buffer: Uint8Array }>
+  }) =>
+  async (byteArray: Uint8Array, files: string[]) => {
+    const filesPromises = files.map((path: string) => getFileWithPathAndBuffer(byteArray, path))
 
     const filesArray = await Promise.all(filesPromises)
 
@@ -82,7 +94,7 @@ export const _getFilesFromByteArray =
   }
 
 export const getFilesFromByteArray = _getFilesFromByteArray({
-  getFileFromByteArray,
+  getFileWithPathAndBuffer,
 })
 
 export const _getFilesWithPathAndByteArrayFromManifest =
@@ -103,9 +115,9 @@ export const _getFilesWithPathAndByteArrayFromManifest =
 
     const files = getFilesGroupedByAccessRoles(manifest)
 
-    const owner = await getFilesFromByteArray(byteArray, (files.owner as any))
-    const registeredUser = await getFilesFromByteArray(byteArray, (files.registeredUser as any))
-    const publicUser = await getFilesFromByteArray(byteArray, (files.publicUser as any))
+    const owner = await getFilesFromByteArray(byteArray, files.owner as any)
+    const registeredUser = await getFilesFromByteArray(byteArray, files.registeredUser as any)
+    const publicUser = await getFilesFromByteArray(byteArray, files.publicUser as any)
 
     return {
       owner,

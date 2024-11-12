@@ -76,7 +76,9 @@ export const _getFilesFromByteArray =
       }
     })
 
-    return Promise.all(filesPromises)
+    const filesArray = await Promise.all(filesPromises)
+
+    return filesArray
   }
 
 export const getFilesFromByteArray = _getFilesFromByteArray({

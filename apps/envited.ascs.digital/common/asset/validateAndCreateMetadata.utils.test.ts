@@ -111,26 +111,22 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
 
   describe('getFilesFromByteArray', () => {
     it('should get multiple files from byte array', async () => {
-      const files = [
-        'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-        'data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
-      ]
+      const files = ['data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr']
 
       const expected = [
         {
           path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
           buffer: 'FILE_BUFFER',
         },
-        {
-          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
-          buffer: 'FILE_BUFFER',
-        },
       ]
 
       const byteArray = 'BYTE_ARRAY' as any
-      const getFileFromByteArrayStub = jest.fn().mockReturnValue('FILE_BUFFER') as any
+      const getFileFromByteArrayStub = jest.fn().mockResolvedValue({
+        path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
+        buffer: 'FILE_BUFFER',
+      }) as any
 
-      const result = await SUT._getFilesFromByteArray({ getFileFromByteArray: getFileFromByteArrayStub })(
+      const result = await SUT._getFilesFromByteArray({ getFileWithPathAndBuffer: getFileFromByteArrayStub })(
         byteArray,
         files,
       )

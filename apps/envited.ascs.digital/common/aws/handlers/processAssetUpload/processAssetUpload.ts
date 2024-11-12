@@ -90,6 +90,7 @@ export const _main =
         Key: assetCID,
       })
 
+      console.log('validateAndCreateMetadata - files', files)
       const { registeredUser } = files
       /* Write publicUser paths to ipfs */
 

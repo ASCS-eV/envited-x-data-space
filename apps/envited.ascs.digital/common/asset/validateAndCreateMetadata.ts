@@ -243,6 +243,7 @@ export const _validateAndCreateMetadata =
       }
 
       const files = (await getFilesWithPathAndByteArrayFromManifest(byteArray, data.manifest)) as ManifestExtractedFiles
+      console.log('getFilesWithPathAndByteArrayFromManifest', files)
 
       // metadata temporarily hardcoded
       const tokenMetadata = createTokenMetadata({

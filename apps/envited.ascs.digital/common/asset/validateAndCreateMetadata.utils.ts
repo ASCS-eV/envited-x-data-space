@@ -91,15 +91,28 @@ export const _getFilesWithPathAndByteArrayFromManifest =
   }: {
     getFilesFromByteArray: (byteArray: Uint8Array, files: string[]) => Promise<{ path: string; buffer: Uint8Array }[]>
   }) =>
-  (byteArray: Uint8Array, manifest: Manifest) =>
-    pipe(
-      getFilesGroupedByAccessRoles,
-      evolve({
-        owner: (files: string[]) => getFilesFromByteArray(byteArray, files),
-        registeredUser: (files: string[]) => getFilesFromByteArray(byteArray, files),
-        publicUser: (files: string[]) => getFilesFromByteArray(byteArray, files),
-      }),
-    )(manifest)
+  async (byteArray: Uint8Array, manifest: Manifest) => {
+    // pipe(
+    //   getFilesGroupedByAccessRoles,
+    //   evolve({
+    //     owner: (files: string[]) => getFilesFromByteArray(byteArray, files),
+    //     registeredUser: (files: string[]) => getFilesFromByteArray(byteArray, files),
+    //     publicUser: (files: string[]) => getFilesFromByteArray(byteArray, files),
+    //   }),
+    // )(manifest)
+
+    const files = getFilesGroupedByAccessRoles(manifest)
+
+    const owner = await getFilesFromByteArray(byteArray, (files.owner as any))
+    const registeredUser = await getFilesFromByteArray(byteArray, (files.registeredUser as any))
+    const publicUser = await getFilesFromByteArray(byteArray, (files.publicUser as any))
+
+    return {
+      owner,
+      registeredUser,
+      publicUser,
+    }
+  }
 
 export const getFilesWithPathAndByteArrayFromManifest = _getFilesWithPathAndByteArrayFromManifest({
   getFilesFromByteArray,

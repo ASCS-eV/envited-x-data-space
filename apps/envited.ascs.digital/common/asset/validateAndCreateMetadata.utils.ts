@@ -2,7 +2,7 @@ import { CID } from 'multiformats/cid'
 import * as json from 'multiformats/codecs/json'
 import { Hasher } from 'multiformats/dist/src/hashes/hasher'
 import { sha256 } from 'multiformats/hashes/sha2'
-import { evolve, find, groupBy, map, path, pathOr, pipe, propEq, replace } from 'ramda'
+import { find, groupBy, map, path, pathOr, pipe, propEq, propOr, replace } from 'ramda'
 
 import { extractFromByteArray, read } from '../archive'
 import { Manifest, ManifestLink } from './types'
@@ -38,16 +38,18 @@ export const getDomainMetadataPath = (manifest: Manifest) =>
     replace('./', ''),
   )(manifest)
 
-export const getFilesGroupedByAccessRoles = (manifest: Manifest) =>
-  pipe(
+export const getFilesGroupedByAccessRoles = (manifest: Manifest) => {
+  const files = pipe(
     getAllManifestLinks,
     groupBy((link: ManifestLink) => link['manifest:accessRole']),
-    evolve({
-      owner: getPathsOfManifestFiles,
-      registeredUser: getPathsOfManifestFiles,
-      publicUser: getPathsOfManifestFiles,
-    }),
   )(manifest)
+
+  return {
+    owner: getPathsOfManifestFiles(propOr([], 'owner')(files)),
+    registeredUser: getPathsOfManifestFiles(propOr([], 'registeredUser')(files)),
+    publicUser: getPathsOfManifestFiles(propOr([], 'publicUser')(files)),
+  }
+}
 
 export const getAllManifestLinks = (manifest: Manifest) => {
   const assetData = path(['manifest:data', 'manifest:assetData'])(manifest) as ManifestLink[]
@@ -66,14 +68,10 @@ export const getManifestFilesAndFormatPaths = (manifest: Manifest) =>
 
 export const _getFileWithPathAndBuffer =
   ({ getFileFromByteArray }: { getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any }) =>
-  async (byteArray: Uint8Array, path: string) => {
-    const buffer = await getFileFromByteArray(byteArray, path)
-
-    return {
-      path,
-      buffer,
-    }
-  }
+  async (byteArray: Uint8Array, path: string) => ({
+    path,
+    buffer: await getFileFromByteArray(byteArray, path),
+  })
 
 export const getFileWithPathAndBuffer = _getFileWithPathAndBuffer({
   getFileFromByteArray,
@@ -85,13 +83,8 @@ export const _getFilesFromByteArray =
   }: {
     getFileWithPathAndBuffer: (byteArray: Uint8Array, path: string) => Promise<{ path: string; buffer: Uint8Array }>
   }) =>
-  async (byteArray: Uint8Array, files: string[]) => {
-    const filesPromises = files.map((path: string) => getFileWithPathAndBuffer(byteArray, path))
-
-    const filesArray = await Promise.all(filesPromises)
-
-    return filesArray
-  }
+  async (byteArray: Uint8Array, files: string[]) =>
+    await Promise.all(files.map((path: string) => getFileWithPathAndBuffer(byteArray, path)))
 
 export const getFilesFromByteArray = _getFilesFromByteArray({
   getFileWithPathAndBuffer,
@@ -104,25 +97,12 @@ export const _getFilesWithPathAndByteArrayFromManifest =
     getFilesFromByteArray: (byteArray: Uint8Array, files: string[]) => Promise<{ path: string; buffer: Uint8Array }[]>
   }) =>
   async (byteArray: Uint8Array, manifest: Manifest) => {
-    // pipe(
-    //   getFilesGroupedByAccessRoles,
-    //   evolve({
-    //     owner: (files: string[]) => getFilesFromByteArray(byteArray, files),
-    //     registeredUser: (files: string[]) => getFilesFromByteArray(byteArray, files),
-    //     publicUser: (files: string[]) => getFilesFromByteArray(byteArray, files),
-    //   }),
-    // )(manifest)
-
-    const files = getFilesGroupedByAccessRoles(manifest)
-
-    const owner = await getFilesFromByteArray(byteArray, files.owner as any)
-    const registeredUser = await getFilesFromByteArray(byteArray, files.registeredUser as any)
-    const publicUser = await getFilesFromByteArray(byteArray, files.publicUser as any)
+    const { owner, registeredUser, publicUser } = getFilesGroupedByAccessRoles(manifest)
 
     return {
-      owner,
-      registeredUser,
-      publicUser,
+      owner: await getFilesFromByteArray(byteArray, owner),
+      registeredUser: await getFilesFromByteArray(byteArray, registeredUser),
+      publicUser: await getFilesFromByteArray(byteArray, publicUser),
     }
   }
 

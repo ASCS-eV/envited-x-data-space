@@ -56,15 +56,15 @@ export const getDomainMetadataPath = (manifest: Manifest) =>
   )(manifest)
 
 export const getFilesGroupedByAccessRoles = (manifest: Manifest) => {
-  const files = pipe(
+  const { owner, registeredUser, publicUser } = pipe(
     getAllManifestLinks,
     groupBy((link: ManifestLink) => link['manifest:accessRole']),
   )(manifest)
 
   return {
-    owner: getPathsFromManifestLinks(propOr([], 'owner')(files)),
-    registeredUser: getPathsFromManifestLinks(propOr([], 'registeredUser')(files)),
-    publicUser: getPathsFromManifestLinks(propOr([], 'publicUser')(files)),
+    owner: owner ? getPathsFromManifestLinks(owner) : [],
+    registeredUser: registeredUser ? getPathsFromManifestLinks(registeredUser) : [],
+    publicUser: publicUser ? getPathsFromManifestLinks(publicUser) : [],
   }
 }
 
@@ -128,10 +128,17 @@ export const _getPathsAndBuffersFromByteArray =
   }: {
     getPathAndBufferFromFile: (byteArray: Uint8Array, path: string, type: string) => Promise<ExtractedFile>
   }) =>
-  async (byteArray: Uint8Array, files: { path: string; type: string }[]) =>
-    await Promise.all(
-      files.map(({ path, type }: { path: string; type: string }) => getPathAndBufferFromFile(byteArray, path, type)),
-    )
+  async (byteArray: Uint8Array, files: { path: string; type: string }[]) => {
+    const promises = files.map(({ path, type }: { path: string; type: string }) => getPathAndBufferFromFile(byteArray, path, type))
+    console.log('_getPathsAndBuffersFromByteArray - promises', promises)
+    const results = await Promise.all(promises)
+    console.log('_getPathsAndBuffersFromByteArray - results', results)
+    // await Promise.all(
+    //   files.map(({ path, type }: { path: string; type: string }) => getPathAndBufferFromFile(byteArray, path, type)),
+    // )
+
+    return results
+  }
 
 export const getPathsAndBuffersFromByteArray = _getPathsAndBuffersFromByteArray({
   getPathAndBufferFromFile,

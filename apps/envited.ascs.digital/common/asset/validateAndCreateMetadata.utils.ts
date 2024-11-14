@@ -144,6 +144,7 @@ export const _getPathsAndBuffersFromByteArray =
     )
     console.log('_getPathsAndBuffersFromByteArray - promises', addBufferPromises)
     const addBuffer = await Promise.all(addBufferPromises)
+    console.log('_getPathsAndBuffersFromByteArray - addBuffer', addBuffer)
 
     const addFilenamesPromises = addBuffer.map(
       ({ path, type, buffer }: { path: string; type: string; buffer: string }) =>

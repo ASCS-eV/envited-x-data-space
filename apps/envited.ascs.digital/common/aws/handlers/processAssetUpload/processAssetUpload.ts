@@ -95,7 +95,7 @@ export const _main =
 
       if (registeredUser) {
         const writeFilesToMetadataPromises = registeredUser.map(
-          async ({ path, buffer }: { path: string; buffer: Uint8Array }) => {
+          async ({ path, buffer }: { path: string; buffer: string }) => {
             const writeToMetadata = writeFile({
               Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
               Key: `${assetCID}/${path}`,

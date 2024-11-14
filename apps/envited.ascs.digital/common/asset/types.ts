@@ -37,7 +37,7 @@ export interface ManifestLicense {
 }
 
 export interface ExtractedFile {
-  buffer: Uint8Array
+  buffer: string
   cid: string
   path: string
   type: string

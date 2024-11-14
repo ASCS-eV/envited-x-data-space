@@ -160,9 +160,10 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
 
       const expected = [
         {
+          buffer: 'FILE_BUFFER',
+          cid: 'FILE_CID',
           path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
           type: 'FILE_TYPE',
-          buffer: 'FILE_BUFFER',
         },
       ]
 
@@ -172,11 +173,17 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
         type: 'FILE_TYPE',
         buffer: 'FILE_BUFFER',
       }) as any
+      const getFilenameFromFileStub = jest.fn().mockResolvedValue({
+        buffer: 'FILE_BUFFER',
+        cid: 'FILE_CID',
+        path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
+        type: 'FILE_TYPE',
+      }) as any
 
-      const result = await SUT._getPathsAndBuffersFromByteArray({ getPathAndBufferFromFile: getFileFromByteArrayStub })(
-        byteArray,
-        files,
-      )
+      const result = await SUT._getPathsAndBuffersFromByteArray({
+        getPathAndBufferFromFile: getFileFromByteArrayStub,
+        getFilenameFromFile: getFilenameFromFileStub,
+      })(byteArray, files)
 
       expect(result).toEqual(expected)
     })

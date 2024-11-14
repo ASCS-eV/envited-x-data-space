@@ -14,7 +14,6 @@ import {
   pathOr,
   pipe,
   propEq,
-  propOr,
   reduce,
   reject,
   replace,
@@ -103,36 +102,56 @@ export const getAllManifestLinksAndFormatPaths = (manifest: Manifest) =>
   )(manifest)
 
 export const _getPathAndBufferFromFile =
-  ({
-    getFileFromByteArray,
-    createFilename,
-  }: {
-    getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any
-    createFilename: (byteArray: Uint8Array) => Promise<string>
-  }) =>
+  ({ getFileFromByteArray }: { getFileFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<string> }) =>
   async (byteArray: Uint8Array, path: string, type: string) => ({
     path,
     type,
     buffer: await getFileFromByteArray(byteArray, path),
-    cid: await createFilename(byteArray),
   })
 
 export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
   getFileFromByteArray,
+})
+
+export const _getFilenameFromFile =
+  ({ createFilename }: { createFilename: (byteArray: Uint8Array) => Promise<string> }) =>
+  async (byteArray: Uint8Array, path: string, type: string, buffer: string): Promise<ExtractedFile> => ({
+    path,
+    type,
+    buffer,
+    cid: await createFilename(byteArray),
+  })
+
+export const getFilenameFromFile = _getFilenameFromFile({
   createFilename,
 })
 
 export const _getPathsAndBuffersFromByteArray =
   ({
     getPathAndBufferFromFile,
+    getFilenameFromFile,
   }: {
-    getPathAndBufferFromFile: (byteArray: Uint8Array, path: string, type: string) => Promise<ExtractedFile>
+    getPathAndBufferFromFile: (
+      byteArray: Uint8Array,
+      path: string,
+      type: string,
+    ) => Promise<{ path: string; type: string; buffer: string }>
+    getFilenameFromFile: (byteArray: Uint8Array, path: string, type: string, buffer: string) => Promise<ExtractedFile>
   }) =>
   async (byteArray: Uint8Array, files: { path: string; type: string }[]) => {
-    const promises = files.map(({ path, type }: { path: string; type: string }) => getPathAndBufferFromFile(byteArray, path, type))
-    console.log('_getPathsAndBuffersFromByteArray - promises', promises)
-    const results = await Promise.all(promises)
-    console.log('_getPathsAndBuffersFromByteArray - results', results)
+    const addBufferPromises = files.map(({ path, type }: { path: string; type: string }) =>
+      getPathAndBufferFromFile(byteArray, path, type),
+    )
+    console.log('_getPathsAndBuffersFromByteArray - promises', addBufferPromises)
+    const addBuffer = await Promise.all(addBufferPromises)
+
+    const addFilenamesPromises = addBuffer.map(
+      ({ path, type, buffer }: { path: string; type: string; buffer: string }) =>
+        getFilenameFromFile(byteArray, path, type, buffer),
+    )
+    console.log('_getPathsAndBuffersFromByteArray - results', addFilenamesPromises)
+
+    const results = await Promise.all(addFilenamesPromises)
     // await Promise.all(
     //   files.map(({ path, type }: { path: string; type: string }) => getPathAndBufferFromFile(byteArray, path, type)),
     // )
@@ -142,6 +161,7 @@ export const _getPathsAndBuffersFromByteArray =
 
 export const getPathsAndBuffersFromByteArray = _getPathsAndBuffersFromByteArray({
   getPathAndBufferFromFile,
+  getFilenameFromFile,
 })
 
 export const _getFilesAsPathAndByteArrayFromManifest =

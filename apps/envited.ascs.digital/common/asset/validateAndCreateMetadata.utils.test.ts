@@ -161,7 +161,6 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
       const expected = [
         {
           buffer: 'FILE_BUFFER',
-          cid: 'FILE_CID',
           path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
           type: 'FILE_TYPE',
         },
@@ -173,6 +172,35 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
         type: 'FILE_TYPE',
         buffer: 'FILE_BUFFER',
       }) as any
+
+      const result = await SUT._getPathsAndBuffersFromByteArray({
+        getPathAndBufferFromFile: getFileFromByteArrayStub,
+      })(byteArray, files)
+
+      expect(result).toEqual(expected)
+    })
+  })
+
+  describe('_getAllFilenamesFromFiles', () => {
+    it('should get multiple files from byte array', async () => {
+      const files = [
+        {
+          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
+          type: 'FILE_TYPE',
+          buffer: 'FILE_BUFFER',
+        },
+      ]
+
+      const expected = [
+        {
+          buffer: 'FILE_BUFFER',
+          cid: 'FILE_CID',
+          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
+          type: 'FILE_TYPE',
+        },
+      ]
+
+      const byteArray = 'BYTE_ARRAY' as any
       const getFilenameFromFileStub = jest.fn().mockResolvedValue({
         buffer: 'FILE_BUFFER',
         cid: 'FILE_CID',
@@ -180,8 +208,7 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
         type: 'FILE_TYPE',
       }) as any
 
-      const result = await SUT._getPathsAndBuffersFromByteArray({
-        getPathAndBufferFromFile: getFileFromByteArrayStub,
+      const result = await SUT._getAllFilenamesFromFiles({
         getFilenameFromFile: getFilenameFromFileStub,
       })(byteArray, files)
 

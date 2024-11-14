@@ -222,8 +222,6 @@ export const _validateAndCreateMetadata =
         domainMetadataCID,
       })(data.manifest)
 
-      console.log('modifiedManifest', modifiedManifest)
-
       const modifiedManifestCID = await createFilename(modifiedManifest)
       // const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
       // const licenseCID = await createFilename(license as any)

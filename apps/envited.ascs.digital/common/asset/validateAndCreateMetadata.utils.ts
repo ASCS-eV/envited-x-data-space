@@ -115,7 +115,7 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 
 export const _getFilenameFromFile =
   ({ createFilename }: { createFilename: (byteArray: Uint8Array) => Promise<string> }) =>
-  async (byteArray: Uint8Array, path: string, type: string, buffer: string): Promise<ExtractedFile> => {
+  async (byteArray: Uint8Array, path: string, type: string, buffer: string) => {
     const cid = await createFilename(byteArray)
     console.log('_getFilenameFromFile', cid)
     return {
@@ -130,43 +130,47 @@ export const getFilenameFromFile = _getFilenameFromFile({
   createFilename,
 })
 
+export const _getAllFilenamesFromFiles = ({
+    getFilenameFromFile,
+  }:
+  {
+    getFilenameFromFile: (byteArray: Uint8Array, path: string, type: string, buffer: string) => Promise<ExtractedFile>
+  }
+) => async (byteArray: Uint8Array, files: { path: string; type: string; buffer: string }[]) => {
+  console.log('_getAllFilenamesFromFiles')
+  const addFilenamesPromises = files.map(
+    ({ path, type, buffer }: { path: string; type: string; buffer: string }) =>
+      getFilenameFromFile(byteArray, path, type, buffer),
+  )
+  console.log('_getAllFilenamesFromFiles - promises', addFilenamesPromises)
+  
+  const results = await Promise.all(addFilenamesPromises)
+  console.log('_getAllFilenamesFromFiles - results', addFilenamesPromises)
+
+  return results
+}
+
+export const getAllFilenamesFromFiles = _getAllFilenamesFromFiles({
+  getFilenameFromFile,
+})
+
 export const _getPathsAndBuffersFromByteArray =
   ({
     getPathAndBufferFromFile,
-    getFilenameFromFile,
   }: {
     getPathAndBufferFromFile: (
       byteArray: Uint8Array,
       path: string,
       type: string,
     ) => Promise<{ path: string; type: string; buffer: string }>
-    getFilenameFromFile: (byteArray: Uint8Array, path: string, type: string, buffer: string) => Promise<ExtractedFile>
   }) =>
-  async (byteArray: Uint8Array, files: { path: string; type: string }[]) => {
-    const addBufferPromises = files.map(({ path, type }: { path: string; type: string }) =>
-      getPathAndBufferFromFile(byteArray, path, type),
+  async (byteArray: Uint8Array, files: { path: string; type: string }[]) =>
+    await Promise.all(
+      files.map(({ path, type }: { path: string; type: string }) => getPathAndBufferFromFile(byteArray, path, type)),
     )
-    console.log('_getPathsAndBuffersFromByteArray - promises', addBufferPromises)
-    const addBuffer = await Promise.all(addBufferPromises)
-    console.log('_getPathsAndBuffersFromByteArray - addBuffer', addBuffer)
-
-    const addFilenamesPromises = addBuffer.map(
-      ({ path, type, buffer }: { path: string; type: string; buffer: string }) =>
-        getFilenameFromFile(byteArray, path, type, buffer),
-    )
-    console.log('_getPathsAndBuffersFromByteArray - results', addFilenamesPromises)
-
-    const results = await Promise.all(addFilenamesPromises)
-    // await Promise.all(
-    //   files.map(({ path, type }: { path: string; type: string }) => getPathAndBufferFromFile(byteArray, path, type)),
-    // )
-
-    return results
-  }
 
 export const getPathsAndBuffersFromByteArray = _getPathsAndBuffersFromByteArray({
   getPathAndBufferFromFile,
-  getFilenameFromFile,
 })
 
 export const _getFilesAsPathAndByteArrayFromManifest =
@@ -176,7 +180,7 @@ export const _getFilesAsPathAndByteArrayFromManifest =
     getPathsAndBuffersFromByteArray: (
       byteArray: Uint8Array,
       files: { path: string; type: string }[],
-    ) => Promise<ExtractedFile[]>
+    ) => Promise<{ path: string; type: string; buffer: string }[]>
   }) =>
   async (byteArray: Uint8Array, manifest: Manifest) => {
     console.log('before getFilesGroupedByAccessRoles')
@@ -185,10 +189,14 @@ export const _getFilesAsPathAndByteArrayFromManifest =
     // const { owner, registeredUser, publicUser } = getFilesGroupedByAccessRoles(manifest)
     console.log('after getFilesGroupedByAccessRoles', grouped)
 
+    const publicUserFiles = await getPathsAndBuffersFromByteArray(byteArray, publicUser)
+    const publicUserFilesWithCID = await getAllFilenamesFromFiles(byteArray, publicUserFiles)
+    console.log(publicUserFilesWithCID)
+
     return {
       owner: await getPathsAndBuffersFromByteArray(byteArray, owner),
       registeredUser: await getPathsAndBuffersFromByteArray(byteArray, registeredUser),
-      publicUser: await getPathsAndBuffersFromByteArray(byteArray, publicUser),
+      publicUser: publicUserFiles,
     }
   }
 

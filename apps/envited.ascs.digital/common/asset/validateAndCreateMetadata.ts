@@ -209,7 +209,9 @@ export const _validateAndCreateMetadata =
       byteArray: Uint8Array,
       manifest: Manifest,
     ) => Promise<ManifestExtractedFiles>
-    getAllFilenamesFromFiles: (extractedFiles: ExtractedFile[]) => Promise<{ buffer: string; cid: string, path: string, type: string}[]>
+    getAllFilenamesFromFiles: (
+      extractedFiles: ExtractedFile[],
+    ) => Promise<{ buffer: string; cid: string; path: string; type: string }[]>
     db: Database
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
@@ -248,7 +250,7 @@ export const _validateAndCreateMetadata =
       console.log('visualizationFiles - before')
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
       console.log('visualizationFiles', visualizationFiles)
-      
+
       // metadata temporarily hardcoded
       const tokenMetadata = createTokenMetadata({
         assetCID,

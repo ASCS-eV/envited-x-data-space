@@ -130,25 +130,24 @@ export const getFilenameFromFile = _getFilenameFromFile({
   createFilename,
 })
 
-export const _getAllFilenamesFromFiles = ({
+export const _getAllFilenamesFromFiles =
+  ({
     getFilenameFromFile,
-  }:
-  {
+  }: {
     getFilenameFromFile: (byteArray: Uint8Array, path: string, type: string, buffer: string) => Promise<ExtractedFile>
-  }
-) => async (byteArray: Uint8Array, files: { path: string; type: string; buffer: string }[]) => {
-  console.log('_getAllFilenamesFromFiles')
-  const addFilenamesPromises = files.map(
-    ({ path, type, buffer }: { path: string; type: string; buffer: string }) =>
+  }) =>
+  async (byteArray: Uint8Array, files: { path: string; type: string; buffer: string }[]) => {
+    console.log('_getAllFilenamesFromFiles')
+    const addFilenamesPromises = files.map(({ path, type, buffer }: { path: string; type: string; buffer: string }) =>
       getFilenameFromFile(byteArray, path, type, buffer),
-  )
-  console.log('_getAllFilenamesFromFiles - promises', addFilenamesPromises)
-  
-  const results = await Promise.all(addFilenamesPromises)
-  console.log('_getAllFilenamesFromFiles - results', addFilenamesPromises)
+    )
+    console.log('_getAllFilenamesFromFiles - promises', addFilenamesPromises)
 
-  return results
-}
+    const results = await Promise.all(addFilenamesPromises)
+    console.log('_getAllFilenamesFromFiles - results', addFilenamesPromises)
+
+    return results
+  }
 
 export const getAllFilenamesFromFiles = _getAllFilenamesFromFiles({
   getFilenameFromFile,

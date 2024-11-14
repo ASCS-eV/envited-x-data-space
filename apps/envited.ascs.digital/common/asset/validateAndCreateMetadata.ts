@@ -222,6 +222,8 @@ export const _validateAndCreateMetadata =
         domainMetadataCID,
       })(data.manifest)
 
+      console.log('modifiedManifest', modifiedManifest)
+
       const modifiedManifestCID = await createFilename(modifiedManifest)
       // const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
       // const licenseCID = await createFilename(license as any)
@@ -238,7 +240,9 @@ export const _validateAndCreateMetadata =
         throw new Error('Issuer not found')
       }
 
+      console.log('before - files')
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
+      console.log('files', files)
       console.log('IPFS files', files.publicUser)
       console.log('displayUri', find(propEq('visualization', 'type'))(files.publicUser))
 

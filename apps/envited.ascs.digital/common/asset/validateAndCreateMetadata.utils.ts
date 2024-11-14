@@ -147,7 +147,11 @@ export const _getFilesAsPathAndByteArrayFromManifest =
     ) => Promise<ExtractedFile[]>
   }) =>
   async (byteArray: Uint8Array, manifest: Manifest) => {
-    const { owner, registeredUser, publicUser } = getFilesGroupedByAccessRoles(manifest)
+    console.log('before getFilesGroupedByAccessRoles')
+    const grouped = getFilesGroupedByAccessRoles(manifest)
+    const { owner, registeredUser, publicUser } = grouped
+    // const { owner, registeredUser, publicUser } = getFilesGroupedByAccessRoles(manifest)
+    console.log('after getFilesGroupedByAccessRoles', grouped)
 
     return {
       owner: await getPathsAndBuffersFromByteArray(byteArray, owner),

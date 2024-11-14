@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { all, equals, find, keys, omit, pipe, prop, propEq } from 'ramda'
+import { all, equals, filter, find, keys, omit, pipe, prop, propEq } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { db } from '../database/queries'
@@ -164,6 +164,7 @@ export const _validateAndCreateMetadata =
     createFilename,
     getFileFromByteArray,
     getFilesAsPathAndByteArrayFromManifest,
+    getAllFilenamesFromFiles,
     db,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array) => Promise<
@@ -208,6 +209,7 @@ export const _validateAndCreateMetadata =
       byteArray: Uint8Array,
       manifest: Manifest,
     ) => Promise<ManifestExtractedFiles>
+    getAllFilenamesFromFiles: (extractedFiles: ExtractedFile[]) => Promise<{ buffer: string; cid: string, path: string, type: string}[]>
     db: Database
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
@@ -238,23 +240,21 @@ export const _validateAndCreateMetadata =
         throw new Error('Issuer not found')
       }
 
-      console.log('before - files')
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
-      console.log('files', files)
-      console.log('IPFS files', files.publicUser)
       const displayUri = find(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile
-      console.log('displayUri', displayUri)
-      if (displayUri) {
-        const displayUriCID = await createFilename(displayUri.buffer as any)
-        console.log('displayUriCID', displayUriCID)
-      }
+      const displayUriCID = await createFilename(displayUri.buffer as any)
 
+      const visualization = filter(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile[]
+      console.log('visualizationFiles - before')
+      const visualizationFiles = await getAllFilenamesFromFiles(visualization)
+      console.log('visualizationFiles', visualizationFiles)
+      
       // metadata temporarily hardcoded
       const tokenMetadata = createTokenMetadata({
-        assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH', //
-        manifestCID: modifiedManifestCID, //'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
-        domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB', //
-        displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
+        assetCID,
+        manifestCID: modifiedManifestCID,
+        domainMetadataCID,
+        displayUriCID: displayUriCID,
         displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
         minter: extractAddressFromDid(issuer.user.id),
         creator: issuer.profile.name,
@@ -283,5 +283,6 @@ export const validateAndCreateMetadata = _validateAndCreateMetadata({
   createFilename,
   getFileFromByteArray,
   getFilesAsPathAndByteArrayFromManifest,
+  getAllFilenamesFromFiles,
   db,
 })

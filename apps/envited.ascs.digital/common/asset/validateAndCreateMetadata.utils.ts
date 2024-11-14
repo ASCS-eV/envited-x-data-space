@@ -115,12 +115,16 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 
 export const _getFilenameFromFile =
   ({ createFilename }: { createFilename: (byteArray: Uint8Array) => Promise<string> }) =>
-  async (byteArray: Uint8Array, path: string, type: string, buffer: string): Promise<ExtractedFile> => ({
-    path,
-    type,
-    buffer,
-    cid: await createFilename(byteArray),
-  })
+  async (byteArray: Uint8Array, path: string, type: string, buffer: string): Promise<ExtractedFile> => {
+    const cid = await createFilename(byteArray)
+    console.log('_getFilenameFromFile', cid)
+    return {
+      cid,
+      path,
+      type,
+      buffer,
+    }
+  }
 
 export const getFilenameFromFile = _getFilenameFromFile({
   createFilename,

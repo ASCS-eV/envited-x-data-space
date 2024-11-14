@@ -12,7 +12,7 @@ import { ValidationSchema } from '../validator/shacl/shacl.types'
 import { MANIFEST_FILE } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
-import { Manifest, ManifestExtractedFiles } from './types'
+import { ExtractedFile, Manifest, ManifestExtractedFiles } from './types'
 import {
   createFilename,
   getDomainMetadataPath,
@@ -242,7 +242,12 @@ export const _validateAndCreateMetadata =
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
       console.log('files', files)
       console.log('IPFS files', files.publicUser)
-      console.log('displayUri', find(propEq('visualization', 'type'))(files.publicUser))
+      const displayUri = find(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile
+      console.log('displayUri', displayUri)
+      if (displayUri) {
+        const displayUriCID = await createFilename(displayUri.buffer as any)
+        console.log('displayUriCID', displayUriCID)
+      }
 
       // metadata temporarily hardcoded
       const tokenMetadata = createTokenMetadata({

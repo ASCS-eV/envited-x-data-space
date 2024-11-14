@@ -2,10 +2,27 @@ import { CID } from 'multiformats/cid'
 import * as json from 'multiformats/codecs/json'
 import { Hasher } from 'multiformats/dist/src/hashes/hasher'
 import { sha256 } from 'multiformats/hashes/sha2'
-import { append, concat, find, groupBy, is, map, path, pathOr, pipe, propEq, propOr, reduce, replace } from 'ramda'
+import {
+  append,
+  concat,
+  find,
+  groupBy,
+  is,
+  isNil,
+  map,
+  path,
+  pathOr,
+  pipe,
+  propEq,
+  propOr,
+  reduce,
+  reject,
+  replace,
+  startsWith,
+} from 'ramda'
 
 import { extractFromByteArray, read } from '../archive'
-import { Manifest, ManifestLink } from './types'
+import { ExtractedFile, Manifest, ManifestLink } from './types'
 
 export const _createFilename =
   ({ json, sha256, CID }: { json: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
@@ -61,35 +78,60 @@ export const getAllManifestLinks = (manifest: Manifest) =>
   )([
     ['manifest:data', 'manifest:assetData'],
     ['manifest:data', 'manifest:contentData'],
+    ['manifest:license', 'manifest:licenseData'],
   ]) as ManifestLink[]
 
 export const formatManifestLinkPath = replace('./', '')
 
+export const isRemoteUrl = startsWith('https://')
+
 export const getPathsFromManifestLinks = (links: ManifestLink[]) =>
-  map((link: ManifestLink) => formatManifestLinkPath(link['manifest:path']['@value']))(links)
+  pipe(
+    map((link: ManifestLink) =>
+      !isRemoteUrl(link['manifest:path']['@value'])
+        ? { path: formatManifestLinkPath(link['manifest:path']['@value']), type: link['manifest:type'] }
+        : null,
+    ),
+    reject(isNil),
+  )(links) as { path: string; type: string }[]
 
 export const getAllManifestLinksAndFormatPaths = (manifest: Manifest) =>
-  pipe(getAllManifestLinks, getPathsFromManifestLinks)(manifest)
+  pipe(
+    getAllManifestLinks,
+    getPathsFromManifestLinks,
+    map(({ path }: { path: string }) => path),
+  )(manifest)
 
 export const _getPathAndBufferFromFile =
-  ({ getFileFromByteArray }: { getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any }) =>
-  async (byteArray: Uint8Array, path: string) => ({
+  ({
+    getFileFromByteArray,
+    createFilename,
+  }: {
+    getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any
+    createFilename: (byteArray: Uint8Array) => Promise<string>
+  }) =>
+  async (byteArray: Uint8Array, path: string, type: string) => ({
     path,
+    type,
     buffer: await getFileFromByteArray(byteArray, path),
+    cid: await createFilename(byteArray),
   })
 
 export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
   getFileFromByteArray,
+  createFilename,
 })
 
 export const _getPathsAndBuffersFromByteArray =
   ({
     getPathAndBufferFromFile,
   }: {
-    getPathAndBufferFromFile: (byteArray: Uint8Array, path: string) => Promise<{ path: string; buffer: Uint8Array }>
+    getPathAndBufferFromFile: (byteArray: Uint8Array, path: string, type: string) => Promise<ExtractedFile>
   }) =>
-  async (byteArray: Uint8Array, files: string[]) =>
-    await Promise.all(files.map((path: string) => getPathAndBufferFromFile(byteArray, path)))
+  async (byteArray: Uint8Array, files: { path: string; type: string }[]) =>
+    await Promise.all(
+      files.map(({ path, type }: { path: string; type: string }) => getPathAndBufferFromFile(byteArray, path, type)),
+    )
 
 export const getPathsAndBuffersFromByteArray = _getPathsAndBuffersFromByteArray({
   getPathAndBufferFromFile,
@@ -101,8 +143,8 @@ export const _getFilesAsPathAndByteArrayFromManifest =
   }: {
     getPathsAndBuffersFromByteArray: (
       byteArray: Uint8Array,
-      files: string[],
-    ) => Promise<{ path: string; buffer: Uint8Array }[]>
+      files: { path: string; type: string }[],
+    ) => Promise<ExtractedFile[]>
   }) =>
   async (byteArray: Uint8Array, manifest: Manifest) => {
     const { owner, registeredUser, publicUser } = getFilesGroupedByAccessRoles(manifest)

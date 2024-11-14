@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { all, equals, keys, omit, pipe, prop } from 'ramda'
+import { all, equals, find, keys, omit, pipe, prop, propEq } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { db } from '../database/queries'
@@ -222,17 +222,10 @@ export const _validateAndCreateMetadata =
         domainMetadataCID,
       })(data.manifest)
 
-      // const modifiedManifestCID = await createFilename(modifiedManifest)
-
+      const modifiedManifestCID = await createFilename(modifiedManifest)
       // const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
       // const licenseCID = await createFilename(license as any)
 
-      // const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
-      //   data.manifest['manifest:data']['manifest:contentData'],
-      // ) as any
-      // const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
-      // const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
-      // const displayUriCID = await createFilename(displayUri as any)
       const connection = await db()
       const user = await connection.getUserById(asset.userId)
       if (!user) {
@@ -246,12 +239,14 @@ export const _validateAndCreateMetadata =
       }
 
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
+      console.log('IPFS files', files.publicUser)
+      console.log('displayUri', find(propEq('visualization', 'type'))(files.publicUser))
 
       // metadata temporarily hardcoded
       const tokenMetadata = createTokenMetadata({
-        assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH',
-        manifestCID: 'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
-        domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB',
+        assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH', //
+        manifestCID: modifiedManifestCID, //'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
+        domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB', //
         displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
         displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
         minter: extractAddressFromDid(issuer.user.id),

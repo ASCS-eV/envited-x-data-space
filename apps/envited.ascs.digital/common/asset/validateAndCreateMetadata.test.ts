@@ -91,7 +91,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
       expect(getUserWithProfileByIdStub).toHaveBeenCalledWith('ISSUER_ID')
       expect(createMetadataStub).toHaveBeenCalledWith({
         assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH',
-        manifestCID: 'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
+        manifestCID: 'HASH',
         domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB',
         displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
         displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',

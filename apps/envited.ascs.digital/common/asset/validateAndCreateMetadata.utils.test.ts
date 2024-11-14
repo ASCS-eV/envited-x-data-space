@@ -45,22 +45,58 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
     it('should group manifest links by access roles', () => {
       const expected = {
         owner: [
-          'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-          'data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
+          {
+            path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
+            type: 'assetData',
+          },
+          {
+            path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
+            type: 'assetData',
+          },
         ],
         publicUser: [
-          'metadata/domainMetadata.json',
-          'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
-          'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_02.png',
-          'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_03.png',
-          'visualization/bbox.geojson',
-          'visualization/roadNetwork.geojson',
+          {
+            path: 'metadata/domainMetadata.json',
+            type: 'metadata',
+          },
+          {
+            path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
+            type: 'visualization',
+          },
+          {
+            path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_02.png',
+            type: 'visualization',
+          },
+          {
+            path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_03.png',
+            type: 'visualization',
+          },
+          {
+            path: 'visualization/bbox.geojson',
+            type: 'visualization',
+          },
+          {
+            path: 'visualization/roadNetwork.geojson',
+            type: 'visualization',
+          },
         ],
         registeredUser: [
-          'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation.pdf',
-          'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation_stats.txt',
-          'validation/qcReport.txt',
-          'visualization/detailRoadNetwork.geojson',
+          {
+            path: 'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation.pdf',
+            type: 'documentation',
+          },
+          {
+            path: 'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation_stats.txt',
+            type: 'documentation',
+          },
+          {
+            path: 'validation/qcReport.txt',
+            type: 'validation',
+          },
+          {
+            path: 'visualization/detailRoadNetwork.geojson',
+            type: 'visualization',
+          },
         ],
       }
 
@@ -76,18 +112,21 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
         owner: [
           {
             path: 'PATH',
+            type: 'FILE_TYPE',
             buffer: 'FILE_BUFFER',
           },
         ],
         publicUser: [
           {
             path: 'PATH',
+            type: 'FILE_TYPE',
             buffer: 'FILE_BUFFER',
           },
         ],
         registeredUser: [
           {
             path: 'PATH',
+            type: 'FILE_TYPE',
             buffer: 'FILE_BUFFER',
           },
         ],
@@ -97,6 +136,7 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
       const getPathsAndBuffersFromByteArrayStub = jest.fn().mockReturnValue([
         {
           path: 'PATH',
+          type: 'FILE_TYPE',
           buffer: 'FILE_BUFFER',
         },
       ]) as any
@@ -111,11 +151,17 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
 
   describe('_getPathsAndBuffersFromByteArray', () => {
     it('should get multiple files from byte array', async () => {
-      const files = ['data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr']
+      const files = [
+        {
+          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
+          type: 'FILE_TYPE',
+        },
+      ]
 
       const expected = [
         {
           path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
+          type: 'FILE_TYPE',
           buffer: 'FILE_BUFFER',
         },
       ]
@@ -123,6 +169,7 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
       const byteArray = 'BYTE_ARRAY' as any
       const getFileFromByteArrayStub = jest.fn().mockResolvedValue({
         path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
+        type: 'FILE_TYPE',
         buffer: 'FILE_BUFFER',
       }) as any
 
@@ -233,8 +280,14 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
       ] as any)
 
       expect(result).toEqual([
-        'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-        'data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
+        {
+          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
+          type: 'assetData',
+        },
+        {
+          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
+          type: 'assetData',
+        },
       ])
     })
   })

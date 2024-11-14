@@ -17,7 +17,7 @@ import {
   createFilename,
   getDomainMetadataPath,
   getFileFromByteArray,
-  getFilesWithPathAndByteArrayFromManifest,
+  getFilesAsPathAndByteArrayFromManifest,
 } from './validateAndCreateMetadata.utils'
 
 export const _getShaclSchemaAndValidate =
@@ -163,7 +163,7 @@ export const _validateAndCreateMetadata =
     createModifiedManifest,
     createFilename,
     getFileFromByteArray,
-    getFilesWithPathAndByteArrayFromManifest,
+    getFilesAsPathAndByteArrayFromManifest,
     db,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array) => Promise<
@@ -203,8 +203,11 @@ export const _validateAndCreateMetadata =
       domainMetadataCID: string
     }) => (manifest: Manifest) => any
     createFilename: (byteArray: Uint8Array) => Promise<string>
-    getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any
-    getFilesWithPathAndByteArrayFromManifest: (byteArray: Uint8Array, manifest: Manifest) => any
+    getFileFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<string>
+    getFilesAsPathAndByteArrayFromManifest: (
+      byteArray: Uint8Array,
+      manifest: Manifest,
+    ) => Promise<ManifestExtractedFiles>
     db: Database
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
@@ -242,8 +245,7 @@ export const _validateAndCreateMetadata =
         throw new Error('Issuer not found')
       }
 
-      const files = (await getFilesWithPathAndByteArrayFromManifest(byteArray, data.manifest)) as ManifestExtractedFiles
-      console.log('getFilesWithPathAndByteArrayFromManifest', files)
+      const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
 
       // metadata temporarily hardcoded
       const tokenMetadata = createTokenMetadata({
@@ -278,6 +280,6 @@ export const validateAndCreateMetadata = _validateAndCreateMetadata({
   createModifiedManifest,
   createFilename,
   getFileFromByteArray,
-  getFilesWithPathAndByteArrayFromManifest,
+  getFilesAsPathAndByteArrayFromManifest,
   db,
 })

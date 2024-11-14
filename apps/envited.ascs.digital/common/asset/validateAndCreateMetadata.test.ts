@@ -14,7 +14,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const createModifiedManifestStub = jest.fn().mockReturnValue('MODIFIED_MANIFEST_BUFFER') as any
       const createFilenameStub = jest.fn().mockReturnValue('HASH') as any
       const getFileFromByteArrayStub = jest.fn().mockResolvedValue('FILE DATA') as any
-      const getFilesWithPathAndByteArrayStub = jest.fn().mockResolvedValue({
+      const getFilesAsPathAndByteArrayFromManifestStub = jest.fn().mockResolvedValue({
         owner: [
           {
             path: 'PATH',
@@ -55,7 +55,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
         createModifiedManifest: jest.fn().mockReturnValue(createModifiedManifestStub),
         createFilename: createFilenameStub,
         getFileFromByteArray: getFileFromByteArrayStub,
-        getFilesWithPathAndByteArrayFromManifest: getFilesWithPathAndByteArrayStub,
+        getFilesAsPathAndByteArrayFromManifest: getFilesAsPathAndByteArrayFromManifestStub,
         db: dbStub,
       })(byteArray as any, asset as any)
 

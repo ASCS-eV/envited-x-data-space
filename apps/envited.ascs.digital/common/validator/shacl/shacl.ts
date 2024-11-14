@@ -7,7 +7,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 import { extractFromFile, read } from '../../archive'
 import { MANIFEST_FILE } from '../../asset/constants'
 import { Manifest } from '../../asset/types'
-import { getDomainMetadataPath, getManifestFilesAndFormatPaths } from '../../asset/validateAndCreateMetadata.utils'
+import { getDomainMetadataPath, getAllManifestLinksAndFormatPaths } from '../../asset/validateAndCreateMetadata.utils'
 import { ERRORS } from '../../constants'
 import { CONTEXT_DROP_SCHEMAS } from './shacl.constants'
 import { ContentType, Schema, ValidationSchema } from './shacl.types'
@@ -166,7 +166,7 @@ export const validateDomainMetadata = _validateDomainMetadata({
 export const _checkIfAllFilesInManifestExists =
   ({ getShaclDataFromZip }: { getShaclDataFromZip: (file: File, fileName: string) => Promise<string> }) =>
   async (file: File, manifest: Manifest) => {
-    const files = getManifestFilesAndFormatPaths(manifest)
+    const files = getAllManifestLinksAndFormatPaths(manifest)
     const validationPromises = files.map((fileName: string) => getShaclDataFromZip(file, fileName))
 
     return Promise.all(validationPromises)

@@ -94,9 +94,7 @@ export const _main =
       const { registeredUser } = files
       /* Write publicUser paths to ipfs */
 
-      /* Write registeredUser paths to metadata bucket */
       if (registeredUser) {
-        // TODO: Loop through links
         const writeFilesToMetadataPromises = registeredUser.map(
           async ({ path, buffer }: { path: string; buffer: Uint8Array }) => {
             const writeToMetadata = writeFile({
@@ -104,7 +102,6 @@ export const _main =
               Key: `${assetCID}/${path}`,
               Body: Buffer.from(buffer),
               ContentEncoding: 'base64',
-              // ContentType: 'application/json',
             })
 
             return writeToMetadata.done()

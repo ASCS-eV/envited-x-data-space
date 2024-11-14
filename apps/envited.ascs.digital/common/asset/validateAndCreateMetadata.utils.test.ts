@@ -70,7 +70,7 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
     })
   })
 
-  describe('_getFilesWithPathAndByteArray', () => {
+  describe('_getFilesAsPathAndByteArrayFromManifest', () => {
     it('should group manifest links by access roles', async () => {
       const expected = {
         owner: [
@@ -94,22 +94,22 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
       }
 
       const byteArray = 'BYTE_ARRAY' as any
-      const getFilesFromByteArrayStub = jest.fn().mockReturnValue([
+      const getPathsAndBuffersFromByteArrayStub = jest.fn().mockReturnValue([
         {
           path: 'PATH',
           buffer: 'FILE_BUFFER',
         },
       ]) as any
 
-      const result = await SUT._getFilesWithPathAndByteArrayFromManifest({
-        getFilesFromByteArray: getFilesFromByteArrayStub,
+      const result = await SUT._getFilesAsPathAndByteArrayFromManifest({
+        getPathsAndBuffersFromByteArray: getPathsAndBuffersFromByteArrayStub,
       })(byteArray, manifest as any)
 
       expect(result).toEqual(expected)
     })
   })
 
-  describe('getFilesFromByteArray', () => {
+  describe('_getPathsAndBuffersFromByteArray', () => {
     it('should get multiple files from byte array', async () => {
       const files = ['data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr']
 
@@ -126,7 +126,7 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
         buffer: 'FILE_BUFFER',
       }) as any
 
-      const result = await SUT._getFilesFromByteArray({ getFileWithPathAndBuffer: getFileFromByteArrayStub })(
+      const result = await SUT._getPathsAndBuffersFromByteArray({ getPathAndBufferFromFile: getFileFromByteArrayStub })(
         byteArray,
         files,
       )
@@ -136,7 +136,7 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
   })
 
   describe('getAllManifestLinks', () => {
-    it('should group manifest links by access roles', () => {
+    it('should return all manifest links as array', () => {
       const manifest = {
         'manifest:data': {
           'manifest:assetData': [
@@ -203,16 +203,16 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
   })
 
   describe('formatManifestLinkPath', () => {
-    it('should group manifest links by access roles', () => {
+    it('should format manifest link path', () => {
       const result = SUT.formatManifestLinkPath('./metadata/domainMetadata.json')
 
       expect(result).toEqual('metadata/domainMetadata.json')
     })
   })
 
-  describe('formatManifestLinkPath', () => {
-    it('should group manifest links by access roles', () => {
-      const result = SUT.getPathsOfManifestFiles([
+  describe('getPathsFromManifestLinks', () => {
+    it('should return an array with paths', () => {
+      const result = SUT.getPathsFromManifestLinks([
         {
           '@type': 'manifest:Link',
           'manifest:accessRole': 'owner',
@@ -239,9 +239,9 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
     })
   })
 
-  describe('formatManifestLinkPath', () => {
-    it('should group manifest links by access roles', () => {
-      const result = SUT.getManifestFilesAndFormatPaths(manifest as any)
+  describe('getAllManifestLinksAndFormatPaths', () => {
+    it('should return an array with all the declared files paths', () => {
+      const result = SUT.getAllManifestLinksAndFormatPaths(manifest as any)
 
       expect(result).toEqual([
         'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',

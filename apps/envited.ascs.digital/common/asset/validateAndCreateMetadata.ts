@@ -15,6 +15,7 @@ import { createTokenMetadata } from './createTokenMetadata'
 import { ExtractedFile, Manifest, ManifestExtractedFiles } from './types'
 import {
   createFilename,
+  getAllFilenamesFromFiles,
   getDomainMetadataPath,
   getFileFromByteArray,
   getFilesAsPathAndByteArrayFromManifest,
@@ -210,8 +211,8 @@ export const _validateAndCreateMetadata =
       manifest: Manifest,
     ) => Promise<ManifestExtractedFiles>
     getAllFilenamesFromFiles: (
-      extractedFiles: ExtractedFile[],
-    ) => Promise<{ buffer: string; cid: string; path: string; type: string }[]>
+      extractedFiles: { path: string; type: string; buffer: string }[],
+    ) => Promise<ExtractedFile[]>
     db: Database
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
@@ -244,7 +245,7 @@ export const _validateAndCreateMetadata =
 
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
       const displayUri = find(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile
-      const displayUriCID = await createFilename(displayUri.buffer as any)
+      const displayUriCID = await createFilename(displayUri?.buffer as any)
 
       const visualization = filter(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile[]
       console.log('visualizationFiles - before')

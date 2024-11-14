@@ -14,6 +14,14 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const createModifiedManifestStub = jest.fn().mockReturnValue('MODIFIED_MANIFEST_BUFFER') as any
       const createFilenameStub = jest.fn().mockReturnValue('HASH') as any
       const getFileFromByteArrayStub = jest.fn().mockResolvedValue('FILE DATA') as any
+      const getAllFilenamesFromFilesStub = jest.fn().mockResolvedValue([
+        {
+          path: 'PATH',
+          buffer: 'FILE_BUFFER',
+          cid: 'FILE_CID',
+          type: 'FILE_TYPE',
+        },
+      ]) as any
       const getFilesAsPathAndByteArrayFromManifestStub = jest.fn().mockResolvedValue({
         owner: [
           {
@@ -56,6 +64,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
         createFilename: createFilenameStub,
         getFileFromByteArray: getFileFromByteArrayStub,
         getFilesAsPathAndByteArrayFromManifest: getFilesAsPathAndByteArrayFromManifestStub,
+        getAllFilenamesFromFiles: getAllFilenamesFromFilesStub,
         db: dbStub,
       })(byteArray as any, asset as any)
 
@@ -90,10 +99,10 @@ describe('common/asset/validateAndCreateMetadata', () => {
       expect(getUserByIdStub).toHaveBeenCalledWith('USER_ID')
       expect(getUserWithProfileByIdStub).toHaveBeenCalledWith('ISSUER_ID')
       expect(createMetadataStub).toHaveBeenCalledWith({
-        assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH',
+        assetCID: 'HASH',
         manifestCID: 'HASH',
-        domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB',
-        displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
+        domainMetadataCID: 'HASH',
+        displayUriCID: 'HASH',
         displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
         minter: 'ISSUER_ID',
         creator: 'NAME',

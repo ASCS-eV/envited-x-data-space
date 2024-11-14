@@ -210,7 +210,7 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
 
       const result = await SUT._getAllFilenamesFromFiles({
         getFilenameFromFile: getFilenameFromFileStub,
-      })(byteArray, files)
+      })(files)
 
       expect(result).toEqual(expected)
     })

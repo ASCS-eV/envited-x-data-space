@@ -17,6 +17,18 @@ export const uploadJson =
       .then(data => pinata.gateways.convert(data.IpfsHash))
   }
 
+export const uploadFile =
+  (pinata: PinataSDK) =>
+  async ({ buffer, filename }: { buffer: string; filename: string }) => {
+    const blob = new Blob([buffer])
+    const file = new File([blob], filename)
+
+    return pinata.upload
+      .file(file)
+      .addMetadata({ name: filename })
+      .then(data => console.log(data))
+  }
+
 export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {
   const group = await pinata.groups.create({
     name: groupName,

@@ -50,6 +50,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
       const getAssetStatusStub = jest.fn().mockReturnValue('ASSET_CID') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
+      const uploadFileToIpfsStub = jest.fn().mockReturnValue('UPDATED') as any
 
       const event = {
         Records: [
@@ -76,6 +77,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         validateAndCreateMetadata: validateShaclDataWithSchemaStub,
         getAsset: getAssetStatusStub,
         updateAsset: updateAssetStatusStub,
+        uploadFileToIpfs: uploadFileToIpfsStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)

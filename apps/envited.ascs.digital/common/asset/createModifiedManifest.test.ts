@@ -334,7 +334,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
               'manifest:path': {
-                '@value': 'ipfs://DETAILED_ROAD_NETWORK_CID',
+                '@value': 'https://metadata.envited-x.net/ASSET_CID/visualization/detailRoadNetwork.geojson',
                 '@type': 'xsd:anyURI',
               },
             },

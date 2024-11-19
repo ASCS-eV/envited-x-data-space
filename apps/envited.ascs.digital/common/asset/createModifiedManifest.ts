@@ -41,7 +41,7 @@ export const modifyManifestLink =
 export const formatManifestUri =
   (assetCID: string, domainMetadataCID: string, visualizationFiles: ExtractedFileWithCID[]) =>
   (accessRole: AccessRole, path: string, type: string, format: string) => {
-    if (includes(type, ['visualization'])) {
+    if (includes(type, ['visualization']) && equals(accessRole)(AccessRole.publicUser)) {
       return pipe(
         find(propEq(formatManifestLinkPath(path), 'path')),
         propOr('', 'cid'),

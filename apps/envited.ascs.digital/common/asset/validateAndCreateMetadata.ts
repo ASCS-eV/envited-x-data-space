@@ -12,7 +12,7 @@ import { ValidationSchema } from '../validator/shacl/shacl.types'
 import { MANIFEST_FILE } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
-import { ExtractedFile, Manifest, ManifestExtractedFiles } from './types'
+import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestExtractedFiles } from './types'
 import {
   createFilename,
   getAllFilenamesFromFiles,
@@ -200,9 +200,11 @@ export const _validateAndCreateMetadata =
     createModifiedManifest: ({
       assetCID,
       domainMetadataCID,
+      visualizationFiles,
     }: {
       assetCID: string
       domainMetadataCID: string
+      visualizationFiles: ExtractedFileWithCID[]
     }) => (manifest: Manifest) => any
     createFilename: (byteArray: Uint8Array) => Promise<string>
     getFileFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<string>
@@ -212,7 +214,7 @@ export const _validateAndCreateMetadata =
     ) => Promise<ManifestExtractedFiles>
     getAllFilenamesFromFiles: (
       extractedFiles: { path: string; type: string; buffer: string }[],
-    ) => Promise<ExtractedFile[]>
+    ) => Promise<ExtractedFileWithCID[]>
     db: Database
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
@@ -238,17 +240,14 @@ export const _validateAndCreateMetadata =
       }
 
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
-      const displayUri = find(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile
-      const displayUriCID = await createFilename(displayUri?.buffer as any)
-
       const visualization = filter(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile[]
-      console.log('visualizationFiles - before')
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
-      console.log('visualizationFiles', visualizationFiles)
+      const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
 
       const modifiedManifest = createModifiedManifest({
         assetCID,
         domainMetadataCID,
+        visualizationFiles,
       })(data.manifest)
 
       const modifiedManifestCID = await createFilename(modifiedManifest)
@@ -258,7 +257,7 @@ export const _validateAndCreateMetadata =
         assetCID,
         manifestCID: modifiedManifestCID,
         domainMetadataCID,
-        displayUriCID: displayUriCID,
+        displayUriCID: displayUri.cid,
         displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
         minter: extractAddressFromDid(issuer.user.id),
         creator: issuer.profile.name,

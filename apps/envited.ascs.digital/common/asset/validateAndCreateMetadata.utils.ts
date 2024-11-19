@@ -21,7 +21,7 @@ import {
 } from 'ramda'
 
 import { extractFromByteArray, read } from '../archive'
-import { ExtractedFile, Manifest, ManifestLink } from './types'
+import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestLink } from './types'
 
 export const _createFilename =
   ({ json, sha256, CID }: { json: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
@@ -115,7 +115,7 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 
 export const _getFilenameFromFile =
   ({ createFilename }: { createFilename: (byteArray: any) => Promise<string> }) =>
-  async (path: string, type: string, buffer: string) => ({
+  async (path: string, type: string, buffer: string): Promise<ExtractedFileWithCID> => ({
     cid: await createFilename(buffer as any),
     path,
     type,
@@ -130,7 +130,7 @@ export const _getAllFilenamesFromFiles =
   ({
     getFilenameFromFile,
   }: {
-    getFilenameFromFile: (path: string, type: string, buffer: string) => Promise<ExtractedFile>
+    getFilenameFromFile: (path: string, type: string, buffer: string) => Promise<ExtractedFileWithCID>
   }) =>
   async (files: { path: string; type: string; buffer: string }[]) =>
     await Promise.all(

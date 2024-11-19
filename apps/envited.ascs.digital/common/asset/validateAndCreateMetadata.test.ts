@@ -18,8 +18,14 @@ describe('common/asset/validateAndCreateMetadata', () => {
         {
           path: 'PATH',
           buffer: 'FILE_BUFFER',
+          cid: 'DISPLAY_HASH',
+          type: 'visualization',
+        },
+        {
+          path: 'PATH',
+          buffer: 'FILE_BUFFER',
           cid: 'FILE_CID',
-          type: 'FILE_TYPE',
+          type: 'visualization',
         },
       ]) as any
       const getFilesAsPathAndByteArrayFromManifestStub = jest.fn().mockResolvedValue({
@@ -102,7 +108,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
         assetCID: 'HASH',
         manifestCID: 'HASH',
         domainMetadataCID: 'HASH',
-        displayUriCID: 'HASH',
+        displayUriCID: 'DISPLAY_HASH',
         displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
         minter: 'ISSUER_ID',
         creator: 'NAME',

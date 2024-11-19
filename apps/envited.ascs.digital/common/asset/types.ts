@@ -42,6 +42,10 @@ export interface ExtractedFile {
   type: string
 }
 
+export interface ExtractedFileWithCID extends ExtractedFile {
+  cid: string
+}
+
 export interface ManifestExtractedFiles {
   owner: ExtractedFile[]
   registeredUser: ExtractedFile[]

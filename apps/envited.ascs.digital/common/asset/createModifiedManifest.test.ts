@@ -161,6 +161,45 @@ describe('common/asset/createModifiedManifest', () => {
         },
       }
 
+      const visualizationFiles = [
+        {
+          buffer: 'BUFFER',
+          path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
+          type: 'visualization',
+          cid: 'DISPLAY_CID',
+        },
+        {
+          buffer: 'BUFFER',
+          path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_02.png',
+          type: 'visualization',
+          cid: 'DISPLAY_CID_1',
+        },
+        {
+          buffer: 'BUFFER',
+          path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_03.png',
+          type: 'visualization',
+          cid: 'DISPLAY_CID_2',
+        },
+        {
+          buffer: 'BUFFER',
+          path: 'visualization/bbox.geojson',
+          type: 'visualization',
+          cid: 'GEOJSON_CID',
+        },
+        {
+          buffer: 'BUFFER',
+          path: 'visualization/roadNetwork.geojson',
+          type: 'visualization',
+          cid: 'ROAD_NETWORK_CID',
+        },
+        {
+          buffer: 'BUFFER',
+          path: 'visualization/detailRoadNetwork.geojson',
+          type: 'visualization',
+          cid: 'DETAILED_ROAD_NETWORK_CID',
+        },
+      ]
+
       const expected = {
         '@context': {
           xsd: 'http://www.w3.org/2001/XMLSchema#',
@@ -245,7 +284,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'png',
               'manifest:path': {
-                '@value': 'ipfs://QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
+                '@value': 'ipfs://DISPLAY_CID',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -255,7 +294,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'png',
               'manifest:path': {
-                '@value': 'ipfs://QmVgViCWeYCgu1Xv2rAJGFApCd4qUgmHWNVskPcYRAgsuf',
+                '@value': 'ipfs://DISPLAY_CID_1',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -265,7 +304,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'png',
               'manifest:path': {
-                '@value': 'ipfs://QmTcZJaHir2CGJKaGjUV316GiTkUYhHbai9jxKEodAAfFf',
+                '@value': 'ipfs://DISPLAY_CID_2',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -275,7 +314,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
               'manifest:path': {
-                '@value': 'ipfs://QmXmRRCutfE3LN9g4ggmVkKb1WdBMLWVKFngdqdkh64q3S',
+                '@value': 'ipfs://GEOJSON_CID',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -285,7 +324,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
               'manifest:path': {
-                '@value': 'ipfs://QmUkN3ktmtqF8muBP8VLxMC9JWr8u8iqnswNo2BtWGVWZ7',
+                '@value': 'ipfs://ROAD_NETWORK_CID',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -295,7 +334,7 @@ describe('common/asset/createModifiedManifest', () => {
               'manifest:type': 'visualization',
               'manifest:format': 'geojson',
               'manifest:path': {
-                '@value': 'ipfs://Qmf7FLUveSyy6jjXt7EbnokWQRPSbbm3tT47HZ1KAWPYjr',
+                '@value': 'ipfs://DETAILED_ROAD_NETWORK_CID',
                 '@type': 'xsd:anyURI',
               },
             },
@@ -323,6 +362,7 @@ describe('common/asset/createModifiedManifest', () => {
       const result = await SUT.createModifiedManifest({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
+        visualizationFiles,
       })(manifest as any)
 
       expect(result).toEqual(expected)

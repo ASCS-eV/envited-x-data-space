@@ -222,12 +222,6 @@ export const _validateAndCreateMetadata =
       const assetCID = await createFilename(byteArray)
       const domainMetadataCID = await createFilename(data.domainMetadata)
 
-      const modifiedManifest = createModifiedManifest({
-        assetCID,
-        domainMetadataCID,
-      })(data.manifest)
-
-      const modifiedManifestCID = await createFilename(modifiedManifest)
       // const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
       // const licenseCID = await createFilename(license as any)
 
@@ -251,6 +245,13 @@ export const _validateAndCreateMetadata =
       console.log('visualizationFiles - before')
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
       console.log('visualizationFiles', visualizationFiles)
+
+      const modifiedManifest = createModifiedManifest({
+        assetCID,
+        domainMetadataCID,
+      })(data.manifest)
+
+      const modifiedManifestCID = await createFilename(modifiedManifest)
 
       // metadata temporarily hardcoded
       const tokenMetadata = createTokenMetadata({

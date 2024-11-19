@@ -115,16 +115,12 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 
 export const _getFilenameFromFile =
   ({ createFilename }: { createFilename: (byteArray: any) => Promise<string> }) =>
-  async (path: string, type: string, buffer: string) => {
-    const cid = await createFilename(buffer as any)
-    console.log('_getFilenameFromFile', cid)
-    return {
-      cid,
-      path,
-      type,
-      buffer,
-    }
-  }
+  async (path: string, type: string, buffer: string) => ({
+    cid: await createFilename(buffer as any),
+    path,
+    type,
+    buffer,
+  })
 
 export const getFilenameFromFile = _getFilenameFromFile({
   createFilename,
@@ -136,18 +132,12 @@ export const _getAllFilenamesFromFiles =
   }: {
     getFilenameFromFile: (path: string, type: string, buffer: string) => Promise<ExtractedFile>
   }) =>
-  async (files: { path: string; type: string; buffer: string }[]) => {
-    console.log('_getAllFilenamesFromFiles')
-    const addFilenamesPromises = files.map(({ path, type, buffer }: { path: string; type: string; buffer: string }) =>
-      getFilenameFromFile(path, type, buffer),
+  async (files: { path: string; type: string; buffer: string }[]) =>
+    await Promise.all(
+      files.map(({ path, type, buffer }: { path: string; type: string; buffer: string }) =>
+        getFilenameFromFile(path, type, buffer),
+      ),
     )
-    console.log('_getAllFilenamesFromFiles - promises', addFilenamesPromises)
-
-    const results = await Promise.all(addFilenamesPromises)
-    console.log('_getAllFilenamesFromFiles - results', addFilenamesPromises)
-
-    return results
-  }
 
 export const getAllFilenamesFromFiles = _getAllFilenamesFromFiles({
   getFilenameFromFile,

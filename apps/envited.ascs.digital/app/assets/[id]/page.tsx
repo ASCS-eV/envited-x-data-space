@@ -14,3 +14,5 @@ export default async function Index({ params: { id } }: { params: { id: string }
     </>
   )
 }
+
+export const dynamic = 'force-dynamic'

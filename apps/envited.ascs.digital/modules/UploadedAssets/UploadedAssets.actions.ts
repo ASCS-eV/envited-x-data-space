@@ -1,8 +1,7 @@
 'use server'
 
-import { AssetStatus } from 'apps/envited.ascs.digital/common/types'
-
 import { getMintParams, updateAssetStatus, uploadTokenMetadata } from '../../common/serverActions'
+import { AssetStatus } from '../../common/types'
 import { internalServerErrorError } from '../../common/utils'
 
 export async function uploadAssetTokenMetadata(id: string) {

@@ -77,7 +77,6 @@ describe('common/aws/handlers/processAssetUpload', () => {
         validateAndCreateMetadata: validateShaclDataWithSchemaStub,
         getAsset: getAssetStatusStub,
         updateAsset: updateAssetStatusStub,
-        uploadFileToIpfs: uploadFileToIpfsStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)

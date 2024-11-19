@@ -12,6 +12,7 @@ import { ValidationSchema } from '../validator/shacl/shacl.types'
 import { MANIFEST_FILE } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
+import { formatAssetUri } from './createTokenMetadata.utils'
 import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestExtractedFiles } from './types'
 import {
   createFilename,
@@ -252,13 +253,12 @@ export const _validateAndCreateMetadata =
 
       const modifiedManifestCID = await createFilename(modifiedManifest)
 
-      // metadata temporarily hardcoded
       const tokenMetadata = createTokenMetadata({
         assetCID,
         manifestCID: modifiedManifestCID,
         domainMetadataCID,
         displayUriCID: displayUri.cid,
-        displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
+        displayUri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
         minter: extractAddressFromDid(issuer.user.id),
         creator: issuer.profile.name,
         manifest: data.manifest,

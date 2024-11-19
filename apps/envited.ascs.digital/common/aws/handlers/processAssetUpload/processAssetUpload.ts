@@ -6,13 +6,12 @@ import {
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
-import { isNil, last, pipe, split } from 'ramda'
+import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { ManifestExtractedFiles } from '../../../asset/types'
 import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
-import { uploadFile } from '../../../ipfs'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
 export const _main =
@@ -24,7 +23,6 @@ export const _main =
     validateAndCreateMetadata,
     getAsset,
     updateAsset,
-    uploadFileToIpfs,
   }: {
     readFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
     writeFile: (params: PutObjectCommandInput) => Upload
@@ -57,7 +55,6 @@ export const _main =
       metadata?: AssetMetadata | string,
       manifest?: Record<string, unknown>,
     ) => Promise<Asset>
-    uploadFileToIpfs: ({ buffer, filename }: { buffer: string; filename: string }) => Promise<any>
   }): S3Handler =>
   async event => {
     try {
@@ -93,15 +90,7 @@ export const _main =
         Key: assetCID,
       })
 
-      const { registeredUser, publicUser } = files
-      /* Write publicUser paths to ipfs */
-      if (publicUser) {
-        const writeFilesToIpfsPromises = publicUser.map(async ({ path, buffer }: { path: string; buffer: string }) =>
-          uploadFileToIpfs({ buffer, filename: pipe(split('/'), last)(path) as string }),
-        )
-
-        Promise.all(writeFilesToIpfsPromises)
-      }
+      const { registeredUser } = files
 
       if (registeredUser) {
         const writeFilesToMetadataPromises = registeredUser.map(
@@ -136,5 +125,4 @@ export const main = _main({
   validateAndCreateMetadata,
   getAsset,
   updateAsset,
-  uploadFileToIpfs: uploadFile,
 })

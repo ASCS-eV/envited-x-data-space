@@ -109,7 +109,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
         manifestCID: 'HASH',
         domainMetadataCID: 'HASH',
         displayUriCID: 'DISPLAY_HASH',
-        displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
+        displayUri: 'https://assets.envited-x.net/HASH/PATH',
         minter: 'ISSUER_ID',
         creator: 'NAME',
         manifest: manifest,

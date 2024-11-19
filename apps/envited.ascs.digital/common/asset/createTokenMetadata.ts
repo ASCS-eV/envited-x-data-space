@@ -1,5 +1,8 @@
+import { equals } from 'ramda'
+
 import { extractFilenameFromPath, formatAssetUri, formatIpfsUri } from './createTokenMetadata.utils'
 import { Manifest } from './types'
+import { formatManifestLinkPath } from './validateAndCreateMetadata.utils'
 
 export const createTokenMetadata = ({
   assetCID,
@@ -27,7 +30,11 @@ export const createTokenMetadata = ({
   const formatType = domainMetadata['hdmap:format']['hdmap:formatType']
   const version = domainMetadata['hdmap:format']['hdmap:version']['@value']
   const rights = manifest['manifest:license']['manifest:spdxIdentifier']['@value']
-  const rightsUri = manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value']
+  const rightsUri = equals('LicenseRef-Custom-Commercial-Agreement')(rights)
+    ? `${formatAssetUri(assetCID)}/${formatManifestLinkPath(
+        manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value'],
+      )}`
+    : manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value']
   const today = new Date()
   const date = today.toISOString().split('T')[0]
 

@@ -82,6 +82,16 @@ export default function Envited({ stack }: StackContext) {
   })
   metadataBucket.cdk.bucket.grantRead(oai)
 
+  const ipfsBucket = new Bucket(stack, 'ipfs', {
+    cdk: {
+      bucket: {
+        accessControl: aws_s3.BucketAccessControl.PRIVATE,
+      },
+    },
+    cors: [s3CorsRule],
+  })
+  ipfsBucket.cdk.bucket.grantRead(oai)
+
   const assetsBucket = new Bucket(stack, 'assets', {
     notifications: {
       processAssetUpload: {
@@ -90,8 +100,9 @@ export default function Envited({ stack }: StackContext) {
           environment: {
             RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
             NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
+            NEXT_PUBLIC_IPFS_BUCKET_NAME: ipfsBucket.bucketName,
           },
-          permissions: [metadataBucket, 'secretsmanager:GetSecretValue'],
+          permissions: [ipfsBucket, metadataBucket, 'secretsmanager:GetSecretValue'],
           copyFiles: [{ from: 'common/aws/handlers/processAssetUpload/schemas' }],
           securityGroups: [sg],
           vpc,
@@ -106,7 +117,7 @@ export default function Envited({ stack }: StackContext) {
     },
     cors: [s3CorsRule],
   })
-  assetsBucket.attachPermissions([assetsBucket, metadataBucket])
+  assetsBucket.attachPermissions([assetsBucket, ipfsBucket, metadataBucket])
   metadataBucket.attachPermissions([metadataBucket, assetsBucket])
   assetsBucket.cdk.bucket.grantRead(oai)
 
@@ -130,6 +141,21 @@ export default function Envited({ stack }: StackContext) {
       {
         s3OriginSource: {
           s3BucketSource: metadataBucket.cdk.bucket,
+          originAccessIdentity: oai,
+        },
+        behaviors: [
+          { isDefaultBehavior: true },
+          { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
+        ],
+      },
+    ],
+  })
+
+  const ipfsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'ipfsDistribution', {
+    originConfigs: [
+      {
+        s3OriginSource: {
+          s3BucketSource: ipfsBucket.cdk.bucket,
           originAccessIdentity: oai,
         },
         behaviors: [
@@ -196,5 +222,7 @@ export default function Envited({ stack }: StackContext) {
     AssetsDistributionId: assetsDistribution.distributionId,
     MetadataDistribution: metadataDistribution.distributionDomainName,
     MetadataDistributionId: metadataDistribution.distributionId,
+    IpfsDistribution: ipfsDistribution.distributionDomainName,
+    IpfsDistributionId: ipfsDistribution.distributionId,
   })
 }

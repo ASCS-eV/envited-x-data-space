@@ -272,6 +272,7 @@ export const _validateAndCreateMetadata =
         modifiedManifest: modifiedManifest,
         assetCID,
         files,
+        visualizationFiles,
       }
     } catch (err) {
       console.log(err)

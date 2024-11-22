@@ -10,7 +10,7 @@ import { isNil } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
-import { ManifestExtractedFiles } from '../../../asset/types'
+import { ExtractedFileWithCID, ManifestExtractedFiles } from '../../../asset/types'
 import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
@@ -46,6 +46,7 @@ export const _main =
       modifiedManifest: Record<string, unknown>
       assetCID: string
       files: ManifestExtractedFiles
+      visualizationFiles: ExtractedFileWithCID[]
     }>
     getAsset: (cid: string) => Promise<Asset>
     updateAsset: (
@@ -71,10 +72,8 @@ export const _main =
 
       const byteArray = await Body.transformToByteArray()
       const asset = await getAsset(Key)
-      const { conforms, metadata, assetCID, modifiedManifest, files } = await validateAndCreateMetadata(
-        byteArray,
-        asset,
-      )
+      const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles } =
+        await validateAndCreateMetadata(byteArray, asset)
 
       if (!conforms) {
         await deleteFile({ Bucket, Key })
@@ -91,6 +90,23 @@ export const _main =
       })
 
       const { registeredUser } = files
+
+      if (visualizationFiles) {
+        const writeFilesToIpfsPromises = visualizationFiles.map(
+          async ({ cid, buffer }: { cid: string; buffer: string }) => {
+            const writeToIpfs = writeFile({
+              Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: Buffer.from(buffer),
+              ContentEncoding: 'base64',
+            })
+
+            return writeToIpfs.done()
+          },
+        )
+
+        Promise.all(writeFilesToIpfsPromises)
+      }
 
       if (registeredUser) {
         const writeFilesToMetadataPromises = registeredUser.map(

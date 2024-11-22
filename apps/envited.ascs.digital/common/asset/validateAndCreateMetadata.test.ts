@@ -100,6 +100,20 @@ describe('common/asset/validateAndCreateMetadata', () => {
             },
           ],
         },
+        visualizationFiles: [
+          {
+            path: 'PATH',
+            buffer: 'FILE_BUFFER',
+            cid: 'DISPLAY_HASH',
+            type: 'visualization',
+          },
+          {
+            path: 'PATH',
+            buffer: 'FILE_BUFFER',
+            cid: 'FILE_CID',
+            type: 'visualization',
+          },
+        ],
       })
 
       expect(getUserByIdStub).toHaveBeenCalledWith('USER_ID')

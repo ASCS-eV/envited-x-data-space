@@ -6,7 +6,7 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
     it('should create a filename', async () => {
       const byteArray = 'BYTE_ARRAY'
 
-      const jsonStub = {
+      const rawStub = {
         encode: jest.fn().mockReturnValue('JSON_BYTES'),
         code: 'JSON_CODE',
       } as any
@@ -22,12 +22,12 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
       } as any
 
       const result = await SUT._createFilename({
-        json: jsonStub,
+        raw: rawStub,
         sha256: sha256Stub,
         CID: CIDStub,
       })(byteArray as any)
 
-      expect(jsonStub.encode).toHaveBeenCalledWith('BYTE_ARRAY')
+      expect(rawStub.encode).toHaveBeenCalledWith('BYTE_ARRAY')
       expect(CIDStub.create).toHaveBeenCalledWith(1, 'JSON_CODE', 'SHA256_HASH')
       expect(result).toBe('CID')
     })
@@ -200,7 +200,6 @@ describe('common/asset/validateAndCreateMetadata.utils', () => {
         },
       ]
 
-      const byteArray = 'BYTE_ARRAY' as any
       const getFilenameFromFileStub = jest.fn().mockResolvedValue({
         buffer: 'FILE_BUFFER',
         cid: 'FILE_CID',

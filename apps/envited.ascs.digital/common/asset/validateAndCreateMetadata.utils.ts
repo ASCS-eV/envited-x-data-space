@@ -1,5 +1,5 @@
 import { CID } from 'multiformats/cid'
-import * as json from 'multiformats/codecs/json'
+import * as raw from 'multiformats/codecs/raw'
 import { Hasher } from 'multiformats/dist/src/hashes/hasher'
 import { sha256 } from 'multiformats/hashes/sha2'
 import {
@@ -21,15 +21,15 @@ import {
 } from 'ramda'
 
 import { extractFromByteArray, read } from '../archive'
-import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestLink } from './types'
+import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
 
 export const _createFilename =
-  ({ json, sha256, CID }: { json: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
+  ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
   async (byteArray: any) => {
     try {
-      const jsonBytes = json.encode(byteArray)
-      const hash = await sha256.digest(jsonBytes)
-      const cid = CID.create(1, json.code, hash)
+      const rawBytes = raw.encode(byteArray)
+      const hash = await sha256.digest(rawBytes)
+      const cid = CID.create(1, raw.code, hash)
 
       return cid.toString()
     } catch (error: unknown) {
@@ -38,7 +38,7 @@ export const _createFilename =
   }
 
 export const createFilename = _createFilename({
-  json,
+  raw,
   sha256,
   CID,
 })

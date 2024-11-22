@@ -59,6 +59,7 @@ export const _main =
   }): S3Handler =>
   async event => {
     try {
+      // Read uploaded asset
       const s3Record = event.Records[0].s3
 
       const Key = s3Record.object.key
@@ -69,26 +70,29 @@ export const _main =
       if (isNil(Body)) {
         return
       }
+      const uploadedFile = await Body.transformToByteArray()
 
-      const byteArray = await Body.transformToByteArray()
+      // Validate uploaded asset
       const asset = await getAsset(Key)
       const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles } =
-        await validateAndCreateMetadata(byteArray, asset)
+        await validateAndCreateMetadata(uploadedFile, asset)
 
       if (!conforms) {
+        // Revert if validation fails
         await deleteFile({ Bucket, Key })
         await updateAsset(Key, Key, AssetStatus.not_accepted)
 
         return
       }
 
-      /* Save asset ZIP file as CID */
+      // Copy asset ZIP file to S3 with CID as name
       await copyFile({
         Bucket,
         CopySource: `${Bucket}/${Key}`,
         Key: assetCID,
       })
 
+      // Handle files for registered users
       const { registeredUser } = files
 
       if (visualizationFiles) {
@@ -125,7 +129,10 @@ export const _main =
         Promise.all(writeFilesToMetadataPromises)
       }
 
+      // Update stored asset in DB
       await updateAsset(assetCID, Key, AssetStatus.pending, metadata, modifiedManifest)
+
+      // Delete uploaded asset with the "old" name from S3
       await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)

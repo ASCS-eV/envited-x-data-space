@@ -225,9 +225,6 @@ export const _validateAndCreateMetadata =
       const assetCID = await createFilename(byteArray)
       const domainMetadataCID = await createFilename(data.domainMetadata)
 
-      // const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
-      // const licenseCID = await createFilename(license as any)
-
       const connection = await db()
       const user = await connection.getUserById(asset.userId)
       if (!user) {

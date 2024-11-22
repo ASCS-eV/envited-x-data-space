@@ -222,6 +222,7 @@ export const _validateAndCreateMetadata =
     try {
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
       const assetCID = await createFilename(byteArray)
+      console.log(data.domainMetadata, typeof data.domainMetadata)
       const domainMetadataCID = await createFilename(data.domainMetadata)
 
       const connection = await db()

@@ -225,6 +225,7 @@ export const _validateAndCreateMetadata =
       console.log('2b')
       console.log(byteArray)
       const assetCID = await createFilename(byteArray)
+      console.log(assetCID)
       const domainMetadataCID = await createFilename(data.domainMetadata)
 
       const connection = await db()

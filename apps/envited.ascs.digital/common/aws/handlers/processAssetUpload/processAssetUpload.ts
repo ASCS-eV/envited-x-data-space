@@ -59,6 +59,7 @@ export const _main =
   }): S3Handler =>
   async event => {
     try {
+      console.log(1)
       // Read uploaded asset
       const s3Record = event.Records[0].s3
 
@@ -70,13 +71,14 @@ export const _main =
       if (isNil(Body)) {
         return
       }
+      console.log(2)
       const uploadedFile = await Body.transformToByteArray()
 
       // Validate uploaded asset
       const asset = await getAsset(Key)
       const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles } =
         await validateAndCreateMetadata(uploadedFile, asset)
-
+      console.log(3)
       if (!conforms) {
         // Revert if validation fails
         await deleteFile({ Bucket, Key })
@@ -84,7 +86,7 @@ export const _main =
 
         return
       }
-
+      console.log(4)
       // Copy asset ZIP file to S3 with CID as name
       await copyFile({
         Bucket,

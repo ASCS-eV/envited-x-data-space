@@ -221,9 +221,11 @@ export const _validateAndCreateMetadata =
   async (byteArray: Uint8Array, asset: Asset) => {
     try {
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
+      console.log('a')
       const assetCID = await createFilename(byteArray)
+      console.log('b')
       const domainMetadataCID = await createFilename(Buffer.from(JSON.stringify(data.domainMetadata)))
-
+      console.log('c')
       const connection = await db()
       const user = await connection.getUserById(asset.userId)
       if (!user) {
@@ -243,9 +245,9 @@ export const _validateAndCreateMetadata =
         domainMetadataCID,
         visualizationFiles,
       })(data.manifest)
-
+      console.log('d')
       const modifiedManifestCID = await createFilename(Buffer.from(JSON.stringify(modifiedManifest)))
-
+      console.log('e')
       const tokenMetadata = createTokenMetadata({
         assetCID,
         manifestCID: modifiedManifestCID,

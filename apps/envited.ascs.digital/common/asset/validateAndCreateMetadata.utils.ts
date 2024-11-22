@@ -27,6 +27,7 @@ export const _createFilename =
   ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
   async (byteArray: any) => {
     try {
+      console.log(typeof byteArray, instanceof byteArray)
       const rawBytes = raw.encode(byteArray)
       const hash = await sha256.digest(rawBytes)
       const cid = CID.create(1, raw.code, hash)

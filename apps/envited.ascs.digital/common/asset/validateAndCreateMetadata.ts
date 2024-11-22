@@ -220,12 +220,8 @@ export const _validateAndCreateMetadata =
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
     try {
-      console.log('2a')
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
-      console.log('2b')
-      console.log(byteArray)
       const assetCID = await createFilename(byteArray)
-      console.log(assetCID)
       const domainMetadataCID = await createFilename(data.domainMetadata)
 
       const connection = await db()
@@ -233,18 +229,15 @@ export const _validateAndCreateMetadata =
       if (!user) {
         throw new Error('User not found')
       }
-      console.log('2c')
       const [issuer] = await connection.getUserWithProfileById(user.issuerId)
 
       if (!issuer) {
         throw new Error('Issuer not found')
       }
-      console.log('2d')
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
       const visualization = filter(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile[]
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
       const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
-      console.log('2e')
       const modifiedManifest = createModifiedManifest({
         assetCID,
         domainMetadataCID,
@@ -264,7 +257,6 @@ export const _validateAndCreateMetadata =
         manifest: data.manifest,
         domainMetadata: data.domainMetadata,
       })
-      console.log('2f')
       return {
         conforms,
         reports,

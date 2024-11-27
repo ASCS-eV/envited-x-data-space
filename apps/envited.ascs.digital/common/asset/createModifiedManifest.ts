@@ -1,8 +1,8 @@
-import { equals, evolve, find, includes, map, pipe, prop, propEq, propOr, tail } from 'ramda'
+import { equals, evolve, find, includes, map, pipe, propEq, propOr, tail } from 'ramda'
 
 import { formatAssetUri, formatIpfsUri, formatMetadataUri } from './createTokenMetadata.utils'
 import { AccessRole, ExtractedFileWithCID, ManifestLink } from './types'
-import { formatManifestLinkPath } from './validateAndCreateMetadata.utils'
+import { formatManifestLinkPath, isRemoteUrl } from './validateAndCreateMetadata.utils'
 
 export const createModifiedManifest = ({
   assetCID,
@@ -18,9 +18,9 @@ export const createModifiedManifest = ({
       'manifest:assetData': map(modifyManifestLink(assetCID, domainMetadataCID, visualizationFiles)),
       'manifest:contentData': map(modifyManifestLink(assetCID, domainMetadataCID, visualizationFiles)),
     },
-    // 'manifest:license': {
-    //   'manifest:licenseData': modifyManifestLink(assetCID, domainMetadataCID),
-    // }
+    'manifest:license': {
+      'manifest:licenseData': modifyManifestLink(assetCID, domainMetadataCID, visualizationFiles),
+    },
   })
 
 export const modifyManifestLink =
@@ -54,14 +54,18 @@ export const formatManifestUri =
     }
 
     if (equals(accessRole)(AccessRole.owner)) {
-      return `${formatAssetUri(assetCID)}${tail(path)}`
+      return !isRemoteUrl(path) ? `${formatAssetUri(assetCID)}${tail(path)}` : path
     }
 
     if (
       equals(accessRole)(AccessRole.registeredUser) ||
-      (equals(accessRole)(AccessRole.publicUser) && type === 'license')
+      (equals(accessRole)(AccessRole.registeredUser) && type === 'license')
     ) {
       return `${formatMetadataUri(assetCID)}${tail(path)}`
+    }
+
+    if (equals(accessRole)(AccessRole.publicUser) && type === 'license') {
+      return path
     }
 
     if (equals(accessRole)(AccessRole.publicUser)) {

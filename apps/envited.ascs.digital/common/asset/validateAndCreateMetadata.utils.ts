@@ -118,11 +118,12 @@ export const _getFilenameFromFile =
   async (path: string, type: string, buffer: string): Promise<ExtractedFileWithCID> => {
     console.log({ path, type, buffer }, typeof buffer)
     return {
-    cid: await createFilename(buffer as any),
-    path,
-    type,
-    buffer,
-  }}
+      cid: await createFilename(buffer as any),
+      path,
+      type,
+      buffer,
+    }
+  }
 
 export const getFilenameFromFile = _getFilenameFromFile({
   createFilename,

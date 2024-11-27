@@ -1,25 +1,25 @@
 {
   "@context": {
-    "general": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/general/",
     "gx": "https://registry.lab.gaia-x.eu/development/api/trusted-shape-registry/v1/shapes/jsonld/trustframework#",
+    "general": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/general/",
     "sh": "http://www.w3.org/ns/shacl#",
     "hdmap": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/hdmap/",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "georeference": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/georeference/"
   },
-  "@id": "did:web:registry.gaia-x.eu:HdMap:wDgNY3gZAxMe3LjhdAZ9TbPiYnQ-yybNhCu8",
+  "@id": "did:web:registry.gaia-x.eu:HdMap:DjHgK5ErTBow1Ya3J05tW9l12skGWgZn6kA9",
   "@type": "hdmap:HdMap",
   "hdmap:general": {
     "@type": "general:General",
     "general:description": {
       "@type": "general:Description",
-      "gx:name": {
-        "@value": "hdmap example",
+      "general:name": {
+        "@value": "TestfeldNiedersachsen_ALKS_ODR_sample",
         "@type": "xsd:string"
       },
-      "gx:description": {
-        "@value": "simple hdmap example file",
+      "general:description": {
+        "@value": "simple hdmap example file on Testfeld Niedersachsen for ALKS scenario",
         "@type": "xsd:string"
       }
     },
@@ -29,86 +29,18 @@
         "@value": "5",
         "@type": "xsd:float"
       },
-      "general:contractId": {
-        "@value": "123456789",
-        "@type": "xsd:string"
-      },
       "general:recordingTime": {
-        "@value": "2024-05-15T08:18:17",
+        "@value": "2020-05-26T12:00:00",
         "@type": "xsd:dateTime"
       }
     },
-    "general:links": {
-      "@type": "general:Links",
-      "general:data": {
-        "@type": "general:Link",
-        "general:url": {
-          "@value": "https://github.com/GAIA-X4PLC-AAD/map-and-scenario-data/blob/main/data/002_MarktplatzGrafing/ODR-3DM/data/MarktplatzGrafing_offset.xodr",
-          "@type": "xsd:anyURI"
-        },
-        "general:type": "Asset"
-      },
-      "general:media": {
-        "@type": "general:Link",
-        "general:url": {
-          "@value": "https://github.com/GAIA-X4PLC-AAD/map-and-scenario-data/blob/main/data/002_MarktplatzGrafing/ODR-3DM/LICENSE.md",
-          "@type": "xsd:anyURI"
-        },
-        "general:type": "Document"
-      }
-    },
-    "general:bundleData": {
-      "@type": "general:BundleData",
-      "general:requiredData": {
-        "@type": "general:Link",
-        "general:url": {
-          "@value": "https://github.com/GAIA-X4PLC-AAD/map-and-scenario-data/blob/main/data/002_MarktplatzGrafing/3DModel-TG/data/Unreal/Readme.md",
-          "@type": "xsd:anyURI"
-        },
-        "general:type": "Document"
-      }
-    },
-    "general:media": [
-      {
-        "@type": "general:Link",
-        "general:url": {
-          "@value": "https://github.com/GAIA-X4PLC-AAD/map-and-scenario-data/blob/main/data/002_MarktplatzGrafing/ODR-3DM/LICENSE.png",
-          "@type": "xsd:anyURI"
-        },
-        "general:type": "Image"
-      },
-      {
-        "@type": "general:Link",
-        "general:url": {
-          "@value": "https://github.com/GAIA-X4PLC-AAD/map-and-scenario-data/blob/main/data/002_MarktplatzGrafing/ODR-3DM/LICENSE.md",
-          "@type": "xsd:anyURI"
-        },
-        "general:type": "Document"
-      }
-    ],
-    "general:requiredData": {
-      "@type": "general:Link",
-      "general:url": {
-        "@value": "https://github.com/GAIA-X4PLC-AAD/map-and-scenario-data/blob/main/data/002_MarktplatzGrafing/3DModel-TG/data/Unreal/Readme.md",
-        "@type": "xsd:anyURI"
-      },
-      "general:type": "Document"
-    },
-    "hdmap:speedLimit": {
-      "@type": "general:Range2D",
-      "general:min": {
-        "@value": "10",
-        "@type": "xsd:float"
-      },
-      "general:max": {
-        "@value": "50",
-        "@type": "xsd:float"
-      }
+    "general:range2D": {
+      "@type": "general:Range2D"
     }
   },
   "hdmap:format": {
     "@type": "hdmap:Format",
-    "hdmap:type": "ASAM OpenDRIVE",
+    "hdmap:formatType": "ASAM OpenDRIVE",
     "hdmap:version": {
       "@value": "1.6",
       "@type": "xsd:string"
@@ -116,23 +48,23 @@
   },
   "hdmap:content": {
     "@type": "hdmap:Content",
-    "hdmap:roadTypes": "Town",
-    "hdmap:laneTypes": ["driving", "walking"],
-    "hdmap:levelOfDetail": "crosswalk",
+    "hdmap:roadTypes": "Motorway",
+    "hdmap:laneTypes": ["shoulder", "driving", "exit", "none", "stop", "restricted", "entry", "walking"],
+    "hdmap:levelOfDetail": "car",
     "hdmap:trafficDirection": "right-hand"
   },
   "hdmap:quantity": {
     "@type": "hdmap:Quantity",
     "hdmap:length": {
-      "@value": "1.46",
+      "@value": "2.68",
       "@type": "xsd:float"
     },
     "hdmap:elevationRange": {
-      "@value": "2.22",
+      "@value": "5.6",
       "@type": "xsd:float"
     },
     "hdmap:numberIntersections": {
-      "@value": "5",
+      "@value": "3",
       "@type": "xsd:unsignedInt"
     },
     "hdmap:numberTrafficLights": {
@@ -140,30 +72,30 @@
       "@type": "xsd:unsignedInt"
     },
     "hdmap:numberTrafficSigns": {
-      "@value": "155",
+      "@value": "0",
       "@type": "xsd:unsignedInt"
     },
     "hdmap:numberObjects": {
-      "@value": "200",
+      "@value": "0",
       "@type": "xsd:unsignedInt"
     },
     "hdmap:numberOutlines": {
-      "@value": "100",
+      "@value": "0",
       "@type": "xsd:unsignedInt"
     },
     "hdmap:speedLimit": {
       "@type": "general:Range2D",
       "general:min": {
-        "@value": "10",
+        "@value": "50",
         "@type": "xsd:float"
       },
       "general:max": {
-        "@value": "50",
+        "@value": "250",
         "@type": "xsd:float"
       }
     },
     "hdmap:rangeOfModeling": {
-      "@value": "20",
+      "@value": "0",
       "@type": "xsd:float"
     }
   },
@@ -182,18 +114,18 @@
       "@type": "xsd:float"
     },
     "hdmap:accuracySignals": {
-      "@value": "0.1",
+      "@value": "0",
       "@type": "xsd:float"
     },
     "hdmap:accuracyObjects": {
-      "@value": "0.1",
+      "@value": "0",
       "@type": "xsd:float"
     }
   },
   "hdmap:dataSource": {
     "@type": "hdmap:DataSource",
     "hdmap:usedDataSources": {
-      "@value": "scanner",
+      "@value": "laserscanner",
       "@type": "xsd:string"
     },
     "hdmap:measurementSystem": {
@@ -202,7 +134,7 @@
     }
   },
   "hdmap:georeference": {
-    "@type": "georeference:GeoreferenceShape",
+    "@type": "georeference:Georeference",
     "georeference:projectLocation": {
       "@type": "georeference:ProjectLocation",
       "georeference:country": {
@@ -210,37 +142,37 @@
         "@type": "xsd:string"
       },
       "georeference:state": {
-        "@value": "DE-BY",
+        "@value": "DE-NI",
         "@type": "xsd:string"
       },
       "georeference:region": {
-        "@value": "Upper Bavaria",
+        "@value": "Landkreis Helmstedt",
         "@type": "xsd:string"
       },
       "georeference:city": {
-        "@value": "Grafing",
+        "@value": "Königslutter am Elm",
         "@type": "xsd:string"
       },
       "georeference:relationOrArea": {
-        "@value": "Town of Grafing",
+        "@value": "A39 Wolfsburg - Braunschweig",
         "@type": "xsd:string"
       },
       "georeference:boundingBox": {
         "@type": "georeference:BoundingBox",
         "georeference:xMin": {
-          "@value": "5",
+          "@value": "10.72024",
           "@type": "xsd:float"
         },
         "georeference:yMin": {
-          "@value": "5",
+          "@value": "52.29648",
           "@type": "xsd:float"
         },
         "georeference:xMax": {
-          "@value": "10",
+          "@value": "10.732000",
           "@type": "xsd:float"
         },
         "georeference:yMax": {
-          "@value": "10",
+          "@value": "52.31636",
           "@type": "xsd:float"
         }
       }
@@ -248,21 +180,32 @@
     "georeference:geodeticReferenceSystem": {
       "@type": "georeference:GeodeticReferenceSystem",
       "georeference:coordinateSystem": {
-        "@value": "32632",
+        "@value": "25832",
         "@type": "xsd:string"
       },
       "georeference:origin": {
         "@type": "georeference:Coordinate2D",
         "georeference:x": {
-          "@value": "7.5",
+          "@value": "115000",
           "@type": "xsd:float"
         },
         "georeference:y": {
-          "@value": "7.5",
+          "@value": "5793000",
           "@type": "xsd:float"
         }
       },
-      "georeference:heightSystem": "Ellipsodial height"
+      "georeference:heightSystem": "Orthometric height"
+    }
+  },
+  "hdmap:speedLimit": {
+    "@type": "general:Range2D",
+    "general:min": {
+      "@value": "50",
+      "@type": "xsd:float"
+    },
+    "general:max": {
+      "@value": "250",
+      "@type": "xsd:float"
     }
   }
 }

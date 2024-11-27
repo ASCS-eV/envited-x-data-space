@@ -95,11 +95,11 @@ export const _main =
 
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(
-          async ({ cid, buffer }: { cid: string; buffer: string }) => {
+          async ({ cid, buffer }: { cid: string; buffer: Buffer }) => {
             const writeToIpfs = writeFile({
               Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
               Key: `${assetCID}/${cid}`,
-              Body: Buffer.from(buffer),
+              Body: buffer,
               ContentEncoding: 'base64',
             })
 
@@ -112,11 +112,11 @@ export const _main =
 
       if (registeredUser) {
         const writeFilesToMetadataPromises = registeredUser.map(
-          async ({ path, buffer }: { path: string; buffer: string }) => {
+          async ({ path, buffer }: { path: string; buffer: Buffer }) => {
             const writeToMetadata = writeFile({
               Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
               Key: `${assetCID}/${path}`,
-              Body: Buffer.from(buffer),
+              Body: buffer,
               ContentEncoding: 'base64',
             })
 

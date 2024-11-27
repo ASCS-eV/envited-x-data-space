@@ -103,11 +103,15 @@ export const getAllManifestLinksAndFormatPaths = (manifest: Manifest) =>
 
 export const _getPathAndBufferFromFile =
   ({ getFileFromByteArray }: { getFileFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<string> }) =>
-  async (byteArray: Uint8Array, path: string, type: string) => ({
-    path,
-    type,
-    buffer: await getFileFromByteArray(byteArray, path),
-  })
+  async (byteArray: Uint8Array, path: string, type: string) => {
+    const fileString = await getFileFromByteArray(byteArray, path)
+
+    return {
+      path,
+      type,
+      buffer: Buffer.from(fileString),
+    }
+  }
 
 export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
   getFileFromByteArray,
@@ -115,10 +119,10 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 
 export const _getFilenameFromFile =
   ({ createFilename }: { createFilename: (byteArray: Uint8Array) => Promise<string> }) =>
-  async (path: string, type: string, buffer: string): Promise<ExtractedFileWithCID> => {
+  async (path: string, type: string, buffer: Buffer): Promise<ExtractedFileWithCID> => {
     console.log({ path, type, buffer }, typeof buffer)
     return {
-      cid: await createFilename(buffer as any),
+      cid: await createFilename(buffer),
       path,
       type,
       buffer,
@@ -133,11 +137,11 @@ export const _getAllFilenamesFromFiles =
   ({
     getFilenameFromFile,
   }: {
-    getFilenameFromFile: (path: string, type: string, buffer: string) => Promise<ExtractedFileWithCID>
+    getFilenameFromFile: (path: string, type: string, buffer: Buffer) => Promise<ExtractedFileWithCID>
   }) =>
-  async (files: { path: string; type: string; buffer: string }[]) =>
+  async (files: { path: string; type: string; buffer: Buffer }[]) =>
     await Promise.all(
-      files.map(({ path, type, buffer }: { path: string; type: string; buffer: string }) =>
+      files.map(({ path, type, buffer }: { path: string; type: string; buffer: Buffer }) =>
         getFilenameFromFile(path, type, buffer),
       ),
     )
@@ -154,7 +158,7 @@ export const _getPathsAndBuffersFromByteArray =
       byteArray: Uint8Array,
       path: string,
       type: string,
-    ) => Promise<{ path: string; type: string; buffer: string }>
+    ) => Promise<{ path: string; type: string; buffer: Buffer }>
   }) =>
   async (byteArray: Uint8Array, files: { path: string; type: string }[]) =>
     await Promise.all(
@@ -172,7 +176,7 @@ export const _getFilesAsPathAndByteArrayFromManifest =
     getPathsAndBuffersFromByteArray: (
       byteArray: Uint8Array,
       files: { path: string; type: string }[],
-    ) => Promise<{ path: string; type: string; buffer: string }[]>
+    ) => Promise<{ path: string; type: string; buffer: Buffer }[]>
   }) =>
   async (byteArray: Uint8Array, manifest: Manifest) => {
     const { owner, registeredUser, publicUser } = getFilesGroupedByAccessRoles(manifest)

@@ -44,7 +44,7 @@ export const createFilename = _createFilename({
 })
 
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
-  extractFromByteArray(byteArray, filename) //.then(read)
+  extractFromByteArray(byteArray, filename).then(read)
 
 export const getDomainMetadataPath = (manifest: Manifest) =>
   pipe(
@@ -102,15 +102,14 @@ export const getAllManifestLinksAndFormatPaths = (manifest: Manifest) =>
   )(manifest)
 
 export const _getPathAndBufferFromFile =
-  ({ getFileFromByteArray }: { getFileFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<Blob> }) =>
+  ({ getFileFromByteArray }: { getFileFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<string> }) =>
   async (byteArray: Uint8Array, path: string, type: string) => {
     const fileString = await getFileFromByteArray(byteArray, path)
-    const arrayBuffer = await fileString.arrayBuffer()
 
     return {
       path,
       type,
-      buffer: Buffer.from(arrayBuffer),
+      buffer: Buffer.from(fileString),
     }
   }
 

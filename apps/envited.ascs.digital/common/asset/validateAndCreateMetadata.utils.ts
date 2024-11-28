@@ -21,8 +21,8 @@ import {
 } from 'ramda'
 
 import { extractFromByteArray, read } from '../archive'
-import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
 import { readBuffer } from '../archive/archive'
+import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
 
 export const _createFilename =
   ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>

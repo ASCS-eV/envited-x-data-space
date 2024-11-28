@@ -49,8 +49,8 @@ export const getFileFromByteArray = async (byteArray: Uint8Array, filename: stri
 
 export const getArrayBufferFromByteArray = async (byteArray: Uint8Array, filename: string) => {
   const extractedFile = await extractFromByteArray(byteArray, filename)
-  const entry = await getFileBlob(extractedFile)
-  const arrayBuffer = await entry.arrayBuffer()
+  const blob = await getFileBlob(extractedFile)
+  const arrayBuffer = await blob.arrayBuffer()
   return arrayBuffer
 }
 

@@ -19,7 +19,7 @@ export const uploadJson =
 
 export const uploadFile =
   (pinata: PinataSDK) =>
-  async ({ buffer, filename }: { buffer: string; filename: string }) => {
+  async ({ buffer, filename }: { buffer: Buffer; filename: string }) => {
     const blob = new Blob([buffer])
     const file = new File([blob], filename)
 

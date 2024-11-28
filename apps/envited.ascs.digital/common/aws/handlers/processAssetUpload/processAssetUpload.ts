@@ -5,8 +5,9 @@ import {
   PutObjectCommandInput,
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
+import { uploadFile } from 'apps/envited.ascs.digital/common/ipfs'
 import { S3Handler } from 'aws-lambda'
-import { isNil } from 'ramda'
+import { isNil, last, split } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
@@ -110,23 +111,32 @@ export const _main =
         })
 
         Promise.all(writeFilesToAssetPromises)
+        console.log('Asset files saved')
       }
 
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(
           async ({ cid, buffer }: { cid: string; buffer: Buffer }) => {
-            const writeToIpfs = writeFile({
+            const writeToIpfsBucket = writeFile({
               Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
               Key: `${assetCID}/${cid}`,
               Body: buffer,
               ContentEncoding: 'base64',
             })
 
-            return writeToIpfs.done()
+            return writeToIpfsBucket.done()
           },
         )
 
-        Promise.all(writeFilesToIpfsPromises)
+        const resultsIpfs = Promise.all(writeFilesToIpfsPromises)
+        console.log('IPFS files saved', resultsIpfs)
+
+        const pinataIpfsPromises = visualizationFiles.map(async ({ path, buffer }: { path: string; buffer: Buffer }) =>
+          uploadFile({ buffer, filename: last(split('/', path)) as string }),
+        )
+
+        const resultsPinata = Promise.all(pinataIpfsPromises)
+        console.log('Pinata files saved', resultsPinata)
       }
 
       if (registeredUser) {
@@ -144,6 +154,7 @@ export const _main =
         )
 
         Promise.all(writeFilesToMetadataPromises)
+        console.log('Metadata files saved')
       }
 
       // Update stored asset in DB

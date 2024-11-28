@@ -22,6 +22,7 @@ import {
 
 import { extractFromByteArray, read } from '../archive'
 import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
+import { readBuffer } from '../archive/archive'
 
 export const _createFilename =
   ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
@@ -47,6 +48,9 @@ export const getFileFromByteArray = async (byteArray: Uint8Array, filename: stri
   const extractedFile = await extractFromByteArray(byteArray, filename)
   console.log('getFileFromByteArray - typeof', typeof extractedFile)
   console.log('getFileFromByteArray', extractedFile)
+
+  const fileBuffer = await readBuffer(extractedFile)
+  console.log('getFileFromByteArray - fileBuffer', fileBuffer)
 
   return extractFromByteArray(byteArray, filename).then(read)
 }

@@ -43,8 +43,13 @@ export const createFilename = _createFilename({
   CID,
 })
 
-export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
-  extractFromByteArray(byteArray, filename).then(read)
+export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) => {
+  const extractedFile = await extractFromByteArray(byteArray, filename)
+  console.log('getFileFromByteArray - typeof', typeof extractedFile)
+  console.log('getFileFromByteArray', extractedFile)
+
+  return extractFromByteArray(byteArray, filename).then(read)
+}
 
 export const getDomainMetadataPath = (manifest: Manifest) =>
   pipe(

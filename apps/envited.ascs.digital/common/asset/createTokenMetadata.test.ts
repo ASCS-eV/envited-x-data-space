@@ -57,22 +57,22 @@ describe('common/asset/createTokenMetadata', () => {
         ],
         attributes: [
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap',
+            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
             value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap',
+            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
             value: 'ipfs://DOMAIN_METADATA_CID',
             type: 'application/json',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest',
+            name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
             value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest',
+            name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
             value: 'ipfs://MODIFIED_MANIFEST_CID',
             type: 'application/json',
           },
@@ -144,22 +144,22 @@ describe('common/asset/createTokenMetadata', () => {
         ],
         attributes: [
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap',
+            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
             value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap',
+            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
             value: 'ipfs://DOMAIN_METADATA_CID',
             type: 'application/json',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest',
+            name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
             value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest',
+            name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
             value: 'ipfs://MODIFIED_MANIFEST_CID',
             type: 'application/json',
           },
@@ -231,22 +231,22 @@ describe('common/asset/createTokenMetadata', () => {
         ],
         attributes: [
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap',
+            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
             value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap',
+            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
             value: 'ipfs://DOMAIN_METADATA_CID',
             type: 'application/json',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest',
+            name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
             value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest',
+            name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
             value: 'ipfs://MODIFIED_MANIFEST_CID',
             type: 'application/json',
           },
@@ -318,22 +318,22 @@ describe('common/asset/createTokenMetadata', () => {
         ],
         attributes: [
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap',
+            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
             value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap',
+            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
             value: 'ipfs://DOMAIN_METADATA_CID',
             type: 'application/json',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest',
+            name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
             value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest',
+            name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
             value: 'ipfs://MODIFIED_MANIFEST_CID',
             type: 'application/json',
           },

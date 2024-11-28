@@ -50,7 +50,9 @@ export const getFileFromByteArray = async (byteArray: Uint8Array, filename: stri
   console.log('getFileFromByteArray', extractedFile)
 
   const fileBuffer = await readBuffer(extractedFile)
-  console.log('getFileFromByteArray - fileBuffer', fileBuffer)
+  const arrayBuffer = await fileBuffer.arrayBuffer()
+  console.log('getFileFromByteArray - arrayBuffer', arrayBuffer)
+  // return fileBuffer
 
   return extractFromByteArray(byteArray, filename).then(read)
 }

@@ -164,7 +164,7 @@ export const _validateAndCreateMetadata =
     createTokenMetadata,
     createModifiedManifest,
     createFilename,
-    getFileFromByteArray,
+    // getFileFromByteArray,
     getFilesAsPathAndByteArrayFromManifest,
     getAllFilenamesFromFiles,
     db,
@@ -208,7 +208,7 @@ export const _validateAndCreateMetadata =
       visualizationFiles: ExtractedFileWithCID[]
     }) => (manifest: Manifest) => any
     createFilename: (byteArray: Uint8Array) => Promise<string>
-    getFileFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<string>
+    // getFileFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<string>
     getFilesAsPathAndByteArrayFromManifest: (
       byteArray: Uint8Array,
       manifest: Manifest,
@@ -279,7 +279,7 @@ export const validateAndCreateMetadata = _validateAndCreateMetadata({
   createTokenMetadata,
   createModifiedManifest,
   createFilename,
-  getFileFromByteArray,
+  // getFileFromByteArray,
   getFilesAsPathAndByteArrayFromManifest,
   getAllFilenamesFromFiles,
   db,

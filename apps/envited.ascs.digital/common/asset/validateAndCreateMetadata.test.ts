@@ -68,7 +68,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
         createTokenMetadata: createMetadataStub,
         createModifiedManifest: jest.fn().mockReturnValue(createModifiedManifestStub),
         createFilename: createFilenameStub,
-        getFileFromByteArray: getFileFromByteArrayStub,
+        // getFileFromByteArray: getFileFromByteArrayStub,
         getFilesAsPathAndByteArrayFromManifest: getFilesAsPathAndByteArrayFromManifestStub,
         getAllFilenamesFromFiles: getAllFilenamesFromFilesStub,
         db: dbStub,

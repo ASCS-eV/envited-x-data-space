@@ -49,12 +49,8 @@ export const getFileFromByteArray = async (byteArray: Uint8Array, filename: stri
 
 export const getArrayBufferFromByteArray = async (byteArray: Uint8Array, filename: string) => {
   const extractedFile = await extractFromByteArray(byteArray, filename)
-  // console.log('getArrayBufferFromByteArray - typeof', typeof extractedFile)
-  // console.log('getArrayBufferFromByteArray', extractedFile)
-
   const entry = await getFileBlob(extractedFile)
   const arrayBuffer = await entry.arrayBuffer()
-  // console.log('getArrayBufferFromByteArray - arrayBuffer', arrayBuffer)
   return arrayBuffer
 }
 
@@ -136,7 +132,6 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 export const _getFilenameFromFile =
   ({ createFilename }: { createFilename: (byteArray: Uint8Array) => Promise<string> }) =>
   async (path: string, type: string, buffer: Buffer): Promise<ExtractedFileWithCID> => {
-    console.log({ path, type, buffer }, typeof buffer)
     return {
       cid: await createFilename(buffer),
       path,

@@ -83,7 +83,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(readFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'ASSET_CID')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
-      expect(writeFileStub).toHaveBeenCalledTimes(2)
+      expect(writeFileStub).toHaveBeenCalledTimes(3)
       expect(deleteFileStub).toHaveBeenCalledTimes(1)
     })
 

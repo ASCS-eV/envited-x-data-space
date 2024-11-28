@@ -91,7 +91,26 @@ export const _main =
       })
 
       // Handle files for registered users
-      const { registeredUser } = files
+      const { owner, registeredUser, publicUser } = files
+
+      console.log('Files', { owner })
+      console.log('Files', { registeredUser })
+      console.log('Files', { publicUser })
+
+      if (owner) {
+        const writeFilesToAssetPromises = owner.map(async ({ path, buffer }: { path: string; buffer: Buffer }) => {
+          const writeToAsset = writeFile({
+            Bucket,
+            Key: `${assetCID}/${path}`,
+            Body: buffer,
+            ContentEncoding: 'base64',
+          })
+
+          return writeToAsset.done()
+        })
+
+        Promise.all(writeFilesToAssetPromises)
+      }
 
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(

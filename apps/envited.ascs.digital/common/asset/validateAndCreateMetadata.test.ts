@@ -13,7 +13,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const createMetadataStub = jest.fn().mockReturnValue('METADATA_BUFFER') as any
       const createModifiedManifestStub = jest.fn().mockReturnValue('MODIFIED_MANIFEST_BUFFER') as any
       const createFilenameStub = jest.fn().mockReturnValue('HASH') as any
-      const getFileFromByteArrayStub = jest.fn().mockResolvedValue('FILE DATA') as any
+      // const getFileFromByteArrayStub = jest.fn().mockResolvedValue('FILE DATA') as any
       const getAllFilenamesFromFilesStub = jest.fn().mockResolvedValue([
         {
           path: 'PATH',

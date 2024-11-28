@@ -37,7 +37,7 @@ export interface ManifestLicense {
 }
 
 export interface ExtractedFile {
-  buffer: Buffer
+  arrayBuffer: ArrayBuffer
   path: string
   type: string
 }

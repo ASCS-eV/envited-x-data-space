@@ -5,7 +5,6 @@ import {
   PutObjectCommandInput,
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
-import { uploadFile } from 'apps/envited.ascs.digital/common/ipfs'
 import { S3Handler } from 'aws-lambda'
 import { isNil, last, split } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
@@ -13,6 +12,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { ExtractedFileWithCID, ManifestExtractedFiles } from '../../../asset/types'
 import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
+import { uploadFile } from '../../../ipfs'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
 export const _main =
@@ -99,16 +99,18 @@ export const _main =
       console.log('Files', { publicUser })
 
       if (owner) {
-        const writeFilesToAssetPromises = owner.map(async ({ path, buffer }: { path: string; buffer: Buffer }) => {
-          const writeToAsset = writeFile({
-            Bucket,
-            Key: `${assetCID}/${path}`,
-            Body: buffer,
-            ContentEncoding: 'base64',
-          })
+        const writeFilesToAssetPromises = owner.map(
+          async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
+            const writeToAsset = writeFile({
+              Bucket,
+              Key: `${assetCID}/${path}`,
+              Body: Buffer.from(arrayBuffer),
+              ContentEncoding: 'base64',
+            })
 
-          return writeToAsset.done()
-        })
+            return writeToAsset.done()
+          },
+        )
 
         Promise.all(writeFilesToAssetPromises)
         console.log('Asset files saved')
@@ -116,11 +118,11 @@ export const _main =
 
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(
-          async ({ cid, buffer }: { cid: string; buffer: Buffer }) => {
+          async ({ cid, arrayBuffer }: { cid: string; arrayBuffer: ArrayBuffer }) => {
             const writeToIpfsBucket = writeFile({
               Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
               Key: `${assetCID}/${cid}`,
-              Body: buffer,
+              Body: Buffer.from(arrayBuffer),
               ContentEncoding: 'base64',
             })
 
@@ -131,8 +133,9 @@ export const _main =
         const resultsIpfs = Promise.all(writeFilesToIpfsPromises)
         console.log('IPFS files saved', resultsIpfs)
 
-        const pinataIpfsPromises = visualizationFiles.map(async ({ path, buffer }: { path: string; buffer: Buffer }) =>
-          uploadFile({ buffer, filename: last(split('/', path)) as string }),
+        const pinataIpfsPromises = visualizationFiles.map(
+          async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) =>
+            uploadFile({ arrayBuffer, filename: last(split('/', path)) as string }),
         )
 
         const resultsPinata = Promise.all(pinataIpfsPromises)
@@ -141,11 +144,11 @@ export const _main =
 
       if (registeredUser) {
         const writeFilesToMetadataPromises = registeredUser.map(
-          async ({ path, buffer }: { path: string; buffer: Buffer }) => {
+          async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
             const writeToMetadata = writeFile({
               Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
               Key: `${assetCID}/${path}`,
-              Body: buffer,
+              Body: Buffer.from(arrayBuffer),
               ContentEncoding: 'base64',
             })
 

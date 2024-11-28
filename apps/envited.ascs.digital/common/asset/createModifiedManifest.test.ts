@@ -11,37 +11,37 @@ describe('common/asset/createModifiedManifest', () => {
       // then ... it should get the type and validate with this schema
       const visualizationFiles = [
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
           type: 'visualization',
           cid: 'DISPLAY_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_02.png',
           type: 'visualization',
           cid: 'DISPLAY_CID_1',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_03.png',
           type: 'visualization',
           cid: 'DISPLAY_CID_2',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/bbox.geojson',
           type: 'visualization',
           cid: 'GEOJSON_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/roadNetwork.geojson',
           type: 'visualization',
           cid: 'ROAD_NETWORK_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/detailRoadNetwork.geojson',
           type: 'visualization',
           cid: 'DETAILED_ROAD_NETWORK_CID',
@@ -210,7 +210,7 @@ describe('common/asset/createModifiedManifest', () => {
       const result = await SUT.createModifiedManifest({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
-        visualizationFiles,
+        visualizationFiles: visualizationFiles as any,
       })(manifest as any)
 
       expect(result).toEqual(expected)
@@ -221,37 +221,37 @@ describe('common/asset/createModifiedManifest', () => {
       // then ... it should get the type and validate with this schema
       const visualizationFiles = [
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
           type: 'visualization',
           cid: 'DISPLAY_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_02.png',
           type: 'visualization',
           cid: 'DISPLAY_CID_1',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_03.png',
           type: 'visualization',
           cid: 'DISPLAY_CID_2',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/bbox.geojson',
           type: 'visualization',
           cid: 'GEOJSON_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/roadNetwork.geojson',
           type: 'visualization',
           cid: 'ROAD_NETWORK_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/detailRoadNetwork.geojson',
           type: 'visualization',
           cid: 'DETAILED_ROAD_NETWORK_CID',
@@ -420,7 +420,7 @@ describe('common/asset/createModifiedManifest', () => {
       const result = await SUT.createModifiedManifest({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
-        visualizationFiles,
+        visualizationFiles: visualizationFiles as any,
       })(manifestLicenseRefPolicySmartContract as any)
 
       expect(result).toEqual(expected)
@@ -431,37 +431,37 @@ describe('common/asset/createModifiedManifest', () => {
       // then ... it should get the type and validate with this schema
       const visualizationFiles = [
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
           type: 'visualization',
           cid: 'DISPLAY_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_02.png',
           type: 'visualization',
           cid: 'DISPLAY_CID_1',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_03.png',
           type: 'visualization',
           cid: 'DISPLAY_CID_2',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/bbox.geojson',
           type: 'visualization',
           cid: 'GEOJSON_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/roadNetwork.geojson',
           type: 'visualization',
           cid: 'ROAD_NETWORK_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/detailRoadNetwork.geojson',
           type: 'visualization',
           cid: 'DETAILED_ROAD_NETWORK_CID',
@@ -630,7 +630,7 @@ describe('common/asset/createModifiedManifest', () => {
       const result = await SUT.createModifiedManifest({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
-        visualizationFiles,
+        visualizationFiles: visualizationFiles as any,
       })(manifestLicenseRefCustomCommercialAgreement as any)
 
       expect(result).toEqual(expected)
@@ -641,37 +641,37 @@ describe('common/asset/createModifiedManifest', () => {
       // then ... it should get the type and validate with this schema
       const visualizationFiles = [
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
           type: 'visualization',
           cid: 'DISPLAY_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_02.png',
           type: 'visualization',
           cid: 'DISPLAY_CID_1',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/TestfeldNiedersachsen_ALKS_ODR_sample_03.png',
           type: 'visualization',
           cid: 'DISPLAY_CID_2',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/bbox.geojson',
           type: 'visualization',
           cid: 'GEOJSON_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/roadNetwork.geojson',
           type: 'visualization',
           cid: 'ROAD_NETWORK_CID',
         },
         {
-          buffer: 'BUFFER',
+          arrayBuffer: 'BUFFER',
           path: 'visualization/detailRoadNetwork.geojson',
           type: 'visualization',
           cid: 'DETAILED_ROAD_NETWORK_CID',
@@ -839,7 +839,7 @@ describe('common/asset/createModifiedManifest', () => {
       const result = await SUT.createModifiedManifest({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
-        visualizationFiles,
+        visualizationFiles: visualizationFiles as any,
       })(manifestRemoteAssetData as any)
 
       expect(result).toEqual(expected)

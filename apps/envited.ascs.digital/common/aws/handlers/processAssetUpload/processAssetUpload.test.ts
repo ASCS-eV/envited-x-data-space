@@ -22,23 +22,23 @@ describe('common/aws/handlers/processAssetUpload', () => {
           owner: [
             {
               path: 'PATH',
-              buffer: 'FILE_BUFFER',
+              arrayBuffer: 'FILE_BUFFER',
             },
           ],
           registeredUser: [
             {
               path: 'PATH',
-              buffer: 'FILE_BUFFER',
+              arrayBuffer: 'FILE_BUFFER',
             },
             {
               path: 'PATH_1',
-              buffer: 'FILE_BUFFER',
+              arrayBuffer: 'FILE_BUFFER',
             },
           ],
           publicUser: [
             {
               path: 'PATH',
-              buffer: 'FILE_BUFFER',
+              arrayBuffer: 'FILE_BUFFER',
             },
           ],
         },
@@ -50,7 +50,6 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
       const getAssetStatusStub = jest.fn().mockReturnValue('ASSET_CID') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
-      const uploadFileToIpfsStub = jest.fn().mockReturnValue('UPDATED') as any
 
       const event = {
         Records: [

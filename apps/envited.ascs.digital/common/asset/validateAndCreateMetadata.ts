@@ -212,7 +212,7 @@ export const _validateAndCreateMetadata =
       manifest: Manifest,
     ) => Promise<ManifestExtractedFiles>
     getAllFilenamesFromFiles: (
-      extractedFiles: { path: string; type: string; buffer: Buffer }[],
+      extractedFiles: { path: string; type: string; arrayBuffer: ArrayBuffer }[],
     ) => Promise<ExtractedFileWithCID[]>
     db: Database
   }) =>

@@ -20,13 +20,16 @@ export const uploadJson =
 export const uploadFile =
   (pinata: PinataSDK) =>
   async ({ buffer, filename }: { buffer: Buffer; filename: string }) => {
-    // const blob = new Blob([buffer])
+    const stream = new Blob([buffer]).stream()
     // const file = new File([blob], filename)
 
-    return pinata.upload
-      .file(buffer as any)
-      .addMetadata({ name: filename })
-      .then(data => console.log(data))
+    return (
+      pinata.upload
+        .stream(stream as any)
+        // .file(buffer as any)
+        .addMetadata({ name: filename })
+        .then(data => console.log(data))
+    )
   }
 
 export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {

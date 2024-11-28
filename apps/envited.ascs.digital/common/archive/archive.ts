@@ -35,7 +35,7 @@ export const read = async (entry: Entry) => {
   return new Response(stream.readable).text()
 }
 
-export const readBuffer = async (entry: Entry) => {
+export const getFileBlob = async (entry: Entry) => {
   const stream = new TransformStream()
   entry.getData?.(stream.writable)
 

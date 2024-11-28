@@ -21,7 +21,7 @@ import {
 } from 'ramda'
 
 import { extractFromByteArray, read } from '../archive'
-import { readBuffer } from '../archive/archive'
+import { getFileBlob } from '../archive/archive'
 import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
 
 export const _createFilename =
@@ -44,17 +44,18 @@ export const createFilename = _createFilename({
   CID,
 })
 
-export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) => {
+export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
+  extractFromByteArray(byteArray, filename).then(read)
+
+export const getArrayBufferFromByteArray = async (byteArray: Uint8Array, filename: string) => {
   const extractedFile = await extractFromByteArray(byteArray, filename)
-  console.log('getFileFromByteArray - typeof', typeof extractedFile)
-  console.log('getFileFromByteArray', extractedFile)
+  // console.log('getArrayBufferFromByteArray - typeof', typeof extractedFile)
+  // console.log('getArrayBufferFromByteArray', extractedFile)
 
-  const fileBuffer = await readBuffer(extractedFile)
-  const arrayBuffer = await fileBuffer.arrayBuffer()
-  console.log('getFileFromByteArray - arrayBuffer', arrayBuffer)
+  const entry = await getFileBlob(extractedFile)
+  const arrayBuffer = await entry.arrayBuffer()
+  // console.log('getArrayBufferFromByteArray - arrayBuffer', arrayBuffer)
   return arrayBuffer
-
-  return extractFromByteArray(byteArray, filename).then(read)
 }
 
 export const getDomainMetadataPath = (manifest: Manifest) =>
@@ -113,9 +114,13 @@ export const getAllManifestLinksAndFormatPaths = (manifest: Manifest) =>
   )(manifest)
 
 export const _getPathAndBufferFromFile =
-  ({ getFileFromByteArray }: { getFileFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<string | ArrayBuffer> }) =>
+  ({
+    getArrayBufferFromByteArray,
+  }: {
+    getArrayBufferFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<string | ArrayBuffer>
+  }) =>
   async (byteArray: Uint8Array, path: string, type: string) => {
-    const buffer = await getFileFromByteArray(byteArray, path) as any
+    const buffer = (await getArrayBufferFromByteArray(byteArray, path)) as any
 
     return {
       path,
@@ -125,7 +130,7 @@ export const _getPathAndBufferFromFile =
   }
 
 export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
-  getFileFromByteArray,
+  getArrayBufferFromByteArray,
 })
 
 export const _getFilenameFromFile =

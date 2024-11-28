@@ -20,10 +20,11 @@ export const uploadJson =
 export const uploadFile =
   (pinata: PinataSDK) =>
   async ({ buffer, filename }: { buffer: Buffer; filename: string }) => {
-    const blob = new Blob([buffer])
+    // const blob = new Blob([buffer])
+    // const file = new File([blob], filename)
 
     return pinata.upload
-      .file(blob as any)
+      .file(buffer as any)
       .addMetadata({ name: filename })
       .then(data => console.log(data))
   }

@@ -113,7 +113,6 @@ export const _main =
         )
 
         Promise.all(writeFilesToAssetPromises)
-        console.log('Asset files saved')
       }
 
       if (visualizationFiles) {
@@ -130,16 +129,14 @@ export const _main =
           },
         )
 
-        const resultsIpfs = Promise.all(writeFilesToIpfsPromises)
-        console.log('IPFS files saved', resultsIpfs)
+        Promise.all(writeFilesToIpfsPromises)
 
         const pinataIpfsPromises = visualizationFiles.map(
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) =>
             uploadFile({ arrayBuffer, filename: last(split('/', path)) as string }),
         )
 
-        const resultsPinata = Promise.all(pinataIpfsPromises)
-        console.log('Pinata files saved', resultsPinata)
+        Promise.all(pinataIpfsPromises)
       }
 
       if (registeredUser) {
@@ -157,7 +154,6 @@ export const _main =
         )
 
         Promise.all(writeFilesToMetadataPromises)
-        console.log('Metadata files saved')
       }
 
       // Update stored asset in DB

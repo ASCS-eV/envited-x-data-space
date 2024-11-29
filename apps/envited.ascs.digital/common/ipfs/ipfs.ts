@@ -21,7 +21,6 @@ export const uploadJson =
 export const uploadFile =
   (pinata: PinataSDK) =>
   async ({ arrayBuffer, filename }: { arrayBuffer: ArrayBuffer; filename: string }) => {
-    console.log('uploadFile - input', arrayBuffer, filename)
     const buffer = Buffer.from(arrayBuffer)
 
     const readable = new Readable({
@@ -30,16 +29,11 @@ export const uploadFile =
         this.push(null)
       },
     })
-    console.log('uploadFile - Readable()', readable)
 
-    const result = await pinata.upload
+    return pinata.upload
       .stream(readable)
       .addMetadata({ name: filename })
       .then(data => pinata.gateways.convert(data.IpfsHash))
-
-    console.log('uploadFile - result', result)
-
-    return result
   }
 
 export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {

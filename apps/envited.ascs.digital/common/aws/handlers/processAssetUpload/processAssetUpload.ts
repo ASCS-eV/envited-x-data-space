@@ -92,11 +92,7 @@ export const _main =
       })
 
       // Handle files for registered users
-      const { owner, registeredUser, publicUser } = files
-
-      console.log('Files', { owner })
-      console.log('Files', { registeredUser })
-      console.log('Files', { publicUser })
+      const { owner, registeredUser } = files
 
       if (owner) {
         const writeFilesToAssetPromises = owner.map(

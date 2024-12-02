@@ -1,8 +1,7 @@
 'use server'
 
-
-import { getMintParams, updateAssetStatus, uploadTokenMetadata } from '../../common/serverActions'
 import { log } from '../../common/logger'
+import { getMintParams, updateAssetStatus, uploadTokenMetadata } from '../../common/serverActions'
 import { AssetStatus } from '../../common/types'
 import { internalServerErrorError } from '../../common/utils'
 

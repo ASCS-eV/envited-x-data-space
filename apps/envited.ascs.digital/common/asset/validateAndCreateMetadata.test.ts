@@ -13,17 +13,21 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const createMetadataStub = jest.fn().mockReturnValue('METADATA_BUFFER') as any
       const createModifiedManifestStub = jest.fn().mockReturnValue('MODIFIED_MANIFEST_BUFFER') as any
       const createFilenameStub = jest.fn().mockReturnValue('HASH') as any
-      // const getFileFromByteArrayStub = jest.fn().mockResolvedValue('FILE DATA') as any
+      const getImageDimensionsAndTypeStub = jest.fn().mockResolvedValue({
+        width: 1095,
+        height: 850,
+        type: 'image/png',
+      }) as any
       const getAllFilenamesFromFilesStub = jest.fn().mockResolvedValue([
         {
           path: 'PATH',
-          buffer: 'FILE_BUFFER',
+          arrayBuffer: 'FILE_BUFFER',
           cid: 'DISPLAY_HASH',
           type: 'visualization',
         },
         {
           path: 'PATH',
-          buffer: 'FILE_BUFFER',
+          arrayBuffer: 'FILE_BUFFER',
           cid: 'FILE_CID',
           type: 'visualization',
         },
@@ -32,19 +36,19 @@ describe('common/asset/validateAndCreateMetadata', () => {
         owner: [
           {
             path: 'PATH',
-            buffer: 'FILE_BUFFER',
+            arrayBuffer: 'FILE_BUFFER',
           },
         ],
         registeredUser: [
           {
             path: 'PATH',
-            buffer: 'FILE_BUFFER',
+            arrayBuffer: 'FILE_BUFFER',
           },
         ],
         publicUser: [
           {
             path: 'PATH',
-            buffer: 'FILE_BUFFER',
+            arrayBuffer: 'FILE_BUFFER',
           },
         ],
       }) as any
@@ -68,9 +72,9 @@ describe('common/asset/validateAndCreateMetadata', () => {
         createTokenMetadata: createMetadataStub,
         createModifiedManifest: jest.fn().mockReturnValue(createModifiedManifestStub),
         createFilename: createFilenameStub,
-        // getFileFromByteArray: getFileFromByteArrayStub,
         getFilesAsPathAndByteArrayFromManifest: getFilesAsPathAndByteArrayFromManifestStub,
         getAllFilenamesFromFiles: getAllFilenamesFromFilesStub,
+        getImageDimensionsAndType: getImageDimensionsAndTypeStub,
         db: dbStub,
       })(byteArray as any, asset as any)
 
@@ -84,32 +88,32 @@ describe('common/asset/validateAndCreateMetadata', () => {
           owner: [
             {
               path: 'PATH',
-              buffer: 'FILE_BUFFER',
+              arrayBuffer: 'FILE_BUFFER',
             },
           ],
           registeredUser: [
             {
               path: 'PATH',
-              buffer: 'FILE_BUFFER',
+              arrayBuffer: 'FILE_BUFFER',
             },
           ],
           publicUser: [
             {
               path: 'PATH',
-              buffer: 'FILE_BUFFER',
+              arrayBuffer: 'FILE_BUFFER',
             },
           ],
         },
         visualizationFiles: [
           {
             path: 'PATH',
-            buffer: 'FILE_BUFFER',
+            arrayBuffer: 'FILE_BUFFER',
             cid: 'DISPLAY_HASH',
             type: 'visualization',
           },
           {
             path: 'PATH',
-            buffer: 'FILE_BUFFER',
+            arrayBuffer: 'FILE_BUFFER',
             cid: 'FILE_CID',
             type: 'visualization',
           },
@@ -119,15 +123,33 @@ describe('common/asset/validateAndCreateMetadata', () => {
       expect(getUserByIdStub).toHaveBeenCalledWith('USER_ID')
       expect(getUserWithProfileByIdStub).toHaveBeenCalledWith('ISSUER_ID')
       expect(createMetadataStub).toHaveBeenCalledWith({
-        assetCID: 'HASH',
-        manifestCID: 'HASH',
-        domainMetadataCID: 'HASH',
-        displayUriCID: 'DISPLAY_HASH',
-        displayUri: 'https://assets.envited-x.net/HASH/PATH',
+        asset: {
+          cid: 'HASH',
+          fileSize: 16,
+        },
+        manifest: {
+          cid: 'HASH',
+          data: manifest,
+          fileSize: 26,
+          modifiedData: 'MODIFIED_MANIFEST_BUFFER',
+        },
+        domainMetadata: {
+          cid: 'HASH',
+          data: { '@type': 'NAME' },
+        },
+        display: {
+          cid: 'DISPLAY_HASH',
+          uri: 'https://assets.envited-x.net/HASH/PATH',
+          fileSize: undefined,
+          dimensions: '1095x850',
+          mimeType: 'image/png',
+        },
         minter: 'ISSUER_ID',
         creator: 'NAME',
-        manifest: manifest,
-        domainMetadata: { '@type': 'NAME' },
+        rights: {
+          identifier: 'MIT',
+          path: 'https://opensource.org/license/mit',
+        },
       })
     })
   })

@@ -33,14 +33,14 @@ describe('common/asset/createTokenMetadata', () => {
             uri: 'https://assets.envited-x.net/ASSET_CID',
             hash: 'ASSET_CID',
             mimeType: 'application/zip',
-            fileSize: 3158016,
+            fileSize: 1024,
             fileName: 'ASSET_CID.zip',
           },
           {
             uri: 'ipfs://MODIFIED_MANIFEST_CID',
             hash: 'MODIFIED_MANIFEST_CID',
             mimeType: 'application/json',
-            fileSize: 8192,
+            fileSize: 2048,
             fileName: 'manifest.json',
           },
           {
@@ -51,7 +51,7 @@ describe('common/asset/createTokenMetadata', () => {
               value: '1095x850',
               unit: 'px',
             },
-            fileSize: 2400256,
+            fileSize: 512,
             fileName: 'DISPLAY_URI',
           },
         ],
@@ -80,15 +80,32 @@ describe('common/asset/createTokenMetadata', () => {
       }
 
       const result = await SUT.createTokenMetadata({
-        assetCID: 'ASSET_CID',
-        manifestCID: 'MODIFIED_MANIFEST_CID',
-        domainMetadataCID: 'DOMAIN_METADATA_CID',
-        displayUriCID: 'DISPLAY_URI_CID',
-        displayUri: 'DISPLAY_URI',
-        minter: 'MINTER',
+        asset: {
+          cid: 'ASSET_CID',
+          fileSize: 1024,
+        },
         creator: 'CREATOR',
-        manifest: manifest as any,
-        domainMetadata,
+        display: {
+          cid: 'DISPLAY_URI_CID',
+          uri: 'DISPLAY_URI',
+          fileSize: 512,
+          dimensions: '1095x850',
+          mimeType: 'image/png',
+        },
+        domainMetadata: {
+          cid: 'DOMAIN_METADATA_CID',
+          data: domainMetadata,
+        },
+        manifest: {
+          cid: 'MODIFIED_MANIFEST_CID',
+          fileSize: 2048,
+          data: manifest as any,
+        },
+        minter: 'MINTER',
+        rights: {
+          identifier: 'MIT',
+          path: 'https://opensource.org/license/mit',
+        },
       })
 
       expect(result).toEqual(expected)
@@ -120,14 +137,14 @@ describe('common/asset/createTokenMetadata', () => {
             uri: 'https://assets.envited-x.net/ASSET_CID',
             hash: 'ASSET_CID',
             mimeType: 'application/zip',
-            fileSize: 3158016,
+            fileSize: 1024,
             fileName: 'ASSET_CID.zip',
           },
           {
             uri: 'ipfs://MODIFIED_MANIFEST_CID',
             hash: 'MODIFIED_MANIFEST_CID',
             mimeType: 'application/json',
-            fileSize: 8192,
+            fileSize: 2048,
             fileName: 'manifest.json',
           },
           {
@@ -138,7 +155,7 @@ describe('common/asset/createTokenMetadata', () => {
               value: '1095x850',
               unit: 'px',
             },
-            fileSize: 2400256,
+            fileSize: 512,
             fileName: 'DISPLAY_URI',
           },
         ],
@@ -167,15 +184,32 @@ describe('common/asset/createTokenMetadata', () => {
       }
 
       const result = await SUT.createTokenMetadata({
-        assetCID: 'ASSET_CID',
-        manifestCID: 'MODIFIED_MANIFEST_CID',
-        domainMetadataCID: 'DOMAIN_METADATA_CID',
-        displayUriCID: 'DISPLAY_URI_CID',
-        displayUri: 'DISPLAY_URI',
-        minter: 'MINTER',
+        asset: {
+          cid: 'ASSET_CID',
+          fileSize: 1024,
+        },
         creator: 'CREATOR',
-        manifest: manifestRemoteAssetData as any,
-        domainMetadata,
+        display: {
+          cid: 'DISPLAY_URI_CID',
+          uri: 'DISPLAY_URI',
+          fileSize: 512,
+          dimensions: '1095x850',
+          mimeType: 'image/png',
+        },
+        domainMetadata: {
+          cid: 'DOMAIN_METADATA_CID',
+          data: domainMetadata,
+        },
+        manifest: {
+          cid: 'MODIFIED_MANIFEST_CID',
+          fileSize: 2048,
+          data: manifestRemoteAssetData as any,
+        },
+        minter: 'MINTER',
+        rights: {
+          identifier: 'MIT',
+          path: 'https://opensource.org/license/mit',
+        },
       })
 
       expect(result).toEqual(expected)
@@ -207,14 +241,14 @@ describe('common/asset/createTokenMetadata', () => {
             uri: 'https://assets.envited-x.net/ASSET_CID',
             hash: 'ASSET_CID',
             mimeType: 'application/zip',
-            fileSize: 3158016,
+            fileSize: 1024,
             fileName: 'ASSET_CID.zip',
           },
           {
             uri: 'ipfs://MODIFIED_MANIFEST_CID',
             hash: 'MODIFIED_MANIFEST_CID',
             mimeType: 'application/json',
-            fileSize: 8192,
+            fileSize: 2048,
             fileName: 'manifest.json',
           },
           {
@@ -225,7 +259,7 @@ describe('common/asset/createTokenMetadata', () => {
               value: '1095x850',
               unit: 'px',
             },
-            fileSize: 2400256,
+            fileSize: 512,
             fileName: 'DISPLAY_URI',
           },
         ],
@@ -254,15 +288,32 @@ describe('common/asset/createTokenMetadata', () => {
       }
 
       const result = await SUT.createTokenMetadata({
-        assetCID: 'ASSET_CID',
-        manifestCID: 'MODIFIED_MANIFEST_CID',
-        domainMetadataCID: 'DOMAIN_METADATA_CID',
-        displayUriCID: 'DISPLAY_URI_CID',
-        displayUri: 'DISPLAY_URI',
-        minter: 'MINTER',
+        asset: {
+          cid: 'ASSET_CID',
+          fileSize: 1024,
+        },
         creator: 'CREATOR',
-        manifest: manifestLicenseRefPolicySmartContract as any,
-        domainMetadata,
+        display: {
+          cid: 'DISPLAY_URI_CID',
+          uri: 'DISPLAY_URI',
+          fileSize: 512,
+          dimensions: '1095x850',
+          mimeType: 'image/png',
+        },
+        domainMetadata: {
+          cid: 'DOMAIN_METADATA_CID',
+          data: domainMetadata,
+        },
+        manifest: {
+          cid: 'MODIFIED_MANIFEST_CID',
+          fileSize: 2048,
+          data: manifestLicenseRefPolicySmartContract as any,
+        },
+        minter: 'MINTER',
+        rights: {
+          identifier: 'LicenseRef-Policy-Smart-Contract',
+          path: 'did:tezos:NetXdQprcVkpaWU:KT1PaDvx6vApsvZchR7m3LCRQLJ1cR6C778y',
+        },
       })
 
       expect(result).toEqual(expected)
@@ -294,14 +345,14 @@ describe('common/asset/createTokenMetadata', () => {
             uri: 'https://assets.envited-x.net/ASSET_CID',
             hash: 'ASSET_CID',
             mimeType: 'application/zip',
-            fileSize: 3158016,
+            fileSize: 1024,
             fileName: 'ASSET_CID.zip',
           },
           {
             uri: 'ipfs://MODIFIED_MANIFEST_CID',
             hash: 'MODIFIED_MANIFEST_CID',
             mimeType: 'application/json',
-            fileSize: 8192,
+            fileSize: 2048,
             fileName: 'manifest.json',
           },
           {
@@ -312,7 +363,7 @@ describe('common/asset/createTokenMetadata', () => {
               value: '1095x850',
               unit: 'px',
             },
-            fileSize: 2400256,
+            fileSize: 512,
             fileName: 'DISPLAY_URI',
           },
         ],
@@ -341,15 +392,32 @@ describe('common/asset/createTokenMetadata', () => {
       }
 
       const result = await SUT.createTokenMetadata({
-        assetCID: 'ASSET_CID',
-        manifestCID: 'MODIFIED_MANIFEST_CID',
-        domainMetadataCID: 'DOMAIN_METADATA_CID',
-        displayUriCID: 'DISPLAY_URI_CID',
-        displayUri: 'DISPLAY_URI',
-        minter: 'MINTER',
+        asset: {
+          cid: 'ASSET_CID',
+          fileSize: 1024,
+        },
         creator: 'CREATOR',
-        manifest: manifestLicenseRefCustomCommercialAgreement as any,
-        domainMetadata,
+        display: {
+          cid: 'DISPLAY_URI_CID',
+          uri: 'DISPLAY_URI',
+          fileSize: 512,
+          dimensions: '1095x850',
+          mimeType: 'image/png',
+        },
+        domainMetadata: {
+          cid: 'DOMAIN_METADATA_CID',
+          data: domainMetadata,
+        },
+        manifest: {
+          cid: 'MODIFIED_MANIFEST_CID',
+          fileSize: 2048,
+          data: manifestLicenseRefCustomCommercialAgreement as any,
+        },
+        minter: 'MINTER',
+        rights: {
+          identifier: 'LicenseRef-Custom-Commercial-Agreement',
+          path: './LICENSE',
+        },
       })
 
       expect(result).toEqual(expected)

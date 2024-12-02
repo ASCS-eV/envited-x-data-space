@@ -20,6 +20,7 @@ import {
   getDomainMetadataPath,
   getFileFromByteArray,
   getFilesAsPathAndByteArrayFromManifest,
+  getImageDimensionsAndType,
 } from './validateAndCreateMetadata.utils'
 
 export const _getShaclSchemaAndValidate =
@@ -166,6 +167,7 @@ export const _validateAndCreateMetadata =
     createFilename,
     getFilesAsPathAndByteArrayFromManifest,
     getAllFilenamesFromFiles,
+    getImageDimensionsAndType,
     db,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array) => Promise<
@@ -177,25 +179,38 @@ export const _validateAndCreateMetadata =
       | { conforms: boolean; data: { manifest: any; domainMetadata: any }; reports: { conforms: boolean }[] }
     >
     createTokenMetadata: ({
-      assetCID,
-      manifestCID,
-      domainMetadataCID,
-      displayUriCID,
-      displayUri,
-      minter,
+      asset,
       creator,
-      manifest,
+      display,
       domainMetadata,
+      manifest,
+      minter,
+      rights,
     }: {
-      assetCID: string
-      manifestCID: string
-      domainMetadataCID: string
-      displayUriCID: string
-      displayUri: string
-      minter: string
+      asset: {
+        cid: string
+        fileSize: number
+      }
       creator: string
-      manifest: Manifest
-      domainMetadata: any
+      display: {
+        cid: string
+        fileSize: number
+        uri: string
+        dimensions: string
+        mimeType: string
+      }
+      domainMetadata: {
+        cid: string
+        data: any
+      }
+      manifest: {
+        cid: string
+        data: Manifest
+        fileSize: number
+        modifiedData: Manifest
+      }
+      minter: string
+      rights: { identifier: string; path: string }
     }) => any
     createModifiedManifest: ({
       assetCID,
@@ -214,6 +229,11 @@ export const _validateAndCreateMetadata =
     getAllFilenamesFromFiles: (
       extractedFiles: { path: string; type: string; arrayBuffer: ArrayBuffer }[],
     ) => Promise<ExtractedFileWithCID[]>
+    getImageDimensionsAndType: (arrayBuffer: ArrayBuffer) => Promise<{
+      type: string
+      width: number
+      height: number
+    }>
     db: Database
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
@@ -234,23 +254,54 @@ export const _validateAndCreateMetadata =
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
       const visualization = filter(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile[]
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
-      const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
       const modifiedManifest = createModifiedManifest({
         assetCID,
         domainMetadataCID,
         visualizationFiles,
       })(data.manifest)
-      const modifiedManifestCID = await createFilename(Buffer.from(JSON.stringify(modifiedManifest)))
+      const modifiedManifestBuffer = Buffer.from(JSON.stringify(modifiedManifest))
+      const modifiedManifestCID = await createFilename(modifiedManifestBuffer)
+
+      const assetObject = {
+        cid: assetCID,
+        fileSize: byteArray.length,
+      }
+
+      const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
+      const displayUriInfo = await getImageDimensionsAndType(displayUri.arrayBuffer)
+      const displayObject = {
+        cid: displayUri.cid,
+        fileSize: displayUri.arrayBuffer.byteLength,
+        uri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
+        dimensions: `${displayUriInfo.width}x${displayUriInfo.height}`,
+        mimeType: displayUriInfo.type,
+      }
+
+      const manifestObject = {
+        cid: modifiedManifestCID,
+        fileSize: modifiedManifestBuffer.length,
+        data: data.manifest,
+        modifiedData: modifiedManifest,
+      }
+
+      const domainMetadataObject = {
+        cid: domainMetadataCID,
+        data: data.domainMetadata,
+      }
+
+      const rightsObject = {
+        identifier: data.manifest['manifest:license']['manifest:spdxIdentifier']['@value'],
+        path: data.manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value'],
+      }
+
       const tokenMetadata = createTokenMetadata({
-        assetCID,
-        manifestCID: modifiedManifestCID,
-        domainMetadataCID,
-        displayUriCID: displayUri.cid,
-        displayUri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
-        minter: extractAddressFromDid(issuer.user.id),
+        asset: assetObject,
         creator: issuer.profile.name,
-        manifest: data.manifest,
-        domainMetadata: data.domainMetadata,
+        display: displayObject,
+        domainMetadata: domainMetadataObject,
+        manifest: manifestObject,
+        minter: extractAddressFromDid(issuer.user.id),
+        rights: rightsObject,
       })
 
       return {
@@ -275,5 +326,6 @@ export const validateAndCreateMetadata = _validateAndCreateMetadata({
   createFilename,
   getFilesAsPathAndByteArrayFromManifest,
   getAllFilenamesFromFiles,
+  getImageDimensionsAndType,
   db,
 })

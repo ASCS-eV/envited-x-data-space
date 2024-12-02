@@ -5,36 +5,45 @@ import { Manifest } from './types'
 import { formatManifestLinkPath } from './validateAndCreateMetadata.utils'
 
 export const createTokenMetadata = ({
-  assetCID,
-  manifestCID,
-  domainMetadataCID,
-  displayUriCID,
-  displayUri,
-  minter,
+  asset,
   creator,
-  manifest,
+  display,
   domainMetadata,
+  manifest,
+  minter,
+  rights,
 }: {
-  assetCID: string
-  manifestCID: string
-  domainMetadataCID: string
-  displayUriCID: string
-  displayUri: string
-  minter: string
+  asset: {
+    cid: string
+    fileSize: number
+  }
   creator: string
-  manifest: Manifest
-  domainMetadata: any
+  display: {
+    cid: string
+    fileSize: number
+    uri: string
+    dimensions: string
+    mimeType: string
+  }
+  domainMetadata: {
+    cid: string
+    data: any
+  }
+  manifest: {
+    cid: string
+    fileSize: number
+    data: Manifest
+  }
+  minter: string
+  rights: {
+    identifier: string
+    path: string
+  }
 }) => {
-  const name = domainMetadata['hdmap:general']['general:description']['general:name']['@value']
-  const description = domainMetadata['hdmap:general']['general:description']['general:description']['@value']
-  const formatType = domainMetadata['hdmap:format']['hdmap:formatType']
-  const version = domainMetadata['hdmap:format']['hdmap:version']['@value']
-  const rights = manifest['manifest:license']['manifest:spdxIdentifier']['@value']
-  const rightsUri = equals('LicenseRef-Custom-Commercial-Agreement')(rights)
-    ? `${formatAssetUri(assetCID)}/${formatManifestLinkPath(
-        manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value'],
-      )}`
-    : manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value']
+  const name = domainMetadata.data['hdmap:general']['general:description']['general:name']['@value']
+  const description = domainMetadata.data['hdmap:general']['general:description']['general:description']['@value']
+  const formatType = domainMetadata.data['hdmap:format']['hdmap:formatType']
+  const version = domainMetadata.data['hdmap:format']['hdmap:version']['@value']
   const today = new Date()
   const date = today.toISOString().split('T')[0]
 
@@ -49,38 +58,40 @@ export const createTokenMetadata = ({
     publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],
     date,
     type: 'EVES-003 https://github.com/ASCS-eV/EVES',
-    rights,
-    rightsUri,
+    rights: rights.identifier,
+    rightsUri: equals('LicenseRef-Custom-Commercial-Agreement')(rights.identifier)
+      ? `${formatAssetUri(asset.cid)}/${formatManifestLinkPath(rights.path)}`
+      : rights.path,
     language: 'en',
-    artifactUri: formatAssetUri(assetCID),
-    identifier: assetCID,
-    externalUri: formatIpfsUri(manifestCID),
-    displayUri: formatIpfsUri(displayUriCID),
+    artifactUri: formatAssetUri(asset.cid),
+    identifier: asset.cid,
+    externalUri: formatIpfsUri(manifest.cid),
+    displayUri: formatIpfsUri(display.cid),
     formats: [
       {
-        uri: formatAssetUri(assetCID),
-        hash: assetCID,
+        uri: formatAssetUri(asset.cid),
+        hash: asset.cid,
         mimeType: 'application/zip',
-        fileSize: 3158016,
-        fileName: `${assetCID}.zip`,
+        fileSize: asset.fileSize,
+        fileName: `${asset.cid}.zip`,
       },
       {
-        uri: formatIpfsUri(manifestCID),
-        hash: manifestCID,
+        uri: formatIpfsUri(manifest.cid),
+        hash: manifest.cid,
         mimeType: 'application/json',
-        fileSize: 8192,
+        fileSize: manifest.fileSize,
         fileName: 'manifest.json',
       },
       {
-        uri: formatIpfsUri(displayUriCID),
-        hash: displayUriCID,
-        mimeType: 'image/png',
+        uri: formatIpfsUri(display.cid),
+        hash: display.cid,
+        mimeType: display.mimeType,
         dimensions: {
-          value: '1095x850',
+          value: display.dimensions,
           unit: 'px',
         },
-        fileSize: 2400256,
-        fileName: extractFilenameFromPath(displayUri),
+        fileSize: display.fileSize,
+        fileName: extractFilenameFromPath(display.uri),
       },
     ],
     attributes: [
@@ -91,7 +102,7 @@ export const createTokenMetadata = ({
       },
       {
         name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
-        value: formatIpfsUri(domainMetadataCID),
+        value: formatIpfsUri(domainMetadata.cid),
         type: 'application/json',
       },
       {
@@ -101,7 +112,7 @@ export const createTokenMetadata = ({
       },
       {
         name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
-        value: formatIpfsUri(manifestCID),
+        value: formatIpfsUri(manifest.cid),
         type: 'application/json',
       },
     ],

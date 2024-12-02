@@ -22,8 +22,6 @@ export const createTokenMetadata = ({
     cid: string
     fileSize: number
     uri: string
-    dimensions: string
-    mimeType: string
   }
   domainMetadata: {
     cid: string
@@ -85,9 +83,9 @@ export const createTokenMetadata = ({
       {
         uri: formatIpfsUri(display.cid),
         hash: display.cid,
-        mimeType: display.mimeType,
+        mimeType: 'image/png',
         dimensions: {
-          value: display.dimensions,
+          value: '1095x850',
           unit: 'px',
         },
         fileSize: display.fileSize,

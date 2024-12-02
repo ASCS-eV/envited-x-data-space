@@ -198,34 +198,3 @@ export const _getFilesAsPathAndByteArrayFromManifest =
 export const getFilesAsPathAndByteArrayFromManifest = _getFilesAsPathAndByteArrayFromManifest({
   getPathsAndBuffersFromByteArray,
 })
-
-export const loadImageFromUrl = (
-  url: string,
-): Promise<{
-  width: number
-  height: number
-}> =>
-  new Promise((resolve, reject) => {
-    const img = new Image()
-    img.onload = () => {
-      resolve({ width: img.width, height: img.height })
-      URL.revokeObjectURL(url)
-    }
-    img.onerror = () => {
-      URL.revokeObjectURL(url)
-      reject(new Error('Failed to load image'))
-    }
-    img.src = url
-  })
-
-export const getImageDimensionsAndType = async (arrayBuffer: ArrayBuffer) => {
-  const blob = new Blob([arrayBuffer])
-  const url = URL.createObjectURL(blob)
-
-  const dimensions = await loadImageFromUrl(url)
-
-  return {
-    ...dimensions,
-    type: blob.type || 'unknown',
-  }
-}

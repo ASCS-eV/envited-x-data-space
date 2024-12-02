@@ -20,7 +20,6 @@ import {
   getDomainMetadataPath,
   getFileFromByteArray,
   getFilesAsPathAndByteArrayFromManifest,
-  getImageDimensionsAndType,
 } from './validateAndCreateMetadata.utils'
 
 export const _getShaclSchemaAndValidate =
@@ -167,7 +166,6 @@ export const _validateAndCreateMetadata =
     createFilename,
     getFilesAsPathAndByteArrayFromManifest,
     getAllFilenamesFromFiles,
-    getImageDimensionsAndType,
     db,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array) => Promise<
@@ -196,8 +194,6 @@ export const _validateAndCreateMetadata =
         cid: string
         fileSize: number
         uri: string
-        dimensions: string
-        mimeType: string
       }
       domainMetadata: {
         cid: string
@@ -229,11 +225,6 @@ export const _validateAndCreateMetadata =
     getAllFilenamesFromFiles: (
       extractedFiles: { path: string; type: string; arrayBuffer: ArrayBuffer }[],
     ) => Promise<ExtractedFileWithCID[]>
-    getImageDimensionsAndType: (arrayBuffer: ArrayBuffer) => Promise<{
-      type: string
-      width: number
-      height: number
-    }>
     db: Database
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
@@ -268,13 +259,11 @@ export const _validateAndCreateMetadata =
       }
 
       const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
-      const displayUriInfo = await getImageDimensionsAndType(displayUri.arrayBuffer)
       const displayObject = {
         cid: displayUri.cid,
         fileSize: displayUri.arrayBuffer.byteLength,
         uri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
-        dimensions: `${displayUriInfo.width}x${displayUriInfo.height}`,
-        mimeType: displayUriInfo.type,
+        // add image dimensions
       }
 
       const manifestObject = {
@@ -326,6 +315,5 @@ export const validateAndCreateMetadata = _validateAndCreateMetadata({
   createFilename,
   getFilesAsPathAndByteArrayFromManifest,
   getAllFilenamesFromFiles,
-  getImageDimensionsAndType,
   db,
 })

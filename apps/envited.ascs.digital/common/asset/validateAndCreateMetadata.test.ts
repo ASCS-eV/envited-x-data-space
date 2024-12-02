@@ -74,7 +74,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
         createFilename: createFilenameStub,
         getFilesAsPathAndByteArrayFromManifest: getFilesAsPathAndByteArrayFromManifestStub,
         getAllFilenamesFromFiles: getAllFilenamesFromFilesStub,
-        getImageDimensionsAndType: getImageDimensionsAndTypeStub,
+        // getImageDimensionsAndType: getImageDimensionsAndTypeStub,
         db: dbStub,
       })(byteArray as any, asset as any)
 
@@ -141,8 +141,6 @@ describe('common/asset/validateAndCreateMetadata', () => {
           cid: 'DISPLAY_HASH',
           uri: 'https://assets.envited-x.net/HASH/PATH',
           fileSize: undefined,
-          dimensions: '1095x850',
-          mimeType: 'image/png',
         },
         minter: 'ISSUER_ID',
         creator: 'NAME',

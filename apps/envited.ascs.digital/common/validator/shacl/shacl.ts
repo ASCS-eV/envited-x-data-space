@@ -5,7 +5,9 @@ import { all, equals, keys, omit, pipe } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromFile, read } from '../../archive'
-import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from '../../asset/constants'
+import { MANIFEST_FILE } from '../../asset/constants'
+import { Manifest } from '../../asset/types'
+import { getAllManifestLinksAndFormatPaths, getDomainMetadataPath } from '../../asset/validateAndCreateMetadata.utils'
 import { ERRORS } from '../../constants'
 import { CONTEXT_DROP_SCHEMAS } from './shacl.constants'
 import { ContentType, Schema, ValidationSchema } from './shacl.types'
@@ -15,14 +17,18 @@ export const _validateShaclFile =
   ({
     validateManifest,
     validateDomainMetadata,
+    checkIfAllFilesInManifestExists,
   }: {
     validateManifest: (file: File) => Promise<{ conforms: boolean; data: any }>
-    validateDomainMetadata: (file: File) => Promise<{ conforms: boolean; data: any }>
+    validateDomainMetadata: (file: File, manifest: Manifest) => Promise<{ conforms: boolean; data: any }>
+    checkIfAllFilesInManifestExists: (file: File, manifest: Manifest) => any
   }) =>
   async (file: File) => {
     try {
       const { conforms: manifestConforms, data: manifest } = await validateManifest(file)
-      const { conforms: domainMetadataConforms, data: domainMetadata } = await validateDomainMetadata(file)
+      await checkIfAllFilesInManifestExists(file, manifest)
+
+      const { conforms: domainMetadataConforms, data: domainMetadata } = await validateDomainMetadata(file, manifest)
 
       if (!manifestConforms) {
         return { isValid: false, data: {}, error: ERRORS.ASSET_INVALID }
@@ -112,14 +118,16 @@ export const _validateDomainMetadata =
     getShaclDataFromZip,
     loadDataset,
     validateShaclSchema,
+    getDomainMetadataPath,
   }: {
     getShaclDataFromZip: (file: File, fileName: string) => Promise<string>
     loadDataset: (data: string, contentType: ContentType) => Promise<DatasetCore<Quad, Quad>>
     validateShaclSchema: (data: DatasetCore<Quad, Quad>) => (type: ValidationSchema) => Promise<boolean>
+    getDomainMetadataPath: (manifest: Manifest) => string
   }) =>
-  async (file: File) => {
+  async (file: File, manifest: Manifest) => {
     try {
-      const data = await getShaclDataFromZip(file, DOMAIN_METADATA_FILE)
+      const data = await getShaclDataFromZip(file, getDomainMetadataPath(manifest))
       const json = JSON.parse(data)
       const templates = pipe(omit(CONTEXT_DROP_SCHEMAS), keys)(json['@context']) as ValidationSchema[]
 
@@ -152,11 +160,26 @@ export const validateDomainMetadata = _validateDomainMetadata({
   getShaclDataFromZip,
   loadDataset,
   validateShaclSchema,
+  getDomainMetadataPath,
+})
+
+export const _checkIfAllFilesInManifestExists =
+  ({ getShaclDataFromZip }: { getShaclDataFromZip: (file: File, fileName: string) => Promise<string> }) =>
+  async (file: File, manifest: Manifest) => {
+    const files = getAllManifestLinksAndFormatPaths(manifest)
+    const validationPromises = files.map((fileName: string) => getShaclDataFromZip(file, fileName))
+
+    return Promise.all(validationPromises)
+  }
+
+export const checkIfAllFilesInManifestExists = _checkIfAllFilesInManifestExists({
+  getShaclDataFromZip,
 })
 
 export const validateShaclFile = _validateShaclFile({
   validateDomainMetadata,
   validateManifest,
+  checkIfAllFilesInManifestExists,
 })
 
 export const _validateShaclDataWithSchema =

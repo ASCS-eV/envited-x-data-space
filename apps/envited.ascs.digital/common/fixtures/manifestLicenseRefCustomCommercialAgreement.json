@@ -138,16 +138,16 @@
   "manifest:license": {
     "@type": "manifest:License",
     "manifest:spdxIdentifier": {
-      "@value": "MIT",
+      "@value": "LicenseRef-Custom-Commercial-Agreement",
       "@type": "xsd:string"
     },
     "manifest:licenseData": {
       "@type": "manifest:Link",
-      "manifest:accessRole": "publicUser",
+      "manifest:accessRole": "registeredUser",
       "manifest:type": "license",
-      "manifest:format": "html",
+      "manifest:format": "md",
       "manifest:path": {
-        "@value": "https://opensource.org/license/mit",
+        "@value": "./LICENSE",
         "@type": "xsd:anyURI"
       }
     }

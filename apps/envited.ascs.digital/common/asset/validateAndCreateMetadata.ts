@@ -1,8 +1,7 @@
 import fs from 'fs'
-import { all, equals, keys, omit, pipe, prop } from 'ramda'
+import { all, equals, filter, find, keys, omit, pipe, prop, propEq } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { extractFromByteArray, read } from '../archive'
 import { db } from '../database/queries'
 import { Database } from '../database/types'
 import { Asset } from '../types'
@@ -10,14 +9,18 @@ import { extractAddressFromDid } from '../utils'
 import { validateShaclDataWithSchema } from '../validator'
 import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { ValidationSchema } from '../validator/shacl/shacl.types'
-import { DOMAIN_METADATA_FILE, MANIFEST_FILE } from './constants'
+import { MANIFEST_FILE } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
-import { Manifest } from './types'
-import { createFilename } from './validateAndCreateMetadata.utils'
-
-export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
-  extractFromByteArray(byteArray, filename).then(read)
+import { formatAssetUri } from './createTokenMetadata.utils'
+import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestExtractedFiles } from './types'
+import {
+  createFilename,
+  getAllFilenamesFromFiles,
+  getDomainMetadataPath,
+  getFileFromByteArray,
+  getFilesAsPathAndByteArrayFromManifest,
+} from './validateAndCreateMetadata.utils'
 
 export const _getShaclSchemaAndValidate =
   ({
@@ -26,17 +29,17 @@ export const _getShaclSchemaAndValidate =
   }: {
     validateManifest: (
       byteArray: Uint8Array,
-    ) => Promise<{ conforms: boolean; report: ValidationReport<any> | { conforms: boolean }; data: any }>
+    ) => Promise<{ conforms: boolean; report: ValidationReport | { conforms: boolean }; data: any }>
     validateDomainMetadata: (
       byteArray: Uint8Array,
-    ) => Promise<{ conforms: boolean; reports: (ValidationReport<any> | { conforms: boolean })[]; data: any }>
+      manifest: Manifest,
+    ) => Promise<{ conforms: boolean; reports: (ValidationReport | { conforms: boolean })[]; data: any }>
   }) =>
   async (byteArray: Uint8Array) => {
     try {
-      const manifestPromise = validateManifest(byteArray)
-      const domainMetadataPromise = validateDomainMetadata(byteArray)
+      const { conforms: manifestConforms, report: manifestReport, data: manifest } = await validateManifest(byteArray)
+      const domainMetadataPromise = validateDomainMetadata(byteArray, manifest)
 
-      const { conforms: manifestConforms, report: manifestReport, data: manifest } = await manifestPromise
       const {
         conforms: domainMetadataConforms,
         reports: domainMetadataReports,
@@ -73,7 +76,7 @@ export const _validateManifest =
       data: string,
       stream: NodeJS.ReadableStream,
     ) => Promise<
-      | ValidationReport<any>
+      | ValidationReport
       | {
           conforms: boolean
         }
@@ -114,16 +117,16 @@ export const _validateDomainMetadata =
       data: string,
       stream: NodeJS.ReadableStream,
     ) => Promise<
-      | ValidationReport<any>
+      | ValidationReport
       | {
           conforms: boolean
         }
     >
     fs: any
   }) =>
-  async (byteArray: Uint8Array) => {
+  async (byteArray: Uint8Array, manifest: Manifest) => {
     try {
-      const data = await getFileFromByteArray(byteArray, DOMAIN_METADATA_FILE)
+      const data = await getFileFromByteArray(byteArray, getDomainMetadataPath(manifest))
       const parsedData = JSON.parse(data)
       const schemaTypes = pipe(omit(CONTEXT_DROP_SCHEMAS), keys)(parsedData['@context']) as ValidationSchema[]
 
@@ -161,106 +164,143 @@ export const _validateAndCreateMetadata =
     createTokenMetadata,
     createModifiedManifest,
     createFilename,
-    getFileFromByteArray,
+    getFilesAsPathAndByteArrayFromManifest,
+    getAllFilenamesFromFiles,
     db,
   }: {
     getShaclSchemaAndValidate: (byteArray: Uint8Array) => Promise<
       | {
           conforms: boolean
-          reports: (ValidationReport<any> | { conforms: boolean })[]
+          reports: (ValidationReport | { conforms: boolean })[]
           data: { manifest?: undefined; domainMetadata?: undefined }
         }
       | { conforms: boolean; data: { manifest: any; domainMetadata: any }; reports: { conforms: boolean }[] }
     >
     createTokenMetadata: ({
-      assetCID,
-      manifestCID,
-      domainMetadataCID,
-      displayUriCID,
-      displayUri,
-      minter,
+      asset,
       creator,
-      manifest,
+      display,
       domainMetadata,
+      manifest,
+      minter,
+      rights,
     }: {
-      assetCID: string
-      manifestCID: string
-      domainMetadataCID: string
-      displayUriCID: string
-      displayUri: string
-      minter: string
+      asset: {
+        cid: string
+        fileSize: number
+      }
       creator: string
-      manifest: Manifest
-      domainMetadata: any
+      display: {
+        cid: string
+        fileSize: number
+        uri: string
+      }
+      domainMetadata: {
+        cid: string
+        data: any
+      }
+      manifest: {
+        cid: string
+        data: Manifest
+        fileSize: number
+        modifiedData: Manifest
+      }
+      minter: string
+      rights: { identifier: string; path: string }
     }) => any
     createModifiedManifest: ({
       assetCID,
       domainMetadataCID,
+      visualizationFiles,
     }: {
       assetCID: string
       domainMetadataCID: string
+      visualizationFiles: ExtractedFileWithCID[]
     }) => (manifest: Manifest) => any
     createFilename: (byteArray: Uint8Array) => Promise<string>
-    getFileFromByteArray: (byteArray: Uint8Array, filename: string) => any
+    getFilesAsPathAndByteArrayFromManifest: (
+      byteArray: Uint8Array,
+      manifest: Manifest,
+    ) => Promise<ManifestExtractedFiles>
+    getAllFilenamesFromFiles: (
+      extractedFiles: { path: string; type: string; arrayBuffer: ArrayBuffer }[],
+    ) => Promise<ExtractedFileWithCID[]>
     db: Database
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
     try {
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
-
       const assetCID = await createFilename(byteArray)
-      const domainMetadataCID = await createFilename(data.domainMetadata)
-
-      const modifiedManifest = createModifiedManifest({
-        assetCID,
-        domainMetadataCID,
-      })(data.manifest)
-
-      // const modifiedManifestCID = await createFilename(modifiedManifest)
-
-      // const license = await getFileFromByteArray(byteArray, LICENSE_FILE)
-      // const licenseCID = await createFilename(license as any)
-
-      // const firstMediaElement = find(propEq('visualization', 'manifest:type'))(
-      //   data.manifest['manifest:data']['manifest:contentData'],
-      // ) as any
-      // const displayUriPath = firstMediaElement['manifest:relativePath']['@value']
-      // const displayUri = await getFileFromByteArray(byteArray, replace('./', '')(displayUriPath))
-      // const displayUriCID = await createFilename(displayUri as any)
+      const domainMetadataCID = await createFilename(Buffer.from(JSON.stringify(data.domainMetadata)))
       const connection = await db()
       const user = await connection.getUserById(asset.userId)
       if (!user) {
         throw new Error('User not found')
       }
-
       const [issuer] = await connection.getUserWithProfileById(user.issuerId)
 
       if (!issuer) {
         throw new Error('Issuer not found')
       }
+      const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
+      const visualization = filter(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile[]
+      const visualizationFiles = await getAllFilenamesFromFiles(visualization)
+      const modifiedManifest = createModifiedManifest({
+        assetCID,
+        domainMetadataCID,
+        visualizationFiles,
+      })(data.manifest)
+      const modifiedManifestBuffer = Buffer.from(JSON.stringify(modifiedManifest))
+      const modifiedManifestCID = await createFilename(modifiedManifestBuffer)
 
-      // metadata temporarily hardcoded
+      const assetObject = {
+        cid: assetCID,
+        fileSize: byteArray.length,
+      }
+
+      const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
+      const displayObject = {
+        cid: displayUri.cid,
+        fileSize: displayUri.arrayBuffer.byteLength,
+        uri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
+        // add image dimensions
+      }
+
+      const manifestObject = {
+        cid: modifiedManifestCID,
+        fileSize: modifiedManifestBuffer.length,
+        data: data.manifest,
+        modifiedData: modifiedManifest,
+      }
+
+      const domainMetadataObject = {
+        cid: domainMetadataCID,
+        data: data.domainMetadata,
+      }
+
+      const rightsObject = {
+        identifier: data.manifest['manifest:license']['manifest:spdxIdentifier']['@value'],
+        path: data.manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value'],
+      }
+
       const tokenMetadata = createTokenMetadata({
-        assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH',
-        manifestCID: 'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
-        domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB',
-        displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
-        displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
-        minter: extractAddressFromDid(issuer.user.id),
+        asset: assetObject,
         creator: issuer.profile.name,
-        manifest: data.manifest,
-        domainMetadata: data.domainMetadata,
+        display: displayObject,
+        domainMetadata: domainMetadataObject,
+        manifest: manifestObject,
+        minter: extractAddressFromDid(issuer.user.id),
+        rights: rightsObject,
       })
-
-      const tokenMetadataCID = await createFilename(tokenMetadata)
 
       return {
         conforms,
         reports,
         metadata: tokenMetadata,
-        manifest: modifiedManifest,
+        modifiedManifest: modifiedManifest,
         assetCID,
-        metadataCID: tokenMetadataCID,
+        files,
+        visualizationFiles,
       }
     } catch (err) {
       console.log(err)
@@ -273,6 +313,7 @@ export const validateAndCreateMetadata = _validateAndCreateMetadata({
   createTokenMetadata,
   createModifiedManifest,
   createFilename,
-  getFileFromByteArray,
+  getFilesAsPathAndByteArrayFromManifest,
+  getAllFilenamesFromFiles,
   db,
 })

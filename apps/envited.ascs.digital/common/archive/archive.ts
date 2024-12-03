@@ -35,6 +35,13 @@ export const read = async (entry: Entry) => {
   return new Response(stream.readable).text()
 }
 
+export const getFileBlob = async (entry: Entry) => {
+  const stream = new TransformStream()
+  entry.getData?.(stream.writable)
+
+  return new Response(stream.readable).blob()
+}
+
 export const _readContentFromJsonFile =
   ({ read }: { read: (file: Entry) => Promise<string> }) =>
   async (file: Entry) =>

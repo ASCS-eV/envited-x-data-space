@@ -6,11 +6,13 @@ import {
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
-import { isNil } from 'ramda'
+import { isNil, last, split } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
+import { ExtractedFileWithCID, ManifestExtractedFiles } from '../../../asset/types'
 import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
+import { uploadFile } from '../../../ipfs'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
 export const _main =
@@ -40,11 +42,12 @@ export const _main =
       asset: Asset,
     ) => Promise<{
       conforms: boolean
-      reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
+      reports: (ValidationReport | { conforms: boolean })[] | { conforms: boolean }[]
       metadata: any
-      manifest: Record<string, unknown>
+      modifiedManifest: Record<string, unknown>
       assetCID: string
-      metadataCID: string
+      files: ManifestExtractedFiles
+      visualizationFiles: ExtractedFileWithCID[]
     }>
     getAsset: (cid: string) => Promise<Asset>
     updateAsset: (
@@ -57,6 +60,7 @@ export const _main =
   }): S3Handler =>
   async event => {
     try {
+      // Read uploaded asset
       const s3Record = event.Records[0].s3
 
       const Key = s3Record.object.key
@@ -67,34 +71,91 @@ export const _main =
       if (isNil(Body)) {
         return
       }
+      const uploadedFile = await Body.transformToByteArray()
 
-      const byteArray = await Body.transformToByteArray()
+      // Validate uploaded asset
       const asset = await getAsset(Key)
-      const { conforms, metadata, assetCID, metadataCID, manifest } = await validateAndCreateMetadata(byteArray, asset)
-
+      const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles } =
+        await validateAndCreateMetadata(uploadedFile, asset)
       if (!conforms) {
+        // Revert if validation fails
         await deleteFile({ Bucket, Key })
         await updateAsset(Key, Key, AssetStatus.not_accepted)
 
         return
       }
-
+      // Copy asset ZIP file to S3 with CID as name
       await copyFile({
         Bucket,
         CopySource: `${Bucket}/${Key}`,
         Key: assetCID,
       })
 
-      const writeMetadata = writeFile({
-        Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
-        Key: metadataCID,
-        Body: Buffer.from(JSON.stringify(metadata)),
-        ContentEncoding: 'base64',
-        ContentType: 'application/json',
-      })
+      // Handle files for registered users
+      const { owner, registeredUser } = files
 
-      await writeMetadata.done()
-      await updateAsset(assetCID, Key, AssetStatus.pending, metadata, manifest)
+      if (owner) {
+        const writeFilesToAssetPromises = owner.map(
+          async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
+            const writeToAsset = writeFile({
+              Bucket,
+              Key: `${assetCID}/${path}`,
+              Body: Buffer.from(arrayBuffer),
+              ContentEncoding: 'base64',
+            })
+
+            return writeToAsset.done()
+          },
+        )
+
+        Promise.all(writeFilesToAssetPromises)
+      }
+
+      if (visualizationFiles) {
+        const writeFilesToIpfsPromises = visualizationFiles.map(
+          async ({ cid, arrayBuffer }: { cid: string; arrayBuffer: ArrayBuffer }) => {
+            const writeToIpfsBucket = writeFile({
+              Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: Buffer.from(arrayBuffer),
+              ContentEncoding: 'base64',
+            })
+
+            return writeToIpfsBucket.done()
+          },
+        )
+
+        Promise.all(writeFilesToIpfsPromises)
+
+        const pinataIpfsPromises = visualizationFiles.map(
+          async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) =>
+            uploadFile({ arrayBuffer, filename: last(split('/', path)) as string }),
+        )
+
+        Promise.all(pinataIpfsPromises)
+      }
+
+      if (registeredUser) {
+        const writeFilesToMetadataPromises = registeredUser.map(
+          async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
+            const writeToMetadata = writeFile({
+              Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+              Key: `${assetCID}/${path}`,
+              Body: Buffer.from(arrayBuffer),
+              ContentEncoding: 'base64',
+            })
+
+            return writeToMetadata.done()
+          },
+        )
+
+        Promise.all(writeFilesToMetadataPromises)
+      }
+
+      // Update stored asset in DB
+      await updateAsset(assetCID, Key, AssetStatus.pending, metadata, modifiedManifest)
+
+      // Delete uploaded asset with the "old" name from S3
       await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)

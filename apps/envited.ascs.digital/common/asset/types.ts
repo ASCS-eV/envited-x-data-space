@@ -5,7 +5,7 @@ export enum AccessRole {
 }
 
 export interface Manifest {
-  '@context': {}
+  '@context': ManifestContext
   '@id': string
   '@type': string
   'manifest:data': {
@@ -14,6 +14,14 @@ export interface Manifest {
     'manifest:contentData': ManifestLink[]
   }
   'manifest:license': ManifestLicense
+}
+
+export interface ManifestContext {
+  xsd: string
+  gx: string
+  skos: string
+  sh: string
+  manifest: string
 }
 
 export interface ManifestLink {
@@ -34,6 +42,22 @@ export interface ManifestLicense {
     '@type': string
   }
   'manifest:licenseData': ManifestLink
+}
+
+export interface ExtractedFile {
+  arrayBuffer: ArrayBuffer
+  path: string
+  type: string
+}
+
+export interface ExtractedFileWithCID extends ExtractedFile {
+  cid: string
+}
+
+export interface ManifestExtractedFiles {
+  owner: ExtractedFile[]
+  registeredUser: ExtractedFile[]
+  publicUser: ExtractedFile[]
 }
 
 export interface TokenFormat {

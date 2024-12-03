@@ -18,14 +18,17 @@ describe('common/validator/shacl', () => {
         },
       })
 
+      const checkIfAllFilesInManifestExistsStub = jest.fn().mockReturnValue({})
+
       // then ... we should get a valid response
       const result = await SUT._validateShaclFile({
         validateManifest: validateManifestStub,
         validateDomainMetadata: validateDomainMetadataStub,
+        checkIfAllFilesInManifestExists: checkIfAllFilesInManifestExistsStub,
       })(file as any)
 
       expect(validateManifestStub).toHaveBeenCalledWith('ZIP')
-      expect(validateDomainMetadataStub).toHaveBeenCalledWith('ZIP')
+      expect(validateDomainMetadataStub).toHaveBeenCalledWith('ZIP', { file: 'FILE_NAME' })
       expect(result).toEqual({
         isValid: true,
         data: {
@@ -88,6 +91,7 @@ describe('common/validator/shacl', () => {
     it('Should return a valid result', async () => {
       // when ... we want to validate a asset file
       const file = 'ZIP'
+      const manifest = {}
 
       const getShaclDataFromZipStub = jest.fn().mockResolvedValue(
         JSON.stringify({
@@ -99,13 +103,15 @@ describe('common/validator/shacl', () => {
       const loadDatasetStub = jest.fn().mockResolvedValueOnce('DATA_QUADS')
       const validateShaclDataStub = jest.fn().mockReturnValue(true)
       const validateShaclStub = jest.fn().mockReturnValue(validateShaclDataStub)
+      const getDomainMetadataPathStub = jest.fn().mockReturnValue('DOMAIN_METADATA_PATH')
 
       // then ... we should get a valid response
       const result = await SUT._validateDomainMetadata({
         getShaclDataFromZip: getShaclDataFromZipStub,
         loadDataset: loadDatasetStub,
         validateShaclSchema: validateShaclStub,
-      })(file as any)
+        getDomainMetadataPath: getDomainMetadataPathStub,
+      })(file as any, manifest as any)
 
       expect(loadDatasetStub).toHaveBeenCalledWith(
         JSON.stringify({

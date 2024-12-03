@@ -1,4 +1,5 @@
 import type { PinataSDK } from 'pinata-web3'
+import { Readable } from 'stream'
 
 export const uploadJson =
   (pinata: PinataSDK) =>
@@ -13,6 +14,24 @@ export const uploadJson =
 
     return pinata.upload
       .json(data)
+      .addMetadata({ name: filename })
+      .then(data => pinata.gateways.convert(data.IpfsHash))
+  }
+
+export const uploadFile =
+  (pinata: PinataSDK) =>
+  async ({ arrayBuffer, filename }: { arrayBuffer: ArrayBuffer; filename: string }) => {
+    const buffer = Buffer.from(arrayBuffer)
+
+    const readable = new Readable({
+      read() {
+        this.push(buffer)
+        this.push(null)
+      },
+    })
+
+    return pinata.upload
+      .stream(readable)
       .addMetadata({ name: filename })
       .then(data => pinata.gateways.convert(data.IpfsHash))
   }

@@ -18,6 +18,30 @@ describe('common/aws/handlers/processAssetUpload', () => {
         metadata: 'METADATA',
         assetCID: 'ASSET_CID',
         metadataCID: 'METADATA_CID',
+        files: {
+          owner: [
+            {
+              path: 'PATH',
+              arrayBuffer: 'FILE_BUFFER',
+            },
+          ],
+          registeredUser: [
+            {
+              path: 'PATH',
+              arrayBuffer: 'FILE_BUFFER',
+            },
+            {
+              path: 'PATH_1',
+              arrayBuffer: 'FILE_BUFFER',
+            },
+          ],
+          publicUser: [
+            {
+              path: 'PATH',
+              arrayBuffer: 'FILE_BUFFER',
+            },
+          ],
+        },
       }) as any
       const writeFileStub = jest.fn().mockReturnValue({
         done: uploadStub,
@@ -58,7 +82,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(readFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'ASSET_CID')
       expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
-      expect(writeFileStub).toHaveBeenCalledTimes(1)
+      expect(writeFileStub).toHaveBeenCalledTimes(3)
       expect(deleteFileStub).toHaveBeenCalledTimes(1)
     })
 

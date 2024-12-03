@@ -1,5 +1,6 @@
 'use server'
 
+import { log } from '../../common/logger'
 import { getMintParams, updateAssetStatus, uploadTokenMetadata } from '../../common/serverActions'
 import { AssetStatus } from '../../common/types'
 import { internalServerErrorError } from '../../common/utils'
@@ -9,6 +10,7 @@ export async function uploadAssetTokenMetadata(id: string) {
     const fileLocation = await uploadTokenMetadata(id)
     return fileLocation
   } catch (e) {
+    log.error(e)
     throw internalServerErrorError()
   }
 }
@@ -18,7 +20,7 @@ export async function getAssetMintParams(id: string) {
     const mintParams = await getMintParams(id)
     return mintParams
   } catch (e) {
-    console.log(e)
+    log.error(e)
     throw internalServerErrorError()
   }
 }
@@ -27,6 +29,7 @@ export async function updateStatus(assetId: string, hash: string) {
   try {
     await updateAssetStatus({ id: assetId, hash, status: AssetStatus.minted })
   } catch (e) {
+    log.error(e)
     throw internalServerErrorError()
   }
 }

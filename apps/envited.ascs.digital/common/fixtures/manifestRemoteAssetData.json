@@ -17,7 +17,7 @@
         "manifest:type": "assetData",
         "manifest:format": "xodr",
         "manifest:path": {
-          "@value": "./data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr",
+          "@value": "https://remote-asset-url.io/TestfeldNiedersachsen_ALKS_ODR_sample.xodr",
           "@type": "xsd:anyURI"
         }
       },
@@ -27,7 +27,7 @@
         "manifest:type": "assetData",
         "manifest:format": "xodr",
         "manifest:path": {
-          "@value": "./data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr",
+          "@value": "https://remote-asset-url.io/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr",
           "@type": "xsd:anyURI"
         }
       }

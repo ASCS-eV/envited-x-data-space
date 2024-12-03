@@ -1,3 +1,5 @@
+import manifest from '../fixtures/manifest.json'
+import { Manifest } from './types'
 import * as SUT from './validateAndCreateMetadata'
 
 describe('common/asset/validateAndCreateMetadata', () => {
@@ -5,62 +7,6 @@ describe('common/asset/validateAndCreateMetadata', () => {
     it('should validate and return a metadata buffer', async () => {
       // when ... we want to validate and create a metadata buffer
       // then ... it should validate, extract and create a metadata buffer
-      const manifest = {
-        'manifest:data': {
-          'manifest:contentData': [
-            {
-              '@type': 'manifest:Link',
-              'manifest:accessRole': 'publicUser',
-              'manifest:type': 'metadata',
-              'manifest:format': 'json',
-              'manifest:relativePath': {
-                '@value': './metadata/domainMetadata.json',
-                '@type': 'xsd:anyURI',
-              },
-            },
-            {
-              '@type': 'manifest:Link',
-              'manifest:accessRole': 'registeredUser',
-              'manifest:type': 'documentation',
-              'manifest:format': 'pdf',
-              'manifest:relativePath': {
-                '@value': './documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation.pdf',
-                '@type': 'xsd:anyURI',
-              },
-            },
-            {
-              '@type': 'manifest:Link',
-              'manifest:accessRole': 'registeredUser',
-              'manifest:type': 'documentation',
-              'manifest:format': 'txt',
-              'manifest:relativePath': {
-                '@value': './documentation/TestfeldNiedersachsen_ALKS_ODR_sample_Documentation_stats.txt',
-                '@type': 'xsd:anyURI',
-              },
-            },
-            {
-              '@type': 'manifest:Link',
-              'manifest:accessRole': 'registeredUser',
-              'manifest:type': 'validation',
-              'manifest:format': 'txt',
-              'manifest:relativePath': {
-                '@value': './validation/qcReport.txt',
-                '@type': 'xsd:anyURI',
-              },
-            },
-            {
-              '@type': 'manifest:Link',
-              'manifest:accessRole': 'publicUser',
-              'manifest:type': 'visualization',
-              'manifest:format': 'png',
-              'manifest:relativePath': {
-                '@value': './visualization/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
-                '@type': 'xsd:anyURI',
-              },
-            },
-          ],
-        },
-      }
       const getShaclSchemaAndValidateStub = jest.fn().mockResolvedValue({
         reports: [{ conforms: true }],
         data: { domainMetadata: { '@type': 'NAME' }, manifest },
@@ -68,7 +14,40 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const createMetadataStub = jest.fn().mockReturnValue('METADATA_BUFFER') as any
       const createModifiedManifestStub = jest.fn().mockReturnValue('MODIFIED_MANIFEST_BUFFER') as any
       const createFilenameStub = jest.fn().mockReturnValue('HASH') as any
-      const getFileFromByteArrayStub = jest.fn().mockResolvedValue('FILE DATA') as any
+      const getAllFilenamesFromFilesStub = jest.fn().mockResolvedValue([
+        {
+          path: 'PATH',
+          arrayBuffer: 'FILE_BUFFER',
+          cid: 'DISPLAY_HASH',
+          type: 'visualization',
+        },
+        {
+          path: 'PATH',
+          arrayBuffer: 'FILE_BUFFER',
+          cid: 'FILE_CID',
+          type: 'visualization',
+        },
+      ]) as any
+      const getFilesAsPathAndByteArrayFromManifestStub = jest.fn().mockResolvedValue({
+        owner: [
+          {
+            path: 'PATH',
+            arrayBuffer: 'FILE_BUFFER',
+          },
+        ],
+        registeredUser: [
+          {
+            path: 'PATH',
+            arrayBuffer: 'FILE_BUFFER',
+          },
+        ],
+        publicUser: [
+          {
+            path: 'PATH',
+            arrayBuffer: 'FILE_BUFFER',
+          },
+        ],
+      }) as any
       const getUserByIdStub = jest.fn().mockResolvedValue({ id: 'USER_ID', issuerId: 'ISSUER_ID' }) as any
       const getUserWithProfileByIdStub = jest
         .fn()
@@ -89,7 +68,8 @@ describe('common/asset/validateAndCreateMetadata', () => {
         createTokenMetadata: createMetadataStub,
         createModifiedManifest: jest.fn().mockReturnValue(createModifiedManifestStub),
         createFilename: createFilenameStub,
-        getFileFromByteArray: getFileFromByteArrayStub,
+        getFilesAsPathAndByteArrayFromManifest: getFilesAsPathAndByteArrayFromManifestStub,
+        getAllFilenamesFromFiles: getAllFilenamesFromFilesStub,
         db: dbStub,
       })(byteArray as any, asset as any)
 
@@ -97,23 +77,72 @@ describe('common/asset/validateAndCreateMetadata', () => {
         conforms: undefined,
         reports: [{ conforms: true }],
         metadata: 'METADATA_BUFFER',
-        manifest: 'MODIFIED_MANIFEST_BUFFER',
+        modifiedManifest: 'MODIFIED_MANIFEST_BUFFER',
         assetCID: 'HASH',
-        metadataCID: 'HASH',
+        files: {
+          owner: [
+            {
+              path: 'PATH',
+              arrayBuffer: 'FILE_BUFFER',
+            },
+          ],
+          registeredUser: [
+            {
+              path: 'PATH',
+              arrayBuffer: 'FILE_BUFFER',
+            },
+          ],
+          publicUser: [
+            {
+              path: 'PATH',
+              arrayBuffer: 'FILE_BUFFER',
+            },
+          ],
+        },
+        visualizationFiles: [
+          {
+            path: 'PATH',
+            arrayBuffer: 'FILE_BUFFER',
+            cid: 'DISPLAY_HASH',
+            type: 'visualization',
+          },
+          {
+            path: 'PATH',
+            arrayBuffer: 'FILE_BUFFER',
+            cid: 'FILE_CID',
+            type: 'visualization',
+          },
+        ],
       })
 
       expect(getUserByIdStub).toHaveBeenCalledWith('USER_ID')
       expect(getUserWithProfileByIdStub).toHaveBeenCalledWith('ISSUER_ID')
       expect(createMetadataStub).toHaveBeenCalledWith({
-        assetCID: 'QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH',
-        manifestCID: 'QmTWU55kxaMpzfxNiTRTA4juDsBa4gd5UZocshBWRUeoDW',
-        domainMetadataCID: 'QmU7TvL9afnY87ceyfX9vVPcKM4mNS1bpNN1CUQNjxZjvB',
-        displayUriCID: 'QmPg2xq9HAH45tF9EhLfGpYvtjhRL1LnB2jrHx7WUxKDzg',
-        displayUri: 'https://assets/TestfeldNiedersachsen_ALKS_ODR_sample_01.png',
+        asset: {
+          cid: 'HASH',
+          fileSize: 16,
+        },
+        manifest: {
+          cid: 'HASH',
+          data: manifest,
+          fileSize: 26,
+          modifiedData: 'MODIFIED_MANIFEST_BUFFER',
+        },
+        domainMetadata: {
+          cid: 'HASH',
+          data: { '@type': 'NAME' },
+        },
+        display: {
+          cid: 'DISPLAY_HASH',
+          uri: 'https://assets.envited-x.net/HASH/PATH',
+          fileSize: undefined,
+        },
         minter: 'ISSUER_ID',
         creator: 'NAME',
-        manifest: manifest,
-        domainMetadata: { '@type': 'NAME' },
+        rights: {
+          identifier: 'MIT',
+          path: 'https://opensource.org/license/mit',
+        },
       })
     })
   })
@@ -202,7 +231,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
           getFileFromByteArray: getFileFromByteArrayStub,
           validateShaclDataWithSchema: validateShaclDataSchemaStub,
           fs: fsStub,
-        })(byteArray as any)
+        })(byteArray as any, manifest as Manifest)
 
         expect(result).toEqual({
           conforms: true,

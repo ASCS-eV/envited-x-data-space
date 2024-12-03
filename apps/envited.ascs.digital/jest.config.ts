@@ -19,7 +19,10 @@ export default {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/next/babel'] }],
   },
-  transformIgnorePatterns: [`/node_modules/(?!(${esModules})/*)`],
+  transformIgnorePatterns: [`/node_modules/(?!(${esModules})/.*)`],
+  moduleNameMapper: {
+    '^multiformats/(.*)$': '<rootDir>/../../node_modules/multiformats/dist/src/$1',
+  },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/apps/envited.ascs.digital',
 }

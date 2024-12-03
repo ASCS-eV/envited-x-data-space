@@ -83,11 +83,6 @@ export const createTokenMetadata = ({
       {
         uri: formatIpfsUri(display.cid),
         hash: display.cid,
-        mimeType: 'image/png',
-        dimensions: {
-          value: '1095x850',
-          unit: 'px',
-        },
         fileSize: display.fileSize,
         fileName: extractFilenameFromPath(display.uri),
       },

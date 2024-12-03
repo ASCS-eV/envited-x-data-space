@@ -13,11 +13,6 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const createMetadataStub = jest.fn().mockReturnValue('METADATA_BUFFER') as any
       const createModifiedManifestStub = jest.fn().mockReturnValue('MODIFIED_MANIFEST_BUFFER') as any
       const createFilenameStub = jest.fn().mockReturnValue('HASH') as any
-      const getImageDimensionsAndTypeStub = jest.fn().mockResolvedValue({
-        width: 1095,
-        height: 850,
-        type: 'image/png',
-      }) as any
       const getAllFilenamesFromFilesStub = jest.fn().mockResolvedValue([
         {
           path: 'PATH',
@@ -74,7 +69,6 @@ describe('common/asset/validateAndCreateMetadata', () => {
         createFilename: createFilenameStub,
         getFilesAsPathAndByteArrayFromManifest: getFilesAsPathAndByteArrayFromManifestStub,
         getAllFilenamesFromFiles: getAllFilenamesFromFilesStub,
-        // getImageDimensionsAndType: getImageDimensionsAndTypeStub,
         db: dbStub,
       })(byteArray as any, asset as any)
 

@@ -46,11 +46,6 @@ describe('common/asset/createTokenMetadata', () => {
           {
             uri: 'ipfs://DISPLAY_URI_CID',
             hash: 'DISPLAY_URI_CID',
-            mimeType: 'image/png',
-            dimensions: {
-              value: '1095x850',
-              unit: 'px',
-            },
             fileSize: 512,
             fileName: 'DISPLAY_URI',
           },
@@ -89,8 +84,6 @@ describe('common/asset/createTokenMetadata', () => {
           cid: 'DISPLAY_URI_CID',
           uri: 'DISPLAY_URI',
           fileSize: 512,
-          dimensions: '1095x850',
-          mimeType: 'image/png',
         },
         domainMetadata: {
           cid: 'DOMAIN_METADATA_CID',
@@ -150,11 +143,6 @@ describe('common/asset/createTokenMetadata', () => {
           {
             uri: 'ipfs://DISPLAY_URI_CID',
             hash: 'DISPLAY_URI_CID',
-            mimeType: 'image/png',
-            dimensions: {
-              value: '1095x850',
-              unit: 'px',
-            },
             fileSize: 512,
             fileName: 'DISPLAY_URI',
           },
@@ -193,8 +181,6 @@ describe('common/asset/createTokenMetadata', () => {
           cid: 'DISPLAY_URI_CID',
           uri: 'DISPLAY_URI',
           fileSize: 512,
-          dimensions: '1095x850',
-          mimeType: 'image/png',
         },
         domainMetadata: {
           cid: 'DOMAIN_METADATA_CID',
@@ -254,11 +240,6 @@ describe('common/asset/createTokenMetadata', () => {
           {
             uri: 'ipfs://DISPLAY_URI_CID',
             hash: 'DISPLAY_URI_CID',
-            mimeType: 'image/png',
-            dimensions: {
-              value: '1095x850',
-              unit: 'px',
-            },
             fileSize: 512,
             fileName: 'DISPLAY_URI',
           },
@@ -297,8 +278,6 @@ describe('common/asset/createTokenMetadata', () => {
           cid: 'DISPLAY_URI_CID',
           uri: 'DISPLAY_URI',
           fileSize: 512,
-          dimensions: '1095x850',
-          mimeType: 'image/png',
         },
         domainMetadata: {
           cid: 'DOMAIN_METADATA_CID',
@@ -358,11 +337,6 @@ describe('common/asset/createTokenMetadata', () => {
           {
             uri: 'ipfs://DISPLAY_URI_CID',
             hash: 'DISPLAY_URI_CID',
-            mimeType: 'image/png',
-            dimensions: {
-              value: '1095x850',
-              unit: 'px',
-            },
             fileSize: 512,
             fileName: 'DISPLAY_URI',
           },
@@ -401,8 +375,6 @@ describe('common/asset/createTokenMetadata', () => {
           cid: 'DISPLAY_URI_CID',
           uri: 'DISPLAY_URI',
           fileSize: 512,
-          dimensions: '1095x850',
-          mimeType: 'image/png',
         },
         domainMetadata: {
           cid: 'DOMAIN_METADATA_CID',

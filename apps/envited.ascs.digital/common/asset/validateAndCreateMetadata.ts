@@ -29,11 +29,11 @@ export const _getShaclSchemaAndValidate =
   }: {
     validateManifest: (
       byteArray: Uint8Array,
-    ) => Promise<{ conforms: boolean; report: ValidationReport<any> | { conforms: boolean }; data: any }>
+    ) => Promise<{ conforms: boolean; report: ValidationReport | { conforms: boolean }; data: any }>
     validateDomainMetadata: (
       byteArray: Uint8Array,
       manifest: Manifest,
-    ) => Promise<{ conforms: boolean; reports: (ValidationReport<any> | { conforms: boolean })[]; data: any }>
+    ) => Promise<{ conforms: boolean; reports: (ValidationReport | { conforms: boolean })[]; data: any }>
   }) =>
   async (byteArray: Uint8Array) => {
     try {
@@ -76,7 +76,7 @@ export const _validateManifest =
       data: string,
       stream: NodeJS.ReadableStream,
     ) => Promise<
-      | ValidationReport<any>
+      | ValidationReport
       | {
           conforms: boolean
         }
@@ -117,7 +117,7 @@ export const _validateDomainMetadata =
       data: string,
       stream: NodeJS.ReadableStream,
     ) => Promise<
-      | ValidationReport<any>
+      | ValidationReport
       | {
           conforms: boolean
         }
@@ -171,7 +171,7 @@ export const _validateAndCreateMetadata =
     getShaclSchemaAndValidate: (byteArray: Uint8Array) => Promise<
       | {
           conforms: boolean
-          reports: (ValidationReport<any> | { conforms: boolean })[]
+          reports: (ValidationReport | { conforms: boolean })[]
           data: { manifest?: undefined; domainMetadata?: undefined }
         }
       | { conforms: boolean; data: { manifest: any; domainMetadata: any }; reports: { conforms: boolean }[] }

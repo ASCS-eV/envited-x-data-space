@@ -42,7 +42,7 @@ export const _main =
       asset: Asset,
     ) => Promise<{
       conforms: boolean
-      reports: (ValidationReport<any> | { conforms: boolean })[] | { conforms: boolean }[]
+      reports: (ValidationReport | { conforms: boolean })[] | { conforms: boolean }[]
       metadata: any
       modifiedManifest: Record<string, unknown>
       assetCID: string

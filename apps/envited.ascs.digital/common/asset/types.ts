@@ -5,7 +5,7 @@ export enum AccessRole {
 }
 
 export interface Manifest {
-  '@context': any
+  '@context': ManifestContext
   '@id': string
   '@type': string
   'manifest:data': {
@@ -14,6 +14,14 @@ export interface Manifest {
     'manifest:contentData': ManifestLink[]
   }
   'manifest:license': ManifestLicense
+}
+
+export interface ManifestContext {
+  xsd: string
+  gx: string
+  skos: string
+  sh: string
+  manifest: string
 }
 
 export interface ManifestLink {

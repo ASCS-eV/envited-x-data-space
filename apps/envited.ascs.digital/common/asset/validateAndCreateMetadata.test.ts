@@ -1,4 +1,5 @@
 import manifest from '../fixtures/manifest.json'
+import { Manifest } from './types'
 import * as SUT from './validateAndCreateMetadata'
 
 describe('common/asset/validateAndCreateMetadata', () => {
@@ -230,7 +231,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
           getFileFromByteArray: getFileFromByteArrayStub,
           validateShaclDataWithSchema: validateShaclDataSchemaStub,
           fs: fsStub,
-        })(byteArray as any, manifest as any)
+        })(byteArray as any, manifest as Manifest)
 
         expect(result).toEqual({
           conforms: true,

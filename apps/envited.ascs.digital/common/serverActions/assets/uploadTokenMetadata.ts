@@ -54,7 +54,7 @@ export const uploadTokenMetadataToIPFS =
     }
 
     const group = await createGroup(user.issuerId)
-    return uploadJson({ data: (asset as Asset).metadata , filename: 'token_info.json', group })
+    return uploadJson({ data: (asset as Asset).metadata, filename: 'token_info.json', group })
   }
 
 export const uploadTokenMetadata = uploadTokenMetadataToIPFS({

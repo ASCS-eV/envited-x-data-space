@@ -101,14 +101,24 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(validateAndCreateMetadataStub).toHaveBeenCalledTimes(1)
       expect(writeFileStub).toHaveBeenCalledTimes(5)
       expect(deleteFileStub).toHaveBeenCalledTimes(1)
-      expect(updateAssetStatusStub).toHaveBeenCalledWith('ASSET_CID', 'OBJECT_KEY', 'pending', {
-        minter: 'MINTER_ADDRESS',
-      }, 'MODIFIED_MANIFEST')
+      expect(updateAssetStatusStub).toHaveBeenCalledWith(
+        'ASSET_CID',
+        'OBJECT_KEY',
+        'pending',
+        {
+          minter: 'MINTER_ADDRESS',
+        },
+        'MODIFIED_MANIFEST',
+      )
       expect(copyFileStub).toHaveBeenCalledTimes(1)
       expect(createGroupStub).toHaveBeenCalledWith('MINTER_ADDRESS')
       expect(uploadDoneStub).toHaveBeenCalledWith()
-      expect(uploadFileStub).toHaveBeenCalledWith({"arrayBuffer": "FILE_BUFFER", "filename": "PATH", "group": "GROUP_NAME"})
-      expect(uploadFileStub).toHaveBeenCalledWith({"arrayBuffer": "FILE_BUFFER", "filename": "PATH_1", "group": "GROUP_NAME"})
+      expect(uploadFileStub).toHaveBeenCalledWith({ arrayBuffer: 'FILE_BUFFER', filename: 'PATH', group: 'GROUP_NAME' })
+      expect(uploadFileStub).toHaveBeenCalledWith({
+        arrayBuffer: 'FILE_BUFFER',
+        filename: 'PATH_1',
+        group: 'GROUP_NAME',
+      })
     })
 
     it('should delete the asset if the validation does not conforms', async () => {

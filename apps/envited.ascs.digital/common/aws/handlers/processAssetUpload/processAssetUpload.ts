@@ -12,7 +12,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { ExtractedFileWithCID, ManifestExtractedFiles } from '../../../asset/types'
 import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
-import { uploadFile, createGroup } from '../../../ipfs'
+import { createGroup, uploadFile } from '../../../ipfs'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
 export const _main =
@@ -58,7 +58,7 @@ export const _main =
       status: AssetStatus,
       metadata?: AssetMetadata | string,
       manifest?: Record<string, unknown>,
-    ) => Promise<Asset>,
+    ) => Promise<Asset>
     uploadFile: ({
       arrayBuffer,
       filename,
@@ -122,7 +122,7 @@ export const _main =
 
         Promise.all(writeFilesToAssetPromises)
       }
-      
+
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(
           async ({ cid, arrayBuffer }: { cid: string; arrayBuffer: ArrayBuffer }) => {
@@ -165,7 +165,7 @@ export const _main =
 
         Promise.all(writeFilesToMetadataPromises)
       }
-      
+
       // Update stored asset in DB
       await updateAsset(assetCID, Key, AssetStatus.pending, metadata, modifiedManifest)
 

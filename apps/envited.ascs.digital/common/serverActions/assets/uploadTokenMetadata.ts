@@ -7,7 +7,7 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { CreateGroup, UploadJson, createGroup, uploadJson } from '../../ipfs'
 import { Log, log } from '../../logger'
-import { Role, Session } from '../../types'
+import { Asset, Role, Session } from '../../types'
 import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
 export const uploadTokenMetadataToIPFS =
@@ -54,7 +54,7 @@ export const uploadTokenMetadataToIPFS =
     }
 
     const group = await createGroup(user.issuerId)
-    return uploadJson({ data: asset.metadata, filename: 'token_info.json', group })
+    return uploadJson({ data: (asset as Asset).metadata , filename: 'token_info.json', group })
   }
 
 export const uploadTokenMetadata = uploadTokenMetadataToIPFS({

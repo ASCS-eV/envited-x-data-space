@@ -12,7 +12,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { ExtractedFileWithCID, ManifestExtractedFiles } from '../../../asset/types'
 import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
-import { uploadFile } from '../../../ipfs'
+import { uploadFile, createGroup } from '../../../ipfs'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
 export const _main =
@@ -24,6 +24,8 @@ export const _main =
     validateAndCreateMetadata,
     getAsset,
     updateAsset,
+    uploadFile,
+    createGroup,
   }: {
     readFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
     writeFile: (params: PutObjectCommandInput) => Upload
@@ -56,7 +58,17 @@ export const _main =
       status: AssetStatus,
       metadata?: AssetMetadata | string,
       manifest?: Record<string, unknown>,
-    ) => Promise<Asset>
+    ) => Promise<Asset>,
+    uploadFile: ({
+      arrayBuffer,
+      filename,
+      group,
+    }: {
+      arrayBuffer: ArrayBuffer
+      filename: string
+      group?: string
+    }) => Promise<string>
+    createGroup: (minter: string) => Promise<string>
   }): S3Handler =>
   async event => {
     try {
@@ -110,7 +122,7 @@ export const _main =
 
         Promise.all(writeFilesToAssetPromises)
       }
-
+      
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(
           async ({ cid, arrayBuffer }: { cid: string; arrayBuffer: ArrayBuffer }) => {
@@ -128,8 +140,10 @@ export const _main =
         Promise.all(writeFilesToIpfsPromises)
 
         const pinataIpfsPromises = visualizationFiles.map(
-          async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) =>
-            uploadFile({ arrayBuffer, filename: last(split('/', path)) as string }),
+          async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
+            const group = await createGroup(metadata.minter)
+            return uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
+          },
         )
 
         Promise.all(pinataIpfsPromises)
@@ -151,7 +165,7 @@ export const _main =
 
         Promise.all(writeFilesToMetadataPromises)
       }
-
+      
       // Update stored asset in DB
       await updateAsset(assetCID, Key, AssetStatus.pending, metadata, modifiedManifest)
 
@@ -171,4 +185,6 @@ export const main = _main({
   validateAndCreateMetadata,
   getAsset,
   updateAsset,
+  uploadFile,
+  createGroup,
 })

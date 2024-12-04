@@ -5,17 +5,20 @@ describe('common/aws/handlers/processAssetUpload', () => {
     it('should extract and write metadata to a bucket', async () => {
       // when ... we want extract data from a asset and upload to a different bucket
       // then ... it should validate, extract and upload to a bucket
-      const uploadStub = jest.fn().mockResolvedValue('UPLOAD_URL')
+      const uploadDoneStub = jest.fn().mockResolvedValue('UPLOAD_URL')
       const transformToByteArrayStub = jest.fn().mockResolvedValue('ASSET_BYTE_ARRAY')
       const readFileStub = jest.fn().mockResolvedValue({
         Body: {
           transformToByteArray: transformToByteArrayStub,
         },
       }) as any
-      const validateShaclDataWithSchemaStub = jest.fn().mockResolvedValue({
+      const validateAndCreateMetadataStub = jest.fn().mockResolvedValue({
         conforms: true,
         reports: { conforms: true },
-        metadata: 'METADATA',
+        metadata: {
+          minter: 'MINTER_ADDRESS',
+        },
+        modifiedManifest: 'MODIFIED_MANIFEST',
         assetCID: 'ASSET_CID',
         metadataCID: 'METADATA_CID',
         files: {
@@ -42,14 +45,26 @@ describe('common/aws/handlers/processAssetUpload', () => {
             },
           ],
         },
+        visualizationFiles: [
+          {
+            path: 'PATH',
+            arrayBuffer: 'FILE_BUFFER',
+          },
+          {
+            path: 'PATH_1',
+            arrayBuffer: 'FILE_BUFFER',
+          },
+        ],
       }) as any
       const writeFileStub = jest.fn().mockReturnValue({
-        done: uploadStub,
+        done: uploadDoneStub,
       }) as any
       const copyFileStub = jest.fn().mockResolvedValue('COPIED') as any
       const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
       const getAssetStatusStub = jest.fn().mockReturnValue('ASSET_CID') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
+      const uploadFileStub = jest.fn().mockResolvedValue('ASSET_CID') as any
+      const createGroupStub = jest.fn().mockResolvedValue('GROUP_NAME') as any
 
       const event = {
         Records: [
@@ -73,23 +88,33 @@ describe('common/aws/handlers/processAssetUpload', () => {
         writeFile: writeFileStub,
         copyFile: copyFileStub,
         deleteFile: deleteFileStub,
-        validateAndCreateMetadata: validateShaclDataWithSchemaStub,
+        validateAndCreateMetadata: validateAndCreateMetadataStub,
         getAsset: getAssetStatusStub,
         updateAsset: updateAssetStatusStub,
+        uploadFile: uploadFileStub,
+        createGroup: createGroupStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
       expect(readFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
-      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'ASSET_CID')
-      expect(validateShaclDataWithSchemaStub).toHaveBeenCalledTimes(1)
-      expect(writeFileStub).toHaveBeenCalledTimes(3)
+      expect(validateAndCreateMetadataStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'ASSET_CID')
+      expect(validateAndCreateMetadataStub).toHaveBeenCalledTimes(1)
+      expect(writeFileStub).toHaveBeenCalledTimes(5)
       expect(deleteFileStub).toHaveBeenCalledTimes(1)
+      expect(updateAssetStatusStub).toHaveBeenCalledWith('ASSET_CID', 'OBJECT_KEY', 'pending', {
+        minter: 'MINTER_ADDRESS',
+      }, 'MODIFIED_MANIFEST')
+      expect(copyFileStub).toHaveBeenCalledTimes(1)
+      expect(createGroupStub).toHaveBeenCalledWith('MINTER_ADDRESS')
+      expect(uploadDoneStub).toHaveBeenCalledWith()
+      expect(uploadFileStub).toHaveBeenCalledWith({"arrayBuffer": "FILE_BUFFER", "filename": "PATH", "group": "GROUP_NAME"})
+      expect(uploadFileStub).toHaveBeenCalledWith({"arrayBuffer": "FILE_BUFFER", "filename": "PATH_1", "group": "GROUP_NAME"})
     })
 
     it('should delete the asset if the validation does not conforms', async () => {
       // when ... we want extract data from a asset and upload to a different bucket
       // then ... it should validate, extract and upload to a bucket
-      const uploadStub = jest.fn().mockResolvedValue('UPLOAD_URL')
+      const uploadDoneStub = jest.fn().mockResolvedValue('UPLOAD_URL')
       const transformToByteArrayStub = jest.fn().mockResolvedValue('ASSET_BYTE_ARRAY')
       const readFileStub = jest.fn().mockResolvedValue({
         Body: {
@@ -99,17 +124,21 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const validateShaclDataWithSchemaStub = jest.fn().mockResolvedValue({
         conforms: false,
         reports: { conforms: false },
-        metadata: 'METADATA',
+        metadata: {
+          minter: 'MINTER_ADDRESS',
+        },
         assetCID: 'ASSET_CID',
         metadataCID: 'METADATA_CID',
       }) as any
       const writeFileStub = jest.fn().mockReturnValue({
-        done: uploadStub,
+        done: uploadDoneStub,
       }) as any
       const copyFileStub = jest.fn().mockResolvedValue('COPIED') as any
       const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
       const getAssetStatusStub = jest.fn().mockReturnValue('ASSET_CID') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
+      const uploadFileStub = jest.fn().mockResolvedValue('ASSET_CID') as any
+      const createGroupStub = jest.fn().mockResolvedValue('GROUP_NAME') as any
 
       const event = {
         Records: [
@@ -136,6 +165,8 @@ describe('common/aws/handlers/processAssetUpload', () => {
         validateAndCreateMetadata: validateShaclDataWithSchemaStub,
         getAsset: getAssetStatusStub,
         updateAsset: updateAssetStatusStub,
+        uploadFile: uploadFileStub,
+        createGroup: createGroupStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
@@ -145,6 +176,10 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(updateAssetStatusStub).toHaveBeenCalledWith('OBJECT_KEY', 'OBJECT_KEY', 'not_accepted')
       expect(writeFileStub).toHaveBeenCalledTimes(0)
       expect(deleteFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
+      expect(uploadDoneStub).not.toHaveBeenCalledWith()
+      expect(copyFileStub).toHaveBeenCalledTimes(0)
+      expect(createGroupStub).toHaveBeenCalledTimes(0)
+      expect(uploadFileStub).toHaveBeenCalledTimes(0)
     })
   })
 })

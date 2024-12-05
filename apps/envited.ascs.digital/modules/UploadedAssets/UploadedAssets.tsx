@@ -1,9 +1,10 @@
 'use client'
 
+import { isEmpty } from 'ramda'
 import { FC } from 'react'
+
 import { useTranslation } from '../../common/i18n'
 import { Asset } from '../../common/types'
-import { isEmpty } from 'ramda'
 import { UploadedAsset } from '../UploadedAsset'
 
 interface UploadedAssetsProps {
@@ -47,9 +48,7 @@ export const UploadedAssets: FC<UploadedAssetsProps> = ({ assets }) => {
                   : asset.metadata
                 : {}
 
-              return (
-                <UploadedAsset key={asset.id} asset={asset} assetIdx={assetIdx} metadata={metadata} />
-              )
+              return <UploadedAsset key={asset.id} asset={asset} assetIdx={assetIdx} metadata={metadata} />
             })}
           </tbody>
         </table>

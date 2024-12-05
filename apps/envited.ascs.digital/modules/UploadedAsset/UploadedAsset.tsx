@@ -1,6 +1,7 @@
 'use client'
 
 import { LoadingIndicator } from '@envited-x-data-space/design-system'
+import { TrashIcon } from '@heroicons/react/24/outline'
 import { equals, last, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
@@ -10,7 +11,6 @@ import { useNotification } from '../../common/notifications'
 import { Asset, AssetMetadata, AssetStatus } from '../../common/types'
 import { Mint } from '../Mint'
 import { deleteAsset, getAsset } from './UploadedAsset.actions'
-import { TrashIcon } from '@heroicons/react/24/outline'
 
 interface UploadedAssetProps {
   assetIdx: number
@@ -92,7 +92,7 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
           ))
           .with(AssetStatus.minted, () => <span className="text-green-600">{t('[Status] minted')}</span>)
           .with(AssetStatus.rejected, () => (
-            <div className='flex items-center justify-end text-red-500'>
+            <div className="flex items-center justify-end text-red-500">
               {t('[Status] rejected')}
               <button
                 type="button"

@@ -3,7 +3,6 @@ import { Role } from '../../types'
 import {
   badRequestError,
   forbiddenError,
-  internalServerErrorError,
   notFoundError,
   unauthorizedError,
 } from '../../utils'

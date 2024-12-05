@@ -5,41 +5,36 @@ import { Database } from '../../database/types'
 import { isOwnAsset } from '../../guards'
 import { Log } from '../../logger'
 import { Session } from '../../types'
-import {
-  badRequestError,
-  forbiddenError,
-  notFoundError,
-  unauthorizedError,
-} from '../../utils'
+import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
 export const deleteAsset =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async (id: string) => {
-      if (isNil(id) || isEmpty(id)) {
-        throw badRequestError({ resource: 'assets', resourceId: id, message: 'Missing ID' })
-      }
+    if (isNil(id) || isEmpty(id)) {
+      throw badRequestError({ resource: 'assets', resourceId: id, message: 'Missing ID' })
+    }
 
-      const session = await getServerSession()
+    const session = await getServerSession()
 
-      if (isNil(session)) {
-        throw unauthorizedError({ resource: 'users' })
-      }
+    if (isNil(session)) {
+      throw unauthorizedError({ resource: 'users' })
+    }
 
-      const connection = await db()
-      const [asset] = await connection.getAsset(id)
+    const connection = await db()
+    const [asset] = await connection.getAsset(id)
 
-      if (isNil(asset) || isEmpty(asset)) {
-        throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })
-      }
+    if (isNil(asset) || isEmpty(asset)) {
+      throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })
+    }
 
-      if (!isOwnAsset(asset)(session)) {
-        throw forbiddenError({
-          resource: 'assets',
-          resourceId: id,
-          message: ERRORS.NOT_ALLOWED_TO_DELETE_ASSET,
-          userId: session.user.id,
-        })
-      }
+    if (!isOwnAsset(asset)(session)) {
+      throw forbiddenError({
+        resource: 'assets',
+        resourceId: id,
+        message: ERRORS.NOT_ALLOWED_TO_DELETE_ASSET,
+        userId: session.user.id,
+      })
+    }
 
-      return connection.deleteAsset(id)
+    return connection.deleteAsset(id)
   }

@@ -1,6 +1,12 @@
 import { ERRORS } from '../../constants'
 import { Role } from '../../types'
-import { badRequestError, forbiddenError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
+import {
+  badRequestError,
+  forbiddenError,
+  internalServerErrorError,
+  notFoundError,
+  unauthorizedError,
+} from '../../utils'
 import * as SUT from './delete'
 
 describe('serverActions/assets/delete', () => {
@@ -13,7 +19,7 @@ describe('serverActions/assets/delete', () => {
         info: jest.fn(),
         warn: jest.fn(),
       }
-      
+
       const getServerSessionStub = jest.fn().mockResolvedValue({
         user: {
           id: userId,
@@ -33,7 +39,9 @@ describe('serverActions/assets/delete', () => {
         deleteAsset: deleteAssetStub,
       })
 
-      const result = await SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(assetId)
+      const result = await SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
+        assetId,
+      )
 
       expect(result).toBe(true)
       expect(deleteAssetStub).toHaveBeenCalledWith(assetId)
@@ -49,7 +57,7 @@ describe('serverActions/assets/delete', () => {
       const dbStub = jest.fn()
 
       await expect(
-        SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('')
+        SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(''),
       ).rejects.toEqual(badRequestError({ resource: 'assets', resourceId: '', message: 'Missing ID' }))
 
       expect(dbStub).not.toHaveBeenCalled()
@@ -65,7 +73,7 @@ describe('serverActions/assets/delete', () => {
       const dbStub = jest.fn()
 
       await expect(
-        SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('ASSET_ID')
+        SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })('ASSET_ID'),
       ).rejects.toEqual(unauthorizedError({ resource: 'users' }))
 
       expect(dbStub).not.toHaveBeenCalled()
@@ -93,7 +101,7 @@ describe('serverActions/assets/delete', () => {
       })
 
       await expect(
-        SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(assetId)
+        SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(assetId),
       ).rejects.toEqual(notFoundError({ resource: 'assets', resourceId: assetId, userId }))
     })
 
@@ -125,14 +133,14 @@ describe('serverActions/assets/delete', () => {
       })
 
       await expect(
-        SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(assetId)
+        SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(assetId),
       ).rejects.toEqual(
         forbiddenError({
           resource: 'assets',
           resourceId: assetId,
           message: ERRORS.NOT_ALLOWED_TO_DELETE_ASSET,
           userId,
-        })
+        }),
       )
     })
   })

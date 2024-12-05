@@ -13,6 +13,7 @@ import { MemberTranslation } from '../../modules/Member'
 import { MintTranslation } from '../../modules/Mint'
 import { NotFoundTranslation } from '../../modules/NotFound'
 import { ProfileTranslation } from '../../modules/Profile'
+import { UploadedAssetTranslation } from '../../modules/UploadedAsset'
 import { UploadedAssetsTranslation } from '../../modules/UploadedAssets'
 import { UsersTranslation } from '../../modules/Users'
 import { Locale, TranslationsMap } from './types'
@@ -33,6 +34,7 @@ const translationObject = mergeTranslations([
   NotFoundTranslation,
   ProfileTranslation,
   UploadedAssetsTranslation,
+  UploadedAssetTranslation,
   UsersTranslation,
   ReinventingMobilityTranslation,
   SimulationDataTranslation,

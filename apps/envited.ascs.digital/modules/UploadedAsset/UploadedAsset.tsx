@@ -1,10 +1,14 @@
+'use client'
+
 import { LoadingIndicator } from '@envited-x-data-space/design-system'
 import { equals, last, propOr } from 'ramda'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
+import { useTranslation } from '../../common/i18n'
 import { Asset, AssetMetadata, AssetStatus } from '../../common/types'
 import { Mint } from '../Mint'
+import { getAsset } from './UploadedAsset.actions'
 
 interface UploadedAssetProps {
   assetIdx: number
@@ -13,6 +17,35 @@ interface UploadedAssetProps {
 }
 
 export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadata }) => {
+  const { t } = useTranslation('UploadedAsset')
+  const [assetStatus, setAssetStatus] = useState<AssetStatus>(asset.status)
+
+  useEffect(() => {
+    let interval: NodeJS.Timer
+
+    if (equals(assetStatus)(AssetStatus.processing)) {
+      interval = setInterval(async () => {
+        try {
+          const newAsset = await getAsset(asset.id)
+          if (newAsset) {
+            setAssetStatus(newAsset.status)
+            if (!equals(newAsset.status)(AssetStatus.processing)) {
+              clearInterval(interval)
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching asset status:', error)
+        }
+      }, 10000)
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [asset.id, assetStatus])
+
   return (
     <tr key={asset.id}>
       <td className={`${equals(assetIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}>
@@ -31,14 +64,14 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
           equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
         } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
       >
-        {equals(asset.status)(AssetStatus.processing) ? <>&hellip;</> : last(propOr('', 'tags')(metadata))}
+        {equals(assetStatus)(AssetStatus.processing) ? <>&hellip;</> : last(propOr('', 'tags')(metadata))}
       </td>
       <td
         className={`${
           equals(assetIdx)(0) ? '' : 'border-t border-transparent'
         } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
       >
-        {match(asset.status)
+        {match(assetStatus)
           .with(AssetStatus.processing, () => (
             <div className="inline-flex gap-x-2 text-sm text-gray-500">
               <LoadingIndicator />

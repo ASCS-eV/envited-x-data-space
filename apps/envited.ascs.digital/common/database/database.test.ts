@@ -21,7 +21,9 @@ describe('common/database', () => {
         database: 'DB_NAME',
         username: 'DB_USER',
         password: 'DB_PASSWORD',
-        max: 1,
+        max: 20,
+        idle_timeout: 30,
+        connect_timeout: 30,
       }
 
       const db = await initDb({ drizzle, postgres, getSecret })()
@@ -45,7 +47,9 @@ describe('common/database', () => {
         dbname: 'DB_NAME',
         username: 'DB_USER',
         password: 'DB_PASSWORD',
-        max: 1,
+        max: 20,
+        idle_timeout: 30,
+        connect_timeout: 30,
       })
 
       const config = {
@@ -54,7 +58,9 @@ describe('common/database', () => {
         database: 'DB_NAME',
         username: 'DB_USER',
         password: 'DB_PASSWORD',
-        max: 1,
+        max: 20,
+        idle_timeout: 30,
+        connect_timeout: 30,
       }
 
       const db = await initDb({ drizzle, postgres, getSecret })()

@@ -1,11 +1,6 @@
 import { ERRORS } from '../../constants'
 import { Role } from '../../types'
-import {
-  badRequestError,
-  forbiddenError,
-  notFoundError,
-  unauthorizedError,
-} from '../../utils'
+import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 import * as SUT from './delete'
 
 describe('serverActions/assets/delete', () => {

@@ -8,6 +8,7 @@ export const ERRORS = {
   ASSETS_NOT_FOUND: 'Assets not found',
   ASSET_INVALID: 'Asset validation failed',
   ASSET_FILE_NOT_FOUND: 'No valid metadata.json found',
+  NOT_ALLOWED_TO_DELETE_ASSET: 'Not allowed to delete asset',
 }
 
 export const ERROR_CODES = {

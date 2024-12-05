@@ -6,9 +6,10 @@ import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
 import { useTranslation } from '../../common/i18n'
+import { useNotification } from '../../common/notifications'
 import { Asset, AssetMetadata, AssetStatus } from '../../common/types'
 import { Mint } from '../Mint'
-import { getAsset } from './UploadedAsset.actions'
+import { deleteAsset, getAsset } from './UploadedAsset.actions'
 
 interface UploadedAssetProps {
   assetIdx: number
@@ -18,6 +19,7 @@ interface UploadedAssetProps {
 
 export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadata }) => {
   const { t } = useTranslation('UploadedAsset')
+  const { error, success } = useNotification()
   const [assetStatus, setAssetStatus] = useState<AssetStatus>(asset.status)
 
   useEffect(() => {
@@ -45,6 +47,15 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
       }
     }
   }, [asset.id, assetStatus])
+
+  const cancel = async (id: string) => {
+    try {
+      await deleteAsset(id)
+      success(t('[Notification] asset deleted'))
+    } catch (e) {
+      error(t('[Notification] error deleting asset'))
+    }
+  }
 
   return (
     <tr key={asset.id}>
@@ -80,7 +91,16 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
           ))
           .with(AssetStatus.minted, () => <span className="text-green-600">{t('[Status] minted')}</span>)
           .otherwise(() => (
-            <Mint assetId={asset.id} />
+            <>
+              <Mint assetId={asset.id} />
+              <button
+                type="button"
+                className="inline-flex items-center rounded-md bg-blue-900 hover:bg-blue-800 px-2.5 py-1.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300 ml-1"
+                onClick={() => cancel(asset.id)}
+              >
+                {t('[Button] delete')}
+              </button>
+            </>
           ))}
         {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>

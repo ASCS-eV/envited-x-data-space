@@ -93,7 +93,7 @@ export const _main =
       if (!conforms) {
         // Revert if validation fails
         await deleteFile({ Bucket, Key })
-        await updateAsset(Key, Key, AssetStatus.not_accepted)
+        await updateAsset(Key, Key, AssetStatus.rejected)
 
         return
       }

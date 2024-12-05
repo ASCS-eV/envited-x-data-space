@@ -10,6 +10,7 @@ import { useNotification } from '../../common/notifications'
 import { Asset, AssetMetadata, AssetStatus } from '../../common/types'
 import { Mint } from '../Mint'
 import { deleteAsset, getAsset } from './UploadedAsset.actions'
+import { TrashIcon } from '@heroicons/react/24/outline'
 
 interface UploadedAssetProps {
   assetIdx: number
@@ -90,17 +91,29 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
             </div>
           ))
           .with(AssetStatus.minted, () => <span className="text-green-600">{t('[Status] minted')}</span>)
+          .with(AssetStatus.rejected, () => (
+            <div className='flex items-center justify-end text-red-500'>
+              {t('[Status] rejected')}
+              <button
+                type="button"
+                className="inline-flex items-center rounded-md px-2.5 py-1.5 pr-1 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300 ml-1"
+                onClick={() => cancel(asset.id)}
+              >
+                <TrashIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+              </button>
+            </div>
+          ))
           .otherwise(() => (
-            <>
+            <div className="flex items-center justify-end text-gray-500">
               <Mint assetId={asset.id} />
               <button
                 type="button"
-                className="inline-flex items-center rounded-md bg-blue-900 hover:bg-blue-800 px-2.5 py-1.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300 ml-1"
+                className="inline-flex items-center rounded-md px-2.5 py-1.5 pr-1 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300 ml-1"
                 onClick={() => cancel(asset.id)}
               >
-                {t('[Button] delete')}
+                <TrashIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
               </button>
-            </>
+            </div>
           ))}
         {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>

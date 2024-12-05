@@ -1,10 +1,10 @@
-import { isEmpty, isNil } from 'ramda'
+import { equals, isEmpty, isNil } from 'ramda'
 
 import { ERRORS } from '../../constants'
 import { Database } from '../../database/types'
 import { isOwnAsset } from '../../guards'
 import { Log } from '../../logger'
-import { Session } from '../../types'
+import { AssetStatus, Session } from '../../types'
 import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
 export const deleteAsset =
@@ -32,6 +32,15 @@ export const deleteAsset =
         resource: 'assets',
         resourceId: id,
         message: ERRORS.NOT_ALLOWED_TO_DELETE_ASSET,
+        userId: session.user.id,
+      })
+    }
+
+    if (equals(AssetStatus.minted)(asset.status)) {
+      throw forbiddenError({
+        resource: 'assets',
+        resourceId: id,
+        message: ERRORS.MINTED_ASSET_CANNOT_BE_DELETED,
         userId: session.user.id,
       })
     }

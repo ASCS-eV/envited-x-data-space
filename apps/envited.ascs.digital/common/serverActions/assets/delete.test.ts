@@ -1,5 +1,5 @@
 import { ERRORS } from '../../constants'
-import { Role } from '../../types'
+import { AssetStatus, Role } from '../../types'
 import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 import * as SUT from './delete'
 
@@ -28,6 +28,7 @@ describe('serverActions/assets/delete', () => {
           {
             id: assetId,
             userId,
+            status: AssetStatus.processing,
           },
         ]),
         deleteAsset: deleteAssetStub,
@@ -133,6 +134,45 @@ describe('serverActions/assets/delete', () => {
           resource: 'assets',
           resourceId: assetId,
           message: ERRORS.NOT_ALLOWED_TO_DELETE_ASSET,
+          userId,
+        }),
+      )
+    })
+
+    it('should throw forbiddenError when trying to delete a minted asset', async () => {
+      const userId = 'USER_PKH'
+      const assetId = 'ASSET_ID'
+      const logStub = {
+        error: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+      }
+
+      const getServerSessionStub = jest.fn().mockResolvedValue({
+        user: {
+          id: userId,
+          pkh: userId,
+          role: Role.principal,
+        },
+      })
+
+      const dbStub = jest.fn().mockResolvedValue({
+        getAsset: jest.fn().mockResolvedValue([
+          {
+            id: assetId,
+            userId,
+            status: AssetStatus.minted,
+          },
+        ]),
+      })
+
+      await expect(
+        SUT.deleteAsset({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(assetId),
+      ).rejects.toEqual(
+        forbiddenError({
+          resource: 'assets',
+          resourceId: assetId,
+          message: ERRORS.MINTED_ASSET_CANNOT_BE_DELETED,
           userId,
         }),
       )

@@ -8,7 +8,7 @@ import { Database } from '../../database/types'
 import { CreateGroup, UploadJson, createGroup, uploadJson } from '../../ipfs'
 import { Log, log } from '../../logger'
 import { Asset, Role, Session } from '../../types'
-import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
+import { badRequestError, extractAddressFromDid, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
 export const uploadTokenMetadataToIPFS =
   ({
@@ -53,7 +53,7 @@ export const uploadTokenMetadataToIPFS =
       throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })
     }
 
-    const group = await createGroup(user.issuerId)
+    const group = await createGroup(extractAddressFromDid(user.issuerId))
     return uploadJson({ data: (asset as Asset).metadata, filename: 'token_info.json', group })
   }
 

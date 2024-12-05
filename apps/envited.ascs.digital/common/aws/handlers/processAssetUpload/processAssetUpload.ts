@@ -13,6 +13,7 @@ import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset
 import { ExtractedFileWithCID, ManifestExtractedFiles } from '../../../asset/types'
 import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
 import { createGroup, uploadFile } from '../../../ipfs'
+import { log } from '../../../logger'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
 export const _main =
@@ -141,6 +142,7 @@ export const _main =
 
         const pinataIpfsPromises = visualizationFiles.map(
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
+            log.info(`Uploading ${path} to IPFS`)
             const group = await createGroup(metadata.minter)
             return uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
           },

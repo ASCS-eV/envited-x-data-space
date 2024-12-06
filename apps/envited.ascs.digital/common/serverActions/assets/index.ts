@@ -1,6 +1,5 @@
-import { getServerSession } from 'next-auth/next'
-
 import { log } from '../../../common/logger'
+import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { deleteAsset as deleteAssetById } from './delete'
 
@@ -10,4 +9,4 @@ export { update as updateAsset, updateStatus as updateAssetStatus } from './upda
 export { uploadTokenMetadata } from './uploadTokenMetadata'
 export { getMintParams } from './getMintParams'
 
-export const deleteAsset = deleteAssetById({ db, log })
+export const deleteAsset = deleteAssetById({ db, getServerSession, log })

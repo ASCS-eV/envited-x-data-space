@@ -2,6 +2,7 @@
 
 import { LoadingIndicator } from '@envited-x-data-space/design-system'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import { useSession } from 'next-auth/react'
 import { equals, last, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
@@ -11,7 +12,6 @@ import { useNotification } from '../../common/notifications'
 import { Asset, AssetMetadata, AssetStatus } from '../../common/types'
 import { Mint } from '../Mint'
 import { deleteAsset, getAsset } from './UploadedAsset.actions'
-import { useSession } from 'next-auth/react'
 
 interface UploadedAssetProps {
   assetIdx: number

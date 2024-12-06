@@ -168,7 +168,7 @@ export interface Session {
   user: {
     pkh: string
     id: string
-    role: Role | string
+    role: Role
   }
 }
 

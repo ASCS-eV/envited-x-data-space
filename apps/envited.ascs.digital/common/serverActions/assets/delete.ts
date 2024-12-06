@@ -26,13 +26,15 @@ export const deleteAsset =
     if (isNil(asset) || isEmpty(asset)) {
       throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })
     }
-
+    log.info('deleteAsset', { id })
+    log.info('asset', { asset })
+    log.info('session', { session })
     if (!isOwnAsset(asset)(session)) {
       throw forbiddenError({
         resource: 'assets',
         resourceId: id,
         message: ERRORS.NOT_ALLOWED_TO_DELETE_ASSET,
-        userId: session.user.id,
+        userId: session.user.pkh,
       })
     }
 
@@ -41,7 +43,7 @@ export const deleteAsset =
         resource: 'assets',
         resourceId: id,
         message: ERRORS.MINTED_ASSET_CANNOT_BE_DELETED,
-        userId: session.user.id,
+        userId: session.user.pkh,
       })
     }
 

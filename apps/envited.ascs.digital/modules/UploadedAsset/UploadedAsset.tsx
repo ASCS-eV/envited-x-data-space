@@ -1,14 +1,17 @@
 'use client'
 
 import { LoadingIndicator } from '@envited-x-data-space/design-system'
+import { TrashIcon } from '@heroicons/react/24/outline'
+import { useSession } from 'next-auth/react'
 import { equals, last, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
 import { useTranslation } from '../../common/i18n'
+import { useNotification } from '../../common/notifications'
 import { Asset, AssetMetadata, AssetStatus } from '../../common/types'
 import { Mint } from '../Mint'
-import { getAsset } from './UploadedAsset.actions'
+import { deleteAsset, getAsset } from './UploadedAsset.actions'
 
 interface UploadedAssetProps {
   assetIdx: number
@@ -18,8 +21,10 @@ interface UploadedAssetProps {
 
 export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadata }) => {
   const { t } = useTranslation('UploadedAsset')
+  const { error, success } = useNotification()
   const [assetStatus, setAssetStatus] = useState<AssetStatus>(asset.status)
-
+  const session = useSession()
+  console.log('session', session)
   useEffect(() => {
     let interval: NodeJS.Timer
 
@@ -45,6 +50,15 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
       }
     }
   }, [asset.id, assetStatus])
+
+  const cancel = async (id: string) => {
+    try {
+      await deleteAsset(id)
+      success(t('[Notification] asset deleted'))
+    } catch (e) {
+      error(t('[Notification] error deleting asset'))
+    }
+  }
 
   return (
     <tr key={asset.id}>
@@ -79,8 +93,29 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
             </div>
           ))
           .with(AssetStatus.minted, () => <span className="text-green-600">{t('[Status] minted')}</span>)
+          .with(AssetStatus.rejected, () => (
+            <div className="flex items-center justify-end text-red-500">
+              {t('[Status] rejected')}
+              <button
+                type="button"
+                className="inline-flex items-center rounded-md px-2.5 py-1.5 pr-1 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300 ml-1"
+                onClick={() => cancel(asset.id)}
+              >
+                <TrashIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+              </button>
+            </div>
+          ))
           .otherwise(() => (
-            <Mint assetId={asset.id} />
+            <div className="flex items-center justify-end text-gray-500">
+              <Mint assetId={asset.id} />
+              <button
+                type="button"
+                className="inline-flex items-center rounded-md px-2.5 py-1.5 pr-1 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300 ml-1"
+                onClick={() => cancel(asset.id)}
+              >
+                <TrashIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+              </button>
+            </div>
           ))}
         {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>

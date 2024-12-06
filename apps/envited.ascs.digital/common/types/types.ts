@@ -12,7 +12,7 @@ export interface TranslationsMap {
 
 export enum AssetStatus {
   processing = 'processing',
-  not_accepted = 'not_accepted',
+  rejected = 'rejected',
   pending = 'pending',
   minted = 'minted',
   completed = 'completed',

@@ -16,6 +16,9 @@ export const getAssets = (db: DatabaseConnection) => async () => db.select().fro
 export const getAssetByCID = (db: DatabaseConnection) => async (cid: string) =>
   db.select().from(asset).where(eq(asset.cid, cid))
 
+export const deleteAsset = (db: DatabaseConnection) => async (id: string) =>
+  db.delete(asset).where(eq(asset.id, id)).returning()
+
 export const insertAsset =
   (db: DatabaseConnection) =>
   async ({ userId, cid, ownerId }: { userId: string; cid: string; ownerId: string }) =>

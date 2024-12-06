@@ -161,7 +161,7 @@ export const authOptions: NextAuthOptions = {
       if (profile) {
         const connection = await db()
         const userRoles = await connection.getUserRolesById(profile.sub)
-        log.info('Adding user role to JWT', assignSingleRole(userRoles))
+        log.info('Adding user role to JWT: ', assignSingleRole(userRoles))
         token.user.role = assignSingleRole(userRoles)
       }
 
@@ -177,6 +177,7 @@ export const authOptions: NextAuthOptions = {
         session.user.image = undefined
         session.user.name = token?.user?.id
       }
+      log.info('Session: ', session)
       return session
     },
   },

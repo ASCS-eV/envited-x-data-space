@@ -23,7 +23,9 @@ export const initDb =
       database: process.env.POSTGRES_DATABASE_NAME!, // Name of database to connect to
       username: process.env.POSTGRES_DATABASE_USER!, // Username of database user
       password: process.env.POSTGRES_DATABASE_PASSWORD!, // Password of database user
-      max: 1,
+      max: 20,
+      idle_timeout: 30,
+      connect_timeout: 30,
     }
     if (!equals(process.env.ENV, 'development')) {
       try {
@@ -34,7 +36,9 @@ export const initDb =
           database: dbname,
           username,
           password,
-          max: 1,
+          max: 20,
+          idle_timeout: 30,
+          connect_timeout: 30,
         }
       } catch (error) {
         console.log(ERRORS.CANNOT_CONNECT_TO_DATABASE, error)

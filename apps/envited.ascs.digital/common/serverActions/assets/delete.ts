@@ -6,15 +6,17 @@ import { isOwnAsset } from '../../guards'
 import { Log } from '../../logger'
 import { AssetStatus, Session } from '../../types'
 import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
+import { getServerSession } from "next-auth"
+import { authOptions } from '../../auth/auth'
 
 export const deleteAsset =
-  ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
+  ({ db, log }: { db: Database; log: Log }) =>
   async (id: string) => {
     if (isNil(id) || isEmpty(id)) {
       throw badRequestError({ resource: 'assets', resourceId: id, message: 'Missing ID' })
     }
 
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
 
     if (isNil(session)) {
       throw unauthorizedError({ resource: 'users' })
@@ -46,6 +48,6 @@ export const deleteAsset =
         userId: session.user.pkh,
       })
     }
-
-    return connection.deleteAsset(id)
+    return
+    // return connection.deleteAsset(id)
   }

@@ -11,6 +11,7 @@ import { useNotification } from '../../common/notifications'
 import { Asset, AssetMetadata, AssetStatus } from '../../common/types'
 import { Mint } from '../Mint'
 import { deleteAsset, getAsset } from './UploadedAsset.actions'
+import { useSession } from 'next-auth/react'
 
 interface UploadedAssetProps {
   assetIdx: number
@@ -22,7 +23,8 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
   const { t } = useTranslation('UploadedAsset')
   const { error, success } = useNotification()
   const [assetStatus, setAssetStatus] = useState<AssetStatus>(asset.status)
-
+  const session = useSession()
+  console.log('session', session)
   useEffect(() => {
     let interval: NodeJS.Timer
 

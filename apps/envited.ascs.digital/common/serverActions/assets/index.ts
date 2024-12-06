@@ -10,4 +10,4 @@ export { update as updateAsset, updateStatus as updateAssetStatus } from './upda
 export { uploadTokenMetadata } from './uploadTokenMetadata'
 export { getMintParams } from './getMintParams'
 
-export const deleteAsset = deleteAssetById({ db, getServerSession, log })
+export const deleteAsset = deleteAssetById({ db, log })

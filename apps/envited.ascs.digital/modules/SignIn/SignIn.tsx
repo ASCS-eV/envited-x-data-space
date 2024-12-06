@@ -23,7 +23,7 @@ export const SignIn: FC<{ colorScheme?: ColorScheme }> = ({ colorScheme = ColorS
       <span
         className={`absolute right-0 w-8 h-32 -mt-12 transition-all transform translate-x-12 bg-white opacity-10 rotate-12 ease duration-1000 group-hover:-translate-x-40`}
       ></span>
-      <span className="relative text-base font-semibold">Connect</span>
+      <span className="relative text-base font-semibold">Connect {process.env.NEXT_PUBLIC_SIGNING_DID}</span>
     </button>
   )
 }

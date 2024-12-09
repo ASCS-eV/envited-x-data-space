@@ -1,8 +1,8 @@
-import { equals } from 'ramda'
+import { append, equals } from 'ramda'
 
 import { extractFilenameFromPath, formatAssetUri, formatIpfsUri } from './createTokenMetadata.utils'
 import { Manifest } from './types'
-import { formatManifestLinkPath } from './validateAndCreateMetadata.utils'
+import { formatManifestLinkPath, hasManifestAccessRestrictedLinks } from './validateAndCreateMetadata.utils'
 
 export const createTokenMetadata = ({
   asset,
@@ -44,13 +44,15 @@ export const createTokenMetadata = ({
   const version = domainMetadata.data['hdmap:format']['hdmap:version']['@value']
   const today = new Date()
   const date = today.toISOString().split('T')[0]
+  const tags = ['GaiaX', 'ASCS', 'ENVITED-X', 'EVES', 'nft', `${formatType} ${version}`]
+  const hasAccessRestrictedLinks = hasManifestAccessRestrictedLinks(manifest.data)
 
   return {
     decimals: 0,
     isBooleanAmount: true,
     name,
     description,
-    tags: ['GaiaX', 'ASCS', 'ENVITED-X', 'EVES', 'nft', `${formatType} ${version}`],
+    tags: hasAccessRestrictedLinks ? append('containsAccessRestrictedLinks')(tags) : tags,
     minter,
     creators: [creator],
     publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],

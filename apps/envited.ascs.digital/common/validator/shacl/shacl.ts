@@ -1,7 +1,7 @@
 import { DatasetCore, Quad } from '@rdfjs/types'
 import { Dataset } from '@zazuko/env/lib/Dataset'
 import { Entry } from '@zip.js/zip.js'
-import { all, equals, isEmpty, keys, omit, pipe } from 'ramda'
+import { all, equals, has, isEmpty, keys, omit, pipe } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromFile, read } from '../../archive'
@@ -178,7 +178,7 @@ export const validateDomainMetadata = _validateDomainMetadata({
 })
 
 export const _checkIfAllFilesInManifestExists =
-  ({ getShaclDataFromZip }: { getShaclDataFromZip: (file: File, fileName: string) => Promise<any> }) =>
+  ({ getShaclDataFromZip }: { getShaclDataFromZip: (file: File, fileName: string) => Promise<string> }) =>
   async (file: File, manifest: Manifest) => {
     const files = getAllManifestLinksAndFormatPaths(manifest)
     const validationPromises = files.map((fileName: string) => ({
@@ -187,10 +187,12 @@ export const _checkIfAllFilesInManifestExists =
     }))
 
     const wrappedPromises = validationPromises.map(({ fileName, promise }) =>
-      promise.catch(error => ({ error: fileName })),
+      promise.catch(() => ({ error: fileName })),
     )
 
-    return Promise.all(wrappedPromises).then(results => results.filter(result => result.error))
+    return Promise.all(wrappedPromises).then((results: (string | { error: string })[]) =>
+      results.filter((result: string | { error: string }) => has('error')(result) && result.error),
+    )
   }
 
 export const checkIfAllFilesInManifestExists = _checkIfAllFilesInManifestExists({

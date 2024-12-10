@@ -45,7 +45,7 @@ export const createTokenMetadata = ({
   const version = domainMetadata.data['hdmap:format']['hdmap:version']['@value']
   const today = new Date()
   const date = today.toISOString().split('T')[0]
-  const tags = ['GaiaX', 'ASCS', 'ENVITED-X', 'EVES', 'nft', `${formatType} ${version}`]
+  const tags = [TOKEN_TAGS.GAIA_X, TOKEN_TAGS.ASCS, TOKEN_TAGS.ENVITED_X, TOKEN_TAGS.EVES, TOKEN_TAGS.NFT, `${formatType} ${version}`]
   const isThirdPartyHosted = hasManifestThirdPartyLinks(manifest.data)
 
   return {

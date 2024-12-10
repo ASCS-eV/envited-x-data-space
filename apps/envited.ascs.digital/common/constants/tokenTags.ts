@@ -4,5 +4,5 @@ export const TOKEN_TAGS = {
     ENVITED_X: 'ENVITED-X',
     EVES: 'EVES',
     NFT: 'nft',
-    THIRD_PARTY_HOSTED: "Third Party Hosted",
+    THIRD_PARTY_HOSTED: 'Third Party Hosted',
   }

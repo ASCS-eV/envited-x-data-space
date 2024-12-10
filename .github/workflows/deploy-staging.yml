@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - develop
+      - 397_error_handling_asset_verification
   workflow_dispatch:
 
 # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish

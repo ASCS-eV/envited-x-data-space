@@ -20,6 +20,7 @@ import {
   reject,
   replace,
   startsWith,
+  includes,
 } from 'ramda'
 
 import { extractFromByteArray, read } from '../archive'
@@ -93,11 +94,12 @@ export const getAllManifestLinks = (manifest: Manifest) =>
 export const formatManifestLinkPath = replace('./', '')
 
 export const isRemoteUrl = startsWith('https://')
+export const isSelfHosted = includes('.envited-x.net')
 
-export const hasManifestAccessRestrictedLinks = (manifest: Manifest) =>
+export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
   pipe(
     getAllManifestLinks,
-    map((link: ManifestLink) => isRemoteUrl(link['manifest:path']['@value'])),
+    map((link: ManifestLink) => isRemoteUrl(link['manifest:path']['@value'])&&!isSelfHosted(link['manifest:path']['@value'])),
     (x: boolean[]) => any(equals(true))(x),
   )(manifest)
 

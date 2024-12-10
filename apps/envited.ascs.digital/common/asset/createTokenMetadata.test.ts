@@ -4,6 +4,7 @@ import manifestLicenseRefCustomCommercialAgreement from '../fixtures/manifestLic
 import manifestLicenseRefPolicySmartContract from '../fixtures/manifestLicenseRefPolicySmartContract.json'
 import manifestRemoteAssetData from '../fixtures/manifestRemoteAssetData.json'
 import * as SUT from './createTokenMetadata'
+import { TOKEN_TAGS } from '../constants/tokenTags'
 
 describe('common/asset/createTokenMetadata', () => {
   describe('createTokenMetadata', () => {
@@ -15,7 +16,7 @@ describe('common/asset/createTokenMetadata', () => {
         isBooleanAmount: true,
         name: 'TestfeldNiedersachsen_ALKS_ODR_sample',
         description: 'simple hdmap example file on Testfeld Niedersachsen for ALKS scenario',
-        tags: ['GaiaX', 'ASCS', 'ENVITED-X', 'EVES', 'nft', 'ASAM OpenDRIVE 1.6', 'containsAccessRestrictedLinks'],
+        tags: [TOKEN_TAGS.GAIA_X, TOKEN_TAGS.ASCS, TOKEN_TAGS.ENVITED_X, TOKEN_TAGS.EVES, TOKEN_TAGS.NFT, 'ASAM OpenDRIVE 1.6', TOKEN_TAGS.THIRD_PARTY_HOSTED],
         minter: 'MINTER',
         creators: ['CREATOR'],
         publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],
@@ -112,7 +113,7 @@ describe('common/asset/createTokenMetadata', () => {
         isBooleanAmount: true,
         name: 'TestfeldNiedersachsen_ALKS_ODR_sample',
         description: 'simple hdmap example file on Testfeld Niedersachsen for ALKS scenario',
-        tags: ['GaiaX', 'ASCS', 'ENVITED-X', 'EVES', 'nft', 'ASAM OpenDRIVE 1.6', 'containsAccessRestrictedLinks'],
+        tags: [TOKEN_TAGS.GAIA_X, TOKEN_TAGS.ASCS, TOKEN_TAGS.ENVITED_X, TOKEN_TAGS.EVES, TOKEN_TAGS.NFT, 'ASAM OpenDRIVE 1.6', TOKEN_TAGS.THIRD_PARTY_HOSTED],
         minter: 'MINTER',
         creators: ['CREATOR'],
         publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],

@@ -2,7 +2,8 @@ import { append, equals } from 'ramda'
 
 import { extractFilenameFromPath, formatAssetUri, formatIpfsUri } from './createTokenMetadata.utils'
 import { Manifest } from './types'
-import { formatManifestLinkPath, hasManifestAccessRestrictedLinks } from './validateAndCreateMetadata.utils'
+import { formatManifestLinkPath, hasManifestThirdPartyLinks } from './validateAndCreateMetadata.utils'
+import { TOKEN_TAGS } from '../constants/tokenTags'
 
 export const createTokenMetadata = ({
   asset,
@@ -45,14 +46,14 @@ export const createTokenMetadata = ({
   const today = new Date()
   const date = today.toISOString().split('T')[0]
   const tags = ['GaiaX', 'ASCS', 'ENVITED-X', 'EVES', 'nft', `${formatType} ${version}`]
-  const hasAccessRestrictedLinks = hasManifestAccessRestrictedLinks(manifest.data)
+  const isThirdPartyHosted = hasManifestThirdPartyLinks(manifest.data)
 
   return {
     decimals: 0,
     isBooleanAmount: true,
     name,
     description,
-    tags: hasAccessRestrictedLinks ? append('containsAccessRestrictedLinks')(tags) : tags,
+    tags: isThirdPartyHosted ? append(TOKEN_TAGS.THIRD_PARTY_HOSTED)(tags) : tags,
     minter,
     creators: [creator],
     publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],

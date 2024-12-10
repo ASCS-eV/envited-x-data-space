@@ -1,7 +1,7 @@
 import { DatasetCore, Quad } from '@rdfjs/types'
 import { Dataset } from '@zazuko/env/lib/Dataset'
 import { Entry } from '@zip.js/zip.js'
-import { all, equals, keys, omit, pipe } from 'ramda'
+import { all, equals, isEmpty, keys, omit, pipe } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { extractFromFile, read } from '../../archive'
@@ -11,7 +11,13 @@ import { getAllManifestLinksAndFormatPaths, getDomainMetadataPath } from '../../
 import { ERRORS } from '../../constants'
 import { CONTEXT_DROP_SCHEMAS } from './shacl.constants'
 import { ContentType, Schema, ValidationSchema } from './shacl.types'
-import { fetchShaclSchema, loadDataset, parseStreamToDataset, validateShacl } from './shacl.utils'
+import {
+  fetchShaclSchema,
+  formatFilesErrorMessage,
+  loadDataset,
+  parseStreamToDataset,
+  validateShacl,
+} from './shacl.utils'
 
 export const _validateShaclFile =
   ({
@@ -26,7 +32,15 @@ export const _validateShaclFile =
   async (file: File) => {
     try {
       const { conforms: manifestConforms, data: manifest } = await validateManifest(file)
-      await checkIfAllFilesInManifestExists(file, manifest)
+      const filesResults = await checkIfAllFilesInManifestExists(file, manifest)
+
+      if (!isEmpty(filesResults)) {
+        return {
+          isValid: false,
+          data: {},
+          error: formatFilesErrorMessage(filesResults),
+        }
+      }
 
       const { conforms: domainMetadataConforms, data: domainMetadata } = await validateDomainMetadata(file, manifest)
 
@@ -164,12 +178,19 @@ export const validateDomainMetadata = _validateDomainMetadata({
 })
 
 export const _checkIfAllFilesInManifestExists =
-  ({ getShaclDataFromZip }: { getShaclDataFromZip: (file: File, fileName: string) => Promise<string> }) =>
+  ({ getShaclDataFromZip }: { getShaclDataFromZip: (file: File, fileName: string) => Promise<any> }) =>
   async (file: File, manifest: Manifest) => {
     const files = getAllManifestLinksAndFormatPaths(manifest)
-    const validationPromises = files.map((fileName: string) => getShaclDataFromZip(file, fileName))
+    const validationPromises = files.map((fileName: string) => ({
+      fileName,
+      promise: getShaclDataFromZip(file, fileName),
+    }))
 
-    return Promise.all(validationPromises)
+    const wrappedPromises = validationPromises.map(({ fileName, promise }) =>
+      promise.catch(error => ({ error: fileName })),
+    )
+
+    return Promise.all(wrappedPromises).then(results => results.filter(result => result.error))
   }
 
 export const checkIfAllFilesInManifestExists = _checkIfAllFilesInManifestExists({

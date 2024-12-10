@@ -58,4 +58,20 @@ describe('common/validator/shacl/shacl.utils', () => {
       expect(result._readableState.highWaterMark).toEqual(expected)
     })
   })
+
+  describe('formatFilesErrorMessage', () => {
+    const errors = [
+      {
+        error: 'Error 1',
+      },
+      {
+        error: 'Error 2',
+      },
+    ]
+
+    const expected = 'File(s) not found - Error 1, Error 2'
+    const result = SUT.formatFilesErrorMessage(errors)
+
+    expect(result).toEqual(expected)
+  })
 })

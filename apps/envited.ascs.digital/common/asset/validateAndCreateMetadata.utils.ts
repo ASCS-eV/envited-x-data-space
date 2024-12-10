@@ -9,6 +9,7 @@ import {
   equals,
   find,
   groupBy,
+  includes,
   is,
   isNil,
   map,
@@ -20,7 +21,6 @@ import {
   reject,
   replace,
   startsWith,
-  includes,
 } from 'ramda'
 
 import { extractFromByteArray, read } from '../archive'
@@ -99,7 +99,10 @@ export const isSelfHosted = includes('.envited-x.net')
 export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
   pipe(
     getAllManifestLinks,
-    map((link: ManifestLink) => isRemoteUrl(link['manifest:path']['@value'])&&!isSelfHosted(link['manifest:path']['@value'])),
+    map(
+      (link: ManifestLink) =>
+        isRemoteUrl(link['manifest:path']['@value']) && !isSelfHosted(link['manifest:path']['@value']),
+    ),
     (x: boolean[]) => any(equals(true))(x),
   )(manifest)
 

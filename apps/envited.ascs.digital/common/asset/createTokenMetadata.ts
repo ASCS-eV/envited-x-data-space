@@ -1,9 +1,9 @@
 import { append, equals } from 'ramda'
 
+import { TOKEN_TAGS } from '../constants/tokenTags'
 import { extractFilenameFromPath, formatAssetUri, formatIpfsUri } from './createTokenMetadata.utils'
 import { Manifest } from './types'
 import { formatManifestLinkPath, hasManifestThirdPartyLinks } from './validateAndCreateMetadata.utils'
-import { TOKEN_TAGS } from '../constants/tokenTags'
 
 export const createTokenMetadata = ({
   asset,
@@ -45,7 +45,14 @@ export const createTokenMetadata = ({
   const version = domainMetadata.data['hdmap:format']['hdmap:version']['@value']
   const today = new Date()
   const date = today.toISOString().split('T')[0]
-  const tags = [TOKEN_TAGS.GAIA_X, TOKEN_TAGS.ASCS, TOKEN_TAGS.ENVITED_X, TOKEN_TAGS.EVES, TOKEN_TAGS.NFT, `${formatType} ${version}`]
+  const tags = [
+    TOKEN_TAGS.GAIA_X,
+    TOKEN_TAGS.ASCS,
+    TOKEN_TAGS.ENVITED_X,
+    TOKEN_TAGS.EVES,
+    TOKEN_TAGS.NFT,
+    `${formatType} ${version}`,
+  ]
   const isThirdPartyHosted = hasManifestThirdPartyLinks(manifest.data)
 
   return {

@@ -1,7 +1,7 @@
 import { DatasetCore, Quad } from '@rdfjs/types'
 import rdf, { DefaultEnv } from '@zazuko/env'
 import { Dataset } from '@zazuko/env/lib/Dataset'
-import { join, map, pipe } from 'ramda'
+import { add, join, map, pipe } from 'ramda'
 import rdfParser, { RdfParser } from 'rdf-parse'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Readable } from 'stream'
@@ -65,3 +65,5 @@ export const formatFilesErrorMessage = (errors: { error: string }[]) =>
     join(', '),
     (x: string) => `${ERRORS.FILES_NOT_FOUND} - ${x}`,
   )(errors)
+
+export const addManifestAndReadMeFiles = add(2)

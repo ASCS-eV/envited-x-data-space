@@ -5,26 +5,32 @@ describe('common/validator/shacl', () => {
     it('Should return a valid result', async () => {
       // when ... we want to validate a asset file
       const file = 'ZIP'
-      const validateManifestStub = jest.fn().mockReturnValue({
+      const validateManifestStub = jest.fn().mockResolvedValue({
         conforms: true,
         data: {
           file: 'FILE_NAME',
         },
       })
-      const validateDomainMetadataStub = jest.fn().mockReturnValue({
+      const validateDomainMetadataStub = jest.fn().mockResolvedValue({
         conforms: true,
         data: {
           name: 'NAME',
         },
       })
 
-      const checkIfAllFilesInManifestExistsStub = jest.fn().mockReturnValue({})
+      const checkIfAllFilesInManifestExistsStub = jest.fn().mockResolvedValue({
+        errors: [],
+        amount: 12,
+      })
+
+      const countAmountOfFilesInZipStub = jest.fn().mockResolvedValue(14)
 
       // then ... we should get a valid response
       const result = await SUT._validateShaclFile({
         validateManifest: validateManifestStub,
         validateDomainMetadata: validateDomainMetadataStub,
         checkIfAllFilesInManifestExists: checkIfAllFilesInManifestExistsStub,
+        countAmountOfFilesInZip: countAmountOfFilesInZipStub,
       })(file as any)
 
       expect(validateManifestStub).toHaveBeenCalledWith('ZIP')

@@ -4,7 +4,7 @@ import { Entry } from '@zip.js/zip.js'
 import { all, equals, has, isEmpty, keys, omit, pipe } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
-import { extractFromFile, read } from '../../archive'
+import { countAmountOfFilesInZip, extractFromFile, read } from '../../archive'
 import { MANIFEST_FILE } from '../../asset/constants'
 import { Manifest } from '../../asset/types'
 import { getAllManifestLinksAndFormatPaths, getDomainMetadataPath } from '../../asset/validateAndCreateMetadata.utils'
@@ -12,6 +12,7 @@ import { ERRORS } from '../../constants'
 import { CONTEXT_DROP_SCHEMAS } from './shacl.constants'
 import { ContentType, Schema, ValidationSchema } from './shacl.types'
 import {
+  addManifestAndReadMeFiles,
   fetchShaclSchema,
   formatFilesErrorMessage,
   loadDataset,
@@ -24,21 +25,37 @@ export const _validateShaclFile =
     validateManifest,
     validateDomainMetadata,
     checkIfAllFilesInManifestExists,
+    countAmountOfFilesInZip,
   }: {
     validateManifest: (file: File) => Promise<{ conforms: boolean; data: any }>
     validateDomainMetadata: (file: File, manifest: Manifest) => Promise<{ conforms: boolean; data: any }>
-    checkIfAllFilesInManifestExists: (file: File, manifest: Manifest) => any
+    checkIfAllFilesInManifestExists: (
+      file: File,
+      manifest: Manifest,
+    ) => Promise<{ errors: { error: string }[]; amount: number }>
+    countAmountOfFilesInZip: (file: File) => Promise<number>
   }) =>
   async (file: File) => {
     try {
       const { conforms: manifestConforms, data: manifest } = await validateManifest(file)
-      const filesResults = await checkIfAllFilesInManifestExists(file, manifest)
+      const manifestFiles = await checkIfAllFilesInManifestExists(file, manifest)
 
-      if (!isEmpty(filesResults)) {
+      if (!isEmpty(manifestFiles.errors)) {
         return {
           isValid: false,
           data: {},
-          error: formatFilesErrorMessage(filesResults),
+          error: formatFilesErrorMessage(manifestFiles.errors),
+        }
+      }
+
+      const amountOfFilesInZip = await countAmountOfFilesInZip(file)
+      const allowedAmountOfFiles = addManifestAndReadMeFiles(manifestFiles.amount)
+
+      if (!equals(amountOfFilesInZip)(allowedAmountOfFiles)) {
+        return {
+          isValid: false,
+          data: {},
+          error: `${amountOfFilesInZip} files found, should be ${allowedAmountOfFiles} files`,
         }
       }
 
@@ -190,9 +207,17 @@ export const _checkIfAllFilesInManifestExists =
       promise.catch(() => ({ error: fileName })),
     )
 
-    return Promise.all(wrappedPromises).then((results: (string | { error: string })[]) =>
-      results.filter((result: string | { error: string }) => has('error')(result) && result.error),
+    const errors = await Promise.all(wrappedPromises).then(
+      (results: (string | { error: string })[]) =>
+        results.filter((result: string | { error: string }) => has('error')(result) && result.error) as {
+          error: string
+        }[],
     )
+
+    return {
+      errors,
+      amount: files.length,
+    }
   }
 
 export const checkIfAllFilesInManifestExists = _checkIfAllFilesInManifestExists({
@@ -203,6 +228,7 @@ export const validateShaclFile = _validateShaclFile({
   validateDomainMetadata,
   validateManifest,
   checkIfAllFilesInManifestExists,
+  countAmountOfFilesInZip,
 })
 
 export const _validateShaclDataWithSchema =

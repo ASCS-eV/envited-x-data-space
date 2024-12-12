@@ -74,4 +74,10 @@ describe('common/validator/shacl/shacl.utils', () => {
 
     expect(result).toEqual(expected)
   })
+
+  describe('addManifestAndReadMeFiles', () => {
+    const result = SUT.addManifestAndReadMeFiles(12)
+
+    expect(result).toEqual(14)
+  })
 })

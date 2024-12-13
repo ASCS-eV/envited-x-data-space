@@ -5,6 +5,7 @@ describe('common/validator/shacl', () => {
     it('Should return a valid result', async () => {
       // when ... we want to validate a asset file
       const file = 'ZIP'
+      const validateReadmeStub = jest.fn().mockResolvedValue('FILE_NAME')
       const validateManifestStub = jest.fn().mockResolvedValue({
         conforms: true,
         data: {
@@ -31,6 +32,7 @@ describe('common/validator/shacl', () => {
         validateDomainMetadata: validateDomainMetadataStub,
         checkIfAllFilesInManifestExists: checkIfAllFilesInManifestExistsStub,
         countAmountOfFilesInZip: countAmountOfFilesInZipStub,
+        validateReadme: validateReadmeStub,
       })(file as any)
 
       expect(validateManifestStub).toHaveBeenCalledWith('ZIP')

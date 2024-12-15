@@ -73,11 +73,11 @@ export const _validateShaclFile =
       const { conforms: domainMetadataConforms, data: domainMetadata } = await validateDomainMetadata(file, manifest)
 
       if (!manifestConforms) {
-        return { isValid: false, data: {}, error: ERRORS.ASSET_INVALID }
+        return { isValid: false, data: {}, error: ERRORS.MANIFEST_INVALID }
       }
 
       if (!domainMetadataConforms) {
-        return { isValid: false, data: {}, error: ERRORS.ASSET_INVALID }
+        return { isValid: false, data: {}, error: ERRORS.DOMAIN_METADATA_INVALID }
       }
 
       return { isValid: true, data: { manifest, domainMetadata } }

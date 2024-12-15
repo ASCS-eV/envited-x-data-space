@@ -8,6 +8,8 @@ export const ERRORS = {
   ASSETS_NOT_FOUND: 'Assets not found',
   ASSET_INVALID: 'Asset validation failed',
   ASSET_FILE_NOT_FOUND: 'No valid metadata.json found',
+  DOMAIN_METADATA_INVALID: 'domainMetadata.json validation failed',
+  MANIFEST_INVALID: 'manifest.json validation failed',
   FILES_NOT_FOUND: 'File(s) not found',
   README_FILE_NOT_FOUND: 'README.md file not found',
   NOT_ALLOWED_TO_DELETE_ASSET: 'Not allowed to delete asset',

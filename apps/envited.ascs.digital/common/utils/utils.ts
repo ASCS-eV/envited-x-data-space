@@ -76,6 +76,8 @@ export const truncate = (length: number) =>
 
 export const truncateDID = truncate(20)
 
+export const truncateCID = truncate(10)
+
 export const isServer = () => typeof window === 'undefined'
 
 export const addUrn = (type: string) => (uuid: string) => `urn:${type}:${uuid}`

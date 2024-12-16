@@ -27,15 +27,28 @@ export const UploadedAssets: FC<UploadedAssetsProps> = ({ assets }) => {
           <thead>
             <tr>
               <th scope="col" className="py-3.5 text-left text-sm font-semibold text-gray-900">
-                {t('[Label] asset')}
+                {t('[Label] cid')}
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                {t('[Label] type')}
+                {t('[Label] name')}
               </th>
-              <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+              <th
+                scope="col"
+                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+              >
+                {t('[Label] time')}
+              </th>
+              <th
+                scope="col"
+                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+              >
+                {t('[Label] status')}
+              </th>
+              <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6 text-sm font-semibold text-gray-900">
+                {t('[Label] action')}
                 <span className="sr-only">{t('[Label] select')}</span>
               </th>
             </tr>

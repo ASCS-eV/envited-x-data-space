@@ -2,8 +2,9 @@
 
 import { LoadingIndicator } from '@envited-x-data-space/design-system'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import { truncateCID } from 'apps/envited.ascs.digital/common/utils'
 import { useSession } from 'next-auth/react'
-import { equals, last, propOr } from 'ramda'
+import { equals, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
@@ -63,14 +64,7 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
   return (
     <tr key={asset.id}>
       <td className={`${equals(assetIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}>
-        <div className="font-medium text-gray-900">
-          {equals(asset.status)(AssetStatus.processing) ? asset.cid : propOr('', 'name')(metadata)}
-        </div>
-        <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
-          <span>{propOr('', 'type')(metadata)}</span>
-          <span className="hidden sm:inline">·</span>
-          <span>{propOr('', 'size')(metadata)}</span>
-        </div>
+        <div className="font-medium text-gray-900">{truncateCID(asset.cid)}</div>
         {assetIdx !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" /> : null}
       </td>
       <td
@@ -78,12 +72,19 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
           equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
         } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
       >
-        {equals(assetStatus)(AssetStatus.processing) ? <>&hellip;</> : last(propOr('', 'tags')(metadata))}
+        {equals(asset.status)(AssetStatus.processing) ? <>&hellip;</> : propOr('', 'name')(metadata)}
       </td>
       <td
         className={`${
-          equals(assetIdx)(0) ? '' : 'border-t border-transparent'
-        } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
+          equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
+        } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
+      >
+        {equals(asset.status)(AssetStatus.processing) ? <>&hellip;</> : propOr('', 'date')(metadata)}
+      </td>
+      <td
+        className={`${
+          equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
+        } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
       >
         {match(assetStatus)
           .with(AssetStatus.processing, () => (
@@ -93,6 +94,15 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
             </div>
           ))
           .with(AssetStatus.minted, () => <span className="text-green-600">{t('[Status] minted')}</span>)
+          .with(AssetStatus.rejected, () => <span className="text-red-500">{t('[Status] rejected')}</span>)
+          .otherwise(() => '')}
+      </td>
+      <td
+        className={`${
+          equals(assetIdx)(0) ? '' : 'border-t border-transparent'
+        } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
+      >
+        {match(assetStatus)
           .with(AssetStatus.rejected, () => (
             <div className="flex items-center justify-end text-red-500">
               {t('[Status] rejected')}
@@ -105,7 +115,7 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
               </button>
             </div>
           ))
-          .otherwise(() => (
+          .with(AssetStatus.pending, () => (
             <div className="flex items-center justify-end text-gray-500">
               <Mint assetId={asset.id} />
               <button
@@ -116,7 +126,8 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
                 <TrashIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
               </button>
             </div>
-          ))}
+          ))
+          .otherwise(() => '')}
         {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>
     </tr>

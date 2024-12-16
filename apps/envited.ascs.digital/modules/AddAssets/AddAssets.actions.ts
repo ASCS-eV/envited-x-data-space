@@ -9,6 +9,7 @@ import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
 import { insertAsset } from '../../common/serverActions'
 import { badRequestError, formatError, internalServerErrorError, slugify, unauthorizedError } from '../../common/utils'
+import { createFilename } from 'apps/envited.ascs.digital/common/asset/utils'
 
 export async function addAssetsForm(formData: FormData) {
   const assets = formData.getAll('assets') as File[]
@@ -29,19 +30,22 @@ export async function addAssetsForm(formData: FormData) {
 
     const result = assets.map(async (asset: File) => {
       const arrayBuffer = Buffer.from(await asset.arrayBuffer())
-      const uniqueFilename = getUniqueFilename(slugify(asset.name), asset.name)
-      const signedUrl = await getAssetUploadUrl(uniqueFilename)
+      const cid = await createFilename(arrayBuffer)
+      const signedUrl = await getAssetUploadUrl(cid)
 
       const uploadResult = await fetch(signedUrl, {
         body: arrayBuffer,
         method: 'PUT',
         headers: {
           'Content-Type': asset.type,
-          'Content-Disposition': `attachment; filename="${uniqueFilename}"`,
+          'Content-Disposition': `attachment; filename="${cid}"`,
         },
       })
 
-      await insertAsset(uniqueFilename)
+      await insertAsset({
+        cid,
+        name: asset.name, 
+      })
 
       return uploadResult
     })

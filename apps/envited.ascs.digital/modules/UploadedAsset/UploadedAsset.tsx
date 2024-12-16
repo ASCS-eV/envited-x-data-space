@@ -23,8 +23,7 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
   const { t } = useTranslation('UploadedAsset')
   const { error, success } = useNotification()
   const [assetStatus, setAssetStatus] = useState<AssetStatus>(asset.status)
-  const session = useSession()
-  console.log('session', session)
+
   useEffect(() => {
     let interval: NodeJS.Timer
 
@@ -64,7 +63,11 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
     <tr key={asset.id}>
       <td className={`${equals(assetIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}>
         <div className="font-medium text-gray-900">
-          {equals(asset.status)(AssetStatus.processing) ? asset.cid : propOr('', 'name')(metadata)}
+          {asset.name}<br/>
+          <span className='text-xs text-gray-500 italic pt-1'>{asset.cid}</span>
+        </div>
+        <div className="font-medium text-gray-900">
+          
         </div>
         <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
           <span>{propOr('', 'type')(metadata)}</span>

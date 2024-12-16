@@ -2,7 +2,7 @@ import { equals } from 'ramda'
 
 import { extractFilenameFromPath, formatAssetUri, formatIpfsUri } from './createTokenMetadata.utils'
 import { Manifest } from './types'
-import { formatManifestLinkPath } from './validateAndCreateMetadata.utils'
+import { formatManifestLinkPath } from './utils'
 
 export const createTokenMetadata = ({
   asset,

@@ -172,26 +172,9 @@ export const Assets: FC<AssetsProps> = ({ items }) => {
             {map(
               ({
                 id,
-                hash,
-                createdAt,
-                contract,
-                minter,
-                tokenId,
                 displayUri,
-                tokenMetadata,
                 name,
                 description,
-                creators,
-                publishers,
-                date,
-                type,
-                rights,
-                rightsUri,
-                language,
-                artifactUri,
-                identifier,
-                externalUri,
-                modifiedAt,
               }: Token) => (
                 <div
                   key={id}

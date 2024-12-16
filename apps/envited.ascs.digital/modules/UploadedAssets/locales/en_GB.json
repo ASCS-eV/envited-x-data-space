@@ -7,5 +7,6 @@
   "[Label] select": "Select",
   "[Button] mint": "Mint",
   "[Button] preview": "Preview",
-  "[Button] delete": "Delete"
+  "[Button] delete": "Delete",
+  "[Label] CID": "CID"
 }

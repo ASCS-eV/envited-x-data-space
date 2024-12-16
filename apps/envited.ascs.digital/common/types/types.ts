@@ -74,6 +74,7 @@ export enum CredentialType {
 export interface Asset {
   id: string
   cid: string
+  name: string | undefined
   metadata: AssetMetadata
   status: AssetStatus
   userId: string
@@ -108,7 +109,7 @@ export interface Token {
   artifactUri: string
   identifier: string
   externalUri: string
-  modifiedAt: string
+  updatedAt: string
 }
 
 export interface TokenAttribute {

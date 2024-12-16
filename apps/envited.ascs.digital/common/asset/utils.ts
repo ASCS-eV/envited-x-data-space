@@ -3,10 +3,13 @@ import * as raw from 'multiformats/codecs/raw'
 import { Hasher } from 'multiformats/dist/src/hashes/hasher'
 import { sha256 } from 'multiformats/hashes/sha2'
 import {
+  any,
   append,
   concat,
+  equals,
   find,
   groupBy,
+  includes,
   is,
   isNil,
   map,
@@ -91,6 +94,17 @@ export const getAllManifestLinks = (manifest: Manifest) =>
 export const formatManifestLinkPath = replace('./', '')
 
 export const isRemoteUrl = startsWith('https://')
+export const isSelfHosted = includes('.envited-x.net')
+
+export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
+  pipe(
+    getAllManifestLinks,
+    map(
+      (link: ManifestLink) =>
+        isRemoteUrl(link['manifest:path']['@value']) && !isSelfHosted(link['manifest:path']['@value']),
+    ),
+    (x: boolean[]) => any(equals(true))(x),
+  )(manifest)
 
 export const getPathsFromManifestLinks = (links: ManifestLink[]) =>
   pipe(

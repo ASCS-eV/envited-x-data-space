@@ -1,8 +1,9 @@
-import { equals } from 'ramda'
+import { append, equals } from 'ramda'
 
+import { TOKEN_TAGS } from '../constants/tokenTags'
 import { extractFilenameFromPath, formatAssetUri, formatIpfsUri } from './createTokenMetadata.utils'
 import { Manifest } from './types'
-import { formatManifestLinkPath } from './utils'
+import { formatManifestLinkPath, hasManifestThirdPartyLinks } from './utils'
 
 export const createTokenMetadata = ({
   asset,
@@ -44,13 +45,22 @@ export const createTokenMetadata = ({
   const version = domainMetadata.data['hdmap:format']['hdmap:version']['@value']
   const today = new Date()
   const date = today.toISOString().split('T')[0]
+  const tags = [
+    TOKEN_TAGS.GAIA_X,
+    TOKEN_TAGS.ASCS,
+    TOKEN_TAGS.ENVITED_X,
+    TOKEN_TAGS.EVES,
+    TOKEN_TAGS.NFT,
+    `${formatType} ${version}`,
+  ]
+  const isThirdPartyHosted = hasManifestThirdPartyLinks(manifest.data)
 
   return {
     decimals: 0,
     isBooleanAmount: true,
     name,
     description,
-    tags: ['GaiaX', 'ASCS', 'ENVITED-X', 'EVES', 'nft', `${formatType} ${version}`],
+    tags: isThirdPartyHosted ? append(TOKEN_TAGS.THIRD_PARTY_HOSTED)(tags) : tags,
     minter,
     creators: [creator],
     publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],

@@ -1,4 +1,5 @@
 import manifest from '../fixtures/manifest.json'
+import manifestRemoteAssetData from '../fixtures/manifestRemoteAssetData.json'
 import * as SUT from './utils'
 
 describe('common/asset/utils', () => {
@@ -343,6 +344,20 @@ describe('common/asset/utils', () => {
         'visualization/roadNetwork.geojson',
         'visualization/detailRoadNetwork.geojson',
       ])
+    })
+  })
+
+  describe('hasManifestThirdPartyLinks', () => {
+    it('should return true when there is a external link', () => {
+      const result = SUT.hasManifestThirdPartyLinks(manifest as any)
+
+      expect(result).toEqual(true)
+    })
+
+    it('should return false when there are not external links found', () => {
+      const result = SUT.hasManifestThirdPartyLinks(manifestRemoteAssetData as any)
+
+      expect(result).toEqual(true)
     })
   })
 })

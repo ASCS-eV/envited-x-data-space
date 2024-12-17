@@ -1,1 +1,8 @@
-export { extract, extractFromFile, extractFromByteArray, read, readContentFromJsonFile } from './archive'
+export {
+  countAmountOfFilesInZip,
+  extract,
+  extractFromFile,
+  extractFromByteArray,
+  read,
+  readContentFromJsonFile,
+} from './archive'

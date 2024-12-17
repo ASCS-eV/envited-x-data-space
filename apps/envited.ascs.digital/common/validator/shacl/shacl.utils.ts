@@ -7,7 +7,7 @@ import SHACLValidator from 'rdf-validate-shacl'
 import { Readable } from 'stream'
 
 import { ERRORS } from '../../constants'
-import { SCHEMA_MAP } from './shacl.constants'
+import { AMOUNT_OF_UNDEFINED_FILES_IN_MANIFEST, SCHEMA_MAP } from './shacl.constants'
 import { ContentType, ValidationSchema } from './shacl.types'
 
 export const validateShacl = (shapes: DatasetCore<Quad, Quad>) => async (data: DatasetCore<Quad, Quad>) => {
@@ -66,4 +66,4 @@ export const formatFilesErrorMessage = (errors: { error: string }[]) =>
     (x: string) => `${ERRORS.FILES_NOT_FOUND} - ${x}`,
   )(errors)
 
-export const subtractManifestAndReadMeFiles = flip(subtract)(2)
+export const subtractManifestAndReadMeFiles = flip(subtract)(AMOUNT_OF_UNDEFINED_FILES_IN_MANIFEST)

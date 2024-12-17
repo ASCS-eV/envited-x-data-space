@@ -17,3 +17,5 @@ export const SCHEMA_MAP = {
 }
 
 export const CONTEXT_DROP_SCHEMAS = [Schema.sh, Schema.skos, Schema.xsd]
+
+export const AMOUNT_OF_UNDEFINED_FILES_IN_MANIFEST = 2

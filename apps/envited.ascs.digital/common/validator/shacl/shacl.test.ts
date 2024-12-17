@@ -19,7 +19,7 @@ describe('common/validator/shacl', () => {
         },
       })
 
-      const checkIfAllFilesInManifestExistsStub = jest.fn().mockResolvedValue({
+      const checkIfAllFilesInManifestExistStub = jest.fn().mockResolvedValue({
         errors: [],
         amount: 12,
       })
@@ -30,7 +30,7 @@ describe('common/validator/shacl', () => {
       const result = await SUT._validateShaclFile({
         validateManifest: validateManifestStub,
         validateDomainMetadata: validateDomainMetadataStub,
-        checkIfAllFilesInManifestExists: checkIfAllFilesInManifestExistsStub,
+        checkIfAllFilesInManifestExist: checkIfAllFilesInManifestExistStub,
         countAmountOfFilesInZip: countAmountOfFilesInZipStub,
         validateReadme: validateReadmeStub,
       })(file as any)

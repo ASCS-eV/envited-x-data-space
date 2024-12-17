@@ -24,13 +24,13 @@ export const _validateShaclFile =
   ({
     validateManifest,
     validateDomainMetadata,
-    checkIfAllFilesInManifestExists,
+    checkIfAllFilesInManifestExist,
     countAmountOfFilesInZip,
     validateReadme,
   }: {
     validateManifest: (file: File) => Promise<{ conforms: boolean; data: any }>
     validateDomainMetadata: (file: File, manifest: Manifest) => Promise<{ conforms: boolean; data: any }>
-    checkIfAllFilesInManifestExists: (
+    checkIfAllFilesInManifestExist: (
       file: File,
       manifest: Manifest,
     ) => Promise<{ errors: { error: string }[]; amount: number }>
@@ -49,7 +49,7 @@ export const _validateShaclFile =
       }
 
       const { conforms: manifestConforms, data: manifest } = await validateManifest(file)
-      const manifestFiles = await checkIfAllFilesInManifestExists(file, manifest)
+      const manifestFiles = await checkIfAllFilesInManifestExist(file, manifest)
 
       if (!isEmpty(manifestFiles.errors)) {
         return {
@@ -221,7 +221,7 @@ export const validateDomainMetadata = _validateDomainMetadata({
   getDomainMetadataPath,
 })
 
-export const _checkIfAllFilesInManifestExists =
+export const _checkIfAllFilesInManifestExist =
   ({ getShaclDataFromZip }: { getShaclDataFromZip: (file: File, fileName: string) => Promise<string> }) =>
   async (file: File, manifest: Manifest) => {
     const files = getAllManifestLinksAndFormatPaths(manifest)
@@ -247,14 +247,14 @@ export const _checkIfAllFilesInManifestExists =
     }
   }
 
-export const checkIfAllFilesInManifestExists = _checkIfAllFilesInManifestExists({
+export const checkIfAllFilesInManifestExist = _checkIfAllFilesInManifestExist({
   getShaclDataFromZip,
 })
 
 export const validateShaclFile = _validateShaclFile({
   validateDomainMetadata,
   validateManifest,
-  checkIfAllFilesInManifestExists,
+  checkIfAllFilesInManifestExist,
   countAmountOfFilesInZip,
   validateReadme,
 })

@@ -6,9 +6,9 @@ module.exports = {
       watch: '.',
       env_staging: {
         ENV: 'staging',
-        ASSETS_CONTRACT: 'KT19RZz4bezfgPD7Kc1tJ84bs58AFmkf4zxE',
+        ASSETS_CONTRACT: 'KT1XC2fTBNqoafnrhEb7TuToRCzewgbHAhnA',
         ASSET_BUCKET_NAME: 'staging-envitedascsdigital-en-assetsbucket5f3b285a-ug4zozpjyshd',
-        ASSET_URL: 'https://d234i0z2knz9va.cloudfront.net',
+        ASSET_URL: 'https://staging.envited-x.net',
         RDS_SECRET_ARN:
           'arn:aws:secretsmanager:eu-central-1:597778497612:secret:EnvitedSecretD661DE26-KcCzWiLKyXmK-9z9dYl',
         RDS_DB_NAME: 'envited',
@@ -19,7 +19,7 @@ module.exports = {
         ENV: 'development',
         ASSETS_CONTRACT: 'KT1NUDsQ5qCpf5Mxmeo2dqRdnKqqL8kpj2LG',
         ASSET_BUCKET_NAME: 'staging-envitedascsdigital-en-assetsbucket5f3b285a-ug4zozpjyshd',
-        ASSET_URL: 'https://d234i0z2knz9va.cloudfront.net',
+        ASSET_URL: 'https://staging.envited-x.net',
         POSTGRES_PORT: 5436,
         POSTGRES_DATABASE_NAME: 'envited',
         POSTGRES_DATABASE_USER: 'admin',

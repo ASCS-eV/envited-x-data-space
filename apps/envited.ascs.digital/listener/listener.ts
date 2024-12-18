@@ -8,7 +8,7 @@ import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
 import { extractAttributesUri, extractKeyValuePairs } from './utils'
 
-const createLocalCopy = async (cid: string) => {
+export const createLocalCopy = async (cid: string) => {
   try {
     const { data, contentType } = await downloadFile(cid)
     let body = null

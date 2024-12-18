@@ -24,7 +24,7 @@ describe('createLocalCopy', () => {
         Body: data,
         ContentType: contentType,
         ContentDisposition: 'inline',
-      })
+      }),
     )
   })
 

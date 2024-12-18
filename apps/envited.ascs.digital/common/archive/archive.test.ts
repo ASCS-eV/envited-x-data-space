@@ -50,4 +50,30 @@ describe('common/archive', () => {
       expect(result).toEqual(undefined)
     })
   })
+
+  describe('countAmountOfFilesInZip', () => {
+    it('Should return the amount of files', async () => {
+      // when ... we want to read a file from a zip archive
+      // then ... it should return the entries from the zip archive
+
+      const getEntriesStub = jest
+        .fn()
+        .mockResolvedValue([
+          { filename: 'FILENAME.EXT', directory: true },
+          { filename: 'FILENAME_1.EXT' },
+          { filename: 'FILENAME_2.EXT' },
+        ])
+      const closeStub = jest.fn()
+      const zipReaderStub = jest.fn().mockImplementation(() => ({
+        getEntries: getEntriesStub,
+        close: closeStub,
+      }))
+
+      const result = await SUT._countAmountOfFilesInZip({ ZipReader: zipReaderStub })('FILE' as any)
+      expect(result).toEqual(2)
+      expect(closeStub).toHaveBeenCalledWith()
+      expect(getEntriesStub).toHaveBeenCalledWith()
+      expect(zipReaderStub).toHaveBeenCalledWith({ blob: 'FILE', size: undefined })
+    })
+  })
 })

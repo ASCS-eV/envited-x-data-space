@@ -205,7 +205,6 @@ export default function Envited({ stack }: StackContext) {
       JWKS_ENDPOINT: process.env.JWKS_ENDPOINT!,
       OIDC_SERVER_URL: process.env.OIDC_SERVER_URL!,
       TRUST_ANCHOR_DID: process.env.TRUST_ANCHOR_DID!,
-      PINATA_API_KEY: process.env.PINATA_API_KEY!,
       PINATA_SECRET: process.env.PINATA_SECRET!,
       PINATA_JWT: process.env.PINATA_JWT!,
       PINATA_GATEWAY: process.env.PINATA_GATEWAY!,

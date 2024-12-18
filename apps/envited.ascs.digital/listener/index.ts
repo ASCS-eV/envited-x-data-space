@@ -8,6 +8,7 @@ import * as schema from '../common/database/schema'
 import { log } from '../common/logger'
 import { listenToAssetContract } from './listener'
 import { getTokenByTokenId, insertToken } from './persistence'
+import { downloadFile } from '../common/ipfs'
 
 const Tezos = new TezosToolkit(process.env.NEXT_PUBLIC_WEB3_RPC_URL || 'https://ghostnet.ecadinfra.com')
 const db = async () => {
@@ -30,9 +31,16 @@ const db = async () => {
 
 const connection = await db()
 
-listenToAssetContract({
-  tezos: Tezos,
-  getTokenByTokenId: getTokenByTokenId({ database: connection }),
-  insertToken: insertToken({ database: connection }),
-  log,
-})()
+// listenToAssetContract({
+//   tezos: Tezos,
+//   getTokenByTokenId: getTokenByTokenId({ database: connection }),
+//   insertToken: insertToken({ database: connection }),
+//   log,
+// })()
+
+const test = async () => {
+  const f = await downloadFile("bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu")
+  console.log(f)
+}
+
+test()

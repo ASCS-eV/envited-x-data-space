@@ -3,13 +3,13 @@
 import { revalidatePath } from 'next/cache'
 import { isNil } from 'ramda'
 
+import { createFilename } from '../../common/asset/validateAndCreateMetadata.utils'
 import { getServerSession } from '../../common/auth'
 import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
 import { insertAsset } from '../../common/serverActions'
 import { badRequestError, formatError, internalServerErrorError, unauthorizedError } from '../../common/utils'
-import { createFilename } from '../../common/asset/validateAndCreateMetadata.utils'
 
 export async function addAssetsForm(formData: FormData) {
   const assets = formData.getAll('assets') as File[]

@@ -1,6 +1,11 @@
 import { PinataSDK } from 'pinata-web3'
 
-import { createGroup as _createGroup, uploadFile as _uploadFile, uploadJson as _uploadJson, download as _download } from './ipfs'
+import {
+  createGroup as _createGroup,
+  download as _download,
+  uploadFile as _uploadFile,
+  uploadJson as _uploadJson,
+} from './ipfs'
 
 export type UploadJson = ReturnType<typeof _uploadJson>
 export type CreateGroup = ReturnType<typeof _createGroup>

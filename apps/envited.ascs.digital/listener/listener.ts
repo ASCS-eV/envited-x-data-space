@@ -1,12 +1,12 @@
 import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
+import { replace } from 'ramda'
 
 import { s3Client } from '../common/aws'
+import { downloadFile } from '../common/ipfs'
+import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
 import { extractAttributesUri, extractKeyValuePairs } from './utils'
-import { Log } from '../common/logger'
-import { downloadFile } from '../common/ipfs'
-import { replace } from 'ramda'
 
 const createLocalCopy = async (cid: string) => {
   try {
@@ -32,7 +32,7 @@ const createLocalCopy = async (cid: string) => {
       ContentType: contentType ? contentType : 'application/octet-stream',
       ContentDisposition: 'inline',
     }
-  
+
     await s3Client.send(new PutObjectCommand(uploadParams))
     return `${process.env.ASSET_URL}/${cid}`
   } catch (err) {
@@ -41,7 +41,17 @@ const createLocalCopy = async (cid: string) => {
 }
 
 export const listenToAssetContract =
-  ({ tezos, getTokenByTokenId, insertToken, log }: { tezos: TezosToolkit; getTokenByTokenId: any; insertToken: any, log: Log }) =>
+  ({
+    tezos,
+    getTokenByTokenId,
+    insertToken,
+    log,
+  }: {
+    tezos: TezosToolkit
+    getTokenByTokenId: any
+    insertToken: any
+    log: Log
+  }) =>
   async () => {
     tezos.setStreamProvider(
       tezos.getFactory(PollingSubscribeProvider)({

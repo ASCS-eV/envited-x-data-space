@@ -4,10 +4,10 @@ import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
+import { formatIpfsUri } from '../../common/utils'
 import { mintToken, tezos } from '../../common/web3'
 import { getAssetMintParams, updateStatus, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
 import { ShowSpecificBeaconWallets } from './Mint.utils'
-import { formatIpfsUri } from '../../common/utils'
 
 interface MintProps {
   assetId: string

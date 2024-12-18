@@ -5,6 +5,7 @@ import { drizzle } from 'drizzle-orm/aws-data-api/pg'
 
 import { connectDb } from '../common/database'
 import * as schema from '../common/database/schema'
+import { log } from '../common/logger'
 import { listenToAssetContract } from './listener'
 import { getTokenByTokenId, insertToken } from './persistence'
 
@@ -33,4 +34,5 @@ listenToAssetContract({
   tezos: Tezos,
   getTokenByTokenId: getTokenByTokenId({ database: connection }),
   insertToken: insertToken({ database: connection }),
+  log,
 })()

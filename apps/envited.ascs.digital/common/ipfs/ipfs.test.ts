@@ -15,13 +15,9 @@ describe('common/ipfs/ipfs', () => {
       group: groupStub,
     })
 
-    const convertStub = jest.fn().mockResolvedValue('IPFS URL')
     const pinataStub = {
       upload: {
         json: jsonStub,
-      },
-      gateways: {
-        convert: convertStub,
       },
     } as any
 
@@ -31,11 +27,10 @@ describe('common/ipfs/ipfs', () => {
       group: 'GROUP_ID',
     })
 
-    expect(result).toEqual('IPFS URL')
+    expect(result).toEqual('IPFS HASH')
     expect(jsonStub).toHaveBeenCalledWith({ name: 'asset' })
     expect(addMetadataStub).toHaveBeenCalledWith({ name: 'FILENAME' })
     expect(groupStub).toHaveBeenCalledWith('GROUP_ID')
-    expect(convertStub).toHaveBeenCalledWith('IPFS HASH')
   })
   it('should upload the asset token metadata to IPFS as expected without a group', async () => {
     // when ... we want to upload the asset token metadata to IPFS
@@ -47,23 +42,18 @@ describe('common/ipfs/ipfs', () => {
       addMetadata: addMetadataStub,
     })
 
-    const convertStub = jest.fn().mockResolvedValue('IPFS URL')
     const pinataStub = {
       upload: {
         json: jsonStub,
-      },
-      gateways: {
-        convert: convertStub,
       },
     } as any
 
     const result = await SUT.uploadJson(pinataStub)({ data: { name: 'asset' }, filename: 'FILENAME' })
 
-    expect(result).toEqual('IPFS URL')
+    expect(result).toEqual('IPFS HASH')
     expect(jsonStub).toHaveBeenCalledWith({ name: 'asset' })
     expect(addMetadataStub).toHaveBeenCalledWith({ name: 'FILENAME' })
     expect(groupStub).not.toHaveBeenCalled()
-    expect(convertStub).toHaveBeenCalledWith('IPFS HASH')
   })
   it('should create a group as expected', async () => {
     // when ... we want to create a group

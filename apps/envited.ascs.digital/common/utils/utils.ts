@@ -10,12 +10,14 @@ import {
   head,
   join,
   juxt,
+  last,
   map,
   pathOr,
   pipe,
   propSatisfies,
   reduce,
   replace,
+  split,
   tail,
   take,
   takeLast,
@@ -106,3 +108,11 @@ export const formatTokenAttributes = (data: any) => {
 
   return result
 }
+
+export const formatIpfsUri = (CID: string) => `ipfs://${CID}`
+
+export const formatAssetUri = (CID: string) => `https://assets.envited-x.net/${CID}`
+
+export const formatMetadataUri = (CID: string) => `https://metadata.envited-x.net/${CID}`
+
+export const extractFilenameFromPath = (path: string) => last(split('/')(path))

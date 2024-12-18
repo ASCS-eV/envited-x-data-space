@@ -18,7 +18,7 @@ import {
   toPairs,
 } from 'ramda'
 
-export const convertIpfsUrlToGateway = (ipfsUrl: string, gateway = 'https://ipfs.io') => {
+export const convertIpfsUrlToGateway = (ipfsUrl: string, gateway = 'https://ipfs.io', gatewayToken = '') => {
   if (startsWith('ipfs://')(ipfsUrl)) {
     return { url: replace('ipfs://', `${gateway}/ipfs/`)(ipfsUrl), filename: replace('ipfs://', '')(ipfsUrl) }
   }

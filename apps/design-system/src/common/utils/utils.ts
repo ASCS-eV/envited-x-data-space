@@ -87,3 +87,5 @@ export const chunkString = splitEvery
 export const verifiedValidAddress = equals(3)
 
 export const bytesToMegaBytes = pipe(flip(divide)(multiply(1024, 1024)), x => x.toFixed(2))
+
+export const formatIpfsUri = (CID: string) => `ipfs://${CID}`

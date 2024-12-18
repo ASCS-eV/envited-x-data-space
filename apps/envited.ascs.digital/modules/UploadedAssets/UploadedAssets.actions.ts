@@ -7,8 +7,7 @@ import { internalServerErrorError } from '../../common/utils'
 
 export async function uploadAssetTokenMetadata(id: string) {
   try {
-    const fileLocation = await uploadTokenMetadata(id)
-    return fileLocation
+    return uploadTokenMetadata(id)
   } catch (e) {
     log.error(e)
     throw internalServerErrorError()

@@ -3,33 +3,45 @@ import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 
 import { s3Client } from '../common/aws'
 import { getTokenMetadata } from './tokenMetadata'
-import { convertIpfsUrlToGateway, extractAttributesUri, extractKeyValuePairs, getFileTypeFromBuffer } from './utils'
+import { extractAttributesUri, extractKeyValuePairs } from './utils'
+import { Log } from '../common/logger'
+import { downloadFile } from '../common/ipfs'
+import { replace } from 'ramda'
 
-const createLocalCopy = async (uri: string) => {
-  const { url, filename } = convertIpfsUrlToGateway(uri)
-
-  const response = await fetch(url)
-  const arrayBuffer = await response.arrayBuffer()
-  const fileType = await getFileTypeFromBuffer(arrayBuffer)
-
-  const uploadParams = {
-    Bucket: process.env.ASSET_BUCKET_NAME,
-    Key: filename,
-    Body: Buffer.from(arrayBuffer),
-    ContentType: fileType ? fileType.mime : 'application/octet-stream',
-    ContentDisposition: 'inline',
-  }
-
+const createLocalCopy = async (cid: string) => {
   try {
+    const { data, contentType } = await downloadFile(cid)
+    let body = null
+    if (!data) {
+      throw new Error('No data')
+    }
+
+    if (data instanceof Blob) {
+      const arrayBuffer = await data.arrayBuffer()
+      body = Buffer.from(arrayBuffer)
+    } else if (typeof data === 'string') {
+      body = data
+    } else {
+      body = JSON.stringify(data)
+    }
+
+    const uploadParams = {
+      Bucket: process.env.ASSET_BUCKET_NAME,
+      Key: cid,
+      Body: body,
+      ContentType: contentType ? contentType : 'application/octet-stream',
+      ContentDisposition: 'inline',
+    }
+  
     await s3Client.send(new PutObjectCommand(uploadParams))
-    return `${process.env.ASSET_URL}/${filename}`
+    return `${process.env.ASSET_URL}/${cid}`
   } catch (err) {
     console.log('Error', err)
   }
 }
 
 export const listenToAssetContract =
-  ({ tezos, getTokenByTokenId, insertToken }: { tezos: TezosToolkit; getTokenByTokenId: any; insertToken: any }) =>
+  ({ tezos, getTokenByTokenId, insertToken, log }: { tezos: TezosToolkit; getTokenByTokenId: any; insertToken: any, log: Log }) =>
   async () => {
     tezos.setStreamProvider(
       tezos.getFactory(PollingSubscribeProvider)({
@@ -57,17 +69,18 @@ export const listenToAssetContract =
           return
         }
 
-        console.log('Registering token ', tokenId)
-
+        log.info('Registering token ', tokenId)
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
-        const localDisplayUri = await createLocalCopy(tokenMetadata?.displayUri || '')
+        log.info('Token metadata', tokenMetadata)
+        const localDisplayUri = await createLocalCopy(replace('ipfs://', '')(tokenMetadata?.displayUri || ''))
+        log.info('Local display URI', localDisplayUri)
         const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
-        console.log('Attributes URI', attributesUri)
-        const manifest = await fetch(convertIpfsUrlToGateway(attributesUri as string).url).then(res => res.json())
-        console.log('Manifest', manifest)
+        log.info('Attributes URI', attributesUri)
+        const manifest = await downloadFile(replace('ipfs://', '')(attributesUri as string))
+        log.info('Manifest', manifest)
         const attributes = extractKeyValuePairs(manifest)
-        console.log('Attributes', attributes)
+        log.info('Attributes', attributes)
         // Save token to DB
         return insertToken({
           hash,
@@ -92,8 +105,8 @@ export const listenToAssetContract =
           tokenMetadata,
         })
       } catch (e) {
-        console.log('Registering token failed')
-        console.log(e)
+        log.error('Registering token failed')
+        log.error(e)
       }
     })
   }

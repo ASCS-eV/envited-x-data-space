@@ -7,6 +7,7 @@ import { useNotification } from '../../common/notifications'
 import { mintToken, tezos } from '../../common/web3'
 import { getAssetMintParams, updateStatus, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
 import { ShowSpecificBeaconWallets } from './Mint.utils'
+import { formatIpfsUri } from '../../common/utils'
 
 interface MintProps {
   assetId: string
@@ -22,9 +23,9 @@ export const Mint: FC<MintProps> = ({ assetId }) => {
     const account = await wallet?.client.getActiveAccount()
 
     if (account) {
-      const fileLocation = await uploadAssetTokenMetadata(id)
+      const cid = await uploadAssetTokenMetadata(id)
       const mintParams = await getAssetMintParams(id)
-      const operation = await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: fileLocation })
+      const operation = await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: formatIpfsUri(cid) })
       await operation
         ?.confirmation(3)
         .then(async () => {

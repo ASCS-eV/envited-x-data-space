@@ -1,8 +1,8 @@
 import { equals, evolve, find, includes, map, pipe, propEq, propOr, tail } from 'ramda'
 
-import { formatAssetUri, formatIpfsUri, formatMetadataUri } from './createTokenMetadata.utils'
 import { AccessRole, ExtractedFileWithCID, ManifestLink } from './types'
 import { formatManifestLinkPath, isRemoteUrl } from './validateAndCreateMetadata.utils'
+import { formatAssetUri, formatIpfsUri, formatMetadataUri } from '../utils'
 
 export const createModifiedManifest = ({
   assetCID,
@@ -33,14 +33,13 @@ export const modifyManifestLink =
         link['manifest:accessRole'],
         link['manifest:path']['@value'],
         link['manifest:type'],
-        link['manifest:format'],
       ),
     },
   })
 
 export const formatManifestUri =
   (assetCID: string, domainMetadataCID: string, visualizationFiles: ExtractedFileWithCID[]) =>
-  (accessRole: AccessRole, path: string, type: string, format: string) => {
+  (accessRole: AccessRole, path: string, type: string) => {
     if (includes(type, ['visualization']) && equals(accessRole)(AccessRole.publicUser)) {
       return pipe(
         find(propEq(formatManifestLinkPath(path), 'path')),

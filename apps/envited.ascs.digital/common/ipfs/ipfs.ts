@@ -1,4 +1,5 @@
 import type { PinataSDK } from 'pinata-web3'
+import { prop } from 'ramda';
 import { Readable } from 'stream'
 
 export const uploadJson =
@@ -9,13 +10,13 @@ export const uploadJson =
         .json(data)
         .addMetadata({ name: filename })
         .group(group)
-        .then(data => pinata.gateways.convert(data.IpfsHash))
+        .then(prop('IpfsHash'))
     }
 
     return pinata.upload
       .json(data)
       .addMetadata({ name: filename })
-      .then(data => pinata.gateways.convert(data.IpfsHash))
+      .then(prop('IpfsHash'))
   }
 
 export const uploadFile =
@@ -35,13 +36,13 @@ export const uploadFile =
         .stream(readable)
         .addMetadata({ name: filename })
         .group(group)
-        .then(data => pinata.gateways.convert(data.IpfsHash))
+        .then(prop('IpfsHash'))
     }
 
     return pinata.upload
       .stream(readable)
       .addMetadata({ name: filename })
-      .then(data => pinata.gateways.convert(data.IpfsHash))
+      .then(prop('IpfsHash'))
   }
 
 export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {
@@ -51,3 +52,5 @@ export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {
 
   return group.id
 }
+
+export const download = (pinata: PinataSDK) => pinata.gateways.get

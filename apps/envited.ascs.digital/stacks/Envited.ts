@@ -209,6 +209,7 @@ export default function Envited({ stack }: StackContext) {
       PINATA_SECRET: process.env.PINATA_SECRET!,
       PINATA_JWT: process.env.PINATA_JWT!,
       PINATA_GATEWAY: process.env.PINATA_GATEWAY!,
+      PINATA_GATEWAY_KEY: process.env.PINATA_GATEWAY_KEY!,
       ASSETS_CONTRACT: process.env.ASSETS_CONTRACT!,
       NEXT_PUBLIC_WEB3_RPC_URL: process.env.NEXT_PUBLIC_WEB3_RPC_URL!,
     },

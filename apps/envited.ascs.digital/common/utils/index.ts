@@ -28,4 +28,8 @@ export {
   isTrustAnchor,
   truncateDID,
   isServer,
+  formatIpfsUri,
+  formatAssetUri,
+  formatMetadataUri,
+  extractFilenameFromPath,
 } from './utils'

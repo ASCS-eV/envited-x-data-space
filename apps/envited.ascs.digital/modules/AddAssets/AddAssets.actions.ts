@@ -3,13 +3,12 @@
 import { revalidatePath } from 'next/cache'
 import { isNil } from 'ramda'
 
-import { createFilename } from '../../common/asset/validateAndCreateMetadata.utils'
 import { getServerSession } from '../../common/auth'
-import { getAssetUploadUrl } from '../../common/aws'
+import { getAssetUploadUrl, getUniqueFilename } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
 import { insertAsset } from '../../common/serverActions'
-import { badRequestError, formatError, internalServerErrorError, unauthorizedError } from '../../common/utils'
+import { badRequestError, formatError, internalServerErrorError, slugify, unauthorizedError } from '../../common/utils'
 
 export async function addAssetsForm(formData: FormData) {
   const assets = formData.getAll('assets') as File[]
@@ -30,19 +29,19 @@ export async function addAssetsForm(formData: FormData) {
 
     const result = assets.map(async (asset: File) => {
       const arrayBuffer = Buffer.from(await asset.arrayBuffer())
-      const cid = await createFilename(arrayBuffer)
-      const signedUrl = await getAssetUploadUrl(cid)
+      const uniqueFilename = getUniqueFilename(slugify(asset.name), asset.name)
+      const signedUrl = await getAssetUploadUrl(uniqueFilename)
 
       const uploadResult = await fetch(signedUrl, {
         body: arrayBuffer,
         method: 'PUT',
         headers: {
           'Content-Type': asset.type,
-          'Content-Disposition': `attachment; filename="${cid}"`,
+          'Content-Disposition': `attachment; filename="${uniqueFilename}"`,
         },
       })
 
-      await insertAsset(cid)
+      await insertAsset(uniqueFilename)
 
       return uploadResult
     })

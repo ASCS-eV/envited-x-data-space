@@ -5,9 +5,9 @@ import { getMintParams, updateAssetStatus, uploadTokenMetadata } from '../../com
 import { AssetStatus } from '../../common/types'
 import { internalServerErrorError } from '../../common/utils'
 
-export async function uploadAssetTokenMetadata(id: string) {
+export async function uploadAssetTokenMetadata(cid: string) {
   try {
-    return uploadTokenMetadata(id)
+    return uploadTokenMetadata(cid)
   } catch (e) {
     log.error(e)
     throw internalServerErrorError()

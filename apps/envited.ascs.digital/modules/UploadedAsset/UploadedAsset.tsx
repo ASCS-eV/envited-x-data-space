@@ -23,8 +23,7 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
   const { t } = useTranslation('UploadedAsset')
   const { error, success } = useNotification()
   const [assetStatus, setAssetStatus] = useState<AssetStatus>(asset.status)
-  const session = useSession()
-  console.log('session', session)
+
   useEffect(() => {
     let interval: NodeJS.Timer
 

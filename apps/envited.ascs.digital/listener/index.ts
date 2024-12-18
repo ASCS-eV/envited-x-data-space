@@ -5,10 +5,11 @@ import { drizzle } from 'drizzle-orm/aws-data-api/pg'
 
 import { connectDb } from '../common/database'
 import * as schema from '../common/database/schema'
+import { downloadFile } from '../common/ipfs'
 import { log } from '../common/logger'
 import { listenToAssetContract } from './listener'
 import { getTokenByTokenId, insertToken } from './persistence'
-import { downloadFile } from '../common/ipfs'
+import { PinataSDK } from 'pinata-web3'
 
 const Tezos = new TezosToolkit(process.env.NEXT_PUBLIC_WEB3_RPC_URL || 'https://ghostnet.ecadinfra.com')
 const db = async () => {
@@ -39,7 +40,14 @@ const connection = await db()
 // })()
 
 const test = async () => {
-  const f = await downloadFile("bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu")
+  const pinata = new PinataSDK({
+    pinataJwt: `${process.env.PINATA_JWT}`,
+    pinataGateway: `${process.env.PINATA_GATEWAY}`,
+    pinataGatewayKey: `${process.env.PINATA_GATEWAY_KEY}`,
+  })
+
+  const f = await pinata.gateways.get('bafkreic6ju7honlocx2tztv6bv72owunxiva2y4c7vlreai7iqdx56jgva')
+  // const f = await downloadFile('bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu')
   console.log(f)
 }
 

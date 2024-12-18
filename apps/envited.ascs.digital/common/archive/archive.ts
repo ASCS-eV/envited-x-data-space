@@ -48,3 +48,17 @@ export const _readContentFromJsonFile =
     read(file).then(JSON.parse)
 
 export const readContentFromJsonFile = _readContentFromJsonFile({ read })
+
+export const _countAmountOfFilesInZip =
+  ({ ZipReader }: { ZipReader: any }) =>
+  async (file: File) => {
+    const reader = new ZipReader(new BlobReader(file))
+
+    return reader
+      .getEntries()
+      .then((entries: Entry[]) => entries.filter(entry => !entry.directory).length)
+      .catch(() => undefined)
+      .finally(() => reader.close())
+  }
+
+export const countAmountOfFilesInZip = _countAmountOfFilesInZip({ ZipReader })

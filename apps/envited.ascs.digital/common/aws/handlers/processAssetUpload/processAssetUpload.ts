@@ -107,7 +107,6 @@ export const _main =
             log.info(`Uploading ${path} to IPFS`)
             return createGroup(metadata.minter).then(async group => {
               log.info(`Uploading ${path} to IPFS with group ${group}`)
-              console.log(process.env.PINATA_JWT, process.env.PINATA_GATEWAY, process.env.PINATA_GATEWAY_KEY)
               const file = await uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
               log.info(file)
             })

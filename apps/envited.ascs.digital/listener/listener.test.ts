@@ -1,7 +1,8 @@
+import { fileTypeFromBuffer } from 'file-type'
+
 import * as SUT from './listener'
 
 jest.mock('file-type')
-import { fileTypeFromBuffer } from 'file-type'
 
 describe('createLocalCopy', () => {
   beforeEach(() => {
@@ -11,11 +12,11 @@ describe('createLocalCopy', () => {
 
   it.only('should download a file from IPFS and upload it to S3', async () => {
     // Setup your mock as needed for specific tests
-    (fileTypeFromBuffer as jest.Mock).mockResolvedValue({
+    ;(fileTypeFromBuffer as jest.Mock).mockResolvedValue({
       ext: 'png',
-      mime: 'image/png'
+      mime: 'image/png',
     })
-    
+
     const cid = 'CID'
     const data = 'DATA'
     const contentType = 'CONTENT_TYPE'

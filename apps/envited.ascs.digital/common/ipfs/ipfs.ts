@@ -35,7 +35,7 @@ export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {
   const group = await pinata.groups.create({
     name: groupName,
   })
-
+  console.log(group)
   return group.id
 }
 

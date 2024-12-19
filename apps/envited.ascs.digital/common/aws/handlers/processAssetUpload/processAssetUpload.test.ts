@@ -100,7 +100,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(validateAndCreateMetadataStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'ASSET_CID')
       expect(validateAndCreateMetadataStub).toHaveBeenCalledTimes(1)
       expect(writeFileStub).toHaveBeenCalledTimes(4)
-      expect(deleteFileStub).toHaveBeenCalledTimes(1)
+      expect(deleteFileStub).toHaveBeenCalledTimes(0)
       expect(updateAssetStatusStub).toHaveBeenCalledWith(
         'ASSET_CID',
         'OBJECT_KEY',
@@ -110,7 +110,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         },
         'MODIFIED_MANIFEST',
       )
-      expect(copyFileStub).toHaveBeenCalledTimes(1)
+      expect(copyFileStub).toHaveBeenCalledTimes(0)
       expect(createGroupStub).toHaveBeenCalledWith('MINTER_ADDRESS')
       expect(uploadDoneStub).toHaveBeenCalledWith()
       expect(uploadFileStub).toHaveBeenCalledWith({ arrayBuffer: 'FILE_BUFFER', filename: 'PATH', group: 'GROUP_NAME' })

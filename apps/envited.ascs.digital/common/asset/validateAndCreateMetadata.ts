@@ -257,7 +257,7 @@ export const _validateAndCreateMetadata =
         cid: assetCID,
         fileSize: byteArray.length,
       }
-
+      console.log('visualizationFiles', visualizationFiles)
       const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,
@@ -292,6 +292,8 @@ export const _validateAndCreateMetadata =
         minter: extractAddressFromDid(issuer.user.id),
         rights: rightsObject,
       })
+
+      console.log('TokenMetadata', tokenMetadata)
 
       return {
         conforms,

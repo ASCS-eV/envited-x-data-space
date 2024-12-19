@@ -105,10 +105,11 @@ export const _main =
         const pinataIpfsPromises = visualizationFiles.map(
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
             log.info(`Uploading ${path} to IPFS`)
-            const group = await createGroup(metadata.minter)
-            console.log(group)
             let ipfsHash = ''
+            console.log(arrayBuffer, metadata.minter)
             try {
+              const group = await createGroup(metadata.minter)
+              console.log(group)
               ipfsHash = await uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
               console.log(ipfsHash)
             } catch (err) {

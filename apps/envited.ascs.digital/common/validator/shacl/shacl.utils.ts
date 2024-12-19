@@ -1,11 +1,13 @@
 import { DatasetCore, Quad } from '@rdfjs/types'
 import rdf, { DefaultEnv } from '@zazuko/env'
 import { Dataset } from '@zazuko/env/lib/Dataset'
+import { flip, join, map, pipe, subtract } from 'ramda'
 import rdfParser, { RdfParser } from 'rdf-parse'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Readable } from 'stream'
 
-import { SCHEMA_MAP } from './shacl.constants'
+import { ERRORS } from '../../constants'
+import { AMOUNT_OF_UNDEFINED_FILES_IN_MANIFEST, SCHEMA_MAP } from './shacl.constants'
 import { ContentType, ValidationSchema } from './shacl.types'
 
 export const validateShacl = (shapes: DatasetCore<Quad, Quad>) => async (data: DatasetCore<Quad, Quad>) => {
@@ -56,3 +58,12 @@ export const loadDataset = _loadDataset({
   createReadableStream,
   parseStreamToDataset,
 })
+
+export const formatFilesErrorMessage = (errors: { error: string }[]) =>
+  pipe(
+    map(({ error }: { error: string }) => error),
+    join(', '),
+    (x: string) => `${ERRORS.FILES_NOT_FOUND} - ${x}`,
+  )(errors)
+
+export const subtractManifestAndReadMeFiles = flip(subtract)(AMOUNT_OF_UNDEFINED_FILES_IN_MANIFEST)

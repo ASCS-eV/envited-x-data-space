@@ -47,6 +47,12 @@ export const createFilename = _createFilename({
   CID,
 })
 
+export const jsonToUint8Array = (json: object): Uint8Array => {
+  const jsonString = JSON.stringify(json)
+  const buffer = Buffer.from(jsonString)
+  return new Uint8Array(buffer)
+}
+
 export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
   extractFromByteArray(byteArray, filename).then(read)
 
@@ -142,7 +148,7 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 export const _getFilenameFromFile =
   ({ createFilename }: { createFilename: (byteArray: Uint8Array) => Promise<string> }) =>
   async (path: string, type: string, arrayBuffer: ArrayBuffer): Promise<ExtractedFileWithCID> => ({
-    cid: await createFilename(Buffer.from(arrayBuffer)),
+    cid: await createFilename(new Uint8Array(arrayBuffer)),
     path,
     type,
     arrayBuffer,

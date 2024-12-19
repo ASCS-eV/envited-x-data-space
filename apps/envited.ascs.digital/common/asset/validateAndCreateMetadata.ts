@@ -19,6 +19,7 @@ import {
   getDomainMetadataPath,
   getFileFromByteArray,
   getFilesAsPathAndByteArrayFromManifest,
+  jsonToUint8Array,
 } from './utils'
 
 export const _getShaclSchemaAndValidate =
@@ -230,7 +231,7 @@ export const _validateAndCreateMetadata =
     try {
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
       const assetCID = await createFilename(byteArray)
-      const domainMetadataCID = await createFilename(Buffer.from(JSON.stringify(data.domainMetadata)))
+      const domainMetadataCID = await createFilename(jsonToUint8Array(data.domainMetadata))
       const connection = await db()
       const user = await connection.getUserById(asset.userId)
       if (!user) {
@@ -250,7 +251,7 @@ export const _validateAndCreateMetadata =
         visualizationFiles,
       })(data.manifest)
       const modifiedManifestBuffer = Buffer.from(JSON.stringify(modifiedManifest))
-      const modifiedManifestCID = await createFilename(modifiedManifestBuffer)
+      const modifiedManifestCID = await createFilename(jsonToUint8Array(modifiedManifest))
 
       const assetObject = {
         cid: assetCID,

@@ -105,8 +105,10 @@ export const _main =
         const pinataIpfsPromises = visualizationFiles.map(
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
             log.info(`Uploading ${path} to IPFS`)
-            return createGroup(metadata.minter).then(group => {
-              return uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
+            return createGroup(metadata.minter).then(async group => {
+              log.info(`Uploading ${path} to IPFS with group ${group}`)
+              const file = await uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
+              log.info(file)
             })
           },
         )
@@ -128,7 +130,7 @@ export const _main =
           },
         )
 
-        Promise.all(writeFilesToMetadataPromises)
+        await Promise.all(writeFilesToMetadataPromises)
       }
 
       // Update stored asset in DB

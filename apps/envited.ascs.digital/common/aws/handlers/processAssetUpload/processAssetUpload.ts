@@ -101,11 +101,11 @@ export const _main =
         return
       }
       // Copy asset ZIP file to S3 with CID as name
-      await copyFile({
-        Bucket,
-        CopySource: `${Bucket}/${Key}`,
-        Key: assetCID,
-      })
+      // await copyFile({
+      //   Bucket,
+      //   CopySource: `${Bucket}/${Key}`,
+      //   Key: assetCID,
+      // })
       console.log('3. copyFile', assetCID)
 
       // Handle files for registered users
@@ -186,7 +186,7 @@ export const _main =
       console.log('7. updateAsset')
 
       // Delete uploaded asset with the "old" name from S3
-      await deleteFile({ Bucket, Key })
+      // await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)
       throw err

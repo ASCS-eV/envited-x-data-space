@@ -57,8 +57,8 @@ export const DeleteDialogConfirm: FC<{ id: string; disabled: boolean }> = ({ id,
         {t('[Button] delete')}
       </IconButtonWithTooltip>
       <Dialog
-        heading={t('[Heading] cancel asset')}
-        description={t('[Description] cancel asset')}
+        heading={t('[Heading] delete asset')}
+        description={t('[Description] delete asset')}
         isOpen={showDialog}
         setShow={setShowDialog}
         action={

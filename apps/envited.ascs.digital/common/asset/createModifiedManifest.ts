@@ -2,7 +2,7 @@ import { equals, evolve, find, includes, map, pipe, propEq, propOr, tail } from 
 
 import { formatAssetUri, formatIpfsUri, formatMetadataUri } from '../utils'
 import { AccessRole, ExtractedFileWithCID, ManifestLink } from './types'
-import { formatManifestLinkPath, isRemoteUrl } from './validateAndCreateMetadata.utils'
+import { formatManifestLinkPath, isRemoteUrl } from './utils'
 
 export const createModifiedManifest = ({
   assetCID,

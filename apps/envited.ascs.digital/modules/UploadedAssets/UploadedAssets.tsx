@@ -24,32 +24,24 @@ export const UploadedAssets: FC<UploadedAssetsProps> = ({ assets }) => {
       </div>
       <div className="-mx-4 mt-6 sm:mx-0 sm:rounded-lg">
         <table className="min-w-full divide-y divide-gray-300">
-          <thead>
-            <tr>
-              <th scope="col" className="py-3.5 text-left text-sm font-semibold text-gray-900">
-                {t('[Label] asset')}
-              </th>
-              <th
-                scope="col"
-                className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
-              >
-                {t('[Label] type')}
-              </th>
-              <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                <span className="sr-only">{t('[Label] select')}</span>
-              </th>
-            </tr>
-          </thead>
+          <tr>
+            <th scope="col" className="py-3.5 text-left text-sm font-semibold text-gray-900">
+              {t('[Label] name')}
+            </th>
+            <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
+              {t('[Label] created at')}
+            </th>
+            <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
+              {t('[Label] status')}
+            </th>
+            <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6 text-sm font-semibold text-gray-900">
+              <span className="sr-only">{t('[Label] select')}</span>
+            </th>
+          </tr>
           <tbody>
-            {assets.map((asset, assetIdx) => {
-              const metadata = !isEmpty(asset.metadata)
-                ? typeof asset.metadata === 'string'
-                  ? JSON.parse(asset.metadata)
-                  : asset.metadata
-                : {}
-
-              return <UploadedAsset key={asset.id} asset={asset} assetIdx={assetIdx} metadata={metadata} />
-            })}
+            {assets.map((asset, assetIdx) => (
+              <UploadedAsset key={asset.id} asset={asset} assetIdx={assetIdx} />
+            ))}
           </tbody>
         </table>
       </div>

@@ -1,9 +1,4 @@
-import {
-  CopyObjectCommandOutput,
-  DeleteObjectCommandOutput,
-  GetObjectCommandOutput,
-  PutObjectCommandInput,
-} from '@aws-sdk/client-s3'
+import { DeleteObjectCommandOutput, GetObjectCommandOutput, PutObjectCommandInput } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
 import { isNil, last, split } from 'ramda'
@@ -11,7 +6,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { ExtractedFileWithCID, ManifestExtractedFiles } from '../../../asset/types'
-import { copyFile, deleteFile, readFile, writeFile } from '../../../aws'
+import { deleteFile, readFile, writeFile } from '../../../aws'
 import { createGroup, uploadFile } from '../../../ipfs'
 import { log } from '../../../logger'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
@@ -20,7 +15,6 @@ export const _main =
   ({
     readFile,
     writeFile,
-    copyFile,
     deleteFile,
     validateAndCreateMetadata,
     getAsset,
@@ -30,15 +24,6 @@ export const _main =
   }: {
     readFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
     writeFile: (params: PutObjectCommandInput) => Upload
-    copyFile: ({
-      Bucket,
-      CopySource,
-      Key,
-    }: {
-      Bucket: string
-      CopySource: string
-      Key: string
-    }) => Promise<CopyObjectCommandOutput | undefined>
     deleteFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<DeleteObjectCommandOutput | undefined>
     validateAndCreateMetadata: (
       byteArray: Uint8Array,
@@ -97,32 +82,9 @@ export const _main =
 
         return
       }
-      // Copy asset ZIP file to S3 with CID as name
-      await copyFile({
-        Bucket,
-        CopySource: `${Bucket}/${Key}`,
-        Key: assetCID,
-      })
 
       // Handle files for registered users
-      const { owner, registeredUser } = files
-
-      if (owner) {
-        const writeFilesToAssetPromises = owner.map(
-          async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
-            const writeToAsset = writeFile({
-              Bucket,
-              Key: `${assetCID}/${path}`,
-              Body: Buffer.from(arrayBuffer),
-              ContentEncoding: 'base64',
-            })
-
-            return writeToAsset.done()
-          },
-        )
-
-        Promise.all(writeFilesToAssetPromises)
-      }
+      const { registeredUser } = files
 
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(
@@ -170,9 +132,6 @@ export const _main =
 
       // Update stored asset in DB
       await updateAsset(assetCID, Key, AssetStatus.pending, metadata, modifiedManifest)
-
-      // Delete uploaded asset with the "old" name from S3
-      await deleteFile({ Bucket, Key })
     } catch (err) {
       console.log(err)
       throw err
@@ -182,7 +141,6 @@ export const _main =
 export const main = _main({
   readFile,
   writeFile,
-  copyFile,
   deleteFile,
   validateAndCreateMetadata,
   getAsset,

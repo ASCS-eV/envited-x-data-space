@@ -96,7 +96,7 @@ export const insertTokenTx =
         displayUri,
         tokenMetadata,
         createdAt: new Date(),
-        modifiedAt: new Date(),
+        updatedAt: new Date(),
       })
       .returning()
 

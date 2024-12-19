@@ -1,8 +1,8 @@
 import manifest from '../fixtures/manifest.json'
 import manifestRemoteAssetData from '../fixtures/manifestRemoteAssetData.json'
-import * as SUT from './validateAndCreateMetadata.utils'
+import * as SUT from './utils'
 
-describe('common/asset/validateAndCreateMetadata.utils', () => {
+describe('common/asset/utils', () => {
   describe('createFilename', () => {
     it('should create a filename', async () => {
       const byteArray = 'BYTE_ARRAY'

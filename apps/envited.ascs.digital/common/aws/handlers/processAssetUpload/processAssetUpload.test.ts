@@ -59,7 +59,6 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const writeFileStub = jest.fn().mockReturnValue({
         done: uploadDoneStub,
       }) as any
-      const copyFileStub = jest.fn().mockResolvedValue('COPIED') as any
       const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
       const getAssetStatusStub = jest.fn().mockReturnValue('ASSET_CID') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
@@ -86,7 +85,6 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const result = await SUT._main({
         readFile: readFileStub,
         writeFile: writeFileStub,
-        copyFile: copyFileStub,
         deleteFile: deleteFileStub,
         validateAndCreateMetadata: validateAndCreateMetadataStub,
         getAsset: getAssetStatusStub,
@@ -99,8 +97,8 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(readFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(validateAndCreateMetadataStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'ASSET_CID')
       expect(validateAndCreateMetadataStub).toHaveBeenCalledTimes(1)
-      expect(writeFileStub).toHaveBeenCalledTimes(5)
-      expect(deleteFileStub).toHaveBeenCalledTimes(1)
+      expect(writeFileStub).toHaveBeenCalledTimes(4)
+      expect(deleteFileStub).toHaveBeenCalledTimes(0)
       expect(updateAssetStatusStub).toHaveBeenCalledWith(
         'ASSET_CID',
         'OBJECT_KEY',
@@ -110,7 +108,6 @@ describe('common/aws/handlers/processAssetUpload', () => {
         },
         'MODIFIED_MANIFEST',
       )
-      expect(copyFileStub).toHaveBeenCalledTimes(1)
       expect(createGroupStub).toHaveBeenCalledWith('MINTER_ADDRESS')
       expect(uploadDoneStub).toHaveBeenCalledWith()
       expect(uploadFileStub).toHaveBeenCalledWith({ arrayBuffer: 'FILE_BUFFER', filename: 'PATH', group: 'GROUP_NAME' })
@@ -143,7 +140,6 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const writeFileStub = jest.fn().mockReturnValue({
         done: uploadDoneStub,
       }) as any
-      const copyFileStub = jest.fn().mockResolvedValue('COPIED') as any
       const deleteFileStub = jest.fn().mockReturnValue('SHACL_DATA') as any
       const getAssetStatusStub = jest.fn().mockReturnValue('ASSET_CID') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
@@ -170,7 +166,6 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const result = await SUT._main({
         readFile: readFileStub,
         writeFile: writeFileStub,
-        copyFile: copyFileStub,
         deleteFile: deleteFileStub,
         validateAndCreateMetadata: validateShaclDataWithSchemaStub,
         getAsset: getAssetStatusStub,
@@ -187,7 +182,6 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(writeFileStub).toHaveBeenCalledTimes(0)
       expect(deleteFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(uploadDoneStub).not.toHaveBeenCalledWith()
-      expect(copyFileStub).toHaveBeenCalledTimes(0)
       expect(createGroupStub).toHaveBeenCalledTimes(0)
       expect(uploadFileStub).toHaveBeenCalledTimes(0)
     })

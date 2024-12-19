@@ -78,6 +78,8 @@ export const truncate = (length: number) =>
 
 export const truncateDID = truncate(20)
 
+export const truncateCID = truncate(10)
+
 export const isServer = () => typeof window === 'undefined'
 
 export const addUrn = (type: string) => (uuid: string) => `urn:${type}:${uuid}`
@@ -116,3 +118,7 @@ export const formatAssetUri = (CID: string) => `https://assets.envited-x.net/${C
 export const formatMetadataUri = (CID: string) => `https://metadata.envited-x.net/${CID}`
 
 export const extractFilenameFromPath = (path: string) => last(split('/')(path))
+
+export const formatDate = (date: Date) => {
+  return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+}

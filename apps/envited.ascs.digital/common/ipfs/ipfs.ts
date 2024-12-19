@@ -32,17 +32,11 @@ export const uploadFile =
   }
 
 export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {
-  console.log('createGroup', groupName)
-  try {
-    const group = await pinata.groups.create({
-      name: groupName,
-    })
-    console.log('group', group)
-    return group.id
-  } catch (error) {
-    console.log('error', error)
-    return ''
-  }
+  const group = await pinata.groups.create({
+    name: groupName,
+  })
+
+  return group.id
 }
 
 export const download = (pinata: PinataSDK) => pinata.gateways.get

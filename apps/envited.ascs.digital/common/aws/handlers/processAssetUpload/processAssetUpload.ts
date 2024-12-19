@@ -1,8 +1,4 @@
-import {
-  DeleteObjectCommandOutput,
-  GetObjectCommandOutput,
-  PutObjectCommandInput,
-} from '@aws-sdk/client-s3'
+import { DeleteObjectCommandOutput, GetObjectCommandOutput, PutObjectCommandInput } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { S3Handler } from 'aws-lambda'
 import { isNil, last, split } from 'ramda'

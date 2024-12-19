@@ -179,6 +179,7 @@ export const profilesToBusinessCategoriesRelations = relations(profilesToBusines
 export const asset = pgTable('asset', {
   id: uuid('id').defaultRandom().primaryKey(),
   cid: text('cid'),
+  name: text('name'),
   metadata: jsonb('metadata'),
   manifest: jsonb('manifest'),
   status: text('status', { enum: ['processing', 'rejected', 'pending', 'minted', 'completed'] }),
@@ -187,6 +188,8 @@ export const asset = pgTable('asset', {
     .references(() => user.id)
     .notNull(),
   hash: text('hash'),
+  createdAt: timestamp('created_at'),
+  updatedAt: timestamp('modified_at'),
 })
 
 export const token = pgTable('token', {
@@ -210,7 +213,7 @@ export const token = pgTable('token', {
   displayUri: text('display_uri'),
   tokenMetadata: jsonb('token_metadata'),
   createdAt: timestamp('created_at'),
-  modifiedAt: timestamp('modified_at'),
+  updatedAt: timestamp('modified_at'),
 })
 
 export const tokenTag = pgTable('tokenTag', {

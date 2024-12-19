@@ -115,6 +115,17 @@ describe('common/utils', () => {
     })
   })
 
+  describe('truncateCID', () => {
+    it.each([
+      ['QmPwE3TS2hPxvCosUZJyF3RABMdKjT63K9fNroFMtqeEaH', 'QmPwE3TS2h…roFMtqeEaH'],
+      ['', ''],
+    ])('should, with value %s, return %s as expected', (value, result) => {
+      // when ... we provide a value
+      // then ... it should return as expected
+      expect(SUT.truncateCID(value)).toEqual(result)
+    })
+  })
+
   describe('addUrn', () => {
     it.each([
       ['uuid', '1234', 'urn:uuid:1234'],

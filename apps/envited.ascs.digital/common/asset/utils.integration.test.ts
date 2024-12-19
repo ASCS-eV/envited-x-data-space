@@ -1,6 +1,6 @@
-import { createFilename } from './validateAndCreateMetadata.utils'
+import { createFilename } from './utils'
 
-describe('common/asset/validateAndCreateMetadata.utils', () => {
+describe('common/asset/utils', () => {
   describe('createFilename', () => {
     it('should create a valid CID from a byte array', async () => {
       // Create a sample byte array

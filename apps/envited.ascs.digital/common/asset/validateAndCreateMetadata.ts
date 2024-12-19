@@ -20,7 +20,7 @@ import {
   getDomainMetadataPath,
   getFileFromByteArray,
   getFilesAsPathAndByteArrayFromManifest,
-} from './validateAndCreateMetadata.utils'
+} from './utils'
 
 export const _getShaclSchemaAndValidate =
   ({

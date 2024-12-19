@@ -1,5 +1,7 @@
 'use client'
 
+import { IconButtonWithTooltip } from '@envited-x-data-space/design-system'
+import { RocketLaunchIcon } from '@heroicons/react/24/outline'
 import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
@@ -10,9 +12,10 @@ import { ShowSpecificBeaconWallets } from './Mint.utils'
 
 interface MintProps {
   assetId: string
+  disabled: boolean
 }
 
-export const Mint: FC<MintProps> = ({ assetId }) => {
+export const Mint: FC<MintProps> = ({ assetId, disabled }) => {
   const { t } = useTranslation('Mint')
   const { error, success } = useNotification()
 
@@ -40,12 +43,12 @@ export const Mint: FC<MintProps> = ({ assetId }) => {
     }
   }
   return (
-    <button
-      type="button"
-      className="inline-flex items-center rounded-md bg-blue-900 hover:bg-blue-800 px-2.5 py-1.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300"
+    <IconButtonWithTooltip
+      disabled={disabled}
+      icon={<RocketLaunchIcon className="h-4 w-4" aria-hidden="true" />}
       onClick={() => mintAsset(assetId)}
     >
       {t('[Button] mint')}
-    </button>
+    </IconButtonWithTooltip>
   )
 }

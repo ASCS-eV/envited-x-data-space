@@ -21,7 +21,7 @@ export const deleteAsset = (db: DatabaseConnection) => async (id: string) =>
 
 export const insertAsset =
   (db: DatabaseConnection) =>
-  async ({ userId, cid, ownerId }: { userId: string; cid: string; ownerId: string }) =>
+  async ({ userId, cid, ownerId, name }: { userId: string; cid: string; ownerId: string; name: string }) =>
     db
       .insert(asset)
       .values({
@@ -30,6 +30,9 @@ export const insertAsset =
         status: AssetStatus.processing,
         userId,
         owner: ownerId,
+        name,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       })
       .returning()
 

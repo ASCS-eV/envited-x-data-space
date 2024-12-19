@@ -11,7 +11,7 @@ import { forbiddenError, formatError, internalServerErrorError, unauthorizedErro
 
 export const _insert =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
-  async (cid: string) => {
+  async ({ cid, name }: { cid: string; name: string }) => {
     try {
       const session = await getServerSession()
       if (isNil(session)) {
@@ -40,7 +40,7 @@ export const _insert =
         })
       }
 
-      const [result] = await connection.insertAsset({ userId, cid, ownerId: user.issuerId })
+      const [result] = await connection.insertAsset({ userId, cid, name, ownerId: user.issuerId })
       return result
     } catch (error: unknown) {
       log.error(formatError(error))

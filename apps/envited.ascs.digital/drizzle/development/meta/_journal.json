@@ -169,6 +169,20 @@
       "when": 1730808274653,
       "tag": "0023_wide_ted_forrester",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1733496403512,
+      "tag": "0024_perfect_eddie_brock",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1733498428262,
+      "tag": "0025_rapid_rumiko_fujikawa",
+      "breakpoints": true
     }
   ]
 }

@@ -76,6 +76,8 @@ export const truncate = (length: number) =>
 
 export const truncateDID = truncate(20)
 
+export const truncateCID = truncate(10)
+
 export const isServer = () => typeof window === 'undefined'
 
 export const addUrn = (type: string) => (uuid: string) => `urn:${type}:${uuid}`
@@ -105,4 +107,8 @@ export const formatTokenAttributes = (data: any) => {
   }, data)
 
   return result
+}
+
+export const formatDate = (date: Date) => {
+  return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
 }

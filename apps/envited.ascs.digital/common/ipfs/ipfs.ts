@@ -37,13 +37,12 @@ export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {
     const group = await pinata.groups.create({
       name: groupName,
     })
-  
+    console.log('group', group)
     return group.id
   } catch (error) {
     console.log('error', error)
     return ''
   }
-  
 }
 
 export const download = (pinata: PinataSDK) => pinata.gateways.get

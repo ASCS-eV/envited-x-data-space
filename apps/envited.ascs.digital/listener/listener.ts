@@ -1,4 +1,4 @@
-import { PutObjectCommand } from '@aws-sdk/client-s3'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 import { replace } from 'ramda'
 
@@ -8,7 +8,7 @@ import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
 import { extractAttributesUri, extractKeyValuePairs } from './utils'
 
-export const createLocalCopy = async (cid: string) => {
+export const createLocalCopy = ({ s3Client, downloadFile }: { s3Client: S3Client; downloadFile: any }) => async (cid: string) => {
   try {
     const { data, contentType } = await downloadFile(cid)
     let body = null
@@ -83,7 +83,7 @@ export const listenToAssetContract =
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         log.info('Token metadata', tokenMetadata)
-        const localDisplayUri = await createLocalCopy(replace('ipfs://', '')(tokenMetadata?.displayUri || ''))
+        const localDisplayUri = await createLocalCopy({ s3Client, downloadFile })(replace('ipfs://', '')(tokenMetadata?.displayUri || ''))
         log.info('Local display URI', localDisplayUri)
         const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
         log.info('Attributes URI', attributesUri)

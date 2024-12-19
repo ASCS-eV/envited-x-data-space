@@ -108,7 +108,7 @@ export const _main =
             let ipfsHash = ''
             console.log(arrayBuffer, metadata.minter)
             try {
-              console.log("Try")
+              console.log('Try')
               console.log(createGroup)
               const group = await createGroup(metadata.minter)
               console.log(group)

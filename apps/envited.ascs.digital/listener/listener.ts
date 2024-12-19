@@ -8,37 +8,39 @@ import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
 import { extractAttributesUri, extractKeyValuePairs } from './utils'
 
-export const createLocalCopy = ({ s3Client, downloadFile }: { s3Client: S3Client; downloadFile: any }) => async (cid: string) => {
-  try {
-    const { data, contentType } = await downloadFile(cid)
-    let body = null
-    if (!data) {
-      throw new Error('No data')
-    }
+export const createLocalCopy =
+  ({ s3Client, downloadFile }: { s3Client: S3Client; downloadFile: any }) =>
+  async (cid: string) => {
+    try {
+      const { data, contentType } = await downloadFile(cid)
+      let body = null
+      if (!data) {
+        throw new Error('No data')
+      }
 
-    if (data instanceof Blob) {
-      const arrayBuffer = await data.arrayBuffer()
-      body = Buffer.from(arrayBuffer)
-    } else if (typeof data === 'string') {
-      body = data
-    } else {
-      body = JSON.stringify(data)
-    }
+      if (data instanceof Blob) {
+        const arrayBuffer = await data.arrayBuffer()
+        body = Buffer.from(arrayBuffer)
+      } else if (typeof data === 'string') {
+        body = data
+      } else {
+        body = JSON.stringify(data)
+      }
 
-    const uploadParams = {
-      Bucket: process.env.ASSET_BUCKET_NAME,
-      Key: cid,
-      Body: body,
-      ContentType: contentType ? contentType : 'application/octet-stream',
-      ContentDisposition: 'inline',
-    }
+      const uploadParams = {
+        Bucket: process.env.ASSET_BUCKET_NAME,
+        Key: cid,
+        Body: body,
+        ContentType: contentType ? contentType : 'application/octet-stream',
+        ContentDisposition: 'inline',
+      }
 
-    await s3Client.send(new PutObjectCommand(uploadParams))
-    return `${process.env.ASSET_URL}/${cid}`
-  } catch (err) {
-    console.log('Error', err)
+      await s3Client.send(new PutObjectCommand(uploadParams))
+      return `${process.env.ASSET_URL}/${cid}`
+    } catch (err) {
+      console.log('Error', err)
+    }
   }
-}
 
 export const listenToAssetContract =
   ({
@@ -83,7 +85,9 @@ export const listenToAssetContract =
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         log.info('Token metadata', tokenMetadata)
-        const localDisplayUri = await createLocalCopy({ s3Client, downloadFile })(replace('ipfs://', '')(tokenMetadata?.displayUri || ''))
+        const localDisplayUri = await createLocalCopy({ s3Client, downloadFile })(
+          replace('ipfs://', '')(tokenMetadata?.displayUri || ''),
+        )
         log.info('Local display URI', localDisplayUri)
         const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
         log.info('Attributes URI', attributesUri)

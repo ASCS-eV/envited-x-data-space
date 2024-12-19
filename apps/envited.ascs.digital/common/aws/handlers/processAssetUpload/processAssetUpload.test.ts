@@ -99,7 +99,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(readFileStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
       expect(validateAndCreateMetadataStub).toHaveBeenCalledWith('ASSET_BYTE_ARRAY', 'ASSET_CID')
       expect(validateAndCreateMetadataStub).toHaveBeenCalledTimes(1)
-      expect(writeFileStub).toHaveBeenCalledTimes(5)
+      expect(writeFileStub).toHaveBeenCalledTimes(4)
       expect(deleteFileStub).toHaveBeenCalledTimes(1)
       expect(updateAssetStatusStub).toHaveBeenCalledWith(
         'ASSET_CID',

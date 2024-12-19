@@ -1,5 +1,7 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import { log } from '../../common/logger'
 import { getMintParams, updateAssetStatus, uploadTokenMetadata } from '../../common/serverActions'
 import { AssetStatus } from '../../common/types'
@@ -28,6 +30,7 @@ export async function getAssetMintParams(id: string) {
 export async function updateStatus(assetId: string, hash: string) {
   try {
     await updateAssetStatus({ id: assetId, hash, status: AssetStatus.minted })
+    revalidatePath('/add-assets')
   } catch (e) {
     log.error(e)
     throw internalServerErrorError()

@@ -3,5 +3,7 @@
   "[Label] select assets": "Select and validate assets before uploading",
   "[Button] upload assets": "Upload assets",
   "[Error] invalid asset found": "Invalid asset(s) found.",
-  "[Success] assets are uploaded": "All assets are uploaded."
+  "[Success] assets are uploaded": "All assets are uploaded.",
+  "[Notification] assets are uploaded": "All asset(s) are uploaded.",
+  "[Notification] invalid asset found": "Asset(s) are not uploaded"
 }

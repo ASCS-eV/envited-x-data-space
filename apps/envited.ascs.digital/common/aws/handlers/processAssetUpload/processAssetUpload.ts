@@ -106,8 +106,14 @@ export const _main =
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
             log.info(`Uploading ${path} to IPFS`)
             const group = await createGroup(metadata.minter)
-            const ipfsHash = await uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
-            console.log(ipfsHash)
+            console.log(group)
+            let ipfsHash = ''
+            try {
+              ipfsHash = await uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
+              console.log(ipfsHash)
+            } catch (err) {
+              console.log(err)
+            }
             return ipfsHash
           },
         )

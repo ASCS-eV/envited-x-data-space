@@ -2,11 +2,9 @@ import { RDSDataClient } from '@aws-sdk/client-rds-data'
 import { fromIni } from '@aws-sdk/credential-providers'
 import { TezosToolkit } from '@taquito/taquito'
 import { drizzle } from 'drizzle-orm/aws-data-api/pg'
-import { PinataSDK } from 'pinata-web3'
 
 import { connectDb } from '../common/database'
 import * as schema from '../common/database/schema'
-import { downloadFile } from '../common/ipfs'
 import { log } from '../common/logger'
 import { listenToAssetContract } from './listener'
 import { getTokenByTokenId, insertToken } from './persistence'
@@ -32,23 +30,10 @@ const db = async () => {
 
 const connection = await db()
 
-// listenToAssetContract({
-//   tezos: Tezos,
-//   getTokenByTokenId: getTokenByTokenId({ database: connection }),
-//   insertToken: insertToken({ database: connection }),
-//   log,
-// })()
+listenToAssetContract({
+  tezos: Tezos,
+  getTokenByTokenId: getTokenByTokenId({ database: connection }),
+  insertToken: insertToken({ database: connection }),
+  log,
+})()
 
-const test = async () => {
-  const pinata = new PinataSDK({
-    pinataJwt: `${process.env.PINATA_JWT}`,
-    pinataGateway: `${process.env.PINATA_GATEWAY}`,
-    pinataGatewayKey: `${process.env.PINATA_GATEWAY_KEY}`,
-  })
-
-  const f = await pinata.gateways.get('bafkreic6ju7honlocx2tztv6bv72owunxiva2y4c7vlreai7iqdx56jgva')
-  // const f = await downloadFile('bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu')
-  console.log(f)
-}
-
-test()

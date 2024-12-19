@@ -36,4 +36,3 @@ listenToAssetContract({
   insertToken: insertToken({ database: connection }),
   log,
 })()
-

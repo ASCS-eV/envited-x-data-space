@@ -18,6 +18,7 @@ export {
 export { Grid, GridRow } from './components/Atoms/Grid'
 export { Heading } from './components/Atoms/Heading'
 export { HeadingWithTooltip } from './components/Atoms/HeadingWithTooltip'
+export { IconButtonWithTooltip } from './components/Atoms/IconButtonWithTooltip'
 export { LoadingIndicator } from './components/Atoms/LoadingIndicator'
 export { MemberProfileCard } from './components/Molecules/MemberProfileCard'
 export { Nav, NavItem } from './components/Atoms/Nav'

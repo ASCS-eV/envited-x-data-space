@@ -1,8 +1,11 @@
 {
-  "[Status] minted": "Completed",
+  "[Status] minted": "Minted",
   "[Status] processing": "Processing...",
+  "[Status] pending": "Ready for minting",
   "[Status] rejected": "Rejected",
-  "[Button] delete": "Cancel",
+  "[Button] mint": "Mint",
+  "[Button] delete": "Delete",
+  "[Button] view": "View",
   "[Notification] error deleting asset": "Cannot delete asset",
   "[Notification] asset deleted": "Asset successfully cancelled"
 }

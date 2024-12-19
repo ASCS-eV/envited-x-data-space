@@ -18,6 +18,12 @@ export enum AssetStatus {
   completed = 'completed',
 }
 
+export enum AssetAction {
+  mint = 'mint',
+  view = 'view',
+  delete = 'delete',
+}
+
 export enum Columns {
   two = 'two',
   three = 'three',
@@ -78,6 +84,7 @@ export interface Asset {
   metadata: AssetMetadata
   status: AssetStatus
   userId: string
+  createdAt: Date
 }
 
 export interface AssetMetadata {

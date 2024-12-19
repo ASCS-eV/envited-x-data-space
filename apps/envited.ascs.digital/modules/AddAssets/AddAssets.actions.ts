@@ -3,13 +3,13 @@
 import { revalidatePath } from 'next/cache'
 import { isNil } from 'ramda'
 
+import { createFilename } from '../../common/asset/utils'
 import { getServerSession } from '../../common/auth'
-import { getAssetUploadUrl, getUniqueFilename } from '../../common/aws'
+import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
 import { insertAsset } from '../../common/serverActions'
 import { badRequestError, formatError, internalServerErrorError, slugify, unauthorizedError } from '../../common/utils'
-import { createFilename } from 'apps/envited.ascs.digital/common/asset/utils'
 
 export async function addAssetsForm(formData: FormData) {
   const assets = formData.getAll('assets') as File[]
@@ -44,7 +44,7 @@ export async function addAssetsForm(formData: FormData) {
 
       await insertAsset({
         cid,
-        name: asset.name, 
+        name: asset.name,
       })
 
       return uploadResult

@@ -169,46 +169,39 @@ export const Assets: FC<AssetsProps> = ({ items }) => {
         </form>
         <div className="lg:col-span-3">
           <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3">
-            {map(
-              ({
-                id,
-                displayUri,
-                name,
-                description,
-              }: Token) => (
-                <div
-                  key={id}
-                  className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
-                >
-                  <div className="aspect-h-3 aspect-w-4 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-48">
-                    <img
-                      src={displayUri}
-                      alt={name}
-                      className="h-48 w-full object-cover object-center sm:h-48 sm:w-full"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col space-y-2 p-4">
-                    <p className="text-sm italic text-gray-500">{id}</p>
-                    <h3 className="text-sm font-medium text-gray-900">
-                      <a href={`/assets/${id}`} className="break-all">
-                        <span aria-hidden="true" className="absolute inset-0" />
-                        {name}
-                      </a>
-                    </h3>
-                    <p className="text-sm text-gray-500">{description}</p>
-                    <div className="flex justify-between pt-4">
-                      <a
-                        href={`/assets/${id}`}
-                        className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"
-                      >
-                        View
-                        <span aria-hidden="true"> &rarr;</span>
-                      </a>
-                    </div>
+            {map(({ id, displayUri, name, description }: Token) => (
+              <div
+                key={id}
+                className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
+              >
+                <div className="aspect-h-3 aspect-w-4 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-48">
+                  <img
+                    src={displayUri}
+                    alt={name}
+                    className="h-48 w-full object-cover object-center sm:h-48 sm:w-full"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col space-y-2 p-4">
+                  <p className="text-sm italic text-gray-500">{id}</p>
+                  <h3 className="text-sm font-medium text-gray-900">
+                    <a href={`/assets/${id}`} className="break-all">
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {name}
+                    </a>
+                  </h3>
+                  <p className="text-sm text-gray-500">{description}</p>
+                  <div className="flex justify-between pt-4">
+                    <a
+                      href={`/assets/${id}`}
+                      className="whitespace-nowrap text-sm font-medium text-blue-900 hover:text-blue-800"
+                    >
+                      View
+                      <span aria-hidden="true"> &rarr;</span>
+                    </a>
                   </div>
                 </div>
-              ),
-            )(items)}
+              </div>
+            ))(items)}
           </div>
         </div>
       </div>

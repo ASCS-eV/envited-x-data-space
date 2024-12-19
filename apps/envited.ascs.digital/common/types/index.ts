@@ -1,4 +1,15 @@
-export { Language, AssetStatus, ButtonType, Columns, Size, ColorScheme, Role, CredentialType, FileType } from './types'
+export {
+  Language,
+  AssetAction,
+  AssetStatus,
+  ButtonType,
+  Columns,
+  Size,
+  ColorScheme,
+  Role,
+  CredentialType,
+  FileType,
+} from './types'
 export type {
   Action,
   Asset,

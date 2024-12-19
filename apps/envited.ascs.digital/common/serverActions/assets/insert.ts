@@ -11,7 +11,7 @@ import { forbiddenError, formatError, internalServerErrorError, unauthorizedErro
 
 export const _insert =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
-  async ({ cid, name }: { cid: string, name: string }) => {
+  async ({ cid, name }: { cid: string; name: string }) => {
     try {
       const session = await getServerSession()
       if (isNil(session)) {

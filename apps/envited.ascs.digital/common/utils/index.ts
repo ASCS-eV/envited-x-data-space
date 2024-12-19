@@ -18,6 +18,7 @@ export {
   extractIdFromCredential,
   extractIssuerIdFromCredential,
   extractTypeFromCredential,
+  formatDate,
   formatTokenAttributes,
   getImageUrl,
   slugify,
@@ -27,5 +28,6 @@ export {
   slugToLabel,
   isTrustAnchor,
   truncateDID,
+  truncateCID,
   isServer,
 } from './utils'

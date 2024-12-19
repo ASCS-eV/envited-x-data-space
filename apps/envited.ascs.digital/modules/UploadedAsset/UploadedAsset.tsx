@@ -1,27 +1,24 @@
 'use client'
 
 import { LoadingIndicator } from '@envited-x-data-space/design-system'
-import { TrashIcon } from '@heroicons/react/24/outline'
-import { useSession } from 'next-auth/react'
-import { equals, last, propOr } from 'ramda'
+import { CheckIcon, EllipsisHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { equals } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
 import { useTranslation } from '../../common/i18n'
-import { useNotification } from '../../common/notifications'
-import { Asset, AssetMetadata, AssetStatus } from '../../common/types'
-import { Mint } from '../Mint'
-import { deleteAsset, getAsset } from './UploadedAsset.actions'
+import { Asset, AssetStatus } from '../../common/types'
+import { formatDate, truncateCID } from '../../common/utils'
+import { getAsset } from './UploadedAsset.actions'
+import { UploadedAssetButtons } from './UploadedAsset.buttons'
 
 interface UploadedAssetProps {
   assetIdx: number
   asset: Asset
-  metadata: AssetMetadata
 }
 
-export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadata }) => {
+export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset }) => {
   const { t } = useTranslation('UploadedAsset')
-  const { error, success } = useNotification()
   const [assetStatus, setAssetStatus] = useState<AssetStatus>(asset.status)
 
   useEffect(() => {
@@ -50,29 +47,13 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
     }
   }, [asset.id, assetStatus])
 
-  const cancel = async (id: string) => {
-    try {
-      await deleteAsset(id)
-      success(t('[Notification] asset deleted'))
-    } catch (e) {
-      error(t('[Notification] error deleting asset'))
-    }
-  }
-
   return (
     <tr key={asset.id}>
       <td className={`${equals(assetIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}>
         <div className="font-medium text-gray-900">
-          {asset.name}<br/>
-          <span className='text-xs text-gray-500 italic pt-1'>{asset.cid}</span>
-        </div>
-        <div className="font-medium text-gray-900">
-          
-        </div>
-        <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
-          <span>{propOr('', 'type')(metadata)}</span>
-          <span className="hidden sm:inline">·</span>
-          <span>{propOr('', 'size')(metadata)}</span>
+          {asset.name}
+          <br />
+          <span className="text-xs text-gray-500 italic pt-1">{truncateCID(asset.cid)}</span>
         </div>
         {assetIdx !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" /> : null}
       </td>
@@ -81,12 +62,12 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
           equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
         } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
       >
-        {equals(assetStatus)(AssetStatus.processing) ? <>&hellip;</> : last(propOr('', 'tags')(metadata))}
+        {equals(asset.status)(AssetStatus.processing) ? <>&hellip;</> : formatDate(asset.createdAt)}
       </td>
       <td
         className={`${
-          equals(assetIdx)(0) ? '' : 'border-t border-transparent'
-        } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
+          equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
+        } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
       >
         {match(assetStatus)
           .with(AssetStatus.processing, () => (
@@ -95,31 +76,32 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset, metadat
               <p className="text-xs">{t('[Status] processing')}</p>
             </div>
           ))
-          .with(AssetStatus.minted, () => <span className="text-green-600">{t('[Status] minted')}</span>)
-          .with(AssetStatus.rejected, () => (
-            <div className="flex items-center justify-end text-red-500">
-              {t('[Status] rejected')}
-              <button
-                type="button"
-                className="inline-flex items-center rounded-md px-2.5 py-1.5 pr-1 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300 ml-1"
-                onClick={() => cancel(asset.id)}
-              >
-                <TrashIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
-              </button>
+          .with(AssetStatus.pending, () => (
+            <div className="flex items-center justify-end gap-x-2 sm:justify-start text-sm">
+              <EllipsisHorizontalIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
+              <div className="hidden text-gray-500 sm:block text-xs">{t('[Status] pending')}</div>
             </div>
           ))
-          .otherwise(() => (
-            <div className="flex items-center justify-end text-gray-500">
-              <Mint assetId={asset.id} />
-              <button
-                type="button"
-                className="inline-flex items-center rounded-md px-2.5 py-1.5 pr-1 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-gray-300 ml-1"
-                onClick={() => cancel(asset.id)}
-              >
-                <TrashIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
-              </button>
+          .with(AssetStatus.minted, () => (
+            <div className="flex items-center justify-end gap-x-2 sm:justify-start text-sm">
+              <CheckIcon className="h-4 w-4 text-green-600" aria-hidden="true" />
+              <div className="hidden text-green-600 sm:block text-xs">{t('[Status] minted')}</div>
             </div>
-          ))}
+          ))
+          .with(AssetStatus.rejected, () => (
+            <div className="flex items-center justify-end gap-x-2 sm:justify-start text-sm">
+              <XMarkIcon className="h-4 w-4 text-red-500" aria-hidden="true" />
+              <div className="hidden text-red-500 sm:block text-xs">{t('[Status] rejected')}</div>
+            </div>
+          ))
+          .otherwise(() => '')}
+      </td>
+      <td
+        className={`${
+          equals(assetIdx)(0) ? '' : 'border-t border-transparent'
+        } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
+      >
+        <UploadedAssetButtons id={asset.id} status={assetStatus} />
         {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>
     </tr>

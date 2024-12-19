@@ -3,8 +3,11 @@
   "[Status] processing": "Processing...",
   "[Status] pending": "Ready for minting",
   "[Status] rejected": "Rejected",
-  "[Button] delete": "Cancel",
+  "[Button] mint": "Mint",
+  "[Button] delete": "Delete",
   "[Button] view": "View",
+  "[Heading] cancel asset": "Cancel asset",
+  "[Description] cancel asset": "Are you sure that you want to delete this asset?",
   "[Notification] error deleting asset": "Cannot delete asset",
   "[Notification] asset deleted": "Asset successfully cancelled"
 }

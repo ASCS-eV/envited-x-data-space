@@ -1,10 +1,10 @@
 'use client'
 
-import { IconButtonWithTooltip } from '@envited-x-data-space/design-system'
+import { Dialog, IconButtonWithTooltip } from '@envited-x-data-space/design-system'
 import { EyeIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
 import { includes } from 'ramda'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
@@ -33,11 +33,12 @@ export const View: FC<{ id: string; disabled: boolean }> = ({ id, disabled }) =>
   )
 }
 
-export const Delete: FC<{ id: string; disabled: boolean }> = ({ id, disabled }) => {
+export const DeleteDialogConfirm: FC<{ id: string; disabled: boolean }> = ({ id, disabled }) => {
   const { t } = useTranslation('UploadedAsset')
   const { error, success } = useNotification()
+  const [showDialog, setShowDialog] = useState(false)
 
-  const cancel = async (id: string) => {
+  const cancel = (id: string) => async () => {
     try {
       await deleteAsset(id)
       success(t('[Notification] asset deleted'))
@@ -47,13 +48,30 @@ export const Delete: FC<{ id: string; disabled: boolean }> = ({ id, disabled }) 
   }
 
   return (
-    <IconButtonWithTooltip
-      disabled={disabled}
-      icon={<TrashIcon className="h-4 w-4" aria-hidden="true" />}
-      onClick={() => cancel(id)}
-    >
-      {t('[Button] delete')}
-    </IconButtonWithTooltip>
+    <>
+      <IconButtonWithTooltip
+        disabled={disabled}
+        icon={<TrashIcon className="h-4 w-4" aria-hidden="true" />}
+        onClick={() => setShowDialog(true)}
+      >
+        {t('[Button] delete')}
+      </IconButtonWithTooltip>
+      <Dialog
+        heading={t('[Heading] cancel asset')}
+        description={t('[Description] cancel asset')}
+        isOpen={showDialog}
+        setShow={setShowDialog}
+        action={
+          <form action={cancel(id)}>
+            <button
+              className={`bg-red-600 hover:bg-red-500 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto`}
+            >
+              {t('[Button] delete')}
+            </button>
+          </form>
+        }
+      />
+    </>
   )
 }
 
@@ -65,7 +83,7 @@ export const UploadedAssetButtons: FC<UploadedAssetProps> = ({ id, status }) => 
       <span className="text-gray-300 border-r border-gray-300 block h-[1rem] w-[1px]" aria-hidden="true">
         {''}
       </span>
-      <Delete id={id} disabled={!includes(AssetAction.delete)(enabledActionsMap[status])} />
+      <DeleteDialogConfirm id={id} disabled={!includes(AssetAction.delete)(enabledActionsMap[status])} />
     </span>
   )
 }

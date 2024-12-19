@@ -69,6 +69,7 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset }) => {
           equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
         } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
       >
+        {assetStatus}
         {match(assetStatus)
           .with(AssetStatus.processing, () => (
             <div className="inline-flex gap-x-2 text-sm text-gray-500">

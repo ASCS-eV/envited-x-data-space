@@ -109,6 +109,8 @@ export default function Envited({ stack }: StackContext) {
           copyFiles: [{ from: 'common/aws/handlers/processAssetUpload/schemas' }],
           securityGroups: [sg],
           vpc,
+          timeout: 60,
+          memorySize: 1024,
         },
         events: ['object_created_put'],
       },

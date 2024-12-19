@@ -36,7 +36,9 @@ describe('createLocalCopy', () => {
       send: jest.fn().mockResolvedValue({} as any),
     } as any
 
-    await expect(SUT.createLocalCopy({ s3Client: s3ClientStub, downloadFile: downloadFileMock })(cid)).rejects.toThrow('No data')
+    await expect(SUT.createLocalCopy({ s3Client: s3ClientStub, downloadFile: downloadFileMock })(cid)).rejects.toThrow(
+      'No data',
+    )
   })
 
   it('should throw an error if the file is not downloaded correctly', async () => {
@@ -47,6 +49,8 @@ describe('createLocalCopy', () => {
       send: jest.fn().mockResolvedValue({} as any),
     } as any
 
-    await expect(SUT.createLocalCopy({ s3Client: s3ClientStub, downloadFile: downloadFileMock })(cid)).rejects.toThrow('Error')
+    await expect(SUT.createLocalCopy({ s3Client: s3ClientStub, downloadFile: downloadFileMock })(cid)).rejects.toThrow(
+      'Error',
+    )
   })
 })

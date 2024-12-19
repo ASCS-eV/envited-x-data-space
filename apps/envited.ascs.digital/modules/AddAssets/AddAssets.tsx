@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
+import { useNotification } from '../../common/notifications'
 import { allTrue } from '../../common/utils/utils'
 import { addAssetsForm } from './AddAssets.actions'
 import { addFiles, removeFile } from './AddAssets.utils'
@@ -13,6 +14,7 @@ import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
   const { t } = useTranslation('AddAssets')
+  const { error, success } = useNotification()
 
   const {
     control,
@@ -46,8 +48,10 @@ export const AddAssets = () => {
 
       await addAssetsForm(formData)
 
+      success(t('[Notification] asset are uploaded'))
       reset()
     } catch (e) {
+      error(t('[Notification] invalid asset found'))
       console.log(e)
     }
   }

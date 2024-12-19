@@ -87,9 +87,12 @@ export const _main =
       const uploadedFile = await Body.transformToByteArray()
 
       // Validate uploaded asset
+      console.log('1. getAsset - Key', Key)
       const asset = await getAsset(Key)
+      console.log('1. getAsset - Result', asset)
       const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles } =
         await validateAndCreateMetadata(uploadedFile, asset)
+      console.log('2. validateAndCreateMetadata - conforms', conforms)
       if (!conforms) {
         // Revert if validation fails
         await deleteFile({ Bucket, Key })
@@ -103,10 +106,12 @@ export const _main =
         CopySource: `${Bucket}/${Key}`,
         Key: assetCID,
       })
+      console.log('3. copyFile', assetCID)
 
       // Handle files for registered users
       const { owner, registeredUser } = files
 
+      /*
       if (owner) {
         const writeFilesToAssetPromises = owner.map(
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
@@ -123,6 +128,7 @@ export const _main =
 
         Promise.all(writeFilesToAssetPromises)
       }
+      */
 
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(
@@ -138,7 +144,9 @@ export const _main =
           },
         )
 
+        console.log('4. writeFilesToIpfsPromises - before')
         Promise.all(writeFilesToIpfsPromises)
+        console.log('4. writeFilesToIpfsPromises')
 
         const pinataIpfsPromises = visualizationFiles.map(
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
@@ -148,7 +156,9 @@ export const _main =
           },
         )
 
+        console.log('5. pinataIpfsPromises - before')
         Promise.all(pinataIpfsPromises)
+        console.log('5. pinataIpfsPromises')
       }
 
       if (registeredUser) {
@@ -165,11 +175,15 @@ export const _main =
           },
         )
 
+        console.log('6. writeFilesToMetadataPromises - before')
         Promise.all(writeFilesToMetadataPromises)
+        console.log('6. writeFilesToMetadataPromises')
       }
 
       // Update stored asset in DB
+      console.log('7. updateAsset - before', assetCID, Key, AssetStatus.pending, metadata, modifiedManifest)
       await updateAsset(assetCID, Key, AssetStatus.pending, metadata, modifiedManifest)
+      console.log('7. updateAsset')
 
       // Delete uploaded asset with the "old" name from S3
       await deleteFile({ Bucket, Key })

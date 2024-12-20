@@ -303,6 +303,7 @@ export const _validateAndCreateMetadata =
         assetCID,
         files,
         visualizationFiles,
+        domainMetadata: data.domainMetadata,
       }
     } catch (err) {
       console.log(err)

@@ -7,7 +7,7 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 import { getAsset, updateAsset, validateAndCreateMetadata } from '../../../asset'
 import { ExtractedFileWithCID, ManifestExtractedFiles } from '../../../asset/types'
 import { deleteFile, readFile, writeFile } from '../../../aws'
-import { createGroup, uploadFile } from '../../../ipfs'
+import { createGroup, uploadFile, uploadJson } from '../../../ipfs'
 import { log } from '../../../logger'
 import { Asset, AssetMetadata, AssetStatus } from '../../../types'
 
@@ -36,6 +36,7 @@ export const _main =
       assetCID: string
       files: ManifestExtractedFiles
       visualizationFiles: ExtractedFileWithCID[]
+      domainMetadata: Record<string, unknown>,
     }>
     getAsset: (cid: string) => Promise<Asset>
     updateAsset: (
@@ -73,7 +74,7 @@ export const _main =
 
       // Validate uploaded asset
       const asset = await getAsset(Key)
-      const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles } =
+      const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles, domainMetadata } =
         await validateAndCreateMetadata(uploadedFile, asset)
       if (!conforms) {
         // Revert if validation fails
@@ -132,6 +133,11 @@ export const _main =
 
         await Promise.all(writeFilesToMetadataPromises)
       }
+
+      const domainMetadataCID = await uploadJson({ data: domainMetadata, filename: `${assetCID}-domain-metadata.json`, group: metadata.minter })
+      log.info('Domain metadata CID', domainMetadataCID)
+      const manifestCID = await uploadJson({ data: modifiedManifest, filename: `${assetCID}-manifest.json`, group: metadata.minter })
+      log.info('Manifest CID', manifestCID)
 
       // Update stored asset in DB
       await updateAsset(assetCID, Key, AssetStatus.pending, metadata, modifiedManifest)

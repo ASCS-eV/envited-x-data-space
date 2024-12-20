@@ -36,7 +36,7 @@ export const _main =
       assetCID: string
       files: ManifestExtractedFiles
       visualizationFiles: ExtractedFileWithCID[]
-      domainMetadata: Record<string, unknown>,
+      domainMetadata: Record<string, unknown>
     }>
     getAsset: (cid: string) => Promise<Asset>
     updateAsset: (
@@ -86,7 +86,7 @@ export const _main =
 
       // Handle files for registered users
       const { registeredUser } = files
-
+      const group = await createGroup(metadata.minter)
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(
           async ({ cid, arrayBuffer }: { cid: string; arrayBuffer: ArrayBuffer }) => {
@@ -102,15 +102,13 @@ export const _main =
         )
 
         await Promise.all(writeFilesToIpfsPromises)
-
+        
         const pinataIpfsPromises = visualizationFiles.map(
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
-            log.info(`Uploading ${path} to IPFS`)
-            return createGroup(metadata.minter).then(async group => {
-              log.info(`Uploading ${path} to IPFS with group ${group}`)
-              const file = await uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
-              log.info(file)
-            })
+            log.info(`Uploading ${path} to IPFS with group ${group}`)
+            const file = await uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
+            log.info(file)
+            return file
           },
         )
 
@@ -134,9 +132,18 @@ export const _main =
         await Promise.all(writeFilesToMetadataPromises)
       }
 
-      const domainMetadataCID = await uploadJson({ data: domainMetadata, filename: `${assetCID}-domain-metadata.json`, group: metadata.minter })
+      const domainMetadataCID = await uploadJson({
+        data: domainMetadata,
+        filename: `${assetCID}-domain-metadata.json`,
+        group,
+      })
       log.info('Domain metadata CID', domainMetadataCID)
-      const manifestCID = await uploadJson({ data: modifiedManifest, filename: `${assetCID}-manifest.json`, group: metadata.minter })
+
+      const manifestCID = await uploadJson({
+        data: modifiedManifest,
+        filename: `${assetCID}-manifest.json`,
+        group,
+      })
       log.info('Manifest CID', manifestCID)
 
       // Update stored asset in DB

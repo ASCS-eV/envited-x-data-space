@@ -47,9 +47,9 @@ describe('createLocalCopy', () => {
     const downloadFileStub = jest.fn().mockResolvedValue({ data: null })
     const uploadFileToS3Stub = jest.fn().mockResolvedValue({} as any)
 
-    await expect(SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub, downloadFile: downloadFileStub })(cid)).rejects.toThrow(
-      'No data',
-    )
+    await expect(
+      SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub, downloadFile: downloadFileStub })(cid),
+    ).rejects.toThrow('No data')
   })
 
   it('should throw an error if the file is not downloaded correctly', async () => {
@@ -58,8 +58,8 @@ describe('createLocalCopy', () => {
     const downloadFileStub = jest.fn().mockRejectedValue(new Error('Error'))
     const uploadFileToS3Stub = jest.fn().mockResolvedValue({} as any)
 
-    await expect(SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub, downloadFile: downloadFileStub })(cid)).rejects.toThrow(
-      'Error',
-    )
+    await expect(
+      SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub, downloadFile: downloadFileStub })(cid),
+    ).rejects.toThrow('Error')
   })
 })

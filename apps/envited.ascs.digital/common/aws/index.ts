@@ -3,12 +3,12 @@ import { getSignedUrl as AwsGetSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 import {
   copyObjectToS3 as _copyObjectToS3,
-  putObjectToS3 as _putObjectToS3,
   deleteObjectFromS3 as _deleteObjectFromS3,
   getAssetDownloadUrl as _getAssetDownloadUrl,
   getAssetUploadUrl as _getAssetUploadUrl,
   getS3SignedUrl as _getS3SignedUrl,
   getUploadUrl as _getUploadUrl,
+  putObjectToS3 as _putObjectToS3,
   readStreamFromS3 as _readStreamFromS3,
   writeStreamToS3 as _writeStreamToS3,
 } from './S3'

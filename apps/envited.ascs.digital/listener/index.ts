@@ -3,13 +3,13 @@ import { fromIni } from '@aws-sdk/credential-providers'
 import { TezosToolkit } from '@taquito/taquito'
 import { drizzle } from 'drizzle-orm/aws-data-api/pg'
 
+import { uploadFile } from '../common/aws'
 import { connectDb } from '../common/database'
 import * as schema from '../common/database/schema'
-import { log } from '../common/logger'
-import { listenToAssetContract, createLocalCopy } from './listener'
-import { getTokenByTokenId, insertToken } from './persistence'
 import { downloadFile } from '../common/ipfs'
-import { uploadFile } from '../common/aws'
+import { log } from '../common/logger'
+import { createLocalCopy, listenToAssetContract } from './listener'
+import { getTokenByTokenId, insertToken } from './persistence'
 
 const Tezos = new TezosToolkit(process.env.NEXT_PUBLIC_WEB3_RPC_URL || 'https://ghostnet.ecadinfra.com')
 const db = async () => {

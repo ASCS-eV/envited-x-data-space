@@ -29,15 +29,9 @@ import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
 
 export const _createFilename =
   ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
-  async (byteArray: Uint8Array, type: string = 'file', filename: string = '') => {
+  async (byteArray: Uint8Array) => {
     try {
-      let fileToBeEncoded = null
-      fileToBeEncoded = byteArray
-      if (type === 'file') {
-        fileToBeEncoded = new File([byteArray], filename)
-      }
-
-      const rawBytes = raw.encode(fileToBeEncoded)
+      const rawBytes = raw.encode(byteArray)
       const hash = await sha256.digest(rawBytes)
       const cid = CID.create(1, raw.code, hash)
 

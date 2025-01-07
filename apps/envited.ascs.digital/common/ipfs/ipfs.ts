@@ -15,20 +15,20 @@ export const uploadJson =
 export const uploadFile =
   (pinata: PinataSDK) =>
   async ({ arrayBuffer, filename, group = '' }: { arrayBuffer: ArrayBuffer; filename: string; group?: string }) => {
-    const buffer = Buffer.from(arrayBuffer)
+    // const buffer = Buffer.from(arrayBuffer)
 
-    const readable = new Readable({
-      read() {
-        this.push(buffer)
-        this.push(null)
-      },
-    })
+    // const readable = new Readable({
+    //   read() {
+    //     this.push(buffer)
+    //     this.push(null)
+    //   },
+    // })
 
     if (group) {
-      return pinata.upload.stream(readable).addMetadata({ name: filename }).group(group).then(prop('IpfsHash'))
+      return pinata.upload.file(new File([arrayBuffer], filename)).addMetadata({ name: filename }).group(group).then(prop('IpfsHash'))
     }
 
-    return pinata.upload.stream(readable).addMetadata({ name: filename }).then(prop('IpfsHash'))
+    return pinata.upload.file(new File([arrayBuffer], filename)).addMetadata({ name: filename }).then(prop('IpfsHash'))
   }
 
 export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {

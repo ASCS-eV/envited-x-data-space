@@ -116,6 +116,7 @@ export const _main =
         const pinataIpfsPromises = visualizationFiles.map(
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
             log.info(`Uploading ${path} to IPFS with group ${group}`)
+            log.info(arrayBuffer)
             const file = await uploadFile({ arrayBuffer, filename: last(split('/', path)) as string, group })
             log.info(file)
             return file

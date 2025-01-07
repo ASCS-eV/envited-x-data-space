@@ -24,11 +24,19 @@ export const uploadFile =
     //   },
     // })
 
+
     if (group) {
-      return pinata.upload.file(new File([arrayBuffer], filename)).addMetadata({ name: filename }).group(group).then(prop('IpfsHash'))
+      return pinata.upload
+        .stream(stream)
+        .addMetadata({ name: filename })
+        .group(group)
+        .then(prop('IpfsHash'))
     }
 
-    return pinata.upload.file(new File([arrayBuffer], filename)).addMetadata({ name: filename }).then(prop('IpfsHash'))
+    return pinata.upload
+      .file(new File([arrayBuffer], filename))
+      .addMetadata({ name: filename })
+      .then(prop('IpfsHash'))
   }
 
 export const createGroup = (pinata: PinataSDK) => async (groupName: string) => {

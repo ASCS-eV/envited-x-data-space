@@ -111,6 +111,7 @@ export default function Envited({ stack }: StackContext) {
           vpc,
           timeout: 60,
           memorySize: 1024,
+          runtime: 'nodejs20.x',
         },
         events: ['object_created_put'],
       },
@@ -177,6 +178,7 @@ export default function Envited({ stack }: StackContext) {
     bind: [uploadsBucket, assetsBucket],
     memorySize: '1024 MB',
     timeout: '20 seconds',
+    runtime: 'nodejs20.x',
     cdk: {
       server: {
         vpc,

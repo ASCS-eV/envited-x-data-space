@@ -88,3 +88,7 @@ export const writeStreamToS3 =
       client: s3Client,
       params,
     })
+
+export const putObjectToS3 =
+  ({ s3Client }: { s3Client: S3Client }) =>
+  (params: PutObjectCommandInput) => s3Client.send(new PutObjectCommand(params))

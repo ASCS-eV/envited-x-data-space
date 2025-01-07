@@ -78,6 +78,9 @@ describe('common/asset/validateAndCreateMetadata', () => {
         reports: [{ conforms: true }],
         metadata: 'METADATA_BUFFER',
         modifiedManifest: 'MODIFIED_MANIFEST_BUFFER',
+        domainMetadata: {
+          '@type': 'NAME',
+        },
         assetCID: 'HASH',
         files: {
           owner: [

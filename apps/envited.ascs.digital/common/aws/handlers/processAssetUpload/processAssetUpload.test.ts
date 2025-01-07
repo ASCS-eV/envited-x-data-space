@@ -63,6 +63,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const getAssetStatusStub = jest.fn().mockReturnValue('ASSET_CID') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
       const uploadFileStub = jest.fn().mockResolvedValue('ASSET_CID') as any
+      const uploadJsonStub = jest.fn().mockResolvedValue('JSON_CID') as any
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_NAME') as any
 
       const event = {
@@ -90,6 +91,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         getAsset: getAssetStatusStub,
         updateAsset: updateAssetStatusStub,
         uploadFile: uploadFileStub,
+        uploadJson: uploadJsonStub,
         createGroup: createGroupStub,
       })(event as any, context, callback)
 
@@ -144,6 +146,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const getAssetStatusStub = jest.fn().mockReturnValue('ASSET_CID') as any
       const updateAssetStatusStub = jest.fn().mockReturnValue('UPDATED') as any
       const uploadFileStub = jest.fn().mockResolvedValue('ASSET_CID') as any
+      const uploadJsonStub = jest.fn().mockResolvedValue('JSON_CID') as any
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_NAME') as any
 
       const event = {
@@ -171,6 +174,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         getAsset: getAssetStatusStub,
         updateAsset: updateAssetStatusStub,
         uploadFile: uploadFileStub,
+        uploadJson: uploadJsonStub,
         createGroup: createGroupStub,
       })(event as any, context, callback)
 

@@ -1,19 +1,19 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 import { replace } from 'ramda'
 
-import { s3Client } from '../common/aws'
 import { downloadFile } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
 import { extractAttributesUri, extractKeyValuePairs } from './utils'
 
 export const createLocalCopy =
-  ({ s3Client, downloadFile }: { s3Client: S3Client; downloadFile: any }) =>
+  ({ uploadFileToS3, downloadFile }: { uploadFileToS3: any; downloadFile: any }) =>
   async (cid: string) => {
     try {
       const { data, contentType } = await downloadFile(cid)
+
       let body = null
+
       if (!data) {
         throw new Error('No data')
       }
@@ -35,10 +35,10 @@ export const createLocalCopy =
         ContentDisposition: 'inline',
       }
 
-      await s3Client.send(new PutObjectCommand(uploadParams))
+      await uploadFileToS3(uploadParams)
       return `${process.env.ASSET_URL}/${cid}`
     } catch (err) {
-      console.log('Error', err)
+      throw new Error(`Unable to create local copy: ${err}`)
     }
   }
 
@@ -48,11 +48,13 @@ export const listenToAssetContract =
     getTokenByTokenId,
     insertToken,
     log,
+    createLocalCopy,
   }: {
     tezos: TezosToolkit
     getTokenByTokenId: any
     insertToken: any
     log: Log
+    createLocalCopy: (cid: string) => Promise<string | undefined>
   }) =>
   async () => {
     tezos.setStreamProvider(
@@ -85,9 +87,7 @@ export const listenToAssetContract =
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         log.info('Token metadata', tokenMetadata)
-        const localDisplayUri = await createLocalCopy({ s3Client, downloadFile })(
-          replace('ipfs://', '')(tokenMetadata?.displayUri || ''),
-        )
+        const localDisplayUri = await createLocalCopy(replace('ipfs://', '')(tokenMetadata?.displayUri || ''))
         log.info('Local display URI', localDisplayUri)
         const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
         log.info('Attributes URI', attributesUri)

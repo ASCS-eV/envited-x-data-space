@@ -20,6 +20,7 @@ export const _main =
     getAsset,
     updateAsset,
     uploadFile,
+    uploadJson,
     createGroup,
   }: {
     readFile: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
@@ -52,6 +53,15 @@ export const _main =
       group,
     }: {
       arrayBuffer: ArrayBuffer
+      filename: string
+      group?: string
+    }) => Promise<string>
+    uploadJson: ({
+      data,
+      filename,
+      group,
+    }: {
+      data: Record<string, unknown>
       filename: string
       group?: string
     }) => Promise<string>
@@ -102,7 +112,7 @@ export const _main =
         )
 
         await Promise.all(writeFilesToIpfsPromises)
-        
+
         const pinataIpfsPromises = visualizationFiles.map(
           async ({ path, arrayBuffer }: { path: string; arrayBuffer: ArrayBuffer }) => {
             log.info(`Uploading ${path} to IPFS with group ${group}`)
@@ -162,5 +172,6 @@ export const main = _main({
   getAsset,
   updateAsset,
   uploadFile,
+  uploadJson,
   createGroup,
 })

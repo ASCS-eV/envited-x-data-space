@@ -12,7 +12,6 @@ import {
   includes,
   is,
   isNil,
-  last,
   map,
   path,
   pathOr,
@@ -21,7 +20,6 @@ import {
   reduce,
   reject,
   replace,
-  split,
   startsWith,
 } from 'ramda'
 
@@ -154,9 +152,9 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 })
 
 export const _getFilenameFromFile =
-  ({ createFilename }: { createFilename: (byteArray: Uint8Array, type?: string, filename?: string, ) => Promise<string> }) =>
+  ({ createFilename }: { createFilename: (byteArray: Uint8Array) => Promise<string> }) =>
   async (path: string, type: string, arrayBuffer: ArrayBuffer): Promise<ExtractedFileWithCID> => {
-    const cid = await createFilename(new Uint8Array(arrayBuffer), 'file', last(split('/', path)))
+    const cid = await createFilename(new Uint8Array(arrayBuffer))
     return {
       cid,
       path,

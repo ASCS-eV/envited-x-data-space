@@ -24,10 +24,9 @@ export const uploadFile =
     //   },
     // })
 
-
     if (group) {
       return pinata.upload
-        .stream(stream)
+        .file(new File([arrayBuffer], filename))
         .addMetadata({ name: filename })
         .group(group)
         .then(prop('IpfsHash'))

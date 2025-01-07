@@ -1,6 +1,5 @@
 import type { PinataSDK } from 'pinata-web3'
 import { prop } from 'ramda'
-import { Readable } from 'stream'
 
 export const uploadJson =
   (pinata: PinataSDK) =>
@@ -15,15 +14,6 @@ export const uploadJson =
 export const uploadFile =
   (pinata: PinataSDK) =>
   async ({ arrayBuffer, filename, group = '' }: { arrayBuffer: ArrayBuffer; filename: string; group?: string }) => {
-    // const buffer = Buffer.from(arrayBuffer)
-
-    // const readable = new Readable({
-    //   read() {
-    //     this.push(buffer)
-    //     this.push(null)
-    //   },
-    // })
-
     if (group) {
       return pinata.upload
         .file(new File([arrayBuffer], filename))

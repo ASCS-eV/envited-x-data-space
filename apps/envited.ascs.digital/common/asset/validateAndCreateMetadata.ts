@@ -217,7 +217,7 @@ export const _validateAndCreateMetadata =
       domainMetadataCID: string
       visualizationFiles: ExtractedFileWithCID[]
     }) => (manifest: Manifest) => any
-    createFilename: (byteArray: Uint8Array) => Promise<string>
+    createFilename: (byteArray: Uint8Array, type?: string, filename?: string) => Promise<string>
     getFilesAsPathAndByteArrayFromManifest: (
       byteArray: Uint8Array,
       manifest: Manifest,

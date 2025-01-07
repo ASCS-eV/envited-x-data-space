@@ -12,6 +12,7 @@ import {
   includes,
   is,
   isNil,
+  last,
   map,
   path,
   pathOr,
@@ -20,6 +21,7 @@ import {
   reduce,
   reject,
   replace,
+  split,
   startsWith,
 } from 'ramda'
 
@@ -29,9 +31,15 @@ import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
 
 export const _createFilename =
   ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
-  async (byteArray: Uint8Array) => {
+  async (byteArray: Uint8Array, type: string = 'file', filename: string = '') => {
     try {
-      const rawBytes = raw.encode(byteArray)
+      let fileToBeEncoded = null
+      fileToBeEncoded = byteArray
+      if (type === 'file') {
+        fileToBeEncoded = new File([byteArray], filename)
+      }
+
+      const rawBytes = raw.encode(fileToBeEncoded)
       const hash = await sha256.digest(rawBytes)
       const cid = CID.create(1, raw.code, hash)
 
@@ -146,9 +154,9 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 })
 
 export const _getFilenameFromFile =
-  ({ createFilename }: { createFilename: (byteArray: Uint8Array) => Promise<string> }) =>
+  ({ createFilename }: { createFilename: (byteArray: Uint8Array, type?: string, filename?: string, ) => Promise<string> }) =>
   async (path: string, type: string, arrayBuffer: ArrayBuffer): Promise<ExtractedFileWithCID> => {
-    const cid = await createFilename(new Uint8Array(arrayBuffer))
+    const cid = await createFilename(new Uint8Array(arrayBuffer), 'file', last(split('/', path)))
     return {
       cid,
       path,

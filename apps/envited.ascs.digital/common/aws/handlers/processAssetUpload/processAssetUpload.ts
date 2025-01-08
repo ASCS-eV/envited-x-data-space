@@ -81,11 +81,13 @@ export const _main =
         return
       }
       const uploadedFile = await Body.transformToByteArray()
-
+      console.log(uploadedFile, Key, Bucket)
       // Validate uploaded asset
       const asset = await getAsset(Key)
+      console.log(asset)
       const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles, domainMetadata } =
         await validateAndCreateMetadata(uploadedFile, asset)
+      console.log(visualizationFiles)
       if (!conforms) {
         // Revert if validation fails
         await deleteFile({ Bucket, Key })

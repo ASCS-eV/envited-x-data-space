@@ -1,3 +1,4 @@
+import 'cross-fetch/polyfill'
 import '@testing-library/jest-dom'
 import { TextDecoder, TextEncoder } from 'util'
 

@@ -1,4 +1,9 @@
+import { prop } from 'ramda'
+import { readFile } from '../aws'
+import { pinata, uploadFile } from '../ipfs'
 import { createFilename } from './utils'
+import { getAsset } from 'apps/envited.ascs.digital/modules/UploadedAsset/UploadedAsset.actions'
+import { getShaclSchemaAndValidate, validateAndCreateMetadata } from './validateAndCreateMetadata'
 
 describe('common/asset/utils', () => {
   describe('createFilename', () => {
@@ -62,7 +67,7 @@ describe('common/asset/utils', () => {
           symbol: 'ENVITED',
           decimals: 2,
           shouldPreferSymbol: true,
-          thumbnailUri: 'THUMBNAIL_UR',
+          thumbnailUri: 'THUMBNAIL_URI',
           attributes: [],
           assets: [],
         }),
@@ -75,6 +80,39 @@ describe('common/asset/utils', () => {
       expect(cid).toBeDefined()
       expect(typeof cid).toBe('string')
       expect(cid).toMatch('bafkreigdlsyni2wjmihwrotlmhficmbnspltfiuwbo476e7x45eojntzha') // CID v1 with raw codec starts with 'bafkr'
+    })
+
+    it.only('should create the same CID as pinata from a file', async () => {
+      // Create a sample byte array
+      const Key = 'bafkreifn25c5s4nyh6nqhs242r4eumyy7p27titowkbcy47qy5g3rzzpc4'
+      const { Body } = await readFile({
+        Bucket: 'staging-envitedascsdigital-en-assetsbucket5f3b285a-ug4zozpjyshd',
+        Key,
+      })
+      const uploadedFile = await Body.transformToByteArray()
+      const { conforms, reports, data } = await getShaclSchemaAndValidate(uploadedFile)
+      // const filename = 'TestfeldNiedersachsen_ALKS_ODR_sample_01.png'
+      // const file = new File([a.buffer], filename)
+
+      // const pu = await pinata.upload
+      //   .file(file)
+      //   .addMetadata({ name: filename })
+      //   .then(prop('IpfsHash'))
+        
+      // console.log(pu)
+      // console.log(a)
+      // console.log(file)
+
+      // const b = await file.arrayBuffer()
+      // console.log(b)
+      // Generate CID
+      const cid = await createFilename(a)
+      console.log(cid)
+
+      // Verify the result is a valid CID string
+      // expect(cid).toBeDefined()
+      // expect(typeof cid).toBe('string')
+      // expect(cid).toMatch('bafkreigdlsyni2wjmihwrotlmhficmbnspltfiuwbo476e7x45eojntzha') // CID v1 with raw codec starts with 'bafkr'
     })
   })
 })

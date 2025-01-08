@@ -8,7 +8,6 @@ export const _extract =
   ({ ZipReader }: { ZipReader: any }) =>
   async (readable: BlobReader, filename: string) => {
     const reader = new ZipReader(readable)
-
     return reader
       .getEntries()
       .then((entries: Entry[]) => {
@@ -17,7 +16,7 @@ export const _extract =
         }
         return find(propEq(filename, 'filename'))(entries)
       })
-      .catch(() => undefined)
+      .catch((e: unknown) => console.log('no entries found', e))
       .finally(() => reader.close())
   }
 

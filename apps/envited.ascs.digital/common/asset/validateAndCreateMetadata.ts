@@ -85,6 +85,7 @@ export const _validateManifest =
   }) =>
   async (byteArray: Uint8Array) => {
     try {
+      console.log(byteArray)
       const data = await getFileFromByteArray(byteArray, MANIFEST_FILE)
       const schema = fs.createReadStream(`${__dirname}${SCHEMA_MAP.manifest}`)
       const validation = await validateShaclDataWithSchema(data, schema)

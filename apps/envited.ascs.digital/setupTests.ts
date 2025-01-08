@@ -1,5 +1,5 @@
-import 'cross-fetch/polyfill'
 import '@testing-library/jest-dom'
+import 'cross-fetch/polyfill'
 import { TextDecoder, TextEncoder } from 'util'
 
 Object.assign(global, { TextDecoder, TextEncoder, TransformStream: jest.fn(), DataTransfer: jest.fn() })

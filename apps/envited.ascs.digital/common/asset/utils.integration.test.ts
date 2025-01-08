@@ -1,8 +1,9 @@
+import { getAsset } from 'apps/envited.ascs.digital/modules/UploadedAsset/UploadedAsset.actions'
 import { prop } from 'ramda'
+
 import { readFile } from '../aws'
 import { pinata, uploadFile } from '../ipfs'
 import { createFilename } from './utils'
-import { getAsset } from 'apps/envited.ascs.digital/modules/UploadedAsset/UploadedAsset.actions'
 import { getShaclSchemaAndValidate, validateAndCreateMetadata } from './validateAndCreateMetadata'
 
 describe('common/asset/utils', () => {
@@ -98,7 +99,7 @@ describe('common/asset/utils', () => {
       //   .file(file)
       //   .addMetadata({ name: filename })
       //   .then(prop('IpfsHash'))
-        
+
       // console.log(pu)
       // console.log(a)
       // console.log(file)

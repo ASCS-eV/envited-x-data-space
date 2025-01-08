@@ -32,7 +32,6 @@ describe('common/asset/utils', () => {
       expect(CIDStub.create).toHaveBeenCalledWith(1, 'JSON_CODE', 'SHA256_HASH')
       expect(result).toBe('CID')
     })
-
   })
 
   describe('getDomainMetadataPath', () => {

@@ -70,4 +70,4 @@ jobs:
           aws-region: eu-central-1
       - name: Deploy OIDC client
         run: |
-          npm ci --force && npx nx deploy:staging oidc-client.ascs.digital
+          npm ci --legacy-peer-deps && npx nx deploy:staging oidc-client.ascs.digital

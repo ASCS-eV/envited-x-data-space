@@ -245,7 +245,7 @@ export const _validateAndCreateMetadata =
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
       const visualization = filter(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile[]
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
-      
+
       const modifiedManifest = createModifiedManifest({
         assetCID,
         domainMetadataCID,
@@ -258,7 +258,7 @@ export const _validateAndCreateMetadata =
         cid: assetCID,
         fileSize: byteArray.length,
       }
-      
+
       const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,

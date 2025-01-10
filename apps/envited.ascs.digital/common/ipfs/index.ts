@@ -18,6 +18,8 @@ export const pinata = new PinataSDK({
     process.env.PINATA_GATEWAY_KEY || 'yCNvt4_psrxde9cshtn7vPtK5HujxSUYaRyNT5aVIu1l5eH2S7pUxSEl7UVQhF-4',
 })
 
+console.log(await pinata.gateways.get('bafybeief5r2xgciehzhx6c4kbooifsnbjpiifjei36lpi3kzcdmpr2wvue'))
+
 export const createGroup = _createGroup(pinata)
 
 export const uploadFile = _uploadFile(pinata)

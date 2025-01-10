@@ -38,4 +38,4 @@ listenToAssetContract({
   insertToken: insertToken({ database: connection }),
   log,
   createLocalCopy: createLocalCopy({ uploadFileToS3: uploadFile, downloadFile: downloadFile }),
-})
+})()

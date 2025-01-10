@@ -1,16 +1,17 @@
 import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 import { replace } from 'ramda'
 
-import { downloadFile } from '../common/ipfs'
+import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
 import { extractAttributesUri, extractKeyValuePairs } from './utils'
 
 export const createLocalCopy =
-  ({ uploadFileToS3, downloadFile }: { uploadFileToS3: any; downloadFile: any }) =>
+  ({ uploadFileToS3 }: { uploadFileToS3: any }) =>
   async (cid: string) => {
     try {
-      const { data, contentType } = await downloadFile(cid)
+      console.log(`Creating local copy for ${cid}`)
+      const { data, contentType } = await pinata.gateways.get(cid)
 
       let body = null
 
@@ -38,6 +39,7 @@ export const createLocalCopy =
       await uploadFileToS3(uploadParams)
       return `${process.env.ASSET_URL}/${cid}`
     } catch (err) {
+      console.log(err)
       throw new Error(`Unable to create local copy: ${err}`)
     }
   }
@@ -87,11 +89,12 @@ export const listenToAssetContract =
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         log.info('Token metadata', tokenMetadata)
+        console.log('localDisplayCid', replace('ipfs://', '')(tokenMetadata?.displayUri || ''))
         const localDisplayUri = await createLocalCopy(replace('ipfs://', '')(tokenMetadata?.displayUri || ''))
         log.info('Local display URI', localDisplayUri)
         const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
         log.info('Attributes URI', attributesUri)
-        const manifest = await downloadFile(replace('ipfs://', '')(attributesUri as string))
+        const manifest = await pinata.gateways.get(replace('ipfs://', '')(attributesUri as string))
         log.info('Manifest', manifest)
         const attributes = extractKeyValuePairs(manifest)
         log.info('Attributes', attributes)

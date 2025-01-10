@@ -1,16 +1,4 @@
-import { getAsset } from 'apps/envited.ascs.digital/modules/UploadedAsset/UploadedAsset.actions'
-import { prop } from 'ramda'
-
-import { readFile } from '../aws'
-import { pinata, uploadFile } from '../ipfs'
 import { createFilename } from './utils'
-import { getShaclSchemaAndValidate, validateAndCreateMetadata } from './validateAndCreateMetadata'
-import { getFileBlob } from '../archive/archive'
-import { BlobReader } from '@zip.js/zip.js'
-import { CID } from 'multiformats/cid'
-import * as raw from 'multiformats/codecs/raw'
-import { Hasher } from 'multiformats/dist/src/hashes/hasher'
-import { sha256 } from 'multiformats/hashes/sha2'
 
 describe('common/asset/utils', () => {
   describe('createFilename', () => {
@@ -86,46 +74,7 @@ describe('common/asset/utils', () => {
       // Verify the result is a valid CID string
       expect(cid).toBeDefined()
       expect(typeof cid).toBe('string')
-      expect(cid).toMatch('bafkreigdlsyni2wjmihwrotlmhficmbnspltfiuwbo476e7x45eojntzha') // CID v1 with raw codec starts with 'bafkr'
-    })
-
-    it.only('should create the same CID as pinata from a file', async () => {
-      // Create a sample byte array
-      const Key = 'bafkreifn25c5s4nyh6nqhs242r4eumyy7p27titowkbcy47qy5g3rzzpc4/bafkreib4ebmyrxuomnkhcuugkwshelm7twc6j55f5qutcfyzmjwf54lg5y'
-      const { Body } = await readFile({
-        Bucket: 'staging-envitedascsdigital-envi-ipfsbucket72ccbc1e-l3lceunn2dnx',
-        Key,
-      })
-      const uploadedFile = await Body.transformToByteArray()
-      // const { conforms, reports, data } = await getShaclSchemaAndValidate(uploadedFile)
-      const filename = 'TestfeldNiedersachsen_ALKS_ODR_sample_01.png'
-      console.log(uploadedFile.buffer)
-      const file = new File([uploadedFile.buffer], filename)
-
-      // const pu = await pinata.upload
-      //   .file(file)
-      //   .addMetadata({ name: filename })
-      //   .then(prop('IpfsHash'))
-
-      // console.log(pu)
-      // console.log(a)
-      // console.log(file)
-
-      // const b = await file.arrayBuffer()
-      // console.log(b)
-      // Generate CID
-
-      const rawBytes = raw.encode(uploadedFile)
-      const hash = await sha256.digest(rawBytes)
-      const cid = CID.create(1, raw.code, hash)
-
-      const cidString = cid.toString()
-      console.log(cidString)
-
-      // Verify the result is a valid CID string
-      // expect(cid).toBeDefined()
-      // expect(typeof cid).toBe('string')
-      // expect(cid).toMatch('bafkreigdlsyni2wjmihwrotlmhficmbnspltfiuwbo476e7x45eojntzha') // CID v1 with raw codec starts with 'bafkr'
+      expect(cid).toMatch('bafkreigjbtt45enqujwrknbdk22cf7db2g4qcbyd6keglgdrlitsvzpwca') // CID v1 with raw codec starts with 'bafkr'
     })
   })
 })

@@ -1,3 +1,5 @@
+import { MemoryBlockstore } from 'blockstore-core/memory'
+import { importer } from 'ipfs-unixfs-importer'
 import { CID } from 'multiformats/cid'
 import * as raw from 'multiformats/codecs/raw'
 import { Hasher } from 'multiformats/dist/src/hashes/hasher'
@@ -26,6 +28,7 @@ import {
 import { extractFromByteArray, read } from '../archive'
 import { getFileBlob } from '../archive/archive'
 import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
+import { determineCID } from '../serverActions/cid'
 
 export const _createFilename =
   ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
@@ -146,10 +149,9 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
 })
 
 export const _getFilenameFromFile =
-  ({ createFilename }: { createFilename: (byteArray: Uint8Array) => Promise<string> }) =>
+  ({ determineCID }: { determineCID: (byteArray: Uint8Array) => Promise<string> }) =>
   async (path: string, type: string, arrayBuffer: ArrayBuffer): Promise<ExtractedFileWithCID> => {
-    console.log('createFilename', path, type, arrayBuffer, new Uint8Array(arrayBuffer))
-    const cid = await createFilename(new Uint8Array(arrayBuffer))
+    const cid = await determineCID(new Uint8Array(arrayBuffer))
     return {
       cid,
       path,
@@ -159,7 +161,7 @@ export const _getFilenameFromFile =
   }
 
 export const getFilenameFromFile = _getFilenameFromFile({
-  createFilename,
+  determineCID,
 })
 
 export const _getAllFilenamesFromFiles =
@@ -220,3 +222,24 @@ export const _getFilesAsPathAndByteArrayFromManifest =
 export const getFilesAsPathAndByteArrayFromManifest = _getFilesAsPathAndByteArrayFromManifest({
   getPathsAndBuffersFromByteArray,
 })
+
+export const predetermineCID = async (array: Uint8Array) => {
+  try {
+    const buffer = Buffer.from(array)
+    const blockstore = new MemoryBlockstore()
+
+    let rootCid: any
+
+    for await (const result of importer([{ content: buffer }], blockstore, {
+      cidVersion: 1,
+      // hashAlg: "sha2-256",
+      rawLeaves: 1 === 1,
+    })) {
+      rootCid = result.cid
+    }
+
+    return rootCid.toString()
+  } catch (err) {
+    return err
+  }
+}

@@ -9,7 +9,7 @@ import { formatError, internalServerErrorError } from '../../utils'
 
 export const _loadDataset =
   ({ fileSystem, parser, environment }: { fileSystem: any; parser: RdfParser<Quad>; environment: any }) =>
-  async (filePath: fs.PathLike, contentType: string): Promise<DatasetCore<Quad, Quad>> => {
+  async (filePath: fs.PathLike, contentType: string) => {
     try {
       const stream = fileSystem.createReadStream(filePath)
       const quads = parser.parse(stream, { contentType })
@@ -25,7 +25,7 @@ export const loadDataset = _loadDataset({ fileSystem: fs, parser: rdfParser, env
 
 export const validateShacl = (shapes: DatasetCore<Quad, Quad>) => async (data: DatasetCore<Quad, Quad>) => {
   try {
-    const validator = new SHACLValidator(shapes, { factory: rdf })
+    const validator = new SHACLValidator(shapes, { factory: rdf as any })
 
     return validator.validate(data)
   } catch (error: unknown) {

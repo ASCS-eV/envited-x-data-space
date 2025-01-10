@@ -1,6 +1,4 @@
-'use server'
-
-import { find, isEmpty, isNil, omit, pathEq } from 'ramda'
+import { isEmpty, isNil, omit } from 'ramda'
 
 import { getServerSession } from '../../auth'
 import { RESTRICTED_PROFILE_FIELDS } from '../../constants'

@@ -1,5 +1,3 @@
-'use server'
-
 import { equals, isEmpty } from 'ramda'
 
 import { db } from '../../database/queries'

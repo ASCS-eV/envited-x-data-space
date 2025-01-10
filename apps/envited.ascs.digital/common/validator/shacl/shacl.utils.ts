@@ -1,6 +1,5 @@
 import { DatasetCore, Quad } from '@rdfjs/types'
 import rdf, { DefaultEnv } from '@zazuko/env'
-import { Dataset } from '@zazuko/env/lib/Dataset'
 import { flip, join, map, pipe, subtract } from 'ramda'
 import rdfParser, { RdfParser } from 'rdf-parse'
 import SHACLValidator from 'rdf-validate-shacl'
@@ -49,7 +48,7 @@ export const _loadDataset =
     parseStreamToDataset,
   }: {
     createReadableStream: (data: string) => any
-    parseStreamToDataset: (stream: NodeJS.ReadableStream, contentType: ContentType) => Promise<Dataset>
+    parseStreamToDataset: (stream: NodeJS.ReadableStream, contentType: ContentType) => Promise<DatasetCore<Quad, Quad>>
   }) =>
   (data: string, contentType: ContentType) =>
     parseStreamToDataset(createReadableStream(data), contentType)

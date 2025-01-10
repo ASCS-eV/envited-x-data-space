@@ -1,5 +1,3 @@
-'use server'
-
 import { isEmpty, isNil } from 'ramda'
 
 import { getServerSession } from '../../auth'

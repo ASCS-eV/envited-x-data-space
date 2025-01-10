@@ -1,5 +1,4 @@
 import { DatasetCore, Quad } from '@rdfjs/types'
-import { Dataset } from '@zazuko/env/lib/Dataset'
 import { Entry } from '@zip.js/zip.js'
 import { all, equals, has, isEmpty, keys, omit, pipe } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
@@ -265,7 +264,7 @@ export const _validateShaclDataWithSchema =
     loadDataset,
     validateShacl,
   }: {
-    parseStreamToDataset: (stream: NodeJS.ReadableStream, type: ContentType) => Promise<Dataset>
+    parseStreamToDataset: (stream: NodeJS.ReadableStream, type: ContentType) => Promise<DatasetCore<Quad, Quad>>
     loadDataset: (data: string, contentType: ContentType) => Promise<DatasetCore<Quad, Quad>>
     validateShacl: (shapes: DatasetCore<Quad, Quad>) => (data: DatasetCore<Quad, Quad>) => Promise<ValidationReport>
   }) =>

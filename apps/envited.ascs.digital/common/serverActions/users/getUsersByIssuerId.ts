@@ -1,5 +1,3 @@
-'use server'
-
 import { isNil } from 'ramda'
 import { cache } from 'react'
 

@@ -1,5 +1,3 @@
-'use server'
-
 import { equals, has, isNil, prop } from 'ramda'
 
 import { getServerSession } from '../../auth'

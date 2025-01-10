@@ -1,5 +1,3 @@
-'use server'
-
 import { DatasetCore, Quad } from '@rdfjs/types'
 import fs from 'fs'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'

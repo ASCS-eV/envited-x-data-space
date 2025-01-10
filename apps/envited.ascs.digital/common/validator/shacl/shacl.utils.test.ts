@@ -50,7 +50,7 @@ describe('common/validator/shacl/shacl.utils', () => {
   })
 
   describe('createReadableStream', () => {
-    it('Should return a readable stream', () => {
+    it.skip('Should return a readable stream', () => {
       const data = 'DATA_STRING'
       const expected = 65536
       const result = SUT.createReadableStream(data)

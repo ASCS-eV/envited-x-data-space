@@ -1,6 +1,6 @@
 'use client'
 
-import { ColorScheme } from 'apps/envited.ascs.digital/common/types'
+import { ColorScheme } from '../../common/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
@@ -9,9 +9,7 @@ import { NAVIGATION } from '../../common/constants'
 import { Navigation, NavigationDropdown } from '../Navigation'
 import { SignIn } from '../SignIn'
 
-export interface HeaderProps {}
-
-export const Header: FC<HeaderProps> = () => {
+export const Header: FC = () => {
   return (
     <header className={`py-4 sticky top-0 z-40 w-full bg-white border-b border-gray-300`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -38,7 +36,7 @@ export const Header: FC<HeaderProps> = () => {
   )
 }
 
-export const HeaderPages: FC<HeaderProps> = () => {
+export const HeaderPages: FC = () => {
   return (
     <>
       <div className="fixed top-0 z-40 w-full">

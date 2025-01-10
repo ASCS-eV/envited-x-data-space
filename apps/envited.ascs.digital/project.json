@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/envited.ascs.digital",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/next:build",
@@ -76,10 +77,8 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
-
     "db:generate": {
       "executor": "nx:run-commands",
       "options": {
@@ -189,6 +188,5 @@
         "parallel": false
       }
     }
-  },
-  "tags": []
+  }
 }

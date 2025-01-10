@@ -42,3 +42,4 @@ const withLocaleProvider = (Story, context) => {
 }
 
 export const decorators = [withLocaleProvider]
+export const tags = ['autodocs']

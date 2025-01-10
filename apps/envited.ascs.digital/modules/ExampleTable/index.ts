@@ -1,1 +1,0 @@
-export { ExampleTable } from './ExampleTable'

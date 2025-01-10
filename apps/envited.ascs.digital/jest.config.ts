@@ -8,6 +8,8 @@ const esModules = [
   'get-stream',
   '@vocabulary',
   'rdf-validate-datatype',
+  'blockstore-core',
+  'ipfs-unixfs-importer',
   'multiformats',
 ].join('|')
 
@@ -15,8 +17,6 @@ export default {
   displayName: 'envited.ascs.digital',
   preset: '../../jest.preset.js',
   transform: {
-    [`(${esModules}).+\\.js$`]: ['babel-jest', { presets: ['@babel/preset-env'] }],
-    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/next/babel'] }],
   },
   transformIgnorePatterns: [`/node_modules/(?!(${esModules})/.*)`],

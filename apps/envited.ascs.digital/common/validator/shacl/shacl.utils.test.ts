@@ -54,7 +54,7 @@ describe('common/validator/shacl/shacl.utils', () => {
       const data = 'DATA_STRING'
       const expected = 65536
       const result = SUT.createReadableStream(data)
-      
+
       expect(result._readableState.highWaterMark).toEqual(expected)
     })
   })

@@ -1,11 +1,11 @@
 'use client'
 
-import { ColorScheme } from '../../common/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
 import { NAVIGATION } from '../../common/constants'
+import { ColorScheme } from '../../common/types'
 import { Navigation, NavigationDropdown } from '../Navigation'
 import { SignIn } from '../SignIn'
 

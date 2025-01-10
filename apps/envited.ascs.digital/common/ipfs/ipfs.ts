@@ -14,7 +14,6 @@ export const uploadJson =
 export const uploadFile =
   (pinata: PinataSDK) =>
   async ({ arrayBuffer, filename, group = '' }: { arrayBuffer: ArrayBuffer; filename: string; group?: string }) => {
-    console.log('PINATA', arrayBuffer, filename, new File([arrayBuffer], filename))
     if (group) {
       return pinata.upload
         .file(new File([arrayBuffer], filename))

@@ -78,7 +78,6 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset }) => {
           ))
           .with(AssetStatus.pending, () => (
             <div className="flex items-center justify-end gap-x-2 sm:justify-start text-sm">
-              <EllipsisHorizontalIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
               <div className="hidden text-gray-500 sm:block text-xs">{t('[Status] pending')}</div>
             </div>
           ))

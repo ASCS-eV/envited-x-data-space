@@ -28,7 +28,6 @@ import {
 import { extractFromByteArray, read } from '../archive'
 import { getFileBlob } from '../archive/archive'
 import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
-import { determineCID } from '../serverActions/cid'
 
 export const _createFilename =
   ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
@@ -148,10 +147,30 @@ export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
   getArrayBufferFromByteArray,
 })
 
+export const predetermineCID = async (array: Uint8Array) => {
+  try {
+    const buffer = Buffer.from(array)
+    const blockstore = new MemoryBlockstore()
+
+    let rootCid: any
+
+    for await (const result of importer([{ content: buffer }], blockstore, {
+      cidVersion: 1,
+      rawLeaves: 1 === 1,
+    })) {
+      rootCid = result.cid
+    }
+
+    return rootCid.toString()
+  } catch (err) {
+    return err
+  }
+}
+
 export const _getFilenameFromFile =
-  ({ determineCID }: { determineCID: (byteArray: Uint8Array) => Promise<string> }) =>
+  ({ predetermineCID }: { predetermineCID: (byteArray: Uint8Array) => Promise<string> }) =>
   async (path: string, type: string, arrayBuffer: ArrayBuffer): Promise<ExtractedFileWithCID> => {
-    const cid = await determineCID(new Uint8Array(arrayBuffer))
+    const cid = await predetermineCID(new Uint8Array(arrayBuffer))
     return {
       cid,
       path,
@@ -161,7 +180,7 @@ export const _getFilenameFromFile =
   }
 
 export const getFilenameFromFile = _getFilenameFromFile({
-  determineCID,
+  predetermineCID,
 })
 
 export const _getAllFilenamesFromFiles =
@@ -222,24 +241,3 @@ export const _getFilesAsPathAndByteArrayFromManifest =
 export const getFilesAsPathAndByteArrayFromManifest = _getFilesAsPathAndByteArrayFromManifest({
   getPathsAndBuffersFromByteArray,
 })
-
-export const predetermineCID = async (array: Uint8Array) => {
-  try {
-    const buffer = Buffer.from(array)
-    const blockstore = new MemoryBlockstore()
-
-    let rootCid: any
-
-    for await (const result of importer([{ content: buffer }], blockstore, {
-      cidVersion: 1,
-      // hashAlg: "sha2-256",
-      rawLeaves: 1 === 1,
-    })) {
-      rootCid = result.cid
-    }
-
-    return rootCid.toString()
-  } catch (err) {
-    return err
-  }
-}

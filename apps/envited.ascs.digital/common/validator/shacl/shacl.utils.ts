@@ -11,7 +11,7 @@ import { AMOUNT_OF_UNDEFINED_FILES_IN_MANIFEST, SCHEMA_MAP } from './shacl.const
 import { ContentType, ValidationSchema } from './shacl.types'
 
 export const validateShacl = (shapes: DatasetCore<Quad, Quad>) => async (data: DatasetCore<Quad, Quad>) => {
-  const validator = new SHACLValidator(shapes, { factory: rdf as any})
+  const validator = new SHACLValidator(shapes, { factory: rdf as any })
 
   return validator.validate(data)
 }

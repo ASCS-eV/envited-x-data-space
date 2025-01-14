@@ -54,7 +54,7 @@ jobs:
           aws-region: eu-central-1
       - name: Deploy app
         run: |
-          npm ci --legacy-peer-deps && npx nx deploy:staging envited.ascs.digital
+          npm ci --legacy-peer-deps && npx nx deploy:staging envited.ascs.digital --no-cloud
   DeployOIDCClient:
     runs-on: ubuntu-latest
     environment: staging
@@ -70,4 +70,4 @@ jobs:
           aws-region: eu-central-1
       - name: Deploy OIDC client
         run: |
-          npm ci --legacy-peer-deps && npx nx deploy:staging oidc-client.ascs.digital
+          npm ci --legacy-peer-deps && npx nx deploy:staging oidc-client.ascs.digital --no-cloud

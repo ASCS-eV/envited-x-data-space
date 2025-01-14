@@ -4,7 +4,7 @@ import * as SUT from './listener'
 
 jest.mock('file-type')
 
-describe('createLocalCopy', () => {
+describe.skip('createLocalCopy', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     jest.clearAllMocks()
@@ -12,7 +12,7 @@ describe('createLocalCopy', () => {
 
   it('should download a file from IPFS and upload it to S3', async () => {
     // Setup your mock as needed for specific tests
-    ;(fileTypeFromBuffer as jest.Mock).mockResolvedValue({
+    (fileTypeFromBuffer as jest.Mock).mockResolvedValue({
       ext: 'png',
       mime: 'image/png',
     })

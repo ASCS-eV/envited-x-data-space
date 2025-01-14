@@ -12,7 +12,7 @@ describe.skip('createLocalCopy', () => {
 
   it('should download a file from IPFS and upload it to S3', async () => {
     // Setup your mock as needed for specific tests
-    (fileTypeFromBuffer as jest.Mock).mockResolvedValue({
+    ;(fileTypeFromBuffer as jest.Mock).mockResolvedValue({
       ext: 'png',
       mime: 'image/png',
     })

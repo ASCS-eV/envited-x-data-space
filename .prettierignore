@@ -2,7 +2,7 @@
 /dist
 /coverage
 /.nx/cache
-/apps/envited.ascs.digital/drizzle
+/apps/envited-x-data-space/drizzle
 deploy.mjs
 
 /.nx/workspace-data

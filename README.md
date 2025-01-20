@@ -71,12 +71,12 @@ docker container ls
 
 ### Setting up the environment
 
-In `apps/envited.ascs.digital` rename `.env.example` to `.env.development` and fill out the required values.
+In `apps/envited-x-data-space` rename `.env.example` to `.env.development` and fill out the required values.
 
 ## Test the app
 
 ```bash
-npx nx test envited.ascs.digital —watch
+npx nx test envited-x-data-space —watch
 ```
 
 ## Start the app
@@ -84,7 +84,7 @@ npx nx test envited.ascs.digital —watch
 To start the development server run:
 
 ```bash
-npx nx serve envited.ascs.digital
+npx nx serve envited-x-data-space
 ```
 
 Open your browser and navigate to http://localhost:4200/

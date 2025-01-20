@@ -54,7 +54,7 @@ jobs:
           aws-region: eu-central-1
       - name: Deploy app
         run: |
-          npm ci --legacy-peer-deps && npx nx deploy:staging envited.ascs.digital --no-cloud
+          npm ci --legacy-peer-deps && npx nx deploy:staging envited-x-data-space --no-cloud
   DeployOIDCClient:
     runs-on: ubuntu-latest
     environment: staging

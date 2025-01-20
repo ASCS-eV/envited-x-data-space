@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'Listener',
-      script: './apps/envited.ascs.digital/listener/index.ts',
+      script: './apps/envited-x-data-space/listener/index.ts',
       watch: '.',
       env_staging: {
         ENV: 'staging',

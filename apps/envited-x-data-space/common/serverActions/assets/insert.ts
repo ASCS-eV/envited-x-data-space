@@ -18,7 +18,7 @@ export const _insert =
       const userId = session.user.id
 
       const connection = await db()
-      const user = await connection.getUserById(userId) as User
+      const user = (await connection.getUserById(userId)) as User
 
       if (isNil(user)) {
         throw forbiddenError({

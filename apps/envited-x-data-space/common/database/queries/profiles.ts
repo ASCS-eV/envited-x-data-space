@@ -16,7 +16,11 @@ export const update = (db: DatabaseConnection) => async (data: Profile) =>
 export const maybeUpdatePublishedState = (db: DatabaseConnection) => async (data: Profile) => {
   const isPublished = pipe(pick(MINIMUM_PROFILE_REQUIREMENTS) as (...args: any[]) => [], filter(isNil), isEmpty)(data)
 
-  return db.update(profile).set({ isPublished: isPublished as boolean, updatedAt: new Date() }).where(eq(profile.name, data.name)).returning()
+  return db
+    .update(profile)
+    .set({ isPublished: isPublished as boolean, updatedAt: new Date() })
+    .where(eq(profile.name, data.name))
+    .returning()
 }
 
 export const getProfileBySlug = (db: DatabaseConnection) => async (slug: string) =>

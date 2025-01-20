@@ -31,13 +31,13 @@ export const _getMintParams =
     }
 
     const connection = await db()
-    const [asset] = await connection.getAsset(assetId) as Asset[]
+    const [asset] = (await connection.getAsset(assetId)) as Asset[]
 
     if (isNil(asset) || isEmpty(asset)) {
       throw notFoundError({ resource: 'assets', resourceId: assetId, userId: session?.user.id })
     }
 
-    const user = await connection.getUserById(session.user.id) as User
+    const user = (await connection.getUserById(session.user.id)) as User
 
     if (isNil(user.issuerId) || isEmpty(user.issuerId)) {
       throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })

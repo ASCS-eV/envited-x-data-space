@@ -84,7 +84,7 @@ export const authOptions: NextAuthOptions = {
             return '/error?error=CREDENTIAL_NOT_FOUND'
           }
 
-          const credential = omit(['proof'])(prop('credential')(profile) as Partial<Record<"proof", any>>) as Credential
+          const credential = omit(['proof'])(prop('credential')(profile) as Partial<Record<'proof', any>>) as Credential
           const {
             id,
             issuer,
@@ -125,7 +125,7 @@ export const authOptions: NextAuthOptions = {
             }
           }
 
-          const existingUser = await connection.getUserById(credentialSubjectId) as User
+          const existingUser = (await connection.getUserById(credentialSubjectId)) as User
 
           if (!isNil(existingUser)) {
             // User already exists

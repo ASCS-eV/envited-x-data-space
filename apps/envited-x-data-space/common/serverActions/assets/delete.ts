@@ -21,7 +21,7 @@ export const deleteAsset =
     }
 
     const connection = await db()
-    const [asset] = await connection.getAsset(id) as Asset[]
+    const [asset] = (await connection.getAsset(id)) as Asset[]
 
     if (isNil(asset) || isEmpty(asset)) {
       throw notFoundError({ resource: 'assets', resourceId: id, userId: session?.user.id })

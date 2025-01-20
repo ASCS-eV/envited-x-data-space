@@ -27,7 +27,7 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset }) => {
     if (equals(assetStatus)(AssetStatus.processing)) {
       interval = setInterval(async () => {
         try {
-          const newAsset = await getAsset(asset.id) as Asset
+          const newAsset = (await getAsset(asset.id)) as Asset
           if (newAsset) {
             setAssetStatus(newAsset.status)
             if (!equals(newAsset.status)(AssetStatus.processing)) {

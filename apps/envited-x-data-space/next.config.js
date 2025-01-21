@@ -15,6 +15,7 @@ const nextConfig = {
   experimental: {
     scrollRestoration: true,
     serverComponentsExternalPackages: ['@aws-sdk'],
+    forceSwcTransforms: true,
   },
   webpack: (config, { isServer, webpack }) => {
     if (!isServer) {

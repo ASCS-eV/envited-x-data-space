@@ -1,11 +1,14 @@
 /* eslint-disable */
 const esModules = [
   '@zazuko',
+  '@sec-ant',
   'rdf-validate-shacl',
   '@rdfjs',
   '@tpluscode',
   'clownface',
   'get-stream',
+  'readable-stream',
+  'is-stream',
   '@vocabulary',
   'rdf-validate-datatype',
   'blockstore-core',
@@ -15,14 +18,10 @@ const esModules = [
 
 export default {
   displayName: 'envited-x-data-space',
-  preset: '../jest.preset.js',
+  preset: '../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/next/babel'] }],
   },
   transformIgnorePatterns: [`/node_modules/(?!(${esModules})/.*)`],
-  moduleNameMapper: {
-    '^multiformats/(.*)$': '<rootDir>/../node_modules/multiformats/dist/src/$1',
-  },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../coverage/envited-x-data-space',
+  testPathIgnorePatterns: ['/node_modules/', '\\.integration\\.test\\.ts$'],
 }

@@ -14,7 +14,7 @@ import { extractAddressFromDid } from '../utils'
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    error: '/',
+    error: '/error',
     signIn: '/',
   },
   providers: [
@@ -112,16 +112,16 @@ export const authOptions: NextAuthOptions = {
             const principal = await connection.getUserById(issuer)
 
             log.info('User credential, checking principal credentials')
-
-            if (!principal.isActive) {
-              log.info('Principal exists, but the account is deactivated')
-              return '/error?error=PRINCIPAL_INACTIVE'
-            }
-
+          
             if (isEmpty(principal)) {
               // Principal not found
               log.error('Principal not found or active')
               return '/error?error=PRINCIPAL_NOT_FOUND'
+            }
+
+            if (!principal.isActive) {
+              log.info('Principal exists, but the account is deactivated')
+              return '/error?error=PRINCIPAL_INACTIVE'
             }
           }
 

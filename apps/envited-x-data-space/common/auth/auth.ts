@@ -112,7 +112,7 @@ export const authOptions: NextAuthOptions = {
             const principal = await connection.getUserById(issuer)
 
             log.info('User credential, checking principal credentials')
-          
+
             if (isEmpty(principal)) {
               // Principal not found
               log.error('Principal not found or active')

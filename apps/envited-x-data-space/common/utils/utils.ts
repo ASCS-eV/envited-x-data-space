@@ -113,9 +113,9 @@ export const formatTokenAttributes = (data: any) => {
 
 export const formatIpfsUri = (CID: string) => `ipfs://${CID}`
 
-export const formatAssetUri = (CID: string) => `https://assets.envited-x.net/${CID}`
+export const formatAssetUri = (CID: string) => `https://${process.env.ASSETS_URL}/${CID}`
 
-export const formatMetadataUri = (CID: string) => `https://metadata.envited-x.net/${CID}`
+export const formatMetadataUri = (CID: string) => `https://${process.env.METADATA_URL}/${CID}`
 
 export const extractFilenameFromPath = (path: string) => last(split('/')(path))
 

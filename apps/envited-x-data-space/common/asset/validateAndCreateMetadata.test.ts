@@ -3,6 +3,8 @@ import { Manifest } from './types'
 import * as SUT from './validateAndCreateMetadata'
 
 describe('common/asset/validateAndCreateMetadata', () => {
+  process.env.ASSETS_URL = 'https://assets.envited-x.net'
+      process.env.METADATA_URL = 'https://metadata.envited-x.net'
   describe('_validateAndCreateMetadata', () => {
     it('should validate and return a metadata buffer', async () => {
       // when ... we want to validate and create a metadata buffer

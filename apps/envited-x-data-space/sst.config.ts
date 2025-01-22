@@ -5,7 +5,7 @@ import Envited from './stacks/Envited'
 export default {
   config(_input) {
     return {
-      name: 'envitedascsdigital',
+      name: 'envited-x-data-space',
       region: 'eu-central-1',
       role: process.env.ROLE_TO_ASSUME,
     }

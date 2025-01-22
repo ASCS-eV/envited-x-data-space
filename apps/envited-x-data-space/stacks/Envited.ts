@@ -33,11 +33,11 @@ export default function Envited({ stack }: StackContext) {
   }
   new cdk.CfnOutput(stack, `VpcId${stack.stage}`, {
     value: vpc.vpcId,
-    exportName: `VpcId:${stack.stage}`,
+    exportName: `VpcId:envited-x-data-space:${stack.stage}`,
   })
-  new cdk.CfnOutput(stack, `SecretArn${stack.stage}`, {
+  new cdk.CfnOutput(stack, `SecretArn-${stack.stage}`, {
     value: rdsCluster.secret?.secretArn || '',
-    exportName: `SecretArn:${stack.stage}`,
+    exportName: `SecretArn:envited-x-data-space:${stack.stage}`,
   })
 
   const s3CorsRule = {
@@ -173,7 +173,7 @@ export default function Envited({ stack }: StackContext) {
   })
 
   // Create the Next.js site
-  const site = new NextjsSite(stack, 'envited_ascs_digital', {
+  const site = new NextjsSite(stack, 'envited_x_data_space', {
     path: './',
     bind: [uploadsBucket, assetsBucket],
     memorySize: '1024 MB',

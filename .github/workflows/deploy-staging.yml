@@ -37,7 +37,6 @@ jobs:
       JWKS_ENDPOINT: ${{ vars.JWKS_ENDPOINT }}
       OIDC_SERVER_URL: ${{ vars.OIDC_SERVER_URL }}
       TRUST_ANCHOR_DID: ${{ vars.TRUST_ANCHOR_DID }}
-      PINATA_API_KEY: ${{ vars.PINATA_API_KEY }}
       PINATA_SECRET: ${{ secrets.PINATA_SECRET }}
       PINATA_JWT: ${{ vars.PINATA_JWT }}
       PINATA_GATEWAY: ${{ vars.PINATA_GATEWAY }}
@@ -55,7 +54,7 @@ jobs:
           aws-region: eu-central-1
       - name: Deploy app
         run: |
-          npm ci --force && npx nx deploy:staging envited.ascs.digital
+          npm ci --legacy-peer-deps && npx nx deploy:staging envited-x-data-space --no-cloud
   DeployOIDCClient:
     runs-on: ubuntu-latest
     environment: staging
@@ -71,4 +70,4 @@ jobs:
           aws-region: eu-central-1
       - name: Deploy OIDC client
         run: |
-          npm ci --force && npx nx deploy:staging oidc-client.ascs.digital
+          npm ci --legacy-peer-deps && npx nx deploy:staging oidc-client.ascs.digital --no-cloud

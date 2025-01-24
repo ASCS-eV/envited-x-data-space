@@ -48,7 +48,7 @@ export const AddAssets = () => {
 
       await addAssetsForm(formData)
 
-      success(t('[Notification] asset are uploaded'))
+      success(t('[Notification] assets are uploaded'))
       reset()
     } catch (e) {
       error(t('[Notification] invalid asset found'))

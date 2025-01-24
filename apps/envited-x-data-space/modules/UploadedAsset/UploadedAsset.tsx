@@ -19,17 +19,17 @@ interface UploadedAssetProps {
 
 export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset }) => {
   const { t } = useTranslation('UploadedAsset')
-  const [assetStatus, setAssetStatus] = useState<AssetStatus>(asset.status)
+  const [localAsset, setLocalAsset] = useState<Asset>(asset)
 
   useEffect(() => {
     let interval: NodeJS.Timer
 
-    if (equals(assetStatus)(AssetStatus.processing)) {
+    if (equals(localAsset.status)(AssetStatus.processing)) {
       interval = setInterval(async () => {
         try {
-          const newAsset = (await getAsset(asset.id)) as Asset
+          const newAsset = (await getAsset(localAsset.id)) as Asset
           if (newAsset) {
-            setAssetStatus(newAsset.status)
+            setLocalAsset(newAsset)
             if (!equals(newAsset.status)(AssetStatus.processing)) {
               clearInterval(interval)
             }
@@ -45,15 +45,15 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset }) => {
         clearInterval(interval)
       }
     }
-  }, [asset.id, assetStatus])
+  }, [asset.id, localAsset])
 
   return (
     <tr key={asset.id}>
       <td className={`${equals(assetIdx)(0) ? '' : 'border-t border-transparent'} relative py-4 pr-3 text-sm`}>
         <div className="font-medium text-gray-900">
-          {asset.name}
+          {localAsset.name}
           <br />
-          <span className="text-xs text-gray-500 italic pt-1">{truncateCID(asset.cid)}</span>
+          <span className="text-xs text-gray-500 italic pt-1">{truncateCID(localAsset.cid)}</span>
         </div>
         {assetIdx !== 0 ? <div className="absolute -top-px left-6 right-0 h-px bg-gray-200" /> : null}
       </td>
@@ -62,14 +62,14 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset }) => {
           equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
         } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
       >
-        {equals(asset.status)(AssetStatus.processing) ? <>&hellip;</> : formatDate(asset.createdAt)}
+        {equals(localAsset.status)(AssetStatus.processing) ? <>&hellip;</> : formatDate(localAsset.createdAt)}
       </td>
       <td
         className={`${
           equals(assetIdx)(0) ? '' : 'border-t border-gray-200'
         } hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell`}
       >
-        {match(assetStatus)
+        {match(localAsset.status)
           .with(AssetStatus.processing, () => (
             <div className="inline-flex gap-x-2 text-sm text-gray-500">
               <LoadingIndicator />
@@ -100,7 +100,7 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset }) => {
           equals(assetIdx)(0) ? '' : 'border-t border-transparent'
         } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
       >
-        <UploadedAssetButtons id={asset.id} status={assetStatus} />
+        <UploadedAssetButtons id={asset.id} status={localAsset.status} />
         {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>
     </tr>

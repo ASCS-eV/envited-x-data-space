@@ -36,5 +36,4 @@ listenToAssetContract({
   getTokenByTokenId: getTokenByTokenId({ database: connection }),
   insertToken: insertToken({ database: connection }),
   log,
-  createLocalCopy: createLocalCopy({ uploadFileToS3: uploadFile }),
 })()

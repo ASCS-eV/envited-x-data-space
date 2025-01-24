@@ -50,13 +50,11 @@ export const listenToAssetContract =
     getTokenByTokenId,
     insertToken,
     log,
-    createLocalCopy,
   }: {
     tezos: TezosToolkit
     getTokenByTokenId: any
     insertToken: any
     log: Log
-    createLocalCopy: (cid: string) => Promise<string | undefined>
   }) =>
   async () => {
     tezos.setStreamProvider(
@@ -89,15 +87,13 @@ export const listenToAssetContract =
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         log.info('Token metadata', tokenMetadata)
-        console.log('localDisplayCid', replace('ipfs://', '')(tokenMetadata?.displayUri || ''))
-        const localDisplayUri = await createLocalCopy(replace('ipfs://', '')(tokenMetadata?.displayUri || ''))
+        const displayCid = replace('ipfs://', '')(tokenMetadata?.displayUri || '')
+        const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${tokenMetadata?.identifier}/${displayCid}`
         log.info('Local display URI', localDisplayUri)
         const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
         log.info('Attributes URI', attributesUri)
         const manifest = await pinata.gateways.get(replace('ipfs://', '')(attributesUri as string))
-        log.info('Manifest', manifest)
         const attributes = extractKeyValuePairs(manifest)
-        log.info('Attributes', attributes)
         // Save token to DB
         return insertToken({
           hash,

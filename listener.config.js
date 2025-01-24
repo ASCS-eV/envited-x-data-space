@@ -7,13 +7,13 @@ module.exports = {
       env_staging: {
         ENV: 'staging',
         ASSETS_CONTRACT: 'KT1XC2fTBNqoafnrhEb7TuToRCzewgbHAhnA',
-        ASSET_BUCKET_NAME: 'staging-envitedascsdigital-en-assetsbucket5f3b285a-ug4zozpjyshd',
+        ASSET_BUCKET_NAME: 'staging-envited-x-data-space--assetsbucket5f3b285a-jajxd4n1z8k2',
         PUBLIC_ASSET_URL: 'https://d2ftpxn442yx6p.cloudfront.net',
         RDS_SECRET_ARN:
-          'arn:aws:secretsmanager:eu-central-1:597778497612:secret:EnvitedSecretD661DE26-KcCzWiLKyXmK-9z9dYl',
+          'arn:aws:secretsmanager:eu-central-1:597778497612:secret:EnvitedSecretD661DE26-F2sAG4BoFy2s-ydkCoY',
         RDS_DB_NAME: 'envited',
         RDS_RESOURCE_ARN:
-          'arn:aws:rds:eu-central-1:597778497612:cluster:staging-envitedascsdigital-envited-envited46e22b9b-l2rchfuookv5',
+          'arn:aws:rds:eu-central-1:597778497612:cluster:staging-envited-x-data-space-envit-envited46e22b9b-86obows1tyha',
         PINATA_GATEWAY_KEY: 'yCNvt4_psrxde9cshtn7vPtK5HujxSUYaRyNT5aVIu1l5eH2S7pUxSEl7UVQhF-4',
         PINATA_GATEWAY: 'plum-secret-aardwolf-688.mypinata.cloud',
         PINATA_JWT:
@@ -22,7 +22,7 @@ module.exports = {
       env_development: {
         ENV: 'development',
         ASSETS_CONTRACT: 'KT1NUDsQ5qCpf5Mxmeo2dqRdnKqqL8kpj2LG',
-        ASSET_BUCKET_NAME: 'staging-envitedascsdigital-en-assetsbucket5f3b285a-ug4zozpjyshd',
+        ASSET_BUCKET_NAME: 'staging-envited-x-data-space--assetsbucket5f3b285a-jajxd4n1z8k2',
         PUBLIC_ASSET_URL: 'https://d2ftpxn442yx6p.cloudfront.net',
         POSTGRES_PORT: 5436,
         POSTGRES_DATABASE_NAME: 'envited',

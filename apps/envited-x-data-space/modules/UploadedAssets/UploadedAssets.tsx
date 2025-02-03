@@ -1,6 +1,5 @@
 'use client'
 
-import { isEmpty } from 'ramda'
 import { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'

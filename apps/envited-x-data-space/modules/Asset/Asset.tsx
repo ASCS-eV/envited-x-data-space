@@ -71,15 +71,15 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                   </li>
                   <li>
                     <strong>{t('[Term] size')}</strong>{' '}
-                    {pathOr('', ['hdmap', 'general', 'general', 'data', 'general', 'size'])(attributes)}
+                    {pathOr('', ['data', 'hdmap', 'general', 'general', 'data', 'general', 'size'])(attributes)}
                   </li>
                   <li>
                     <strong>{t('[Term] recording time')}</strong>{' '}
-                    {pathOr('', ['hdmap', 'general', 'general', 'data', 'general', 'recordingTime'])(attributes)}
+                    {pathOr('', ['data', 'hdmap', 'general', 'general', 'data', 'general', 'recordingTime'])(attributes)}
                   </li>
                   <li>
                     <strong>{t('[Term] version')}</strong>{' '}
-                    {pathOr('', ['hdmap', 'format', 'hdmap', 'version'])(attributes)}
+                    {pathOr('', ['data', 'hdmap', 'format', 'hdmap', 'version'])(attributes)}
                   </li>
                 </ul>
               </div>
@@ -172,56 +172,56 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Number intersections</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quantity', 'hdmap', 'numberIntersections'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberIntersections'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Length</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quantity', 'hdmap', 'length'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'length'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Number traffic lights</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quantity', 'hdmap', 'numberTrafficLights'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberTrafficLights'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Elevation range</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quantity', 'hdmap', 'elevationRange'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'elevationRange'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Range of modeling</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quantity', 'hdmap', 'rangeOfModeling'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'rangeOfModeling'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Number objects</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quantity', 'hdmap', 'numberObjects'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberObjects'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Number traffic signs</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quantity', 'hdmap', 'numberTrafficSigns'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberTrafficSigns'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Number outlines</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quantity', 'hdmap', 'numberOutlines'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberOutlines'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Speed limit</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          Min: {pathOr('', ['hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'min'])(attributes)},
-                          Max: {pathOr('', ['hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'max'])(attributes)}
+                          Min: {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'min'])(attributes)},
+                          Max: {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'max'])(attributes)}
                         </dd>
                       </div>
                     </dl>
@@ -235,31 +235,31 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Accuracy Signals</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quality', 'hdmap', 'accuracySignals'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'accuracySignals'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Precision</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quality', 'hdmap', 'precision'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'precision'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Accuracy Objects</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quality', 'hdmap', 'accuracyObjects'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'accuracyObjects'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Accuracy Lane Model 2d</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quality', 'hdmap', 'accuracyLaneModel2d'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'accuracyLaneModel2d'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Accuracy Lane Model Height</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'quality', 'hdmap', 'accuracyLaneModelHeight'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'accuracyLaneModelHeight'])(attributes)}
                         </dd>
                       </div>
                     </dl>
@@ -270,13 +270,13 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Measurement System</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'dataSource', 'hdmap', 'measurementSystem'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'dataSource', 'hdmap', 'measurementSystem'])(attributes)}
                         </dd>
                       </div>
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Used Data Sources</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['hdmap', 'dataSource', 'hdmap', 'usedDataSources'])(attributes)}
+                          {pathOr('', ['data', 'hdmap', 'dataSource', 'hdmap', 'usedDataSources'])(attributes)}
                         </dd>
                       </div>
                     </dl>
@@ -296,6 +296,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">Country</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -309,6 +310,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">State</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -322,6 +324,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">Region</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -335,6 +338,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">City</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -348,6 +352,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">Relation or Area</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -366,6 +371,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">Origin</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -377,6 +383,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                           ])(attributes)}
                           ,{' '}
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -392,6 +399,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">Coordinate System</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -405,6 +413,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">Height System</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -423,6 +432,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">xMin</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -438,6 +448,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">yMin</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -453,6 +464,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">xMax</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',
@@ -468,6 +480,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                         <dt className="text-sm font-medium leading-6 text-gray-900">yMax</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
                           {pathOr('', [
+                            'data',
                             'hdmap',
                             'georeference',
                             'georeference',

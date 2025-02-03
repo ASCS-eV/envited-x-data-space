@@ -188,12 +188,13 @@ export const asset = pgTable('asset', {
     .references(() => user.id)
     .notNull(),
   hash: text('hash'),
+  tokenId: uuid('token_id').references(() => token.id),
   createdAt: timestamp('created_at'),
   updatedAt: timestamp('modified_at'),
 })
 
 export const token = pgTable('token', {
-  id: uuid('id').defaultRandom().primaryKey(),
+  id: uuid('id').unique().defaultRandom().primaryKey(),
   hash: text('hash'),
   contract: text('contract'),
   minter: text('minter'),

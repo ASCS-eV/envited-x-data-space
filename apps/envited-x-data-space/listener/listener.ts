@@ -49,11 +49,15 @@ export const listenToAssetContract =
     tezos,
     getTokenByTokenId,
     insertToken,
+    getAssetByOpHash,
+    updateAssetTokenId,
     log,
   }: {
     tezos: TezosToolkit
     getTokenByTokenId: any
     insertToken: any
+    getAssetByOpHash: any
+    updateAssetTokenId: any
     log: Log
   }) =>
   async () => {
@@ -95,7 +99,7 @@ export const listenToAssetContract =
         const manifest = await pinata.gateways.get(replace('ipfs://', '')(attributesUri as string))
         const attributes = extractKeyValuePairs(manifest)
         // Save token to DB
-        return insertToken({
+        const token = await insertToken({
           hash,
           contract: destination,
           minter: creator,
@@ -117,6 +121,16 @@ export const listenToAssetContract =
           attributes,
           tokenMetadata,
         })
+
+        const asset = await getAssetByOpHash(token.hash)
+
+        if (!asset) {
+          return true
+        }
+
+        await updateAssetTokenId(asset.id, token.id)
+
+        return true
       } catch (e) {
         log.error('Registering token failed')
         log.error(e)

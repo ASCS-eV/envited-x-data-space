@@ -194,9 +194,20 @@ export const insertToken =
           await insertTokenAttributeTx(tx)(insertedToken.id, attributes[i].name, attributes[i].value)
         }
 
-        return true
+        return insertedToken
       } catch (error) {
         console.log(error)
         tx.rollback()
       }
     })
+
+export const getAssetByOpHash = ({ database: db }: { database : DatabaseConnection }) => async (hash: string) =>
+  db.select().from(schema.asset).where(eq(schema.asset.hash, hash))
+    
+export const updateAssetTokenId = ({ database: db }: { database : DatabaseConnection }) => async (id: string, tokenId: string) =>
+  db
+    .update(schema.asset)
+    .set({ tokenId })
+    .where(eq(schema.asset.id, id))
+    .returning()
+  

@@ -127,6 +127,20 @@
       "when": 1734582873570,
       "tag": "0017_green_doorman",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1738564207974,
+      "tag": "0018_pale_steel_serpent",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1738566054498,
+      "tag": "0019_dizzy_steel_serpent",
+      "breakpoints": true
     }
   ]
 }

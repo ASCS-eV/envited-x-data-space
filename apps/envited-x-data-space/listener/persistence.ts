@@ -201,13 +201,12 @@ export const insertToken =
       }
     })
 
-export const getAssetByOpHash = ({ database: db }: { database : DatabaseConnection }) => async (hash: string) =>
-  db.select().from(schema.asset).where(eq(schema.asset.hash, hash))
-    
-export const updateAssetTokenId = ({ database: db }: { database : DatabaseConnection }) => async (id: string, tokenId: string) =>
-  db
-    .update(schema.asset)
-    .set({ tokenId })
-    .where(eq(schema.asset.id, id))
-    .returning()
-  
+export const getAssetByOpHash =
+  ({ database: db }: { database: DatabaseConnection }) =>
+  async (hash: string) =>
+    db.select().from(schema.asset).where(eq(schema.asset.hash, hash))
+
+export const updateAssetTokenId =
+  ({ database: db }: { database: DatabaseConnection }) =>
+  async (id: string, tokenId: string) =>
+    db.update(schema.asset).set({ tokenId }).where(eq(schema.asset.id, id)).returning()

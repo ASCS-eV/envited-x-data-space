@@ -19,7 +19,7 @@ interface UploadedAssetProps {
   status: AssetStatus
 }
 
-export const View: FC<{ disabled: boolean, tokenId?: string }> = ({ tokenId, disabled }) => {
+export const View: FC<{ disabled: boolean; tokenId?: string }> = ({ tokenId, disabled }) => {
   const { t } = useTranslation('UploadedAsset')
   const router = useRouter()
 

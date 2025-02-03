@@ -75,7 +75,9 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                   </li>
                   <li>
                     <strong>{t('[Term] recording time')}</strong>{' '}
-                    {pathOr('', ['data', 'hdmap', 'general', 'general', 'data', 'general', 'recordingTime'])(attributes)}
+                    {pathOr('', ['data', 'hdmap', 'general', 'general', 'data', 'general', 'recordingTime'])(
+                      attributes,
+                    )}
                   </li>
                   <li>
                     <strong>{t('[Term] version')}</strong>{' '}
@@ -220,8 +222,14 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                       <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">Speed limit</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          Min: {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'min'])(attributes)},
-                          Max: {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'max'])(attributes)}
+                          Min:{' '}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'min'])(
+                            attributes,
+                          )}
+                          , Max:{' '}
+                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'max'])(
+                            attributes,
+                          )}
                         </dd>
                       </div>
                     </dl>

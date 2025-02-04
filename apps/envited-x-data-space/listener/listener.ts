@@ -49,14 +49,14 @@ export const listenToAssetContract =
     tezos,
     getTokenByTokenId,
     insertToken,
-    getAssetByOpHash,
+    getAssetByCID,
     updateAssetTokenId,
     log,
   }: {
     tezos: TezosToolkit
     getTokenByTokenId: any
     insertToken: any
-    getAssetByOpHash: any
+    getAssetByCID: any
     updateAssetTokenId: any
     log: Log
   }) =>
@@ -123,7 +123,7 @@ export const listenToAssetContract =
         })
         log.info('Token registered', token)
         log.info('Updating Asset')
-        const asset = await getAssetByOpHash(token.hash)
+        const [asset] = await getAssetByCID(token.identifier)
         log.info('Asset', asset)
         if (!asset) {
           return true

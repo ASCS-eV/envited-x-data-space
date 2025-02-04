@@ -201,10 +201,10 @@ export const insertToken =
       }
     })
 
-export const getAssetByOpHash =
+export const getAssetByCID =
   ({ database: db }: { database: DatabaseConnection }) =>
-  async (hash: string) =>
-    db.select().from(schema.asset).where(eq(schema.asset.hash, hash))
+  async (cid: string) =>
+    db.select().from(schema.asset).where(eq(schema.asset.cid, cid))
 
 export const updateAssetTokenId =
   ({ database: db }: { database: DatabaseConnection }) =>

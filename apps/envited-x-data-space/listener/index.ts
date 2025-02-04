@@ -7,7 +7,7 @@ import { connectDb } from '../common/database'
 import * as schema from '../common/database/schema'
 import { log } from '../common/logger'
 import { listenToAssetContract } from './listener'
-import { getAssetByOpHash, getTokenByTokenId, insertToken, updateAssetTokenId } from './persistence'
+import { getAssetByCID, getTokenByTokenId, insertToken, updateAssetTokenId } from './persistence'
 
 const Tezos = new TezosToolkit(process.env.NEXT_PUBLIC_WEB3_RPC_URL || 'https://ghostnet.ecadinfra.com')
 const db = async () => {
@@ -34,7 +34,7 @@ listenToAssetContract({
   tezos: Tezos,
   getTokenByTokenId: getTokenByTokenId({ database: connection }),
   insertToken: insertToken({ database: connection }),
-  getAssetByOpHash: getAssetByOpHash({ database: connection }),
+  getAssetByCID: getAssetByCID({ database: connection }),
   updateAssetTokenId: updateAssetTokenId({ database: connection }),
   log,
 })()

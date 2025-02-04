@@ -183,6 +183,13 @@
       "when": 1733498428262,
       "tag": "0025_rapid_rumiko_fujikawa",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1738565946815,
+      "tag": "0026_charming_energizer",
+      "breakpoints": true
     }
   ]
 }

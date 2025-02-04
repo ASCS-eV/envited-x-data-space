@@ -194,9 +194,19 @@ export const insertToken =
           await insertTokenAttributeTx(tx)(insertedToken.id, attributes[i].name, attributes[i].value)
         }
 
-        return true
+        return insertedToken
       } catch (error) {
         console.log(error)
         tx.rollback()
       }
     })
+
+export const getAssetByCID =
+  ({ database: db }: { database: DatabaseConnection }) =>
+  async (cid: string) =>
+    db.select().from(schema.asset).where(eq(schema.asset.cid, cid))
+
+export const updateAssetTokenId =
+  ({ database: db }: { database: DatabaseConnection }) =>
+  async (id: string, tokenId: string) =>
+    db.update(schema.asset).set({ tokenId, updatedAt: new Date() }).where(eq(schema.asset.id, id)).returning()

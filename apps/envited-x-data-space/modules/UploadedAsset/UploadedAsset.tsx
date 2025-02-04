@@ -100,7 +100,7 @@ export const UploadedAsset: FC<UploadedAssetProps> = ({ assetIdx, asset }) => {
           equals(assetIdx)(0) ? '' : 'border-t border-transparent'
         } relative py-3.5 pl-3 text-right text-sm font-medium space-x-2`}
       >
-        <UploadedAssetButtons id={asset.id} status={localAsset.status} />
+        <UploadedAssetButtons tokenId={asset.tokenId} id={asset.id} status={localAsset.status} />
         {!equals(assetIdx)(0) ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
       </td>
     </tr>

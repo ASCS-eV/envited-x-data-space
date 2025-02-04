@@ -15,10 +15,11 @@ import { deleteAsset } from './UploadedAsset.actions'
 
 interface UploadedAssetProps {
   id: string
+  tokenId?: string
   status: AssetStatus
 }
 
-export const View: FC<{ id: string; disabled: boolean }> = ({ id, disabled }) => {
+export const View: FC<{ disabled: boolean; tokenId?: string }> = ({ tokenId, disabled }) => {
   const { t } = useTranslation('UploadedAsset')
   const router = useRouter()
 
@@ -26,7 +27,7 @@ export const View: FC<{ id: string; disabled: boolean }> = ({ id, disabled }) =>
     <IconButtonWithTooltip
       disabled={disabled}
       icon={<EyeIcon className="h-4 w-4" aria-hidden="true" />}
-      onClick={() => router.push(`/assets/${id}`)}
+      onClick={() => router.push(`/assets/${tokenId}`)}
     >
       {t('[Button] view')}
     </IconButtonWithTooltip>
@@ -75,11 +76,11 @@ export const DeleteDialogConfirm: FC<{ id: string; disabled: boolean }> = ({ id,
   )
 }
 
-export const UploadedAssetButtons: FC<UploadedAssetProps> = ({ id, status }) => {
+export const UploadedAssetButtons: FC<UploadedAssetProps> = ({ id, status, tokenId }) => {
   return (
     <span className="flex shrink-0 items-center space-x-4 justify-end">
       <Mint assetId={id} disabled={!includes(AssetAction.mint)(enabledActionsMap[status])} />
-      <View id={id} disabled={!includes(AssetAction.view)(enabledActionsMap[status])} />
+      <View tokenId={tokenId} disabled={!includes(AssetAction.view)(enabledActionsMap[status])} />
       <span className="text-gray-300 border-r border-gray-300 block h-[1rem] w-[1px]" aria-hidden="true">
         {''}
       </span>

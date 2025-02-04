@@ -209,4 +209,4 @@ export const getAssetByOpHash =
 export const updateAssetTokenId =
   ({ database: db }: { database: DatabaseConnection }) =>
   async (id: string, tokenId: string) =>
-    db.update(schema.asset).set({ tokenId }).where(eq(schema.asset.id, id)).returning()
+    db.update(schema.asset).set({ tokenId, updatedAt: new Date() }).where(eq(schema.asset.id, id)).returning()

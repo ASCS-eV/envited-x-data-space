@@ -121,9 +121,10 @@ export const listenToAssetContract =
           attributes,
           tokenMetadata,
         })
-
+        log.info('Token registered', token)
+        log.info('Updating Asset')
         const asset = await getAssetByOpHash(token.hash)
-
+        log.info('Asset', asset)
         if (!asset) {
           return true
         }

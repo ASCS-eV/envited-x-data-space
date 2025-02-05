@@ -12,7 +12,7 @@ describe.skip('createLocalCopy', () => {
 
   it('should download a file from IPFS and upload it to S3', async () => {
     // Setup your mock as needed for specific tests
-    ;(fileTypeFromBuffer as jest.Mock).mockResolvedValue({
+    (fileTypeFromBuffer as jest.Mock).mockResolvedValue({
       ext: 'png',
       mime: 'image/png',
     })
@@ -24,7 +24,7 @@ describe.skip('createLocalCopy', () => {
     const downloadFileStub = jest.fn().mockResolvedValue({ data, contentType })
     const uploadFileToS3Stub = jest.fn().mockResolvedValue({} as any)
 
-    await SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub, downloadFile: downloadFileStub })(cid)
+    await SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub })(cid)
 
     expect(downloadFileStub).toHaveBeenCalledTimes(1)
     expect(downloadFileStub).toHaveBeenCalledWith(cid)
@@ -44,22 +44,20 @@ describe.skip('createLocalCopy', () => {
   it('should throw an error if the file is not found on IPFS', async () => {
     const cid = 'CID'
 
-    const downloadFileStub = jest.fn().mockResolvedValue({ data: null })
     const uploadFileToS3Stub = jest.fn().mockResolvedValue({} as any)
 
     await expect(
-      SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub, downloadFile: downloadFileStub })(cid),
+      SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub })(cid),
     ).rejects.toThrow('No data')
   })
 
   it('should throw an error if the file is not downloaded correctly', async () => {
     const cid = 'CID'
 
-    const downloadFileStub = jest.fn().mockRejectedValue(new Error('Error'))
     const uploadFileToS3Stub = jest.fn().mockResolvedValue({} as any)
 
     await expect(
-      SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub, downloadFile: downloadFileStub })(cid),
+      SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub })(cid),
     ).rejects.toThrow('Error')
   })
 })

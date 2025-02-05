@@ -1,13 +1,14 @@
 'use client'
 
-import { Tab } from '@headlessui/react'
-import { pathOr } from 'ramda'
-import { FC, Fragment } from 'react'
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
+import { has, pathOr } from 'ramda'
+import { FC, Fragment, useEffect, useState } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
 import { formatTokenAttributes } from '../../common/utils'
 import { Button } from '../Button'
+import displayTrees from '../../common/asset/displayTrees'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -19,7 +20,12 @@ interface AssetProps {
 
 export const Asset: FC<AssetProps> = ({ token: { token } }) => {
   const attributes = formatTokenAttributes(token.tokenAttributes) as any
+  const [displayTree, setDisplayTree] = useState<any>()
   const { t } = useTranslation('Asset')
+
+  useEffect(() => {
+    setDisplayTree(displayTrees[Object.keys(attributes)[0] as keyof typeof displayTrees])
+  }, [attributes])
 
   return (
     <>
@@ -63,32 +69,22 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-              <h3 className="text-sm font-medium text-gray-900">{t('[Header] asset information')}</h3>
+              <h3 className="text-sm font-bold text-gray-900">{t('[Header] asset information')}</h3>
               <div className="prose prose-sm mt-4 text-gray-500">
                 <ul role="list" className="text-sm font-medium leading-8 text-gray-900">
-                  <li>
-                    <strong>{t('[Term] format')}</strong> ASAM OpenDrive 1.6
-                  </li>
-                  <li>
-                    <strong>{t('[Term] size')}</strong>{' '}
-                    {pathOr('', ['data', 'hdmap', 'general', 'general', 'data', 'general', 'size'])(attributes)}
-                  </li>
-                  <li>
-                    <strong>{t('[Term] recording time')}</strong>{' '}
-                    {pathOr('', ['data', 'hdmap', 'general', 'general', 'data', 'general', 'recordingTime'])(
-                      attributes,
-                    )}
-                  </li>
-                  <li>
-                    <strong>{t('[Term] version')}</strong>{' '}
-                    {pathOr('', ['data', 'hdmap', 'format', 'hdmap', 'version'])(attributes)}
-                  </li>
+                  {
+                    displayTree?.terms.map((term: { name: string, value?: string, path?: string[] }) => (
+                      <li key={term.name}>
+                        <strong>{term.name}</strong> {has('value', term) ? term.value : pathOr('', (term.path as string[] ))(attributes)}
+                      </li>
+                    ))
+                  }
                 </ul>
               </div>
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-              <h3 className="text-sm font-medium text-gray-900">License</h3>
+              <h3 className="text-sm font-bold text-gray-900">License</h3>
               <ul role="list" className="mt-4 text-sm font-medium leading-8 text-gray-900">
                 <li>
                   <strong>{t('[Term] type')}</strong> {token.rights}
@@ -104,407 +100,70 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
           </div>
 
           <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
-            <Tab.Group as="div">
+            <TabGroup as="div">
               <div className="border-b border-gray-200">
-                <Tab.List className="-mb-px flex space-x-8">
-                  <Tab
-                    className={({ selected }) =>
-                      classNames(
-                        selected
-                          ? 'border-blue-800 text-blue-800'
-                          : 'border-transparent text-gray-700 hover:border-gray-300 hover:text-gray-800',
-                        'whitespace-nowrap border-b-2 py-6 text-sm font-medium outline-none',
-                      )
-                    }
-                  >
-                    Content
-                  </Tab>
-                  <Tab
-                    className={({ selected }) =>
-                      classNames(
-                        selected
-                          ? 'border-blue-800 text-blue-800'
-                          : 'border-transparent text-gray-700 hover:border-gray-300 hover:text-gray-800',
-                        'whitespace-nowrap border-b-2 py-6 text-sm font-medium outline-none',
-                      )
-                    }
-                  >
-                    Product details
-                  </Tab>
-                  <Tab
-                    className={({ selected }) =>
-                      classNames(
-                        selected
-                          ? 'border-blue-800 text-blue-800'
-                          : 'border-transparent text-gray-700 hover:border-gray-300 hover:text-gray-800',
-                        'whitespace-nowrap border-b-2 py-6 text-sm font-medium outline-none',
-                      )
-                    }
-                  >
-                    Location
-                  </Tab>
-                </Tab.List>
+              <TabList className="-mb-px flex space-x-8">
+                {
+                  displayTree?.categories.map((tab: { name: string }) => (
+                    <Tab
+                      key={tab.name}
+                      className={({ selected }) =>
+                        classNames(
+                          selected
+                            ? 'border-blue-800 text-blue-800'
+                            : 'border-transparent text-gray-700 hover:border-gray-300 hover:text-gray-800',
+                          'whitespace-nowrap border-b-2 py-6 text-sm font-medium outline-none',
+                        )
+                      }
+                    >
+                      {tab.name}
+                    </Tab>
+                  ))
+                }
+                </TabList>
               </div>
-              <Tab.Panels as={Fragment}>
-                <Tab.Panel>
-                  <h3 className="sr-only">Content</h3>
-                  {/* <div className="mt-0">
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
-                      <div className="border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Road Types</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{product.city}</dd>
-                      </div>
-                      <div className="border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Level of Detail</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{product.country}</dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Lane types</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{product.length}</dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Traffic Direction</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{product.roadSurface}</dd>
-                      </div>
-                    </dl>
-                  </div> */}
-                  <h3 className="text-lg font-medium mt-6">Quantity</h3>
-                  <div className="mt-0">
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Number intersections</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberIntersections'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Length</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'length'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Number traffic lights</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberTrafficLights'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Elevation range</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'elevationRange'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Range of modeling</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'rangeOfModeling'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Number objects</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberObjects'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Number traffic signs</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberTrafficSigns'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Number outlines</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'numberOutlines'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Speed limit</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          Min:{' '}
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'min'])(
-                            attributes,
-                          )}
-                          , Max:{' '}
-                          {pathOr('', ['data', 'hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'max'])(
-                            attributes,
-                          )}
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
-                </Tab.Panel>
-                <Tab.Panel>
-                  <h3 className="sr-only">Product details</h3>
-                  <h3 className="text-lg font-medium">Quality</h3>
-                  <div className="mt-0">
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Accuracy Signals</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'accuracySignals'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Precision</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'precision'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Accuracy Objects</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'accuracyObjects'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Accuracy Lane Model 2d</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'accuracyLaneModel2d'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Accuracy Lane Model Height</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'quality', 'hdmap', 'accuracyLaneModelHeight'])(attributes)}
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
-                  <h3 className="text-lg font-medium mt-6">Data Source</h3>
-                  <div className="mt-0">
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Measurement System</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'dataSource', 'hdmap', 'measurementSystem'])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Used Data Sources</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', ['data', 'hdmap', 'dataSource', 'hdmap', 'usedDataSources'])(attributes)}
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
-                </Tab.Panel>
+              <TabPanels as={Fragment}>
+                {
+                  displayTree?.categories.map((tab: { name: string, sections: { name: string, items: {name: string, path?: string[], paths?: {name: string, path: string[]}[]}[] }[] }) => (
+                    <TabPanel key={tab.name}>
+                      <h3 className="sr-only">{tab.name}</h3>{
+                        tab.sections.map((section) => (
+                          <>
+                            <h3 className="text-lg font-medium mt-6">{section.name}</h3>
+                            <div className="mt-0">
+                              <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
+                                {
+                                  section.items.map((item) => (
+                                    <div key={item.name} className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
+                                      <dt className="text-sm font-medium leading-6 text-gray-900">{item.name}</dt>
+                                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+                                        {
+                                          has('paths', item) ? (
+                                            (item.paths as {name: string, path: string[]}[]).map((path) => (
+                                              <span key={path.name}>
+                                                {path.name}: {pathOr('N/A', path.path)(attributes)} <br/>
+                                              </span>
+                                            ))
+                                          ) : (
+                                            pathOr('N/A', (item.path as string[]))(attributes)
+                                          )
+                                        }
+                                      </dd>
+                                    </div>
+                                  ))
+                                }
+                              </dl>
+                            </div>
+                          </>
+                        ))
+                      }
+                        
+                    </TabPanel>
+                  ))
+                }
+              </TabPanels>
+            </TabGroup>
 
-                <Tab.Panel>
-                  <h3 className="sr-only">Location</h3>
-                  <img
-                    src="https://envited.market/gcmedia/serve/reference/3506/xl/0/streckea8.png"
-                    className="w-full h-auto mt-6"
-                  />
-                  <h3 className="text-lg font-medium mt-6">Project Location</h3>
-                  <div className="mt-0">
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Country</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'projectLocation',
-                            'georeference',
-                            'country',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">State</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'projectLocation',
-                            'georeference',
-                            'state',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Region</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'projectLocation',
-                            'georeference',
-                            'region',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">City</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'projectLocation',
-                            'georeference',
-                            'city',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Relation or Area</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'projectLocation',
-                            'georeference',
-                            'relationOrArea',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
-                  <h3 className="text-lg font-medium mt-6">Geodetic Reference System</h3>
-                  <div className="mt-0">
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Origin</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'geodeticReferenceSystem',
-                            'georeference',
-                            'origin',
-                            'georeference',
-                            'x',
-                          ])(attributes)}
-                          ,{' '}
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'geodeticReferenceSystem',
-                            'georeference',
-                            'origin',
-                            'georeference',
-                            'y',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Coordinate System</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'geodeticReferenceSystem',
-                            'georeference',
-                            'coordinateSystem',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">Height System</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'geodeticReferenceSystem',
-                            'georeference',
-                            'heightSystem',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
-                  <h3 className="text-lg font-medium mt-6">Bounding Box</h3>
-                  <div className="mt-0">
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">xMin</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'projectLocation',
-                            'georeference',
-                            'boundingBox',
-                            'georeference',
-                            'xMin',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">yMin</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'projectLocation',
-                            'georeference',
-                            'boundingBox',
-                            'georeference',
-                            'yMin',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">xMax</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'projectLocation',
-                            'georeference',
-                            'boundingBox',
-                            'georeference',
-                            'xMax',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                      <div className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">yMax</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                          {pathOr('', [
-                            'data',
-                            'hdmap',
-                            'georeference',
-                            'georeference',
-                            'projectLocation',
-                            'georeference',
-                            'boundingBox',
-                            'georeference',
-                            'yMax',
-                          ])(attributes)}
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
-                </Tab.Panel>
-              </Tab.Panels>
-            </Tab.Group>
           </div>
         </div>
       </div>

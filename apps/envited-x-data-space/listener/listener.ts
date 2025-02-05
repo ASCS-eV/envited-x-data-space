@@ -1,4 +1,5 @@
 import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
+import { GetCIDResponse } from 'pinata-web3'
 import { replace } from 'ramda'
 
 import { pinata } from '../common/ipfs'
@@ -95,9 +96,8 @@ export const listenToAssetContract =
         const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${tokenMetadata?.identifier}/${displayCid}`
         log.info('Local display URI', localDisplayUri)
         const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
-        log.info('Attributes URI', attributesUri)
-        const manifest = await pinata.gateways.get(replace('ipfs://', '')(attributesUri as string))
-        const attributes = extractKeyValuePairs(manifest)
+        const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(attributesUri as string))
+        const attributes = extractKeyValuePairs(manifest.data)
         // Save token to DB
         const token = await insertToken({
           hash,

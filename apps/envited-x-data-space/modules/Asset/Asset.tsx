@@ -4,11 +4,11 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { has, pathOr } from 'ramda'
 import { FC, Fragment, useEffect, useState } from 'react'
 
+import displayTrees from '../../common/asset/displayTrees'
 import { useTranslation } from '../../common/i18n'
 import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
 import { formatTokenAttributes } from '../../common/utils'
 import { Button } from '../Button'
-import displayTrees from '../../common/asset/displayTrees'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -72,13 +72,12 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
               <h3 className="text-sm font-bold text-gray-900">{t('[Header] asset information')}</h3>
               <div className="prose prose-sm mt-4 text-gray-500">
                 <ul role="list" className="text-sm font-medium leading-8 text-gray-900">
-                  {
-                    displayTree?.terms.map((term: { name: string, value?: string, path?: string[] }) => (
-                      <li key={term.name}>
-                        <strong>{term.name}</strong> {has('value', term) ? term.value : pathOr('', (term.path as string[] ))(attributes)}
-                      </li>
-                    ))
-                  }
+                  {displayTree?.terms.map((term: { name: string; value?: string; path?: string[] }) => (
+                    <li key={term.name}>
+                      <strong>{term.name}</strong>{' '}
+                      {has('value', term) ? term.value : pathOr('', term.path as string[])(attributes)}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -102,9 +101,8 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
           <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
             <TabGroup as="div">
               <div className="border-b border-gray-200">
-              <TabList className="-mb-px flex space-x-8">
-                {
-                  displayTree?.categories.map((tab: { name: string }) => (
+                <TabList className="-mb-px flex space-x-8">
+                  {displayTree?.categories.map((tab: { name: string }) => (
                     <Tab
                       key={tab.name}
                       className={({ selected }) =>
@@ -118,52 +116,51 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                     >
                       {tab.name}
                     </Tab>
-                  ))
-                }
+                  ))}
                 </TabList>
               </div>
               <TabPanels as={Fragment}>
-                {
-                  displayTree?.categories.map((tab: { name: string, sections: { name: string, items: {name: string, path?: string[], paths?: {name: string, path: string[]}[]}[] }[] }) => (
+                {displayTree?.categories.map(
+                  (tab: {
+                    name: string
+                    sections: {
+                      name: string
+                      items: { name: string; path?: string[]; paths?: { name: string; path: string[] }[] }[]
+                    }[]
+                  }) => (
                     <TabPanel key={tab.name}>
-                      <h3 className="sr-only">{tab.name}</h3>{
-                        tab.sections.map((section) => (
-                          <>
-                            <h3 className="text-lg font-medium mt-6">{section.name}</h3>
-                            <div className="mt-0">
-                              <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
-                                {
-                                  section.items.map((item) => (
-                                    <div key={item.name} className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0">
-                                      <dt className="text-sm font-medium leading-6 text-gray-900">{item.name}</dt>
-                                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                                        {
-                                          has('paths', item) ? (
-                                            (item.paths as {name: string, path: string[]}[]).map((path) => (
-                                              <span key={path.name}>
-                                                {path.name}: {pathOr('N/A', path.path)(attributes)} <br/>
-                                              </span>
-                                            ))
-                                          ) : (
-                                            pathOr('N/A', (item.path as string[]))(attributes)
-                                          )
-                                        }
-                                      </dd>
-                                    </div>
-                                  ))
-                                }
-                              </dl>
-                            </div>
-                          </>
-                        ))
-                      }
-                        
+                      <h3 className="sr-only">{tab.name}</h3>
+                      {tab.sections.map(section => (
+                        <>
+                          <h3 className="text-lg font-medium mt-6">{section.name}</h3>
+                          <div className="mt-0">
+                            <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
+                              {section.items.map(item => (
+                                <div
+                                  key={item.name}
+                                  className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0"
+                                >
+                                  <dt className="text-sm font-medium leading-6 text-gray-900">{item.name}</dt>
+                                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
+                                    {has('paths', item)
+                                      ? (item.paths as { name: string; path: string[] }[]).map(path => (
+                                          <span key={path.name}>
+                                            {path.name}: {pathOr('N/A', path.path)(attributes)} <br />
+                                          </span>
+                                        ))
+                                      : pathOr('N/A', item.path as string[])(attributes)}
+                                  </dd>
+                                </div>
+                              ))}
+                            </dl>
+                          </div>
+                        </>
+                      ))}
                     </TabPanel>
-                  ))
-                }
+                  ),
+                )}
               </TabPanels>
             </TabGroup>
-
           </div>
         </div>
       </div>

@@ -27,11 +27,11 @@ export const hdmap = {
           items: [
             {
               name: 'Number intersections',
-              path: ['hdmap', 'quantity', 'hdmap', 'numberIntersections'], 
+              path: ['hdmap', 'quantity', 'hdmap', 'numberIntersections'],
             },
             {
               name: 'Length',
-              path: ['hdmap', 'quantity', 'hdmap', 'length'], 
+              path: ['hdmap', 'quantity', 'hdmap', 'length'],
             },
             {
               name: 'Number traffic lights',
@@ -39,7 +39,7 @@ export const hdmap = {
             },
             {
               name: 'Elevation range',
-              path: ['hdmap', 'quantity', 'hdmap', 'elevationRange'], 
+              path: ['hdmap', 'quantity', 'hdmap', 'elevationRange'],
             },
             {
               name: 'Range of modeling',
@@ -67,13 +67,14 @@ export const hdmap = {
                 {
                   name: 'Max',
                   path: ['hdmap', 'quantity', 'hdmap', 'speedLimit', 'general', 'max'],
-                }
-              ]
-            }
+                },
+              ],
+            },
           ],
         },
       ],
-    }, {
+    },
+    {
       name: 'Product details',
       sections: [
         {
@@ -113,9 +114,10 @@ export const hdmap = {
               path: ['hdmap', 'dataSource', 'hdmap', 'usedDataSources'],
             },
           ],
-        }
+        },
       ],
-    }, {
+    },
+    {
       name: 'Location',
       sections: [
         {
@@ -150,47 +152,115 @@ export const hdmap = {
               name: 'Origin',
               paths: [
                 {
-                  name: 'X', 
-                  path: ['hdmap', 'georeference', 'georeference', 'geodeticReferenceSystem', 'georeference', 'origin', 'georeference','x'],
+                  name: 'X',
+                  path: [
+                    'hdmap',
+                    'georeference',
+                    'georeference',
+                    'geodeticReferenceSystem',
+                    'georeference',
+                    'origin',
+                    'georeference',
+                    'x',
+                  ],
                 },
                 {
-                  name: 'Y', 
-                  path: ['hdmap', 'georeference', 'georeference', 'geodeticReferenceSystem', 'georeference', 'origin', 'georeference','y'],
-                }
-              ]
+                  name: 'Y',
+                  path: [
+                    'hdmap',
+                    'georeference',
+                    'georeference',
+                    'geodeticReferenceSystem',
+                    'georeference',
+                    'origin',
+                    'georeference',
+                    'y',
+                  ],
+                },
+              ],
             },
             {
               name: 'Coordinate System',
-              path: ['hdmap', 'georeference', 'georeference', 'geodeticReferenceSystem', 'georeference', 'coordinateSystem'],
+              path: [
+                'hdmap',
+                'georeference',
+                'georeference',
+                'geodeticReferenceSystem',
+                'georeference',
+                'coordinateSystem',
+              ],
             },
             {
               name: 'Height System',
-              path: ['hdmap', 'georeference', 'georeference', 'geodeticReferenceSystem', 'georeference', 'heightSystem'],
+              path: [
+                'hdmap',
+                'georeference',
+                'georeference',
+                'geodeticReferenceSystem',
+                'georeference',
+                'heightSystem',
+              ],
             },
             {
               name: 'Bounding Box',
               paths: [
                 {
                   name: 'X Min',
-                  path: ['hdmap', 'georeference', 'georeference', 'projectLocation', 'georeference', 'boundingBox', 'georeference', 'xMin'],
+                  path: [
+                    'hdmap',
+                    'georeference',
+                    'georeference',
+                    'projectLocation',
+                    'georeference',
+                    'boundingBox',
+                    'georeference',
+                    'xMin',
+                  ],
                 },
                 {
                   name: 'Y Min',
-                  path: ['hdmap', 'georeference', 'georeference', 'projectLocation', 'georeference', 'boundingBox', 'georeference', 'yMin'],
+                  path: [
+                    'hdmap',
+                    'georeference',
+                    'georeference',
+                    'projectLocation',
+                    'georeference',
+                    'boundingBox',
+                    'georeference',
+                    'yMin',
+                  ],
                 },
                 {
                   name: 'X Max',
-                  path: ['hdmap', 'georeference', 'georeference', 'projectLocation', 'georeference', 'boundingBox', 'georeference', 'xMax'],
+                  path: [
+                    'hdmap',
+                    'georeference',
+                    'georeference',
+                    'projectLocation',
+                    'georeference',
+                    'boundingBox',
+                    'georeference',
+                    'xMax',
+                  ],
                 },
                 {
                   name: 'Y Max',
-                  path: ['hdmap', 'georeference', 'georeference', 'projectLocation', 'georeference', 'boundingBox', 'georeference', 'yMax'],
-                }
-              ]
-            }
-          ]
-        }
+                  path: [
+                    'hdmap',
+                    'georeference',
+                    'georeference',
+                    'projectLocation',
+                    'georeference',
+                    'boundingBox',
+                    'georeference',
+                    'yMax',
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       ],
-    }
-  ]
+    },
+  ],
 }

@@ -12,7 +12,7 @@ describe.skip('createLocalCopy', () => {
 
   it('should download a file from IPFS and upload it to S3', async () => {
     // Setup your mock as needed for specific tests
-    (fileTypeFromBuffer as jest.Mock).mockResolvedValue({
+    ;(fileTypeFromBuffer as jest.Mock).mockResolvedValue({
       ext: 'png',
       mime: 'image/png',
     })
@@ -46,9 +46,7 @@ describe.skip('createLocalCopy', () => {
 
     const uploadFileToS3Stub = jest.fn().mockResolvedValue({} as any)
 
-    await expect(
-      SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub })(cid),
-    ).rejects.toThrow('No data')
+    await expect(SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub })(cid)).rejects.toThrow('No data')
   })
 
   it('should throw an error if the file is not downloaded correctly', async () => {
@@ -56,8 +54,6 @@ describe.skip('createLocalCopy', () => {
 
     const uploadFileToS3Stub = jest.fn().mockResolvedValue({} as any)
 
-    await expect(
-      SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub })(cid),
-    ).rejects.toThrow('Error')
+    await expect(SUT.createLocalCopy({ uploadFileToS3: uploadFileToS3Stub })(cid)).rejects.toThrow('Error')
   })
 })

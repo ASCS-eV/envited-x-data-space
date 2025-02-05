@@ -1,11 +1,11 @@
 import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
+import { GetCIDResponse } from 'pinata-web3'
 import { replace } from 'ramda'
 
 import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
 import { extractAttributesUri, extractKeyValuePairs } from './utils'
-import { GetCIDResponse } from 'pinata-web3'
 
 export const createLocalCopy =
   ({ uploadFileToS3 }: { uploadFileToS3: any }) =>

@@ -13,32 +13,32 @@ export const FEDERATOR_NAVIGATION_DASHBOARD = [
   {
     href: ROUTES.DASHBOARD.HOME,
     name: 'Dashboard',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.MEMBERS,
     name: 'Members',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.PROFILE,
     name: 'Profile',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.USERS,
     name: 'Users',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.ASSETS,
     name: 'Assets',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.ACCOUNTING,
     name: 'Accounting',
-    icon: '',
+    icon: true,
   },
 ]
 
@@ -46,27 +46,27 @@ export const PRINCIPAL_NAVIGATION_DASHBOARD = [
   {
     href: ROUTES.DASHBOARD.HOME,
     name: 'Dashboard',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.PROFILE,
     name: 'Profile',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.USERS,
     name: 'Users',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.ASSETS,
     name: 'Assets',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.ACCOUNTING,
     name: 'Accounting',
-    icon: '',
+    icon: true,
   },
 ]
 
@@ -74,17 +74,17 @@ export const PROVIDER_NAVIGATION_DASHBOARD = [
   {
     href: ROUTES.DASHBOARD.HOME,
     name: 'Dashboard',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.ASSETS,
     name: 'Assets',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.ACCOUNTING,
     name: 'Accounting',
-    icon: '',
+    icon: true,
   },
 ]
 
@@ -92,17 +92,17 @@ export const USER_NAVIGATION_DASHBOARD = [
   {
     href: ROUTES.DASHBOARD.HOME,
     name: 'Dashboard',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.ASSETS,
     name: 'Assets',
-    icon: '',
+    icon: true,
   },
   {
     href: ROUTES.DASHBOARD.ACCOUNTING,
     name: 'Accounting',
-    icon: '',
+    icon: true,
   },
 ]
 

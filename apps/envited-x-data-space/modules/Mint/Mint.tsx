@@ -4,10 +4,11 @@ import { IconButtonWithTooltip } from '@envited-x-data-space/design-system'
 import { RocketLaunchIcon } from '@heroicons/react/24/outline'
 import React, { FC } from 'react'
 
+import { useWallet } from '../../common/context/WalletContext'
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { formatIpfsUri } from '../../common/utils'
-import { mintToken, tezos } from '../../common/web3'
+import { mintToken } from '../../common/web3'
 import { getAssetMintParams, updateStatus, uploadAssetTokenMetadata } from '../UploadedAssets/UploadedAssets.actions'
 import { ShowSpecificBeaconWallets } from './Mint.utils'
 
@@ -19,13 +20,15 @@ interface MintProps {
 export const Mint: FC<MintProps> = ({ assetId, disabled }) => {
   const { t } = useTranslation('Mint')
   const { error, success } = useNotification()
+  const { Tezos, wallet, account, connectWallet } = useWallet()
 
   const mintAsset = async (id: string) => {
-    const { Tezos, wallet } = await tezos()
-    await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })
-    const account = await wallet?.client.getActiveAccount()
+    if (!account) {
+      await connectWallet()
+      ShowSpecificBeaconWallets()
+    }
 
-    if (account) {
+    if (account && Tezos && wallet) {
       const cid = await uploadAssetTokenMetadata(id)
       const mintParams = await getAssetMintParams(id)
       const operation = await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: formatIpfsUri(cid) })
@@ -38,9 +41,6 @@ export const Mint: FC<MintProps> = ({ assetId, disabled }) => {
         .catch(() => {
           error(t('[Status] token minting failed'))
         })
-    } else {
-      await wallet?.client.requestPermissions({ network: { type: 'ghostnet' as any } })
-      ShowSpecificBeaconWallets()
     }
   }
   return (
@@ -49,7 +49,7 @@ export const Mint: FC<MintProps> = ({ assetId, disabled }) => {
       icon={<RocketLaunchIcon className="h-4 w-4" aria-hidden="true" />}
       onClick={() => mintAsset(assetId)}
     >
-      {t('[Button] mint')}
+      {account ? t('[Button] mint') : t('[Button] connect and mint')}
     </IconButtonWithTooltip>
   )
 }

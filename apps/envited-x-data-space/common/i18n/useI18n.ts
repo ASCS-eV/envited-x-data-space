@@ -18,6 +18,7 @@ import { ProfileTranslation } from '../../modules/Profile'
 import { UploadedAssetTranslation } from '../../modules/UploadedAsset'
 import { UploadedAssetsTranslation } from '../../modules/UploadedAssets'
 import { UsersTranslation } from '../../modules/Users'
+import { WalletConnectTranslation } from '../../modules/WalletConnect'
 import { Locale, TranslationsMap } from './types'
 
 const getTranslationsForLanguage = (namespace: string) => (locale: Locale) => pathOr({}, [locale, namespace])
@@ -42,6 +43,7 @@ const translationObject = mergeTranslations([
   UsersTranslation,
   ReinventingMobilityTranslation,
   MintTranslation,
+  WalletConnectTranslation,
 ]) as TranslationsMap
 
 export const translation = (translations: TranslationsMap) => (namespace: string) => {

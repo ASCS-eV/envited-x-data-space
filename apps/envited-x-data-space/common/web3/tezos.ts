@@ -6,7 +6,13 @@ export const initTezos =
   ({ Tezos }: { Tezos: TezosToolkit }) =>
   async () => {
     if (isServer()) {
-      return { Tezos: null, wallet: null }
+      return {
+        Tezos: null,
+        wallet: null,
+        connectWallet: async () => '',
+        disconnectWallet: async () => {},
+        restoreWallet: async () => {},
+      }
     }
 
     const wallet = new (await import('@taquito/beacon-wallet')).BeaconWallet({
@@ -14,9 +20,38 @@ export const initTezos =
       network: { type: 'ghostnet' as any },
       featuredWallets: ['altme', 'temple'],
     })
+
     Tezos.setWalletProvider(wallet)
 
-    return { Tezos, wallet }
+    const connectWallet = async () => {
+      try {
+        await wallet.requestPermissions({ network: { type: 'ghostnet' as any } })
+        const userAddress = await wallet.getPKH()
+        localStorage.setItem('tezos_wallet', userAddress)
+
+        return userAddress
+      } catch (error) {
+        console.error('Wallet connection failed:', error)
+        return ''
+      }
+    }
+
+    const disconnectWallet = async () => {
+      await wallet.clearActiveAccount()
+      localStorage.removeItem('tezos_wallet')
+    }
+
+    const restoreWallet = async () => {
+      const activeAccount = await wallet.client.getActiveAccount()
+
+      if (activeAccount) {
+        const userAddress = await wallet.getPKH()
+
+        return userAddress
+      }
+    }
+
+    return { Tezos, wallet, connectWallet, disconnectWallet, restoreWallet }
   }
 
 export const tezos = initTezos

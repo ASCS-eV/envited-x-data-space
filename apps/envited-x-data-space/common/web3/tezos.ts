@@ -26,7 +26,7 @@ export const initTezos =
     const connectWallet = async () => {
       try {
         await wallet.requestPermissions({ network: { type: 'ghostnet' as any } })
-        
+
         return wallet.getPKH()
       } catch (error) {
         console.error('Wallet connection failed:', error)

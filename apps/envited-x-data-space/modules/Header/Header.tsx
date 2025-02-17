@@ -23,7 +23,7 @@ export const Header: FC = () => {
             <div className="hidden md:flex lg:gap-x-12 lg:items-center">
               <Navigation items={NAVIGATION} colorScheme={ColorScheme.dark} />
             </div>
-            <div className="flex items-center gap-x-5 md:gap-x-4">
+            <div className="flex items-center gap-x-6">
               <SignIn colorScheme={ColorScheme.dark} />
               <div className="md:hidden">
                 <NavigationDropdown items={NAVIGATION} colorScheme={ColorScheme.dark} />

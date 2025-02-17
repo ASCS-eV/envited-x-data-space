@@ -4,5 +4,6 @@
 /.nx/cache
 /apps/envited-x-data-space/drizzle
 deploy.mjs
+.next
 
 /.nx/workspace-data

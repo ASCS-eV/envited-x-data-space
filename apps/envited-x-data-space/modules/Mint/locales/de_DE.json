@@ -1,5 +1,6 @@
 {
   "[Button] mint": "Mint",
+  "[Button] connect and mint": "Connect & Mint",
   "[Status] token is minted": "The asset is succesfully minted",
   "[Status] token minting failed": "The asset minting failed"
 }

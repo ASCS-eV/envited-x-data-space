@@ -51,14 +51,14 @@ export const listenToAssetContract =
     getTokenByTokenId,
     insertToken,
     getAssetByCID,
-    updateAssetTokenId,
+    updateAsset,
     log,
   }: {
     tezos: TezosToolkit
     getTokenByTokenId: any
     insertToken: any
     getAssetByCID: any
-    updateAssetTokenId: any
+    updateAsset: any
     log: Log
   }) =>
   async () => {
@@ -129,7 +129,7 @@ export const listenToAssetContract =
           return true
         }
 
-        await updateAssetTokenId({ id: asset.id, tokenId: token.id, hash })
+        await updateAsset({ id: asset.id, tokenId: token.id, hash })
 
         return true
       } catch (e) {

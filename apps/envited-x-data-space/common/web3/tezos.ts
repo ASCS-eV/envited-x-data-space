@@ -26,28 +26,21 @@ export const initTezos =
     const connectWallet = async () => {
       try {
         await wallet.requestPermissions({ network: { type: 'ghostnet' as any } })
-        const userAddress = await wallet.getPKH()
-        localStorage.setItem('tezos_wallet', userAddress)
-
-        return userAddress
+        
+        return wallet.getPKH()
       } catch (error) {
         console.error('Wallet connection failed:', error)
         return ''
       }
     }
 
-    const disconnectWallet = async () => {
-      await wallet.clearActiveAccount()
-      localStorage.removeItem('tezos_wallet')
-    }
+    const disconnectWallet = async () => wallet.clearActiveAccount()
 
     const restoreWallet = async () => {
       const activeAccount = await wallet.client.getActiveAccount()
 
       if (activeAccount) {
-        const userAddress = await wallet.getPKH()
-
-        return userAddress
+        return wallet.getPKH()
       }
     }
 

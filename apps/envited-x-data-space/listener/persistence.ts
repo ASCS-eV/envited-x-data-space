@@ -4,6 +4,7 @@ import { PgQueryResultHKT, PgTransaction } from 'drizzle-orm/pg-core'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
 import * as schema from '../common/database/schema'
+import { AssetStatus } from '../common/types'
 
 export type DatabaseConnection = PostgresJsDatabase<typeof schema> | AwsDataApiPgDatabase<typeof schema>
 
@@ -206,7 +207,7 @@ export const getAssetByCID =
   async (cid: string) =>
     db.select().from(schema.asset).where(eq(schema.asset.cid, cid))
 
-export const updateAssetTokenId =
+export const updateAsset =
   ({ database: db }: { database: DatabaseConnection }) =>
-  async (id: string, tokenId: string) =>
-    db.update(schema.asset).set({ tokenId, updatedAt: new Date() }).where(eq(schema.asset.id, id)).returning()
+  async ({ id, tokenId, hash }: { id: string, tokenId: string, hash: string }) =>
+    db.update(schema.asset).set({ tokenId, status: AssetStatus.minted, updatedAt: new Date(), hash }).where(eq(schema.asset.id, id)).returning()

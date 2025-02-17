@@ -129,7 +129,7 @@ export const listenToAssetContract =
           return true
         }
 
-        await updateAssetTokenId(asset.id, token.id)
+        await updateAssetTokenId({ id: asset.id, tokenId: token.id, hash })
 
         return true
       } catch (e) {

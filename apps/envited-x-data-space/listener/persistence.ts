@@ -209,5 +209,9 @@ export const getAssetByCID =
 
 export const updateAsset =
   ({ database: db }: { database: DatabaseConnection }) =>
-  async ({ id, tokenId, hash }: { id: string, tokenId: string, hash: string }) =>
-    db.update(schema.asset).set({ tokenId, status: AssetStatus.minted, updatedAt: new Date(), hash }).where(eq(schema.asset.id, id)).returning()
+  async ({ id, tokenId, hash }: { id: string; tokenId: string; hash: string }) =>
+    db
+      .update(schema.asset)
+      .set({ tokenId, status: AssetStatus.minted, updatedAt: new Date(), hash })
+      .where(eq(schema.asset.id, id))
+      .returning()

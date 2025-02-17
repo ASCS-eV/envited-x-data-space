@@ -6,8 +6,8 @@ import React, { FC } from 'react'
 
 import { signIn } from '../../common/auth'
 import { ColorScheme } from '../../common/types'
-import { WalletConnect } from '../WalletConnect'
 import { DashboardNavigationDropdown } from '../DashboardNavigation'
+import { WalletConnect } from '../WalletConnect'
 
 export const SignIn: FC<{ colorScheme?: ColorScheme }> = ({ colorScheme = ColorScheme.dark }) => {
   const { data: session } = useSession()

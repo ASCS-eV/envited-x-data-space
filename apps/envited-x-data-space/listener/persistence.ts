@@ -206,7 +206,7 @@ export const getAssetByCID =
   async (cid: string) =>
     db.select().from(schema.asset).where(eq(schema.asset.cid, cid))
 
-export const updateAssetTokenId =
+export const updateAsset =
   ({ database: db }: { database: DatabaseConnection }) =>
   async (id: string, tokenId: string) =>
     db.update(schema.asset).set({ tokenId, updatedAt: new Date() }).where(eq(schema.asset.id, id)).returning()

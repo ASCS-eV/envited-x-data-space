@@ -15,7 +15,7 @@ export const SignIn: FC<{ colorScheme?: ColorScheme }> = ({ colorScheme = ColorS
   return !isNil(session) ? (
     <>
       <DashboardNavigationDropdown colorScheme={colorScheme} />
-      <WalletConnect />
+      <WalletConnect colorScheme={colorScheme} />
     </>
   ) : (
     <button

@@ -5,6 +5,7 @@ import rdfParser, { RdfParser } from 'rdf-parse'
 import SHACLValidator from 'rdf-validate-shacl'
 import { Readable } from 'stream'
 
+import { createFilename } from '../../asset/utils'
 import { ERRORS } from '../../constants'
 import { AMOUNT_OF_UNDEFINED_FILES_IN_MANIFEST, SCHEMA_MAP } from './shacl.constants'
 import { ContentType, ValidationSchema } from './shacl.types'
@@ -13,6 +14,20 @@ export const validateShacl = (shapes: DatasetCore<Quad, Quad>) => async (data: D
   const validator = new SHACLValidator(shapes, { factory: rdf as any })
 
   return validator.validate(data)
+}
+
+export const checkIfAssetExists = async (file: File) => {
+  const arrayBuffer = Buffer.from(await file.arrayBuffer())
+  const cid = await createFilename(arrayBuffer)
+  const response = await fetch('/api/check-asset-exists', {
+    method: 'POST',
+    body: JSON.stringify({ cid }),
+    headers: { 'Content-Type': 'application/json' },
+  })
+
+  const { exists } = await response.json()
+
+  return exists
 }
 
 export const _parseStreamToDataset =

@@ -1,7 +1,7 @@
 'use client'
 
 import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-x-data-space/design-system'
-import { isEmpty, isNil, pathOr, times } from 'ramda'
+import { isEmpty, isNil, map, pathOr, times } from 'ramda'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -14,7 +14,7 @@ import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
   const { t } = useTranslation('AddAssets')
-  const { error, success } = useNotification()
+  const { error, success: successNotification } = useNotification()
 
   const {
     control,
@@ -46,9 +46,13 @@ export const AddAssets = () => {
         times(idx => formData.append('assets', data.assets[idx]))(data.assets.length)
       }
 
-      await addAssetsForm(formData)
+      const results = await addAssetsForm(formData)
 
-      success(t('[Notification] assets are uploaded'))
+      map(({ success, file }: { success: boolean; file: string }) =>
+        success
+          ? successNotification(`${file} ${t('[Notification] asset successfully uploaded')}`)
+          : error(`${file} ${t('[Notification] asset already exist')}`),
+      )(results)
       reset()
     } catch (e) {
       error(t('[Notification] invalid asset found'))

@@ -1,5 +1,6 @@
 export {
   getAsset,
+  getAssetByCID,
   getAssets,
   insertAsset,
   updateAsset,

@@ -9,5 +9,12 @@ export {
 } from './assets'
 export { getBusinessCategories } from './businessCategories'
 export { updateProfile, getProfile, getProfileBySlug, getPublishedProfiles } from './profiles'
-export { getActiveUsersByIssuerId, getUserById, getUsersByIssuerId, insertUser } from './users'
+export {
+  getActiveUsersByIssuerId,
+  getTotalUsersByIssuerId,
+  getUser,
+  getUserById,
+  getUsersByIssuerId,
+  insertUser,
+} from './users'
 export { getTokenById, getTokensForLoggedInUser, getTokens, getTokensByProfileSlug } from './tokens'

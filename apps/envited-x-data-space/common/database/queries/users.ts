@@ -1,4 +1,4 @@
-import { ExtractTablesWithRelations, and, eq, inArray } from 'drizzle-orm'
+import { ExtractTablesWithRelations, and, eq, inArray, sql } from 'drizzle-orm'
 import { PgTransaction } from 'drizzle-orm/pg-core'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { PostgresJsQueryResultHKT } from 'drizzle-orm/postgres-js'
@@ -65,6 +65,15 @@ export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: st
 
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.select().from(user).where(eq(user.issuerId, issuerId))
+
+export const getTotalUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) => {
+  const result = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(user)
+    .where(eq(user.issuerId, issuerId))
+
+  return result[0]?.count
+}
 
 export const getActiveUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db

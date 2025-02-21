@@ -2,10 +2,18 @@
 
 import { Nav, NavItem } from '@envited-x-data-space/design-system'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { UserIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowRightStartOnRectangleIcon,
+  BuildingOfficeIcon,
+  CubeTransparentIcon,
+  DocumentCurrencyEuroIcon,
+  Squares2X2Icon,
+  UserIcon,
+  UsersIcon,
+} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { equals, isEmpty, map } from 'ramda'
+import { equals, has, map } from 'ramda'
 import React, { FC } from 'react'
 
 import { signOut } from '../../common/auth'
@@ -15,21 +23,38 @@ import { ColorScheme } from '../../common/types'
 interface NavItemProps {
   href: string
   name: string
-  icon?: JSX.Element | string
 }
 
-const NavLink: FC<NavItemProps> = ({ href, name, icon = <></> }) => {
+enum DashboardIcons {
+  dashboard = 'Dashboard',
+  members = 'Members',
+  users = 'Users',
+  profile = 'Profile',
+  assets = 'Assets',
+  accounting = 'Accounting',
+}
+
+const ICON_MAP = {
+  [DashboardIcons.dashboard]: <Squares2X2Icon className="w-5 h-5" />,
+  [DashboardIcons.members]: <BuildingOfficeIcon className="w-5 h-5" />,
+  [DashboardIcons.users]: <UsersIcon className="w-5 h-5" />,
+  [DashboardIcons.profile]: <UserIcon className="w-5 h-5" />,
+  [DashboardIcons.assets]: <CubeTransparentIcon className="w-5 h-5" />,
+  [DashboardIcons.accounting]: <DocumentCurrencyEuroIcon className="w-5 h-5" />,
+}
+
+const NavLink: FC<NavItemProps> = ({ href, name }) => {
   const pathname = usePathname()
   const isActive = equals(pathname)(href)
 
-  const iconElement = !isEmpty(icon) ? (
-    <div className={`${isActive ? 'text-blue' : null} flex-shrink-0 mr-4`}>{icon}</div>
+  const iconElement = has(name)(ICON_MAP) ? (
+    <div className={`${isActive ? 'text-blue' : null} flex-shrink-0 mr-4`}>{ICON_MAP[name as DashboardIcons]}</div>
   ) : null
 
   return (
     <NavItem active={isActive}>
       <Link href={href}>
-        <div className="w-full py-4 px-5">
+        <div className="w-full py-4 px-5 flex items-center">
           {iconElement}
           <p className="text-base font-medium">{name}</p>
         </div>
@@ -41,11 +66,14 @@ const NavLink: FC<NavItemProps> = ({ href, name, icon = <></> }) => {
 export const DashboardNavigation: FC<{ items: NavItemProps[] }> = ({ items }) => {
   return (
     <Nav>
-      {map(({ href, name, icon }: NavItemProps) => <NavLink key={href} href={href} name={name} icon={icon} />)(items)}
+      {map(({ href, name }: NavItemProps) => <NavLink key={href} href={href} name={name} />)(items)}
       <NavItem>
         <div className="mt-3 pt-3 w-full border-t border-gray-200">
           <button onClick={signOut}>
-            <div className="w-full py-4 px-5">
+            <div className="w-full py-4 px-5 flex items-center">
+              <div className="flex-shrink-0 mr-4">
+                <ArrowRightStartOnRectangleIcon className="w-5 h-5" />
+              </div>
               <p className="text-base font-medium">Sign out</p>
             </div>
           </button>

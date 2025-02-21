@@ -23,7 +23,6 @@ import { ColorScheme } from '../../common/types'
 interface NavItemProps {
   href: string
   name: string
-  icon?: boolean | JSX.Element
 }
 
 enum DashboardIcons {
@@ -44,14 +43,13 @@ const ICON_MAP = {
   [DashboardIcons.accounting]: <DocumentCurrencyEuroIcon className="w-5 h-5" />,
 }
 
-const NavLink: FC<NavItemProps> = ({ href, name, icon = false }) => {
+const NavLink: FC<NavItemProps> = ({ href, name }) => {
   const pathname = usePathname()
   const isActive = equals(pathname)(href)
 
-  const iconElement =
-    has(name)(ICON_MAP) && icon ? (
-      <div className={`${isActive ? 'text-blue' : null} flex-shrink-0 mr-4`}>{ICON_MAP[name as DashboardIcons]}</div>
-    ) : null
+  const iconElement = has(name)(ICON_MAP) ? (
+    <div className={`${isActive ? 'text-blue' : null} flex-shrink-0 mr-4`}>{ICON_MAP[name as DashboardIcons]}</div>
+  ) : null
 
   return (
     <NavItem active={isActive}>
@@ -68,7 +66,7 @@ const NavLink: FC<NavItemProps> = ({ href, name, icon = false }) => {
 export const DashboardNavigation: FC<{ items: NavItemProps[] }> = ({ items }) => {
   return (
     <Nav>
-      {map(({ href, name, icon }: NavItemProps) => <NavLink key={href} href={href} name={name} icon={icon} />)(items)}
+      {map(({ href, name }: NavItemProps) => <NavLink key={href} href={href} name={name} />)(items)}
       <NavItem>
         <div className="mt-3 pt-3 w-full border-t border-gray-200">
           <button onClick={signOut}>

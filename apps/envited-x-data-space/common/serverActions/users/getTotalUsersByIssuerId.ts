@@ -1,4 +1,4 @@
-import { isNil } from 'ramda'
+import { isNil, isNotNil } from 'ramda'
 import { cache } from 'react'
 
 import { getServerSession } from '../../auth'
@@ -23,7 +23,7 @@ export const _getTotalUsersByIssuerId =
       const user = await connection.getUserById(session?.user?.pkh)
 
       let issuerId = session?.user?.pkh
-      if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
+      if (isNotNil(user) && hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserById(user.issuerId)
         issuerId = principal.id
       }

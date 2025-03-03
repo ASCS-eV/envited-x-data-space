@@ -1,1 +1,0 @@
-export { fetchAssetDataByCID } from './fetcher'

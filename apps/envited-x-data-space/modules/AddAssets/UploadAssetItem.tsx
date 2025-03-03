@@ -5,7 +5,7 @@ import { CheckCircleIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/out
 import { pathOr, prop } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 
-import { validateAsset } from './UploadAssetItem.utils'
+import { validateAsset } from '../../common/validator/utils'
 
 interface UploadAssetItemProps {
   idx: number

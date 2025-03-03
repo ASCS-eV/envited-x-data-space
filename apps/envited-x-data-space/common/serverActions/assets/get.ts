@@ -54,6 +54,32 @@ export const _get =
 
 export const get = _get({ db, getServerSession, log })
 
+export const _getAssetByCID =
+  ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
+  async (cid: string) => {
+    try {
+      if (isNil(cid) || isEmpty(cid)) {
+        throw badRequestError({ resource: 'assets', resourceId: cid, message: 'Missing CID' })
+      }
+
+      const session = await getServerSession()
+
+      if (isNil(session)) {
+        throw unauthorizedError({ resource: 'assets' })
+      }
+
+      const connection = await db()
+      const [asset] = await connection.getAssetByCID(cid)
+
+      return asset
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const getAssetByCID = _getAssetByCID({ db, getServerSession, log })
+
 export const _getAssets =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async () => {

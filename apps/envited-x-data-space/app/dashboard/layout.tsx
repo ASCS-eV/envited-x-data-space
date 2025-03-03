@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import { includes, isEmpty } from 'ramda'
+import { equals, includes, isEmpty } from 'ramda'
 
 import { getServerSession } from '../../common/auth'
 import { NAVIGATION_DASHBOARD_MAP } from '../../common/constants'
-import { getProfile } from '../../common/serverActions'
+import { getProfile, getUser } from '../../common/serverActions'
 import { Role } from '../../common/types'
 import { getImageUrl } from '../../common/utils'
 import { Breadcrumbs } from '../../modules/Breadcrumbs'
@@ -13,6 +13,7 @@ import { ProfileNotification } from '../../modules/Profile'
 export default async function Template({ children }: { children: React.ReactNode }) {
   const session = await getServerSession()
   const profile = await getProfile()
+  const user = await getUser()
 
   return (
     <main className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">
@@ -63,9 +64,16 @@ export default async function Template({ children }: { children: React.ReactNode
                 <div className="h-24 w-24 rounded-xl ring-4 ring-white sm:h-32 sm:w-32 bg-gray-300 p-4" />
               )}
             </div>
-            <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
-              <div className="mt-0 min-w-0 flex-1 sm:hidden md:block">
-                <h1 className="truncate text-2xl font-bold text-white">{profile.name}</h1>
+            <div className="mt-0 sm:hidden md:block min-w-0 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
+              <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+                <p className="text-sm font-medium text-white">Welcome back to ENVITED-X,</p>
+                {equals(session?.user.role)(Role.principal) ? (
+                  <p className="truncate text-xl font-bold text-white sm:text-2xl">{profile.name}</p>
+                ) : (
+                  <p className="truncate text-xl font-bold text-white sm:text-2xl">
+                    {user.name} <span className="text-sm font-medium text-white/50">{profile.name}</span>
+                  </p>
+                )}
                 <Link className="text-sm underline text-white" href={`/community/${profile.slug}`}>
                   View profile
                 </Link>

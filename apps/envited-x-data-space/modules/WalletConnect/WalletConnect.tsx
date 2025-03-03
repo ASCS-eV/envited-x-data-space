@@ -1,16 +1,23 @@
 'use client'
 
 import { WalletIcon } from '@heroicons/react/24/outline'
+import { equals } from 'ramda'
+import { FC } from 'react'
 
 import { useWallet } from '../../common/context/WalletContext'
 import { useTranslation } from '../../common/i18n'
+import { ColorScheme } from '../../common/types'
 
-export const WalletConnect = () => {
+export const WalletConnect: FC<{ colorScheme?: ColorScheme }> = ({ colorScheme = ColorScheme.dark }) => {
   const { t } = useTranslation('WalletConnect')
   const { account, connectWallet, disconnectWallet } = useWallet()
 
   return account ? (
-    <button onClick={() => disconnectWallet()} className="flex items-center text-black gap-2">
+    <button
+      onClick={() => disconnectWallet()}
+      className={`${equals(colorScheme)(ColorScheme.light) ? 'text-white' : 'text-black'}
+            flex items-center gap-2`}
+    >
       <WalletIcon className="h-6 w-6" aria-hidden="true" />
     </button>
   ) : (

@@ -27,6 +27,8 @@ export { Switch } from './components/Atoms/Switch'
 export { Table, TableBody, TableCell, TableFooter, TableHeader, TableRow } from './components/Atoms/Table'
 export { ThemeToggle } from './components/Atoms/ThemeToggle'
 export { Tooltip } from './components/Atoms/Tooltip'
+export { Widget } from './components/Atoms/Widget'
+export { ActionWidget } from './components/Atoms/ActionWidget'
 
 export { ColorScheme, Language, Size, AlertType } from './types'
 

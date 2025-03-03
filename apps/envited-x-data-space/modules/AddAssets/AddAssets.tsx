@@ -8,7 +8,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { allTrue } from '../../common/utils/utils'
-import { addAssetsForm } from './AddAssets.actions'
+import { validateAndUploadAssets } from './AddAssets.actions'
 import { addFiles, removeFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
@@ -46,7 +46,7 @@ export const AddAssets = () => {
         times(idx => formData.append('assets', data.assets[idx]))(data.assets.length)
       }
 
-      const results = await addAssetsForm(formData)
+      const results = await validateAndUploadAssets(formData)
 
       map(({ success, file }: { success: boolean; file: string }) =>
         success

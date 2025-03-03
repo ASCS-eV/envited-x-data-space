@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { isNil, isNotNil } from 'ramda'
+import { isEmpty, isNil } from 'ramda'
 
 import { createFilename } from '../../common/asset/utils'
 import { getServerSession } from '../../common/auth'
@@ -11,8 +11,8 @@ import { log } from '../../common/logger'
 import { getAssetByCID, insertAsset } from '../../common/serverActions'
 import { badRequestError, formatError, internalServerErrorError, unauthorizedError } from '../../common/utils'
 
-export async function addAssetsForm(formData: FormData) {
-  const assets = formData.getAll('assets') as File[]
+export async function validateAndUploadAssets(formData: FormData) {
+  const files = formData.getAll('assets') as File[]
   const session = await getServerSession()
 
   try {
@@ -20,7 +20,7 @@ export async function addAssetsForm(formData: FormData) {
       throw unauthorizedError({ resource: 'addAssets' })
     }
 
-    if (isNil(assets)) {
+    if (isNil(files)) {
       throw badRequestError({
         resource: 'addAssets',
         resourceId: 'assets',
@@ -28,13 +28,13 @@ export async function addAssetsForm(formData: FormData) {
       })
     }
 
-    const result = assets.map(async (asset: File) => {
-      const arrayBuffer = Buffer.from(await asset.arrayBuffer())
+    const result = files.map(async (file: File) => {
+      const arrayBuffer = Buffer.from(await file.arrayBuffer())
       const cid = await createFilename(arrayBuffer)
-      const checkIfAssetExists = await getAssetByCID(cid)
+      const asset = await getAssetByCID(cid)
 
-      if (isNotNil(checkIfAssetExists)) {
-        return { success: false, file: asset.name }
+      if (!isEmpty(asset)) {
+        return { success: false, file: file.name }
       }
 
       const signedUrl = await getAssetUploadUrl(cid)
@@ -43,17 +43,17 @@ export async function addAssetsForm(formData: FormData) {
         body: arrayBuffer,
         method: 'PUT',
         headers: {
-          'Content-Type': asset.type,
+          'Content-Type': file.type,
           'Content-Disposition': `attachment; filename="${cid}"`,
         },
       })
 
       await insertAsset({
         cid,
-        name: asset.name,
+        name: file.name,
       })
 
-      return { success: true, file: asset.name }
+      return { success: true, file: file.name }
     })
 
     const uploadResults = await Promise.all(result)

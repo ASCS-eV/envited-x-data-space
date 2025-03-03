@@ -11,7 +11,6 @@ import { ERRORS } from '../../constants'
 import { CONTEXT_DROP_SCHEMAS } from './shacl.constants'
 import { ContentType, Schema, ValidationSchema } from './shacl.types'
 import {
-  checkIfAssetExists,
   fetchShaclSchema,
   formatFilesErrorMessage,
   loadDataset,
@@ -24,14 +23,12 @@ export const _validateShaclFile =
   ({
     validateManifest,
     validateDomainMetadata,
-    checkIfAssetExists,
     checkIfAllFilesInManifestExist,
     countAmountOfFilesInZip,
     validateReadme,
   }: {
     validateManifest: (file: File) => Promise<{ conforms: boolean; data: any }>
     validateDomainMetadata: (file: File, manifest: Manifest) => Promise<{ conforms: boolean; data: any }>
-    checkIfAssetExists: (file: File) => Promise<boolean>
     checkIfAllFilesInManifestExist: (
       file: File,
       manifest: Manifest,
@@ -41,15 +38,6 @@ export const _validateShaclFile =
   }) =>
   async (file: File) => {
     try {
-      const assetExists = await checkIfAssetExists(file)
-      if (assetExists) {
-        return {
-          isValid: false,
-          data: {},
-          error: ERRORS.ASSET_EXSISTS,
-        }
-      }
-
       const readmeExists = await validateReadme(file)
       if (!readmeExists) {
         return {
@@ -265,7 +253,6 @@ export const checkIfAllFilesInManifestExist = _checkIfAllFilesInManifestExist({
 export const validateShaclFile = _validateShaclFile({
   validateDomainMetadata,
   validateManifest,
-  checkIfAssetExists,
   checkIfAllFilesInManifestExist,
   countAmountOfFilesInZip,
   validateReadme,

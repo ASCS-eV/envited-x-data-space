@@ -24,7 +24,7 @@ describe('common/validator/shacl', () => {
         amount: 12,
       })
 
-      const countAmountOfFilesInZipStub = jest.fn().mockResolvedValue(14)
+      const countAmountOfFilesInZipStub = jest.fn().mockResolvedValue(13)
 
       // then ... we should get a valid response
       const result = await SUT._validateShaclFile({

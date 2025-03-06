@@ -75,8 +75,8 @@ describe('common/validator/shacl/shacl.utils', () => {
     expect(result).toEqual(expected)
   })
 
-  describe('subtractManifestAndReadMeFiles', () => {
-    const result = SUT.subtractManifestAndReadMeFiles(16)
+  describe('subtractManifestFile', () => {
+    const result = SUT.subtractManifestFile(15)
 
     expect(result).toEqual(14)
   })

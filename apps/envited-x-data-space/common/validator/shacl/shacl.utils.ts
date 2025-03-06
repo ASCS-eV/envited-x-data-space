@@ -65,4 +65,4 @@ export const formatFilesErrorMessage = (errors: { error: string }[]) =>
     (x: string) => `${ERRORS.FILES_NOT_FOUND} - ${x}`,
   )(errors)
 
-export const subtractManifestAndReadMeFiles = flip(subtract)(AMOUNT_OF_UNDEFINED_FILES_IN_MANIFEST)
+export const subtractManifestFile = flip(subtract)(AMOUNT_OF_UNDEFINED_FILES_IN_MANIFEST)

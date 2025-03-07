@@ -901,4 +901,3 @@ gx:CriteriaResponseShape a sh:NodeShape ;
             sh:name "Optional reason when not applicable" ;
             sh:path gx:reason ] ;
     sh:targetClass gx:CriteriaResponse .
-

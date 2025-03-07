@@ -4,22 +4,28 @@ export enum ContentType {
 }
 
 export enum Schema {
-  default = 'default',
+  automotiveSimulator = 'automotive-simulater',
   environmentModel = 'environment-model',
   general = 'general',
   georeference = 'georeference',
   gx = 'gx',
   hdmap = 'hdmap',
+  leakageTest = 'leakage-test',
   manifest = 'manifest',
+  marketplaceInfo = 'marketplaceInfo',
   ositrace = 'ositrace',
   scenario = 'scenario',
   surfaceModel = 'surface-model',
+  service = 'service',
   sh = 'sh',
+  simulatedModel = 'simulated-model',
+  simulatedSensor = 'simulated-sensor',
   skos = 'skos',
+  // survey = 'survey',
+  // surveyResultDataOferring = 'survey-result-data-offering',
+  // surveyServiceOferring = 'survey-service-offering',
+  vvReport = 'vv-report',
   xsd = 'xsd',
-  domainMetadata = 'domainMetadata',
-  gxMetadata = 'gxMetadata',
-  marketplaceInfo = 'marketplaceInfo',
 }
 
 export type ValidationSchema =
@@ -31,6 +37,12 @@ export type ValidationSchema =
   | Schema.manifest
   | Schema.ositrace
   | Schema.scenario
-  | Schema.domainMetadata
-  | Schema.gxMetadata
   | Schema.marketplaceInfo
+  | Schema.automotiveSimulator
+  | Schema.leakageTest
+  | Schema.service
+  | Schema.simulatedModel
+  | Schema.simulatedSensor
+  // | Schema.surveyResultDataOferring
+  // | Schema.surveyServiceOferring
+  | Schema.vvReport

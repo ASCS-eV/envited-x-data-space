@@ -1,1 +1,1 @@
-export { parseGlobalIdentifier, stringifyGlobalIdentifier } from './globalIdentifiers';
+export { parseGlobalIdentifier, stringifyGlobalIdentifier } from './globalIdentifiers'

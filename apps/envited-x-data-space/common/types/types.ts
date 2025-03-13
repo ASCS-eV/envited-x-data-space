@@ -190,8 +190,8 @@ export enum FileType {
 export type IdentifierMethod = 'did:pkh' | 'urn:uuid'
 
 export interface GlobalIdentifier {
-  method: IdentifierMethod,
-  namespace?: string | null,
-  chainId?: string | null,
-  nss: string,
+  method: IdentifierMethod
+  namespace?: string | null
+  chainId?: string | null
+  nss: string
 }

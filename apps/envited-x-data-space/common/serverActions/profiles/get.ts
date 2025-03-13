@@ -4,11 +4,11 @@ import { getServerSession } from '../../auth'
 import { RESTRICTED_PROFILE_FIELDS } from '../../constants'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
+import { parseGlobalIdentifier } from '../../globalIdentifiers'
 import { hasCredentialType, isOwnProfile, isPrincipalContact, isUsersCompanyProfile } from '../../guards'
 import { Log, log } from '../../logger'
 import { Profile, Session } from '../../types'
 import { badRequestError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
-import { parseGlobalIdentifier } from '../../globalIdentifiers'
 
 export const _getProfileBySlug =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>

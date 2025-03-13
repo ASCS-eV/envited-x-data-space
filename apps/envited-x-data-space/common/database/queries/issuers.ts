@@ -8,6 +8,6 @@ export const getIssuerById = (db: DatabaseConnection) => async (id: string) =>
     where: eq(issuer.id, id),
     with: {
       globalIdentifier: true,
-    }
+    },
   })
-  // db.select().from(issuer).where(eq(issuer.id, id))
+// db.select().from(issuer).where(eq(issuer.id, id))

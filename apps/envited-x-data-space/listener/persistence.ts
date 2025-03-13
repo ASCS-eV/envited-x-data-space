@@ -3,16 +3,16 @@ import { AwsDataApiPgDatabase, AwsDataApiPgQueryResultHKT } from 'drizzle-orm/aw
 import { PgQueryResultHKT, PgTransaction } from 'drizzle-orm/pg-core'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
-import * as schema from '../common/database/schema'
-import { AssetStatus } from '../common/types'
 import { insertGlobalIdentifierTx } from '../common/database/queries/globalIdentifiers'
+import * as schema from '../common/database/schema'
 import { parseGlobalIdentifier } from '../common/globalIdentifiers'
+import { AssetStatus } from '../common/types'
 
 export type DatabaseConnection = PostgresJsDatabase<typeof schema> | AwsDataApiPgDatabase<typeof schema>
 
 export const getTokenByTokenId =
   ({ database }: { database: DatabaseConnection }) =>
-  async ({ tokenId }: { tokenId: number; }) =>
+  async ({ tokenId }: { tokenId: number }) =>
     database
       .select()
       .from(schema.token)
@@ -215,7 +215,7 @@ export const getAssetByCID =
 
 export const updateAsset =
   ({ database: db }: { database: DatabaseConnection }) =>
-  async ({ id, tokenId }: { id: string; tokenId: string; }) =>
+  async ({ id, tokenId }: { id: string; tokenId: string }) =>
     db
       .update(schema.asset)
       .set({ tokenId, status: AssetStatus.minted, updatedAt: new Date() })

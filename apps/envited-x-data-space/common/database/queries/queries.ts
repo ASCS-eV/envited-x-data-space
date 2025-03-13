@@ -22,6 +22,11 @@ import {
   insertBusinessCategoryByProfileId,
 } from './businessCategories'
 import { fetchTables } from './common'
+import {
+  getGlobalIdentifierByFullResourceName,
+  getGlobalIdentifierById,
+  insertGlobalIdentifier,
+} from './globalIdentifiers'
 import { getIssuerById } from './issuers'
 import { getMembers } from './members'
 import {
@@ -54,7 +59,6 @@ import {
   insertUserTx,
   removeUserFromRole,
 } from './users'
-import { getGlobalIdentifierById, insertGlobalIdentifier, getGlobalIdentifierByFullResourceName } from './globalIdentifiers'
 
 const queries = {
   activateUserById,

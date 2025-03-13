@@ -1,22 +1,37 @@
 import { relations } from 'drizzle-orm'
-import { boolean, integer, jsonb, pgTable, primaryKey, serial, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  integer,
+  jsonb,
+  pgTable,
+  primaryKey,
+  serial,
+  text,
+  timestamp,
+  unique,
+  uuid,
+} from 'drizzle-orm/pg-core'
 
-export const globalIdentifier = pgTable('globalIdentifier', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  method: text('method').notNull(),
-  namespace: text('namespace'),
-  chainId: text('chain_id'),
-  nss: text('nss').notNull(),
-  metadata: jsonb('metadata'),
-  createdAt: timestamp('created_at'),
-  updatedAt: timestamp('updated_at'),
-}, (table) => [
-  unique('composite_identifier_unique').on(table.method, table.namespace, table.chainId, table.nss)
-])
+export const globalIdentifier = pgTable(
+  'globalIdentifier',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    method: text('method').notNull(),
+    namespace: text('namespace'),
+    chainId: text('chain_id'),
+    nss: text('nss').notNull(),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at'),
+    updatedAt: timestamp('updated_at'),
+  },
+  table => [unique('composite_identifier_unique').on(table.method, table.namespace, table.chainId, table.nss)],
+)
 
 export const user = pgTable('user', {
   id: uuid('id').unique().primaryKey().defaultRandom(),
-  urnGlobalIdentifierId: uuid('urn_global_identifier_id').unique().references(() => globalIdentifier.id),
+  urnGlobalIdentifierId: uuid('urn_global_identifier_id')
+    .unique()
+    .references(() => globalIdentifier.id),
   addressGlobalIdentifierId: uuid('address_global_identifier_id').references(() => globalIdentifier.id),
   name: text('name').unique(),
   email: text('email'),
@@ -76,7 +91,9 @@ export const addressType = pgTable('addressType', {
 
 export const issuer = pgTable('issuer', {
   id: uuid('id').defaultRandom().primaryKey(),
-  globalIdentifierId: uuid('globalIdentifierId').unique().references(() => globalIdentifier.id),
+  globalIdentifierId: uuid('globalIdentifierId')
+    .unique()
+    .references(() => globalIdentifier.id),
   name: text('name'),
   url: text('url'),
   type: text('type'),

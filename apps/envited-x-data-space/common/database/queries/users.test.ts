@@ -255,7 +255,7 @@ describe('common/database/users', () => {
         streetAddress: 'Teststraße 1',
         updatedAt: new Date(),
         vatId: '',
-        "urnGlobalIdentifierId": "GLOBAL_IDENTIFIER_ID",
+        urnGlobalIdentifierId: 'GLOBAL_IDENTIFIER_ID',
         isActive: true,
       })
       expect(transaction).toEqual({

@@ -6,12 +6,12 @@ import { equals, has, isEmpty, isNil, omit, pluck, prop } from 'ramda'
 import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
+import { parseGlobalIdentifier } from '../globalIdentifiers'
 import { log } from '../logger'
 import { assignSingleRole } from '../roles'
 import { CredentialType, User } from '../types'
 import { Environment } from '../types'
 import { extractAddressFromDid } from '../utils'
-import { parseGlobalIdentifier } from '../globalIdentifiers'
 
 export const authOptions: NextAuthOptions = {
   pages: {

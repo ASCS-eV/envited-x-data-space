@@ -8,6 +8,7 @@ import { hasCredentialType, isOwnProfile, isPrincipalContact, isUsersCompanyProf
 import { Log, log } from '../../logger'
 import { Profile, Session } from '../../types'
 import { badRequestError, formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
+import { parseGlobalIdentifier } from '../../globalIdentifiers'
 
 export const _getProfileBySlug =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
@@ -26,7 +27,7 @@ export const _getProfileBySlug =
       }
 
       if (!isNil(session)) {
-        const user = await connection.getUserById(session.user.id)
+        const user = await connection.getUserByDid(parseGlobalIdentifier(session.user.id))
 
         if (isOwnProfile(user)(profile)) {
           return profile
@@ -73,11 +74,15 @@ export const _getProfile =
       }
 
       const connection = await db()
-      const user = await connection.getUserById(session.user.id)
-      const [issuer] = await connection.getIssuerById(user.issuerId)
+
+      const user = await connection.getUserByDid(parseGlobalIdentifier(session.user.id))
+      console.log('user', user)
+      const issuer = await connection.getIssuerById(user?.issuerId)
+      console.log('ISSUER', issuer)
       let profileName = issuer.name
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
-        const principal = await connection.getUserById(user.issuerId)
+        const principal = await connection.getUserByIssuerId(user.issuerId)
+        console.log('PRINCIPAL', principal)
         profileName = principal.name
       }
 

@@ -21,17 +21,19 @@ export const _getTokensForLoggedInUser =
       }
 
       const connection = await db()
-      const user = await connection.getUserById(session?.user?.pkh)
+      const user = await connection.getUserByDid(session?.user?.did)
 
-      let issuerId = session?.user?.pkh
+      let issuerId = session?.user?.did
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
-        const principal = await connection.getUserById(user.issuerId)
+        const principal = await connection.getUserByIssuerId(user.issuerId)
         issuerId = principal.id
       }
 
-      const tokens = await connection.getTokensByIssuerId(extractAddressFromDid(issuerId))
+      // TODO: Fix get tokens by issuer id
+      // const tokens = await connection.getTokensByIssuerId(extractAddressFromDid(issuerId))
 
-      return tokens
+      // return tokens
+      return []
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()

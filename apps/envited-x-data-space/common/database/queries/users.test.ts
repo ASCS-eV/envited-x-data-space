@@ -100,6 +100,7 @@ describe('common/database/users', () => {
 
       const result = await SUT.insertIssuerTx(tx)({
         id: 'ISSUER_ID',
+        globalIdentifierId: 'GLOBAL_IDENTIFIER_ID',
         type: 'TYPE',
         name: 'NAME',
         url: 'URL',
@@ -108,6 +109,7 @@ describe('common/database/users', () => {
       expect(tx.insert).toHaveBeenCalledWith(issuer)
       expect(tx.insert().values).toHaveBeenCalledWith({
         id: 'ISSUER_ID',
+        globalIdentifierId: 'GLOBAL_IDENTIFIER_ID',
         type: 'TYPE',
         name: 'NAME',
         url: 'URL',
@@ -211,6 +213,7 @@ describe('common/database/users', () => {
         insertUsersToRolesTx: () => jest.fn().mockResolvedValue([{ id: 'ISSUER_ID' }]),
         insertCredentialTypeTx: () => jest.fn().mockResolvedValue([{ id: 'CREDENTIAL_TYPE_ID' }]),
         insertCompanyProfileTx: () => jest.fn().mockResolvedValue([{ id: 'COMPANY_PROFILE_ID' }]),
+        insertGlobalIdentifierTx: () => jest.fn().mockResolvedValue([{ id: 'GLOBAL_IDENTIFIER_ID' }]),
       } as any
 
       const tx = {
@@ -234,6 +237,7 @@ describe('common/database/users', () => {
 
       expect(tx.insert().values).toHaveBeenCalledWith({
         addressCountry: 'DE',
+        addressGlobalIdentifierId: 'GLOBAL_IDENTIFIER_ID',
         addressLocality: 'Munich',
         addressTypeId: 'ADDRESS_TYPE_ID',
         articlesOfAssociationAccepted: '',
@@ -241,7 +245,6 @@ describe('common/database/users', () => {
         createdAt: new Date(),
         email: 'mailto:user@test.de',
         expirationDate: new Date('2102-09-15T17:14:33.000Z'),
-        id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
         isAscsMember: true,
         isEnvitedMember: true,
         issuanceDate: new Date('2023-11-22T17:14:33.000Z'),
@@ -252,7 +255,7 @@ describe('common/database/users', () => {
         streetAddress: 'Teststraße 1',
         updatedAt: new Date(),
         vatId: '',
-        uuid: extractUuidFromUrn('urn:uuid:cf1f329d-9c4c-458e-ba0a-a762a296b79c'),
+        "urnGlobalIdentifierId": "GLOBAL_IDENTIFIER_ID",
         isActive: true,
       })
       expect(transaction).toEqual({

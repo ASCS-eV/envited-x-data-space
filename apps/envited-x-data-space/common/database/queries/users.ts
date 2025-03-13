@@ -6,7 +6,7 @@ import postgres from 'postgres'
 import { isEmpty, prop, propOr } from 'ramda'
 
 import { Profile } from '../../types'
-import { extractUuidFromUrn, isTrustAnchor, slugify } from '../../utils'
+import { isTrustAnchor, slugify } from '../../utils'
 import * as schema from '../schema'
 import {
   addressType,
@@ -17,8 +17,11 @@ import {
   user,
   usersToCredentialTypes,
   usersToRoles,
+  globalIdentifier,
 } from '../schema'
 import { Credential, DatabaseConnection, Issuer, User } from '../types'
+import { insertGlobalIdentifierTx } from './globalIdentifiers'
+import { parseGlobalIdentifier } from '../../globalIdentifiers'
 
 export const deactivateUserById = (db: DatabaseConnection) => async (id: string) =>
   db
@@ -48,29 +51,155 @@ export const getUserById = (db: DatabaseConnection) => async (id: string) =>
           },
         },
       },
+      urnGlobalIdentifier: true,
+      addressGlobalIdentifier: true,
     },
   })
 
 export const getUserRolesById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(usersToRoles).where(eq(usersToRoles.userId, id))
 
-export const getUserWithProfileById = (db: DatabaseConnection) => async (id: string) =>
-  db.select().from(user).where(eq(user.id, id)).leftJoin(profile, eq(user.name, profile.name))
-
-export const getUserByName = (db: DatabaseConnection) => async (name: string) =>
-  db.select().from(user).where(eq(user.name, name))
-
-export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
-  db.select().from(user).where(eq(user.id, issuerId))
-
-export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
-  db.select().from(user).where(eq(user.issuerId, issuerId))
-
-export const getActiveUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
+export const getUserRolesByDid = (db: DatabaseConnection) => async ({ method, namespace, chainId, nss }: { method: string, namespace: string, chainId: string, nss: string }) =>
   db
     .select()
-    .from(user)
-    .where(and(eq(user.issuerId, issuerId), eq(user.isActive, true)))
+    .from(globalIdentifier)
+    .where(and(eq(globalIdentifier.method, method), eq(globalIdentifier.namespace, namespace), eq(globalIdentifier.chainId, chainId), eq(globalIdentifier.nss, nss)))
+    .leftJoin(user, eq(user.addressGlobalIdentifierId, globalIdentifier.id))
+    .leftJoin(usersToRoles, eq(usersToRoles.userId, user.id))
+
+export const getUserByDid = (db: DatabaseConnection) => async ({ method, namespace, chainId, nss }: { method: string, namespace: string, chainId: string, nss: string }) =>
+  db.query.user.findFirst({
+    where: (fields, { eq }) =>
+      eq(
+        fields.addressGlobalIdentifierId,
+        db
+          .select({ id: globalIdentifier.id })
+          .from(globalIdentifier)
+          .where(and(eq(globalIdentifier.method, method), eq(globalIdentifier.namespace, namespace), eq(globalIdentifier.chainId, chainId), eq(globalIdentifier.nss, nss)))
+      ),
+    with: {
+      urnGlobalIdentifier: true,        // Fetch the related urnGlobalIdentifier
+      addressGlobalIdentifier: true,    // Fetch the related addressGlobalIdentifier
+      usersToRoles: true,
+      usersToCredentialTypes: {
+        columns: {},
+        with: {
+          credentialType: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      }, 
+    },
+  });
+
+export const getUserWithProfileById = (db: DatabaseConnection) => async (id: string) =>
+  db
+  .select()
+  .from(user)
+  .where(eq(user.id, id))
+  .leftJoin(profile, eq(user.name, profile.name))
+  .leftJoin(globalIdentifier, eq(user.urnGlobalIdentifierId, globalIdentifier.id))
+  .leftJoin(globalIdentifier, eq(user.addressGlobalIdentifierId, globalIdentifier.id))
+
+export const getUserByName = (db: DatabaseConnection) => async (name: string) =>
+  db.query.user.findFirst({
+    where: eq(user.name, name),
+    with: {
+      urnGlobalIdentifier: true,
+      addressGlobalIdentifier: true,
+    },
+  })
+  // db.select().from(user).where(eq(user.name, name))
+
+export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
+  db.query.user.findFirst({
+    where: eq(
+      user.addressGlobalIdentifierId,
+      db
+        .select({ id: globalIdentifier.id })
+        .from(globalIdentifier)
+        .innerJoin(issuer, eq(issuer.globalIdentifierId, globalIdentifier.id))
+        .where(eq(issuer.id, issuerId))
+    ),
+    with: {
+      urnGlobalIdentifier: true,
+      addressGlobalIdentifier: true,
+      usersToRoles: true,
+      usersToCredentialTypes: {
+        columns: {},
+        with: {
+          credentialType: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
+  db.query.user.findMany({
+    where: eq(
+      user.addressGlobalIdentifierId,
+      db
+        .select({ id: globalIdentifier.id })
+        .from(globalIdentifier)
+        .innerJoin(issuer, eq(issuer.globalIdentifierId, globalIdentifier.id))
+        .where(eq(issuer.id, issuerId))
+    ),
+    with: {
+      urnGlobalIdentifier: true,
+      addressGlobalIdentifier: true,
+      usersToRoles: true,
+      usersToCredentialTypes: {
+        columns: {},
+        with: {
+          credentialType: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  })
+  // db.select().from(user).where(eq(user.issuerId, issuerId))
+
+export const getActiveUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
+  db.query.user.findMany({
+    where: and(eq(
+      user.addressGlobalIdentifierId,
+      db
+        .select({ id: globalIdentifier.id })
+        .from(globalIdentifier)
+        .innerJoin(issuer, eq(issuer.globalIdentifierId, globalIdentifier.id))
+        .where(eq(issuer.id, issuerId))
+      ),
+      eq(user.isActive, true)
+    ),
+    with: {
+      urnGlobalIdentifier: true,
+      addressGlobalIdentifier: true,
+      usersToRoles: true,
+      usersToCredentialTypes: {
+        columns: {},
+        with: {
+          credentialType: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  })
+  // db
+  //   .select()
+  //   .from(user)
+  //   .where(and(eq(user.issuerId, issuerId), eq(user.isActive, true)))
 
 export const addUserToRole =
   (db: DatabaseConnection) =>
@@ -85,6 +214,13 @@ export const removeUserFromRole =
       .where(and(eq(usersToRoles.userId, userId), eq(usersToRoles.roleId, roleId)))
       .returning()
 
+// export const getUserByDid = (db: DatabaseConnection) => async ({ method, namespace, chainId, nss }: { method: string, namespace: string, chainId: string, nss: string }) =>
+//   db
+//     .select()
+//     .from(globalIdentifier)
+//     .where(and(eq(globalIdentifier.method, method), eq(globalIdentifier.namespace, namespace), eq(globalIdentifier.chainId, chainId), eq(globalIdentifier.nss, nss)))
+//     .leftJoin(user, eq(globalIdentifier.id, user.addressGlobalIdentifierId))
+
 export const insertUsersToRolesTx =
   (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
   async ({ userId, roleId }: { userId: string; roleId: string }) =>
@@ -97,8 +233,10 @@ export const insertIssuerTx =
       .insert(issuer)
       .values({
         ...newIssuer,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       })
-      .onConflictDoUpdate({ target: issuer.id, set: { id: newIssuer.id } })
+      .onConflictDoUpdate({ target: issuer.globalIdentifierId, set: { globalIdentifierId: newIssuer.globalIdentifierId } })
       .returning()
 
 export const insertAddressTypeTx =
@@ -153,6 +291,7 @@ export const _txn =
     insertUsersToRolesTx,
     insertCredentialTypeTx,
     insertCompanyProfileTx,
+    insertGlobalIdentifierTx,
   }: {
     insertAddressTypeTx: (
       tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>,
@@ -168,6 +307,7 @@ export const _txn =
     ) => (newIssuer: Issuer) => Promise<
       {
         id: string
+        globalIdentifierId: string | null
         name: string | null
         url: string | null
         type: string | null
@@ -187,6 +327,17 @@ export const _txn =
     insertCompanyProfileTx: (
       tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>,
     ) => (partialProfile: Omit<Profile, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Profile[]>
+    insertGlobalIdentifierTx: (
+      tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>,
+    ) => ({ method, namespace, chainId, nss }: { method: string; namespace?: string | null; chainId?: string | null; nss: string }) => Promise<
+      {
+        id: string
+        method: string
+        namespace?: string | null
+        chainId?: string | null
+        nss: string
+      }[]
+    >
   }) =>
   (credential: Credential) =>
   async (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) => {
@@ -202,28 +353,34 @@ export const _txn =
 
       const [addressType] = await insertAddressTypeTx(tx)(credentialSubject.address.type)
       const { id: addressTypeId } = addressType
-
+      
       if (credentialTypes.includes('AscsMemberCredential')) {
-        await insertIssuerTx(tx)({
-          id: credentialSubject.id,
+        const [{ id: memberGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(credentialSubject.id))
+        
+        const issuer = await insertIssuerTx(tx)({
+          globalIdentifierId: memberGlobalIdentifierId,
           name: credentialSubject.name,
           url: propOr('', 'url')(credentialSubject),
           type: credentialSubject.type,
         })
       }
-
+      
+      const [{ id: issuerGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(credentialIssuer))
       const [{ id }] = await insertIssuerTx(tx)({
-        id: credentialIssuer,
+        globalIdentifierId: issuerGlobalIdentifierId,
         name: '',
         url: '',
         type: '',
       })
 
+      const [{ id: urnGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(uuid))
+      const [{ id: addressGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(credentialSubject.id))
+      
       const [newUser] = await tx
         .insert(user)
         .values({
-          uuid: extractUuidFromUrn(uuid),
-          id: prop('id')(credentialSubject),
+          urnGlobalIdentifierId,
+          addressGlobalIdentifierId,
           name: prop('name')(credentialSubject),
           email: propOr('', 'email')(credentialSubject),
           vatId: propOr('', 'vatId')(credentialSubject),
@@ -296,6 +453,7 @@ export const txn = _txn({
   insertUsersToRolesTx,
   insertCredentialTypeTx,
   insertCompanyProfileTx,
+  insertGlobalIdentifierTx,
 })
 
 export const _insertUserTx =

@@ -13,7 +13,7 @@ import {
   insertAsset,
   updateAsset,
   updateAssetByCID,
-  updateAssetHashAndStatus,
+  updateAssetStatus,
 } from './assets'
 import {
   deleteBusinessCategoriesByProfileId,
@@ -43,15 +43,18 @@ import {
   addUserToRole,
   deactivateUserById,
   getActiveUsersByIssuerId,
+  getUserByDid,
   getUserById,
   getUserByIssuerId,
   getUserByName,
+  getUserRolesByDid,
   getUserRolesById,
   getUserWithProfileById,
   getUsersByIssuerId,
   insertUserTx,
   removeUserFromRole,
 } from './users'
+import { getGlobalIdentifierById, insertGlobalIdentifier, getGlobalIdentifierByFullResourceName } from './globalIdentifiers'
 
 const queries = {
   activateUserById,
@@ -88,10 +91,15 @@ const queries = {
   getTokens,
   getTokenById,
   getTokensByIssuerId,
+  getGlobalIdentifierById,
+  getGlobalIdentifierByFullResourceName,
+  getUserByDid,
+  getUserRolesByDid,
+  insertGlobalIdentifier,
   insertAsset,
   updateAsset,
   updateAssetByCID,
-  updateAssetHashAndStatus,
+  updateAssetStatus,
 }
 
 export const init =

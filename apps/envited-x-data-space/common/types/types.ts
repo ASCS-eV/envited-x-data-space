@@ -177,7 +177,7 @@ export interface Profile {
 
 export interface Session {
   user: {
-    pkh: string
+    did: string
     id: string
     role: Role
   }
@@ -185,4 +185,13 @@ export interface Session {
 
 export enum FileType {
   json = 'application/json',
+}
+
+export type IdentifierMethod = 'did:pkh' | 'urn:uuid'
+
+export interface GlobalIdentifier {
+  method: IdentifierMethod,
+  namespace?: string | null,
+  chainId?: string | null,
+  nss: string,
 }

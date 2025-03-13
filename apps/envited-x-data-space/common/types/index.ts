@@ -13,6 +13,7 @@ export {
 export type {
   Action,
   Asset,
+  GlobalIdentifier,
   AssetMetadata,
   Obj,
   User,

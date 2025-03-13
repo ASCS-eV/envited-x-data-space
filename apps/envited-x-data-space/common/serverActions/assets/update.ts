@@ -70,7 +70,7 @@ export const _updateStatus =
         })
       }
 
-      const [result] = await connection.updateAssetHashAndStatus(id, hash, status)
+      const [result] = await connection.updateAssetStatus(id, status)
 
       return result
     } catch (error: unknown) {

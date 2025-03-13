@@ -5,16 +5,18 @@ import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
 import * as schema from '../common/database/schema'
 import { AssetStatus } from '../common/types'
+import { insertGlobalIdentifierTx } from '../common/database/queries/globalIdentifiers'
+import { parseGlobalIdentifier } from '../common/globalIdentifiers'
 
 export type DatabaseConnection = PostgresJsDatabase<typeof schema> | AwsDataApiPgDatabase<typeof schema>
 
 export const getTokenByTokenId =
   ({ database }: { database: DatabaseConnection }) =>
-  async ({ contract, tokenId }: { tokenId: number; contract: string }) =>
+  async ({ tokenId }: { tokenId: number; }) =>
     database
       .select()
       .from(schema.token)
-      .where(and(eq(schema.token.tokenId, tokenId), eq(schema.token.contract, contract)))
+      .where(and(eq(schema.token.tokenId, tokenId)))
 
 export const getTokenTags =
   (
@@ -37,9 +39,9 @@ export const insertTokenTx =
     >,
   ) =>
   async ({
-    hash,
-    contract,
-    minter,
+    operationGlobalIdentifierId,
+    contractGlobalIdentifierId,
+    minterGlobalIdentifierId,
     tokenId,
     name,
     description,
@@ -56,9 +58,9 @@ export const insertTokenTx =
     displayUri,
     tokenMetadata,
   }: {
-    hash: string
-    contract: string
-    minter: string
+    operationGlobalIdentifierId: string
+    contractGlobalIdentifierId: string
+    minterGlobalIdentifierId: string
     tokenId: number
     name: string
     description: string
@@ -78,9 +80,9 @@ export const insertTokenTx =
     tx
       .insert(schema.token)
       .values({
-        hash,
-        contract,
-        minter,
+        operationGlobalIdentifierId,
+        contractGlobalIdentifierId,
+        minterGlobalIdentifierId,
         tokenId,
         name,
         description,
@@ -162,10 +164,14 @@ export const insertToken =
           tags,
         } = token
 
+        const [{ id: operationGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(hash))
+        const [{ id: contractGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(contract))
+        const [{ id: minterGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(minter))
+
         const [insertedToken] = await insertTokenTx(tx)({
-          hash,
-          contract,
-          minter,
+          operationGlobalIdentifierId,
+          contractGlobalIdentifierId,
+          minterGlobalIdentifierId,
           tokenId,
           name,
           description,
@@ -209,9 +215,9 @@ export const getAssetByCID =
 
 export const updateAsset =
   ({ database: db }: { database: DatabaseConnection }) =>
-  async ({ id, tokenId, hash }: { id: string; tokenId: string; hash: string }) =>
+  async ({ id, tokenId }: { id: string; tokenId: string; }) =>
     db
       .update(schema.asset)
-      .set({ tokenId, status: AssetStatus.minted, updatedAt: new Date(), hash })
+      .set({ tokenId, status: AssetStatus.minted, updatedAt: new Date() })
       .where(eq(schema.asset.id, id))
       .returning()

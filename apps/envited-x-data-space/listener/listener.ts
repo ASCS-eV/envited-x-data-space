@@ -100,10 +100,10 @@ export const listenToAssetContract =
         const attributes = extractKeyValuePairs(manifest.data)
         // Save token to DB
         const token = await insertToken({
-          hash,
-          contract: destination,
-          minter: creator,
-          tokenId,
+          hash: `urn:operation:tezos::${hash}`,
+          contract: `urn:contract:tezos::${destination}`,
+          minter: `did:pkh:tezos::${creator}`,
+          tokenId: `${destination}:${tokenId}`,
           name: tokenMetadata?.name,
           description: tokenMetadata?.description,
           creators: tokenMetadata?.creators,

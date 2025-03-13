@@ -1,6 +1,8 @@
 export { activateUserById } from './activateUserById'
 export { deactivateUserById } from './deactivateUserById'
+export { getUser } from './get'
 export { getUserById } from './getUserById'
 export { getActiveUsersByIssuerId } from './getActiveUsersByIssuerId'
+export { getTotalUsersByIssuerId } from './getTotalUsersByIssuerId'
 export { getUsersByIssuerId } from './getUsersByIssuerId'
 export { insert as insertUser } from './insert'

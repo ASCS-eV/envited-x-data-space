@@ -48,6 +48,7 @@ import {
   addUserToRole,
   deactivateUserById,
   getActiveUsersByIssuerId,
+  getTotalUsersByIssuerId,
   getUserByDid,
   getUserById,
   getUserByIssuerId,
@@ -71,6 +72,7 @@ const queries = {
   addUserToRole,
   removeUserFromRole,
   getActiveUsersByIssuerId,
+  getTotalUsersByIssuerId,
   getUserById,
   getUserByName,
   getUserRolesById,
@@ -113,7 +115,7 @@ export const init =
       string,
       (
         db: PostgresJsDatabase<typeof schema>,
-      ) => (...args: any[]) => Promise<postgres.RowList<Record<string, unknown>[]> | postgres.Row | undefined>
+      ) => (...args: any[]) => Promise<postgres.RowList<Record<string, unknown>[]> | postgres.Row | number | undefined>
     >,
   ) =>
   async () => {

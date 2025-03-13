@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic'
+
 import { Footer } from '../modules/Footer'
 import { NotificationContainer } from '../modules/Notifications'
 import { NextAuthProvider } from './context/NextAuthProvider'
@@ -7,6 +9,10 @@ export const metadata = {
   title: 'Envited Marketplace',
   description: '',
 }
+
+const WalletProvider = dynamic(() => import('../common/context/WalletContext').then(mod => mod.WalletProvider), {
+  ssr: false,
+})
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -24,9 +30,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-white dark:bg-gray-800">
         <NextAuthProvider>
-          <NotificationContainer />
-          {children}
-          <Footer />
+          <WalletProvider>
+            <NotificationContainer />
+            {children}
+            <Footer />
+          </WalletProvider>
         </NextAuthProvider>
       </body>
     </html>

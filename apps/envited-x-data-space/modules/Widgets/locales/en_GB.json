@@ -1,0 +1,12 @@
+{
+  "[Label] users": "Users",
+  "[Description] users": "Amount of users associated with this member account",
+  "[Label] assets": "Assets",
+  "[Description] assets": "Amount of assets associated with this member account",
+  "[Label] manage users": "Manage Users",
+  "[Description] manage users": "Activate or deactivate users",
+  "[Label] view assets": "View Assets",
+  "[Description] view assets": "Explore assets",
+  "[Label] upload assets": "Upload Assets",
+  "[Description] upload assets": "Upload and mint assets"
+}

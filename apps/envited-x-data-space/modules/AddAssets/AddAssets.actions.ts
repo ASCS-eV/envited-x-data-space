@@ -1,18 +1,18 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { isNil } from 'ramda'
+import { isEmpty, isNil } from 'ramda'
 
 import { createFilename } from '../../common/asset/utils'
 import { getServerSession } from '../../common/auth'
 import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
-import { insertAsset } from '../../common/serverActions'
-import { badRequestError, formatError, internalServerErrorError, slugify, unauthorizedError } from '../../common/utils'
+import { getAssetByCID, insertAsset } from '../../common/serverActions'
+import { badRequestError, formatError, internalServerErrorError, unauthorizedError } from '../../common/utils'
 
-export async function addAssetsForm(formData: FormData) {
-  const assets = formData.getAll('assets') as File[]
+export async function validateAndUploadAssets(formData: FormData) {
+  const files = formData.getAll('assets') as File[]
   const session = await getServerSession()
 
   try {
@@ -20,7 +20,7 @@ export async function addAssetsForm(formData: FormData) {
       throw unauthorizedError({ resource: 'addAssets' })
     }
 
-    if (isNil(assets)) {
+    if (isNil(files)) {
       throw badRequestError({
         resource: 'addAssets',
         resourceId: 'assets',
@@ -28,31 +28,39 @@ export async function addAssetsForm(formData: FormData) {
       })
     }
 
-    const result = assets.map(async (asset: File) => {
-      const arrayBuffer = Buffer.from(await asset.arrayBuffer())
+    const result = files.map(async (file: File) => {
+      const arrayBuffer = Buffer.from(await file.arrayBuffer())
       const cid = await createFilename(arrayBuffer)
+      const asset = await getAssetByCID(cid)
+
+      if (!isEmpty(asset)) {
+        return { success: false, file: file.name }
+      }
+
       const signedUrl = await getAssetUploadUrl(cid)
 
-      const uploadResult = await fetch(signedUrl, {
+      await fetch(signedUrl, {
         body: arrayBuffer,
         method: 'PUT',
         headers: {
-          'Content-Type': asset.type,
+          'Content-Type': file.type,
           'Content-Disposition': `attachment; filename="${cid}"`,
         },
       })
 
       await insertAsset({
         cid,
-        name: asset.name,
+        name: file.name,
       })
 
-      return uploadResult
+      return { success: true, file: file.name }
     })
 
-    await Promise.all(result)
+    const uploadResults = await Promise.all(result)
 
     revalidatePath('/dashboard/assets/add-assets')
+
+    return uploadResults
   } catch (error: unknown) {
     log.error(formatError(error))
     throw internalServerErrorError()

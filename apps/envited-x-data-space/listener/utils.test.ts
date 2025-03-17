@@ -6,26 +6,26 @@ describe('listener/utils', () => {
       // given ... a set of attributes with a manifest attribute
       const attributes = [
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.ontology",
-        "type": "uri",
-        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/"
+          name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
+          type: 'uri',
+          value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.metadata",
-        "type": "application/json",
-        "value": "ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu"
+          name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
+          type: 'application/json',
+          value: 'ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.manifest.ontology",
-        "type": "uri",
-        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/"
+          name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
+          type: 'uri',
+          value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.manifest.metadata",
-        "type": "application/json",
-        "value": "ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy"
-        }
-        ]
+          name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
+          type: 'application/json',
+          value: 'ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy',
+        },
+      ]
 
       // when ... we extract the manifest URI
       const result = SUT.extractManifestUri(attributes)
@@ -38,26 +38,26 @@ describe('listener/utils', () => {
       // given ... a set of attributes without a manifest attribute
       const attributes = [
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.ontology",
-        "type": "uri",
-        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/"
+          name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
+          type: 'uri',
+          value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.metadata",
-        "type": "application/json",
-        "value": "ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu"
+          name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
+          type: 'application/json',
+          value: 'ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.manifest.ontology",
-        "type": "uri",
-        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/"
+          name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
+          type: 'uri',
+          value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.anything-else.metadata",
-        "type": "application/json",
-        "value": "ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy"
-        }
-        ]
+          name: 'de.gaiax4plcaad.ontology-management-base.anything-else.metadata',
+          type: 'application/json',
+          value: 'ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy',
+        },
+      ]
 
       // when ... we extract the manifest URI
       const result = SUT.extractManifestUri(attributes)
@@ -83,26 +83,26 @@ describe('listener/utils', () => {
       // given ... a set of attributes with a metadata attribute that doesn't contain manifest
       const attributes = [
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.ontology",
-        "type": "uri",
-        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/"
+          name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
+          type: 'uri',
+          value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.metadata",
-        "type": "application/json",
-        "value": "ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu"
+          name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
+          type: 'application/json',
+          value: 'ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.manifest.ontology",
-        "type": "uri",
-        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/"
+          name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
+          type: 'uri',
+          value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.manifest.metadata",
-        "type": "application/json",
-        "value": "ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy"
-        }
-        ]
+          name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
+          type: 'application/json',
+          value: 'ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy',
+        },
+      ]
 
       // when ... we extract the domain metadata URI
       const result = SUT.extractDomainMetadataUri(attributes)
@@ -115,26 +115,26 @@ describe('listener/utils', () => {
       // given ... a set of attributes with metadata that contains manifest
       const attributes = [
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.ontology",
-        "type": "uri",
-        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/"
+          name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
+          type: 'uri',
+          value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.manifest.metadata",
-        "type": "application/json",
-        "value": "ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu"
+          name: 'de.gaiax4plcaad.ontology-management-base.hdmap.manifest.metadata',
+          type: 'application/json',
+          value: 'ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.manifest.ontology",
-        "type": "uri",
-        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/"
+          name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
+          type: 'uri',
+          value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
         },
         {
-        "name": "de.gaiax4plcaad.ontology-management-base.manifest.metadata",
-        "type": "application/json",
-        "value": "ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy"
-        }
-        ]
+          name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
+          type: 'application/json',
+          value: 'ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy',
+        },
+      ]
 
       // when ... we extract the domain metadata URI
       const result = SUT.extractDomainMetadataUri(attributes)

@@ -75,9 +75,9 @@ export const insertTokenTx =
     identifier: string
     externalUri: string
     displayUri: string
-    tokenMetadata: any,
-    domainMetadata: any,
-    manifest: any,
+    tokenMetadata: any
+    domainMetadata: any
+    manifest: any
   }) =>
     tx
       .insert(schema.token)

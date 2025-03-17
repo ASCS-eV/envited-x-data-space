@@ -5,7 +5,7 @@ import { replace } from 'ramda'
 import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
-import { extractDomainMetadataUri, extractManifestUri, extractKeyValuePairs } from './utils'
+import { extractDomainMetadataUri, extractKeyValuePairs, extractManifestUri } from './utils'
 
 export const createLocalCopy =
   ({ uploadFileToS3 }: { uploadFileToS3: any }) =>
@@ -102,8 +102,10 @@ export const listenToAssetContract =
         const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(manifestUri as string))
         console.log(manifest.data)
         const domainMetadataUri = extractDomainMetadataUri(tokenMetadata?.attributes || [])
-        const domainMetadata: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(domainMetadataUri as string))
-        console.log(domainMetadata.data) 
+        const domainMetadata: GetCIDResponse = await pinata.gateways.get(
+          replace('ipfs://', '')(domainMetadataUri as string),
+        )
+        console.log(domainMetadata.data)
         const attributes = extractKeyValuePairs(manifest.data)
         // Save token to DB
         const token = await insertToken({

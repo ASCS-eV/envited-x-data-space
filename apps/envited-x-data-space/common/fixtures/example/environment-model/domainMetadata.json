@@ -81,7 +81,7 @@
     "environment-model:creationToolName": {
       "@value": "Trian3DBuilder",
       "@type": "xsd:string"
-    }    ,
+    },
     "environment-model:creationToolVendor": {
       "@value": "TrianGraphics GmbH",
       "@type": "xsd:string"

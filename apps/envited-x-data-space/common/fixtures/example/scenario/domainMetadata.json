@@ -57,61 +57,61 @@
     "scenario:timeDate": {
       "@value": "2021-07-09T10:00:00",
       "@type": "xsd:dateTime"
-    }, 
+    },
     "scenario:aim": {
       "@value": "Test the reaction of an ALKS system with regards to a cut-in maneuver.",
       "@type": "xsd:string"
-    },       
+    },
     "scenario:movementDescription": {
       "@value": "LaneChangeAction",
       "@type": "xsd:string"
-    },    
+    },
     "scenario:catalogs": [
       {
         "@type": "manifest:Link",
         "manifest:type": "assetData",
-        "manifest:accessRole": "owner",            
+        "manifest:accessRole": "owner",
         "manifest:fileMetaData": {
-            "manifest:uri": {
-                "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/Vehicles/VehicleCatalog.xosc",
-                "@type": "xsd:anyURI"
-            }
+          "manifest:uri": {
+            "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/Vehicles/VehicleCatalog.xosc",
+            "@type": "xsd:anyURI"
+          }
         }
       },
       {
         "@type": "manifest:Link",
         "manifest:type": "assetData",
-        "manifest:accessRole": "owner",            
+        "manifest:accessRole": "owner",
         "manifest:fileMetaData": {
-            "manifest:uri": {
-                "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/Pedestrians/PedestrianCatalog.xosc",
-                "@type": "xsd:anyURI"
-            }
+          "manifest:uri": {
+            "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/Pedestrians/PedestrianCatalog.xosc",
+            "@type": "xsd:anyURI"
+          }
         }
       },
       {
         "@type": "manifest:Link",
         "manifest:type": "assetData",
-        "manifest:accessRole": "owner",            
+        "manifest:accessRole": "owner",
         "manifest:fileMetaData": {
-            "manifest:uri": {
-                "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/MiscObjects/MiscObjectCatalog.xosc",
-                "@type": "xsd:anyURI"
-            }
+          "manifest:uri": {
+            "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/MiscObjects/MiscObjectCatalog.xosc",
+            "@type": "xsd:anyURI"
+          }
         }
       },
       {
         "@type": "manifest:Link",
         "manifest:type": "assetData",
-        "manifest:accessRole": "owner",            
+        "manifest:accessRole": "owner",
         "manifest:fileMetaData": {
-            "manifest:uri": {
-                "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/Controllers/ControllerCatalog.xosc",
-                "@type": "xsd:anyURI"
-            }
+          "manifest:uri": {
+            "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/Controllers/ControllerCatalog.xosc",
+            "@type": "xsd:anyURI"
+          }
         }
       }
-    ],    
+    ],
     "scenario:environmentModels": [
       {
         "@type": "manifest:Link",
@@ -161,9 +161,7 @@
       "@value": "2",
       "@type": "xsd:unsignedInt"
     },
-    "scenario:controllers": [
-      "ALKSController"
-    ]
+    "scenario:controllers": ["ALKSController"]
   },
   "scenario:quality": {
     "@type": "scenario:Quality"

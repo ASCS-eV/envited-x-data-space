@@ -48,19 +48,8 @@
   },
   "hdmap:content": {
     "@type": "hdmap:Content",
-    "hdmap:roadTypes": [
-      "motorway"
-    ],
-    "hdmap:laneTypes": [
-      "exit",
-      "entry",
-      "none",
-      "shoulder",
-      "driving",
-      "restricted",
-      "border",
-      "stop"
-    ],
+    "hdmap:roadTypes": ["motorway"],
+    "hdmap:laneTypes": ["exit", "entry", "none", "shoulder", "driving", "restricted", "border", "stop"],
     "hdmap:levelOfDetail": "car",
     "hdmap:trafficDirection": "right-hand"
   },
@@ -110,7 +99,7 @@
       "@type": "xsd:float"
     }
   },
-"hdmap:quality": {
+  "hdmap:quality": {
     "@type": "hdmap:Quality",
     "hdmap:precision": {
       "@value": "0.01",

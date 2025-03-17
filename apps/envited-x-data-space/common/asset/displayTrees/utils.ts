@@ -5,19 +5,19 @@ import { Schema, ValidationSchema } from '../../validator/shacl/shacl.types'
 import { fetchShaclSchema } from '../../validator/shacl/shacl.utils'
 
 interface ShaclProperty {
-  name: string;
-  description: string;
-  type?: string | null;
-  value?: any;
+  name: string
+  description: string
+  type?: string | null
+  value?: any
 }
 
 interface ShaclSection {
-  name: string;
-  properties: Record<string, ShaclProperty>;
-  rawContent?: string;
+  name: string
+  properties: Record<string, ShaclProperty>
+  rawContent?: string
 }
 
-type ShaclMetadata = Record<string, ShaclSection>;
+type ShaclMetadata = Record<string, ShaclSection>
 
 export const extractShaclMetadata = (ttlContent: string): ShaclMetadata => {
   const sections = {}
@@ -94,59 +94,59 @@ export const processSection = (
   sectionData: Record<string, any>,
   sectionType: string,
   shaclMetadata: ShaclMetadata,
-  organizedSections: Record<string, ShaclSection>
+  organizedSections: Record<string, ShaclSection>,
 ) => {
   if (!shaclMetadata[sectionType]) {
-      // console.warn(`⚠️ No SHACL metadata found for section type: ${sectionType}`)
-      return
+    // console.warn(`⚠️ No SHACL metadata found for section type: ${sectionType}`)
+    return
   }
 
   const sectionMetadata = shaclMetadata[sectionType]
 
   // Initialize the section without a "type" field
   if (!organizedSections[sectionType]) {
-      organizedSections[sectionType] = {
-          name: sectionMetadata.name || sectionType,
-          properties: {},
-      }
+    organizedSections[sectionType] = {
+      name: sectionMetadata.name || sectionType,
+      properties: {},
+    }
   }
 
   // Process each property in the SHACL metadata
-  Object.keys(sectionData).forEach((propertyKey) => {
-      if (propertyKey === "@type") return
+  Object.keys(sectionData).forEach(propertyKey => {
+    if (propertyKey === '@type') return
 
-      // console.log(`🛠 Processing property: ${propertyKey} in section: ${sectionType}`)
+    // console.log(`🛠 Processing property: ${propertyKey} in section: ${sectionType}`)
 
-      const propertyValue = sectionData[propertyKey]
-      const propertyType = extractType(propertyValue)
+    const propertyValue = sectionData[propertyKey]
+    const propertyType = extractType(propertyValue)
 
-      // If the property has a type and matches a SHACL definition, process it recursively
-      if (propertyType && shaclMetadata[propertyType]) {
-          processSection(propertyValue, propertyType, shaclMetadata, organizedSections);
-      }
+    // If the property has a type and matches a SHACL definition, process it recursively
+    if (propertyType && shaclMetadata[propertyType]) {
+      processSection(propertyValue, propertyType, shaclMetadata, organizedSections)
+    }
 
-      // Attach the property with "type" only inside properties
-      organizedSections[sectionType].properties[propertyKey] = {
-          value: extractValue(propertyValue),
-          type: propertyType || sectionMetadata.properties[propertyKey]?.type || null,
-          name: sectionMetadata.properties[propertyKey]?.name || propertyKey,
-          description: sectionMetadata.properties[propertyKey]?.description || "",
-      };
-  });
+    // Attach the property with "type" only inside properties
+    organizedSections[sectionType].properties[propertyKey] = {
+      value: extractValue(propertyValue),
+      type: propertyType || sectionMetadata.properties[propertyKey]?.type || null,
+      name: sectionMetadata.properties[propertyKey]?.name || propertyKey,
+      description: sectionMetadata.properties[propertyKey]?.description || '',
+    }
+  })
 }
 
 export const organizeDataIntoSections = (data: Record<string, any>, shaclMetadata: ShaclMetadata) => {
   const organizedSections = {}
 
-  Object.keys(data).forEach((sectionKey) => {
-      if (sectionKey === "@context" || sectionKey === "@id") {
-          return
-      }
+  Object.keys(data).forEach(sectionKey => {
+    if (sectionKey === '@context' || sectionKey === '@id') {
+      return
+    }
 
-      let sectionData = data[sectionKey]
-      const sectionType = sectionData["@type"] || sectionKey
+    let sectionData = data[sectionKey]
+    const sectionType = sectionData['@type'] || sectionKey
 
-      processSection(sectionData, sectionType, shaclMetadata, organizedSections)
+    processSection(sectionData, sectionType, shaclMetadata, organizedSections)
   })
 
   return organizedSections

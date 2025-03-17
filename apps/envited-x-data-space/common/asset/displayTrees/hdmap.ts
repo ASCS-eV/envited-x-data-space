@@ -264,3 +264,21 @@ export const hdmap = {
     },
   ],
 }
+
+export const hdmapNew = {
+  terms: ['hdmap:Format'],
+  categories: [
+    {
+      name: 'Content',
+      sections: ['hdmap:Content', 'hdmap:Quantity'],
+    },
+    {
+      name: 'Product details',
+      sections: ['hdmap:Quality', 'hdmap:DataSource'],
+    },
+    {
+      name: 'Location',
+      sections: ['hdmap:Quantity'],
+    },
+  ],
+}

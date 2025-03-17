@@ -1,3 +1,3 @@
-import { hdmap } from './hdmap'
+import { hdmap, hdmapNew } from './hdmap'
 
-export default { hdmap }
+export default { hdmap, hdmapNew }

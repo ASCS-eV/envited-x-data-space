@@ -49,7 +49,7 @@ export const _validateShaclFile =
 
       const { conforms: manifestConforms, data: manifest } = await validateManifest(file)
       const manifestFiles = await checkIfAllFilesInManifestExist(file, manifest)
-
+      
       if (!isEmpty(manifestFiles.errors)) {
         return {
           isValid: false,

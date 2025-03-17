@@ -1,0 +1,163 @@
+{
+  "@context": {
+    "sh": "http://www.w3.org/ns/shacl#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "environment-model": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/environment-model/",
+    "general": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/general/",
+    "georeference": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/georeference/",
+    "gx": "https://registry.lab.gaia-x.eu/development/api/trusted-shape-registry/v1/shapes/jsonld/trustframework#"
+  },
+  "@id": "did:web:registry.gaia-x.eu:environment-model:xwsY5p3Z4Jjvf7XGp2PDnDFt36AlVhYnahHU",
+  "@type": "environment-model:EnvironmentModel",
+  "environment-model:general": {
+    "@type": "general:General",
+    "general:description": {
+      "@type": "general:Description",
+      "general:name": {
+        "@value": "Example environmental model for test field Lower Saxony",
+        "@type": "xsd:string"
+      },
+      "general:description": {
+        "@value": "Motorway section of the test field Lower Saxony with 2000x2000m size with 1x1 tiles.",
+        "@type": "xsd:string"
+      }
+    },
+    "general:data": {
+      "@type": "general:Data",
+      "general:size": {
+        "@value": "155.1",
+        "@type": "xsd:float"
+      },
+      "general:recordingTime": {
+        "@value": "2024-11-28T15:00:07",
+        "@type": "xsd:dateTime"
+      }
+    }
+  },
+  "environment-model:quantity": {
+    "@type": "environment-model:Quantity",
+    "environment-model:geometryCount": {
+      "@value": "2159",
+      "@type": "xsd:unsignedInt"
+    },
+    "environment-model:triangleCount": {
+      "@value": "10681",
+      "@type": "xsd:unsignedInt"
+    },
+    "environment-model:textureMaterialCount": {
+      "@value": "25",
+      "@type": "xsd:unsignedInt"
+    }
+  },
+  "environment-model:quality": {
+    "@type": "environment-model:Quality",
+    "environment-model:detailLevel": "Low",
+    "environment-model:textureResolution": {
+      "@value": "0.1",
+      "@type": "xsd:float"
+    }
+  },
+  "environment-model:content": {
+    "@type": "environment-model:Content",
+    "environment-model:elements": "profile roads",
+    "environment-model:useCase": "driving"
+  },
+  "environment-model:project": {
+    "@type": "environment-model:Project",
+    "environment-model:visualisationToolName": {
+      "@value": "Virtual Test Drive (VTD)",
+      "@type": "xsd:string"
+    },
+    "environment-model:visualisationToolVendor": {
+      "@value": "Hexagon AB",
+      "@type": "xsd:string"
+    },
+    "environment-model:visualisationToolVersion": {
+      "@value": "2021.1",
+      "@type": "xsd:string"
+    },
+    "environment-model:creationToolName": {
+      "@value": "Trian3DBuilder",
+      "@type": "xsd:string"
+    }    ,
+    "environment-model:creationToolVendor": {
+      "@value": "TrianGraphics GmbH",
+      "@type": "xsd:string"
+    },
+    "environment-model:creationToolVersion": {
+      "@value": "7.9",
+      "@type": "xsd:string"
+    }
+  },
+  "environment-model:format": {
+    "@type": "environment-model:Format",
+    "environment-model:formatType": {
+      "@value": "OpenSceneGraph"
+    },
+    "environment-model:version": {
+      "@value": "3.6.5",
+      "@type": "xsd:string"
+    }
+  },
+  "environment-model:georeference": {
+    "@type": "georeference:Georeference",
+    "georeference:projectLocation": {
+      "@type": "georeference:ProjectLocation",
+      "georeference:state": {
+        "@value": "DE-NI",
+        "@type": "xsd:string"
+      },
+      "georeference:city": {
+        "@value": "Koenigslutter am Elm",
+        "@type": "xsd:string"
+      },
+      "georeference:region": {
+        "@value": "Landkreis Helmstedt",
+        "@type": "xsd:string"
+      },
+      "georeference:country": {
+        "@value": "DE",
+        "@type": "xsd:string"
+      },
+      "georeference:boundingBox": {
+        "@type": "georeference:BoundingBox",
+        "georeference:xMin": {
+          "@value": "10.720740862799195",
+          "@type": "xsd:float"
+        },
+        "georeference:yMin": {
+          "@value": "52.29672229543727",
+          "@type": "xsd:float"
+        },
+        "georeference:xMax": {
+          "@value": "10.730432209669724",
+          "@type": "xsd:float"
+        },
+        "georeference:yMax": {
+          "@value": "52.31580272353997",
+          "@type": "xsd:float"
+        }
+      }
+    },
+    "georeference:geodeticReferenceSystem": {
+      "@type": "georeference:GeodeticReferenceSystem",
+      "georeference:origin": {
+        "@type": "georeference:LatLonCoordinate",
+        "georeference:lat": {
+          "@value": "52.275329463992996",
+          "@type": "xsd:float"
+        },
+        "georeference:lon": {
+          "@value": "10.685571633942278",
+          "@type": "xsd:float"
+        }
+      },
+      "georeference:coordinateSystemName": {
+        "@value": "tmerc",
+        "@type": "xsd:string"
+      }
+    }
+  }
+}

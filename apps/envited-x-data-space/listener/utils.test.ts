@@ -1,41 +1,181 @@
 import * as SUT from './utils'
 
 describe('listener/utils', () => {
-  // describe('extractAttributesUri', () => {
-  // it('should return an empty array if the attributes array is empty', () => {
-  //   // when ... we want to extract the attributes uri
-  //   // then ... it should extract the attributes uri as expected
+  describe('extractManifestUri', () => {
+    it('should extract the manifest URI from attributes', () => {
+      // given ... a set of attributes with a manifest attribute
+      const attributes = [
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.ontology",
+        "type": "uri",
+        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.metadata",
+        "type": "application/json",
+        "value": "ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.manifest.ontology",
+        "type": "uri",
+        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.manifest.metadata",
+        "type": "application/json",
+        "value": "ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy"
+        }
+        ]
 
-  //   const attributes = [
-  //     {
-  //       name: 'ASSET_NAME.ASSET_TYPE',
-  //       value: 'ASSET_URI',
-  //       type: 'uri',
-  //     },
-  //     {
-  //       name: 'ASSET_NAME.ASSET_TYPE',
-  //       value: 'ASSET_IPFS_URI',
-  //       type: 'application/json',
-  //     },
-  //     {
-  //       name: 'ASSET_NAME.manifest',
-  //       value: 'ASSET_DEFINITION_URI',
-  //       type: 'uri',
-  //     },
-  //     {
-  //       name: 'ASSET_NAME.manifest',
-  //       value: 'ASSET_MANIFEST_IFPS_URI',
-  //       type: 'application/json',
-  //     },
-  //   ]
+      // when ... we extract the manifest URI
+      const result = SUT.extractManifestUri(attributes)
 
-  //   const expected = 'ASSET_IPFS_URI'
+      // then ... it should return the manifest URI
+      expect(result).toEqual('ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy')
+    })
 
-  //   const result = SUT.extractAttributesUri(attributes)
+    it('should return undefined when there is no manifest attribute', () => {
+      // given ... a set of attributes without a manifest attribute
+      const attributes = [
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.ontology",
+        "type": "uri",
+        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.metadata",
+        "type": "application/json",
+        "value": "ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.manifest.ontology",
+        "type": "uri",
+        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.anything-else.metadata",
+        "type": "application/json",
+        "value": "ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy"
+        }
+        ]
 
-  //   expect(result).toEqual(expected)
-  // })
-  // })
+      // when ... we extract the manifest URI
+      const result = SUT.extractManifestUri(attributes)
+
+      // then ... it should return undefined
+      expect(result).toBeUndefined()
+    })
+
+    it('should return undefined for an empty array', () => {
+      // given ... an empty attributes array
+      const attributes: any[] = []
+
+      // when ... we extract the manifest URI
+      const result = SUT.extractManifestUri(attributes)
+
+      // then ... it should return undefined
+      expect(result).toBeUndefined()
+    })
+  })
+
+  describe('extractDomainMetadataUri', () => {
+    it('should extract the metadata URI when it does not contain manifest', () => {
+      // given ... a set of attributes with a metadata attribute that doesn't contain manifest
+      const attributes = [
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.ontology",
+        "type": "uri",
+        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.metadata",
+        "type": "application/json",
+        "value": "ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.manifest.ontology",
+        "type": "uri",
+        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.manifest.metadata",
+        "type": "application/json",
+        "value": "ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy"
+        }
+        ]
+
+      // when ... we extract the domain metadata URI
+      const result = SUT.extractDomainMetadataUri(attributes)
+
+      // then ... it should return the metadata URI
+      expect(result).toEqual('ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu')
+    })
+
+    it('should not extract metadata URI if it also contains manifest', () => {
+      // given ... a set of attributes with metadata that contains manifest
+      const attributes = [
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.ontology",
+        "type": "uri",
+        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.hdmap.manifest.metadata",
+        "type": "application/json",
+        "value": "ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.manifest.ontology",
+        "type": "uri",
+        "value": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/"
+        },
+        {
+        "name": "de.gaiax4plcaad.ontology-management-base.manifest.metadata",
+        "type": "application/json",
+        "value": "ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy"
+        }
+        ]
+
+      // when ... we extract the domain metadata URI
+      const result = SUT.extractDomainMetadataUri(attributes)
+
+      // then ... it should return undefined because all metadata attributes contain manifest
+      expect(result).toBeUndefined()
+    })
+
+    it('should return undefined when there are no metadata attributes', () => {
+      // given ... a set of attributes without metadata attributes
+      const attributes = [
+        {
+          name: 'ASSET_NAME.ASSET_TYPE',
+          value: 'ASSET_URI',
+          type: 'uri',
+        },
+        {
+          name: 'ASSET_NAME.manifest',
+          value: 'MANIFEST_URI',
+          type: 'application/json',
+        },
+      ]
+
+      // when ... we extract the domain metadata URI
+      const result = SUT.extractDomainMetadataUri(attributes)
+
+      // then ... it should return undefined
+      expect(result).toBeUndefined()
+    })
+
+    it('should return undefined for an empty array', () => {
+      // given ... an empty attributes array
+      const attributes: any[] = []
+
+      // when ... we extract the domain metadata URI
+      const result = SUT.extractDomainMetadataUri(attributes)
+
+      // then ... it should return undefined
+      expect(result).toBeUndefined()
+    })
+  })
 
   describe('extractKeyValuePairs', () => {
     it('should return key value pairs from the manifest', () => {

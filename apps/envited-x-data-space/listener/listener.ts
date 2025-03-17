@@ -5,7 +5,7 @@ import { replace } from 'ramda'
 import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
-import { extractAttributesUri, extractKeyValuePairs } from './utils'
+import { extractDomainMetadataUri, extractManifestUri, extractKeyValuePairs } from './utils'
 
 export const createLocalCopy =
   ({ uploadFileToS3 }: { uploadFileToS3: any }) =>
@@ -82,6 +82,9 @@ export const listenToAssetContract =
         const { hash, destination, metadata, parameters } = data
         const creator = parameters.value.args[1].args[0].string
         const tokenId = parseInt(metadata.operation_result.lazy_storage_diff[2].diff.updates[0].key.int, 10)
+
+        console.log({ contract: process.env.ASSETS_CONTRACT, tokenId })
+        console.log('Fetching token from DB')
         const [existingToken] = await getTokenByTokenId({ contract: process.env.ASSETS_CONTRACT, tokenId })
 
         if (existingToken) {
@@ -95,8 +98,12 @@ export const listenToAssetContract =
         const displayCid = replace('ipfs://', '')(tokenMetadata?.displayUri || '')
         const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${tokenMetadata?.identifier}/${displayCid}`
         log.info('Local display URI', localDisplayUri)
-        const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
-        const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(attributesUri as string))
+        const manifestUri = extractManifestUri(tokenMetadata?.attributes || [])
+        const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(manifestUri as string))
+        console.log(manifest.data)
+        const domainMetadataUri = extractDomainMetadataUri(tokenMetadata?.attributes || [])
+        const domainMetadata: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(domainMetadataUri as string))
+        console.log(domainMetadata.data) 
         const attributes = extractKeyValuePairs(manifest.data)
         // Save token to DB
         const token = await insertToken({
@@ -120,6 +127,8 @@ export const listenToAssetContract =
           tags: tokenMetadata?.tags,
           attributes,
           tokenMetadata,
+          manifest: manifest?.data,
+          domainMetadata: domainMetadata?.data,
         })
         log.info('Token registered', token)
         log.info('Updating Asset')

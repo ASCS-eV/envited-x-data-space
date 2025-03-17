@@ -82,9 +82,6 @@ export const listenToAssetContract =
         const { hash, destination, metadata, parameters } = data
         const creator = parameters.value.args[1].args[0].string
         const tokenId = parseInt(metadata.operation_result.lazy_storage_diff[2].diff.updates[0].key.int, 10)
-
-        console.log({ contract: process.env.ASSETS_CONTRACT, tokenId })
-        console.log('Fetching token from DB')
         const [existingToken] = await getTokenByTokenId({ contract: process.env.ASSETS_CONTRACT, tokenId })
 
         if (existingToken) {

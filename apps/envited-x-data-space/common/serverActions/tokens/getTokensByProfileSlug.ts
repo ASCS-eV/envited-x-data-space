@@ -18,12 +18,10 @@ export const _getTokensByProfileSlug =
       const connection = await db()
 
       const profile = await connection.getProfileBySlug(slug)
-      const [user] = await connection.getUserByName(profile.name)
-      // TODO: Fix get tokens by issuer id
-      // const tokens = await connection.getTokensByIssuerId(extractAddressFromDid(user.id))
+      const user = await connection.getUserByName(profile.name)
 
-      // return tokens
-      return []
+      return connection.getTokensByIssuerId(user.addressGlobalIdentifierId)
+
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()

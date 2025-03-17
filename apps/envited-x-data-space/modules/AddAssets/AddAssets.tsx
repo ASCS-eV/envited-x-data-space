@@ -51,7 +51,7 @@ export const AddAssets = () => {
       map(({ success, file }: { success: boolean; file: string }) =>
         success
           ? successNotification(`${file} ${t('[Notification] asset successfully uploaded')}`)
-          : error(`${file} ${t('[Notification] asset already exist')}`),
+          : error(`${file} ${t('[Notification] asset already exists')}`),
       )(results)
       reset()
     } catch (e) {

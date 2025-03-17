@@ -38,21 +38,22 @@ export const authOptions: NextAuthOptions = {
 
         try {
           const connection = await db()
+          const user = await connection.getUserByDid(parseGlobalIdentifier(pkh))
           const result = await connection.getUserRolesByDid(parseGlobalIdentifier(pkh))
           const userRoles = pluck('usersToRoles', result)
-          console.log('USER ROLES', userRoles)
+
           return {
             name: pkh,
-            id: pkh,
-            pkh: pkh,
+            id: user.id,
+            did: pkh,
             role: assignSingleRole(userRoles),
           }
         } catch (e) {
           console.log(e)
           return {
             name: pkh,
-            id: pkh,
-            pkh: pkh,
+            id: '',
+            did: pkh,
             role: '',
           }
         }
@@ -87,7 +88,6 @@ export const authOptions: NextAuthOptions = {
   debug: true,
   callbacks: {
     async signIn({ profile }) {
-      log.info('Sign in checks', profile)
       try {
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
@@ -190,7 +190,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.user.id || ''
         session.user.email = undefined
         session.user.image = undefined
-        session.user.name = token?.user?.id
+        session.user.name = token?.user?.did
       }
       log.info('Session: ', session)
       return session

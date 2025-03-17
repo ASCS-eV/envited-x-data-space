@@ -12,11 +12,11 @@ export type DatabaseConnection = PostgresJsDatabase<typeof schema> | AwsDataApiP
 
 export const getTokenByTokenId =
   ({ database }: { database: DatabaseConnection }) =>
-  async ({ tokenId }: { tokenId: number }) =>
+  async ({ contractGuid, tokenId }: { tokenId: number; contractGuid: string }) =>
     database
       .select()
       .from(schema.token)
-      .where(and(eq(schema.token.tokenId, tokenId)))
+      .where(and(eq(schema.token.tokenId, tokenId), eq(schema.token.contractGlobalIdentifierId, contractGuid)))
 
 export const getTokenTags =
   (
@@ -221,3 +221,15 @@ export const updateAsset =
       .set({ tokenId, status: AssetStatus.minted, updatedAt: new Date() })
       .where(eq(schema.asset.id, id))
       .returning()
+
+export const getGlobalIdentifierByFullResourceName =
+  ({ database: db }: { database: DatabaseConnection }) =>
+    async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
+      db.query.globalIdentifier.findFirst({
+        where: and(
+          eq(schema.globalIdentifier.method, method),
+          eq(schema.globalIdentifier.namespace, namespace),
+          eq(schema.globalIdentifier.chainId, chainId),
+          eq(schema.globalIdentifier.nss, nss),
+        ),
+      })

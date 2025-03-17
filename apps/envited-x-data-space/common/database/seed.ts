@@ -8,13 +8,16 @@ import { ROLES } from './data/roles'
 import { connectDb } from './database'
 import { db } from './queries/queries'
 import { insertUserTx } from './queries/users'
-import { businessCategory, role } from './schema'
+import { businessCategory, role, globalIdentifier } from './schema'
 import * as schema from './schema'
+import { GLOBAL_IDENTIFIERS } from './data/globalIdentifiers'
 
 const insertRoles = (connection: any) => async (roles: any[]) =>
   connection.insert(role).values(roles).onConflictDoNothing().execute()
 const insertBusinessCategories = (connection: any) => async (businessCategories: any[]) =>
   connection.insert(businessCategory).values(businessCategories).onConflictDoNothing().execute()
+const insertGlobalIdentifiers = (connection: any) => async (globalIdentifiers: any[]) =>
+  connection.insert(globalIdentifier).values(globalIdentifiers).onConflictDoNothing().execute()
 
 const seed = async () => {
   try {
@@ -298,6 +301,8 @@ const seed = async () => {
     }
     // const newUser = await database.insertUserTx(userCredential)
 
+    await insertGlobalIdentifiers(connection)(GLOBAL_IDENTIFIERS);
+
     // console.log(user)
     // const frn = {
     //   method: 'did:pkh',
@@ -310,21 +315,21 @@ const seed = async () => {
     // console.log(globalIdentifier)
     // console.log(user)
 
-    const user = await database.getUserByDid({
-      method: 'did:pkh',
-      namespace: 'tezos',
-      chainId: 'NetXnHfVqm9iesp',
-      nss: 'tz1QiMF7KNwmabgo5fkchacKh5niBK9Xai7y',
-    })
-    console.log(user)
+    // const user = await database.getUserByDid({
+    //   method: 'did:pkh',
+    //   namespace: 'tezos',
+    //   chainId: 'NetXnHfVqm9iesp',
+    //   nss: 'tz1QiMF7KNwmabgo5fkchacKh5niBK9Xai7y',
+    // })
+    // console.log(user)
 
-    const userRoles = await database.getUserRolesByDid({
-      method: 'did:pkh',
-      namespace: 'tezos',
-      chainId: 'NetXnHfVqm9iesp',
-      nss: 'tz1QiMF7KNwmabgo5fkchacKh5niBK9Xai7y',
-    })
-    console.log(userRoles)
+    // const userRoles = await database.getUserRolesByDid({
+    //   method: 'did:pkh',
+    //   namespace: 'tezos',
+    //   chainId: 'NetXnHfVqm9iesp',
+    //   nss: 'tz1QiMF7KNwmabgo5fkchacKh5niBK9Xai7y',
+    // })
+    // console.log(userRoles)
 
     return
   } catch (error) {

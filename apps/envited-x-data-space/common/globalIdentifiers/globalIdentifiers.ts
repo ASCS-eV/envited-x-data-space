@@ -36,7 +36,7 @@ export const parseGlobalIdentifier = (identifier: string): GlobalIdentifier => {
     // Special case for Tezos DIDs: if method is did:pkh and namespace is tz
     if (method === 'did:pkh' && parts[2] === 'tz') {
       result.namespace = 'tezos'
-      result.chainId = 'NetXnHfVqm9iesp'
+      result.chainId = process.env.TEZOS_CHAIN_ID || 'NetXnHfVqm9iesp'
       result.nss = parts[3] || undefined
       return result as GlobalIdentifier
     }

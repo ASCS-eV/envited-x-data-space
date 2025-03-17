@@ -5,7 +5,7 @@
   "[Error] invalid asset found": "Invalid asset(s) found.",
   "[Success] assets are uploaded": "All assets are uploaded.",
   "[Notification] assets are uploaded": "All asset(s) are uploaded.",
-  "[Notification] asset already exist": "asset already exist",
+  "[Notification] asset already exists": "asset already exists",
   "[Notification] asset successfully uploaded": "asset successfully uploaded",
   "[Notification] invalid asset found": "Asset(s) are not uploaded"
 }

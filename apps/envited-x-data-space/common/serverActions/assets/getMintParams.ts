@@ -5,9 +5,7 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { Asset, Role, Session, User } from '../../types'
 import {
-  addUrnUuid,
   badRequestError,
-  extractAddressFromDid,
   forbiddenError,
   notFoundError,
   unauthorizedError,
@@ -32,7 +30,6 @@ export const _getMintParams =
 
     const connection = await db()
     const [asset] = (await connection.getAsset(assetId)) as Asset[]
-
     if (isNil(asset) || isEmpty(asset)) {
       throw notFoundError({ resource: 'assets', resourceId: assetId, userId: session?.user.id })
     }
@@ -42,11 +39,21 @@ export const _getMintParams =
     if (isNil(user.issuerId) || isEmpty(user.issuerId)) {
       throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })
     }
+    console.log(asset)
+    console.log(user.urnGlobalIdentifierId)
+    const ownerUser = await connection.getUserById(asset.ownerId)
+    const owner = await connection.getGlobalIdentifierById(ownerUser.addressGlobalIdentifierId)
+    const from = await connection.getGlobalIdentifierById(user.urnGlobalIdentifierId)
 
+    console.log({
+      from: from.nss,
+      owner: owner?.nss,
+      contractAddress: process.env.TEZOS_ASSETS_CONTRACT!,
+    })
     return {
-      from: addUrnUuid(user.uuid),
-      owner: extractAddressFromDid(asset.owner),
-      contractAddress: process.env.ASSETS_CONTRACT!,
+      from: from.nss,
+      owner: owner?.nss,
+      contractAddress: process.env.TEZOS_ASSETS_CONTRACT!,
     }
   }
 

@@ -164,12 +164,14 @@ export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: st
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.query.user.findMany({
     where: eq(
-      user.addressGlobalIdentifierId,
-      db
-        .select({ id: globalIdentifier.id })
-        .from(globalIdentifier)
-        .innerJoin(issuer, eq(issuer.globalIdentifierId, globalIdentifier.id))
-        .where(eq(issuer.id, issuerId)),
+      // user.addressGlobalIdentifierId,
+      // db
+      //   .select({ id: globalIdentifier.id })
+      //   .from(globalIdentifier)
+      //   .innerJoin(issuer, eq(issuer.globalIdentifierId, globalIdentifier.id))
+      //   .where(eq(issuer.id, issuerId)),
+      user.issuerId,
+      issuerId,
     ),
     with: {
       urnGlobalIdentifier: true,

@@ -10,6 +10,8 @@ import { ERRORS } from '../../common/constants'
 import { log } from '../../common/logger'
 import { getAssetByCID, insertAsset } from '../../common/serverActions'
 import { badRequestError, formatError, internalServerErrorError, unauthorizedError } from '../../common/utils'
+import { FEATURE_FLAGS } from 'apps/envited-x-data-space/common/featureFlags'
+import { Environment } from 'apps/envited-x-data-space/common/types'
 
 export async function validateAndUploadAssets(formData: FormData) {
   const files = formData.getAll('assets') as File[]
@@ -31,14 +33,16 @@ export async function validateAndUploadAssets(formData: FormData) {
     const result = files.map(async (file: File) => {
       const arrayBuffer = Buffer.from(await file.arrayBuffer())
       const cid = await createFilename(arrayBuffer)
-      const asset = await getAssetByCID(cid)
+      
+      if (FEATURE_FLAGS[process.env.ENV as Environment || 'development'].uniqueAsset) {
+        const asset = await getAssetByCID(cid)
 
-      if (!isEmpty(asset)) {
-        return { success: false, file: file.name }
+        if (!isEmpty(asset)) {
+          return { success: false, file: file.name }
+        }
       }
-
+      
       const signedUrl = await getAssetUploadUrl(cid)
-
       await fetch(signedUrl, {
         body: arrayBuffer,
         method: 'PUT',

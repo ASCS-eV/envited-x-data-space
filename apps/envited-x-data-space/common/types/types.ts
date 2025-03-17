@@ -85,7 +85,7 @@ export interface Asset {
   metadata: AssetMetadata
   status: AssetStatus
   userId: string
-  owner: string
+  ownerId: string
   createdAt: Date
 }
 
@@ -149,6 +149,8 @@ export interface User {
   updatedAt: string
   vatId?: string
   isActive: boolean
+  urnGlobalIdentifierId: string
+  addressGlobalIdentifierId: string
 }
 
 export interface Profile {

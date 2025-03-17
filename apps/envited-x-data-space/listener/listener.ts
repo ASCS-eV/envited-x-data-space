@@ -52,6 +52,7 @@ export const listenToAssetContract =
     insertToken,
     getAssetByCID,
     updateAsset,
+    getGlobalIdentifierByFullResourceName,
     log,
   }: {
     tezos: TezosToolkit
@@ -59,6 +60,7 @@ export const listenToAssetContract =
     insertToken: any
     getAssetByCID: any
     updateAsset: any
+    getGlobalIdentifierByFullResourceName: any
     log: Log
   }) =>
   async () => {
@@ -70,7 +72,7 @@ export const listenToAssetContract =
     )
 
     const subscription = tezos.stream.subscribeOperation({
-      destination: process.env.ASSETS_CONTRACT!,
+      destination: process.env.TEZOS_ASSETS_CONTRACT!,
     })
 
     subscription.on('data', async (data: any) => {
@@ -82,7 +84,13 @@ export const listenToAssetContract =
         const { hash, destination, metadata, parameters } = data
         const creator = parameters.value.args[1].args[0].string
         const tokenId = parseInt(metadata.operation_result.lazy_storage_diff[2].diff.updates[0].key.int, 10)
-        const [existingToken] = await getTokenByTokenId({ contract: process.env.ASSETS_CONTRACT, tokenId })
+        const contractGuid = await getGlobalIdentifierByFullResourceName({
+          method: 'urn:contract',
+          namespace: 'tezos',
+          chainId: process.env.TEZOS_CHAIN_ID!,
+          nss: process.env.TEZOS_ASSETS_CONTRACT!,
+        })
+        const [existingToken] = await getTokenByTokenId({ contract: contractGuid.id, tokenId })
 
         if (existingToken) {
           return

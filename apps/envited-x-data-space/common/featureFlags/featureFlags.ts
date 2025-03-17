@@ -2,13 +2,16 @@ export const FEATURE_FLAGS = {
   development: {
     oidc: false,
     contract: false,
+    uniqueAsset: false,
   },
   staging: {
     oidc: true,
     contract: true,
+    uniqueAsset: true,
   },
   production: {
     oidc: true,
     contract: true,
+    uniqueAsset: true,
   },
 }

@@ -4,7 +4,6 @@ import { getServerSession } from '../../auth'
 import { RESTRICTED_PROFILE_FIELDS } from '../../constants'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { parseGlobalIdentifier } from '../../globalIdentifiers'
 import { hasCredentialType, isOwnProfile, isPrincipalContact, isUsersCompanyProfile } from '../../guards'
 import { Log, log } from '../../logger'
 import { Profile, Session } from '../../types'
@@ -27,13 +26,14 @@ export const _getProfileBySlug =
       }
 
       if (!isNil(session)) {
-        const user = await connection.getUserByDid(parseGlobalIdentifier(session.user.id))
+        const user = await connection.getUserById(session.user.id)
 
         if (isOwnProfile(user)(profile)) {
           return profile
         }
 
-        const [principal] = await connection.getUserByIssuerId(user.issuerId)
+        const principal = await connection.getUserByIssuerId(user.issuerId)
+
         if (isUsersCompanyProfile(principal)(profile)) {
           return profile
         }
@@ -72,17 +72,13 @@ export const _getProfile =
       if (isNil(session)) {
         throw unauthorizedError({ resource: 'profiles' })
       }
-
       const connection = await db()
 
-      const user = await connection.getUserByDid(parseGlobalIdentifier(session.user.id))
-      console.log('user', user)
+      const user = await connection.getUserById(session.user.id)
       const issuer = await connection.getIssuerById(user?.issuerId)
-      console.log('ISSUER', issuer)
       let profileName = issuer.name
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserByIssuerId(user.issuerId)
-        console.log('PRINCIPAL', principal)
         profileName = principal.name
       }
 

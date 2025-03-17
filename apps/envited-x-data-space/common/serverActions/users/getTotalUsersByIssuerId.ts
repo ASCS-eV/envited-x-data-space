@@ -20,17 +20,15 @@ export const _getTotalUsersByIssuerId =
       }
 
       const connection = await db()
-      const user = await connection.getUserById(session?.user?.pkh)
-
-      let issuerId = session?.user?.pkh
+      const user = await connection.getUserById(session?.user?.id)
+      
+      let issuerId = session?.user?.id
       if (isNotNil(user) && hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
-        const principal = await connection.getUserById(user.issuerId)
-        issuerId = principal.id
+        issuerId = user.issuerId
       }
 
-      const users = await connection.getTotalUsersByIssuerId(issuerId)
-
-      return users
+      const users = await connection.getUsersByIssuerId(issuerId)
+      return users.length
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()

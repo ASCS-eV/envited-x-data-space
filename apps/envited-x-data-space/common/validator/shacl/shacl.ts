@@ -15,7 +15,6 @@ import {
   formatFilesErrorMessage,
   loadDataset,
   parseStreamToDataset,
-  subtractManifestAndReadMeFiles,
   validateShacl,
 } from './shacl.utils'
 
@@ -59,13 +58,11 @@ export const _validateShaclFile =
       }
 
       const amountOfFilesInZip = await countAmountOfFilesInZip(file)
-      const amountWithoutManifestAndReadme = subtractManifestAndReadMeFiles(amountOfFilesInZip)
-
-      if (!equals(amountWithoutManifestAndReadme)(manifestFiles.amount)) {
+      if (!equals(amountOfFilesInZip)(manifestFiles.amount)) {
         return {
           isValid: false,
           data: {},
-          error: `${amountWithoutManifestAndReadme} files found, should be ${manifestFiles.amount} files`,
+          error: `${amountOfFilesInZip} files found, should be ${manifestFiles.amount} files`,
         }
       }
 

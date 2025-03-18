@@ -216,7 +216,7 @@ export const _validateAndCreateMetadata =
       assetCID: string
       domainMetadataCID: string
       visualizationFiles: ExtractedFileWithCID[]
-    }) => (manifest: Manifest) => any
+    }) => (manifest: any) => any
     createFilename: (byteArray: Uint8Array, type?: string, filename?: string) => Promise<string>
     getFilesAsPathAndByteArrayFromManifest: (
       byteArray: Uint8Array,
@@ -280,8 +280,10 @@ export const _validateAndCreateMetadata =
       }
 
       const rightsObject = {
-        identifier: data.manifest['manifest:license']['manifest:spdxIdentifier']['@value'],
-        path: data.manifest['manifest:license']['manifest:licenseData']['manifest:path']['@value'],
+        identifier: data.manifest['manifest:hasLicense']['gx:license']['@value'],
+        path: data.manifest['manifest:hasLicense']['manifest:licenseData']['manifest:hasFileMetadata'][
+          'manifest:filePath'
+        ]['@value'],
       }
 
       const tokenMetadata = createTokenMetadata({

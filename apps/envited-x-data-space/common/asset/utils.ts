@@ -16,9 +16,9 @@ import {
   isNil,
   map,
   path,
+  pathEq,
   pathOr,
   pipe,
-  propEq,
   reduce,
   reject,
   replace,
@@ -67,22 +67,26 @@ export const getArrayBufferFromByteArray = async (byteArray: Uint8Array, filenam
 
 export const getDomainMetadataPath = (manifest: Manifest) =>
   pipe(
-    pathOr([], ['manifest:data', 'manifest:contentData']),
-    find(propEq('metadata', 'manifest:type')),
-    pathOr('', ['manifest:path', '@value']),
+    pathOr([], ['manifest:hasArtifacts']),
+    find(pathEq('envited-x:isMetadata', ['manifest:hasCategory', '@id'])),
+    pathOr('', ['manifest:hasFileMetadata', 'manifest:filePath', '@value']),
     replace('./', ''),
   )(manifest)
 
 export const getFilesGroupedByAccessRoles = (manifest: Manifest) => {
-  const { owner, registeredUser, publicUser } = pipe(
+  const groupedAssets = pipe(
     getAllManifestLinks,
-    groupBy((link: ManifestLink) => link['manifest:accessRole']),
+    groupBy((link: ManifestLink) => link['manifest:hasAccessRole']?.['@id'] ?? 'unknown'),
   )(manifest)
 
   return {
-    owner: owner ? getPathsFromManifestLinks(owner) : [],
-    registeredUser: registeredUser ? getPathsFromManifestLinks(registeredUser) : [],
-    publicUser: publicUser ? getPathsFromManifestLinks(publicUser) : [],
+    owner: groupedAssets['envited-x:isOwner'] ? getPathsFromManifestLinks(groupedAssets['envited-x:isOwner']) : [],
+    registeredUser: groupedAssets['envited-x:isRegistered']
+      ? getPathsFromManifestLinks(groupedAssets['envited-x:isRegistered'])
+      : [],
+    publicUser: groupedAssets['envited-x:isPublic']
+      ? getPathsFromManifestLinks(groupedAssets['envited-x:isPublic'])
+      : [],
   }
 }
 
@@ -94,9 +98,9 @@ export const getAllManifestLinks = (manifest: Manifest) =>
       [],
     ),
   )([
-    ['manifest:data', 'manifest:assetData'],
-    ['manifest:data', 'manifest:contentData'],
-    ['manifest:license', 'manifest:licenseData'],
+    ['manifest:hasManifestReference'],
+    ['manifest:hasLicense', 'manifest:licenseData'],
+    ['manifest:hasArtifacts'],
   ]) as ManifestLink[]
 
 export const formatManifestLinkPath = replace('./', '')
@@ -109,7 +113,8 @@ export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
     getAllManifestLinks,
     map(
       (link: ManifestLink) =>
-        isRemoteUrl(link['manifest:path']['@value']) && !isSelfHosted(link['manifest:path']['@value']),
+        isRemoteUrl(link['manifest:hasFileMetadata']['manifest:filePath']['@value']) &&
+        !isSelfHosted(link['manifest:hasFileMetadata']['manifest:filePath']['@value']),
     ),
     (x: boolean[]) => any(equals(true))(x),
   )(manifest)
@@ -117,8 +122,11 @@ export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
 export const getPathsFromManifestLinks = (links: ManifestLink[]) =>
   pipe(
     map((link: ManifestLink) =>
-      !isRemoteUrl(link['manifest:path']['@value'])
-        ? { path: formatManifestLinkPath(link['manifest:path']['@value']), type: link['manifest:type'] }
+      !isRemoteUrl(link['manifest:hasFileMetadata']['manifest:filePath']['@value'])
+        ? {
+            path: formatManifestLinkPath(link['manifest:hasFileMetadata']['manifest:filePath']['@value']),
+            type: link['manifest:hasFileMetadata']['manifest:mimeType']['@value'],
+          }
         : null,
     ),
     reject(isNil),

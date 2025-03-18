@@ -6,20 +6,20 @@ export enum ContentType {
 export enum Schema {
   automotiveSimulator = 'automotive-simulater',
   environmentModel = 'environment-model',
+  envitedX = 'envited-x',
   general = 'general',
   georeference = 'georeference',
   gx = 'gx',
   hdmap = 'hdmap',
   leakageTest = 'leakage-test',
   manifest = 'manifest',
-  marketplaceInfo = 'marketplaceInfo',
   ositrace = 'ositrace',
   scenario = 'scenario',
   surfaceModel = 'surface-model',
   service = 'service',
   sh = 'sh',
-  simulatedModel = 'simulated-model',
   simulatedSensor = 'simulated-sensor',
+  simulationModel = 'simulation-model',
   skos = 'skos',
   // survey = 'survey',
   // surveyResultDataOferring = 'survey-result-data-offering',
@@ -30,6 +30,7 @@ export enum Schema {
 
 export type ValidationSchema =
   | Schema.environmentModel
+  | Schema.envitedX
   | Schema.general
   | Schema.georeference
   | Schema.gx
@@ -37,11 +38,10 @@ export type ValidationSchema =
   | Schema.manifest
   | Schema.ositrace
   | Schema.scenario
-  | Schema.marketplaceInfo
   | Schema.automotiveSimulator
   | Schema.leakageTest
   | Schema.service
-  | Schema.simulatedModel
+  | Schema.simulationModel
   | Schema.simulatedSensor
   // | Schema.surveyResultDataOferring
   // | Schema.surveyServiceOferring

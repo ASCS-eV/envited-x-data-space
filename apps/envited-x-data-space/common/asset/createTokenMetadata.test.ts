@@ -246,7 +246,7 @@ describe('common/asset/createTokenMetadata', () => {
         date: expect.any(String),
         type: 'EVES-003 https://github.com/ASCS-eV/EVES',
         rights: 'LicenseRef-Policy-Smart-Contract',
-        rightsUri: 'did:tezos:NetXdQprcVkpaWU:KT1PaDvx6vApsvZchR7m3LCRQLJ1cR6C778y',
+        rightsUri: 'urn:blockchain:tezos:NetXnHfVqm9iesp:contract:KT1PCaD2kmgCHy15wQ1gpqZUy9RLxyBVJdTF',
         language: 'en',
         artifactUri: 'https://assets.envited-x.net/ASSET_CID',
         identifier: 'ASSET_CID',
@@ -321,7 +321,7 @@ describe('common/asset/createTokenMetadata', () => {
         minter: 'MINTER',
         rights: {
           identifier: 'LicenseRef-Policy-Smart-Contract',
-          path: 'did:tezos:NetXdQprcVkpaWU:KT1PaDvx6vApsvZchR7m3LCRQLJ1cR6C778y',
+          path: 'urn:blockchain:tezos:NetXnHfVqm9iesp:contract:KT1PCaD2kmgCHy15wQ1gpqZUy9RLxyBVJdTF',
         },
       })
 

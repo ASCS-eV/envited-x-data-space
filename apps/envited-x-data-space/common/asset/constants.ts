@@ -1,4 +1,4 @@
-export const MANIFEST_FILE = 'manifest.json'
+export const MANIFEST_FILE = 'manifest_reference.json'
 
 export const LICENSE_FILE = 'LICENSE'
 

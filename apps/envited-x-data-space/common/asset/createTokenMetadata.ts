@@ -39,10 +39,10 @@ export const createTokenMetadata = ({
     path: string
   }
 }) => {
-  const name = domainMetadata.data['hdmap:general']['general:description']['general:name']['@value']
-  const description = domainMetadata.data['hdmap:general']['general:description']['general:description']['@value']
-  const formatType = domainMetadata.data['hdmap:format']['hdmap:formatType']
-  const version = domainMetadata.data['hdmap:format']['hdmap:version']['@value']
+  const name = domainMetadata.data['hdmap:hasDataResource']['gx:name']['@value']
+  const description = domainMetadata.data['hdmap:hasDataResource']['gx:description']['@value']
+  const formatType = domainMetadata.data['hdmap:hasDataResourceExtension']['hdmap:hasFormat']['hdmap:formatType']
+  const version = domainMetadata.data['hdmap:hasDataResourceExtension']['hdmap:hasFormat']['hdmap:version']['@value']
   const today = new Date()
   const date = today.toISOString().split('T')[0]
   const tags = [

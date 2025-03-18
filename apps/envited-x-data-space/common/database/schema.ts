@@ -213,6 +213,8 @@ export const token = pgTable('token', {
   externalUri: text('external_uri'),
   displayUri: text('display_uri'),
   tokenMetadata: jsonb('token_metadata'),
+  domainMetadata: jsonb('domain_metadata'),
+  manifest: jsonb('manifest'),
   createdAt: timestamp('created_at'),
   updatedAt: timestamp('modified_at'),
 })

@@ -55,6 +55,8 @@ export const insertTokenTx =
     externalUri,
     displayUri,
     tokenMetadata,
+    domainMetadata,
+    manifest,
   }: {
     hash: string
     contract: string
@@ -74,6 +76,8 @@ export const insertTokenTx =
     externalUri: string
     displayUri: string
     tokenMetadata: any
+    domainMetadata: any
+    manifest: any
   }) =>
     tx
       .insert(schema.token)
@@ -96,6 +100,8 @@ export const insertTokenTx =
         externalUri,
         displayUri,
         tokenMetadata,
+        domainMetadata,
+        manifest,
         createdAt: new Date(),
         updatedAt: new Date(),
       })
@@ -158,6 +164,8 @@ export const insertToken =
           externalUri,
           displayUri,
           tokenMetadata,
+          domainMetadata,
+          manifest,
           attributes,
           tags,
         } = token
@@ -181,6 +189,8 @@ export const insertToken =
           externalUri,
           displayUri,
           tokenMetadata,
+          domainMetadata,
+          manifest,
         })
 
         // RDS Data api does not support concurrent transactions so we need to insert tags and attributes sequentially

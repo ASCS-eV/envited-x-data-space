@@ -5,7 +5,7 @@ import { replace } from 'ramda'
 import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
-import { extractAttributesUri, extractKeyValuePairs } from './utils'
+import { extractDomainMetadataUri, extractKeyValuePairs, extractManifestUri } from './utils'
 
 export const createLocalCopy =
   ({ uploadFileToS3 }: { uploadFileToS3: any }) =>
@@ -95,8 +95,12 @@ export const listenToAssetContract =
         const displayCid = replace('ipfs://', '')(tokenMetadata?.displayUri || '')
         const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${tokenMetadata?.identifier}/${displayCid}`
         log.info('Local display URI', localDisplayUri)
-        const attributesUri = extractAttributesUri(tokenMetadata?.attributes || [])
-        const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(attributesUri as string))
+        const manifestUri = extractManifestUri(tokenMetadata?.attributes || [])
+        const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(manifestUri as string))
+        const domainMetadataUri = extractDomainMetadataUri(tokenMetadata?.attributes || [])
+        const domainMetadata: GetCIDResponse = await pinata.gateways.get(
+          replace('ipfs://', '')(domainMetadataUri as string),
+        )
         const attributes = extractKeyValuePairs(manifest.data)
         // Save token to DB
         const token = await insertToken({
@@ -120,6 +124,8 @@ export const listenToAssetContract =
           tags: tokenMetadata?.tags,
           attributes,
           tokenMetadata,
+          manifest: manifest?.data,
+          domainMetadata: domainMetadata?.data,
         })
         log.info('Token registered', token)
         log.info('Updating Asset')

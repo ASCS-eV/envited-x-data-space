@@ -15,15 +15,13 @@ export enum Schema {
   manifest = 'manifest',
   ositrace = 'ositrace',
   scenario = 'scenario',
-  surfaceModel = 'surface-model',
   service = 'service',
   sh = 'sh',
   simulatedSensor = 'simulated-sensor',
   simulationModel = 'simulation-model',
   skos = 'skos',
-  // survey = 'survey',
-  // surveyResultDataOferring = 'survey-result-data-offering',
-  // surveyServiceOferring = 'survey-service-offering',
+  surfaceModel = 'surface-model',
+  survey = 'survey',
   vvReport = 'vv-report',
   xsd = 'xsd',
 }
@@ -43,6 +41,6 @@ export type ValidationSchema =
   | Schema.service
   | Schema.simulationModel
   | Schema.simulatedSensor
-  // | Schema.surveyResultDataOferring
-  // | Schema.surveyServiceOferring
+  | Schema.surfaceModel
+  | Schema.survey
   | Schema.vvReport

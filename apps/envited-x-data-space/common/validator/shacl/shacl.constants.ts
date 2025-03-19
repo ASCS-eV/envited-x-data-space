@@ -12,12 +12,11 @@ export const SCHEMA_MAP = {
   [Schema.manifest]: '/schemas/manifest_shacl.ttl',
   [Schema.ositrace]: '/schemas/ositrace_shacl.ttl',
   [Schema.scenario]: '/schemas/scenario_shacl.ttl',
-  [Schema.surfaceModel]: '/schemas/surface-model_shacl.ttl',
   [Schema.service]: '/schemas/service_shacl.ttl',
   [Schema.simulatedSensor]: '/schemas/simulated-sensor_shacl.ttl',
   [Schema.simulationModel]: '/schemas/simulation-model_shacl.ttl',
-  // [Schema.surveyResultDataOferring]: '/schemas/survey-result-data-offering_shacl.ttl',
-  // [Schema.surveyServiceOferring]: '/schemas/survery-service-offering_shacl.ttl',
+  [Schema.surfaceModel]: '/schemas/surface-model_shacl.ttl',
+  [Schema.survey]: '/schemas/survey_shacl.ttl',
   [Schema.vvReport]: '/schemas/vv-report_shacl.ttl',
 }
 

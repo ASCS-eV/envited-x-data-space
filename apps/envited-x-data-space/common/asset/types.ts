@@ -6,6 +6,7 @@ export enum ManifestCategoryId {
   envitedXIsMetadata = 'envited-x:isMetadata',
   envitedXIsMiscellaneous = 'envited-x:isMiscellaneous',
   envitedXIsSimulationData = 'envited-x:isSimulationData',
+  envitedXIsReferencedSimulationData = 'envited-x:isReferencedSimulationData',
   envitedXIsValidationReport = 'envited-x:isValidationReport',
 }
 

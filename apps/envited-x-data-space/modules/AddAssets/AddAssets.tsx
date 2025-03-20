@@ -9,7 +9,7 @@ import { createFilename } from '../../common/asset/utils'
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { allTrue } from '../../common/utils/utils'
-import { validateAndUploadAssets } from './AddAssets.actions'
+import { insertAssetAfterUpload, validateAndUploadAssets } from './AddAssets.actions'
 import { addFiles, removeFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
@@ -127,6 +127,10 @@ export const AddAssets = () => {
             return { success: false, file, reason: 'Failed to upload to S3' }
           }
 
+          console.log('before insertAssetAfterUpload')
+          await insertAssetAfterUpload(cid, file)
+          console.log('after insertAssetAfterUpload')
+
           return { success: true, file }
         }),
       )
@@ -134,7 +138,9 @@ export const AddAssets = () => {
       console.log('After uploadResults promise', uploadResults)
 
       uploadResults.forEach(({ success, file }) =>
-        success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`),
+        success
+          ? successNotification(`${file} successfully uploaded`)
+          : error(`${file} already exists`)
       )
 
       reset()

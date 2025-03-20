@@ -38,6 +38,9 @@ export const getAssetUploadUrl = (getSignedUrl: (command: PutObjectCommand) => P
       ACL: 'private',
       Key: filename,
       Bucket: process.env.NEXT_PUBLIC_ASSET_BUCKET_NAME || '',
+      Metadata: {
+        'Access-Control-Allow-Origin': '*',
+      },
     }),
   )
 

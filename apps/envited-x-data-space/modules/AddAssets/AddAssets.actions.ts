@@ -125,3 +125,23 @@ export async function validateAndUploadAssets(files: { name: string; cid: string
     throw internalServerErrorError()
   }
 }
+
+export async function insertAssetAfterUpload(cid: string, name: string) {
+  const session = await getServerSession()
+
+  try {
+    if (isNil(session)) {
+      throw unauthorizedError({ resource: 'addAssets' })
+    }
+
+    await insertAsset({
+      cid,
+      name,
+    })
+
+    return { success: true, file: name }
+  } catch (error: unknown) {
+    log.error(formatError(error))
+    throw internalServerErrorError()
+  }
+}

@@ -10,6 +10,15 @@ export enum ManifestCategoryId {
   envitedXIsValidationReport = 'envited-x:isValidationReport',
 }
 
+export enum MetadataType {
+  environmentModel = 'environment-model:EnvironmentModel',
+  envitedX = 'envited-x:SimulationAsset',
+  hdmap = 'hdmap:HdMap',
+  ositrace = 'ositrace:OSITrace',
+  scenario = 'scenario:Scenario',
+  surfaceModel = 'surface-model:SurfaceModel',
+}
+
 export enum AccessRole {
   envitedXIsOwner = 'envited-x:isOwner',
   manifestIsPublic = 'manifest:isPublic',

@@ -2,8 +2,9 @@ import { append, equals } from 'ramda'
 
 import { TOKEN_TAGS } from '../constants/tokenTags'
 import { extractFilenameFromPath, formatAssetUri, formatIpfsUri } from '../utils'
-import { getNameAndDescriptionFromMetadata } from './createTokenMetadata.utils'
-import { Manifest } from './types'
+import { ASSET_TYPE } from './createTokenMetadata.constants'
+import { extractGeneralInformationFromMetadata } from './createTokenMetadata.utils'
+import { Manifest, MetadataType } from './types'
 import { formatManifestLinkPath, hasManifestThirdPartyLinks } from './utils'
 
 export const createTokenMetadata = ({
@@ -40,7 +41,10 @@ export const createTokenMetadata = ({
     path: string
   }
 }) => {
-  const { name, description, formatType, version } = getNameAndDescriptionFromMetadata(domainMetadata.data)
+  const type = domainMetadata.data['@type'] as MetadataType
+  const { name, description, formatType, version } = extractGeneralInformationFromMetadata(ASSET_TYPE[type])(
+    domainMetadata.data,
+  )
   const today = new Date()
   const date = today.toISOString().split('T')[0]
   const tags = [

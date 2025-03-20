@@ -70,7 +70,7 @@ export async function validateAndUploadAssets(formData: FormData) {
 */
 
 export async function validateAndUploadAssets(files: { name: string; arrayBuffer: ArrayBuffer; type: string }[]) {
-// export async function validateAndUploadAssets(formData: FormData) {
+  // export async function validateAndUploadAssets(formData: FormData) {
   // const files = formData.getAll('assets') as File[]
   const session = await getServerSession()
 

@@ -77,11 +77,11 @@ export const AddAssets = () => {
       const filesArray = Array.from(data.assets as FileList)
 
       const filesData = await Promise.all(
-        filesArray.map(async (file) => ({
+        filesArray.map(async file => ({
           name: file.name,
           type: file.type,
           arrayBuffer: await file.arrayBuffer(),
-        }))
+        })),
       )
 
       const uploadData = await validateAndUploadAssets(filesData)

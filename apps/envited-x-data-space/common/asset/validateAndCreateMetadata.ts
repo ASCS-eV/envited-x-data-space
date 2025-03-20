@@ -245,7 +245,9 @@ export const _validateAndCreateMetadata =
       }
 
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
-      console.log({ files })
+      console.log(files.publicUser)
+      console.log(files.registeredUser)
+      console.log(files.owner)
       const visualization = filter(propEq('envited-x:isMedia', 'type'))(files.publicUser) as ExtractedFile[]
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
 

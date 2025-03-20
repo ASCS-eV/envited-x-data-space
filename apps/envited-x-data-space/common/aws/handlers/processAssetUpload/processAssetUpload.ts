@@ -89,7 +89,7 @@ export const _main =
       console.log({ asset })
       const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles, domainMetadata } =
         await validateAndCreateMetadata(uploadedFile, asset)
-      
+
       console.log({ conforms })
 
       if (!conforms) {

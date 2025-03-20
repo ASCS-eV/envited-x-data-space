@@ -101,7 +101,7 @@ export const listenToAssetContract =
         const domainMetadata: GetCIDResponse = await pinata.gateways.get(
           replace('ipfs://', '')(domainMetadataUri as string),
         )
-        const attributes = extractKeyValuePairs(manifest.data)
+        const attributes = extractKeyValuePairs(domainMetadata.data)
         // Save token to DB
         const token = await insertToken({
           hash,

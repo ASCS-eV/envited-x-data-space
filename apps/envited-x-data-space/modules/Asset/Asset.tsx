@@ -1,14 +1,16 @@
 'use client'
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
-import { has, pathOr } from 'ramda'
+import { clsx } from 'clsx'
+import { pipe } from 'ramda'
 import { FC, Fragment, useEffect, useState } from 'react'
 
 import displayTrees from '../../common/asset/displayTrees'
 import { useTranslation } from '../../common/i18n'
 import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
-import { formatTokenAttributes } from '../../common/utils'
+import { capitalize, displayItemValue, formatItemName, formatSectionName, getAssetType, kebabToCamelCase, removeKeywords } from '../../common/utils'
 import { Button } from '../Button'
+import { extractDomainMetadata } from '../../common/asset/utils'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -19,13 +21,77 @@ interface AssetProps {
 }
 
 export const Asset: FC<AssetProps> = ({ token: { token } }) => {
-  const attributes = formatTokenAttributes(token.tokenAttributes) as any
   const [displayTree, setDisplayTree] = useState<any>()
   const { t } = useTranslation('Asset')
+  const [data, setData] = useState<Record<string, any>>({})
 
   useEffect(() => {
-    setDisplayTree(displayTrees[Object.keys(attributes)[0] as keyof typeof displayTrees])
-  }, [attributes])
+    const assetType = getAssetType(token.domainMetadata)
+    console.log(displayTrees[kebabToCamelCase(assetType) as keyof typeof displayTrees])
+    setDisplayTree(displayTrees[kebabToCamelCase(assetType) as keyof typeof displayTrees])
+  }, [token.domainMetadata])
+
+  useEffect(() => {
+    const getSections = async (metadata: Record<string, any>) => {
+      const metadataInSections = extractDomainMetadata(metadata)
+      setData(metadataInSections)
+    }
+
+    if (token.domainMetadata) {
+      getSections(token.domainMetadata)
+    }
+  }, [token])
+
+  const hasNestedObjects = (obj: any) => {
+    return Object.values(obj).some(value => typeof value === 'object' && value !== null)
+  }
+
+  const renderNestedProperties = (properties: any, section: string, level: number = 0) => {
+    return Object.entries(properties).map(([key, value]) => {
+      // Handle arrays by joining them with commas
+      if (Array.isArray(value)) {
+        return (
+          <div
+            key={key as string}
+            className={clsx(' px-4 sm:col-span-1 sm:px-0 py-2')}
+          >
+            <dt className="text-sm font-medium leading-6 text-gray-900">{pipe(formatSectionName, formatItemName)(key as string) as string}</dt>
+            <dd className="text-sm leading-6 text-gray-700">
+              {value.map((item: string) => capitalize(item)).join(', ')}
+            </dd>
+          </div>
+        )
+      } else if (typeof value === 'object' && value !== null) {
+        return (
+          <Fragment key={key as string}>
+            <div
+              key={key as string}
+              className={clsx('px-4 sm:col-span-1 sm:px-0 py-2')}
+            >
+              <dt className="text-sm font-medium leading-6 text-gray-900">{pipe(formatSectionName, formatItemName, removeKeywords)(key as string) as string}</dt>
+              <dd className="text-sm leading-6 text-gray-700">
+                <dl className={clsx('grid', hasNestedObjects(value) ? 'grid-cols-1' : 'grid-cols-2')}>
+                  {renderNestedProperties(value, section, level + 1)}
+                </dl>
+              </dd>
+            </div>
+          </Fragment>
+        )
+      } else {
+        return (
+          <div
+            key={key as string}
+            className={clsx("px-4 sm:col-span-1 sm:px-0 py-2")}
+          >
+            <dt className="text-sm font-medium leading-6 text-gray-900">{pipe(formatSectionName, formatItemName)(key as string) as string}</dt>
+            <dd className="text-sm leading-6 text-gray-700 text-wrap break-words">
+              {displayItemValue(value)}
+            </dd>
+          </div>
+        )
+      }
+    })
+  }
 
   return (
     <>
@@ -40,7 +106,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
           <div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
             <div className="flex flex-col-reverse">
               <div className="mt-4">
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl break-all">{token.name}</h1>
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl break-all">{data.name}</h1>
 
                 <h2 id="information-heading" className="sr-only">
                   {t('[Header] product information')}
@@ -55,7 +121,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
               </div>
             </div>
 
-            <p className="mt-6 text-gray-500">{token.description}</p>
+            <p className="mt-6 text-gray-500">{data.description}</p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4">
               <Button
@@ -72,10 +138,20 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
               <h3 className="text-sm font-bold text-gray-900">{t('[Header] asset information')}</h3>
               <div className="prose prose-sm mt-4 text-gray-500">
                 <ul role="list" className="text-sm font-medium leading-8 text-gray-900">
-                  {displayTree?.terms.map((term: { name: string; value?: string; path?: string[] }) => (
-                    <li key={term.name}>
-                      <strong>{term.name}</strong>{' '}
-                      {has('value', term) ? term.value : pathOr('', term.path as string[])(attributes)}
+                  {displayTree?.terms.map((term: string) => (
+                    <li key={data[term]}>
+                      <strong>{formatSectionName(term)}</strong>{' '}
+                      {data[term] && <ul> 
+                        { Object.entries(data[term]).map(([key, value]) => {
+                          if (!key || !value) {
+                            return ''
+                          }
+                          return ( 
+                            <li><strong>{pipe(formatSectionName, formatItemName)(key as string) as string}:</strong> {value as string}</li>
+                          )
+                        })}
+                        </ul>
+                      }
                     </li>
                   ))}
                 </ul>
@@ -120,45 +196,21 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                 </TabList>
               </div>
               <TabPanels as={Fragment}>
-                {displayTree?.categories.map(
-                  (tab: {
-                    name: string
-                    sections: {
-                      name: string
-                      items: { name: string; path?: string[]; paths?: { name: string; path: string[] }[] }[]
-                    }[]
-                  }) => (
-                    <TabPanel key={tab.name}>
-                      <h3 className="sr-only">{tab.name}</h3>
-                      {tab.sections.map(section => (
-                        <>
-                          <h3 className="text-lg font-medium mt-6">{section.name}</h3>
-                          <div className="mt-0">
-                            <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
-                              {section.items.map(item => (
-                                <div
-                                  key={item.name}
-                                  className="border-t border-gray-100 px-4 py-3 sm:col-span-1 sm:px-0"
-                                >
-                                  <dt className="text-sm font-medium leading-6 text-gray-900">{item.name}</dt>
-                                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-                                    {has('paths', item)
-                                      ? (item.paths as { name: string; path: string[] }[]).map(path => (
-                                          <span key={path.name}>
-                                            {path.name}: {pathOr('N/A', path.path)(attributes)} <br />
-                                          </span>
-                                        ))
-                                      : pathOr('N/A', item.path as string[])(attributes)}
-                                  </dd>
-                                </div>
-                              ))}
-                            </dl>
-                          </div>
-                        </>
-                      ))}
-                    </TabPanel>
-                  ),
-                )}
+                {displayTree?.categories && displayTree?.categories.map((tab: { name: string; sections: string[] }) => (
+                  <TabPanel key={tab.name}>
+                    <h3 className="sr-only">{tab.name}</h3>
+                    {tab.sections.map(section => (
+                      <>
+                        <h3 className="text-lg font-medium mt-6">{formatSectionName(section)}</h3>
+                        <div className='mt-0'>
+                          <dl className="grid grid-cols-1 sm:grid-cols-2 pt-2">
+                            {data[section] && renderNestedProperties(data[section], section)}
+                          </dl>
+                        </div>
+                      </>
+                    ))}
+                  </TabPanel>
+                ))}
               </TabPanels>
             </TabGroup>
           </div>

@@ -5,3 +5,5 @@ export const LICENSE_FILE = 'LICENSE'
 export const README_FILE = 'README.md'
 
 export const DOMAIN_METADATA_FILE = 'metadata/domainMetadata.json'
+
+export const KEYWORDS = ['Has ']

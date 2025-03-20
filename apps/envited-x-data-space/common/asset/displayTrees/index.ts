@@ -1,3 +1,15 @@
-import { hdmap, hdmapNew } from './hdmap'
+import { hdmap } from './hdmap'
+import { environmentModel } from './environmentModel'
+import { ositrace } from './ositrace'
+import { scenario } from './scenario'
+import { surfaceModel } from './surfaceModel'
 
-export default { hdmap, hdmapNew }
+const displayTrees = {
+  hdmap,
+  environmentModel,
+  ositrace,
+  scenario,
+  surfaceModel,
+}
+
+export default displayTrees

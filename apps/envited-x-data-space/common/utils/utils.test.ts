@@ -183,4 +183,90 @@ describe('common/utils', () => {
       expect(SUT.formatTokenAttributes(attributes)).toEqual(result)
     })
   })
+
+  describe('formatSectionName', () => {
+    it.each([
+      ['hdmap:georeference:projectLocation', 'projectLocation'],
+      ['general:description', 'description'],
+      ['singleWordWithoutColon', 'singleWordWithoutColon'],
+      ['', ''],
+    ])('should extract the last part after colon from %s and return %s', (input, expected) => {
+      // when ... we want to format a section name
+      // then ... it should return the last part after colon
+      expect(SUT.formatSectionName(input)).toEqual(expected)
+    })
+  })
+
+  describe('formatItemName', () => {
+    it.each([
+      ['formatTabName', 'Format Tab Name'],
+      ['camelCase', 'Camel Case'],
+      ['PascalCase', 'Pascal Case'],
+      ['snake_case', 'Snake_case'], // Note: doesn't handle snake_case specifically
+      ['version2', 'Version 2'],
+      ['temp32C', 'Temp 3 2C'],
+      ['', '']
+    ])('should format %s as %s', (input, expected) => {
+      // when ... we want to format an item name
+      // then ... it should split at capital letters and properly capitalize
+      expect(SUT.formatItemName(input)).toEqual(expected)
+    })
+  })
+
+  describe('capitalize', () => {
+    it.each([
+      ['hello', 'Hello'],
+      ['world', 'World'],
+      ['ALREADY', 'ALREADY'],  // Already capitalized
+      ['a', 'A'],             // Single letter
+      ['123abc', '123abc'],    // Starts with number
+      ['', ''],               // Empty string
+    ])('should capitalize %s as %s', (input, expected) => {
+      // when ... we want to capitalize a string
+      // then ... it should capitalize the first letter only
+      expect(SUT.capitalize(input)).toEqual(expected)
+    })
+  })
+
+  describe('displayItemValue', () => {
+    it.each([
+      [[1, 2, 3], '1, 2, 3'], // Array of numbers should be joined with commas
+      [['apple', 'banana', 'cherry'], 'Apple, Banana, Cherry'], // Array of strings should be capitalized
+      [['hello world', 'test'], 'Hello world, Test'], // Only first letter of each string should be capitalized
+      [['a', 'b', 'c'], 'A, B, C'], // Single letters should be capitalized
+      [['a', 1, true], 'A, 1, true'], // Mixed types - only strings should be capitalized
+      ['text', 'Text'], // String should be returned capitalized 
+      [123, 123], // Number should be returned as is
+      [true, true], // Boolean should be returned as is
+      [false, false], // Boolean should be returned as is
+      [{key: 'value'}, ''], // Object should return empty string
+      [null, ''], // Null should return empty string
+      [undefined, undefined] // Undefined is not an object, so should return undefined
+    ])('should format value %s as %s', (input, expected) => {
+      // when ... we want to display an item value
+      // then ... it should format it correctly based on its type
+      expect(SUT.displayItemValue(input)).toEqual(expected)
+    })
+  })
+
+  describe('kebabToCamelCase', () => {
+    it('should convert a kebab-case string to camelCase', () => {
+      // when ... we convert kebab-case strings to camelCase
+      // then ... we should get the expected camelCase strings
+      expect(SUT.kebabToCamelCase('word-word')).toEqual('wordWord')
+      expect(SUT.kebabToCamelCase('multiple-word-string')).toEqual('multipleWordString')
+      expect(SUT.kebabToCamelCase('single')).toEqual('single')
+      expect(SUT.kebabToCamelCase('kebab-case-to-camel-case')).toEqual('kebabCaseToCamelCase')
+    })
+
+    it('should handle edge cases properly', () => {
+      // when ... we pass edge cases to the function
+      // then ... we should handle them correctly
+      expect(SUT.kebabToCamelCase('')).toEqual('')
+      expect(SUT.kebabToCamelCase('-')).toEqual('')
+      expect(SUT.kebabToCamelCase('--')).toEqual('')
+      expect(SUT.kebabToCamelCase('word-')).toEqual('word')
+      expect(SUT.kebabToCamelCase('-word')).toEqual('Word')
+    })
+  })
 })

@@ -119,7 +119,6 @@ export const AddAssets = () => {
             body: arrayBuffer,
             headers: {
               'Content-Type': fileType,
-              'Content-Disposition': `attachment; filename="${cid}"`,
             },
           })
 

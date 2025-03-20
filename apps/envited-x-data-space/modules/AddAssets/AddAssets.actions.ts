@@ -69,10 +69,11 @@ export async function validateAndUploadAssets(formData: FormData) {
 }
 */
 
-export async function validateAndUploadAssets(files: { name: string; arrayBuffer: ArrayBuffer; type: string }[]) {
+export async function validateAndUploadAssets(files: { name: string; cid: string; type: string }[]) {
   // export async function validateAndUploadAssets(formData: FormData) {
   // const files = formData.getAll('assets') as File[]
   const session = await getServerSession()
+  console.log('validateAndUploadAssets')
 
   try {
     if (isNil(session)) {
@@ -87,28 +88,33 @@ export async function validateAndUploadAssets(files: { name: string; arrayBuffer
       })
     }
 
+    console.log('before promise', files)
+
     const uploadData = await Promise.all(
-      files.map(async file => {
+      files.map(async ({ name, cid, type }) => {
+        console.log('in promise')
         // const arrayBuffer = Buffer.from(await file.arrayBuffer())
         // const cid = await createFilename(arrayBuffer)
         // const asset = await getAssetByCID(cid)
-        const cid = await createFilename(Buffer.from(file.arrayBuffer))
+        // const cid = await createFilename(Buffer.from(file.arrayBuffer))
+        // console.log('createFilename', cid)
         const asset = await getAssetByCID(cid)
-
-        console.log('getAssetByCID', asset)
+        // console.log('getAssetByCID', asset)
 
         if (isNotNil(asset)) {
-          return { success: false, file: file.name, reason: 'Asset already exists' }
+          return { success: false, file: name, reason: 'Asset already exists' }
         }
 
+        console.log('before signed')
         const signedUrl = await getAssetUploadUrl(cid)
+        console.log('signedUrl', signedUrl)
 
         return {
           success: true,
-          file: file.name,
+          file: name,
           signedUrl,
           cid,
-          fileType: file.type,
+          fileType: type,
         }
       }),
     )

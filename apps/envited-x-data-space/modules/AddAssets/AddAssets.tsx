@@ -5,6 +5,7 @@ import { isEmpty, isNil, map, pathOr, times } from 'ramda'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
+import { createFilename } from '../../common/asset/utils'
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { allTrue } from '../../common/utils/utils'
@@ -76,15 +77,26 @@ export const AddAssets = () => {
 
       const filesArray = Array.from(data.assets as FileList)
 
+      console.log('TEST', filesArray)
+
       const filesData = await Promise.all(
-        filesArray.map(async file => ({
-          name: file.name,
-          type: file.type,
-          arrayBuffer: await file.arrayBuffer(),
-        })),
+        filesArray.map(async file => {
+          const arrayBuffer = Buffer.from(await file.arrayBuffer())
+          const cid = await createFilename(arrayBuffer)
+
+          return {
+            name: file.name,
+            type: file.type,
+            cid,
+          }
+        }),
       )
 
+      console.log('AFTER', filesData)
+
       const uploadData = await validateAndUploadAssets(filesData)
+
+      console.log({ uploadData })
 
       const uploadResults = await Promise.all(
         uploadData.map(async ({ signedUrl, cid, fileType, file }) => {
@@ -93,9 +105,12 @@ export const AddAssets = () => {
           }
 
           const fileObj = filesArray.find((f: File) => f.name === file)
+          console.log({ fileObj })
           if (!fileObj) {
             return { success: false, file, reason: 'File not found' }
           }
+
+          console.log('BEFORE uploadResponse')
 
           const uploadResponse = await fetch(signedUrl, {
             method: 'PUT',
@@ -106,6 +121,8 @@ export const AddAssets = () => {
             },
           })
 
+          console.log('AFTER uploadResponse', uploadResponse)
+
           if (!uploadResponse.ok) {
             return { success: false, file, reason: 'Failed to upload to S3' }
           }
@@ -113,6 +130,8 @@ export const AddAssets = () => {
           return { success: true, file }
         }),
       )
+
+      console.log('After uploadResults promise', uploadResults)
 
       uploadResults.forEach(({ success, file }) =>
         success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`),

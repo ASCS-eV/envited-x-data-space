@@ -69,9 +69,9 @@ export async function validateAndUploadAssets(formData: FormData) {
 }
 */
 
-// export async function validateAndUploadAssets(files: { name: string; arrayBuffer: ArrayBuffer; type: string }[]) {
-export async function validateAndUploadAssets(formData: FormData) {
-  const files = formData.getAll('assets') as File[]
+export async function validateAndUploadAssets(files: { name: string; arrayBuffer: ArrayBuffer; type: string }[]) {
+// export async function validateAndUploadAssets(formData: FormData) {
+  // const files = formData.getAll('assets') as File[]
   const session = await getServerSession()
 
   try {
@@ -89,8 +89,10 @@ export async function validateAndUploadAssets(formData: FormData) {
 
     const uploadData = await Promise.all(
       files.map(async file => {
-        const arrayBuffer = Buffer.from(await file.arrayBuffer())
-        const cid = await createFilename(arrayBuffer)
+        // const arrayBuffer = Buffer.from(await file.arrayBuffer())
+        // const cid = await createFilename(arrayBuffer)
+        // const asset = await getAssetByCID(cid)
+        const cid = await createFilename(Buffer.from(file.arrayBuffer))
         const asset = await getAssetByCID(cid)
 
         console.log('getAssetByCID', asset)

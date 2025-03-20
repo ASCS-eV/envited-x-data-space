@@ -68,14 +68,23 @@ export const AddAssets = () => {
         throw new Error('No files selected')
       }
 
-      const formData = new FormData()
+      // const formData = new FormData()
 
-      if (data.assets) {
-        times(idx => formData.append('assets', data.assets[idx]))(data.assets.length)
-      }
+      // if (data.assets) {
+      //   times(idx => formData.append('assets', data.assets[idx]))(data.assets.length)
+      // }
 
       const filesArray = Array.from(data.assets as FileList)
-      const uploadData = await validateAndUploadAssets(formData)
+
+      const filesData = await Promise.all(
+        filesArray.map(async (file) => ({
+          name: file.name,
+          type: file.type,
+          arrayBuffer: await file.arrayBuffer(),
+        }))
+      )
+
+      const uploadData = await validateAndUploadAssets(filesData)
 
       const uploadResults = await Promise.all(
         uploadData.map(async ({ signedUrl, cid, fileType, file }) => {

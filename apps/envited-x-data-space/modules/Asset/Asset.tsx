@@ -35,7 +35,6 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
 
   useEffect(() => {
     const assetType = getAssetType(token.domainMetadata)
-    console.log(displayTrees[kebabToCamelCase(assetType) as keyof typeof displayTrees])
     setDisplayTree(displayTrees[kebabToCamelCase(assetType) as keyof typeof displayTrees])
   }, [token.domainMetadata])
 

@@ -75,6 +75,8 @@ export const _main =
       const Key = s3Record.object.key
       const Bucket = s3Record.bucket.name
 
+      console.log({ Key, Bucket })
+
       const { Body } = await readFile({ Key, Bucket })
 
       if (isNil(Body)) {
@@ -84,8 +86,11 @@ export const _main =
 
       // Validate uploaded asset
       const asset = await getAsset(Key)
+      console.log({ asset })
       const { conforms, metadata, assetCID, modifiedManifest, files, visualizationFiles, domainMetadata } =
         await validateAndCreateMetadata(uploadedFile, asset)
+      
+      console.log({ conforms })
 
       if (!conforms) {
         // Revert if validation fails
@@ -96,11 +101,13 @@ export const _main =
       }
 
       // Handle files for registered users
+      console.log('EXTRACTED FILES', files)
       const { registeredUser } = files
       const group = await createGroup(metadata.minter)
       if (visualizationFiles) {
         const writeFilesToIpfsPromises = visualizationFiles.map(
           async ({ cid, arrayBuffer }: { cid: string; arrayBuffer: ArrayBuffer }) => {
+            console.log('writeToIpfsBucket', { cid })
             const writeToIpfsBucket = writeFile({
               Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
               Key: `${assetCID}/${cid}`,

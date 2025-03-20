@@ -101,9 +101,9 @@ export async function validateAndUploadAssets(files: { name: string; cid: string
         const asset = await getAssetByCID(cid)
         // console.log('getAssetByCID', asset)
 
-        if (isNotNil(asset)) {
-          return { success: false, file: name, reason: 'Asset already exists' }
-        }
+        // if (isNotNil(asset)) {
+        //   return { success: false, file: name, reason: 'Asset already exists' }
+        // }
 
         console.log('before signed')
         const signedUrl = await getAssetUploadUrl(cid)

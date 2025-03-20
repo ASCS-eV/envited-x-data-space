@@ -7,6 +7,7 @@ import { sha256 } from 'multiformats/hashes/sha2'
 import {
   any,
   append,
+  applySpec,
   concat,
   equals,
   find,
@@ -27,7 +28,16 @@ import {
 
 import { extractFromByteArray, read } from '../archive'
 import { getFileBlob } from '../archive/archive'
-import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
+import {
+  MANIFEST_ARTIFACTS,
+  MANIFEST_CATEGORY_ID,
+  MANIFEST_LICENSE_DATA,
+  MANIFEST_LINK_ACCESS_ROLE,
+  MANIFEST_LINK_FILE_PATH,
+  MANIFEST_LINK_MIME_TYPE,
+  MANIFEST_REFERENCE,
+} from './constants'
+import { AccessRole, ExtractedFileWithCID, Manifest, ManifestCategoryId, ManifestLink } from './types'
 
 export const _createFilename =
   ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
@@ -67,25 +77,27 @@ export const getArrayBufferFromByteArray = async (byteArray: Uint8Array, filenam
 
 export const getDomainMetadataPath = (manifest: Manifest) =>
   pipe(
-    pathOr([], ['manifest:hasArtifacts']),
-    find(pathEq('envited-x:isMetadata', ['manifest:hasCategory', '@id'])),
-    pathOr('', ['manifest:hasFileMetadata', 'manifest:filePath', '@value']),
+    pathOr([], MANIFEST_ARTIFACTS),
+    find(pathEq(ManifestCategoryId.envitedXIsMetadata, MANIFEST_CATEGORY_ID)),
+    pathOr('', MANIFEST_LINK_FILE_PATH),
     replace('./', ''),
   )(manifest)
 
 export const getFilesGroupedByAccessRoles = (manifest: Manifest) => {
   const groupedAssets = pipe(
     getAllManifestLinks,
-    groupBy((link: ManifestLink) => link['manifest:hasAccessRole']?.['@id'] ?? 'unknown'),
+    groupBy((link: ManifestLink) => pathOr('', MANIFEST_LINK_ACCESS_ROLE)(link)),
   )(manifest)
 
   return {
-    owner: groupedAssets['envited-x:isOwner'] ? getPathsFromManifestLinks(groupedAssets['envited-x:isOwner']) : [],
-    registeredUser: groupedAssets['envited-x:isRegistered']
-      ? getPathsFromManifestLinks(groupedAssets['envited-x:isRegistered'])
+    owner: groupedAssets[AccessRole.envitedXIsOwner]
+      ? getPathsFromManifestLinks(groupedAssets[AccessRole.envitedXIsOwner])
       : [],
-    publicUser: groupedAssets['envited-x:isPublic']
-      ? getPathsFromManifestLinks(groupedAssets['envited-x:isPublic'])
+    registeredUser: groupedAssets[AccessRole.envitedXIsRegistered]
+      ? getPathsFromManifestLinks(groupedAssets[AccessRole.envitedXIsRegistered])
+      : [],
+    publicUser: groupedAssets[AccessRole.envitedXIsPublic]
+      ? getPathsFromManifestLinks(groupedAssets[AccessRole.envitedXIsPublic])
       : [],
   }
 }
@@ -97,11 +109,7 @@ export const getAllManifestLinks = (manifest: Manifest) =>
       (acc: any, links: ManifestLink[] | ManifestLink) => (is(Array)(links) ? concat(acc, links) : append(links, acc)),
       [],
     ),
-  )([
-    ['manifest:hasManifestReference'],
-    ['manifest:hasLicense', 'manifest:licenseData'],
-    ['manifest:hasArtifacts'],
-  ]) as ManifestLink[]
+  )([MANIFEST_REFERENCE, MANIFEST_LICENSE_DATA, MANIFEST_ARTIFACTS]) as ManifestLink[]
 
 export const formatManifestLinkPath = replace('./', '')
 
@@ -113,8 +121,8 @@ export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
     getAllManifestLinks,
     map(
       (link: ManifestLink) =>
-        isRemoteUrl(link['manifest:hasFileMetadata']['manifest:filePath']['@value']) &&
-        !isSelfHosted(link['manifest:hasFileMetadata']['manifest:filePath']['@value']),
+        isRemoteUrl(pathOr('', MANIFEST_LINK_FILE_PATH)(link)) &&
+        !isSelfHosted(pathOr('', MANIFEST_LINK_FILE_PATH)(link)),
     ),
     (x: boolean[]) => any(equals(true))(x),
   )(manifest)
@@ -122,10 +130,10 @@ export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
 export const getPathsFromManifestLinks = (links: ManifestLink[]) =>
   pipe(
     map((link: ManifestLink) =>
-      !isRemoteUrl(link['manifest:hasFileMetadata']['manifest:filePath']['@value'])
+      !isRemoteUrl(pathOr('', MANIFEST_LINK_FILE_PATH)(link))
         ? {
-            path: formatManifestLinkPath(link['manifest:hasFileMetadata']['manifest:filePath']['@value']),
-            type: link['manifest:hasFileMetadata']['manifest:mimeType']['@value'],
+            path: formatManifestLinkPath(pathOr('', MANIFEST_LINK_FILE_PATH)(link)),
+            type: path(MANIFEST_LINK_MIME_TYPE)(link),
           }
         : null,
     ),
@@ -249,3 +257,11 @@ export const _getFilesAsPathAndByteArrayFromManifest =
 export const getFilesAsPathAndByteArrayFromManifest = _getFilesAsPathAndByteArrayFromManifest({
   getPathsAndBuffersFromByteArray,
 })
+
+export const extractGeneralInformationFromMetadata = (type: string) =>
+  applySpec({
+    name: path([`${type}:hasDataResource`, 'gx:name', '@value']),
+    description: path([`${type}:hasDataResource`, 'gx:description', '@value']),
+    formatType: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:formatType`]),
+    version: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:version`, '@value']),
+  })

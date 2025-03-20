@@ -2,10 +2,9 @@ import { append, equals } from 'ramda'
 
 import { TOKEN_TAGS } from '../constants/tokenTags'
 import { extractFilenameFromPath, formatAssetUri, formatIpfsUri } from '../utils'
-import { ASSET_TYPE } from './createTokenMetadata.constants'
-import { extractGeneralInformationFromMetadata } from './createTokenMetadata.utils'
+import { ASSET_TYPE } from './constants'
 import { Manifest, MetadataType } from './types'
-import { formatManifestLinkPath, hasManifestThirdPartyLinks } from './utils'
+import { extractGeneralInformationFromMetadata, formatManifestLinkPath, hasManifestThirdPartyLinks } from './utils'
 
 export const createTokenMetadata = ({
   asset,

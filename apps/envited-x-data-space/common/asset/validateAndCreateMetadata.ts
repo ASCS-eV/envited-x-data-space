@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { all, equals, filter, find, keys, omit, pipe, prop, propEq } from 'ramda'
+import { all, equals, filter, find, keys, omit, path, pathOr, pipe, prop, propEq } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { db } from '../database/queries'
@@ -9,7 +9,7 @@ import { extractAddressFromDid, formatAssetUri } from '../utils'
 import { validateShaclDataWithSchema } from '../validator'
 import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { ValidationSchema } from '../validator/shacl/shacl.types'
-import { MANIFEST_FILE } from './constants'
+import { MANIFEST_FILE, MANIFEST_LICENSE, MANIFEST_LICENSE_PATH } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
 import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestExtractedFiles } from './types'
@@ -280,10 +280,8 @@ export const _validateAndCreateMetadata =
       }
 
       const rightsObject = {
-        identifier: data.manifest['manifest:hasLicense']['gx:license']['@value'],
-        path: data.manifest['manifest:hasLicense']['manifest:licenseData']['manifest:hasFileMetadata'][
-          'manifest:filePath'
-        ]['@value'],
+        identifier: pathOr('', MANIFEST_LICENSE)(data.manifest),
+        path: pathOr('', MANIFEST_LICENSE_PATH)(data.manifest),
       }
 
       const tokenMetadata = createTokenMetadata({

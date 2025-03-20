@@ -229,36 +229,51 @@ export const _validateAndCreateMetadata =
   }) =>
   async (byteArray: Uint8Array, asset: Asset) => {
     try {
+      console.log(1)
       const { conforms, reports, data } = await getShaclSchemaAndValidate(byteArray)
+      console.log(2)
       const assetCID = await createFilename(byteArray)
+      console.log(3)
       const domainMetadataCID = await createFilename(jsonToUint8Array(data.domainMetadata))
+      console.log(4)
       const connection = await db()
+      console.log(5)
       const user = await connection.getUserById(asset.userId)
+      console.log(6)
       if (!user) {
         throw new Error('User not found')
       }
       const [issuer] = await connection.getUserWithProfileById(user.issuerId)
-
+      console.log(7)
+      
       if (!issuer) {
         throw new Error('Issuer not found')
       }
+      console.log(8)
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
+      console.log(9)
       const visualization = filter(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile[]
+      console.log(10)
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
-
+      console.log(11)
+      
       const modifiedManifest = createModifiedManifest({
         assetCID,
         domainMetadataCID,
         visualizationFiles,
       })(data.manifest)
+      console.log(12)
       const modifiedManifestBuffer = Buffer.from(JSON.stringify(modifiedManifest))
+      console.log(13)
       const modifiedManifestCID = await createFilename(jsonToUint8Array(modifiedManifest))
-
+      console.log(14)
+      
       const assetObject = {
         cid: assetCID,
         fileSize: byteArray.length,
       }
-
+      
+      console.log(15)
       const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,
@@ -266,6 +281,7 @@ export const _validateAndCreateMetadata =
         uri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
         // add image dimensions
       }
+      console.log(16)
 
       const manifestObject = {
         cid: modifiedManifestCID,
@@ -284,6 +300,7 @@ export const _validateAndCreateMetadata =
         path: pathOr('', MANIFEST_LICENSE_PATH)(data.manifest),
       }
 
+      console.log(17)
       const tokenMetadata = createTokenMetadata({
         asset: assetObject,
         creator: issuer.profile.name,
@@ -293,6 +310,7 @@ export const _validateAndCreateMetadata =
         minter: extractAddressFromDid(issuer.user.id),
         rights: rightsObject,
       })
+      console.log(18)
 
       return {
         conforms,

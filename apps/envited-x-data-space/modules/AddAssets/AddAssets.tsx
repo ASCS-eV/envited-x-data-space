@@ -112,7 +112,7 @@ export const AddAssets = () => {
 
           const arrayBuffer = Buffer.from(await fileObj.arrayBuffer())
 
-          console.log('BEFORE uploadResponse', arrayBuffer)
+          console.log('BEFORE uploadResponse', fileType, arrayBuffer)
 
           const uploadResponse = await fetch(signedUrl, {
             method: 'PUT',

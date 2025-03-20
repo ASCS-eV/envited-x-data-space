@@ -3,7 +3,7 @@ export const environmentModel = {
   categories: [
     {
       name: 'Content',
-      sections: ['environment-model:Content',  'environment-model:Quantity'],
+      sections: ['environment-model:Content', 'environment-model:Quantity'],
     },
     {
       name: 'Product details',
@@ -12,6 +12,6 @@ export const environmentModel = {
     {
       name: 'Georeference',
       sections: ['environment-model:Georeference'],
-    }
+    },
   ],
 }

@@ -25,6 +25,7 @@ import {
   toUpper,
   when,
 } from 'ramda'
+
 import { KEYWORDS } from '../asset/constants'
 
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
@@ -141,33 +142,33 @@ export const formatSectionName = (name: string): string => {
 
 export const formatItemName = (name: string) => {
   if (!name) {
-    return '';
+    return ''
   }
   // Add spaces in the following cases:
   // 1. Before capital letters that are at the start of a word or after lowercase
   // 2. Before numbers
-  const withSpaces = replace(/([a-z]|^)([A-Z])|([0-9])/g, '$1 $2$3', name);
-  
+  const withSpaces = replace(/([a-z]|^)([A-Z])|([0-9])/g, '$1 $2$3', name)
+
   // Ensure the first letter is capitalized
   return pipe(
     // Trim leading spaces that might occur
     replace(/^\s+/, ''),
     // Capitalize first letter
-    capitalize
-  )(withSpaces);
+    capitalize,
+  )(withSpaces)
 }
 
 export const displayItemValue = (value: any) =>
   Array.isArray(value)
-    ? value.map(item => typeof item === 'string' ? capitalize(item) : item).join(', ')
+    ? value.map(item => (typeof item === 'string' ? capitalize(item) : item)).join(', ')
     : typeof value !== 'object' && value !== null
     ? capitalize(value)
     : ''
 
 export const removeKeywords = (str: string): string => {
   return KEYWORDS.reduce((result, keyword) => {
-    return result.replace(new RegExp(keyword, 'g'), '');
-  }, str);
+    return result.replace(new RegExp(keyword, 'g'), '')
+  }, str)
 }
 
 export const getAssetType = (metadata: Record<string, any>) => {
@@ -181,7 +182,7 @@ export const kebabToCamelCase = (str: string): string => {
     .split('-')
     .map((word, index) => {
       // Keep the first word lowercase, capitalize the rest
-      return index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1);
+      return index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
     })
-    .join('');
+    .join('')
 }

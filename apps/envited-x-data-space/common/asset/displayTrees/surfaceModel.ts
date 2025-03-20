@@ -12,6 +12,6 @@ export const surfaceModel = {
     {
       name: 'Georeference',
       sections: ['surface-model:Georeference'],
-    }
+    },
   ],
 }

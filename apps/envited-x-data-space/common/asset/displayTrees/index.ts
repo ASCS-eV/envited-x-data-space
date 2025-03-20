@@ -1,5 +1,5 @@
-import { hdmap } from './hdmap'
 import { environmentModel } from './environmentModel'
+import { hdmap } from './hdmap'
 import { ositrace } from './ositrace'
 import { scenario } from './scenario'
 import { surfaceModel } from './surfaceModel'

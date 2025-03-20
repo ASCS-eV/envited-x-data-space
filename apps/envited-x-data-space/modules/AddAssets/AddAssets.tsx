@@ -110,11 +110,13 @@ export const AddAssets = () => {
             return { success: false, file, reason: 'File not found' }
           }
 
-          console.log('BEFORE uploadResponse')
+          const arrayBuffer = Buffer.from(await fileObj.arrayBuffer())
+
+          console.log('BEFORE uploadResponse', arrayBuffer)
 
           const uploadResponse = await fetch(signedUrl, {
             method: 'PUT',
-            body: fileObj,
+            body: arrayBuffer,
             headers: {
               'Content-Type': fileType,
               'Content-Disposition': `attachment; filename="${cid}"`,
@@ -138,9 +140,7 @@ export const AddAssets = () => {
       console.log('After uploadResults promise', uploadResults)
 
       uploadResults.forEach(({ success, file }) =>
-        success
-          ? successNotification(`${file} successfully uploaded`)
-          : error(`${file} already exists`)
+        success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`),
       )
 
       reset()

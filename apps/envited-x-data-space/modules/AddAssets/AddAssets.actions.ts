@@ -139,6 +139,8 @@ export async function insertAssetAfterUpload(cid: string, name: string) {
       name,
     })
 
+    revalidatePath('/dashboard/assets/add-assets')
+
     return { success: true, file: name }
   } catch (error: unknown) {
     log.error(formatError(error))

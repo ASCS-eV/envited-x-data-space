@@ -245,7 +245,7 @@ export const _validateAndCreateMetadata =
       }
       const [issuer] = await connection.getUserWithProfileById(user.issuerId)
       console.log(7)
-      
+
       if (!issuer) {
         throw new Error('Issuer not found')
       }
@@ -256,7 +256,7 @@ export const _validateAndCreateMetadata =
       console.log(10)
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
       console.log(11)
-      
+
       const modifiedManifest = createModifiedManifest({
         assetCID,
         domainMetadataCID,
@@ -267,14 +267,14 @@ export const _validateAndCreateMetadata =
       console.log(13)
       const modifiedManifestCID = await createFilename(jsonToUint8Array(modifiedManifest))
       console.log(14)
-      
+
       const assetObject = {
         cid: assetCID,
         fileSize: byteArray.length,
       }
-      
+
       console.log(15)
-      const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
+      const displayUri = find(propEq('envited-x:isMedia', 'type'))(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,
         fileSize: displayUri.arrayBuffer.byteLength,

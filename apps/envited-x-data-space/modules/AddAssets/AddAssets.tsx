@@ -38,6 +38,7 @@ export const AddAssets = () => {
 
   const { allAssetsValid } = getValues()
 
+  /*
   const addAssetsAction: SubmitHandler<any> = async data => {
     try {
       const formData = new FormData()
@@ -57,6 +58,61 @@ export const AddAssets = () => {
     } catch (e) {
       error(t('[Notification] invalid asset found'))
       console.log(e)
+    }
+  }
+  */
+
+  const addAssetsAction: SubmitHandler<any> = async data => {
+    try {
+      if (!data.assets || data.assets.length === 0) {
+        throw new Error('No files selected')
+      }
+
+      const formData = new FormData()
+
+      if (data.assets) {
+        times(idx => formData.append('assets', data.assets[idx]))(data.assets.length)
+      }
+
+      const filesArray = Array.from(data.assets as FileList)
+      const uploadData = await validateAndUploadAssets(formData)
+
+      const uploadResults = await Promise.all(
+        uploadData.map(async ({ signedUrl, cid, fileType, file }) => {
+          if (!signedUrl) {
+            return { success: false, file, reason: 'No signed URL' }
+          }
+
+          const fileObj = filesArray.find((f: File) => f.name === file)
+          if (!fileObj) {
+            return { success: false, file, reason: 'File not found' }
+          }
+
+          const uploadResponse = await fetch(signedUrl, {
+            method: 'PUT',
+            body: fileObj,
+            headers: {
+              'Content-Type': fileType,
+              'Content-Disposition': `attachment; filename="${cid}"`,
+            },
+          })
+
+          if (!uploadResponse.ok) {
+            return { success: false, file, reason: 'Failed to upload to S3' }
+          }
+
+          return { success: true, file }
+        }),
+      )
+
+      uploadResults.forEach(({ success, file }) =>
+        success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`),
+      )
+
+      reset()
+    } catch (e) {
+      error('Invalid asset found')
+      console.error(e)
     }
   }
 

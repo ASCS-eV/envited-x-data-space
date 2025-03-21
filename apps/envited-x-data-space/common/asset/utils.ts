@@ -241,3 +241,86 @@ export const _getFilesAsPathAndByteArrayFromManifest =
 export const getFilesAsPathAndByteArrayFromManifest = _getFilesAsPathAndByteArrayFromManifest({
   getPathsAndBuffersFromByteArray,
 })
+
+export const extractDomainMetadata = (jsonData: Record<string, any>) => {
+  // Find any hasDataResource and hasDataResourceExtension properties
+  const dataResource = Object.entries(jsonData).find(([key]) => key.endsWith(':hasDataResource'))?.[1] as Record<
+    string,
+    any
+  >
+  const dataResourceExtension = Object.entries(jsonData).find(([key]) =>
+    key.endsWith(':hasDataResourceExtension'),
+  )?.[1] as Record<string, any>
+
+  // Extract description and name from DataResource
+  const description = dataResource?.['gx:description']?.['@value'] || ''
+  const name = dataResource?.['gx:name']?.['@value'] || ''
+
+  // Initialize result object with basic information
+  const result: any = {
+    description,
+    name,
+  }
+
+  // Process each property in dataResourceExtension dynamically
+  if (dataResourceExtension) {
+    Object.keys(dataResourceExtension).forEach(key => {
+      if (key.includes(':has')) {
+        const node = dataResourceExtension[key]
+        if (!node) return
+
+        const typeName = key.split(':has')[1]
+        const typePrefix = key.split(':has')[0]
+        const fullTypeName = `${typePrefix}:${typeName}`
+
+        // Create an entry for this node
+        result[fullTypeName] = {}
+
+        // Copy all properties except @type and @id
+        Object.keys(node).forEach(propKey => {
+          if (propKey !== '@type' && propKey !== '@id') {
+            // Handle complex structures recursively
+            result[fullTypeName][propKey] = extractValue(node[propKey])
+          }
+        })
+      }
+    })
+  }
+
+  return result
+}
+
+export const extractValue = (value: any): any => {
+  // Base case: not an object or null
+  if (!value || typeof value !== 'object') {
+    return value
+  }
+
+  // If it has @value, return the @value
+  if (value['@value'] !== undefined) {
+    return value['@value']
+  }
+
+  // For arrays, map each element
+  if (Array.isArray(value)) {
+    return value.map(extractValue)
+  }
+
+  // For complex objects, process recursively
+  if (Object.keys(value).length > 0) {
+    // Skip @type and @id properties
+    if (Object.keys(value).length === 1 && (value['@type'] !== undefined || value['@id'] !== undefined)) {
+      return value
+    }
+
+    const result: any = {}
+    Object.keys(value).forEach(key => {
+      if (key !== '@type' && key !== '@id') {
+        result[key] = extractValue(value[key])
+      }
+    })
+    return result
+  }
+
+  return value
+}

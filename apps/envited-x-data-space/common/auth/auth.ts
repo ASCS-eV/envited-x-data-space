@@ -168,7 +168,7 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      log.info('Building session')
+      // log.info('Building session')
       if (session?.user) {
         session.user.pkh = token.user.pkh
         session.user.role = token.user.role
@@ -177,7 +177,7 @@ export const authOptions: NextAuthOptions = {
         session.user.image = undefined
         session.user.name = token?.user?.id
       }
-      log.info('Session: ', session)
+      // log.info('Session: ', session)
       return session
     },
   },

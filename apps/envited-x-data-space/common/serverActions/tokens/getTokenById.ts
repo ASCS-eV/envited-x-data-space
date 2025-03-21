@@ -17,7 +17,6 @@ export const _getTokenById =
       const connection = await db()
       const [token] = await connection.getTokenById(id)
       const [user] = await connection.getUserWithProfileById(addDidToAddress(token.minter))
-
       const tokenWithTokenAttributes = await connection.getTokenWithAttributesById(id)
 
       return {

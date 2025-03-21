@@ -245,9 +245,6 @@ export const _validateAndCreateMetadata =
       }
 
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
-      console.log(files.publicUser)
-      console.log(files.registeredUser)
-      console.log(files.owner)
       const visualization = filter(propEq('envited-x:isMedia', 'type'))(files.publicUser) as ExtractedFile[]
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
 
@@ -264,7 +261,6 @@ export const _validateAndCreateMetadata =
         fileSize: byteArray.length,
       }
 
-      console.log(15)
       const displayUri = find(propEq('envited-x:isMedia', 'type'))(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,
@@ -272,7 +268,6 @@ export const _validateAndCreateMetadata =
         uri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
         // add image dimensions
       }
-      console.log(16)
 
       const manifestObject = {
         cid: modifiedManifestCID,
@@ -291,7 +286,6 @@ export const _validateAndCreateMetadata =
         path: pathOr('', MANIFEST_LICENSE_PATH)(data.manifest),
       }
 
-      console.log(17)
       const tokenMetadata = createTokenMetadata({
         asset: assetObject,
         creator: issuer.profile.name,
@@ -301,7 +295,6 @@ export const _validateAndCreateMetadata =
         minter: extractAddressFromDid(issuer.user.id),
         rights: rightsObject,
       })
-      console.log(18)
 
       return {
         conforms,

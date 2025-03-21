@@ -68,7 +68,11 @@ export async function validateAndUploadAssets(formData: FormData) {
 }
 */
 
-export interface AssetFile { name: string; cid: string; type: string }
+export interface AssetFile {
+  name: string
+  cid: string
+  type: string
+}
 export interface UploadAssetFile {
   success: boolean
   file: string

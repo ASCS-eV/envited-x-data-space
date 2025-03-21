@@ -1,6 +1,7 @@
 'use client'
 
 import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-x-data-space/design-system'
+import { ERRORS } from 'apps/envited-x-data-space/common/constants'
 import { isEmpty, isNil, map, pathOr, pipe, propEq, times } from 'ramda'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -12,7 +13,6 @@ import { allTrue } from '../../common/utils/utils'
 import { AssetFile, insertAssetAfterUpload, validateAndUploadAssets } from './AddAssets.actions'
 import { addFiles, processFile, removeFile, uploadFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
-import { ERRORS } from 'apps/envited-x-data-space/common/constants'
 
 export const AddAssets = () => {
   const { t } = useTranslation('AddAssets')
@@ -100,7 +100,7 @@ export const AddAssets = () => {
         }),
       )
 
-      console.log({filesData})
+      console.log({ filesData })
       const uploadData = await validateAndUploadAssets(filesData)
 
       const uploadResults = await Promise.all(

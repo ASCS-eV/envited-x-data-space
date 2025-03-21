@@ -1,7 +1,8 @@
+import { concat, equals, map, propEq, times } from 'ramda'
+
 import { createFilename } from '../../common/asset/utils'
 import { ERRORS } from '../../common/constants'
-import { concat, equals, map, propEq, times } from 'ramda'
-import { insertAssetAfterUpload, UploadAssetFile } from './AddAssets.actions'
+import { UploadAssetFile, insertAssetAfterUpload } from './AddAssets.actions'
 
 export const _removeFile = (dataTransfer: DataTransfer) => (files: FileList, idx: number) => {
   times(index => !equals(idx)(index) && dataTransfer.items.add(files[index]), files.length)

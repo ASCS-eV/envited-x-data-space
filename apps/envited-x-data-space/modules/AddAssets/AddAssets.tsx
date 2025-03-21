@@ -69,15 +69,7 @@ export const AddAssets = () => {
         throw new Error('No files selected')
       }
 
-      // const formData = new FormData()
-
-      // if (data.assets) {
-      //   times(idx => formData.append('assets', data.assets[idx]))(data.assets.length)
-      // }
-
       const filesArray = Array.from(data.assets as FileList)
-
-      console.log('TEST', filesArray)
 
       const filesData = await Promise.all(
         filesArray.map(async file => {
@@ -92,11 +84,7 @@ export const AddAssets = () => {
         }),
       )
 
-      console.log('AFTER', filesData)
-
       const uploadData = await validateAndUploadAssets(filesData)
-
-      console.log({ uploadData })
 
       const uploadResults = await Promise.all(
         uploadData.map(async ({ signedUrl, cid, fileType, file }) => {
@@ -105,14 +93,11 @@ export const AddAssets = () => {
           }
 
           const fileObj = filesArray.find((f: File) => f.name === file)
-          console.log({ fileObj })
           if (!fileObj) {
             return { success: false, file, reason: 'File not found' }
           }
 
           const arrayBuffer = Buffer.from(await fileObj.arrayBuffer())
-
-          console.log('BEFORE uploadResponse', fileType, arrayBuffer)
 
           const uploadResponse = await fetch(signedUrl, {
             method: 'PUT',
@@ -122,21 +107,15 @@ export const AddAssets = () => {
             },
           })
 
-          console.log('AFTER uploadResponse', uploadResponse)
-
           if (!uploadResponse.ok) {
             return { success: false, file, reason: 'Failed to upload to S3' }
           }
 
-          console.log('before insertAssetAfterUpload')
           await insertAssetAfterUpload(cid, file)
-          console.log('after insertAssetAfterUpload')
 
           return { success: true, file }
         }),
       )
-
-      console.log('After uploadResults promise', uploadResults)
 
       uploadResults.forEach(({ success, file }) =>
         success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`),

@@ -29,9 +29,17 @@ export const processFile = async (file: File): Promise<{ name: string; type: str
 }
 
 export const uploadFile = async (filesArray: File[], { signedUrl, cid, fileType, file }: UploadAssetFile) => {
-  if (!signedUrl) return { success: false, file, message: ERRORS.SIGNED_URL_MISSING }
-  if (!cid) return { success: false, file, message: ERRORS.CID_MISSING }
-  if (!fileType) return { success: false, file, message: ERRORS.FILE_TYPE_MISSING }
+  if (!signedUrl) {
+    return { success: false, file, message: ERRORS.SIGNED_URL_MISSING }
+  }
+
+  if (!cid) {
+    return { success: false, file, message: ERRORS.CID_MISSING }
+  }
+
+  if (!fileType) {
+    return { success: false, file, message: ERRORS.FILE_TYPE_MISSING }
+  }
 
   const fileObj = filesArray.find(propEq(file, 'name'))
   if (!fileObj) return { success: false, file, message: ERRORS.FILE_NOT_FOUND }

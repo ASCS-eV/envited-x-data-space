@@ -38,13 +38,13 @@ export const _validateAsset =
       const cid = await createFilename(arrayBuffer)
       const asset = await fetchAssetDataByCID(cid)
 
-      // if (!isEmpty(asset)) {
-      //   return {
-      //     isValid: false,
-      //     data: {},
-      //     error: ERRORS.ASSET_EXISTS,
-      //   }
-      // }
+      if (!isEmpty(asset)) {
+        return {
+          isValid: false,
+          data: {},
+          error: ERRORS.ASSET_EXISTS,
+        }
+      }
 
       return validateShaclFile(file)
     } catch (error) {

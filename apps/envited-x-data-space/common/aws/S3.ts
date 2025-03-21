@@ -21,7 +21,7 @@ export const getUniqueFilename = _getUniqueFilename(randomString)
 export const getS3SignedUrl =
   ({ getSignedUrl, s3Client }: { getSignedUrl: typeof TgetSignedUrl; s3Client: S3Client }) =>
   (command: PutObjectCommand | GetObjectCommand) =>
-    getSignedUrl(s3Client, command, { expiresIn: 3600 })
+    getSignedUrl(s3Client, command, { expiresIn: 600 })
 
 export const getUploadUrl = (getSignedUrl: (command: PutObjectCommand) => Promise<string>) => (filename: string) =>
   getSignedUrl(

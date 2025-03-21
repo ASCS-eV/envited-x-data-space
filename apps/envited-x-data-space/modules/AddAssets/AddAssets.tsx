@@ -1,7 +1,7 @@
 'use client'
 
 import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-x-data-space/design-system'
-import { isEmpty, isNil, map, pathOr, pipe, propEq, times } from 'ramda'
+import { isEmpty, isNil, map, pathOr, pipe } from 'ramda'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -40,7 +40,9 @@ export const AddAssets = () => {
 
   const addAssetsAction: SubmitHandler<any> = async data => {
     try {
-      if (isEmpty(data.assets)) throw new Error('No files selected')
+      if (isEmpty(data.assets)) {
+        return error(t('[Notification] no assets selected'))
+      }
 
       const filesArray = Array.from(data.assets as FileList)
 
@@ -55,7 +57,7 @@ export const AddAssets = () => {
 
       reset()
     } catch (e) {
-      error('Invalid asset found')
+      error(t('[Notification] invalid asset found'))
       console.error(e)
     }
   }

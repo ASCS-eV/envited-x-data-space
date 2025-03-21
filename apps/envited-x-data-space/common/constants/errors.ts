@@ -15,6 +15,7 @@ export const ERRORS = {
   FILES_NOT_FOUND: 'File(s) not found',
   FILE_NOT_FOUND: 'File not found',
   SIGNED_URL_MISSING: 'No signed URL',
+  FILE_TYPE_MISSING: 'File type is missing',
   FAILED_UPLOAD: 'Failed to upload to S3',
   README_FILE_NOT_FOUND: 'README.md file not found',
   NOT_ALLOWED_TO_DELETE_ASSET: 'Not allowed to delete asset',

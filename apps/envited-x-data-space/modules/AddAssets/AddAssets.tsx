@@ -1,16 +1,14 @@
 'use client'
 
 import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-x-data-space/design-system'
-import { ERRORS } from 'apps/envited-x-data-space/common/constants'
 import { isEmpty, isNil, map, pathOr, pipe, propEq, times } from 'ramda'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
-import { createFilename } from '../../common/asset/utils'
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { allTrue } from '../../common/utils/utils'
-import { AssetFile, insertAssetAfterUpload, validateAndUploadAssets } from './AddAssets.actions'
+import { AssetFile, validateAndUploadAssets } from './AddAssets.actions'
 import { addFiles, processFile, removeFile, uploadFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
@@ -40,115 +38,20 @@ export const AddAssets = () => {
 
   const { allAssetsValid } = getValues()
 
-  /*
   const addAssetsAction: SubmitHandler<any> = async data => {
     try {
-      const formData = new FormData()
-
-      if (data.assets) {
-        times(idx => formData.append('assets', data.assets[idx]))(data.assets.length)
-      }
-
-      const results = await validateAndUploadAssets(formData)
-
-      map(({ success, file }: { success: boolean; file: string }) =>
-        success
-          ? successNotification(`${file} ${t('[Notification] asset successfully uploaded')}`)
-          : error(`${file} ${t('[Notification] asset already exist')}`),
-      )(results)
-      reset()
-    } catch (e) {
-      error(t('[Notification] invalid asset found'))
-      console.log(e)
-    }
-  }
-  */
-
-  const addAssetsAction: SubmitHandler<any> = async data => {
-    try {
-      /*
       if (isEmpty(data.assets)) throw new Error('No files selected')
-
-        const filesArray = Array.from(data.assets as FileList)
-    
-        const processFiles = pipe(map(processFile), Promise.all.bind(Promise))
-        const filesData = await processFiles(filesArray)
-        const uploadData = await validateAndUploadAssets(filesData as AssetFile[])
-        const uploadResults = await Promise.all(map(file => uploadFile(filesArray, file), uploadData))
-    
-        map(({ success, file }: { success: boolean; file: string }) =>
-          success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`))(uploadResults)
-    
-        reset()
-        */
-      if (!data.assets || data.assets.length === 0) {
-        throw new Error('No files selected')
-      }
 
       const filesArray = Array.from(data.assets as FileList)
 
-      const filesData = await Promise.all(
-        filesArray.map(async file => {
-          const arrayBuffer = Buffer.from(await file.arrayBuffer())
-          const cid = await createFilename(arrayBuffer)
+      const processFiles = pipe(map(processFile), Promise.all.bind(Promise))
+      const filesData = await processFiles(filesArray)
+      const uploadData = await validateAndUploadAssets(filesData as AssetFile[])
+      const uploadResults = await Promise.all(map(file => uploadFile(filesArray, file), uploadData))
 
-          return {
-            name: file.name,
-            type: file.type,
-            cid,
-          }
-        }),
-      )
-
-      console.log({ filesData })
-      const uploadData = await validateAndUploadAssets(filesData)
-
-      const uploadResults = await Promise.all(
-        uploadData.map(async ({ signedUrl, cid, fileType, file }) => {
-          if (!signedUrl) {
-            return {
-              success: false,
-              file,
-              message: ERRORS.SIGNED_URL_MISSING,
-            }
-          }
-
-          const fileObj = filesArray.find((f: File) => propEq(file, 'name')(f))
-          if (!fileObj) {
-            return {
-              success: false,
-              file,
-              message: ERRORS.FILE_NOT_FOUND,
-            }
-          }
-
-          const arrayBuffer = Buffer.from(await fileObj.arrayBuffer())
-
-          const uploadResponse = await fetch(signedUrl, {
-            method: 'PUT',
-            body: arrayBuffer,
-            headers: {
-              'Content-Type': fileType,
-            },
-          })
-
-          if (!uploadResponse.ok) {
-            return {
-              success: false,
-              file,
-              message: ERRORS.FAILED_UPLOAD,
-            }
-          }
-
-          await insertAssetAfterUpload(cid, file)
-
-          return { success: true, file }
-        }),
-      )
-
-      uploadResults.forEach(({ success, file }) =>
+      map(({ success, file }: { success: boolean; file: string }) =>
         success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`),
-      )
+      )(uploadResults)
 
       reset()
     } catch (e) {

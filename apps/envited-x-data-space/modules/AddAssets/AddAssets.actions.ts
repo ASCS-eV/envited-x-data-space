@@ -1,9 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { isEmpty, isNil, isNotNil } from 'ramda'
+import { isNil } from 'ramda'
 
-import { createFilename } from '../../common/asset/utils'
 import { getServerSession } from '../../common/auth'
 import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
@@ -69,8 +68,19 @@ export async function validateAndUploadAssets(formData: FormData) {
 }
 */
 
-export async function validateAndUploadAssets(files: { name: string; cid: string; type: string }[]) {
+export interface AssetFile { name: string; cid: string; type: string }
+export interface UploadAssetFile {
+  success: boolean
+  file: string
+  signedUrl: string
+  cid: string
+  fileType: string
+}
+
+export async function validateAndUploadAssets(files: AssetFile[]) {
   const session = await getServerSession()
+
+  console.log(files)
 
   try {
     if (isNil(session)) {
@@ -81,7 +91,7 @@ export async function validateAndUploadAssets(files: { name: string; cid: string
       throw badRequestError({
         resource: 'addAssets',
         resourceId: 'assets',
-        message: 'No files provided',
+        message: ERRORS.ASSETS_NOT_FOUND,
       })
     }
 

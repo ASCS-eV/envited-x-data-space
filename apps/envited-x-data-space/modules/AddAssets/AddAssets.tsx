@@ -1,7 +1,7 @@
 'use client'
 
 import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-x-data-space/design-system'
-import { isEmpty, isNil, map, pathOr, times } from 'ramda'
+import { isEmpty, isNil, map, pathOr, pipe, propEq, times } from 'ramda'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -9,9 +9,10 @@ import { createFilename } from '../../common/asset/utils'
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { allTrue } from '../../common/utils/utils'
-import { insertAssetAfterUpload, validateAndUploadAssets } from './AddAssets.actions'
-import { addFiles, removeFile } from './AddAssets.utils'
+import { AssetFile, insertAssetAfterUpload, validateAndUploadAssets } from './AddAssets.actions'
+import { addFiles, processFile, removeFile, uploadFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
+import { ERRORS } from 'apps/envited-x-data-space/common/constants'
 
 export const AddAssets = () => {
   const { t } = useTranslation('AddAssets')
@@ -65,6 +66,21 @@ export const AddAssets = () => {
 
   const addAssetsAction: SubmitHandler<any> = async data => {
     try {
+      /*
+      if (isEmpty(data.assets)) throw new Error('No files selected')
+
+        const filesArray = Array.from(data.assets as FileList)
+    
+        const processFiles = pipe(map(processFile), Promise.all.bind(Promise))
+        const filesData = await processFiles(filesArray)
+        const uploadData = await validateAndUploadAssets(filesData as AssetFile[])
+        const uploadResults = await Promise.all(map(file => uploadFile(filesArray, file), uploadData))
+    
+        map(({ success, file }: { success: boolean; file: string }) =>
+          success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`))(uploadResults)
+    
+        reset()
+        */
       if (!data.assets || data.assets.length === 0) {
         throw new Error('No files selected')
       }
@@ -84,17 +100,26 @@ export const AddAssets = () => {
         }),
       )
 
+      console.log({filesData})
       const uploadData = await validateAndUploadAssets(filesData)
 
       const uploadResults = await Promise.all(
         uploadData.map(async ({ signedUrl, cid, fileType, file }) => {
           if (!signedUrl) {
-            return { success: false, file, reason: 'No signed URL' }
+            return {
+              success: false,
+              file,
+              message: ERRORS.SIGNED_URL_MISSING,
+            }
           }
 
-          const fileObj = filesArray.find((f: File) => f.name === file)
+          const fileObj = filesArray.find((f: File) => propEq(file, 'name')(f))
           if (!fileObj) {
-            return { success: false, file, reason: 'File not found' }
+            return {
+              success: false,
+              file,
+              message: ERRORS.FILE_NOT_FOUND,
+            }
           }
 
           const arrayBuffer = Buffer.from(await fileObj.arrayBuffer())
@@ -108,7 +133,11 @@ export const AddAssets = () => {
           })
 
           if (!uploadResponse.ok) {
-            return { success: false, file, reason: 'Failed to upload to S3' }
+            return {
+              success: false,
+              file,
+              message: ERRORS.FAILED_UPLOAD,
+            }
           }
 
           await insertAssetAfterUpload(cid, file)

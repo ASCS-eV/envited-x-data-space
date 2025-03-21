@@ -1,0 +1,195 @@
+{
+  "@context": {
+    "sh": "http://www.w3.org/ns/shacl#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "hdmap": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/hdmap/",
+    "general": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/general/",
+    "georeference": "https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/georeference/",
+    "gx": "https://registry.lab.gaia-x.eu/development/api/trusted-shape-registry/v1/shapes/jsonld/trustframework#"
+  },
+  "@id": "did:web:registry.gaia-x.eu:HdMap:DjHgK5ErTBow1Ya3J05tW9l12skGWgZn6kA9",
+  "@type": "hdmap:HdMap",
+  "hdmap:general": {
+    "@type": "general:General",
+    "general:description": {
+      "@type": "general:Description",
+      "general:name": {
+        "@value": "TestfeldNiedersachsen_ALKS_ODR_sample",
+        "@type": "xsd:string"
+      },
+      "general:description": {
+        "@value": "simple hdmap example file on Testfeld Niedersachsen for ALKS scenario",
+        "@type": "xsd:string"
+      }
+    },
+    "general:data": {
+      "@type": "general:Data",
+      "general:size": {
+        "@value": "0.6",
+        "@type": "xsd:float"
+      },
+      "general:recordingTime": {
+        "@value": "2020-05-26T00:00:00",
+        "@type": "xsd:dateTime"
+      }
+    }
+  },
+  "hdmap:format": {
+    "@type": "hdmap:Format",
+    "hdmap:version": {
+      "@value": "1.6",
+      "@type": "xsd:string"
+    },
+    "hdmap:formatType": {
+      "@value": "ASAM OpenDRIVE"
+    }
+  },
+  "hdmap:content": {
+    "@type": "hdmap:Content",
+    "hdmap:roadTypes": ["motorway"],
+    "hdmap:laneTypes": ["exit", "entry", "none", "shoulder", "driving", "restricted", "border", "stop"],
+    "hdmap:levelOfDetail": "car",
+    "hdmap:trafficDirection": "right-hand"
+  },
+  "hdmap:quantity": {
+    "@type": "hdmap:Quantity",
+    "hdmap:length": {
+      "@value": "2.68",
+      "@type": "xsd:float"
+    },
+    "hdmap:elevationRange": {
+      "@value": "5.6",
+      "@type": "xsd:float"
+    },
+    "hdmap:numberIntersections": {
+      "@value": "3",
+      "@type": "xsd:unsignedInt"
+    },
+    "hdmap:numberTrafficLights": {
+      "@value": "0",
+      "@type": "xsd:unsignedInt"
+    },
+    "hdmap:numberTrafficSigns": {
+      "@value": "0",
+      "@type": "xsd:unsignedInt"
+    },
+    "hdmap:numberObjects": {
+      "@value": "0",
+      "@type": "xsd:unsignedInt"
+    },
+    "hdmap:numberOutlines": {
+      "@value": "0",
+      "@type": "xsd:unsignedInt"
+    },
+    "hdmap:speedLimit": {
+      "@type": "hdmap:Range2D",
+      "hdmap:min": {
+        "@value": "50",
+        "@type": "xsd:float"
+      },
+      "hdmap:max": {
+        "@value": "250",
+        "@type": "xsd:float"
+      }
+    },
+    "hdmap:rangeOfModeling": {
+      "@value": "0",
+      "@type": "xsd:float"
+    }
+  },
+  "hdmap:quality": {
+    "@type": "hdmap:Quality",
+    "hdmap:precision": {
+      "@value": "0.01",
+      "@type": "xsd:float"
+    },
+    "hdmap:accuracyLaneModel2d": {
+      "@value": "0.1",
+      "@type": "xsd:float"
+    },
+    "hdmap:accuracyLaneModelHeight": {
+      "@value": "0.1",
+      "@type": "xsd:float"
+    },
+    "hdmap:accuracySignals": {
+      "@value": "0",
+      "@type": "xsd:float"
+    },
+    "hdmap:accuracyObjects": {
+      "@value": "0",
+      "@type": "xsd:float"
+    }
+  },
+  "hdmap:dataSource": {
+    "@type": "hdmap:DataSource",
+    "hdmap:usedDataSources": {
+      "@value": "laserscanner",
+      "@type": "xsd:string"
+    },
+    "hdmap:measurementSystem": {
+      "@value": "3DMS system",
+      "@type": "xsd:string"
+    }
+  },
+  "hdmap:georeference": {
+    "@type": "georeference:Georeference",
+    "georeference:projectLocation": {
+      "@type": "georeference:ProjectLocation",
+      "georeference:state": {
+        "@value": "DE-NI",
+        "@type": "xsd:string"
+      },
+      "georeference:city": {
+        "@value": "Koenigslutter am Elm",
+        "@type": "xsd:string"
+      },
+      "georeference:region": {
+        "@value": "Landkreis Helmstedt",
+        "@type": "xsd:string"
+      },
+      "georeference:country": {
+        "@value": "DE",
+        "@type": "xsd:string"
+      },
+      "georeference:boundingBox": {
+        "@type": "georeference:BoundingBox",
+        "georeference:xMin": {
+          "@value": "10.720740862799195",
+          "@type": "xsd:float"
+        },
+        "georeference:yMin": {
+          "@value": "52.29672229543727",
+          "@type": "xsd:float"
+        },
+        "georeference:xMax": {
+          "@value": "10.730432209669724",
+          "@type": "xsd:float"
+        },
+        "georeference:yMax": {
+          "@value": "52.31580272353997",
+          "@type": "xsd:float"
+        }
+      }
+    },
+    "georeference:geodeticReferenceSystem": {
+      "@type": "georeference:GeodeticReferenceSystem",
+      "georeference:origin": {
+        "@type": "georeference:LatLonCoordinate",
+        "georeference:lat": {
+          "@value": "52.275329463992996",
+          "@type": "xsd:float"
+        },
+        "georeference:lon": {
+          "@value": "10.685571633942278",
+          "@type": "xsd:float"
+        }
+      },
+      "georeference:coordinateSystemName": {
+        "@value": "tmerc",
+        "@type": "xsd:string"
+      }
+    }
+  }
+}

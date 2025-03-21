@@ -1,15 +1,15 @@
 'use client'
 
 import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-x-data-space/design-system'
-import { isEmpty, isNil, map, pathOr, times } from 'ramda'
+import { isEmpty, isNil, map, pathOr, pipe } from 'ramda'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
 import { allTrue } from '../../common/utils/utils'
-import { validateAndUploadAssets } from './AddAssets.actions'
-import { addFiles, removeFile } from './AddAssets.utils'
+import { AssetFile, validateAndUploadAssets } from './AddAssets.actions'
+import { addFiles, processFile, removeFile, uploadFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
@@ -40,23 +40,25 @@ export const AddAssets = () => {
 
   const addAssetsAction: SubmitHandler<any> = async data => {
     try {
-      const formData = new FormData()
-
-      if (data.assets) {
-        times(idx => formData.append('assets', data.assets[idx]))(data.assets.length)
+      if (isEmpty(data.assets)) {
+        return error(t('[Notification] no assets selected'))
       }
 
-      const results = await validateAndUploadAssets(formData)
+      const filesArray = Array.from(data.assets as FileList)
+
+      const processFiles = pipe(map(processFile), Promise.all.bind(Promise))
+      const filesData = await processFiles(filesArray)
+      const uploadData = await validateAndUploadAssets(filesData as AssetFile[])
+      const uploadResults = await Promise.all(map(file => uploadFile(filesArray, file), uploadData))
 
       map(({ success, file }: { success: boolean; file: string }) =>
-        success
-          ? successNotification(`${file} ${t('[Notification] asset successfully uploaded')}`)
-          : error(`${file} ${t('[Notification] asset already exist')}`),
-      )(results)
+        success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`),
+      )(uploadResults)
+
       reset()
     } catch (e) {
       error(t('[Notification] invalid asset found'))
-      console.log(e)
+      console.error(e)
     }
   }
 

@@ -19,10 +19,14 @@ describe('common/aws/S3', () => {
       const result = await getS3SignedUrl({ getSignedUrl, s3Client: s3Client as any })(putObjectCommand as any)
 
       expect(result).toEqual('UPLOAD_URL')
-      expect(getSignedUrl).toHaveBeenCalledWith('S3_CLIENT', {
-        Key: 'FILE.TEST.jpeg',
-        Bucket: 'BUCKET_NAME',
-      })
+      expect(getSignedUrl).toHaveBeenCalledWith(
+        'S3_CLIENT',
+        {
+          Key: 'FILE.TEST.jpeg',
+          Bucket: 'BUCKET_NAME',
+        },
+        { expiresIn: 600 },
+      )
     })
   })
 })

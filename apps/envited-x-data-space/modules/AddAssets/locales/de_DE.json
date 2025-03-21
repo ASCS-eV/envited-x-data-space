@@ -7,5 +7,6 @@
   "[Notification] assets are uploaded": "All asset(s) are uploaded.",
   "[Notification] asset already exist": "asset already exist",
   "[Notification] asset successfully uploaded": "asset successfully uploaded",
-  "[Notification] invalid asset found": "Asset(s) are not uploaded"
+  "[Notification] invalid asset found": "Asset(s) are not uploaded",
+  "[Notification] no assets selected": "'No assets selected'"
 }

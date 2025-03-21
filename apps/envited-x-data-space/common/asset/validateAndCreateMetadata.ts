@@ -234,6 +234,7 @@ export const _validateAndCreateMetadata =
       const domainMetadataCID = await createFilename(jsonToUint8Array(data.domainMetadata))
       const connection = await db()
       const user = await connection.getUserById(asset.userId)
+
       if (!user) {
         throw new Error('User not found')
       }
@@ -242,8 +243,9 @@ export const _validateAndCreateMetadata =
       if (!issuer) {
         throw new Error('Issuer not found')
       }
+
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
-      const visualization = filter(propEq('visualization', 'type'))(files.publicUser) as ExtractedFile[]
+      const visualization = filter(propEq('envited-x:isMedia', 'type'))(files.publicUser) as ExtractedFile[]
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
 
       const modifiedManifest = createModifiedManifest({
@@ -259,7 +261,7 @@ export const _validateAndCreateMetadata =
         fileSize: byteArray.length,
       }
 
-      const displayUri = find(propEq('visualization', 'type'))(visualizationFiles) as ExtractedFileWithCID
+      const displayUri = find(propEq('envited-x:isMedia', 'type'))(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,
         fileSize: displayUri.arrayBuffer.byteLength,

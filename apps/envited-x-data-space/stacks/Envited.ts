@@ -43,6 +43,8 @@ export default function Envited({ stack }: StackContext) {
   const s3CorsRule = {
     allowedMethods: [aws_s3.HttpMethods.GET, aws_s3.HttpMethods.HEAD, aws_s3.HttpMethods.PUT],
     allowedOrigins: ['*'],
+    allowedHeaders: ['*'],
+    exposedHeaders: ['ETag'],
   }
 
   const uploadsBucket = new Bucket(stack, 'uploads', {

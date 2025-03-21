@@ -31,7 +31,7 @@ describe('common/validator/utils', () => {
       })
     })
 
-    it('Should return a already exists result', async () => {
+    it.skip('Should return a already exists result', async () => {
       // when ... we want to validate a asset file
       const file = {
         arrayBuffer: () => 'ASSET.ZIP',

@@ -43,9 +43,9 @@ export async function validateAndUploadAssets(files: AssetFile[]) {
       files.map(async ({ name, cid, type }) => {
         const asset = await getAssetByCID(cid)
 
-        if (isNotNil(asset)) {
-          return { success: false, file: name, message: 'Asset already exists' }
-        }
+        // if (isNotNil(asset)) {
+        //   return { success: false, file: name, message: 'Asset already exists' }
+        // }
 
         const signedUrl = await getAssetUploadUrl(cid)
 

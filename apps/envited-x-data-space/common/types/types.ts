@@ -115,6 +115,8 @@ export interface Token {
   rights: string
   rightsUri: string
   language: string
+  manifest: Record<string, any>
+  domainMetadata: Record<string, any>
   artifactUri: string
   identifier: string
   externalUri: string

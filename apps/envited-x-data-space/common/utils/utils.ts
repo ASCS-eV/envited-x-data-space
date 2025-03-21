@@ -26,6 +26,8 @@ import {
   when,
 } from 'ramda'
 
+import { KEYWORDS } from '../asset/constants'
+
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
 
 export const extractIssuerIdFromCredential = pathOr('', ['issuer'])
@@ -121,4 +123,66 @@ export const extractFilenameFromPath = (path: string) => last(split('/')(path))
 
 export const formatDate = (date: Date) => {
   return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+}
+
+export const capitalize = (string: string) => {
+  if (typeof string !== 'string') {
+    return string
+  }
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+export const formatSectionName = (name: string): string => {
+  if (!name) {
+    return ''
+  }
+
+  return last(split(':', name)) as string
+}
+
+export const formatItemName = (name: string) => {
+  if (!name) {
+    return ''
+  }
+  // Add spaces in the following cases:
+  // 1. Before capital letters that are at the start of a word or after lowercase
+  // 2. Before numbers
+  const withSpaces = replace(/([a-z]|^)([A-Z])|([0-9])/g, '$1 $2$3', name)
+
+  // Ensure the first letter is capitalized
+  return pipe(
+    // Trim leading spaces that might occur
+    replace(/^\s+/, ''),
+    // Capitalize first letter
+    capitalize,
+  )(withSpaces)
+}
+
+export const displayItemValue = (value: any) =>
+  Array.isArray(value)
+    ? value.map(item => (typeof item === 'string' ? capitalize(item) : item)).join(', ')
+    : typeof value !== 'object' && value !== null
+    ? capitalize(value)
+    : ''
+
+export const removeKeywords = (str: string): string => {
+  return KEYWORDS.reduce((result, keyword) => {
+    return result.replace(new RegExp(keyword, 'g'), '')
+  }, str)
+}
+
+export const getAssetType = (metadata: Record<string, any>) => {
+  const type = metadata['@type']
+
+  return split(':', type)[0]
+}
+
+export const kebabToCamelCase = (str: string): string => {
+  return str
+    .split('-')
+    .map((word, index) => {
+      // Keep the first word lowercase, capitalize the rest
+      return index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
+    })
+    .join('')
 }

@@ -36,3 +36,7 @@ export const MANIFEST_LINK_FILE_PATH = ['manifest:hasFileMetadata', 'manifest:fi
 export const MANIFEST_LINK_MIME_TYPE = ['manifest:hasFileMetadata', 'manifest:mimeType', '@value']
 
 export const MANIFEST_LINK_ACCESS_ROLE = ['manifest:hasAccessRole', '@id']
+
+export const DOMAIN_METADATA_FILE = 'metadata/domainMetadata.json'
+
+export const KEYWORDS = ['Has ']

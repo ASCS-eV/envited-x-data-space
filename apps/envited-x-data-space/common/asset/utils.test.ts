@@ -521,6 +521,147 @@ describe('common/asset/utils', () => {
       )(domainMetadata)
 
       expect(result).toEqual(expected)
+
+  describe('extractValue', () => {
+    it('should handle primitive values', () => {
+      expect(SUT.extractValue('test string')).toEqual('test string')
+      expect(SUT.extractValue(123)).toEqual(123)
+      expect(SUT.extractValue(true)).toEqual(true)
+      expect(SUT.extractValue(null)).toEqual(null)
+      expect(SUT.extractValue(undefined)).toEqual(undefined)
+    })
+
+    it('should extract @value from objects that have it', () => {
+      expect(SUT.extractValue({ '@value': 'extracted value' })).toEqual('extracted value')
+      expect(SUT.extractValue({ '@value': 42, '@type': 'xsd:integer' })).toEqual(42)
+    })
+
+    it('should process arrays recursively', () => {
+      const input = [{ '@value': 'value1' }, { '@value': 'value2' }, 'plain value']
+      const expected = ['value1', 'value2', 'plain value']
+      expect(SUT.extractValue(input)).toEqual(expected)
+    })
+
+    it('should process nested objects recursively', () => {
+      const input = {
+        prop1: { '@value': 'value1' },
+        prop2: { '@value': 'value2' },
+        nested: {
+          prop3: { '@value': 'value3' },
+          array: [{ '@value': 'value4' }],
+        },
+      }
+      const expected = {
+        prop1: 'value1',
+        prop2: 'value2',
+        nested: {
+          prop3: 'value3',
+          array: ['value4'],
+        },
+      }
+      expect(SUT.extractValue(input)).toEqual(expected)
+    })
+
+    it('should skip @type and @id properties', () => {
+      const input = {
+        '@type': 'hdmap:SomeType',
+        '@id': 'some-id',
+        'prop': { '@value': 'value' },
+      }
+      const expected = {
+        prop: 'value',
+      }
+      expect(SUT.extractValue(input)).toEqual(expected)
+    })
+  })
+
+  describe('extractDomainMetadata', () => {
+    it('should extract basic info from dataResource', () => {
+      const input = {
+        'hdmap:hasDataResource': {
+          'gx:name': { '@value': 'Sample HD Map' },
+          'gx:description': { '@value': 'A sample HD map for testing' },
+        },
+      }
+      const result = SUT.extractDomainMetadata(input)
+      expect(result).toEqual({
+        name: 'Sample HD Map',
+        description: 'A sample HD map for testing',
+      })
+    })
+
+    it('should extract metadata from dataResourceExtension', () => {
+      const input = {
+        'hdmap:hasDataResource': {
+          'gx:name': { '@value': 'Sample HD Map' },
+          'gx:description': { '@value': 'A sample HD map for testing' },
+        },
+        'hdmap:hasDataResourceExtension': {
+          'hdmap:hasGeoreference': {
+            '@type': 'hdmap:Georeference',
+            'hdmap:hasGeodeticReferenceSystem': {
+              '@type': 'hdmap:GeodeticReferenceSystem',
+              'hdmap:hasEPSGCode': { '@value': '4326' },
+              'hdmap:hasHeightSystem': { '@value': 'WGS84' },
+            },
+            'hdmap:hasBoundingBox': {
+              'hdmap:hasMinX': { '@value': '10.0' },
+              'hdmap:hasMinY': { '@value': '20.0' },
+              'hdmap:hasMaxX': { '@value': '30.0' },
+              'hdmap:hasMaxY': { '@value': '40.0' },
+            },
+          },
+        },
+      }
+      const result = SUT.extractDomainMetadata(input)
+      expect(result).toEqual({
+        'name': 'Sample HD Map',
+        'description': 'A sample HD map for testing',
+        'hdmap:Georeference': {
+          'hdmap:hasGeodeticReferenceSystem': {
+            'hdmap:hasEPSGCode': '4326',
+            'hdmap:hasHeightSystem': 'WGS84',
+          },
+          'hdmap:hasBoundingBox': {
+            'hdmap:hasMinX': '10.0',
+            'hdmap:hasMinY': '20.0',
+            'hdmap:hasMaxX': '30.0',
+            'hdmap:hasMaxY': '40.0',
+          },
+        },
+      })
+    })
+
+    it('should work with different namespace prefixes', () => {
+      const input = {
+        'environment-model:hasDataResource': {
+          'gx:name': { '@value': 'Environment Model' },
+          'gx:description': { '@value': 'A sample environment model' },
+        },
+        'environment-model:hasDataResourceExtension': {
+          'environment-model:hasContent': {
+            '@type': 'environment-model:Content',
+            'environment-model:hasFormat': { '@value': 'OpenSceneGraph' },
+          },
+        },
+      }
+      const result = SUT.extractDomainMetadata(input)
+      expect(result).toEqual({
+        'name': 'Environment Model',
+        'description': 'A sample environment model',
+        'environment-model:Content': {
+          'environment-model:hasFormat': 'OpenSceneGraph',
+        },
+      })
+    })
+
+    it('should handle missing or empty data', () => {
+      const empty = {}
+      const result = SUT.extractDomainMetadata(empty)
+      expect(result).toEqual({
+        name: '',
+        description: '',
+      })
     })
   })
 })

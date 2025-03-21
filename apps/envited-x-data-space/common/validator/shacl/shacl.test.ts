@@ -21,7 +21,7 @@ describe('common/validator/shacl', () => {
 
       const checkIfAllFilesInManifestExistStub = jest.fn().mockResolvedValue({
         errors: [],
-        amount: 12,
+        amount: 14,
       })
 
       const countAmountOfFilesInZipStub = jest.fn().mockResolvedValue(14)

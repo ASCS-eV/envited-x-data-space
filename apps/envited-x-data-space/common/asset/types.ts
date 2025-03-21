@@ -1,19 +1,41 @@
-export enum AccessRole {
-  owner = 'owner',
-  registeredUser = 'registeredUser',
-  publicUser = 'publicUser',
+export enum ManifestCategoryId {
+  envitedXIsDocumentation = 'envited-x:isDocumentation',
+  envitedXIsLicense = 'envited-x:isLicense',
+  envitedXIsManifest = 'envited-x:isManifest',
+  envitedXIsMedia = 'envited-x:isMedia',
+  envitedXIsMetadata = 'envited-x:isMetadata',
+  envitedXIsMiscellaneous = 'envited-x:isMiscellaneous',
+  envitedXIsSimulationData = 'envited-x:isSimulationData',
+  envitedXIsReferencedSimulationData = 'envited-x:isReferencedSimulationData',
+  envitedXIsValidationReport = 'envited-x:isValidationReport',
 }
+
+export enum MetadataType {
+  environmentModel = 'environment-model:EnvironmentModel',
+  envitedX = 'envited-x:SimulationAsset',
+  hdmap = 'hdmap:HdMap',
+  ositrace = 'ositrace:OSITrace',
+  scenario = 'scenario:Scenario',
+  surfaceModel = 'surface-model:SurfaceModel',
+}
+
+export enum AccessRole {
+  envitedXIsOwner = 'envited-x:isOwner',
+  manifestIsPublic = 'manifest:isPublic',
+  envitedXIsPublic = 'envited-x:isPublic',
+  envitedXIsRegistered = 'envited-x:isRegistered',
+}
+
+type ManifestArtifacts = [ManifestMetadataLink, ...ManifestLink[]]
 
 export interface Manifest {
   '@context': ManifestContext
   '@id': string
   '@type': string
-  'manifest:data': {
-    '@type': string
-    'manifest:assetData': ManifestLink[]
-    'manifest:contentData': ManifestLink[]
-  }
-  'manifest:license': ManifestLicense
+  'manifest:hasManifestReference': ManifestLink
+  'manifest:hasLicense': ManifestLink
+  'manifest:hasArtifacts': ManifestArtifacts
+  'manifest:hasReferencedArtifacts': []
 }
 
 export interface ManifestContext {
@@ -22,24 +44,75 @@ export interface ManifestContext {
   skos: string
   sh: string
   manifest: string
+  envited: string
+  hdmap: string
+  rdf: string
+}
+
+export interface ManifestHasAccessRole {
+  '@type': string
+  '@id': AccessRole
+}
+
+export interface ManifestHasCategory {
+  '@type': string
+  '@id': ManifestCategoryId
+}
+
+export interface ManifestFilePath {
+  '@value': string
+  '@type': string
+}
+export interface ManifestCid {
+  '@value': string
+  '@type': string
+}
+export interface ManifestMimeType {
+  '@value': string
+  '@type': string
+}
+export interface ManifestFileSize {
+  '@value': number
+  '@type': string
+}
+export interface ManifestFilename {
+  '@value': string
+  '@type': string
+}
+
+export interface ManifestHasFileMetadata {
+  '@type': string
+  'manifest:filePath': ManifestFilePath
+  'manifest:cid': ManifestCid
+  'manifest:mimeType': ManifestMimeType
+  'manifest:fileSize': ManifestFileSize
+  'manifest:filename': ManifestFilename
 }
 
 export interface ManifestLink {
   '@type': string
-  'manifest:accessRole': AccessRole
-  'manifest:type': string
-  'manifest:format': string
-  'manifest:path': {
+  'manifest:hasAccessRole': ManifestHasAccessRole
+  'manifest:hasCategory': ManifestHasCategory
+  'manifest:hasFileMetadata': ManifestHasFileMetadata
+}
+
+export interface ManifestMetadataLink extends ManifestLink {
+  'manifest:iri': {
+    '@id': string
+  }
+  'skos:note': {
     '@value': string
     '@type': string
+  }
+  'sh:conformsTo': {
+    '@id': string
   }
 }
 
 export interface ManifestLicense {
   '@type': string
-  'manifest:spdxIdentifier': {
+  'gx:license': {
     '@value': string
-    '@type': string
   }
   'manifest:licenseData': ManifestLink
 }

@@ -7,6 +7,7 @@ import { sha256 } from 'multiformats/hashes/sha2'
 import {
   any,
   append,
+  applySpec,
   concat,
   equals,
   find,
@@ -16,9 +17,9 @@ import {
   isNil,
   map,
   path,
+  pathEq,
   pathOr,
   pipe,
-  propEq,
   reduce,
   reject,
   replace,
@@ -27,7 +28,16 @@ import {
 
 import { extractFromByteArray, read } from '../archive'
 import { getFileBlob } from '../archive/archive'
-import { ExtractedFileWithCID, Manifest, ManifestLink } from './types'
+import {
+  MANIFEST_ARTIFACTS,
+  MANIFEST_CATEGORY_ID,
+  MANIFEST_LICENSE_DATA,
+  MANIFEST_LINK_ACCESS_ROLE,
+  MANIFEST_LINK_FILE_PATH,
+  MANIFEST_LINK_MIME_TYPE,
+  MANIFEST_REFERENCE,
+} from './constants'
+import { AccessRole, ExtractedFileWithCID, Manifest, ManifestCategoryId, ManifestLink } from './types'
 
 export const _createFilename =
   ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
@@ -67,22 +77,28 @@ export const getArrayBufferFromByteArray = async (byteArray: Uint8Array, filenam
 
 export const getDomainMetadataPath = (manifest: Manifest) =>
   pipe(
-    pathOr([], ['manifest:data', 'manifest:contentData']),
-    find(propEq('metadata', 'manifest:type')),
-    pathOr('', ['manifest:path', '@value']),
+    pathOr([], MANIFEST_ARTIFACTS),
+    find(pathEq(ManifestCategoryId.envitedXIsMetadata, MANIFEST_CATEGORY_ID)),
+    pathOr('', MANIFEST_LINK_FILE_PATH),
     replace('./', ''),
   )(manifest)
 
 export const getFilesGroupedByAccessRoles = (manifest: Manifest) => {
-  const { owner, registeredUser, publicUser } = pipe(
+  const groupedAssets = pipe(
     getAllManifestLinks,
-    groupBy((link: ManifestLink) => link['manifest:accessRole']),
+    groupBy((link: ManifestLink) => pathOr('', MANIFEST_LINK_ACCESS_ROLE)(link)),
   )(manifest)
 
   return {
-    owner: owner ? getPathsFromManifestLinks(owner) : [],
-    registeredUser: registeredUser ? getPathsFromManifestLinks(registeredUser) : [],
-    publicUser: publicUser ? getPathsFromManifestLinks(publicUser) : [],
+    owner: groupedAssets[AccessRole.envitedXIsOwner]
+      ? getPathsFromManifestLinks(groupedAssets[AccessRole.envitedXIsOwner])
+      : [],
+    registeredUser: groupedAssets[AccessRole.envitedXIsRegistered]
+      ? getPathsFromManifestLinks(groupedAssets[AccessRole.envitedXIsRegistered])
+      : [],
+    publicUser: groupedAssets[AccessRole.envitedXIsPublic]
+      ? getPathsFromManifestLinks(groupedAssets[AccessRole.envitedXIsPublic])
+      : [],
   }
 }
 
@@ -93,11 +109,7 @@ export const getAllManifestLinks = (manifest: Manifest) =>
       (acc: any, links: ManifestLink[] | ManifestLink) => (is(Array)(links) ? concat(acc, links) : append(links, acc)),
       [],
     ),
-  )([
-    ['manifest:data', 'manifest:assetData'],
-    ['manifest:data', 'manifest:contentData'],
-    ['manifest:license', 'manifest:licenseData'],
-  ]) as ManifestLink[]
+  )([MANIFEST_REFERENCE, MANIFEST_LICENSE_DATA, MANIFEST_ARTIFACTS]) as ManifestLink[]
 
 export const formatManifestLinkPath = replace('./', '')
 
@@ -109,7 +121,8 @@ export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
     getAllManifestLinks,
     map(
       (link: ManifestLink) =>
-        isRemoteUrl(link['manifest:path']['@value']) && !isSelfHosted(link['manifest:path']['@value']),
+        isRemoteUrl(pathOr('', MANIFEST_LINK_FILE_PATH)(link)) &&
+        !isSelfHosted(pathOr('', MANIFEST_LINK_FILE_PATH)(link)),
     ),
     (x: boolean[]) => any(equals(true))(x),
   )(manifest)
@@ -117,8 +130,11 @@ export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
 export const getPathsFromManifestLinks = (links: ManifestLink[]) =>
   pipe(
     map((link: ManifestLink) =>
-      !isRemoteUrl(link['manifest:path']['@value'])
-        ? { path: formatManifestLinkPath(link['manifest:path']['@value']), type: link['manifest:type'] }
+      !isRemoteUrl(pathOr('', MANIFEST_LINK_FILE_PATH)(link))
+        ? {
+            path: formatManifestLinkPath(pathOr('', MANIFEST_LINK_FILE_PATH)(link)),
+            type: path(MANIFEST_LINK_MIME_TYPE)(link),
+          }
         : null,
     ),
     reject(isNil),
@@ -241,6 +257,14 @@ export const _getFilesAsPathAndByteArrayFromManifest =
 export const getFilesAsPathAndByteArrayFromManifest = _getFilesAsPathAndByteArrayFromManifest({
   getPathsAndBuffersFromByteArray,
 })
+
+export const extractGeneralInformationFromMetadata = (type: string) =>
+  applySpec({
+    name: path([`${type}:hasDataResource`, 'gx:name', '@value']),
+    description: path([`${type}:hasDataResource`, 'gx:description', '@value']),
+    formatType: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:formatType`]),
+    version: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:version`, '@value']),
+  })
 
 export const extractDomainMetadata = (jsonData: Record<string, any>) => {
   // Find any hasDataResource and hasDataResourceExtension properties

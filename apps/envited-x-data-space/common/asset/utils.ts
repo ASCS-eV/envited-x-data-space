@@ -133,7 +133,7 @@ export const getPathsFromManifestLinks = (links: ManifestLink[]) =>
       !isRemoteUrl(pathOr('', MANIFEST_LINK_FILE_PATH)(link))
         ? {
             path: formatManifestLinkPath(pathOr('', MANIFEST_LINK_FILE_PATH)(link)),
-            type: path(MANIFEST_LINK_MIME_TYPE)(link),
+            type: path(MANIFEST_CATEGORY_ID)(link),
           }
         : null,
     ),

@@ -51,83 +51,107 @@ describe('common/asset/utils', () => {
         owner: [
           {
             path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
-            type: 'application/x-xodr',
+            type: 'envited-x:isSimulationData',
           },
         ],
         registeredUser: [
           {
             path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.bjson',
-            type: 'application/json',
+            type: 'envited-x:isMiscellaneous',
           },
           {
             path: 'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_offset_Documentation_stats.txt',
-            type: 'text/plain',
+            type: 'envited-x:isDocumentation',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_asam_cb_xodr.xqar',
-            type: 'application/x-xqar',
+            type: 'envited-x:isValidationReport',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_openmsl_cb_xodr.xqar',
-            type: 'application/x-xqar',
+            type: 'envited-x:isValidationReport',
           },
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-02.png',
-            type: 'image/png',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-03.png',
-            type: 'image/png',
+            type: 'envited-x:isMedia',
           },
-          { path: 'media/bbox.geojson', type: 'application/x-geojson' },
+          {
+            path: 'media/bbox.geojson',
+            type: 'envited-x:isMedia',
+          },
           {
             path: 'media/roadNetwork.geojson',
-            type: 'application/x-geojson',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/breakLines.json',
-            type: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/junctions.json',
-            type: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/laneSections.json',
-            type: 'application/json',
+            type: 'envited-x:isMedia',
           },
-          { path: 'media/3d_preview/lanes.json', type: 'application/json' },
-          { path: 'media/3d_preview/objects.json', type: 'application/json' },
-          { path: 'media/3d_preview/refLine.json', type: 'application/json' },
+          {
+            path: 'media/3d_preview/lanes.json',
+            type: 'envited-x:isMedia',
+          },
+          {
+            path: 'media/3d_preview/objects.json',
+            type: 'envited-x:isMedia',
+          },
+          {
+            path: 'media/3d_preview/refLine.json',
+            type: 'envited-x:isMedia',
+          },
           {
             path: 'media/3d_preview/roadMarks.json',
-            type: 'application/json',
+            type: 'envited-x:isMedia',
           },
-          { path: 'media/3d_preview/roads.json', type: 'application/json' },
-          { path: 'media/3d_preview/signals.json', type: 'application/json' },
+          {
+            path: 'media/3d_preview/roads.json',
+            type: 'envited-x:isMedia',
+          },
+          {
+            path: 'media/3d_preview/signals.json',
+            type: 'envited-x:isMedia',
+          },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_openmsl_cb_xodr_QCReport.txt',
-            type: 'text/plain',
+            type: 'envited-x:isValidationReport',
           },
         ],
         publicUser: [
-          { path: 'manifest_reference.json', type: 'application/ld+json' },
+          {
+            path: 'manifest_reference.json',
+            type: 'envited-x:isManifest',
+          },
           {
             path: 'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_offset_Documentation.pdf',
-            type: 'application/pdf',
+            type: 'envited-x:isDocumentation',
           },
           {
             path: 'metadata/hdmap_instance.json',
-            type: 'application/ld+json',
+            type: 'envited-x:isMetadata',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_asam_cb_xodr_QCReport.txt',
-            type: 'text/plain',
+            type: 'envited-x:isValidationReport',
           },
-          { path: 'README.md', type: 'text/markdown' },
+          {
+            path: 'README.md',
+            type: 'envited-x:isDocumentation',
+          },
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
-            type: 'image/png',
+            type: 'envited-x:isMedia',
           },
         ],
       }
@@ -451,7 +475,7 @@ describe('common/asset/utils', () => {
       expect(result).toEqual([
         {
           path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
-          type: 'application/x-xodr',
+          type: 'envited-x:isSimulationData',
         },
       ])
     })

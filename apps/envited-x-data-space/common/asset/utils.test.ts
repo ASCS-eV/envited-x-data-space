@@ -521,6 +521,8 @@ describe('common/asset/utils', () => {
       )(domainMetadata)
 
       expect(result).toEqual(expected)
+    })
+  })
 
   describe('extractValue', () => {
     it('should handle primitive values', () => {

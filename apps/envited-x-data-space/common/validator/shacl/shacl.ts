@@ -187,7 +187,7 @@ export const _validateDomainMetadata =
 
       const dataset = await loadDataset(data, ContentType.jsonLd)
       const validateShaclTemplate = validateShaclSchema(dataset)
-      const validationPromises = templates.map((type: ValidationSchema) => validateShaclTemplate(type))
+      const validationPromises = templates.map(async (type: ValidationSchema) => validateShaclTemplate(type))
 
       const validationResults = await Promise.all(validationPromises)
 

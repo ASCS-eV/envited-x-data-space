@@ -2,7 +2,7 @@ import { Schema } from './shacl.types'
 
 export const SCHEMA_MAP = {
   [Schema.automotiveSimulator]: '/schemas/automotive-simulator_shacl.ttl',
-  [Schema.environmentModel]: '/schemas/environment_shacl.ttl',
+  [Schema.environmentModel]: '/schemas/environment-model_shacl.ttl',
   [Schema.envitedX]: '/schemas/envited-x_shacl.ttl',
   [Schema.general]: '/schemas/general_shacl.ttl',
   [Schema.georeference]: '/schemas/georeference_shacl.ttl',
@@ -20,4 +20,4 @@ export const SCHEMA_MAP = {
   [Schema.vvReport]: '/schemas/vv-report_shacl.ttl',
 }
 
-export const CONTEXT_DROP_SCHEMAS = [Schema.sh, Schema.skos, Schema.xsd]
+export const CONTEXT_DROP_SCHEMAS = [Schema.openlabel, Schema.rdf, Schema.sh, Schema.skos, Schema.xsd]

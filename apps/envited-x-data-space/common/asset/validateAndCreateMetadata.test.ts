@@ -20,15 +20,18 @@ describe('common/asset/validateAndCreateMetadata', () => {
         {
           path: 'PATH',
           arrayBuffer: 'FILE_BUFFER',
-          cid: 'DISPLAY_HASH',
+          cid: 'FILE_CID',
           type: 'envited-x:isMedia',
+          mimeType: 'application/json',
         },
         {
           path: 'PATH',
           arrayBuffer: 'FILE_BUFFER',
-          cid: 'FILE_CID',
+          cid: 'DISPLAY_HASH',
           type: 'envited-x:isMedia',
+          mimeType: 'image/png',
         },
+        
       ]) as any
       const getFilesAsPathAndByteArrayFromManifestStub = jest.fn().mockResolvedValue({
         owner: [
@@ -108,14 +111,16 @@ describe('common/asset/validateAndCreateMetadata', () => {
           {
             path: 'PATH',
             arrayBuffer: 'FILE_BUFFER',
-            cid: 'DISPLAY_HASH',
+            cid: 'FILE_CID',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'PATH',
             arrayBuffer: 'FILE_BUFFER',
-            cid: 'FILE_CID',
+            cid: 'DISPLAY_HASH',
             type: 'envited-x:isMedia',
+            mimeType: 'image/png',
           },
         ],
       })

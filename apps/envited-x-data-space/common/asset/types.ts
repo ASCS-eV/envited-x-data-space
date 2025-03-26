@@ -8,6 +8,7 @@ export enum ManifestCategoryId {
   envitedXIsSimulationData = 'envited-x:isSimulationData',
   envitedXIsReferencedSimulationData = 'envited-x:isReferencedSimulationData',
   envitedXIsValidationReport = 'envited-x:isValidationReport',
+  envitedXIsOwner = 'envited-x:isOwner'
 }
 
 export enum MetadataType {
@@ -33,7 +34,7 @@ export interface Manifest {
   '@id': string
   '@type': string
   'manifest:hasManifestReference': ManifestLink
-  'manifest:hasLicense': ManifestLink
+  'manifest:hasLicense': ManifestLicense
   'manifest:hasArtifacts': ManifestArtifacts
   'manifest:hasReferencedArtifacts': []
 }
@@ -44,55 +45,34 @@ export interface ManifestContext {
   skos: string
   sh: string
   manifest: string
-  envited: string
+  "envited-x": string
   hdmap: string
   rdf: string
 }
 
-export interface ManifestHasAccessRole {
-  '@type': string
-  '@id': AccessRole
-}
-
-export interface ManifestHasCategory {
-  '@type': string
-  '@id': ManifestCategoryId
-}
-
-export interface ManifestFilePath {
-  '@value': string
-  '@type': string
-}
-export interface ManifestCid {
-  '@value': string
-  '@type': string
-}
-export interface ManifestMimeType {
-  '@value': string
-  '@type': string
-}
-export interface ManifestFileSize {
-  '@value': number
-  '@type': string
-}
-export interface ManifestFilename {
-  '@value': string
+export interface ManifestValue<T> {
+  '@value': T
   '@type': string
 }
 
 export interface ManifestHasFileMetadata {
   '@type': string
-  'manifest:filePath': ManifestFilePath
-  'manifest:cid': ManifestCid
-  'manifest:mimeType': ManifestMimeType
-  'manifest:fileSize': ManifestFileSize
-  'manifest:filename': ManifestFilename
+  'manifest:filePath': ManifestValue<string>
+  // 'manifest:cid': ManifestCid
+  'manifest:mimeType': ManifestValue<string>
+  'manifest:fileSize'?: ManifestValue<number>
+  'manifest:filename'?: ManifestValue<string>
+}
+
+export interface ManifestId<T> {
+  '@type': string
+  '@id': T
 }
 
 export interface ManifestLink {
   '@type': string
-  'manifest:hasAccessRole': ManifestHasAccessRole
-  'manifest:hasCategory': ManifestHasCategory
+  'manifest:hasAccessRole': ManifestId<AccessRole>
+  'manifest:hasCategory': ManifestId<ManifestCategoryId>
   'manifest:hasFileMetadata': ManifestHasFileMetadata
 }
 
@@ -100,10 +80,7 @@ export interface ManifestMetadataLink extends ManifestLink {
   'manifest:iri': {
     '@id': string
   }
-  'skos:note': {
-    '@value': string
-    '@type': string
-  }
+  'skos:note': ManifestValue<string>
   'sh:conformsTo': {
     '@id': string
   }
@@ -114,7 +91,14 @@ export interface ManifestLicense {
   'gx:license': {
     '@value': string
   }
-  'manifest:licenseData': ManifestLink
+  'manifest:licenseData': ManifestLicenseData
+}
+
+export interface ManifestLicenseData {
+  '@type': string
+  'manifest:hasAccessRole': ManifestId<AccessRole>
+  'manifest:hasCategory': ManifestId<ManifestCategoryId>
+  'manifest:hasFileMetadata': ManifestHasFileMetadata
 }
 
 export interface ExtractedFile {

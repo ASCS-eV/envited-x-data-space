@@ -74,54 +74,67 @@ describe('common/asset/utils', () => {
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-02.png',
             type: 'envited-x:isMedia',
+            mimeType: 'image/png',
           },
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-03.png',
             type: 'envited-x:isMedia',
+            mimeType: 'image/png',
           },
           {
             path: 'media/bbox.geojson',
             type: 'envited-x:isMedia',
+            mimeType: 'application/x-geojson',
           },
           {
             path: 'media/roadNetwork.geojson',
             type: 'envited-x:isMedia',
+            mimeType: 'application/x-geojson',
           },
           {
             path: 'media/3d_preview/breakLines.json',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'media/3d_preview/junctions.json',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'media/3d_preview/laneSections.json',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'media/3d_preview/lanes.json',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'media/3d_preview/objects.json',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'media/3d_preview/refLine.json',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'media/3d_preview/roadMarks.json',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'media/3d_preview/roads.json',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'media/3d_preview/signals.json',
             type: 'envited-x:isMedia',
+            mimeType: 'application/json',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_openmsl_cb_xodr_QCReport.txt',
@@ -152,6 +165,7 @@ describe('common/asset/utils', () => {
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
             type: 'envited-x:isMedia',
+            mimeType: 'image/png',
           },
         ],
       }

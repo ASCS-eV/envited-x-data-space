@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { all, equals, filter, find, keys, omit, path, pathOr, pipe, prop, propEq } from 'ramda'
+import { all, and, compose, equals, filter, find, includes, keys, omit, path, pathOr, pipe, prop, propEq, propOr } from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { db } from '../database/queries'
@@ -9,7 +9,7 @@ import { extractAddressFromDid, formatAssetUri } from '../utils'
 import { validateShaclDataWithSchema } from '../validator'
 import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { ValidationSchema } from '../validator/shacl/shacl.types'
-import { MANIFEST_FILE, MANIFEST_LICENSE, MANIFEST_LICENSE_PATH } from './constants'
+import { MANIFEST_FILE, MANIFEST_LICENSE, MANIFEST_LICENSE_PATH, MEDIA_DESCRIPTOR } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
 import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestExtractedFiles } from './types'
@@ -261,7 +261,7 @@ export const _validateAndCreateMetadata =
         fileSize: byteArray.length,
       }
 
-      const displayUri = find(propEq('envited-x:isMedia', 'type'))(visualizationFiles) as ExtractedFileWithCID
+      const displayUri = find(and(propEq(MEDIA_DESCRIPTOR, 'type'), compose(includes('image'), propOr('', 'mimeType'))))(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,
         fileSize: displayUri.arrayBuffer.byteLength,

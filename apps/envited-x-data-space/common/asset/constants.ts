@@ -39,4 +39,6 @@ export const MANIFEST_LINK_ACCESS_ROLE = ['manifest:hasAccessRole', '@id']
 
 export const DOMAIN_METADATA_FILE = 'metadata/domainMetadata.json'
 
+export const MEDIA_DESCRIPTOR = 'envited-x:isMedia'
+
 export const KEYWORDS = ['Has ']

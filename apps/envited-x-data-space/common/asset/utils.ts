@@ -8,6 +8,7 @@ import {
   any,
   append,
   applySpec,
+  assoc,
   concat,
   equals,
   find,
@@ -36,6 +37,7 @@ import {
   MANIFEST_LINK_FILE_PATH,
   MANIFEST_LINK_MIME_TYPE,
   MANIFEST_REFERENCE,
+  MEDIA_DESCRIPTOR,
 } from './constants'
 import { AccessRole, ExtractedFileWithCID, Manifest, ManifestCategoryId, ManifestLink } from './types'
 
@@ -115,6 +117,7 @@ export const formatManifestLinkPath = replace('./', '')
 
 export const isRemoteUrl = startsWith('https://')
 export const isSelfHosted = includes('.envited-x.net')
+export const isMedia = equals(MEDIA_DESCRIPTOR)
 
 export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
   pipe(
@@ -129,16 +132,24 @@ export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
 
 export const getPathsFromManifestLinks = (links: ManifestLink[]) =>
   pipe(
-    map((link: ManifestLink) =>
-      !isRemoteUrl(pathOr('', MANIFEST_LINK_FILE_PATH)(link))
+    map((link: ManifestLink) => {
+      const fileType = path(MANIFEST_CATEGORY_ID)(link) as string
+      const fileData = !isRemoteUrl(pathOr('', MANIFEST_LINK_FILE_PATH)(link))
         ? {
             path: formatManifestLinkPath(pathOr('', MANIFEST_LINK_FILE_PATH)(link)),
-            type: path(MANIFEST_CATEGORY_ID)(link),
+            type: fileType,
           }
-        : null,
+        : null
+      if (fileData && isMedia(fileType)) {
+        const mimeType = pathOr('', MANIFEST_LINK_MIME_TYPE)(link)
+        return assoc('mimeType', mimeType)(fileData)
+      }
+
+      return fileData
+    }
     ),
     reject(isNil),
-  )(links) as { path: string; type: string }[]
+  )(links) as { path: string; type: string; mimeType?: string }[]
 
 export const getAllManifestLinksAndFormatPaths = (manifest: Manifest) =>
   pipe(

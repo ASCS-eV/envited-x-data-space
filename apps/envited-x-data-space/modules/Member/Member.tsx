@@ -7,7 +7,7 @@ import React, { FC, Fragment } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { Profile, Token } from '../../common/types'
-import { getImageUrl } from '../../common/utils'
+import { getImageUrl, handleImageLoadError } from '../../common/utils'
 
 interface MemberProps {
   member: Profile
@@ -46,7 +46,7 @@ export const Member: FC<MemberProps> = ({ member, tokens }) => {
                 />
               </div>
 
-              <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
+              <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100 flex justify-center items-center min-h-48 lg:min-h-96">
                 {!isNil(propOr('', 'logo')(member)) && (
                   <img
                     src={getImageUrl(propOr('', 'logo')(member))}
@@ -157,11 +157,12 @@ export const Member: FC<MemberProps> = ({ member, tokens }) => {
                 key={id}
                 className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
               >
-                <div className="aspect-h-3 aspect-w-4 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-48">
+                <div className="aspect-h-3 aspect-w-4 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-48 flex justify-center items-center">
                   <img
                     src={displayUri}
                     alt={name}
                     className="h-48 w-full object-cover object-center sm:h-48 sm:w-full"
+                    onError={handleImageLoadError}
                   />
                 </div>
                 <div className="flex flex-1 flex-col space-y-2 p-4">

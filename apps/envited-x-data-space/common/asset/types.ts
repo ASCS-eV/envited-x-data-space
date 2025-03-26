@@ -8,7 +8,7 @@ export enum ManifestCategoryId {
   envitedXIsSimulationData = 'envited-x:isSimulationData',
   envitedXIsReferencedSimulationData = 'envited-x:isReferencedSimulationData',
   envitedXIsValidationReport = 'envited-x:isValidationReport',
-  envitedXIsOwner = 'envited-x:isOwner'
+  envitedXIsOwner = 'envited-x:isOwner',
 }
 
 export enum MetadataType {
@@ -40,14 +40,14 @@ export interface Manifest {
 }
 
 export interface ManifestContext {
-  xsd: string
-  gx: string
-  skos: string
-  sh: string
-  manifest: string
-  "envited-x": string
-  hdmap: string
-  rdf: string
+  'xsd': string
+  'gx': string
+  'skos': string
+  'sh': string
+  'manifest': string
+  'envited-x': string
+  'hdmap': string
+  'rdf': string
 }
 
 export interface ManifestValue<T> {

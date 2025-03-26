@@ -31,7 +31,6 @@ describe('common/asset/validateAndCreateMetadata', () => {
           type: 'envited-x:isMedia',
           mimeType: 'image/png',
         },
-        
       ]) as any
       const getFilesAsPathAndByteArrayFromManifestStub = jest.fn().mockResolvedValue({
         owner: [

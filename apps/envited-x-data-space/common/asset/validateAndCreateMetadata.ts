@@ -1,5 +1,21 @@
 import fs from 'fs'
-import { all, and, compose, equals, filter, find, includes, keys, omit, path, pathOr, pipe, prop, propEq, propOr } from 'ramda'
+import {
+  all,
+  and,
+  compose,
+  equals,
+  filter,
+  find,
+  includes,
+  keys,
+  omit,
+  path,
+  pathOr,
+  pipe,
+  prop,
+  propEq,
+  propOr,
+} from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { db } from '../database/queries'
@@ -261,7 +277,9 @@ export const _validateAndCreateMetadata =
         fileSize: byteArray.length,
       }
 
-      const displayUri = find(and(propEq(MEDIA_DESCRIPTOR, 'type'), compose(includes('image'), propOr('', 'mimeType'))))(visualizationFiles) as ExtractedFileWithCID
+      const displayUri = find(
+        and(propEq(MEDIA_DESCRIPTOR, 'type'), compose(includes('image'), propOr('', 'mimeType'))),
+      )(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,
         fileSize: displayUri.arrayBuffer.byteLength,

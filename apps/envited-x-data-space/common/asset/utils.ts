@@ -146,8 +146,7 @@ export const getPathsFromManifestLinks = (links: ManifestLink[]) =>
       }
 
       return fileData
-    }
-    ),
+    }),
     reject(isNil),
   )(links) as { path: string; type: string; mimeType?: string }[]
 

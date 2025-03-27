@@ -39,29 +39,29 @@ export interface Manifest {
   'manifest:hasReferencedArtifacts': []
 }
 
-export type ManifestContext  =
-  'automotive-simulator' |
-  'environment-model' |
-  'envited-x' |
-  'general' |
-  'georeference' |
-  'gx' |
-  'hdmap' |
-  'leakage-test' |
-  'manifest' |
-  'openlabel' |
-  'ositrace' |
-  'rdf' |
-  'scenario' |
-  'service' |
-  'sh' |
-  'simulated-sensor' |
-  'simulated-model' |
-  'skos' |
-  'surface-model' |
-  'survey' |
-  'vv-report' |
-  'xsd'
+export type ManifestContext =
+  | 'automotive-simulator'
+  | 'environment-model'
+  | 'envited-x'
+  | 'general'
+  | 'georeference'
+  | 'gx'
+  | 'hdmap'
+  | 'leakage-test'
+  | 'manifest'
+  | 'openlabel'
+  | 'ositrace'
+  | 'rdf'
+  | 'scenario'
+  | 'service'
+  | 'sh'
+  | 'simulated-sensor'
+  | 'simulated-model'
+  | 'skos'
+  | 'surface-model'
+  | 'survey'
+  | 'vv-report'
+  | 'xsd'
 
 export interface ManifestValue<T> {
   '@value': T

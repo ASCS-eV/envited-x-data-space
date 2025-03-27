@@ -212,12 +212,17 @@ export const _getAllFilenamesFromFiles =
   ({
     getFilenameFromFile,
   }: {
-    getFilenameFromFile: (path: string, category: ManifestCategoryId, arrayBuffer: ArrayBuffer) => Promise<ExtractedFileWithCID>
+    getFilenameFromFile: (
+      path: string,
+      category: ManifestCategoryId,
+      arrayBuffer: ArrayBuffer,
+    ) => Promise<ExtractedFileWithCID>
   }) =>
   async (files: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer }[]) =>
     await Promise.all(
-      files.map(({ path, category, arrayBuffer }: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer }) =>
-        getFilenameFromFile(path, category, arrayBuffer),
+      files.map(
+        ({ path, category, arrayBuffer }: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer }) =>
+          getFilenameFromFile(path, category, arrayBuffer),
       ),
     )
 
@@ -237,7 +242,9 @@ export const _getPathsAndBuffersFromByteArray =
   }) =>
   async (byteArray: Uint8Array, files: { path: string; category: ManifestCategoryId }[]) =>
     await Promise.all(
-      files.map(({ path, category }: { path: string; category: ManifestCategoryId }) => getPathAndBufferFromFile(byteArray, path, category)),
+      files.map(({ path, category }: { path: string; category: ManifestCategoryId }) =>
+        getPathAndBufferFromFile(byteArray, path, category),
+      ),
     )
 
 export const getPathsAndBuffersFromByteArray = _getPathsAndBuffersFromByteArray({

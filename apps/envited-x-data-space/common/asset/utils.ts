@@ -116,7 +116,6 @@ export const formatManifestLinkPath = replace('./', '')
 
 export const isRemoteUrl = startsWith('https://')
 export const isSelfHosted = includes('.envited-x.net')
-export const isMedia = equals(ManifestCategoryId.envitedXIsMedia)
 
 export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
   pipe(
@@ -139,7 +138,7 @@ export const getPathsFromManifestLinks = (links: ManifestLink[]) =>
             category: category,
           }
         : null
-      if (fileData && isMedia(category)) {
+      if (fileData) {
         const mimeType = pathOr('', MANIFEST_LINK_MIME_TYPE)(link)
         return assoc('mimeType', mimeType)(fileData)
       }

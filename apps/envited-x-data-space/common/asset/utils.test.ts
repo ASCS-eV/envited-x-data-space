@@ -52,24 +52,29 @@ describe('common/asset/utils', () => {
           {
             path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
             category: 'envited-x:isSimulationData',
+            mimeType: 'application/x-xodr',
           },
         ],
         registeredUser: [
           {
             path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.bjson',
             category: 'envited-x:isMiscellaneous',
+            mimeType: 'application/json',
           },
           {
             path: 'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_offset_Documentation_stats.txt',
             category: 'envited-x:isDocumentation',
+            mimeType: 'text/plain',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_asam_cb_xodr.xqar',
             category: 'envited-x:isValidationReport',
+            mimeType: 'application/x-xqar',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_openmsl_cb_xodr.xqar',
             category: 'envited-x:isValidationReport',
+            mimeType: 'application/x-xqar',
           },
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-02.png',
@@ -139,28 +144,34 @@ describe('common/asset/utils', () => {
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_openmsl_cb_xodr_QCReport.txt',
             category: 'envited-x:isValidationReport',
+            mimeType: 'text/plain',
           },
         ],
         publicUser: [
           {
             path: 'manifest_reference.json',
             category: 'envited-x:isManifest',
+            mimeType: 'application/ld+json',
           },
           {
             path: 'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_offset_Documentation.pdf',
             category: 'envited-x:isDocumentation',
+            mimeType: 'application/pdf',
           },
           {
             path: 'metadata/hdmap_instance.json',
             category: 'envited-x:isMetadata',
+            mimeType: 'application/ld+json',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_asam_cb_xodr_QCReport.txt',
             category: 'envited-x:isValidationReport',
+            mimeType: 'text/plain',
           },
           {
             path: 'README.md',
             category: 'envited-x:isDocumentation',
+            mimeType: 'text/markdown',
           },
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
@@ -490,6 +501,7 @@ describe('common/asset/utils', () => {
         {
           path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
           category: 'envited-x:isSimulationData',
+          mimeType: 'application/x-xodr',
         },
       ])
     })

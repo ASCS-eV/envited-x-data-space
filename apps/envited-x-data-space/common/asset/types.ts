@@ -39,16 +39,29 @@ export interface Manifest {
   'manifest:hasReferencedArtifacts': []
 }
 
-export interface ManifestContext {
-  'xsd': string
-  'gx': string
-  'skos': string
-  'sh': string
-  'manifest': string
-  'envited-x': string
-  'hdmap': string
-  'rdf': string
-}
+export type ManifestContext  =
+  'automotive-simulator' |
+  'environment-model' |
+  'envited-x' |
+  'general' |
+  'georeference' |
+  'gx' |
+  'hdmap' |
+  'leakage-test' |
+  'manifest' |
+  'openlabel' |
+  'ositrace' |
+  'rdf' |
+  'scenario' |
+  'service' |
+  'sh' |
+  'simulated-sensor' |
+  'simulated-model' |
+  'skos' |
+  'surface-model' |
+  'survey' |
+  'vv-report' |
+  'xsd'
 
 export interface ManifestValue<T> {
   '@value': T
@@ -58,7 +71,6 @@ export interface ManifestValue<T> {
 export interface ManifestHasFileMetadata {
   '@type': string
   'manifest:filePath': ManifestValue<string>
-  // 'manifest:cid': ManifestCid
   'manifest:mimeType': ManifestValue<string>
   'manifest:fileSize'?: ManifestValue<number>
   'manifest:filename'?: ManifestValue<string>
@@ -104,7 +116,7 @@ export interface ManifestLicenseData {
 export interface ExtractedFile {
   arrayBuffer: ArrayBuffer
   path: string
-  type: string
+  category: ManifestCategoryId
 }
 
 export interface ExtractedFileWithCID extends ExtractedFile {

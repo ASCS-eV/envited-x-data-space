@@ -25,10 +25,10 @@ import { extractAddressFromDid, formatAssetUri } from '../utils'
 import { validateShaclDataWithSchema } from '../validator'
 import { CONTEXT_DROP_SCHEMAS, SCHEMA_MAP } from '../validator/shacl/shacl.constants'
 import { ValidationSchema } from '../validator/shacl/shacl.types'
-import { MANIFEST_FILE, MANIFEST_LICENSE, MANIFEST_LICENSE_PATH, MEDIA_DESCRIPTOR } from './constants'
+import { MANIFEST_FILE, MANIFEST_LICENSE, MANIFEST_LICENSE_PATH } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
-import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestExtractedFiles } from './types'
+import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestCategoryId, ManifestExtractedFiles } from './types'
 import {
   createFilename,
   getAllFilenamesFromFiles,
@@ -239,7 +239,7 @@ export const _validateAndCreateMetadata =
       manifest: Manifest,
     ) => Promise<ManifestExtractedFiles>
     getAllFilenamesFromFiles: (
-      extractedFiles: { path: string; type: string; arrayBuffer: ArrayBuffer }[],
+      extractedFiles: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer }[],
     ) => Promise<ExtractedFileWithCID[]>
     db: Database
   }) =>
@@ -278,7 +278,7 @@ export const _validateAndCreateMetadata =
       }
 
       const displayUri = find(
-        and(propEq(MEDIA_DESCRIPTOR, 'type'), compose(includes('image'), propOr('', 'mimeType'))),
+        and(propEq(ManifestCategoryId.envitedXIsMedia, 'type'), compose(includes('image'), propOr('', 'mimeType'))),
       )(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,

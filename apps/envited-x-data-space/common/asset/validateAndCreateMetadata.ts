@@ -1,5 +1,21 @@
 import fs from 'fs'
-import { all, equals, filter, find, keys, omit, path, pathOr, pipe, prop, propEq } from 'ramda'
+import {
+  all,
+  and,
+  compose,
+  equals,
+  filter,
+  find,
+  includes,
+  keys,
+  omit,
+  path,
+  pathOr,
+  pipe,
+  prop,
+  propEq,
+  propOr,
+} from 'ramda'
 import ValidationReport from 'rdf-validate-shacl/src/validation-report'
 
 import { db } from '../database/queries'
@@ -12,7 +28,7 @@ import { ValidationSchema } from '../validator/shacl/shacl.types'
 import { MANIFEST_FILE, MANIFEST_LICENSE, MANIFEST_LICENSE_PATH } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
-import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestExtractedFiles } from './types'
+import { ExtractedFileWithCID, Manifest, ManifestCategoryId, ManifestExtractedFiles } from './types'
 import {
   createFilename,
   getAllFilenamesFromFiles,
@@ -223,7 +239,7 @@ export const _validateAndCreateMetadata =
       manifest: Manifest,
     ) => Promise<ManifestExtractedFiles>
     getAllFilenamesFromFiles: (
-      extractedFiles: { path: string; type: string; arrayBuffer: ArrayBuffer }[],
+      extractedFiles: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer }[],
     ) => Promise<ExtractedFileWithCID[]>
     db: Database
   }) =>
@@ -245,7 +261,7 @@ export const _validateAndCreateMetadata =
       }
 
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
-      const visualization = filter(propEq('envited-x:isMedia', 'type'))(files.publicUser) as ExtractedFile[]
+      const visualization = filter(propEq('envited-x:isMedia', 'category'))(files.publicUser)
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
 
       const modifiedManifest = createModifiedManifest({
@@ -261,7 +277,9 @@ export const _validateAndCreateMetadata =
         fileSize: byteArray.length,
       }
 
-      const displayUri = find(propEq('envited-x:isMedia', 'type'))(visualizationFiles) as ExtractedFileWithCID
+      const displayUri = find(
+        and(propEq(ManifestCategoryId.envitedXIsMedia, 'category'), compose(includes('image'), propOr('', 'mimeType'))),
+      )(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,
         fileSize: displayUri.arrayBuffer.byteLength,

@@ -41,4 +41,5 @@ export {
   capitalize,
   removeKeywords,
   kebabToCamelCase,
+  handleImageLoadError,
 } from './utils'

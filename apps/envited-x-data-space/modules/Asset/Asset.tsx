@@ -15,7 +15,6 @@ import {
   formatItemName,
   formatSectionName,
   getAssetType,
-  handleImageLoadError,
   kebabToCamelCase,
   removeKeywords,
 } from '../../common/utils'
@@ -54,7 +53,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
     return Object.values(obj).some(value => typeof value === 'object' && value !== null)
   }
 
-  const renderNestedProperties = (properties: any, section: string, level = 0) => {
+  const renderNestedProperties = (properties: any, section: string, level: number = 0) => {
     return Object.entries(properties).map(([key, value]) => {
       // Handle arrays by joining them with commas
       if (Array.isArray(value)) {
@@ -101,13 +100,8 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
       <div>
         <div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
           <div className="lg:col-span-4 lg:row-end-1">
-            <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100 flex justify-center items-center min-h-48 lg:min-h-96">
-              <img
-                src={token.displayUri}
-                alt={token.name}
-                className="object-cover object-center"
-                onError={handleImageLoadError}
-              />
+            <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
+              <img src={token.displayUri} alt={token.name} className="object-cover object-center" />
             </div>
           </div>
 
@@ -156,7 +150,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                               return ''
                             }
                             return (
-                              <li key={key}>
+                              <li>
                                 <strong>{pipe(formatSectionName, formatItemName)(key as string) as string}:</strong>{' '}
                                 {value as string}
                               </li>

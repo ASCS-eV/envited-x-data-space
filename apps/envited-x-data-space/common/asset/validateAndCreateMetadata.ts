@@ -28,7 +28,7 @@ import { ValidationSchema } from '../validator/shacl/shacl.types'
 import { MANIFEST_FILE, MANIFEST_LICENSE, MANIFEST_LICENSE_PATH } from './constants'
 import { createModifiedManifest } from './createModifiedManifest'
 import { createTokenMetadata } from './createTokenMetadata'
-import { ExtractedFile, ExtractedFileWithCID, Manifest, ManifestCategoryId, ManifestExtractedFiles } from './types'
+import { ExtractedFileWithCID, Manifest, ManifestCategoryId, ManifestExtractedFiles } from './types'
 import {
   createFilename,
   getAllFilenamesFromFiles,
@@ -261,7 +261,7 @@ export const _validateAndCreateMetadata =
       }
 
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
-      const visualization = filter(propEq('envited-x:isMedia', 'type'))(files.publicUser) as ExtractedFile[]
+      const visualization = filter(propEq('envited-x:isMedia', 'category'))(files.publicUser)
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
 
       const modifiedManifest = createModifiedManifest({
@@ -278,7 +278,7 @@ export const _validateAndCreateMetadata =
       }
 
       const displayUri = find(
-        and(propEq(ManifestCategoryId.envitedXIsMedia, 'type'), compose(includes('image'), propOr('', 'mimeType'))),
+        and(propEq(ManifestCategoryId.envitedXIsMedia, 'category'), compose(includes('image'), propOr('', 'mimeType'))),
       )(visualizationFiles) as ExtractedFileWithCID
       const displayObject = {
         cid: displayUri.cid,

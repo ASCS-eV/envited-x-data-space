@@ -1,4 +1,4 @@
-import { equals, evolve, find, includes, map, pipe, propEq, propOr, tail } from 'ramda'
+import { equals, evolve, find, has, includes, map, pipe, propEq, propOr, tail } from 'ramda'
 
 import { formatAssetUri, formatIpfsUri, formatMetadataUri } from '../utils'
 import { AccessRole, ExtractedFileWithCID, ManifestCategoryId, ManifestLink } from './types'
@@ -40,8 +40,8 @@ export const modifyManifestLink =
 
 export const formatManifestUri =
   (assetCID: string, domainMetadataCID: string, visualizationFiles: ExtractedFileWithCID[]) =>
-  (accessRole: AccessRole, path: string, category: ManifestCategoryId) => {
-    if (includes(category, [ManifestCategoryId.envitedXIsMedia]) && equals(accessRole)(AccessRole.envitedXIsPublic)) {
+  (accessRole: AccessRole, path: string, type: ManifestCategoryId) => {
+    if (includes(type, [ManifestCategoryId.envitedXIsMedia]) && equals(accessRole)(AccessRole.envitedXIsPublic)) {
       return pipe(
         find(propEq(formatManifestLinkPath(path), 'path')),
         propOr('', 'cid'),
@@ -49,7 +49,7 @@ export const formatManifestUri =
       )(visualizationFiles)
     }
 
-    if (includes(category, [ManifestCategoryId.envitedXIsMetadata])) {
+    if (includes(type, [ManifestCategoryId.envitedXIsMetadata])) {
       return formatIpfsUri(domainMetadataCID)
     }
 
@@ -59,12 +59,12 @@ export const formatManifestUri =
 
     if (
       equals(accessRole)(AccessRole.envitedXIsRegistered) ||
-      (equals(accessRole)(AccessRole.envitedXIsRegistered) && equals(ManifestCategoryId.envitedXIsLicense)(category))
+      (equals(accessRole)(AccessRole.envitedXIsRegistered) && equals(ManifestCategoryId.envitedXIsLicense)(type))
     ) {
       return `${formatMetadataUri(assetCID)}${tail(path)}`
     }
 
-    if (equals(accessRole)(AccessRole.envitedXIsPublic) && equals(ManifestCategoryId.envitedXIsLicense)(category)) {
+    if (equals(accessRole)(AccessRole.envitedXIsPublic) && equals(ManifestCategoryId.envitedXIsLicense)(type)) {
       return path
     }
 

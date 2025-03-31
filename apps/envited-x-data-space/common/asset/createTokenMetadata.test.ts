@@ -89,7 +89,7 @@ describe('common/asset/createTokenMetadata', () => {
         ],
       }
 
-      const result = SUT.createTokenMetadata({
+      const result = await SUT.createTokenMetadata({
         asset: {
           cid: 'ASSET_CID',
           fileSize: 1024,
@@ -194,7 +194,7 @@ describe('common/asset/createTokenMetadata', () => {
         ],
       }
 
-      const result = SUT.createTokenMetadata({
+      const result = await SUT.createTokenMetadata({
         asset: {
           cid: 'ASSET_CID',
           fileSize: 1024,
@@ -298,7 +298,7 @@ describe('common/asset/createTokenMetadata', () => {
         ],
       }
 
-      const result = SUT.createTokenMetadata({
+      const result = await SUT.createTokenMetadata({
         asset: {
           cid: 'ASSET_CID',
           fileSize: 1024,
@@ -402,7 +402,7 @@ describe('common/asset/createTokenMetadata', () => {
         ],
       }
 
-      const result = SUT.createTokenMetadata({
+      const result = await SUT.createTokenMetadata({
         asset: {
           cid: 'ASSET_CID',
           fileSize: 1024,

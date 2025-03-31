@@ -7,7 +7,6 @@ import { map, propOr } from 'ramda'
 import { FC, Fragment, useState } from 'react'
 
 import { Token } from '../../common/types'
-import { handleImageLoadError } from '../../common/utils'
 
 const filters = [
   {
@@ -175,12 +174,11 @@ export const Assets: FC<AssetsProps> = ({ items }) => {
                 key={id}
                 className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
               >
-                <div className="aspect-h-3 aspect-w-4 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-48 flex justify-center items-center">
+                <div className="aspect-h-3 aspect-w-4 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-48">
                   <img
                     src={displayUri}
                     alt={name}
-                    className="h-48 w-full object-cover object-center sm:h-48 sm:w-full "
-                    onError={handleImageLoadError}
+                    className="h-48 w-full object-cover object-center sm:h-48 sm:w-full"
                   />
                 </div>
                 <div className="flex flex-1 flex-col space-y-2 p-4">

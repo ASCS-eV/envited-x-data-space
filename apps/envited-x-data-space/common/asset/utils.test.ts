@@ -2,7 +2,7 @@ import domainMetadata from '../fixtures/domainMetadata.json'
 import manifest from '../fixtures/manifest.json'
 import manifestRemoteAssetData from '../fixtures/manifestRemoteAssetData.json'
 import { ASSET_TYPE } from './constants'
-import { ManifestCategoryId, ManifestLink, MetadataType } from './types'
+import { ManifestLink, MetadataType } from './types'
 import * as SUT from './utils'
 
 describe('common/asset/utils', () => {
@@ -51,132 +51,107 @@ describe('common/asset/utils', () => {
         owner: [
           {
             path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
-            category: 'envited-x:isSimulationData',
-            mimeType: 'application/x-xodr',
+            type: 'envited-x:isSimulationData',
           },
         ],
         registeredUser: [
           {
             path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.bjson',
-            category: 'envited-x:isMiscellaneous',
-            mimeType: 'application/json',
+            type: 'envited-x:isMiscellaneous',
           },
           {
             path: 'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_offset_Documentation_stats.txt',
-            category: 'envited-x:isDocumentation',
-            mimeType: 'text/plain',
+            type: 'envited-x:isDocumentation',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_asam_cb_xodr.xqar',
-            category: 'envited-x:isValidationReport',
-            mimeType: 'application/x-xqar',
+            type: 'envited-x:isValidationReport',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_openmsl_cb_xodr.xqar',
-            category: 'envited-x:isValidationReport',
-            mimeType: 'application/x-xqar',
+            type: 'envited-x:isValidationReport',
           },
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-02.png',
-            category: 'envited-x:isMedia',
-            mimeType: 'image/png',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-03.png',
-            category: 'envited-x:isMedia',
-            mimeType: 'image/png',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/bbox.geojson',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/x-geojson',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/roadNetwork.geojson',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/x-geojson',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/breakLines.json',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/junctions.json',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/laneSections.json',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/lanes.json',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/objects.json',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/refLine.json',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/roadMarks.json',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/roads.json',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'media/3d_preview/signals.json',
-            category: 'envited-x:isMedia',
-            mimeType: 'application/json',
+            type: 'envited-x:isMedia',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_openmsl_cb_xodr_QCReport.txt',
-            category: 'envited-x:isValidationReport',
-            mimeType: 'text/plain',
+            type: 'envited-x:isValidationReport',
           },
         ],
         publicUser: [
           {
             path: 'manifest_reference.json',
-            category: 'envited-x:isManifest',
-            mimeType: 'application/ld+json',
+            type: 'envited-x:isManifest',
           },
           {
             path: 'documentation/TestfeldNiedersachsen_ALKS_ODR_sample_offset_Documentation.pdf',
-            category: 'envited-x:isDocumentation',
-            mimeType: 'application/pdf',
+            type: 'envited-x:isDocumentation',
           },
           {
             path: 'metadata/hdmap_instance.json',
-            category: 'envited-x:isMetadata',
-            mimeType: 'application/ld+json',
+            type: 'envited-x:isMetadata',
           },
           {
             path: 'validation-reports/TestfeldNiedersachsen_ALKS_ODR_sample_offset_asam_cb_xodr_QCReport.txt',
-            category: 'envited-x:isValidationReport',
-            mimeType: 'text/plain',
+            type: 'envited-x:isValidationReport',
           },
           {
             path: 'README.md',
-            category: 'envited-x:isDocumentation',
-            mimeType: 'text/markdown',
+            type: 'envited-x:isDocumentation',
           },
           {
             path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
-            category: 'envited-x:isMedia',
-            mimeType: 'image/png',
+            type: 'envited-x:isMedia',
           },
         ],
       }
@@ -193,21 +168,21 @@ describe('common/asset/utils', () => {
         owner: [
           {
             path: 'PATH',
-            category: 'CATEGORY',
+            type: 'FILE_TYPE',
             buffer: 'FILE_BUFFER',
           },
         ],
         publicUser: [
           {
             path: 'PATH',
-            category: 'CATEGORY',
+            type: 'FILE_TYPE',
             buffer: 'FILE_BUFFER',
           },
         ],
         registeredUser: [
           {
             path: 'PATH',
-            category: 'CATEGORY',
+            type: 'FILE_TYPE',
             buffer: 'FILE_BUFFER',
           },
         ],
@@ -217,7 +192,7 @@ describe('common/asset/utils', () => {
       const getPathsAndBuffersFromByteArrayStub = jest.fn().mockReturnValue([
         {
           path: 'PATH',
-          category: 'CATEGORY',
+          type: 'FILE_TYPE',
           buffer: 'FILE_BUFFER',
         },
       ]) as any
@@ -235,7 +210,7 @@ describe('common/asset/utils', () => {
       const files = [
         {
           path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-          category: 'CATEGORY' as ManifestCategoryId,
+          type: 'FILE_TYPE',
         },
       ]
 
@@ -243,14 +218,14 @@ describe('common/asset/utils', () => {
         {
           arrayBuffer: 'FILE_BUFFER',
           path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-          category: 'CATEGORY' as ManifestCategoryId,
+          type: 'FILE_TYPE',
         },
       ]
 
       const byteArray = 'BYTE_ARRAY' as any
       const getFileFromByteArrayStub = jest.fn().mockResolvedValue({
         path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-        category: 'CATEGORY' as ManifestCategoryId,
+        type: 'FILE_TYPE',
         arrayBuffer: 'FILE_BUFFER',
       }) as any
 
@@ -267,7 +242,7 @@ describe('common/asset/utils', () => {
       const files = [
         {
           path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-          category: 'CATEGORY' as ManifestCategoryId,
+          type: 'FILE_TYPE',
           arrayBuffer: 'FILE_BUFFER',
         },
       ]
@@ -277,7 +252,7 @@ describe('common/asset/utils', () => {
           arrayBuffer: 'FILE_BUFFER',
           cid: 'FILE_CID',
           path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-          category: 'CATEGORY' as ManifestCategoryId,
+          type: 'FILE_TYPE',
         },
       ]
 
@@ -285,7 +260,7 @@ describe('common/asset/utils', () => {
         arrayBuffer: 'FILE_BUFFER',
         cid: 'FILE_CID',
         path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-        category: 'CATEGORY' as ManifestCategoryId,
+        type: 'FILE_TYPE',
       }) as any
 
       const result = await SUT._getAllFilenamesFromFiles({
@@ -500,8 +475,7 @@ describe('common/asset/utils', () => {
       expect(result).toEqual([
         {
           path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
-          category: 'envited-x:isSimulationData',
-          mimeType: 'application/x-xodr',
+          type: 'envited-x:isSimulationData',
         },
       ])
     })

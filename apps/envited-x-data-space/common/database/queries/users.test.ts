@@ -1,5 +1,4 @@
 import { USER_CREDENTIAL } from '../../fixtures'
-import { extractUuidFromUrn } from '../../utils'
 import { addressType, credentialType, issuer, profile, usersToRoles } from '../schema'
 import { Credential } from '../types'
 import * as SUT from './users'
@@ -113,11 +112,10 @@ describe('common/database/users', () => {
         type: 'TYPE',
         name: 'NAME',
         url: 'URL',
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
       })
-      expect(tx.insert().values().onConflictDoUpdate).toHaveBeenCalledWith({
-        target: issuer.id,
-        set: { id: 'ISSUER_ID' },
-      })
+
       expect(tx.insert().values().onConflictDoUpdate().returning).toHaveBeenCalledWith()
       expect(result).toEqual({
         id: 'ISSUER_ID',
@@ -272,6 +270,7 @@ describe('common/database/users', () => {
       insertIssuerTx: () => jest.fn().mockResolvedValue([{ id: 'ISSUER_ID' }]),
       insertUsersToRolesTx: () => jest.fn().mockResolvedValue([{ id: 'ISSUER_ID' }]),
       insertCredentialTypeTx: () => jest.fn().mockResolvedValue([{ id: 'CREDENTIAL_TYPE_ID' }]),
+      insertGlobalIdentifierTx: () => jest.fn().mockResolvedValue([{ id: 'GLOBAL_IDENTIFIER_ID' }]),
     } as any
 
     const tx = {

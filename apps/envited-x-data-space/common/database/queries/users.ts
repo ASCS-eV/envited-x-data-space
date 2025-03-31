@@ -396,7 +396,7 @@ export const _txn =
           parseGlobalIdentifier(credentialSubject.id),
         )
 
-        const issuer = await insertIssuerTx(tx)({
+        await insertIssuerTx(tx)({
           globalIdentifierId: memberGlobalIdentifierId,
           name: credentialSubject.name,
           url: propOr('', 'url')(credentialSubject),
@@ -485,7 +485,6 @@ export const _txn =
 
       return newUser
     } catch (error) {
-      console.log(error)
       tx.rollback()
     }
   }

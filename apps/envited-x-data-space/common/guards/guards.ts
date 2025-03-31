@@ -12,7 +12,7 @@ export const isOwnAsset = (asset: Asset) => (session: Session) =>
 export const isOwnUser = (user: User) => (session: Session) =>
   equals(prop('id')(user))(pathOr('', ['user', 'id'])(session))
 
-export const userIsIssuedByLoggedInUser = (user: User) => (session: Session) =>
+export const isUserIssuedByLoggedInUser = (user: User) => (session: Session) =>
   equals(prop('issuerId')(user))(pathOr('', ['user', 'id'])(session))
 
 export const isOwnProfile = (user: User) => (profile: { name?: string }) =>

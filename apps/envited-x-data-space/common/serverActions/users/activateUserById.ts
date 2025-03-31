@@ -3,7 +3,7 @@ import { isNil } from 'ramda'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isPrincipal, userIsIssuedByLoggedInUser } from '../../guards'
+import { isPrincipal, isUserIssuedByLoggedInUser } from '../../guards'
 import { Log, log } from '../../logger'
 import { User } from '../../types'
 import { Session } from '../../types/types'
@@ -21,8 +21,8 @@ export const _activateUserById =
 
       const connection = await db()
       const user = await connection.getUserById(id)
-
-      if (!userIsIssuedByLoggedInUser(user)(session) && !isPrincipal(session)) {
+      
+      if (!isUserIssuedByLoggedInUser(user)(session) && !isPrincipal(session)) {
         throw forbiddenError({
           resource: 'users',
           resourceId: id,

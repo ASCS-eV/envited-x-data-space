@@ -21,7 +21,6 @@ export const _getTokensByProfileSlug =
       const user = await connection.getUserByName(profile.name)
 
       return connection.getTokensByIssuerId(user.addressGlobalIdentifierId)
-
     } catch (error: unknown) {
       log.error(formatError(error))
       throw internalServerErrorError()

@@ -22,7 +22,7 @@ export const _getUser =
 
       const connection = await db()
       const user = await connection.getUserById(session.user.id)
-      
+
       if (!isOwnUser(user)(session)) {
         throw forbiddenError({
           resource: 'users',

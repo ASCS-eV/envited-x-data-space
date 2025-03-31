@@ -224,12 +224,12 @@ export const updateAsset =
 
 export const getGlobalIdentifierByFullResourceName =
   ({ database: db }: { database: DatabaseConnection }) =>
-    async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
-      db.query.globalIdentifier.findFirst({
-        where: and(
-          eq(schema.globalIdentifier.method, method),
-          eq(schema.globalIdentifier.namespace, namespace),
-          eq(schema.globalIdentifier.chainId, chainId),
-          eq(schema.globalIdentifier.nss, nss),
-        ),
-      })
+  async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
+    db.query.globalIdentifier.findFirst({
+      where: and(
+        eq(schema.globalIdentifier.method, method),
+        eq(schema.globalIdentifier.namespace, namespace),
+        eq(schema.globalIdentifier.chainId, chainId),
+        eq(schema.globalIdentifier.nss, nss),
+      ),
+    })

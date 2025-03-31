@@ -21,7 +21,7 @@ export const _activateUserById =
 
       const connection = await db()
       const user = await connection.getUserById(id)
-      
+
       if (!isUserIssuedByLoggedInUser(user)(session) && !isPrincipal(session)) {
         throw forbiddenError({
           resource: 'users',

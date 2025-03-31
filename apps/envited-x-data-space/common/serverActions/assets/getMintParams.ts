@@ -4,12 +4,7 @@ import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { Asset, Role, Session, User } from '../../types'
-import {
-  badRequestError,
-  forbiddenError,
-  notFoundError,
-  unauthorizedError,
-} from '../../utils'
+import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
 export const _getMintParams =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>

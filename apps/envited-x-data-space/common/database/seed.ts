@@ -4,13 +4,13 @@ import { drizzle as RDSDrizzle } from 'drizzle-orm/aws-data-api/pg'
 import { map } from 'ramda'
 
 import { BUSINESS_CATEGORIES } from './data/businessCategories'
+import { GLOBAL_IDENTIFIERS } from './data/globalIdentifiers'
 import { ROLES } from './data/roles'
 import { connectDb } from './database'
 import { db } from './queries/queries'
 import { insertUserTx } from './queries/users'
-import { businessCategory, role, globalIdentifier } from './schema'
+import { businessCategory, globalIdentifier, role } from './schema'
 import * as schema from './schema'
-import { GLOBAL_IDENTIFIERS } from './data/globalIdentifiers'
 
 const insertRoles = (connection: any) => async (roles: any[]) =>
   connection.insert(role).values(roles).onConflictDoNothing().execute()
@@ -301,7 +301,7 @@ const seed = async () => {
     }
     // const newUser = await database.insertUserTx(userCredential)
 
-    await insertGlobalIdentifiers(connection)(GLOBAL_IDENTIFIERS);
+    await insertGlobalIdentifiers(connection)(GLOBAL_IDENTIFIERS)
 
     // console.log(user)
     // const frn = {

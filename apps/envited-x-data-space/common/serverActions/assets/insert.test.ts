@@ -42,9 +42,10 @@ describe('serverActions/assets/insert', () => {
         error: console.error,
       } as any
 
-      const result = await SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
-        { cid: 'ASSET_CID', name: 'ASSET_NAME' },
-      )
+      const result = await SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })({
+        cid: 'ASSET_CID',
+        name: 'ASSET_NAME',
+      })
       const db = await dbStub()
 
       expect(result).toEqual({
@@ -72,7 +73,10 @@ describe('serverActions/assets/insert', () => {
       })
 
       await expect(
-        SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })({ cid: 'ASSET_CID', name: 'ASSET_NAME' }),
+        SUT._insert({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })({
+          cid: 'ASSET_CID',
+          name: 'ASSET_NAME',
+        }),
       ).rejects.toThrow(ERRORS.INTERNAL_SERVER_ERROR)
     })
   })

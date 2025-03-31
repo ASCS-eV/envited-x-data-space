@@ -21,7 +21,7 @@ export const _getTotalUsersByIssuerId =
 
       const connection = await db()
       const user = await connection.getUserById(session?.user?.id)
-      
+
       let issuerId = session?.user?.id
       if (isNotNil(user) && hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         issuerId = user.issuerId

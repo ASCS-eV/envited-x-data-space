@@ -15,7 +15,7 @@ describe('common/asset/createModifiedManifest', () => {
         {
           arrayBuffer: 'BUFFER',
           path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
-          type: 'envited-x:isMedia',
+          category: 'envited-x:isMedia',
           cid: 'DISPLAY_CID',
         },
       ]
@@ -782,7 +782,7 @@ describe('common/asset/createModifiedManifest', () => {
         {
           arrayBuffer: 'BUFFER',
           path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
-          type: 'envited-x:isMedia',
+          category: 'envited-x:isMedia',
           cid: 'DISPLAY_CID',
         },
       ]
@@ -1549,7 +1549,7 @@ describe('common/asset/createModifiedManifest', () => {
         {
           arrayBuffer: 'BUFFER',
           path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
-          type: 'envited-x:isMedia',
+          category: 'envited-x:isMedia',
           cid: 'DISPLAY_CID',
         },
       ]
@@ -2316,7 +2316,7 @@ describe('common/asset/createModifiedManifest', () => {
         {
           arrayBuffer: 'BUFFER',
           path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
-          type: 'envited-x:isMedia',
+          category: 'envited-x:isMedia',
           cid: 'DISPLAY_CID',
         },
       ]

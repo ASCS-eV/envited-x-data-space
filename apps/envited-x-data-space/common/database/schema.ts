@@ -1,9 +1,38 @@
 import { relations } from 'drizzle-orm'
-import { boolean, integer, jsonb, pgTable, primaryKey, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  integer,
+  jsonb,
+  pgTable,
+  primaryKey,
+  serial,
+  text,
+  timestamp,
+  unique,
+  uuid,
+} from 'drizzle-orm/pg-core'
+
+export const globalIdentifier = pgTable(
+  'globalIdentifier',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    method: text('method').notNull(),
+    namespace: text('namespace'),
+    chainId: text('chain_id'),
+    nss: text('nss').notNull(),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at'),
+    updatedAt: timestamp('updated_at'),
+  },
+  table => [unique('composite_identifier_unique').on(table.method, table.namespace, table.chainId, table.nss)],
+)
 
 export const user = pgTable('user', {
-  id: text('id').unique().primaryKey(),
-  uuid: uuid('uuid').unique(),
+  id: uuid('id').unique().primaryKey().defaultRandom(),
+  urnGlobalIdentifierId: uuid('urn_global_identifier_id')
+    .unique()
+    .references(() => globalIdentifier.id),
+  addressGlobalIdentifierId: uuid('address_global_identifier_id').references(() => globalIdentifier.id),
   name: text('name').unique(),
   email: text('email'),
   isAscsMember: boolean('is_ascs_member'),
@@ -16,7 +45,7 @@ export const user = pgTable('user', {
   privacyPolicyAccepted: text('privacy_policy_accepted'),
   articlesOfAssociationAccepted: text('articles_of_association_accepted'),
   contributionRulesAccepted: text('contribution_rules_accepted'),
-  issuerId: text('issuer_id')
+  issuerId: uuid('issuer_id')
     .references(() => issuer.id)
     .notNull(),
   addressTypeId: uuid('address_type_id').references(() => addressType.id),
@@ -27,9 +56,17 @@ export const user = pgTable('user', {
   updatedAt: timestamp('updated_at'),
 })
 
-export const userRelations = relations(user, ({ many }) => ({
+export const userRelations = relations(user, ({ many, one }) => ({
   usersToCredentialTypes: many(usersToCredentialTypes),
   usersToRoles: many(usersToRoles),
+  urnGlobalIdentifier: one(globalIdentifier, {
+    fields: [user.urnGlobalIdentifierId],
+    references: [globalIdentifier.id],
+  }),
+  addressGlobalIdentifier: one(globalIdentifier, {
+    fields: [user.addressGlobalIdentifierId],
+    references: [globalIdentifier.id],
+  }),
 }))
 
 export const role = pgTable('role', {
@@ -53,13 +90,23 @@ export const addressType = pgTable('addressType', {
 })
 
 export const issuer = pgTable('issuer', {
-  id: text('id').unique().primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
+  globalIdentifierId: uuid('globalIdentifierId')
+    .unique()
+    .references(() => globalIdentifier.id),
   name: text('name'),
   url: text('url'),
   type: text('type'),
   createdAt: timestamp('created_at'),
   updatedAt: timestamp('updated_at'),
 })
+
+export const issuerRelations = relations(issuer, ({ one }) => ({
+  globalIdentifier: one(globalIdentifier, {
+    fields: [issuer.globalIdentifierId],
+    references: [globalIdentifier.id],
+  }),
+}))
 
 export const credentialType = pgTable('credentialType', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -74,7 +121,7 @@ export const credentialTypeRelations = relations(credentialType, ({ many }) => (
 }))
 
 export const usersToCredentialTypes = pgTable('usersToCredentialTypes', {
-  userId: text('user_id')
+  userId: uuid('user_id')
     .references(() => user.id)
     .notNull(),
   credentialTypeId: uuid('credential_type_id')
@@ -83,7 +130,7 @@ export const usersToCredentialTypes = pgTable('usersToCredentialTypes', {
 })
 
 export const usersToRoles = pgTable('usersToRoles', {
-  userId: text('user_id')
+  userId: uuid('user_id')
     .references(() => user.id)
     .notNull(),
   roleId: text('role_id')
@@ -129,7 +176,8 @@ export const profile = pgTable('profile', {
   salesName: text('sales_name'),
   salesPhone: text('sales_phone'),
   salesEmail: text('sales_email'),
-  principalUserId: text('principal_user_id').references(() => user.id),
+  principalUserId: uuid('principal_user_id')
+    .references(() => user.id),
   principalName: text('principal_name'),
   principalPhone: text('principal_phone'),
   principalEmail: text('principal_email'),
@@ -183,11 +231,11 @@ export const asset = pgTable('asset', {
   metadata: jsonb('metadata'),
   manifest: jsonb('manifest'),
   status: text('status', { enum: ['processing', 'rejected', 'pending', 'minted', 'completed'] }),
-  owner: text('owner').references(() => user.id),
-  userId: text('user_id')
+  ownerId: uuid('owner_id')
+    .references(() => user.id),
+  userId: uuid('user_id')
     .references(() => user.id)
     .notNull(),
-  hash: text('hash'),
   tokenId: uuid('token_id').references(() => token.id),
   createdAt: timestamp('created_at'),
   updatedAt: timestamp('modified_at'),
@@ -195,9 +243,12 @@ export const asset = pgTable('asset', {
 
 export const token = pgTable('token', {
   id: uuid('id').unique().defaultRandom().primaryKey(),
-  hash: text('hash'),
-  contract: text('contract'),
-  minter: text('minter'),
+  operationGlobalIdentifierId: uuid('hash_global_identifier_id')
+  .references(() => globalIdentifier.id),
+  contractGlobalIdentifierId: uuid('contract_global_identifier_id')
+  .references(() => globalIdentifier.id),
+  minterGlobalIdentifierId: uuid('minter_global_identifier_id')
+  .references(() => globalIdentifier.id),
   tokenId: integer('token_id'),
   name: text('name'),
   description: text('description'),
@@ -254,8 +305,12 @@ export const tokenAttributes = pgTable(
   table => [primaryKey({ columns: [table.tokenId, table.name] })],
 )
 
-export const tokenRelations = relations(token, ({ many }) => ({
+export const tokenRelations = relations(token, ({ many, one }) => ({
   tokenAttributes: many(tokenAttributes),
+  tokensToTokenTags: many(tokensToTokenTags),
+  operationGlobalIdentifier: one(globalIdentifier),
+  contractGlobalIdentifier: one(globalIdentifier),
+  minterGlobalIdentifier: one(globalIdentifier),
 }))
 
 export const tokenAttributesRelations = relations(tokenAttributes, ({ one }) => ({

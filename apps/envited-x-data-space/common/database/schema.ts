@@ -176,8 +176,7 @@ export const profile = pgTable('profile', {
   salesName: text('sales_name'),
   salesPhone: text('sales_phone'),
   salesEmail: text('sales_email'),
-  principalUserId: uuid('principal_user_id')
-    .references(() => user.id),
+  principalUserId: uuid('principal_user_id').references(() => user.id),
   principalName: text('principal_name'),
   principalPhone: text('principal_phone'),
   principalEmail: text('principal_email'),
@@ -231,8 +230,7 @@ export const asset = pgTable('asset', {
   metadata: jsonb('metadata'),
   manifest: jsonb('manifest'),
   status: text('status', { enum: ['processing', 'rejected', 'pending', 'minted', 'completed'] }),
-  ownerId: uuid('owner_id')
-    .references(() => user.id),
+  ownerId: uuid('owner_id').references(() => user.id),
   userId: uuid('user_id')
     .references(() => user.id)
     .notNull(),
@@ -243,12 +241,9 @@ export const asset = pgTable('asset', {
 
 export const token = pgTable('token', {
   id: uuid('id').unique().defaultRandom().primaryKey(),
-  operationGlobalIdentifierId: uuid('hash_global_identifier_id')
-  .references(() => globalIdentifier.id),
-  contractGlobalIdentifierId: uuid('contract_global_identifier_id')
-  .references(() => globalIdentifier.id),
-  minterGlobalIdentifierId: uuid('minter_global_identifier_id')
-  .references(() => globalIdentifier.id),
+  operationGlobalIdentifierId: uuid('hash_global_identifier_id').references(() => globalIdentifier.id),
+  contractGlobalIdentifierId: uuid('contract_global_identifier_id').references(() => globalIdentifier.id),
+  minterGlobalIdentifierId: uuid('minter_global_identifier_id').references(() => globalIdentifier.id),
   tokenId: integer('token_id'),
   name: text('name'),
   description: text('description'),

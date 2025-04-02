@@ -4,12 +4,12 @@ import { cache } from 'react'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
+import { parseGlobalIdentifier } from '../../globalIdentifiers'
 import { hasCredentialType, isFederator, isPrincipal } from '../../guards'
 import { Log, log } from '../../logger'
 import { User } from '../../types'
 import { Session } from '../../types/types'
 import { forbiddenError, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
-import { parseGlobalIdentifier } from '../../globalIdentifiers'
 
 export const _getActiveUsersByIssuerId =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
@@ -28,7 +28,7 @@ export const _getActiveUsersByIssuerId =
       const connection = await db()
       const user = await connection.getUserByDid(parseGlobalIdentifier(session?.user?.did))
 
-      let issuerId = session?.user?.did
+      let issuerId = session?.user?.id
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserByIssuerId(user.issuerId)
         issuerId = principal.id

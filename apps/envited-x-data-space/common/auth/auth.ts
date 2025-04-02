@@ -169,7 +169,8 @@ export const authOptions: NextAuthOptions = {
         log.info('Adding access token to JWT')
         token.accessToken = account.access_token
       }
-
+      log.info('user', user)
+      log.info('account', account)
       if (user) {
         token.user = user
       }
@@ -188,7 +189,7 @@ export const authOptions: NextAuthOptions = {
         token.user.role = assignSingleRole(userRoles)
         token.user.id = user.id
       }
-
+      console.log('token', token)
       return token
     },
     async session({ session, token }) {

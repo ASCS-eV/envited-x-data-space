@@ -12,6 +12,7 @@ import { assignSingleRole } from '../roles'
 import { CredentialType, User } from '../types'
 import { Environment } from '../types'
 import { extractAddressFromDid } from '../utils'
+import { issuer } from '../database/schema'
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -195,7 +196,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       log.info('Building session')
       if (session?.user) {
-        session.user.did = token.user.did
+        session.user.did = token.user.pkh
         session.user.role = token.user.role
         session.user.id = token.user.id || ''
         session.user.email = undefined

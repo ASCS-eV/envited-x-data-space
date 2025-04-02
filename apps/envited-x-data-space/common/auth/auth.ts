@@ -108,10 +108,7 @@ export const authOptions: NextAuthOptions = {
 
           if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].contract) {
             log.info('Starting revocation registry check')
-            log.info('credential', id,
-              credentialSubjectId,
-              issuer,
-              credentialSubjectType,)
+            log.info('credential', id, credentialSubjectId, issuer, credentialSubjectType)
             const revocationCheck = await checkRevocationRegistry(
               id,
               credentialSubjectId,
@@ -177,10 +174,12 @@ export const authOptions: NextAuthOptions = {
         token.user = user
       }
       console.log('profile', profile)
-      if (profile) {
+      if (profile && profile.sub) {
+        const { sub } = profile
         const connection = await db()
-        const user = await connection.getUserByDid(profile.sub)
-        const userRoles = await connection.getUserRolesByDid(profile.sub)
+
+        const user = await connection.getUserByDid(parseGlobalIdentifier(sub))
+        const userRoles = await connection.getUserRolesByDid(parseGlobalIdentifier(sub))
         log.info('Adding user role to JWT: ', assignSingleRole(userRoles))
         token.user.role = assignSingleRole(userRoles)
         token.user.id = user.id

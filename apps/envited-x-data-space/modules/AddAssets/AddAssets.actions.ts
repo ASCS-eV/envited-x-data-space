@@ -1,9 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { isEmpty, isNil } from 'ramda'
+import { isNil, isNotNil } from 'ramda'
 
-import { createFilename } from '../../common/asset/utils'
 import { getServerSession } from '../../common/auth'
 import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
@@ -43,27 +42,24 @@ export async function validateAndUploadAssets(files: AssetFile[]) {
       })
     }
 
-    const result = files.map(async (file: AssetFile) => {
-      const arrayBuffer = Buffer.from(await file.arrayBuffer())
-      const cid = await createFilename(arrayBuffer)
-
+    const result = files.map(async ({ name, cid, type }) => {
       if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueAsset) {
         const asset = await getAssetByCID(cid)
 
-        if (!isEmpty(asset)) {
-          return { success: false, file: file.name }
+        if (isNotNil(asset)) {
+          return { success: false, file: name, message: 'Asset already exists' }
         }
       }
 
       const signedUrl = await getAssetUploadUrl(cid)
-      await fetch(signedUrl, {
-        body: arrayBuffer,
-        method: 'PUT',
-        headers: {
-          'Content-Type': file.type,
-          'Content-Disposition': `attachment; filename="${cid}"`,
-        },
-      })
+
+      return {
+        success: true,
+        file: name,
+        signedUrl,
+        cid,
+        fileType: type,
+      }
     })
     return result
   } catch (error: unknown) {

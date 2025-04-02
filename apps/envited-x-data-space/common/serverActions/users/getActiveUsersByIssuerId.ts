@@ -9,6 +9,7 @@ import { Log, log } from '../../logger'
 import { User } from '../../types'
 import { Session } from '../../types/types'
 import { forbiddenError, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
+import { parseGlobalIdentifier } from '../../globalIdentifiers'
 
 export const _getActiveUsersByIssuerId =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
@@ -25,7 +26,7 @@ export const _getActiveUsersByIssuerId =
       }
 
       const connection = await db()
-      const user = await connection.getUserByDid(session?.user?.did)
+      const user = await connection.getUserByDid(parseGlobalIdentifier(session?.user?.did))
 
       let issuerId = session?.user?.did
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {

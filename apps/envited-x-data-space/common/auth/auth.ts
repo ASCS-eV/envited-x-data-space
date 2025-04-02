@@ -88,6 +88,8 @@ export const authOptions: NextAuthOptions = {
   debug: true,
   callbacks: {
     async signIn({ profile }) {
+      log.info('SIGNIN IN')
+      log.info('profile', profile)
       try {
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
@@ -106,6 +108,10 @@ export const authOptions: NextAuthOptions = {
 
           if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].contract) {
             log.info('Starting revocation registry check')
+            log.info('credential', id,
+              credentialSubjectId,
+              issuer,
+              credentialSubjectType,)
             const revocationCheck = await checkRevocationRegistry(
               id,
               credentialSubjectId,
@@ -183,7 +189,7 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      // log.info('Building session')
+      log.info('Building session')
       if (session?.user) {
         session.user.did = token.user.did
         session.user.role = token.user.role
@@ -192,7 +198,7 @@ export const authOptions: NextAuthOptions = {
         session.user.image = undefined
         session.user.name = token?.user?.did
       }
-      // log.info('Session: ', session)
+      log.info('Session: ', session)
       return session
     },
   },

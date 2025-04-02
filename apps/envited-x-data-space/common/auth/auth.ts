@@ -4,7 +4,6 @@ import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { equals, has, isEmpty, isNil, omit, pluck, prop } from 'ramda'
 
 import { db } from '../database/queries'
-import { issuer } from '../database/schema'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
 import { parseGlobalIdentifier } from '../globalIdentifiers'

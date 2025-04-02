@@ -26,9 +26,9 @@ export async function getAssetMintParams(id: string) {
   }
 }
 
-export async function updateStatus(assetId: string, hash: string) {
+export async function updateStatus(assetId: string, status: AssetStatus) {
   try {
-    await updateAssetStatus({ id: assetId, hash, status: AssetStatus.minted })
+    await updateAssetStatus({ id: assetId, status })
     revalidatePath('/add-assets')
   } catch (e) {
     log.error(e)

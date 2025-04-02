@@ -7,11 +7,11 @@ export const getTokens = (db: DatabaseConnection) => async () => db.select().fro
 
 export const getToken =
   (db: DatabaseConnection) =>
-  async ({ contract, tokenId }: { tokenId: number; contract: string }) =>
+  async ({ contractGlobalIdentifierId, tokenId }: { tokenId: number; contractGlobalIdentifierId: string }) =>
     db
       .select()
       .from(token)
-      .where(and(eq(token.tokenId, tokenId), eq(token.contract, contract)))
+      .where(and(eq(token.tokenId, tokenId), eq(token.contractGlobalIdentifierId, contractGlobalIdentifierId)))
 
 export const getTokenById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(token).where(eq(token.id, id))
@@ -29,11 +29,11 @@ export const getTokenAttributesByTokenId = (db: DatabaseConnection) => async (id
 
 export const getTokenByTokenId =
   (db: DatabaseConnection) =>
-  async ({ contract, tokenId }: { tokenId: number; contract: string }) =>
+  async ({ contractGlobalIdentifierId, tokenId }: { tokenId: number; contractGlobalIdentifierId: string }) =>
     db
       .select()
       .from(token)
-      .where(and(eq(token.tokenId, tokenId), eq(token.contract, contract)))
+      .where(and(eq(token.tokenId, tokenId), eq(token.contractGlobalIdentifierId, contractGlobalIdentifierId)))
 
-export const getTokensByIssuerId = (db: DatabaseConnection) => async (issuer: string) =>
-  db.select().from(token).where(eq(token.minter, issuer))
+export const getTokensByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
+  db.select().from(token).where(eq(token.minterGlobalIdentifierId, issuerId))

@@ -228,10 +228,12 @@ export const _txn =
         type: '',
       })
 
+      
+
       const [newUser] = await tx
         .insert(user)
         .values({
-          uuid: extractUuidFromUrn(uuid),
+          urnGlobalIdentifierId: extractUuidFromUrn(uuid),
           id: prop('id')(credentialSubject),
           name: prop('name')(credentialSubject),
           email: propOr('', 'email')(credentialSubject),

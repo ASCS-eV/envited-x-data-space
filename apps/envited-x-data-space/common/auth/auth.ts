@@ -174,7 +174,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.user = user
       }
-      console.log('profile', profile)
+      console.log('jwt profile', profile)
       if (profile && profile.sub) {
         const { sub } = profile
         const connection = await db()
@@ -194,6 +194,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       log.info('Building session')
+      log.info('token', token)
       if (session?.user) {
         session.user.did = token.user.did
         session.user.role = token.user.role

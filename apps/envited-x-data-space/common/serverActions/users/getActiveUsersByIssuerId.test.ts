@@ -9,14 +9,14 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
 
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        pkh: 'USER_ISSUER_ID',
+        id: 'USER_ISSUER_ID',
         role: Role.federator,
       },
     })
 
     const user = {
-      id: 'USER_PKH',
-      issuerId: 'FEDERATOR_PKH',
+      id: 'USER_ID',
+      issuerId: 'FEDERATOR_ID',
       name: 'USER_NAME',
       email: 'USER_EMAIL',
       vatId: 'USER_VAT_ID',
@@ -27,7 +27,19 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
       isEnvitedMember: true,
       usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
     }
-
+    const principal = {
+      id: 'PRINCIPAL_ID',
+      issuerId: 'FEDERATOR_ID',
+      name: 'USER_NAME',
+      email: 'USER_EMAIL',
+      vatId: 'USER_VAT_ID',
+      privacyPolicyAccepted: 'USER_PRIVACY_POLICY_ACCEPTED',
+      articlesOfAssociationAccepted: 'USER_ARTICLES_OF_ASSOCIATION_ACCEPTED',
+      contributionRulesAccepted: 'USER_CONTRIBUTION_RULES_ACCEPTED',
+      isAscsMember: true,
+      isEnvitedMember: true,
+      usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
+    }
     const users = [
       {
         id: 'USER_PKH',
@@ -44,6 +56,7 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
     ]
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue(user),
+      getUserByIssuerId: jest.fn().mockResolvedValue(principal),
       getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {
@@ -72,7 +85,19 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
       isEnvitedMember: true,
       usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
     }
-
+    const principal = {
+      id: 'PRINCIPAL_ID',
+      issuerId: 'FEDERATOR_ID',
+      name: 'USER_NAME',
+      email: 'USER_EMAIL',
+      vatId: 'USER_VAT_ID',
+      privacyPolicyAccepted: 'USER_PRIVACY_POLICY_ACCEPTED',
+      articlesOfAssociationAccepted: 'USER_ARTICLES_OF_ASSOCIATION_ACCEPTED',
+      contributionRulesAccepted: 'USER_CONTRIBUTION_RULES_ACCEPTED',
+      isAscsMember: true,
+      isEnvitedMember: true,
+      usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
+    }
     const users = [
       {
         id: 'USER_PKH',
@@ -89,6 +114,7 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
     ]
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue(user),
+      getUserByIssuerId: jest.fn().mockResolvedValue(principal),
       getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {
@@ -124,7 +150,19 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
       isEnvitedMember: true,
       usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
     }
-
+    const principal = {
+      id: 'PRINCIPAL_ID',
+      issuerId: 'FEDERATOR_ID',
+      name: 'USER_NAME',
+      email: 'USER_EMAIL',
+      vatId: 'USER_VAT_ID',
+      privacyPolicyAccepted: 'USER_PRIVACY_POLICY_ACCEPTED',
+      articlesOfAssociationAccepted: 'USER_ARTICLES_OF_ASSOCIATION_ACCEPTED',
+      contributionRulesAccepted: 'USER_CONTRIBUTION_RULES_ACCEPTED',
+      isAscsMember: true,
+      isEnvitedMember: true,
+      usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
+    }
     const users = [
       {
         id: 'USER_PKH',
@@ -141,6 +179,7 @@ describe('common/serverAction/users/getUsersByIssuerId', () => {
     ]
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue(user),
+      getUserByIssuerId: jest.fn().mockResolvedValue(principal),
       getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {

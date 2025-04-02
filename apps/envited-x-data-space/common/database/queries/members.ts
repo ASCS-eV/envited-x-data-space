@@ -1,6 +1,6 @@
 import { eq, isNotNull } from 'drizzle-orm'
 
-import { issuer, user } from '../schema'
+import { globalIdentifier, issuer, user } from '../schema'
 import { DatabaseConnection } from '../types'
 
 export const getMembers = (db: DatabaseConnection) => async () =>
@@ -8,4 +8,5 @@ export const getMembers = (db: DatabaseConnection) => async () =>
     .select({ ...user } as any)
     .from(issuer)
     .leftJoin(user, eq(issuer.id, user.id))
+    .leftJoin(globalIdentifier, eq(issuer.globalIdentifierId, globalIdentifier.id))
     .where(isNotNull(user.id))

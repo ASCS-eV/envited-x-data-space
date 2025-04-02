@@ -41,7 +41,7 @@ jobs:
       PINATA_JWT: ${{ vars.PINATA_JWT }}
       PINATA_GATEWAY: ${{ vars.PINATA_GATEWAY }}
       PINATA_GATEWAY_KEY: ${{ vars.PINATA_GATEWAY_KEY }}
-      ASSETS_CONTRACT: ${{ vars.ASSETS_CONTRACT }}
+      TEZOS_ASSETS_CONTRACT: ${{ vars.TEZOS_ASSETS_CONTRACT }}
       NEXT_PUBLIC_WEB3_RPC_URL: ${{ vars.NEXT_PUBLIC_WEB3_RPC_URL }}
     steps:
       - name: Git clone the repository

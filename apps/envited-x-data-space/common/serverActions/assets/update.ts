@@ -49,6 +49,7 @@ export const _updateStatus =
   async ({ id, status }: { id: string; status: AssetStatus }) => {
     try {
       const session = await getServerSession()
+      console.log(session)
       const userId = session?.user.id
       if (isNil(session)) {
         throw unauthorizedError({ resource: 'assets', resourceId: userId })

@@ -7,7 +7,8 @@ export type DatabaseConnection = PostgresJsDatabase<typeof schema>
 export type Database = () => Promise<{ [x: string]: any }>
 
 export interface Issuer {
-  id: string
+  id?: string
+  globalIdentifierId: string
   type: string
   name: string
   url: string

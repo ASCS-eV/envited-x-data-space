@@ -1,0 +1,1 @@
+ALTER TABLE "globalIdentifier" ADD CONSTRAINT "composite_identifier_unique" UNIQUE("method","namespace","chain_id","nss");

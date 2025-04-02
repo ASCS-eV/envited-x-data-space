@@ -1,19 +1,23 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { isNil, isNotNil } from 'ramda'
+import { isEmpty, isNil } from 'ramda'
 
+import { createFilename } from '../../common/asset/utils'
 import { getServerSession } from '../../common/auth'
 import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
+import { FEATURE_FLAGS } from '../../common/featureFlags'
 import { log } from '../../common/logger'
 import { getAssetByCID, insertAsset } from '../../common/serverActions'
+import { Environment } from '../../common/types'
 import { badRequestError, formatError, internalServerErrorError, unauthorizedError } from '../../common/utils'
 
 export interface AssetFile {
   name: string
   cid: string
   type: string
+  arrayBuffer: () => Promise<ArrayBuffer>
 }
 export interface UploadAssetFile {
   success: boolean
@@ -39,27 +43,29 @@ export async function validateAndUploadAssets(files: AssetFile[]) {
       })
     }
 
-    const uploadData = await Promise.all(
-      files.map(async ({ name, cid, type }) => {
+    const result = files.map(async (file: AssetFile) => {
+      const arrayBuffer = Buffer.from(await file.arrayBuffer())
+      const cid = await createFilename(arrayBuffer)
+
+      if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueAsset) {
         const asset = await getAssetByCID(cid)
 
-        // if (isNotNil(asset)) {
-        //   return { success: false, file: name, message: 'Asset already exists' }
-        // }
-
-        const signedUrl = await getAssetUploadUrl(cid)
-
-        return {
-          success: true,
-          file: name,
-          signedUrl,
-          cid,
-          fileType: type,
+        if (!isEmpty(asset)) {
+          return { success: false, file: file.name }
         }
-      }),
-    )
+      }
 
-    return uploadData
+      const signedUrl = await getAssetUploadUrl(cid)
+      await fetch(signedUrl, {
+        body: arrayBuffer,
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,
+          'Content-Disposition': `attachment; filename="${cid}"`,
+        },
+      })
+    })
+    return result
   } catch (error: unknown) {
     log.error(formatError(error))
     throw internalServerErrorError()

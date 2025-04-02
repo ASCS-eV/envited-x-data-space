@@ -1,5 +1,4 @@
 import { ERRORS } from '../../constants'
-import { Role } from '../../types'
 import * as SUT from './getTotalUsersByIssuerId'
 
 describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
@@ -29,13 +28,14 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
 
     const getUserByIdStub = jest.fn().mockResolvedValue(user)
 
-    const users = 2
+    const users = [user, user]
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: getUserByIdStub,
-      getTotalUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {
-      error: jest.fn(),
+      // error: jest.fn(),
+      error: console.error,
     } as any
 
     const result = await SUT._getTotalUsersByIssuerId({
@@ -53,7 +53,7 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
 
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        pkh: 'UNKNOWN_USER_ID',
+        id: 'UNKNOWN_USER_ID',
       },
     })
 
@@ -61,10 +61,10 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
 
     const getUserByIdStub = jest.fn().mockResolvedValue(user)
 
-    const users = 0
+    const users: any[] = []
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: getUserByIdStub,
-      getTotalUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {
       error: jest.fn(),
@@ -85,12 +85,12 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
 
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        pkh: 'USER_PKH',
+        id: 'USER_ID',
       },
     })
 
     const user = {
-      id: 'USER_PKH',
+      id: 'USER_ID',
       name: 'USER_NAME',
       email: 'USER_EMAIL',
       vatId: 'USER_VAT_ID',
@@ -104,7 +104,7 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
     }
 
     const issuerUser = {
-      id: 'ISSUER_PKH',
+      id: 'ISSUER_ID',
       name: 'USER_NAME',
       email: 'USER_EMAIL',
       vatId: 'USER_VAT_ID',
@@ -117,12 +117,12 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
       usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
     }
 
-    const getUserByIdStub = jest.fn().mockResolvedValueOnce(user).mockResolvedValueOnce(issuerUser)
+    const getUserByIdStub = jest.fn().mockResolvedValueOnce(user)
 
-    const users = 2
+    const users = [issuerUser, user]
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: getUserByIdStub,
-      getTotalUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {
       error: jest.fn(),
@@ -134,7 +134,7 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
       log: logStub,
     })()
     expect(result).toEqual(2)
-    expect(getUserByIdStub).toHaveBeenCalledTimes(2)
+    expect(getUserByIdStub).toHaveBeenCalledTimes(1)
   })
 
   it('should throw because of missing session', async () => {

@@ -1,11 +1,12 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { equals, has, isEmpty, isNil, omit, prop } from 'ramda'
+import { equals, has, isEmpty, isNil, omit, pluck, prop } from 'ramda'
 
 import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
+import { parseGlobalIdentifier } from '../globalIdentifiers'
 import { log } from '../logger'
 import { assignSingleRole } from '../roles'
 import { CredentialType, User } from '../types'
@@ -24,6 +25,7 @@ export const authOptions: NextAuthOptions = {
         pkh: { label: 'Address', type: 'text', placeholder: 'tz...' },
       },
       async authorize(credentials) {
+        console.log('CREDENTIALS', credentials)
         if (!credentials) {
           return {
             id: '',
@@ -34,14 +36,26 @@ export const authOptions: NextAuthOptions = {
 
         const { pkh } = credentials
 
-        const connection = await db()
-        const userRoles = await connection.getUserRolesById(pkh)
+        try {
+          const connection = await db()
+          const user = await connection.getUserByDid(parseGlobalIdentifier(pkh))
+          const result = await connection.getUserRolesByDid(parseGlobalIdentifier(pkh))
+          const userRoles = pluck('usersToRoles', result)
 
-        return {
-          name: pkh,
-          id: pkh,
-          pkh: pkh,
-          role: assignSingleRole(userRoles),
+          return {
+            name: pkh,
+            id: user.id,
+            did: pkh,
+            role: assignSingleRole(userRoles),
+          }
+        } catch (e) {
+          console.log(e)
+          return {
+            name: pkh,
+            id: '',
+            did: pkh,
+            role: '',
+          }
         }
       },
     }),
@@ -74,7 +88,6 @@ export const authOptions: NextAuthOptions = {
   debug: true,
   callbacks: {
     async signIn({ profile }) {
-      log.info('Sign in checks')
       try {
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
@@ -109,7 +122,7 @@ export const authOptions: NextAuthOptions = {
           const connection = await db()
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
-            const principal = await connection.getUserById(issuer)
+            const principal = await connection.getUserByDid(parseGlobalIdentifier(issuer))
 
             log.info('User credential, checking principal credentials')
 
@@ -125,7 +138,7 @@ export const authOptions: NextAuthOptions = {
             }
           }
 
-          const existingUser = (await connection.getUserById(credentialSubjectId)) as User
+          const existingUser = (await connection.getUserByDid(parseGlobalIdentifier(credentialSubjectId))) as User
 
           if (!isNil(existingUser)) {
             // User already exists
@@ -157,12 +170,14 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.user = user
       }
-
+      console.log('profile', profile)
       if (profile) {
         const connection = await db()
-        const userRoles = await connection.getUserRolesById(profile.sub)
+        const user = await connection.getUserByDid(profile.sub)
+        const userRoles = await connection.getUserRolesByDid(profile.sub)
         log.info('Adding user role to JWT: ', assignSingleRole(userRoles))
         token.user.role = assignSingleRole(userRoles)
+        token.user.id = user.id
       }
 
       return token
@@ -170,12 +185,12 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       // log.info('Building session')
       if (session?.user) {
-        session.user.pkh = token.user.pkh
+        session.user.did = token.user.did
         session.user.role = token.user.role
-        session.user.id = token.sub || ''
+        session.user.id = token.user.id || ''
         session.user.email = undefined
         session.user.image = undefined
-        session.user.name = token?.user?.id
+        session.user.name = token?.user?.did
       }
       // log.info('Session: ', session)
       return session

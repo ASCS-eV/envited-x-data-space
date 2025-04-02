@@ -12,7 +12,7 @@ const navigation = {
     { name: 'Data & services', href: '/assets' },
     {
       name: 'Smart contract',
-      href: `${process.env.NEXT_PUBLIC_INDEXER_URL}/${process.env.NEXT_PUBLIC_ASSETS_CONTRACT}`,
+      href: `${process.env.NEXT_PUBLIC_INDEXER_URL}/${process.env.NEXT_PUBLIC_TEZOS_ASSETS_CONTRACT}`,
     },
   ],
   support: [

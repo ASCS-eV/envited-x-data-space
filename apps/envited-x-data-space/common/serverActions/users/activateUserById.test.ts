@@ -2,25 +2,25 @@ import { ERRORS } from '../../constants'
 import * as SUT from './activateUserById'
 
 describe('common/serverActions/users/activateUserById', () => {
-  it('should return a activated user as expected', async () => {
+  it('should return an activated user as expected', async () => {
     // when ... we request a user by id
     // then ... it returns a user as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        pkh: 'ISSUER_PKH',
+        id: 'ISSUER_ID',
       },
     })
     const user = {
-      id: 'USER_PKH',
-      issuerId: 'ISSUER_PKH',
+      id: 'USER_ID',
+      issuerId: 'ISSUER_ID',
     }
 
     const expected = {
-      updatedId: 'USER_PKH',
+      updatedId: 'USER_ID',
     }
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue(user),
-      activateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
+      activateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_ID' }]),
     })
     const logStub = {
       error: jest.fn(),
@@ -37,12 +37,12 @@ describe('common/serverActions/users/activateUserById', () => {
     // then ... it throws as expected
     const getServerSessionStub = jest.fn().mockResolvedValue(null)
     const user = {
-      id: 'USER_PKH',
-      issuerId: 'ISSUER_PKH',
+      id: 'USER_ID',
+      issuerId: 'ISSUER_ID',
     }
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue(user),
-      activateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
+      activateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_ID' }]),
     })
     const logStub = {
       error: jest.fn(),
@@ -59,12 +59,12 @@ describe('common/serverActions/users/activateUserById', () => {
     // then ... it throws as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        pkh: 'ISSUER_PKH',
+        id: 'ISSUER_ID',
       },
     })
     const user = {
-      id: 'USER_PKH',
-      issuerId: 'FEDERATOR_PKH',
+      id: 'USER_ID',
+      issuerId: 'FEDERATOR_ID',
     }
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue(user),

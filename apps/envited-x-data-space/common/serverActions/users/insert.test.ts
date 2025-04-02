@@ -1,4 +1,6 @@
+import { Log } from '../../logger'
 import { CredentialType } from '../../types'
+import { badRequestError } from '../../utils'
 import * as SUT from './insert'
 
 describe('common/serverActions/users/insert', () => {
@@ -8,11 +10,15 @@ describe('common/serverActions/users/insert', () => {
 
     const dbStub = jest.fn().mockResolvedValue({
       insertUserTx: jest.fn().mockResolvedValue({
-        id: 'USER_DID',
+        id: 'USER_ID',
         type: CredentialType.AscsUser,
       }),
       getUserById: jest.fn().mockResolvedValueOnce({}).mockResolvedValueOnce({
-        id: 'USER_DID',
+        id: 'USER_ID',
+        type: CredentialType.AscsMember,
+      }),
+      getUserByIssuerId: jest.fn().mockResolvedValue({
+        id: 'USER_ID',
         type: CredentialType.AscsMember,
       }),
     }) as any
@@ -25,13 +31,18 @@ describe('common/serverActions/users/insert', () => {
       issuer: 'ISSUER_DID',
     } as any
 
-    const result = await SUT._insert({ db: dbStub })(credential)
+    const logStub = {
+      error: jest.fn(),
+    } as any
+
+    const result = await SUT._insert({ db: dbStub, log: logStub })(credential)
     const db = await dbStub()
-    expect(db.getUserById).toHaveBeenCalledTimes(2)
+    expect(db.getUserById).toHaveBeenCalledTimes(1)
     expect(db.getUserById).toHaveBeenCalledWith('USER_DID')
-    expect(db.getUserById).toHaveBeenCalledWith('ISSUER_DID')
+    expect(db.getUserByIssuerId).toHaveBeenCalledTimes(1)
+    expect(db.getUserByIssuerId).toHaveBeenCalledWith('ISSUER_DID')
     expect(result).toEqual({
-      id: 'USER_DID',
+      id: 'USER_ID',
       type: CredentialType.AscsUser,
     })
   })
@@ -67,7 +78,11 @@ describe('common/serverActions/users/insert', () => {
       },
     } as any
 
-    await expect(() => SUT._insert({ db: dbStub })(credential)).rejects.toThrow()
+    const logStub = {
+      error: jest.fn(),
+    } as any
+
+    await expect(() => SUT._insert({ db: dbStub, log: logStub })(credential)).rejects.toThrow()
   })
 
   it('should fail when inserting a user without an issuer', async () => {
@@ -92,6 +107,10 @@ describe('common/serverActions/users/insert', () => {
       },
     } as any
 
-    await expect(() => SUT._insert({ db: dbStub })(credential)).rejects.toThrow()
+    const logStub = {
+      error: jest.fn(),
+    } as any
+
+    await expect(() => SUT._insert({ db: dbStub, log: logStub })(credential)).rejects.toThrow()
   })
 })

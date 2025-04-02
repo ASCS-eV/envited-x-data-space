@@ -3,18 +3,20 @@ import { AwsDataApiPgDatabase, AwsDataApiPgQueryResultHKT } from 'drizzle-orm/aw
 import { PgQueryResultHKT, PgTransaction } from 'drizzle-orm/pg-core'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
+import { insertGlobalIdentifierTx } from '../common/database/queries/globalIdentifiers'
 import * as schema from '../common/database/schema'
+import { parseGlobalIdentifier } from '../common/globalIdentifiers'
 import { AssetStatus } from '../common/types'
 
 export type DatabaseConnection = PostgresJsDatabase<typeof schema> | AwsDataApiPgDatabase<typeof schema>
 
 export const getTokenByTokenId =
   ({ database }: { database: DatabaseConnection }) =>
-  async ({ contract, tokenId }: { tokenId: number; contract: string }) =>
+  async ({ contractGuid, tokenId }: { tokenId: number; contractGuid: string }) =>
     database
       .select()
       .from(schema.token)
-      .where(and(eq(schema.token.tokenId, tokenId), eq(schema.token.contract, contract)))
+      .where(and(eq(schema.token.tokenId, tokenId), eq(schema.token.contractGlobalIdentifierId, contractGuid)))
 
 export const getTokenTags =
   (
@@ -37,9 +39,9 @@ export const insertTokenTx =
     >,
   ) =>
   async ({
-    hash,
-    contract,
-    minter,
+    operationGlobalIdentifierId,
+    contractGlobalIdentifierId,
+    minterGlobalIdentifierId,
     tokenId,
     name,
     description,
@@ -58,9 +60,9 @@ export const insertTokenTx =
     domainMetadata,
     manifest,
   }: {
-    hash: string
-    contract: string
-    minter: string
+    operationGlobalIdentifierId: string
+    contractGlobalIdentifierId: string
+    minterGlobalIdentifierId: string
     tokenId: number
     name: string
     description: string
@@ -82,9 +84,9 @@ export const insertTokenTx =
     tx
       .insert(schema.token)
       .values({
-        hash,
-        contract,
-        minter,
+        operationGlobalIdentifierId,
+        contractGlobalIdentifierId,
+        minterGlobalIdentifierId,
         tokenId,
         name,
         description,
@@ -170,10 +172,14 @@ export const insertToken =
           tags,
         } = token
 
+        const [{ id: operationGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(hash))
+        const [{ id: contractGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(contract))
+        const [{ id: minterGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(minter))
+
         const [insertedToken] = await insertTokenTx(tx)({
-          hash,
-          contract,
-          minter,
+          operationGlobalIdentifierId,
+          contractGlobalIdentifierId,
+          minterGlobalIdentifierId,
           tokenId,
           name,
           description,
@@ -219,9 +225,21 @@ export const getAssetByCID =
 
 export const updateAsset =
   ({ database: db }: { database: DatabaseConnection }) =>
-  async ({ id, tokenId, hash }: { id: string; tokenId: string; hash: string }) =>
+  async ({ id, tokenId }: { id: string; tokenId: string }) =>
     db
       .update(schema.asset)
-      .set({ tokenId, status: AssetStatus.minted, updatedAt: new Date(), hash })
+      .set({ tokenId, status: AssetStatus.minted, updatedAt: new Date() })
       .where(eq(schema.asset.id, id))
       .returning()
+
+export const getGlobalIdentifierByFullResourceName =
+  ({ database: db }: { database: DatabaseConnection }) =>
+  async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
+    db.query.globalIdentifier.findFirst({
+      where: and(
+        eq(schema.globalIdentifier.method, method),
+        eq(schema.globalIdentifier.namespace, namespace),
+        eq(schema.globalIdentifier.chainId, chainId),
+        eq(schema.globalIdentifier.nss, nss),
+      ),
+    })

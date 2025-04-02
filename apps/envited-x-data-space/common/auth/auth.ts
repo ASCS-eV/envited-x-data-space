@@ -179,8 +179,11 @@ export const authOptions: NextAuthOptions = {
         const connection = await db()
 
         const user = await connection.getUserByDid(parseGlobalIdentifier(sub))
+        log.info('user', user)
         const result = await connection.getUserRolesByDid(parseGlobalIdentifier(sub))
+        log.info('result', result)
         const userRoles = pluck('usersToRoles', result)
+        log.info('userRoles', userRoles)
         log.info('Adding user role to JWT: ', assignSingleRole(userRoles))
         token.user.role = assignSingleRole(userRoles)
         token.user.id = user.id

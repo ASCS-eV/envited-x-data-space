@@ -7,6 +7,7 @@ module.exports = {
       env_staging: {
         ENV: 'staging',
         TEZOS_ASSETS_CONTRACT: 'KT1XC2fTBNqoafnrhEb7TuToRCzewgbHAhnA',
+        TEZOS_CHAIN_ID: 'NetXnHfVqm9iesp',
         ASSET_BUCKET_NAME: 'staging-envited-x-data-space--assetsbucket5f3b285a-jajxd4n1z8k2',
         PUBLIC_ASSET_URL: 'https://d2ftpxn442yx6p.cloudfront.net',
         RDS_SECRET_ARN:
@@ -22,6 +23,7 @@ module.exports = {
       env_development: {
         ENV: 'development',
         TEZOS_ASSETS_CONTRACT: 'KT1NUDsQ5qCpf5Mxmeo2dqRdnKqqL8kpj2LG',
+        TEZOS_CHAIN_ID: 'NetXnHfVqm9iesp',
         ASSET_BUCKET_NAME: 'staging-envited-x-data-space--assetsbucket5f3b285a-jajxd4n1z8k2',
         PUBLIC_ASSET_URL: 'https://localhost:4200',
         POSTGRES_PORT: 5436,

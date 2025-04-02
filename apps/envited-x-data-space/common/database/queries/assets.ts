@@ -54,12 +54,11 @@ export const updateAssetByCID = (db: DatabaseConnection) => async (data: Asset, 
     .where(eq(asset.cid, cid))
     .returning()
 
-export const updateAssetStatus =
-  (db: DatabaseConnection) => async (id: string, status: AssetStatus) =>
-    db
-      .update(asset)
-      .set({
-        status,
-      })
-      .where(eq(asset.id, id))
-      .returning()
+export const updateAssetStatus = (db: DatabaseConnection) => async (id: string, status: AssetStatus) =>
+  db
+    .update(asset)
+    .set({
+      status,
+    })
+    .where(eq(asset.id, id))
+    .returning()

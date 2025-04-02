@@ -228,8 +228,6 @@ export const _txn =
         type: '',
       })
 
-      
-
       const [newUser] = await tx
         .insert(user)
         .values({

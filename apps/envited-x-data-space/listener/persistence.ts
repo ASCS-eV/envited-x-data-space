@@ -12,11 +12,11 @@ export type DatabaseConnection = PostgresJsDatabase<typeof schema> | AwsDataApiP
 
 export const getTokenByTokenId =
   ({ database }: { database: DatabaseConnection }) =>
-  async ({ contractGuid, tokenId }: { tokenId: number; contractGuid: string }) =>
+  async ({ contractGlobalIdentifierId, tokenId }: { tokenId: number; contractGlobalIdentifierId: string }) =>
     database
       .select()
       .from(schema.token)
-      .where(and(eq(schema.token.tokenId, tokenId), eq(schema.token.contractGlobalIdentifierId, contractGuid)))
+      .where(and(eq(schema.token.tokenId, tokenId), eq(schema.token.contractGlobalIdentifierId, contractGlobalIdentifierId)))
 
 export const getTokenTags =
   (

@@ -91,7 +91,6 @@ export const listenToAssetContract =
           nss: process.env.TEZOS_ASSETS_CONTRACT!,
         })
 
-
         if (contractGuid) {
           const [existingToken] = await getTokenByTokenId({ contractGlobalIdentifierId: contractGuid.id, tokenId })
           if (existingToken) {

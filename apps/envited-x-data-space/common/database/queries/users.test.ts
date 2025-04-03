@@ -28,7 +28,11 @@ describe('common/database/users', () => {
       const result = await SUT.insertAddressTypeTx(tx)('ADDRESS_TYPE')
 
       expect(tx.insert).toHaveBeenCalledWith(addressType)
-      expect(tx.insert().values).toHaveBeenCalledWith({ name: 'ADDRESS_TYPE', createdAt: expect.any(Date), updatedAt: expect.any(Date) })
+      expect(tx.insert().values).toHaveBeenCalledWith({
+        name: 'ADDRESS_TYPE',
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      })
       expect(tx.insert().values().onConflictDoUpdate).toHaveBeenCalledWith({
         target: addressType.name,
         set: { name: 'ADDRESS_TYPE' },

@@ -76,7 +76,7 @@ export const _getProfile =
       const user = await connection.getUserById(session.user.id)
       const issuer = await connection.getIssuerById(user?.issuerId)
       let profileName = issuer.name
-      
+
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserByIssuerId(user.issuerId)
         profileName = principal.name

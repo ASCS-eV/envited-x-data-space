@@ -27,7 +27,7 @@ import {
   getGlobalIdentifierById,
   insertGlobalIdentifier,
 } from './globalIdentifiers'
-import { getIssuerById, getIssuerByGlobalIdentifier } from './issuers'
+import { getIssuerByGlobalIdentifier, getIssuerById } from './issuers'
 import { getMembers } from './members'
 import {
   getProfileByName,

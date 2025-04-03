@@ -9,7 +9,6 @@ import { Log, log } from '../../logger'
 import { Session, User } from '../../types'
 import { formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
 
-
 export const _getTotalUsersByIssuerId =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
   async (): Promise<number> => {
@@ -21,7 +20,7 @@ export const _getTotalUsersByIssuerId =
       }
 
       const connection = await db()
-      const user = await connection.getUserById(session?.user?.id) as User
+      const user = (await connection.getUserById(session?.user?.id)) as User
 
       if (isNil(user)) {
         throw notFoundError({ resource: 'users', resourceId: session?.user?.id })
@@ -36,7 +35,6 @@ export const _getTotalUsersByIssuerId =
         const issuer = await connection.getIssuerByGlobalIdentifier(user.addressGlobalIdentifierId)
         issuerId = issuer.id
       }
-
 
       const users = await connection.getUsersByIssuerId(issuerId)
       return users.length

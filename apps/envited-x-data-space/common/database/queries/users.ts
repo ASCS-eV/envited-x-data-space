@@ -6,6 +6,7 @@ import postgres from 'postgres'
 import { isEmpty, prop, propOr } from 'ramda'
 
 import { parseGlobalIdentifier } from '../../globalIdentifiers'
+import { log } from '../../logger'
 import { Profile } from '../../types'
 import { formatError, isTrustAnchor, slugify } from '../../utils'
 import * as schema from '../schema'
@@ -22,7 +23,6 @@ import {
 } from '../schema'
 import { Credential, DatabaseConnection, Issuer, User } from '../types'
 import { insertGlobalIdentifierTx } from './globalIdentifiers'
-import { log } from '../../logger'
 
 export const deactivateUserById = (db: DatabaseConnection) => async (id: string) =>
   db
@@ -163,10 +163,7 @@ export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: st
 
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.query.user.findMany({
-    where: eq(
-      user.issuerId,
-      issuerId,
-    ),
+    where: eq(user.issuerId, issuerId),
     with: {
       urnGlobalIdentifier: true,
       addressGlobalIdentifier: true,

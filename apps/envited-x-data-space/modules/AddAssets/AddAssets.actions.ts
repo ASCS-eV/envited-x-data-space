@@ -42,25 +42,27 @@ export async function validateAndUploadAssets(files: AssetFile[]) {
       })
     }
 
-    const result = await Promise.all(files.map(async ({ name, cid, type }) => {
-      if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueAsset) {
-        const asset = await getAssetByCID(cid)
+    const result = await Promise.all(
+      files.map(async ({ name, cid, type }) => {
+        if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueAsset) {
+          const asset = await getAssetByCID(cid)
 
-        if (isNotNil(asset)) {
-          return { success: false, file: name, message: 'Asset already exists' }
+          if (isNotNil(asset)) {
+            return { success: false, file: name, message: 'Asset already exists' }
+          }
         }
-      }
 
-      const signedUrl = await getAssetUploadUrl(cid)
+        const signedUrl = await getAssetUploadUrl(cid)
 
-      return {
-        success: true,
-        file: name,
-        signedUrl,
-        cid,
-        fileType: type,
-      }
-    }))
+        return {
+          success: true,
+          file: name,
+          signedUrl,
+          cid,
+          fileType: type,
+        }
+      }),
+    )
     return result
   } catch (error: unknown) {
     log.error(formatError(error))

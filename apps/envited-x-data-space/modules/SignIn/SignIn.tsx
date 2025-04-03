@@ -11,7 +11,7 @@ import { WalletConnect } from '../WalletConnect'
 
 export const SignIn: FC<{ colorScheme?: ColorScheme }> = ({ colorScheme = ColorScheme.dark }) => {
   const { data: session } = useSession()
-  
+
   return !isNil(session) ? (
     <>
       <DashboardNavigationDropdown colorScheme={colorScheme} />

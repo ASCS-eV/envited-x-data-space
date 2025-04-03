@@ -9,7 +9,19 @@ import { DatabaseConnection } from '../types'
 
 export const insertGlobalIdentifier =
   (db: DatabaseConnection) =>
-  async ({ method, namespace, chainId, nss, metadata }: { method: string; namespace?: string; chainId?: string; nss: string; metadata?: string }) =>
+  async ({
+    method,
+    namespace,
+    chainId,
+    nss,
+    metadata,
+  }: {
+    method: string
+    namespace?: string
+    chainId?: string
+    nss: string
+    metadata?: string
+  }) =>
     db
       .insert(globalIdentifier)
       .values({

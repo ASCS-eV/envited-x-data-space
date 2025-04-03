@@ -10,6 +10,14 @@ export interface TranslationsMap {
   [Language.nl]: { [key: string]: { [key: string]: string } }
 }
 
+export enum UploadAssetStatus {
+  idle = 'idle',
+  queued = 'queued',
+  uploading = 'uploading',
+  uploaded = 'uploaded',
+  error = 'error',
+}
+
 export enum AssetStatus {
   processing = 'processing',
   rejected = 'rejected',
@@ -151,6 +159,11 @@ export interface User {
   updatedAt: string
   vatId?: string
   isActive: boolean
+}
+
+export interface UploadAssetState {
+  status: UploadAssetStatus
+  progress: number
 }
 
 export interface Profile {

@@ -5,6 +5,7 @@ import { isEmpty, isNil } from 'ramda'
 import { FC, JSXElementConstructor, ReactElement, useState } from 'react'
 import { RefCallBack } from 'react-hook-form'
 
+import { UploadAssetState } from '../../common/types'
 import { UploadAssetItem } from './UploadAssetItem'
 
 interface FileData {
@@ -16,6 +17,7 @@ interface DragAndDropFieldProps {
   label: string | ReactElement<any, string | JSXElementConstructor<any>>
   name: string
   files: any
+  filesState: UploadAssetState[]
   error?: string
   inputRef: RefCallBack
   onDrop: (event: React.DragEvent<HTMLDivElement>) => void
@@ -28,6 +30,7 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
   label,
   name,
   files,
+  filesState,
   error = '',
   inputRef,
   onDrop,
@@ -89,7 +92,7 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
             </label>
             <p className="pl-1">or drag and drop</p>
           </div>
-          <p className="text-xs leading-5 text-gray-600 dark:text-gray-500">ZIP up to 10MB</p>
+          <p className="text-xs leading-5 text-gray-600 dark:text-gray-500">ZIP</p>
         </div>
       </div>
       <div className="flex flex-col items-center py-3 space-y-4">
@@ -99,6 +102,7 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
               key={file.name}
               idx={idx}
               file={file}
+              state={filesState[idx]}
               validHandler={validationHandler}
               removeFile={removeItem}
             />

@@ -84,12 +84,24 @@ describe('common/utils', () => {
 
   describe('allTrue', () => {
     it.each([
+      [[undefined, true, true], false],
       [[true, false], false],
       [[true, true], true],
     ])('should, with value %s, return %s as expected', (array, result) => {
       // when ... rendering component
       // then ... should render with expected properties
       expect(SUT.allTrue(array)).toBe(result)
+    })
+  })
+
+  describe('anyFalse', () => {
+    it.each([
+      [[true, false], true],
+      [[true, true], false],
+    ])('should, with value %s, return %s as expected', (array, result) => {
+      // when ... rendering component
+      // then ... should render with expected properties
+      expect(SUT.anyFalse(array)).toBe(result)
     })
   })
 

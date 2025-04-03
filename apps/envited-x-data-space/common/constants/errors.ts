@@ -20,6 +20,8 @@ export const ERRORS = {
   README_FILE_NOT_FOUND: 'README.md file not found',
   NOT_ALLOWED_TO_DELETE_ASSET: 'Not allowed to delete asset',
   MINTED_ASSET_CANNOT_BE_DELETED: 'Minted asset cannot be deleted',
+  POST_UPLOAD_FAILED: 'Post upload failed',
+  NETWORK_ERROR: 'Network error',
 }
 
 export const ERROR_CODES = {

@@ -19,6 +19,7 @@ describe('modules/AddAssets/AddAssets.utils', () => {
       expect(result).toEqual([0, 1, 3])
     })
   })
+
   describe('_addFiles', () => {
     it('should return a FileList with new added files', () => {
       // when ... we want to add files to the file list

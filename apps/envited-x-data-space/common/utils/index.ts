@@ -13,6 +13,8 @@ export {
 export {
   addUrnUuid,
   addDidToAddress,
+  allTrue,
+  anyFalse,
   extractAddressFromDid,
   extractUuidFromUrn,
   extractIdFromCredential,

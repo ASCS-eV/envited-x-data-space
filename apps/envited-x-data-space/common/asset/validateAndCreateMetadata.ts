@@ -256,7 +256,7 @@ export const _validateAndCreateMetadata =
       }
 
       const issuer = await connection.getUserByIssuerId(user.issuerId)
-      
+
       if (!issuer) {
         throw new Error('Issuer not found')
       }
@@ -306,7 +306,7 @@ export const _validateAndCreateMetadata =
       }
 
       const minterGuid = await connection.getGlobalIdentifierById(issuer.addressGlobalIdentifierId)
-      
+
       if (!minterGuid) {
         throw new Error('Minter not found')
       }

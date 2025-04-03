@@ -150,7 +150,6 @@ export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: st
         },
       },
     },
-    
   })
 
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>

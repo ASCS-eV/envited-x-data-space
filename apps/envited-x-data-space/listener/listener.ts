@@ -84,7 +84,6 @@ export const listenToAssetContract =
         const { hash, destination, metadata, parameters } = data
         const creator = parameters.value.args[1].args[0].string
         const tokenId = parseInt(metadata.operation_result.lazy_storage_diff[2].diff.updates[0].key.int, 10)
-        log.info('Registering token ', tokenId)
         const contractGuid = await getGlobalIdentifierByFullResourceName({
           method: 'urn:contract',
           namespace: 'tezos',
@@ -92,12 +91,9 @@ export const listenToAssetContract =
           nss: process.env.TEZOS_ASSETS_CONTRACT!,
         })
 
-        console.log('Contract GUID', contractGuid)
 
         if (contractGuid) {
-          log.info('Checking for existing token', contractGuid.id, tokenId)
-          const [existingToken] = await getTokenByTokenId({ contractGuid: contractGuid.id, tokenId })
-          log.info('Existing token', existingToken)
+          const [existingToken] = await getTokenByTokenId({ contractGlobalIdentifierId: contractGuid.id, tokenId })
           if (existingToken) {
             return
           }
@@ -122,7 +118,7 @@ export const listenToAssetContract =
           hash: `urn:operation:tezos:${process.env.TEZOS_CHAIN_ID!}:${hash}`,
           contract: `urn:contract:tezos:${process.env.TEZOS_CHAIN_ID!}:${destination}`,
           minter: `did:pkh:tezos:${process.env.TEZOS_CHAIN_ID!}:${creator}`,
-          tokenId: `${destination}:${tokenId}`,
+          tokenId,
           name: tokenMetadata?.name,
           description: tokenMetadata?.description,
           creators: tokenMetadata?.creators,

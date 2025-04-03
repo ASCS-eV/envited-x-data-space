@@ -232,6 +232,14 @@ export const updateAsset =
       .where(eq(schema.asset.id, id))
       .returning()
 
+export const insertGlobalIdentifier =
+  ({ database: db }: { database: DatabaseConnection }) =>
+  async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
+    db
+      .insert(schema.globalIdentifier)
+      .values({ method, namespace, chainId, nss })
+      .returning()
+
 export const getGlobalIdentifierByFullResourceName =
   ({ database: db }: { database: DatabaseConnection }) =>
   async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>

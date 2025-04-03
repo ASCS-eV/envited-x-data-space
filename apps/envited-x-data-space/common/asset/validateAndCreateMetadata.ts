@@ -277,15 +277,23 @@ export const _validateAndCreateMetadata =
         cid: assetCID,
         fileSize: byteArray.length,
       }
-
+      console.log(visualizationFiles)
       const displayUri = find(
         and(propEq(ManifestCategoryId.envitedXIsMedia, 'category'), compose(includes('image'), propOr('', 'mimeType'))),
       )(visualizationFiles) as ExtractedFileWithCID
-      const displayObject = {
-        cid: displayUri.cid,
-        fileSize: displayUri.arrayBuffer.byteLength,
-        uri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
-        // add image dimensions
+      let displayObject = {
+        cid: '',
+        fileSize: 0,
+        uri: '',
+      }
+      
+      if (displayUri) {
+        displayObject = {
+          cid: displayUri.cid,
+          fileSize: displayUri.arrayBuffer.byteLength,
+          uri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
+          // add image dimensions
+        }
       }
 
       const manifestObject = {

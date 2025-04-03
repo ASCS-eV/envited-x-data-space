@@ -53,7 +53,6 @@ export const listenToAssetContract =
     getAssetByCID,
     updateAsset,
     getGlobalIdentifierByFullResourceName,
-    insertGlobalIdentifier,
     log,
   }: {
     tezos: TezosToolkit
@@ -62,7 +61,6 @@ export const listenToAssetContract =
     getAssetByCID: any
     updateAsset: any
     getGlobalIdentifierByFullResourceName: any
-    insertGlobalIdentifier: any
     log: Log
   }) =>
   async () => {
@@ -99,13 +97,6 @@ export const listenToAssetContract =
           if (existingToken) {
             return
           }
-        } else {
-          contractGuid = await insertGlobalIdentifier({
-            method: 'urn:contract',
-            namespace: 'tezos',
-            chainId: process.env.TEZOS_CHAIN_ID!,
-            nss: process.env.TEZOS_ASSETS_CONTRACT!,
-          })
         }
 
         log.info('Registering token ', tokenId)
@@ -122,34 +113,13 @@ export const listenToAssetContract =
           replace('ipfs://', '')(domainMetadataUri as string),
         )
         const attributes = extractKeyValuePairs(domainMetadata.data)
-        let minterGuid = await getGlobalIdentifierByFullResourceName({
-          method: 'did:pkh',
-          namespace: 'tezos',
-          chainId: process.env.TEZOS_CHAIN_ID!,
-          nss: creator,
-        })
 
-        if (!minterGuid) {
-          minterGuid = await insertGlobalIdentifier({
-            method: 'did:pkh',
-            namespace: 'tezos',
-            chainId: process.env.TEZOS_CHAIN_ID!,
-            nss: creator,
-          })
-        }
-
-        const operationGuid = await insertGlobalIdentifier({
-          method: 'urn:operation',
-          namespace: 'tezos',
-          chainId: process.env.TEZOS_CHAIN_ID!,
-          nss: hash,
-        })
 
         // Save token to DB
         const token = await insertToken({
-          operationGlobalIdentifierId: operationGuid.id,
-          contractGlobalIdentifierId: contractGuid.id,
-          minterGlobalIdentifierId: minterGuid.id,
+          hash: `urn:operation:tezos:${process.env.TEZOS_CHAIN_ID!}:${hash}`,
+          contract: `urn:contract:tezos:${process.env.TEZOS_CHAIN_ID!}:${destination}`,
+          minter: `did:pkh:tezos:${process.env.TEZOS_CHAIN_ID!}:${creator}`,
           tokenId: `${destination}:${tokenId}`,
           name: tokenMetadata?.name,
           description: tokenMetadata?.description,

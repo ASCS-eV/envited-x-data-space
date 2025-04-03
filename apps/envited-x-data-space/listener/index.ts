@@ -13,7 +13,6 @@ import {
   getTokenByTokenId,
   insertToken,
   updateAsset,
-  insertGlobalIdentifier,
 } from './persistence'
 
 const Tezos = new TezosToolkit(process.env.NEXT_PUBLIC_WEB3_RPC_URL || 'https://ghostnet.ecadinfra.com')
@@ -44,6 +43,5 @@ listenToAssetContract({
   getAssetByCID: getAssetByCID({ database: connection }),
   updateAsset: updateAsset({ database: connection }),
   getGlobalIdentifierByFullResourceName: getGlobalIdentifierByFullResourceName({ database: connection }),
-  insertGlobalIdentifier: insertGlobalIdentifier({ database: connection }),
   log,
 })()

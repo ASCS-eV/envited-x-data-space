@@ -5,6 +5,7 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { Asset, Role, Session, User } from '../../types'
 import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
+import { stringifyGlobalIdentifier } from '../../globalIdentifiers'
 
 export const _getMintParams =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
@@ -40,7 +41,7 @@ export const _getMintParams =
     const from = await connection.getGlobalIdentifierById(user.urnGlobalIdentifierId)
 
     return {
-      from: from.nss,
+      from: stringifyGlobalIdentifier(from),
       owner: owner?.nss,
       contractAddress: process.env.TEZOS_ASSETS_CONTRACT!,
     }

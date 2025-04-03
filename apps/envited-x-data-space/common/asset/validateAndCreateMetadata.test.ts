@@ -56,10 +56,8 @@ describe('common/asset/validateAndCreateMetadata', () => {
       const getUserByIssuerIdStub = jest
         .fn()
         .mockResolvedValue({ id: 'ISSUER_ID', addressGlobalIdentifierId: 'GLOBAL_IDENTIFIER_ID', name: 'NAME' }) as any
-      const getGlobalIdentifierByIdStub = jest
-        .fn()
-        .mockResolvedValue({ nss: 'ISSUER ADDRESS' }) as any
-    
+      const getGlobalIdentifierByIdStub = jest.fn().mockResolvedValue({ nss: 'ISSUER ADDRESS' }) as any
+
       const dbStub = jest.fn().mockResolvedValue({
         getUserById: getUserByIdStub,
         getUserByIssuerId: getUserByIssuerIdStub,

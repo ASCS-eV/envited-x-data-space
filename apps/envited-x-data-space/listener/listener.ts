@@ -114,7 +114,6 @@ export const listenToAssetContract =
         )
         const attributes = extractKeyValuePairs(domainMetadata.data)
 
-
         // Save token to DB
         const token = await insertToken({
           hash: `urn:operation:tezos:${process.env.TEZOS_CHAIN_ID!}:${hash}`,

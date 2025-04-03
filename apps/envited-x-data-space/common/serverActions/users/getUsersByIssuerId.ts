@@ -27,10 +27,14 @@ export const _getUsersByIssuerId =
       const connection = await db()
       const user = await connection.getUserById(session?.user?.id)
 
-      let issuerId = session?.user?.id
-      if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
-        const principal = await connection.getUserByIssuerId(user.issuerId)
-        issuerId = principal.id
+      let issuerId = null
+      if (user.usersToCredentialTypes && hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
+        issuerId = user.issuerId
+      }
+
+      if (user.usersToCredentialTypes && hasCredentialType('AscsMemberCredential')(user.usersToCredentialTypes)) {
+        const issuer = await connection.getIssuerByGlobalIdentifier(user.addressGlobalIdentifierId)
+        issuerId = issuer.id
       }
 
       const users = await connection.getUsersByIssuerId(issuerId)

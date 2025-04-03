@@ -5,11 +5,11 @@ import { redis } from '../common'
 import { hydraAdmin } from '../common/hydra'
 import { log } from '../common/logger'
 import { internalServerError, ok } from '../common/responses'
+import { formatError } from '../common/utils'
 import { postPresentCredential } from '../handlers/presentCredential'
 import { hydraMiddleware, loggerMiddleware, redisMiddleware } from '../middleware'
 import { RedisHydraLogContext } from '../types'
 import { queryStringToJSON } from '../utils'
-import { formatError } from '../common/utils'
 
 const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraLogContext) => {
   try {

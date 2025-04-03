@@ -5,10 +5,10 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { redis } from '../common'
 import { log } from '../common/logger'
 import { internalServerError, ok } from '../common/responses'
+import { formatError } from '../common/utils'
 import { getChallenge } from '../handlers/challenge'
 import { loggerMiddleware, redisMiddleware } from '../middleware'
 import { RedisLogContext } from '../types'
-import { formatError } from '../common/utils'
 
 export const lambdaHandler = async (event: any, context: RedisLogContext) => {
   try {

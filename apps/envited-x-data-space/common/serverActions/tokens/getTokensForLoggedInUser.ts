@@ -23,11 +23,6 @@ export const _getTokensForLoggedInUser =
       const connection = await db()
       const user = await connection.getUserById(session?.user?.id)
 
-      let issuerId = session?.user?.id
-      if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
-        const principal = await connection.getUserByIssuerId(user.issuerId)
-        issuerId = principal.id
-      }
       return connection.getTokensByIssuerId(user.addressGlobalIdentifierId)
     } catch (error: unknown) {
       log.error(formatError(error))

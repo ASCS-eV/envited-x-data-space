@@ -8,6 +8,7 @@ import { internalServerError, ok } from '../common/responses'
 import { getConsent } from '../handlers/consent'
 import { hydraMiddleware, loggerMiddleware, redisMiddleware } from '../middleware'
 import { RedisHydraLogContext } from '../types'
+import { formatError } from '../common/utils'
 
 const lambdaHandler = async (event: any, context: RedisHydraLogContext) => {
   try {

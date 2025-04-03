@@ -8,6 +8,7 @@ import { internalServerError, ok } from '../common/responses'
 import { getChallenge } from '../handlers/challenge'
 import { loggerMiddleware, redisMiddleware } from '../middleware'
 import { RedisLogContext } from '../types'
+import { formatError } from '../common/utils'
 
 export const lambdaHandler = async (event: any, context: RedisLogContext) => {
   try {

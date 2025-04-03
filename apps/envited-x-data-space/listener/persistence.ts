@@ -16,7 +16,9 @@ export const getTokenByTokenId =
     database
       .select()
       .from(schema.token)
-      .where(and(eq(schema.token.tokenId, tokenId), eq(schema.token.contractGlobalIdentifierId, contractGlobalIdentifierId)))
+      .where(
+        and(eq(schema.token.tokenId, tokenId), eq(schema.token.contractGlobalIdentifierId, contractGlobalIdentifierId)),
+      )
 
 export const getTokenTags =
   (

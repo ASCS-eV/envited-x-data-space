@@ -174,10 +174,7 @@ export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: s
 
 export const getActiveUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.query.user.findMany({
-    where: and(
-      eq(user.issuerId, issuerId),
-      eq(user.isActive, true),
-    ),
+    where: and(eq(user.issuerId, issuerId), eq(user.isActive, true)),
     with: {
       urnGlobalIdentifier: true,
       addressGlobalIdentifier: true,

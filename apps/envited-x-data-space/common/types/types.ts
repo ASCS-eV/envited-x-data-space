@@ -199,6 +199,8 @@ export enum FileType {
 export enum IdentifierMethod {
   didPkh = 'did:pkh',
   urnUuid = 'urn:uuid',
+  urnContract = 'urn:contract',
+  urnOperation = 'urn:operation',
 }
 
 export interface GlobalIdentifier {

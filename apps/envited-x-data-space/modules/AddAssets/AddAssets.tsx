@@ -49,8 +49,9 @@ export const AddAssets = () => {
       const processFiles = pipe(map(processFile), Promise.all.bind(Promise))
       const filesData = await processFiles(filesArray)
       const uploadData = await validateAndUploadAssets(filesData as AssetFile[])
+      console.log('uploadData', uploadData)
       const results = await Promise.all(map(file => uploadFile(filesArray, file as any), uploadData))
-
+      console.log('results', results)
       map(({ success, file }: { success: boolean; file: string }) =>
         success
           ? successNotification(`${file} ${t('[Notification] asset successfully uploaded')}`)

@@ -29,6 +29,7 @@ export const processFile = async (file: File): Promise<{ name: string; type: str
 }
 
 export const uploadFile = async (filesArray: File[], { signedUrl, cid, fileType, file }: UploadAssetFile) => {
+  console.log('uploadFile', { signedUrl, cid, fileType, file })
   if (!signedUrl) {
     return { success: false, file, message: ERRORS.SIGNED_URL_MISSING }
   }

@@ -34,17 +34,11 @@ export const _getMintParams =
     if (isNil(user.issuerId) || isEmpty(user.issuerId)) {
       throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })
     }
-    console.log(asset)
-    console.log(user.urnGlobalIdentifierId)
+    
     const ownerUser = await connection.getUserById(asset.ownerId)
     const owner = await connection.getGlobalIdentifierById(ownerUser.addressGlobalIdentifierId)
     const from = await connection.getGlobalIdentifierById(user.urnGlobalIdentifierId)
 
-    console.log({
-      from: from.nss,
-      owner: owner?.nss,
-      contractAddress: process.env.TEZOS_ASSETS_CONTRACT!,
-    })
     return {
       from: from.nss,
       owner: owner?.nss,

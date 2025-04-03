@@ -18,11 +18,7 @@ export const mintToken =
     const contract = await web3.Tezos?.wallet.at(contractAddress)
     const token_info_map = new MichelsonMap()
     token_info_map.set('', stringToBytes(tokenInfo))
-    console.log('MINT', {
-      from_uuid: from,
-      to_: owner,
-      token_info: token_info_map,
-    })
+
     return contract?.methodsObject
       .mint({
         from_uuid: from,

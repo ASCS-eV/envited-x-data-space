@@ -100,7 +100,7 @@ describe('serverActions/profiles/update', () => {
 
   it('should throw with incorrect role', async () => {
     // when ... we want to update the profile as a user
-    // then ... it should throw as expectedd
+    // then ... it should throw as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
         id: 'USER_ID',

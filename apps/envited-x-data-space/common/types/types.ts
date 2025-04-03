@@ -153,6 +153,11 @@ export interface User {
   isActive: boolean
   urnGlobalIdentifierId: string
   addressGlobalIdentifierId: string
+  usersToCredentialTypes?: {
+    credentialType: {
+      name: string
+    }
+  }[]
 }
 
 export interface Profile {
@@ -191,7 +196,10 @@ export enum FileType {
   json = 'application/json',
 }
 
-export type IdentifierMethod = 'did:pkh' | 'urn:uuid'
+export enum IdentifierMethod {
+  didPkh = 'did:pkh',
+  urnUuid = 'urn:uuid',
+}
 
 export interface GlobalIdentifier {
   method: IdentifierMethod

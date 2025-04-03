@@ -1,7 +1,7 @@
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions, Session } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { equals, has, isEmpty, isNil, omit, pluck, prop } from 'ramda'
+import { equals, has, isEmpty, isNil, omit, pluck, prop, reject } from 'ramda'
 
 import { db } from '../database/queries'
 import { Credential } from '../database/types'
@@ -11,7 +11,7 @@ import { log } from '../logger'
 import { assignSingleRole } from '../roles'
 import { CredentialType, User } from '../types'
 import { Environment } from '../types'
-import { extractAddressFromDid } from '../utils'
+import { extractAddressFromDid, formatError } from '../utils'
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -25,7 +25,6 @@ export const authOptions: NextAuthOptions = {
         pkh: { label: 'Address', type: 'text', placeholder: 'tz...' },
       },
       async authorize(credentials) {
-        console.log('CREDENTIALS', credentials)
         if (!credentials) {
           return {
             id: '',
@@ -49,7 +48,7 @@ export const authOptions: NextAuthOptions = {
             role: assignSingleRole(userRoles),
           }
         } catch (e) {
-          console.log(e)
+          log.error(e)
           return {
             name: pkh,
             id: '',
@@ -88,8 +87,6 @@ export const authOptions: NextAuthOptions = {
   debug: true,
   callbacks: {
     async signIn({ profile }) {
-      log.info('SIGNIN IN')
-      log.info('profile', profile)
       try {
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
@@ -160,50 +157,39 @@ export const authOptions: NextAuthOptions = {
         log.info('Completing signin')
         return true
       } catch (error: unknown) {
-        log.error(error)
+        log.error(formatError(error))
         return false
       }
     },
     async jwt({ token, user, account, profile }) {
       if (account?.access_token) {
-        log.info('Adding access token to JWT')
         token.accessToken = account.access_token
       }
-      log.info('user', user)
-      log.info('account', account)
       if (user) {
         token.user = user
       }
-      console.log('profile', profile)
       if (profile && profile.sub) {
         const { sub } = profile
         const connection = await db()
 
         const user = await connection.getUserByDid(parseGlobalIdentifier(sub))
-        log.info('user', user)
         const result = await connection.getUserRolesByDid(parseGlobalIdentifier(sub))
-        log.info('result', result)
         const userRoles = pluck('usersToRoles', result)
-        log.info('userRoles', userRoles)
-        log.info('Adding user role to JWT: ', assignSingleRole(userRoles))
         token.user.role = assignSingleRole(userRoles)
         token.user.id = user.id
       }
-      console.log('token', token)
       return token
     },
     async session({ session, token }) {
-      log.info('Building session')
       if (session?.user) {
+        session.user.name = null
         session.user.did = token.user.did
         session.user.role = token.user.role
-        session.user.id = token.user.id || ''
-        session.user.email = undefined
-        session.user.image = undefined
-        session.user.name = token?.user?.did
+        session.user.id = token.user.id
+        session.user.email = null
+        session.user.image = null
       }
-      log.info('Session: ', session)
-      return session
+      return reject(isNil)(session as any) as unknown as Session
     },
   },
 }

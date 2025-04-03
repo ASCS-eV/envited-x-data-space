@@ -73,27 +73,20 @@ export const _getProfile =
         throw unauthorizedError({ resource: 'profiles' })
       }
       const connection = await db()
-      log.info('Getting profile')
       const user = await connection.getUserById(session.user.id)
-      log.info('Getting user', user)
       const issuer = await connection.getIssuerById(user?.issuerId)
-      log.info('Getting issuer', issuer)
       let profileName = issuer.name
-      log.info('Getting profile name', profileName)
+      
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserByIssuerId(user.issuerId)
         profileName = principal.name
-        log.info('Getting principal', principal)
       }
 
       if (hasCredentialType('AscsMemberCredential')(user.usersToCredentialTypes)) {
         profileName = user.name
-        log.info('Getting profile name', profileName)
       }
 
-      log.info('Getting profile', profileName)
       const profile = await connection.getProfileByName(profileName)
-      log.info('Getting profile', profile)
 
       if (isNil(profile) || isEmpty(profile)) {
         throw notFoundError({ resource: 'profiles', resourceId: issuer?.name, userId: session?.user.id })

@@ -32,9 +32,14 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: getUserByIdStub,
       getUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getIssuerByGlobalIdentifier: jest.fn().mockResolvedValue({
+        id: 'ISSUER_ID',
+        type: 'TYPE',
+        name: 'NAME',
+        url: 'URL',
+      }),
     })
     const logStub = {
-      // error: jest.fn(),
       error: console.error,
     } as any
 
@@ -47,7 +52,7 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
     expect(getUserByIdStub).toHaveBeenCalledTimes(1)
   })
 
-  it('should not return the amount of users if it is a unknonw user as expected', async () => {
+  it('should throw an error when it is a unknown user as expected', async () => {
     // when ... we request a user by id
     // then ... it returns a user as expected
 
@@ -65,17 +70,27 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: getUserByIdStub,
       getUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getIssuerByGlobalIdentifier: jest.fn().mockResolvedValue({
+        id: 'ISSUER_ID',
+        type: 'TYPE',
+        name: 'NAME',
+        url: 'URL',
+      }),
     })
     const logStub = {
       error: jest.fn(),
     } as any
 
-    const result = await SUT._getTotalUsersByIssuerId({
-      db: dbStub,
-      getServerSession: getServerSessionStub,
-      log: logStub,
-    })()
-    expect(result).toEqual(0)
+    try {
+      await SUT._getTotalUsersByIssuerId({
+        db: dbStub,
+        getServerSession: getServerSessionStub,
+        log: logStub,
+      })()
+      fail('Expected an error to be thrown')
+    } catch (error) {
+      expect((error as any).message).toEqual(ERRORS.INTERNAL_SERVER_ERROR)
+    }
     expect(getUserByIdStub).toHaveBeenCalledTimes(1)
   })
 

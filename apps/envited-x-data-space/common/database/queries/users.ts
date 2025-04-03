@@ -7,7 +7,7 @@ import { isEmpty, prop, propOr } from 'ramda'
 
 import { parseGlobalIdentifier } from '../../globalIdentifiers'
 import { Profile } from '../../types'
-import { isTrustAnchor, slugify } from '../../utils'
+import { formatError, isTrustAnchor, slugify } from '../../utils'
 import * as schema from '../schema'
 import {
   addressType,
@@ -22,6 +22,7 @@ import {
 } from '../schema'
 import { Credential, DatabaseConnection, Issuer, User } from '../types'
 import { insertGlobalIdentifierTx } from './globalIdentifiers'
+import { log } from '../../logger'
 
 export const deactivateUserById = (db: DatabaseConnection) => async (id: string) =>
   db
@@ -96,8 +97,8 @@ export const getUserByDid =
             ),
         ),
       with: {
-        urnGlobalIdentifier: true, // Fetch the related urnGlobalIdentifier
-        addressGlobalIdentifier: true, // Fetch the related addressGlobalIdentifier
+        urnGlobalIdentifier: true,
+        addressGlobalIdentifier: true,
         usersToRoles: true,
         usersToCredentialTypes: {
           columns: {},
@@ -132,7 +133,6 @@ export const getUserByName = (db: DatabaseConnection) => async (name: string) =>
       addressGlobalIdentifier: true,
     },
   })
-// db.select().from(user).where(eq(user.name, name))
 
 export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.query.user.findFirst({
@@ -164,12 +164,6 @@ export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: st
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.query.user.findMany({
     where: eq(
-      // user.addressGlobalIdentifierId,
-      // db
-      //   .select({ id: globalIdentifier.id })
-      //   .from(globalIdentifier)
-      //   .innerJoin(issuer, eq(issuer.globalIdentifierId, globalIdentifier.id))
-      //   .where(eq(issuer.id, issuerId)),
       user.issuerId,
       issuerId,
     ),
@@ -189,7 +183,6 @@ export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: s
       },
     },
   })
-// db.select().from(user).where(eq(user.issuerId, issuerId))
 
 export const getActiveUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>
   db.query.user.findMany({
@@ -220,10 +213,6 @@ export const getActiveUsersByIssuerId = (db: DatabaseConnection) => async (issue
       },
     },
   })
-// db
-//   .select()
-//   .from(user)
-//   .where(and(eq(user.issuerId, issuerId), eq(user.isActive, true)))
 
 export const addUserToRole =
   (db: DatabaseConnection) =>
@@ -237,13 +226,6 @@ export const removeUserFromRole =
       .delete(usersToRoles)
       .where(and(eq(usersToRoles.userId, userId), eq(usersToRoles.roleId, roleId)))
       .returning()
-
-// export const getUserByDid = (db: DatabaseConnection) => async ({ method, namespace, chainId, nss }: { method: string, namespace: string, chainId: string, nss: string }) =>
-//   db
-//     .select()
-//     .from(globalIdentifier)
-//     .where(and(eq(globalIdentifier.method, method), eq(globalIdentifier.namespace, namespace), eq(globalIdentifier.chainId, chainId), eq(globalIdentifier.nss, nss)))
-//     .leftJoin(user, eq(globalIdentifier.id, user.addressGlobalIdentifierId))
 
 export const insertUsersToRolesTx =
   (tx: PgTransaction<PostgresJsQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>) =>
@@ -273,6 +255,8 @@ export const insertAddressTypeTx =
       .insert(addressType)
       .values({
         name: type,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       })
       .onConflictDoUpdate({ target: addressType.name, set: { name: type } })
       .returning()
@@ -284,6 +268,8 @@ export const insertCredentialTypeTx =
       .insert(credentialType)
       .values({
         name: type,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       })
       .onConflictDoNothing()
       .returning()
@@ -485,6 +471,7 @@ export const _txn =
 
       return newUser
     } catch (error) {
+      log.error(formatError(error))
       tx.rollback()
     }
   }

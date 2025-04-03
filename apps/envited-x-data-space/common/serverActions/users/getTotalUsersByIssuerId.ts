@@ -6,8 +6,9 @@ import { db } from '../../database/queries'
 import { Database } from '../../database/types'
 import { hasCredentialType } from '../../guards'
 import { Log, log } from '../../logger'
-import { Session } from '../../types/types'
-import { formatError, internalServerErrorError, unauthorizedError } from '../../utils'
+import { Session, User } from '../../types'
+import { formatError, internalServerErrorError, notFoundError, unauthorizedError } from '../../utils'
+
 
 export const _getTotalUsersByIssuerId =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
@@ -20,12 +21,22 @@ export const _getTotalUsersByIssuerId =
       }
 
       const connection = await db()
-      const user = await connection.getUserById(session?.user?.id)
+      const user = await connection.getUserById(session?.user?.id) as User
 
-      let issuerId = session?.user?.id
-      if (isNotNil(user) && hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
+      if (isNil(user)) {
+        throw notFoundError({ resource: 'users', resourceId: session?.user?.id })
+      }
+
+      let issuerId = null
+      if (user.usersToCredentialTypes && hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         issuerId = user.issuerId
       }
+
+      if (user.usersToCredentialTypes && hasCredentialType('AscsMemberCredential')(user.usersToCredentialTypes)) {
+        const issuer = await connection.getIssuerByGlobalIdentifier(user.addressGlobalIdentifierId)
+        issuerId = issuer.id
+      }
+
 
       const users = await connection.getUsersByIssuerId(issuerId)
       return users.length

@@ -17,7 +17,7 @@ export const lambdaHandler = async (event: any, context: RedisLogContext) => {
 
     return ok(result)
   } catch (error) {
-    log.error(error)
+    log.error(formatError(error))
     return internalServerError(error.message)
   }
 }

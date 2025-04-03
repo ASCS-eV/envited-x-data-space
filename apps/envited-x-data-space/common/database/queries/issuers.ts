@@ -10,4 +10,8 @@ export const getIssuerById = (db: DatabaseConnection) => async (id: string) =>
       globalIdentifier: true,
     },
   })
-// db.select().from(issuer).where(eq(issuer.id, id))
+
+export const getIssuerByGlobalIdentifier = (db: DatabaseConnection) => async (globalIdentifierId: string) =>
+  db.query.issuer.findFirst({
+    where: eq(issuer.globalIdentifierId, globalIdentifierId),
+  })

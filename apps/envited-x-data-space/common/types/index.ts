@@ -9,6 +9,7 @@ export {
   Role,
   CredentialType,
   FileType,
+  IdentifierMethod,
 } from './types'
 export type {
   Action,

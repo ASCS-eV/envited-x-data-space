@@ -27,7 +27,7 @@ import {
   getGlobalIdentifierById,
   insertGlobalIdentifier,
 } from './globalIdentifiers'
-import { getIssuerById } from './issuers'
+import { getIssuerById, getIssuerByGlobalIdentifier } from './issuers'
 import { getMembers } from './members'
 import {
   getProfileByName,
@@ -79,6 +79,7 @@ const queries = {
   getUserWithProfileById,
   getUsersByIssuerId,
   getIssuerById,
+  getIssuerByGlobalIdentifier,
   insertBusinessCategoryByProfileId,
   insertUserTx,
   updateProfile,

@@ -32,7 +32,7 @@ export const deleteAsset =
         resource: 'assets',
         resourceId: id,
         message: ERRORS.NOT_ALLOWED_TO_DELETE_ASSET,
-        userId: session.user.did,
+        userId: session.user.id,
       })
     }
 
@@ -41,7 +41,7 @@ export const deleteAsset =
         resource: 'assets',
         resourceId: id,
         message: ERRORS.MINTED_ASSET_CANNOT_BE_DELETED,
-        userId: session.user.did,
+        userId: session.user.id,
       })
     }
 

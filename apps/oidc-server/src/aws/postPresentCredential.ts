@@ -23,7 +23,7 @@ const lambdaHandler = async (event: APIGatewayEvent, context: RedisHydraLogConte
 
     return ok(result)
   } catch (error) {
-    log.error(error)
+    log.error(formatError(error))
     return internalServerError(error.message)
   }
 }

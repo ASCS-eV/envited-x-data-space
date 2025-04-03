@@ -42,7 +42,7 @@ export async function validateAndUploadAssets(files: AssetFile[]) {
       })
     }
 
-    const result = files.map(async ({ name, cid, type }) => {
+    const result = await Promise.all(files.map(async ({ name, cid, type }) => {
       if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueAsset) {
         const asset = await getAssetByCID(cid)
 
@@ -60,7 +60,7 @@ export async function validateAndUploadAssets(files: AssetFile[]) {
         cid,
         fileType: type,
       }
-    })
+    }))
     return result
   } catch (error: unknown) {
     log.error(formatError(error))

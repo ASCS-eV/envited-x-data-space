@@ -71,6 +71,7 @@ export const insertGlobalIdentifierTx =
         target: [globalIdentifier.method, globalIdentifier.namespace, globalIdentifier.chainId, globalIdentifier.nss],
         set: {
           metadata,
+          updatedAt: new Date(),
         },
       })
       .returning()

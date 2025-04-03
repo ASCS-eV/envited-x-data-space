@@ -254,8 +254,9 @@ export const _validateAndCreateMetadata =
       if (!user) {
         throw new Error('User not found')
       }
-      const [issuer] = await connection.getUserWithProfileById(user.issuerId)
 
+      const issuer = await connection.getUserByIssuerId(user.issuerId)
+      
       if (!issuer) {
         throw new Error('Issuer not found')
       }
@@ -304,13 +305,19 @@ export const _validateAndCreateMetadata =
         path: pathOr('', MANIFEST_LICENSE_PATH)(data.manifest),
       }
 
+      const minterGuid = await connection.getGlobalIdentifierById(issuer.addressGlobalIdentifierId)
+      
+      if (!minterGuid) {
+        throw new Error('Minter not found')
+      }
+
       const tokenMetadata = createTokenMetadata({
         asset: assetObject,
-        creator: issuer.profile.name,
+        creator: issuer.name,
         display: displayObject,
         domainMetadata: domainMetadataObject,
         manifest: manifestObject,
-        minter: extractAddressFromDid(issuer.user.id),
+        minter: minterGuid.nss,
         rights: rightsObject,
       })
 

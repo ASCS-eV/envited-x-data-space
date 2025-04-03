@@ -116,15 +116,6 @@ export const getUserByDid =
 export const getUserWithProfileById = (db: DatabaseConnection) => async (id: string) =>
   db.select().from(user).where(eq(user.id, id)).leftJoin(profile, eq(user.name, profile.name))
 
-export const getTotalUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) => {
-  const result = await db
-    .select({ count: sql<number>`COUNT(*)` })
-    .from(user)
-    .where(eq(user.issuerId, issuerId))
-
-  return result[0]?.count
-}
-
 export const getUserByName = (db: DatabaseConnection) => async (name: string) =>
   db.query.user.findFirst({
     where: eq(user.name, name),
@@ -159,6 +150,7 @@ export const getUserByIssuerId = (db: DatabaseConnection) => async (issuerId: st
         },
       },
     },
+    
   })
 
 export const getUsersByIssuerId = (db: DatabaseConnection) => async (issuerId: string) =>

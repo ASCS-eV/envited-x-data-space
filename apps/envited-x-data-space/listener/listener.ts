@@ -95,8 +95,8 @@ export const listenToAssetContract =
         console.log('Contract GUID', contractGuid)
 
         if (contractGuid) {
-          log.info('Checking for existing token', contractGuid.id, tokenId )
-          const [existingToken] = await getTokenByTokenId({ contractGlobalIdentifierId: contractGuid.id, tokenId })
+          log.info('Checking for existing token', contractGuid.id, tokenId)
+          const [existingToken] = await getTokenByTokenId({ contractGuid: contractGuid.id, tokenId })
           log.info('Existing token', existingToken)
           if (existingToken) {
             return

@@ -30,7 +30,7 @@ export enum AccessRole {
 type ManifestArtifacts = [ManifestMetadataLink, ...ManifestLink[]]
 
 export interface Manifest {
-  '@context': ManifestContext
+  '@context': { [K in ManifestContext]: string }
   '@id': string
   '@type': string
   'manifest:hasManifestReference': ManifestLink
@@ -117,6 +117,7 @@ export interface ExtractedFile {
   arrayBuffer: ArrayBuffer
   path: string
   category: ManifestCategoryId
+  mimeType: string
 }
 
 export interface ExtractedFileWithCID extends ExtractedFile {

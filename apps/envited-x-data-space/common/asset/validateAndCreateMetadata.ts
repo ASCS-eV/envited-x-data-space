@@ -239,7 +239,7 @@ export const _validateAndCreateMetadata =
       manifest: Manifest,
     ) => Promise<ManifestExtractedFiles>
     getAllFilenamesFromFiles: (
-      extractedFiles: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer }[],
+      extractedFiles: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer; mimeType: string }[],
     ) => Promise<ExtractedFileWithCID[]>
     db: Database
   }) =>
@@ -260,7 +260,7 @@ export const _validateAndCreateMetadata =
       if (!issuer) {
         throw new Error('Issuer not found')
       }
-
+      console.log('Manifest', data.manifest)
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
       console.log('Files', files)
       const visualization = filter(propEq('envited-x:isMedia', 'category'))(files.publicUser)

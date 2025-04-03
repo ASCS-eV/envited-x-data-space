@@ -99,7 +99,7 @@ export interface AssetMetadata {
 
 export interface Token {
   id: string
-  hash: string
+  hashGlobalIdentifierId: string
   createdAt: string
   contract: string
   minter: string

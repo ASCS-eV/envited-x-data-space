@@ -262,8 +262,11 @@ export const _validateAndCreateMetadata =
       }
 
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
+      console.log('Files', files)
       const visualization = filter(propEq('envited-x:isMedia', 'category'))(files.publicUser)
+      console.log('Visualization', visualization)
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
+      console.log('VisualizationFiles', visualizationFiles)
 
       const modifiedManifest = createModifiedManifest({
         assetCID,
@@ -286,7 +289,7 @@ export const _validateAndCreateMetadata =
         fileSize: 0,
         uri: '',
       }
-      
+
       if (displayUri) {
         displayObject = {
           cid: displayUri.cid,

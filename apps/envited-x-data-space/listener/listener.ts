@@ -84,12 +84,15 @@ export const listenToAssetContract =
         const { hash, destination, metadata, parameters } = data
         const creator = parameters.value.args[1].args[0].string
         const tokenId = parseInt(metadata.operation_result.lazy_storage_diff[2].diff.updates[0].key.int, 10)
-        let contractGuid = await getGlobalIdentifierByFullResourceName({
+        log.info('Registering token ', tokenId)
+        const contractGuid = await getGlobalIdentifierByFullResourceName({
           method: 'urn:contract',
           namespace: 'tezos',
           chainId: process.env.TEZOS_CHAIN_ID!,
           nss: process.env.TEZOS_ASSETS_CONTRACT!,
         })
+
+        console.log('Contract GUID', contractGuid)
 
         if (contractGuid) {
           const [existingToken] = await getTokenByTokenId({ contractGlobalIdentifierId: contractGuid.id, tokenId })
@@ -99,7 +102,6 @@ export const listenToAssetContract =
           }
         }
 
-        log.info('Registering token ', tokenId)
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         log.info('Token metadata', tokenMetadata)

@@ -7,7 +7,7 @@ export const FEATURE_FLAGS = {
   staging: {
     oidc: true,
     contract: true,
-    uniqueAsset: true,
+    uniqueAsset: false,
   },
   production: {
     oidc: true,

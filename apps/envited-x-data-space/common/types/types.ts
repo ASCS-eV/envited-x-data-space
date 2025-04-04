@@ -10,7 +10,7 @@ export interface TranslationsMap {
   [Language.nl]: { [key: string]: { [key: string]: string } }
 }
 
-export enum UploadAssetStatus {
+export enum UploadStatus {
   idle = 'idle',
   queued = 'queued',
   uploading = 'uploading',
@@ -169,7 +169,7 @@ export interface User {
 }
 
 export interface UploadAssetState {
-  status: UploadAssetStatus
+  status: UploadStatus
   progress: number
 }
 

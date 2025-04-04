@@ -9,7 +9,7 @@ export {
   Language,
   Role,
   Size,
-  UploadAssetStatus,
+  UploadStatus,
   IdentifierMethod,
 } from './types'
 export type {

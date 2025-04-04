@@ -7,7 +7,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { UploadAssetState, UploadAssetStatus } from '../../common/types'
+import { UploadAssetState, UploadStatus } from '../../common/types'
 import { allTrue, anyFalse } from '../../common/utils'
 import { AssetFile, validateAndUploadAssets } from './AddAssets.actions'
 import { addFiles, processFile, removeFile, uploadFile } from './AddAssets.utils'
@@ -38,6 +38,19 @@ export const AddAssets = () => {
     setSelectedAssetsValidationResults(selectedAssetsValidationResults)
   }
 
+  const updateUploadState = (index: number, progress: number, status: UploadStatus) => {
+    setUploadAssetsState(prev => {
+      const updated = [...prev]
+      updated[index] = {
+        ...updated[index],
+        progress,
+        status,
+      }
+
+      return updated
+    })
+  }
+
   const { allAssetsValid } = getValues()
 
   const addAssetsAction: SubmitHandler<any> = async data => {
@@ -49,16 +62,19 @@ export const AddAssets = () => {
       const filesArray = Array.from(data.assets as FileList)
 
       filesArray.forEach((file, index) => {
+        updateUploadState(index, 0, UploadStatus.queued)
+        /*
         setUploadAssetsState(prev => {
           const updated = [...prev]
           updated[index] = {
             ...updated[index],
             progress: 0,
-            status: UploadAssetStatus.queued,
+            status: UploadStatus.queued,
           }
 
           return updated
         })
+        */
       })
 
       const processFiles = pipe(map(processFile), Promise.all.bind(Promise))
@@ -67,44 +83,54 @@ export const AddAssets = () => {
 
       const uploadPromises = uploadData.map(async (file, index) => {
         try {
-          const { success } = await uploadFile(filesArray, file, percent => {
+          const { success, message } = await uploadFile(filesArray, file, percent => {
+            updateUploadState(index, percent, UploadStatus.uploading)
+            /*
             setUploadAssetsState(prev => {
               const updated = [...prev]
               updated[index] = {
                 ...updated[index],
                 progress: percent,
-                status: UploadAssetStatus.uploading,
+                status: UploadStatus.uploading,
               }
 
               return updated
             })
+            */
           })
 
-          if (success) {
-            setUploadAssetsState(prev => {
-              const updated = [...prev]
-              updated[index] = {
-                ...updated[index],
-                progress: 100,
-                status: UploadAssetStatus.uploaded,
-              }
-
-              return updated
-            })
-            successNotification(`${filesArray[index].name} successfully uploaded`)
-          } else {
+          if (!success) {
+            /*
             setUploadAssetsState(prev => {
               const updated = [...prev]
               updated[index] = {
                 ...updated[index],
                 progress: 0,
-                status: UploadAssetStatus.error,
+                status: UploadStatus.error,
               }
-
+              
               return updated
             })
-            error(`${filesArray[index].name} already exists`)
+            */
+            updateUploadState(index, 0, UploadStatus.error)
+            // error(`${filesArray[index].name} already exists`)
+            return error(`${filesArray[index].name}: ${message}`)
           }
+
+          /*
+          setUploadAssetsState(prev => {
+            const updated = [...prev]
+            updated[index] = {
+              ...updated[index],
+              progress: 100,
+              status: UploadStatus.uploaded,
+            }
+            
+            return updated
+          })
+          */
+          updateUploadState(index, 100, UploadStatus.uploaded)
+          successNotification(`${filesArray[index].name} successfully uploaded`)
         } catch (err) {
           error(`Upload failed for ${file}`)
         }

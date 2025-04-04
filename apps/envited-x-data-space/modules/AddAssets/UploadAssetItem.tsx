@@ -2,12 +2,12 @@
 
 import { LoadingIndicator, ProgressBar, bytesToMegaBytes } from '@envited-x-data-space/design-system'
 import { CheckCircleIcon, ClockIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { anyEqual } from 'apps/envited-x-data-space/common/utils/utils'
 import { pathOr, prop, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
-import { UploadAssetState, UploadAssetStatus } from '../../common/types'
+import { UploadAssetState, UploadStatus } from '../../common/types'
+import { anyEqual } from '../../common/utils'
 import { validateAsset } from '../../common/validator/utils'
 
 interface UploadAssetItemProps {
@@ -27,7 +27,7 @@ export const UploadAssetCard = ({
   name: string
   size: number
   progress: number
-  status: UploadAssetStatus
+  status: UploadStatus
 }) => {
   return (
     <div className="border-gray-300 relative block w-full cursor-pointer rounded-lg border bg-white px-6 py-4 focus:outline-none sm:flex sm:justify-between items-center">
@@ -35,7 +35,7 @@ export const UploadAssetCard = ({
         <span className="flex flex-col text-sm gap-3 w-full">
           <span className="font-medium text-gray-900">{name}</span>
           <span className="flex flex-col gap-2">
-            {!anyEqual(status)([UploadAssetStatus.idle, UploadAssetStatus.queued]) && (
+            {!anyEqual(status)([UploadStatus.idle, UploadStatus.queued]) && (
               <span className="text-gray-500 flex gap-6 items-center">
                 <span className="block sm:inline w-full">
                   <ProgressBar percent={progress} status={status} />
@@ -44,15 +44,15 @@ export const UploadAssetCard = ({
             )}
             <span className="text-gray-500 flex gap-6 items-center justify-between">
               {match(status)
-                .with(UploadAssetStatus.idle, () => <></>)
-                .with(UploadAssetStatus.queued, () => (
+                .with(UploadStatus.idle, () => <></>)
+                .with(UploadStatus.queued, () => (
                   <>
                     <span className="text-xs flex items-center gap-1.5">
                       <ClockIcon className="text-gray-400 w-[18px] h-[18px]" /> Waiting for upload
                     </span>
                   </>
                 ))
-                .with(UploadAssetStatus.uploading, () => (
+                .with(UploadStatus.uploading, () => (
                   <>
                     <span className="flex items-center text-xs">
                       <span className="flex gap-x-2 items-center">
@@ -68,7 +68,7 @@ export const UploadAssetCard = ({
                     <span className="block sm:inline text-xs">{progress}%</span>
                   </>
                 ))
-                .with(UploadAssetStatus.uploaded, () => (
+                .with(UploadStatus.uploaded, () => (
                   <>
                     <span className="text-xs flex items-center gap-1.5">
                       <CheckCircleIcon className="text-green-500 w-[18px] h-[18px]" /> Upload successful!
@@ -76,7 +76,7 @@ export const UploadAssetCard = ({
                     <span className="block sm:inline text-xs">{progress}%</span>
                   </>
                 ))
-                .with(UploadAssetStatus.error, () => (
+                .with(UploadStatus.error, () => (
                   <>
                     <span className="block sm:inline text-xs">
                       <XMarkIcon className="text-red-600 w-[18px] h-[18px]" /> Upload failed!
@@ -96,7 +96,7 @@ export const UploadAssetCard = ({
 }
 
 export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, validHandler, removeFile }) => {
-  const status = propOr(UploadAssetStatus.idle, 'status')(state) as UploadAssetStatus
+  const status = propOr(UploadStatus.idle, 'status')(state) as UploadStatus
   const progress = propOr(0, 'progress')(state) as number
 
   const [asset, setAsset] = useState<any>(null)
@@ -125,7 +125,7 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, va
   }, [status])
 
   return match(status)
-    .with(UploadAssetStatus.idle, () => (
+    .with(UploadStatus.idle, () => (
       <div className="border-gray-300 hover:border-blue hover:bg-gray-100 relative block w-full cursor-pointer rounded-lg border bg-white px-6 py-4 focus:outline-none sm:flex sm:justify-between items-center">
         <span className="flex items-center grow">
           <span className="flex flex-col text-sm gap-2.5">

@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { UploadAssetStatus } from '../../../types'
+import { UploadStatus } from '../../../types'
 import ProgressBar from './ProgressBar'
 
 export default {
@@ -15,5 +15,5 @@ export const ProgressBarStory = Template.bind({})
 
 ProgressBarStory.args = {
   percent: 0,
-  status: UploadAssetStatus.uploaded,
+  status: UploadStatus.uploaded,
 }

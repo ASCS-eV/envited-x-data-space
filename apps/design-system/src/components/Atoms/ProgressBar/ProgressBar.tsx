@@ -1,19 +1,19 @@
 import React, { FC } from 'react'
 
-import { UploadAssetStatus } from '../../../types'
+import { UploadStatus } from '../../../types'
 
 interface Props {
   percent: number
-  status: UploadAssetStatus
+  status: UploadStatus
 }
 
 const ProgressBar: FC<Props> = ({ percent, status }) => {
   const statusClassMap = {
-    [UploadAssetStatus.idle]: 'bg-gray-200',
-    [UploadAssetStatus.queued]: 'bg-gray-200',
-    [UploadAssetStatus.uploading]: 'bg-blue',
-    [UploadAssetStatus.uploaded]: 'bg-green-400',
-    [UploadAssetStatus.error]: 'bg-red-600',
+    [UploadStatus.idle]: 'bg-gray-200',
+    [UploadStatus.queued]: 'bg-gray-200',
+    [UploadStatus.uploading]: 'bg-blue',
+    [UploadStatus.uploaded]: 'bg-green-400',
+    [UploadStatus.error]: 'bg-red-600',
   }
 
   return (

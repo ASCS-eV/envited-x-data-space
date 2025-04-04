@@ -63,17 +63,6 @@ export const AddAssets = () => {
 
       filesArray.forEach((file, index) => {
         updateUploadState(index, 0, UploadStatus.queued)
-        setUploadAssetsState(prev => {
-          const updated = [...prev]
-          updated[index] = {
-            ...updated[index],
-            progress: 0,
-            status: UploadStatus.queued,
-          }
-
-          return updated
-        })
-        */
       })
 
       const processFiles = pipe(map(processFile), Promise.all.bind(Promise))

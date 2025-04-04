@@ -158,6 +158,8 @@ export interface User {
       name: string
     }
   }[]
+  addressGlobalIdentifier?: GlobalIdentifier
+  urnGlobalIdentifier?: GlobalIdentifier
 }
 
 export interface Profile {

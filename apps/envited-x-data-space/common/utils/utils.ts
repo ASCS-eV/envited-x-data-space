@@ -78,7 +78,7 @@ export const truncate = (length: number) =>
     pipe((x: string) => [take(10, x), takeLast(10, x)], join('…')),
   )
 
-export const truncateDID = truncate(20)
+export const truncatePkh = truncate(20)
 
 export const truncateCID = truncate(10)
 

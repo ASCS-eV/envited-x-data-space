@@ -8,10 +8,10 @@ export default async function Index() {
       <PageHeader
         heading="About us"
         title="ASCS association"
-        description="The ENVITED-X data space is operated by the Automotive Solution Center for Simulation e.V. (ASCS), a non-profit association founded in Germany in 2008. Our mission is to use computer simulation, AI, and high-performance computing to advance mobility, making it faster, more efficient, and sustainable. By focusing on simulation, we accelerate research & development, optimize resource use, and support eco-friendly solutions. As multiplier, catalyst and accelerator in the mobility sector, ASCS connects stakeholders, providing a platform for collaboration, knowledge exchange, and innovation."
+        description="The ENVITED-X data space is operated by the Automotive Solution Center for Simulation e.V. (ASCS), a non-profit association founded in Germany in 2008. Our mission is to use computer simulation, AI, and high-performance computing to advance mobility, making it faster, more efficient, and sustainable. By focusing on simulation, we accelerate research &amp; development, optimize resource use, and support eco-friendly solutions. As multiplier, catalyst and accelerator in the mobility sector, ASCS connects stakeholders, providing a platform for collaboration, knowledge exchange, and innovation."
         link={
           <Link href="https://asc-s.de/en/" target="_blank" className="text-white/60">
-            Learn more about ASCS's work and membership benefits on our website
+            Learn more about ASCS&apos;s work and membership benefits on our website
           </Link>
         }
         backgroundImage="/images/AdobeStock_824054193_goami.jpeg"

@@ -6,7 +6,7 @@ import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { User } from '../../common/types/types'
-import { truncateDID } from '../../common/utils'
+import { truncatePkh } from '../../common/utils'
 import { DashboardMembersDialogConfirm } from './DashboardMembersDialogConfirm'
 
 interface UsersProps {
@@ -38,7 +38,7 @@ export const DashboardMembers: FC<UsersProps> = ({ members }) => {
         <TableBody>
           {map(({ id, name, email, isActive }: User) => (
             <TableRow key={id}>
-              <TableCell>{truncateDID(id)}</TableCell>
+              <TableCell>{truncatePkh(id)}</TableCell>
               <TableCell>{name}</TableCell>
               <TableCell>{email}</TableCell>
               <TableCell>

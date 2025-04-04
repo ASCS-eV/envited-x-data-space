@@ -6,7 +6,7 @@ import React, { FC } from 'react'
 
 import { useTranslation } from '../../common/i18n'
 import { User } from '../../common/types/types'
-import { truncateDID } from '../../common/utils'
+import { truncatePkh } from '../../common/utils'
 import { UserDialogConfirm } from './UsersDialogConfirm'
 
 interface UsersProps {
@@ -37,9 +37,9 @@ export const Users: FC<UsersProps> = ({ users, principalUserId = '' }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {map(({ id, name, email, isActive }: User) => (
+          {map(({ addressGlobalIdentifier, name, email, isActive, id }: User) => (
             <TableRow key={id}>
-              <TableCell>{truncateDID(id)}</TableCell>
+              <TableCell>{truncatePkh(addressGlobalIdentifier?.nss || '')}</TableCell>
               <TableCell>{name}</TableCell>
               <TableCell>{email}</TableCell>
               <TableCell>

@@ -63,7 +63,6 @@ export const AddAssets = () => {
 
       filesArray.forEach((file, index) => {
         updateUploadState(index, 0, UploadStatus.queued)
-        /*
         setUploadAssetsState(prev => {
           const updated = [...prev]
           updated[index] = {
@@ -81,54 +80,24 @@ export const AddAssets = () => {
       const filesData = await processFiles(filesArray)
       const uploadData = await validateAndUploadAssets(filesData as AssetFile[])
 
+      console.log('uploadData', uploadData)
+
       const uploadPromises = uploadData.map(async (file, index) => {
         try {
+          if (!file.success) {
+            updateUploadState(index, 0, UploadStatus.error)
+            return error(`${filesArray[index].name}: ${file.message}`)
+          } 
+
           const { success, message } = await uploadFile(filesArray, file, percent => {
             updateUploadState(index, percent, UploadStatus.uploading)
-            /*
-            setUploadAssetsState(prev => {
-              const updated = [...prev]
-              updated[index] = {
-                ...updated[index],
-                progress: percent,
-                status: UploadStatus.uploading,
-              }
-
-              return updated
-            })
-            */
           })
 
           if (!success) {
-            /*
-            setUploadAssetsState(prev => {
-              const updated = [...prev]
-              updated[index] = {
-                ...updated[index],
-                progress: 0,
-                status: UploadStatus.error,
-              }
-              
-              return updated
-            })
-            */
             updateUploadState(index, 0, UploadStatus.error)
-            // error(`${filesArray[index].name} already exists`)
             return error(`${filesArray[index].name}: ${message}`)
           }
 
-          /*
-          setUploadAssetsState(prev => {
-            const updated = [...prev]
-            updated[index] = {
-              ...updated[index],
-              progress: 100,
-              status: UploadStatus.uploaded,
-            }
-            
-            return updated
-          })
-          */
           updateUploadState(index, 100, UploadStatus.uploaded)
           successNotification(`${filesArray[index].name} successfully uploaded`)
         } catch (err) {

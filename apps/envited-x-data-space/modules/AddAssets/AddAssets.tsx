@@ -61,7 +61,7 @@ export const AddAssets = () => {
 
       const filesArray = Array.from(data.assets as FileList)
 
-      filesArray.forEach((file, index) => {
+      filesArray.forEach((_, index) => {
         updateUploadState(index, 0, UploadStatus.queued)
       })
 
@@ -69,14 +69,12 @@ export const AddAssets = () => {
       const filesData = await processFiles(filesArray)
       const uploadData = await validateAndUploadAssets(filesData as AssetFile[])
 
-      console.log('uploadData', uploadData)
-
       const uploadPromises = uploadData.map(async (file, index) => {
         try {
           if (!file.success) {
             updateUploadState(index, 0, UploadStatus.error)
             return error(`${filesArray[index].name}: ${file.message}`)
-          } 
+          }
 
           const { success, message } = await uploadFile(filesArray, file, percent => {
             updateUploadState(index, percent, UploadStatus.uploading)

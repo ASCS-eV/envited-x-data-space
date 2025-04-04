@@ -177,7 +177,6 @@ export const insertToken =
         const [operationGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(hash))
         const [contractGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(contract))
         const [minterGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(minter))
-        console.log('Global identifiers', operationGuid, contractGuid, minterGuid)
         const [insertedToken] = await insertTokenTx(tx)({
           operationGlobalIdentifierId: operationGuid.id,
           contractGlobalIdentifierId: contractGuid.id,

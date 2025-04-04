@@ -17,7 +17,12 @@ export const _getTokenById =
       const connection = await db()
       const [token] = await connection.getTokenById(id)
       const minterGuid = await connection.getGlobalIdentifierById(token.minterGlobalIdentifierId)
-      const user = await connection.getUserByDid({ method: minterGuid.method, namespace: minterGuid.namespace, chainId: minterGuid.chainId, nss: minterGuid.nss })
+      const user = await connection.getUserByDid({
+        method: minterGuid.method,
+        namespace: minterGuid.namespace,
+        chainId: minterGuid.chainId,
+        nss: minterGuid.nss,
+      })
       const profile = await connection.getProfileByName(user.name)
       const tokenWithTokenAttributes = await connection.getTokenWithAttributesById(id)
 

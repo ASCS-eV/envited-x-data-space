@@ -260,13 +260,10 @@ export const _validateAndCreateMetadata =
       if (!issuer) {
         throw new Error('Issuer not found')
       }
-      console.log('Manifest', data.manifest)
+      
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
-      console.log('Files', files)
       const visualization = filter(propEq('envited-x:isMedia', 'category'))(files.publicUser)
-      console.log('Visualization', visualization)
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
-      console.log('VisualizationFiles', visualizationFiles)
 
       const modifiedManifest = createModifiedManifest({
         assetCID,
@@ -280,7 +277,7 @@ export const _validateAndCreateMetadata =
         cid: assetCID,
         fileSize: byteArray.length,
       }
-      console.log(visualizationFiles)
+      
       const displayUri = find(
         and(propEq(ManifestCategoryId.envitedXIsMedia, 'category'), compose(includes('image'), propOr('', 'mimeType'))),
       )(visualizationFiles) as ExtractedFileWithCID

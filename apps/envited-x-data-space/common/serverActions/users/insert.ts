@@ -30,7 +30,7 @@ export const _insert =
       }
 
       if (equals(CredentialType.AscsUser)(credentialType as CredentialType)) {
-        const principal = await connection.getUserById(credentialIssuerId)
+        const principal = await connection.getUserByIssuerId(credentialIssuerId)
 
         if (isEmpty(principal)) {
           throw badRequestError({ resource: 'users', resourceId: credentialIssuerId, message: 'Principal not found' })

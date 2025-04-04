@@ -32,7 +32,8 @@ export const _getProfileBySlug =
           return profile
         }
 
-        const [principal] = await connection.getUserByIssuerId(user.issuerId)
+        const principal = await connection.getUserByIssuerId(user.issuerId)
+
         if (isUsersCompanyProfile(principal)(profile)) {
           return profile
         }
@@ -71,13 +72,13 @@ export const _getProfile =
       if (isNil(session)) {
         throw unauthorizedError({ resource: 'profiles' })
       }
-
       const connection = await db()
       const user = await connection.getUserById(session.user.id)
-      const [issuer] = await connection.getIssuerById(user.issuerId)
+      const issuer = await connection.getIssuerById(user?.issuerId)
       let profileName = issuer.name
+
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
-        const principal = await connection.getUserById(user.issuerId)
+        const principal = await connection.getUserByIssuerId(user.issuerId)
         profileName = principal.name
       }
 

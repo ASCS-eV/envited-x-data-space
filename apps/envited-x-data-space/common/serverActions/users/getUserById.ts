@@ -4,7 +4,7 @@ import { cache } from 'react'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { isOwnUser, userIsIssuedByLoggedInUser } from '../../guards'
+import { isOwnUser, isUserIssuedByLoggedInUser } from '../../guards'
 import { Log, log } from '../../logger'
 import { User } from '../../types'
 import { Session } from '../../types/types'
@@ -23,7 +23,7 @@ export const _getUserById =
       const connection = await db()
       const user = await connection.getUserById(id)
 
-      if (!userIsIssuedByLoggedInUser(user)(session) && !isOwnUser(user)(session)) {
+      if (!isUserIssuedByLoggedInUser(user)(session) && !isOwnUser(user)(session)) {
         throw forbiddenError({
           resource: 'users',
           resourceId: id,

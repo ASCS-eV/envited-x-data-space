@@ -22,7 +22,7 @@ describe('serverActions/assets/update', () => {
             cid: 'ASSET_CID',
             metadata: 'METADATA',
             status: AssetStatus.processing,
-            userId: 'USER_PKH',
+            userId: 'USER_ID',
           },
         ]),
         updateAsset: jest.fn().mockResolvedValue([
@@ -31,7 +31,7 @@ describe('serverActions/assets/update', () => {
             cid: 'ASSET_CID',
             metadata: 'METADATA',
             status: AssetStatus.pending,
-            userId: 'USER_PKH',
+            userId: 'USER_ID',
           },
         ]),
       })
@@ -40,7 +40,7 @@ describe('serverActions/assets/update', () => {
       } as any
 
       const result = await SUT._update({ db: dbStub, getServerSession: getServerSessionStub, log: logStub })(
-        'USER_PKH',
+        'USER_ID',
         'ASSET_ID',
         '',
         AssetStatus.pending,
@@ -51,15 +51,15 @@ describe('serverActions/assets/update', () => {
         cid: 'ASSET_CID',
         metadata: 'METADATA',
         status: AssetStatus.pending,
-        userId: 'USER_PKH',
+        userId: 'USER_ID',
       })
       expect(getServerSessionStub).toHaveBeenCalledWith()
-      expect(db.updateAsset).toHaveBeenCalledWith('USER_PKH', 'ASSET_ID', {
+      expect(db.updateAsset).toHaveBeenCalledWith('USER_ID', 'ASSET_ID', {
         cid: 'ASSET_CID',
         id: 'ASSET_ID',
         metadata: '',
         status: 'pending',
-        userId: 'USER_PKH',
+        userId: 'USER_ID',
       })
     })
 

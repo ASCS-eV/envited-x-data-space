@@ -239,7 +239,7 @@ export const _validateAndCreateMetadata =
       manifest: Manifest,
     ) => Promise<ManifestExtractedFiles>
     getAllFilenamesFromFiles: (
-      extractedFiles: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer }[],
+      extractedFiles: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer; mimeType: string }[],
     ) => Promise<ExtractedFileWithCID[]>
     db: Database
   }) =>
@@ -254,7 +254,8 @@ export const _validateAndCreateMetadata =
       if (!user) {
         throw new Error('User not found')
       }
-      const [issuer] = await connection.getUserWithProfileById(user.issuerId)
+
+      const issuer = await connection.getUserByIssuerId(user.issuerId)
 
       if (!issuer) {
         throw new Error('Issuer not found')
@@ -280,11 +281,19 @@ export const _validateAndCreateMetadata =
       const displayUri = find(
         and(propEq(ManifestCategoryId.envitedXIsMedia, 'category'), compose(includes('image'), propOr('', 'mimeType'))),
       )(visualizationFiles) as ExtractedFileWithCID
-      const displayObject = {
-        cid: displayUri.cid,
-        fileSize: displayUri.arrayBuffer.byteLength,
-        uri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
-        // add image dimensions
+      let displayObject = {
+        cid: '',
+        fileSize: 0,
+        uri: '',
+      }
+
+      if (displayUri) {
+        displayObject = {
+          cid: displayUri.cid,
+          fileSize: displayUri.arrayBuffer.byteLength,
+          uri: `${formatAssetUri(assetCID)}/${displayUri.path}`,
+          // add image dimensions
+        }
       }
 
       const manifestObject = {
@@ -304,13 +313,19 @@ export const _validateAndCreateMetadata =
         path: pathOr('', MANIFEST_LICENSE_PATH)(data.manifest),
       }
 
+      const minterGuid = await connection.getGlobalIdentifierById(issuer.addressGlobalIdentifierId)
+
+      if (!minterGuid) {
+        throw new Error('Minter not found')
+      }
+
       const tokenMetadata = createTokenMetadata({
         asset: assetObject,
-        creator: issuer.profile.name,
+        creator: issuer.name,
         display: displayObject,
         domainMetadata: domainMetadataObject,
         manifest: manifestObject,
-        minter: extractAddressFromDid(issuer.user.id),
+        minter: minterGuid.nss,
         rights: rightsObject,
       })
 

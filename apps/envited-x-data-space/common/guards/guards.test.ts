@@ -2,21 +2,21 @@ import { Role, Session, User } from '../types'
 import * as SUT from './guards'
 
 describe('common/guards', () => {
-  describe('userIsIssuedByLoggedInUser', () => {
+  describe('isUserIssuedByLoggedInUser', () => {
     it('should check if user is issued by logged in user', () => {
       // when ... we want to check if the user is issued by the session user
       const user = {
         id: 'USER_ID',
-        issuerId: 'PKH',
+        issuerId: 'ISSUER_ID',
       }
 
       const session = {
         user: {
-          pkh: 'PKH',
+          id: 'ISSUER_ID',
         },
       }
       // then ... we should get the result as expected
-      const result = SUT.userIsIssuedByLoggedInUser(user as User)(session as Session)
+      const result = SUT.isUserIssuedByLoggedInUser(user as User)(session as Session)
 
       expect(result).toEqual(true)
     })
@@ -26,13 +26,13 @@ describe('common/guards', () => {
     it('should check if logged in user is own user', () => {
       // when ... we want to check if the user is the same as session user
       const user = {
-        id: 'PKH',
+        id: 'USER_ID',
         issuerId: 'ISSUER_ID',
       }
 
       const session = {
         user: {
-          pkh: 'PKH',
+          id: 'USER_ID',
         },
       }
       // then ... we should get the result as expected
@@ -50,7 +50,7 @@ describe('common/guards', () => {
       // when ... we want to check if the user has the federator role
       const session = {
         user: {
-          pkh: 'PKH',
+          id: 'USER_ID',
           role,
         },
       }
@@ -70,7 +70,7 @@ describe('common/guards', () => {
       // when ... we want to check if the user has the principal
       const session = {
         user: {
-          pkh: 'PKH',
+          id: 'USER_ID',
           role,
         },
       }
@@ -86,7 +86,7 @@ describe('common/guards', () => {
       // when ... we want to check if the user has the principal
       const session = {
         user: {
-          pkh: 'USER_ID',
+          id: 'USER_ID',
         },
       } as Session
 
@@ -106,12 +106,12 @@ describe('common/guards', () => {
       const asset = {
         id: 'ASSET_ID',
         cid: 'ASSET_CID',
-        userId: 'PKH',
+        userId: 'USER_ID',
       } as any
 
       const session = {
         user: {
-          pkh: 'PKH',
+          id: 'USER_ID',
         },
       } as any
       // then ... we should get the result as expected

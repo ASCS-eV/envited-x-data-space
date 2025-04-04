@@ -13,7 +13,7 @@ import {
   insertAsset,
   updateAsset,
   updateAssetByCID,
-  updateAssetHashAndStatus,
+  updateAssetStatus,
 } from './assets'
 import {
   deleteBusinessCategoriesByProfileId,
@@ -22,7 +22,12 @@ import {
   insertBusinessCategoryByProfileId,
 } from './businessCategories'
 import { fetchTables } from './common'
-import { getIssuerById } from './issuers'
+import {
+  getGlobalIdentifierByFullResourceName,
+  getGlobalIdentifierById,
+  insertGlobalIdentifier,
+} from './globalIdentifiers'
+import { getIssuerByGlobalIdentifier, getIssuerById } from './issuers'
 import { getMembers } from './members'
 import {
   getProfileByName,
@@ -43,10 +48,11 @@ import {
   addUserToRole,
   deactivateUserById,
   getActiveUsersByIssuerId,
-  getTotalUsersByIssuerId,
+  getUserByDid,
   getUserById,
   getUserByIssuerId,
   getUserByName,
+  getUserRolesByDid,
   getUserRolesById,
   getUserWithProfileById,
   getUsersByIssuerId,
@@ -65,13 +71,13 @@ const queries = {
   addUserToRole,
   removeUserFromRole,
   getActiveUsersByIssuerId,
-  getTotalUsersByIssuerId,
   getUserById,
   getUserByName,
   getUserRolesById,
   getUserWithProfileById,
   getUsersByIssuerId,
   getIssuerById,
+  getIssuerByGlobalIdentifier,
   insertBusinessCategoryByProfileId,
   insertUserTx,
   updateProfile,
@@ -90,10 +96,15 @@ const queries = {
   getTokens,
   getTokenById,
   getTokensByIssuerId,
+  getGlobalIdentifierById,
+  getGlobalIdentifierByFullResourceName,
+  getUserByDid,
+  getUserRolesByDid,
+  insertGlobalIdentifier,
   insertAsset,
   updateAsset,
   updateAssetByCID,
-  updateAssetHashAndStatus,
+  updateAssetStatus,
 }
 
 export const init =

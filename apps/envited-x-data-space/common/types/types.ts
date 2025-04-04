@@ -85,7 +85,7 @@ export interface Asset {
   metadata: AssetMetadata
   status: AssetStatus
   userId: string
-  owner: string
+  ownerId: string
   createdAt: Date
 }
 
@@ -99,7 +99,7 @@ export interface AssetMetadata {
 
 export interface Token {
   id: string
-  hash: string
+  hashGlobalIdentifierId: string
   createdAt: string
   contract: string
   minter: string
@@ -151,6 +151,13 @@ export interface User {
   updatedAt: string
   vatId?: string
   isActive: boolean
+  urnGlobalIdentifierId: string
+  addressGlobalIdentifierId: string
+  usersToCredentialTypes?: {
+    credentialType: {
+      name: string
+    }
+  }[]
 }
 
 export interface Profile {
@@ -179,7 +186,7 @@ export interface Profile {
 
 export interface Session {
   user: {
-    pkh: string
+    did: string
     id: string
     role: Role
   }
@@ -187,4 +194,18 @@ export interface Session {
 
 export enum FileType {
   json = 'application/json',
+}
+
+export enum IdentifierMethod {
+  didPkh = 'did:pkh',
+  urnUuid = 'urn:uuid',
+  urnContract = 'urn:contract',
+  urnOperation = 'urn:operation',
+}
+
+export interface GlobalIdentifier {
+  method: IdentifierMethod
+  namespace?: string | null
+  chainId?: string | null
+  nss: string
 }

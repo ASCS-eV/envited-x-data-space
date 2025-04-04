@@ -4,6 +4,7 @@ import { cache } from 'react'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
+import { parseGlobalIdentifier } from '../../globalIdentifiers'
 import { hasCredentialType, isFederator, isPrincipal } from '../../guards'
 import { Log, log } from '../../logger'
 import { User } from '../../types'
@@ -25,12 +26,16 @@ export const _getActiveUsersByIssuerId =
       }
 
       const connection = await db()
-      const user = await connection.getUserById(session?.user?.pkh)
+      const user = await connection.getUserByDid(parseGlobalIdentifier(session?.user?.did))
 
-      let issuerId = session?.user?.pkh
-      if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
-        const principal = await connection.getUserById(user.issuerId)
-        issuerId = principal.id
+      let issuerId = null
+      if (user.usersToCredentialTypes && hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
+        issuerId = user.issuerId
+      }
+
+      if (user.usersToCredentialTypes && hasCredentialType('AscsMemberCredential')(user.usersToCredentialTypes)) {
+        const issuer = await connection.getIssuerByGlobalIdentifier(user.addressGlobalIdentifierId)
+        issuerId = issuer.id
       }
 
       const users = await connection.getActiveUsersByIssuerId(issuerId)

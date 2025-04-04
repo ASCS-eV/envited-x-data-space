@@ -49,12 +49,13 @@ export const AddAssets = () => {
       const processFiles = pipe(map(processFile), Promise.all.bind(Promise))
       const filesData = await processFiles(filesArray)
       const uploadData = await validateAndUploadAssets(filesData as AssetFile[])
-      const uploadResults = await Promise.all(map(file => uploadFile(filesArray, file), uploadData))
+      const results = await Promise.all(map(file => uploadFile(filesArray, file as any), uploadData))
 
       map(({ success, file }: { success: boolean; file: string }) =>
-        success ? successNotification(`${file} successfully uploaded`) : error(`${file} already exists`),
-      )(uploadResults)
-
+        success
+          ? successNotification(`${file} ${t('[Notification] asset successfully uploaded')}`)
+          : error(`${file} ${t('[Notification] asset already exists')}`),
+      )(results)
       reset()
     } catch (e) {
       error(t('[Notification] invalid asset found'))

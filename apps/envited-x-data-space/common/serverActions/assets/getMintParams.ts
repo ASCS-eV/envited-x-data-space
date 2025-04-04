@@ -3,15 +3,9 @@ import { isEmpty, isNil, pathEq } from 'ramda'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
+import { stringifyGlobalIdentifier } from '../../globalIdentifiers'
 import { Asset, Role, Session, User } from '../../types'
-import {
-  addUrnUuid,
-  badRequestError,
-  extractAddressFromDid,
-  forbiddenError,
-  notFoundError,
-  unauthorizedError,
-} from '../../utils'
+import { badRequestError, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
 export const _getMintParams =
   ({ db, getServerSession }: { db: Database; getServerSession: () => Promise<Session | null> }) =>
@@ -32,7 +26,6 @@ export const _getMintParams =
 
     const connection = await db()
     const [asset] = (await connection.getAsset(assetId)) as Asset[]
-
     if (isNil(asset) || isEmpty(asset)) {
       throw notFoundError({ resource: 'assets', resourceId: assetId, userId: session?.user.id })
     }
@@ -43,10 +36,14 @@ export const _getMintParams =
       throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })
     }
 
+    const ownerUser = await connection.getUserById(asset.ownerId)
+    const owner = await connection.getGlobalIdentifierById(ownerUser.addressGlobalIdentifierId)
+    const from = await connection.getGlobalIdentifierById(user.urnGlobalIdentifierId)
+
     return {
-      from: addUrnUuid(user.uuid),
-      owner: extractAddressFromDid(asset.owner),
-      contractAddress: process.env.ASSETS_CONTRACT!,
+      from: stringifyGlobalIdentifier(from),
+      owner: owner?.nss,
+      contractAddress: process.env.TEZOS_ASSETS_CONTRACT!,
     }
   }
 

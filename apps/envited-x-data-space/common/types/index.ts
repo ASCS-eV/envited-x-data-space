@@ -9,10 +9,12 @@ export {
   Role,
   CredentialType,
   FileType,
+  IdentifierMethod,
 } from './types'
 export type {
   Action,
   Asset,
+  GlobalIdentifier,
   AssetMetadata,
   Obj,
   User,

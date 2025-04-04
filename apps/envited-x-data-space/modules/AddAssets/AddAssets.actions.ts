@@ -6,14 +6,17 @@ import { isNil, isNotNil } from 'ramda'
 import { getServerSession } from '../../common/auth'
 import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
+import { FEATURE_FLAGS } from '../../common/featureFlags'
 import { log } from '../../common/logger'
 import { getAssetByCID, insertAsset } from '../../common/serverActions'
+import { Environment } from '../../common/types'
 import { badRequestError, formatError, internalServerErrorError, unauthorizedError } from '../../common/utils'
 
 export interface AssetFile {
   name: string
   cid: string
   type: string
+  arrayBuffer: () => Promise<ArrayBuffer>
 }
 export interface UploadAssetFile {
   success: boolean
@@ -39,13 +42,15 @@ export async function validateAndUploadAssets(files: AssetFile[]) {
       })
     }
 
-    const uploadData = await Promise.all(
+    const result = await Promise.all(
       files.map(async ({ name, cid, type }) => {
-        const asset = await getAssetByCID(cid)
+        if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueAsset) {
+          const asset = await getAssetByCID(cid)
 
-        // if (isNotNil(asset)) {
-        //   return { success: false, file: name, message: 'Asset already exists' }
-        // }
+          if (isNotNil(asset)) {
+            return { success: false, file: name, message: 'Asset already exists' }
+          }
+        }
 
         const signedUrl = await getAssetUploadUrl(cid)
 
@@ -58,8 +63,7 @@ export async function validateAndUploadAssets(files: AssetFile[]) {
         }
       }),
     )
-
-    return uploadData
+    return result
   } catch (error: unknown) {
     log.error(formatError(error))
     throw internalServerErrorError()

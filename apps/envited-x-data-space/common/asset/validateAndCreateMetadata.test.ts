@@ -53,12 +53,15 @@ describe('common/asset/validateAndCreateMetadata', () => {
         ],
       }) as any
       const getUserByIdStub = jest.fn().mockResolvedValue({ id: 'USER_ID', issuerId: 'ISSUER_ID' }) as any
-      const getUserWithProfileByIdStub = jest
+      const getUserByIssuerIdStub = jest
         .fn()
-        .mockResolvedValue([{ user: { id: 'ISSUER_ID' }, profile: { name: 'NAME' } }]) as any
+        .mockResolvedValue({ id: 'ISSUER_ID', addressGlobalIdentifierId: 'GLOBAL_IDENTIFIER_ID', name: 'NAME' }) as any
+      const getGlobalIdentifierByIdStub = jest.fn().mockResolvedValue({ nss: 'ISSUER ADDRESS' }) as any
+
       const dbStub = jest.fn().mockResolvedValue({
         getUserById: getUserByIdStub,
-        getUserWithProfileById: getUserWithProfileByIdStub,
+        getUserByIssuerId: getUserByIssuerIdStub,
+        getGlobalIdentifierById: getGlobalIdentifierByIdStub,
       })
 
       const byteArray = 'ASSET_BYTE_ARRAY'
@@ -125,7 +128,8 @@ describe('common/asset/validateAndCreateMetadata', () => {
       })
 
       expect(getUserByIdStub).toHaveBeenCalledWith('USER_ID')
-      expect(getUserWithProfileByIdStub).toHaveBeenCalledWith('ISSUER_ID')
+      expect(getUserByIssuerIdStub).toHaveBeenCalledWith('ISSUER_ID')
+      expect(getGlobalIdentifierByIdStub).toHaveBeenCalledWith('GLOBAL_IDENTIFIER_ID')
       expect(createMetadataStub).toHaveBeenCalledWith({
         asset: {
           cid: 'HASH',
@@ -146,7 +150,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
           uri: 'https://assets.envited-x.net/HASH/PATH',
           fileSize: undefined,
         },
-        minter: 'ISSUER_ID',
+        minter: 'ISSUER ADDRESS',
         creator: 'NAME',
         rights: {
           identifier: 'MPL-2.0',
@@ -157,7 +161,7 @@ describe('common/asset/validateAndCreateMetadata', () => {
   })
 
   describe('_getShaclSchemaAndValidate', () => {
-    it('should select SHACLE schema and validate data', async () => {
+    it('should select SHACL schema and validate data', async () => {
       // when ... we want to validate data conform the data type
       // then ... it should get the type and validate with this schema
       const validateManifestStub = jest

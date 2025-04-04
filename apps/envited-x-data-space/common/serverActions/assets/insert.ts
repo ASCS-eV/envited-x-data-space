@@ -19,6 +19,7 @@ export const _insert =
 
       const connection = await db()
       const user = (await connection.getUserById(userId)) as User
+      const issuer = await connection.getUserByIssuerId(user.issuerId)
 
       if (isNil(user)) {
         throw forbiddenError({
@@ -38,7 +39,7 @@ export const _insert =
         })
       }
 
-      const [result] = await connection.insertAsset({ userId, cid, name, ownerId: user.issuerId })
+      const [result] = await connection.insertAsset({ userId, cid, name, ownerId: issuer.id })
       return result
     } catch (error: unknown) {
       log.error(formatError(error))

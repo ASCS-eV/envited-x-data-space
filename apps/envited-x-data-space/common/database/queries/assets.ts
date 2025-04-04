@@ -29,7 +29,7 @@ export const insertAsset =
         metadata: {},
         status: AssetStatus.processing,
         userId,
-        owner: ownerId,
+        ownerId,
         name,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -54,13 +54,11 @@ export const updateAssetByCID = (db: DatabaseConnection) => async (data: Asset, 
     .where(eq(asset.cid, cid))
     .returning()
 
-export const updateAssetHashAndStatus =
-  (db: DatabaseConnection) => async (id: string, hash: string, status: AssetStatus) =>
-    db
-      .update(asset)
-      .set({
-        hash,
-        status,
-      })
-      .where(eq(asset.id, id))
-      .returning()
+export const updateAssetStatus = (db: DatabaseConnection) => async (id: string, status: AssetStatus) =>
+  db
+    .update(asset)
+    .set({
+      status,
+    })
+    .where(eq(asset.id, id))
+    .returning()

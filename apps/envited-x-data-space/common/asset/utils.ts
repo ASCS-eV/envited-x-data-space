@@ -161,10 +161,11 @@ export const _getPathAndBufferFromFile =
   }: {
     getArrayBufferFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<ArrayBuffer>
   }) =>
-  async (byteArray: Uint8Array, path: string, category: ManifestCategoryId) => ({
+  async (byteArray: Uint8Array, path: string, category: ManifestCategoryId, mimeType?: string) => ({
     path,
     category,
     arrayBuffer: await getArrayBufferFromByteArray(byteArray, path),
+    mimeType: mimeType || '',
   })
 
 export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
@@ -193,13 +194,19 @@ export const predetermineCID = async (array: Uint8Array) => {
 
 export const _getFilenameFromFile =
   ({ predetermineCID }: { predetermineCID: (byteArray: Uint8Array) => Promise<string> }) =>
-  async (path: string, category: ManifestCategoryId, arrayBuffer: ArrayBuffer): Promise<ExtractedFileWithCID> => {
+  async (
+    path: string,
+    category: ManifestCategoryId,
+    arrayBuffer: ArrayBuffer,
+    mimeType: string,
+  ): Promise<ExtractedFileWithCID> => {
     const cid = await predetermineCID(new Uint8Array(arrayBuffer))
     return {
       cid,
       path,
       category,
       arrayBuffer,
+      mimeType,
     }
   }
 
@@ -215,13 +222,23 @@ export const _getAllFilenamesFromFiles =
       path: string,
       category: ManifestCategoryId,
       arrayBuffer: ArrayBuffer,
+      mimeType: string,
     ) => Promise<ExtractedFileWithCID>
   }) =>
-  async (files: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer }[]) =>
+  async (files: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer; mimeType: string }[]) =>
     await Promise.all(
       files.map(
-        ({ path, category, arrayBuffer }: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer }) =>
-          getFilenameFromFile(path, category, arrayBuffer),
+        ({
+          path,
+          category,
+          arrayBuffer,
+          mimeType,
+        }: {
+          path: string
+          category: ManifestCategoryId
+          arrayBuffer: ArrayBuffer
+          mimeType: string
+        }) => getFilenameFromFile(path, category, arrayBuffer, mimeType),
       ),
     )
 
@@ -237,12 +254,13 @@ export const _getPathsAndBuffersFromByteArray =
       byteArray: Uint8Array,
       path: string,
       category: ManifestCategoryId,
+      mimeType?: string,
     ) => Promise<ExtractedFile>
   }) =>
-  async (byteArray: Uint8Array, files: { path: string; category: ManifestCategoryId }[]) =>
+  async (byteArray: Uint8Array, files: { path: string; category: ManifestCategoryId; mimeType?: string }[]) =>
     await Promise.all(
-      files.map(({ path, category }: { path: string; category: ManifestCategoryId }) =>
-        getPathAndBufferFromFile(byteArray, path, category),
+      files.map(({ path, category, mimeType }: { path: string; category: ManifestCategoryId; mimeType?: string }) =>
+        getPathAndBufferFromFile(byteArray, path, category, mimeType),
       ),
     )
 
@@ -256,7 +274,7 @@ export const _getFilesAsPathAndByteArrayFromManifest =
   }: {
     getPathsAndBuffersFromByteArray: (
       byteArray: Uint8Array,
-      files: { path: string; category: ManifestCategoryId }[],
+      files: { path: string; category: ManifestCategoryId; mimeType?: string }[],
     ) => Promise<ExtractedFile[]>
   }) =>
   async (byteArray: Uint8Array, manifest: Manifest) => {

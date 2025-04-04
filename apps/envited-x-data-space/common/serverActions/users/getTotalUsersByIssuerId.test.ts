@@ -1,5 +1,4 @@
 import { ERRORS } from '../../constants'
-import { Role } from '../../types'
 import * as SUT from './getTotalUsersByIssuerId'
 
 describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
@@ -29,13 +28,19 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
 
     const getUserByIdStub = jest.fn().mockResolvedValue(user)
 
-    const users = 2
+    const users = [user, user]
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: getUserByIdStub,
-      getTotalUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getIssuerByGlobalIdentifier: jest.fn().mockResolvedValue({
+        id: 'ISSUER_ID',
+        type: 'TYPE',
+        name: 'NAME',
+        url: 'URL',
+      }),
     })
     const logStub = {
-      error: jest.fn(),
+      error: console.error,
     } as any
 
     const result = await SUT._getTotalUsersByIssuerId({
@@ -47,13 +52,13 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
     expect(getUserByIdStub).toHaveBeenCalledTimes(1)
   })
 
-  it('should not return the amount of users if it is a unknonw user as expected', async () => {
+  it('should throw an error when it is a unknown user as expected', async () => {
     // when ... we request a user by id
     // then ... it returns a user as expected
 
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        pkh: 'UNKNOWN_USER_ID',
+        id: 'UNKNOWN_USER_ID',
       },
     })
 
@@ -61,21 +66,31 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
 
     const getUserByIdStub = jest.fn().mockResolvedValue(user)
 
-    const users = 0
+    const users: any[] = []
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: getUserByIdStub,
-      getTotalUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getIssuerByGlobalIdentifier: jest.fn().mockResolvedValue({
+        id: 'ISSUER_ID',
+        type: 'TYPE',
+        name: 'NAME',
+        url: 'URL',
+      }),
     })
     const logStub = {
       error: jest.fn(),
     } as any
 
-    const result = await SUT._getTotalUsersByIssuerId({
-      db: dbStub,
-      getServerSession: getServerSessionStub,
-      log: logStub,
-    })()
-    expect(result).toEqual(0)
+    try {
+      await SUT._getTotalUsersByIssuerId({
+        db: dbStub,
+        getServerSession: getServerSessionStub,
+        log: logStub,
+      })()
+      fail('Expected an error to be thrown')
+    } catch (error) {
+      expect((error as any).message).toEqual(ERRORS.INTERNAL_SERVER_ERROR)
+    }
     expect(getUserByIdStub).toHaveBeenCalledTimes(1)
   })
 
@@ -85,12 +100,12 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
 
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        pkh: 'USER_PKH',
+        id: 'USER_ID',
       },
     })
 
     const user = {
-      id: 'USER_PKH',
+      id: 'USER_ID',
       name: 'USER_NAME',
       email: 'USER_EMAIL',
       vatId: 'USER_VAT_ID',
@@ -104,7 +119,7 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
     }
 
     const issuerUser = {
-      id: 'ISSUER_PKH',
+      id: 'ISSUER_ID',
       name: 'USER_NAME',
       email: 'USER_EMAIL',
       vatId: 'USER_VAT_ID',
@@ -117,12 +132,12 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
       usersToCredentialTypes: [{ credentialType: { name: 'AscsUserCredential' } }],
     }
 
-    const getUserByIdStub = jest.fn().mockResolvedValueOnce(user).mockResolvedValueOnce(issuerUser)
+    const getUserByIdStub = jest.fn().mockResolvedValueOnce(user)
 
-    const users = 2
+    const users = [issuerUser, user]
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: getUserByIdStub,
-      getTotalUsersByIssuerId: jest.fn().mockResolvedValue(users),
+      getUsersByIssuerId: jest.fn().mockResolvedValue(users),
     })
     const logStub = {
       error: jest.fn(),
@@ -134,7 +149,7 @@ describe('common/serverAction/users/getTotalUsersByIssuerId', () => {
       log: logStub,
     })()
     expect(result).toEqual(2)
-    expect(getUserByIdStub).toHaveBeenCalledTimes(2)
+    expect(getUserByIdStub).toHaveBeenCalledTimes(1)
   })
 
   it('should throw because of missing session', async () => {

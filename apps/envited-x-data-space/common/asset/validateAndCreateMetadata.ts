@@ -260,7 +260,7 @@ export const _validateAndCreateMetadata =
       if (!issuer) {
         throw new Error('Issuer not found')
       }
-      
+
       const files = await getFilesAsPathAndByteArrayFromManifest(byteArray, data.manifest)
       const visualization = filter(propEq('envited-x:isMedia', 'category'))(files.publicUser)
       const visualizationFiles = await getAllFilenamesFromFiles(visualization)
@@ -277,7 +277,7 @@ export const _validateAndCreateMetadata =
         cid: assetCID,
         fileSize: byteArray.length,
       }
-      
+
       const displayUri = find(
         and(propEq(ManifestCategoryId.envitedXIsMedia, 'category'), compose(includes('image'), propOr('', 'mimeType'))),
       )(visualizationFiles) as ExtractedFileWithCID

@@ -52,6 +52,7 @@ export const listenToAssetContract =
     insertToken,
     getAssetByCID,
     updateAsset,
+    getGlobalIdentifierByFullResourceName,
     log,
   }: {
     tezos: TezosToolkit
@@ -59,6 +60,7 @@ export const listenToAssetContract =
     insertToken: any
     getAssetByCID: any
     updateAsset: any
+    getGlobalIdentifierByFullResourceName: any
     log: Log
   }) =>
   async () => {
@@ -70,7 +72,7 @@ export const listenToAssetContract =
     )
 
     const subscription = tezos.stream.subscribeOperation({
-      destination: process.env.ASSETS_CONTRACT!,
+      destination: process.env.TEZOS_ASSETS_CONTRACT!,
     })
 
     subscription.on('data', async (data: any) => {
@@ -82,13 +84,20 @@ export const listenToAssetContract =
         const { hash, destination, metadata, parameters } = data
         const creator = parameters.value.args[1].args[0].string
         const tokenId = parseInt(metadata.operation_result.lazy_storage_diff[2].diff.updates[0].key.int, 10)
-        const [existingToken] = await getTokenByTokenId({ contract: process.env.ASSETS_CONTRACT, tokenId })
+        const contractGuid = await getGlobalIdentifierByFullResourceName({
+          method: 'urn:contract',
+          namespace: 'tezos',
+          chainId: process.env.TEZOS_CHAIN_ID!,
+          nss: process.env.TEZOS_ASSETS_CONTRACT!,
+        })
 
-        if (existingToken) {
-          return
+        if (contractGuid) {
+          const [existingToken] = await getTokenByTokenId({ contractGlobalIdentifierId: contractGuid.id, tokenId })
+          if (existingToken) {
+            return
+          }
         }
 
-        log.info('Registering token ', tokenId)
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         log.info('Token metadata', tokenMetadata)
@@ -102,11 +111,12 @@ export const listenToAssetContract =
           replace('ipfs://', '')(domainMetadataUri as string),
         )
         const attributes = extractKeyValuePairs(domainMetadata.data)
+
         // Save token to DB
         const token = await insertToken({
-          hash,
-          contract: destination,
-          minter: creator,
+          hash: `urn:operation:tezos:${process.env.TEZOS_CHAIN_ID!}:${hash}`,
+          contract: `urn:contract:tezos:${process.env.TEZOS_CHAIN_ID!}:${destination}`,
+          minter: `did:pkh:tezos:${process.env.TEZOS_CHAIN_ID!}:${creator}`,
           tokenId,
           name: tokenMetadata?.name,
           description: tokenMetadata?.description,

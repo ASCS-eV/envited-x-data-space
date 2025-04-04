@@ -9,15 +9,15 @@ describe('serverActions/profiles/update', () => {
       // then ... it should update as expected
       const getServerSessionStub = jest.fn().mockResolvedValue({
         user: {
-          id: 'USER_PKH',
-          pkh: 'USER_PKH',
+          id: 'USER_ID',
+          did: 'USER_DID',
           role: Role.principal,
         },
       })
       const currentProfile = {
         description: 'CURRENT_DESCRIPTION',
         name: 'USER_NAME',
-        principalUserId: 'USER_PKH',
+        principalUserId: 'USER_ID',
       } as any
 
       const newProfile = {
@@ -54,7 +54,7 @@ describe('serverActions/profiles/update', () => {
       )
       const db = await dbStub()
       expect(result).toEqual(newProfile)
-      expect(db.getUserWithProfileById).toHaveBeenCalledWith('USER_PKH')
+      expect(db.getUserWithProfileById).toHaveBeenCalledWith('USER_ID')
       expect(db.maybeUpdatePublishedState).toHaveBeenCalledWith(newProfile)
       expect(db.updateProfile).toHaveBeenCalledWith(newProfile)
     })
@@ -67,7 +67,7 @@ describe('serverActions/profiles/update', () => {
     const currentProfile = {
       description: 'CURRENT DESCRIPTION',
       name: 'USER_NAME',
-      principalUserId: 'USER_PKH',
+      principalUserId: 'USER_ID',
     } as any
 
     const newProfile = {
@@ -86,7 +86,7 @@ describe('serverActions/profiles/update', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getProfileByName: jest.fn().mockResolvedValue(currentProfile),
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
-      updateProfile: jest.fn().mockResolvedValue(newProfile),
+      updateProfile: jest.fn().mockResolvedValue([newProfile]),
     })
     const logStub = {
       error: jest.fn(),
@@ -100,17 +100,17 @@ describe('serverActions/profiles/update', () => {
 
   it('should throw with incorrect role', async () => {
     // when ... we want to update the profile as a user
-    // then ... it should throw as expectedd
+    // then ... it should throw as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        id: 'USER_PKH',
+        id: 'USER_ID',
         role: Role.user,
       },
     })
     const currentProfile = {
       description: 'CURRENT DESCRIPTION',
       name: 'USER_NAME',
-      principalUserId: 'USER_PKH',
+      principalUserId: 'USER_ID',
     } as any
 
     const newProfile = {
@@ -129,7 +129,7 @@ describe('serverActions/profiles/update', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getProfileByName: jest.fn().mockResolvedValue(currentProfile),
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
-      updateProfile: jest.fn().mockResolvedValue(newProfile),
+      updateProfile: jest.fn().mockResolvedValue([newProfile]),
     })
     const logStub = {
       error: jest.fn(),
@@ -146,14 +146,14 @@ describe('serverActions/profiles/update', () => {
     // then ... it should throw as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        id: 'USER_PKH',
+        id: 'USER_ID',
         role: Role.principal,
       },
     })
     const currentProfile = {
       description: 'CURRENT DESCRIPTION',
       name: 'USER_NAME',
-      principalUserId: 'USER_PKH',
+      principalUserId: 'USER_ID',
     } as any
     const newProfile = {
       description: 'NEW DESCRIPTION',
@@ -164,7 +164,7 @@ describe('serverActions/profiles/update', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getProfileByName: jest.fn().mockResolvedValue(currentProfile),
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
-      updateProfile: jest.fn().mockResolvedValue(newProfile),
+      updateProfile: jest.fn().mockResolvedValue([newProfile]),
     })
     const logStub = {
       error: jest.fn(),
@@ -181,14 +181,14 @@ describe('serverActions/profiles/update', () => {
     // then ... it should throw as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        id: 'USER_PKH',
+        id: 'USER_ID',
         role: Role.principal,
       },
     })
     const currentProfile = {
       description: 'CURRENT DESCRIPTION',
       name: 'USER_NAME',
-      principalUserId: 'USER_PKH',
+      principalUserId: 'ANOTHER_USER_ID',
     } as any
     const newProfile = {
       description: 'NEW DESCRIPTION',
@@ -205,10 +205,12 @@ describe('serverActions/profiles/update', () => {
     const dbStub = jest.fn().mockResolvedValue({
       getProfileByName: jest.fn().mockResolvedValue(currentProfile),
       getUserWithProfileById: jest.fn().mockResolvedValue([user]),
-      updateProfile: jest.fn().mockResolvedValue(newProfile),
+      updateProfile: jest.fn().mockResolvedValue([newProfile]),
+      maybeUpdatePublishedState: jest.fn().mockResolvedValue([newProfile]),
     })
     const logStub = {
       error: jest.fn(),
+      info: jest.fn(),
     } as any
 
     await expect(

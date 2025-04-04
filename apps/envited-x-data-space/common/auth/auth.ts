@@ -1,16 +1,17 @@
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions, Session } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { equals, has, isEmpty, isNil, omit, prop } from 'ramda'
+import { equals, has, isEmpty, isNil, omit, pluck, prop, reject } from 'ramda'
 
 import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
+import { parseGlobalIdentifier } from '../globalIdentifiers'
 import { log } from '../logger'
 import { assignSingleRole } from '../roles'
 import { CredentialType, User } from '../types'
 import { Environment } from '../types'
-import { extractAddressFromDid } from '../utils'
+import { extractAddressFromDid, formatError } from '../utils'
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -34,14 +35,26 @@ export const authOptions: NextAuthOptions = {
 
         const { pkh } = credentials
 
-        const connection = await db()
-        const userRoles = await connection.getUserRolesById(pkh)
+        try {
+          const connection = await db()
+          const user = await connection.getUserByDid(parseGlobalIdentifier(pkh))
+          const result = await connection.getUserRolesByDid(parseGlobalIdentifier(pkh))
+          const userRoles = pluck('usersToRoles', result)
 
-        return {
-          name: pkh,
-          id: pkh,
-          pkh: pkh,
-          role: assignSingleRole(userRoles),
+          return {
+            name: pkh,
+            id: user.id,
+            did: pkh,
+            role: assignSingleRole(userRoles),
+          }
+        } catch (e) {
+          log.error(e)
+          return {
+            name: pkh,
+            id: '',
+            did: pkh,
+            role: '',
+          }
         }
       },
     }),
@@ -65,7 +78,7 @@ export const authOptions: NextAuthOptions = {
       profile: async profile => {
         return {
           id: profile.sub,
-          pkh: profile.sub,
+          did: profile.sub,
         }
       },
     },
@@ -74,7 +87,6 @@ export const authOptions: NextAuthOptions = {
   debug: true,
   callbacks: {
     async signIn({ profile }) {
-      log.info('Sign in checks')
       try {
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
@@ -93,6 +105,7 @@ export const authOptions: NextAuthOptions = {
 
           if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].contract) {
             log.info('Starting revocation registry check')
+            log.info('credential', id, credentialSubjectId, issuer, credentialSubjectType)
             const revocationCheck = await checkRevocationRegistry(
               id,
               credentialSubjectId,
@@ -109,7 +122,7 @@ export const authOptions: NextAuthOptions = {
           const connection = await db()
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
-            const principal = await connection.getUserById(issuer)
+            const principal = await connection.getUserByDid(parseGlobalIdentifier(issuer))
 
             log.info('User credential, checking principal credentials')
 
@@ -125,7 +138,7 @@ export const authOptions: NextAuthOptions = {
             }
           }
 
-          const existingUser = (await connection.getUserById(credentialSubjectId)) as User
+          const existingUser = (await connection.getUserByDid(parseGlobalIdentifier(credentialSubjectId))) as User
 
           if (!isNil(existingUser)) {
             // User already exists
@@ -144,41 +157,39 @@ export const authOptions: NextAuthOptions = {
         log.info('Completing signin')
         return true
       } catch (error: unknown) {
-        log.error(error)
+        log.error(formatError(error))
         return false
       }
     },
     async jwt({ token, user, account, profile }) {
       if (account?.access_token) {
-        log.info('Adding access token to JWT')
         token.accessToken = account.access_token
       }
-
       if (user) {
         token.user = user
       }
-
-      if (profile) {
+      if (profile && profile.sub) {
+        const { sub } = profile
         const connection = await db()
-        const userRoles = await connection.getUserRolesById(profile.sub)
-        log.info('Adding user role to JWT: ', assignSingleRole(userRoles))
-        token.user.role = assignSingleRole(userRoles)
-      }
 
+        const user = await connection.getUserByDid(parseGlobalIdentifier(sub))
+        const result = await connection.getUserRolesByDid(parseGlobalIdentifier(sub))
+        const userRoles = pluck('usersToRoles', result)
+        token.user.role = assignSingleRole(userRoles)
+        token.user.id = user.id
+      }
       return token
     },
     async session({ session, token }) {
-      // log.info('Building session')
       if (session?.user) {
-        session.user.pkh = token.user.pkh
+        session.user.name = null
+        session.user.did = token.user.did
         session.user.role = token.user.role
-        session.user.id = token.sub || ''
-        session.user.email = undefined
-        session.user.image = undefined
-        session.user.name = token?.user?.id
+        session.user.id = token.user.id
+        session.user.email = null
+        session.user.image = null
       }
-      // log.info('Session: ', session)
-      return session
+      return reject(isNil)(session as any) as unknown as Session
     },
   },
 }

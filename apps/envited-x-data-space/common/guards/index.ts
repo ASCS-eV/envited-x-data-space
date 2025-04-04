@@ -7,6 +7,6 @@ export {
   isOwnProfile,
   isPrincipal,
   isPrincipalContact,
-  userIsIssuedByLoggedInUser,
+  isUserIssuedByLoggedInUser,
   isUsersCompanyProfile,
 } from './guards'

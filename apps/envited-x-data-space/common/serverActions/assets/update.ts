@@ -46,7 +46,7 @@ export const update = _update({ db, getServerSession, log })
 
 export const _updateStatus =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
-  async ({ id, hash, status }: { id: string; hash: string; status: AssetStatus }) => {
+  async ({ id, status }: { id: string; status: AssetStatus }) => {
     try {
       const session = await getServerSession()
       const userId = session?.user.id
@@ -70,7 +70,7 @@ export const _updateStatus =
         })
       }
 
-      const [result] = await connection.updateAssetHashAndStatus(id, hash, status)
+      const [result] = await connection.updateAssetStatus(id, status)
 
       return result
     } catch (error: unknown) {

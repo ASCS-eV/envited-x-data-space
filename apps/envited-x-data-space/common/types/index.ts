@@ -10,10 +10,12 @@ export {
   Role,
   Size,
   UploadAssetStatus,
+  IdentifierMethod,
 } from './types'
 export type {
   Action,
   Asset,
+  GlobalIdentifier,
   AssetMetadata,
   Environment,
   Obj,

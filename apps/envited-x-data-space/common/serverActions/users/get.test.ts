@@ -7,11 +7,11 @@ describe('common/serverActions/users/getUser', () => {
     // then ... it returns a user as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        pkh: 'USER_PKH',
+        id: 'USER_ID',
       },
     })
     const user = {
-      id: 'USER_PKH',
+      id: 'USER_ID',
       name: 'USER_NAME',
       email: 'USER_EMAIL',
       vatId: 'USER_VAT_ID',

@@ -44,6 +44,7 @@ const seed = async () => {
       updatedAt: new Date(),
     }))(BUSINESS_CATEGORIES)
     await insertBusinessCategories(connection)(businessCategories)
+
     return
   } catch (error) {
     console.error(error)

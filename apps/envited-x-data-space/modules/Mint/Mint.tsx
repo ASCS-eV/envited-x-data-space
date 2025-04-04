@@ -35,7 +35,7 @@ export const Mint: FC<MintProps> = ({ assetId, disabled }) => {
       await operation
         ?.confirmation(3)
         .then(async () => {
-          await updateStatus(id, operation.opHash)
+          await updateStatus(id)
           success(t('[Status] token is minted'))
         })
         .catch(() => {

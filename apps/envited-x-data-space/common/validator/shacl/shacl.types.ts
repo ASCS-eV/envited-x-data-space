@@ -4,7 +4,7 @@ export enum ContentType {
 }
 
 export enum Schema {
-  automotiveSimulator = 'automotive-simulater',
+  automotiveSimulator = 'automotive-simulator',
   environmentModel = 'environment-model',
   envitedX = 'envited-x',
   general = 'general',

@@ -7,20 +7,20 @@ describe('common/serverActions/users/deactivateUserById', () => {
     // then ... it returns a user as expected
     const getServerSessionStub = jest.fn().mockResolvedValue({
       user: {
-        pkh: 'ISSUER_PKH',
+        id: 'ISSUER_ID',
       },
     })
     const user = {
-      id: 'USER_PKH',
-      issuerId: 'ISSUER_PKH',
+      id: 'USER_ID',
+      issuerId: 'ISSUER_ID',
     }
 
     const expected = {
-      updatedId: 'USER_PKH',
+      updatedId: 'USER_ID',
     }
     const dbStub = jest.fn().mockResolvedValue({
       getUserById: jest.fn().mockResolvedValue(user),
-      deactivateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_PKH' }]),
+      deactivateUserById: jest.fn().mockResolvedValue([{ updatedId: 'USER_ID' }]),
     })
     const logStub = {
       error: jest.fn(),

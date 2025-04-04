@@ -9,7 +9,7 @@ describe('serverActions/profiles/get', () => {
       // then ... it should get the profile as expected
       const getServerSessionStub = jest.fn().mockResolvedValue({
         user: {
-          id: 'USER_PRINCIPAL_PKH',
+          id: 'USER_PRINCIPAL_ID',
           role: Role.principal,
         },
       })
@@ -18,7 +18,6 @@ describe('serverActions/profiles/get', () => {
         getProfileBySlug: jest.fn().mockResolvedValue({
           name: 'USER_PRINCIPAL_NAME',
           description: 'USER_DESCRIPTION',
-          principalName: 'USER_PRINCIPAL_NAME',
         }),
         getUserById: jest.fn().mockResolvedValue({
           name: 'USER_PRINCIPAL_NAME',
@@ -42,11 +41,10 @@ describe('serverActions/profiles/get', () => {
       expect(result).toEqual({
         name: 'USER_PRINCIPAL_NAME',
         description: 'USER_DESCRIPTION',
-        principalName: 'USER_PRINCIPAL_NAME',
       })
       expect(getServerSessionStub).toHaveBeenCalledWith()
       expect(db.getProfileBySlug).toHaveBeenCalledWith(slug)
-      expect(db.getUserById).toHaveBeenCalledWith('USER_PRINCIPAL_PKH')
+      expect(db.getUserById).toHaveBeenCalledWith('USER_PRINCIPAL_ID')
       expect(db.getUserByIssuerId).not.toHaveBeenCalled()
     })
 
@@ -88,7 +86,6 @@ describe('serverActions/profiles/get', () => {
       expect(result).toEqual({
         name: 'USER_PRINCIPAL_NAME',
         description: 'USER_DESCRIPTION',
-        principalName: 'USER_PRINCIPAL_NAME',
       })
       expect(getServerSessionStub).toHaveBeenCalledWith()
       expect(db.getProfileBySlug).toHaveBeenCalledWith(slug)

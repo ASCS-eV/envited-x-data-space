@@ -191,3 +191,16 @@ export const kebabToCamelCase = (str: string): string => {
     })
     .join('')
 }
+
+export const handleImageLoadError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const target = e.target as HTMLImageElement
+  // Prevent infinite loop if fallback also fails
+  if (!target.src.includes('/ASCS_logo_envited-X_colour_alex.png')) {
+    target.src = '/ASCS_logo_envited-X_colour_alex.png'
+    // Apply styling to center the image at 50% size and opacity
+    target.style.objectFit = 'contain'
+    target.style.maxWidth = '50%'
+    target.style.maxHeight = '50%'
+    target.style.opacity = '0.5'
+  }
+}

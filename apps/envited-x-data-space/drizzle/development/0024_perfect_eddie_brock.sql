@@ -1,1 +1,0 @@
-ALTER TABLE "asset" ADD COLUMN "name" text;

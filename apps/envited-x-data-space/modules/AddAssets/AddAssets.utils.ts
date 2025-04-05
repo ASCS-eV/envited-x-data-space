@@ -1,4 +1,4 @@
-import { uploadFileWithOnProgress } from 'apps/envited-x-data-space/common/http'
+import { httpPutWithProgress } from 'apps/envited-x-data-space/common/http'
 import { concat, equals, map, propEq, times } from 'ramda'
 
 import { createFilename } from '../../common/asset/utils'
@@ -51,7 +51,7 @@ export const uploadFile = async (
     return { success: false, file, message: ERRORS.FILE_NOT_FOUND }
   }
 
-  const success = await uploadFileWithOnProgress({
+  const success = await httpPutWithProgress({
     file: fileObj,
     url: signedUrl,
     contentType: fileType,

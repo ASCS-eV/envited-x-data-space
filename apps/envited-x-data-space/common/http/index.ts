@@ -1,1 +1,1 @@
-export { uploadFileWithOnProgress } from './http'
+export { httpGet, httpPost, httpPut, httpPutWithProgress, httpRequest } from './http'

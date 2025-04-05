@@ -1,5 +1,6 @@
 'use server'
 
+import { httpPut } from 'apps/envited-x-data-space/common/http'
 import { revalidatePath } from 'next/cache'
 import { dissoc, isEmpty, omit } from 'ramda'
 import { z } from 'zod'
@@ -32,13 +33,9 @@ export async function updateProfileForm(formData: FormData) {
 
       const uniqueFilename = getUniqueFilename(slugify(data.name), file.name)
       const signedUrl = await getUploadUrl(uniqueFilename)
-      await fetch(signedUrl, {
-        body: arrayBuffer,
-        method: 'PUT',
-        headers: {
-          'Content-Type': file.type,
-          'Content-Disposition': `inline; filename="${uniqueFilename}"`,
-        },
+      await httpPut<void>(signedUrl, arrayBuffer, {
+        'Content-Type': file.type,
+        'Content-Disposition': `inline; filename="${uniqueFilename}"`,
       })
 
       data = { ...data, logo: uniqueFilename }

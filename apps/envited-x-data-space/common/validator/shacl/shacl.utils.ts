@@ -6,6 +6,7 @@ import SHACLValidator from 'rdf-validate-shacl'
 import { Readable } from 'stream'
 
 import { ERRORS } from '../../constants'
+import { httpGet } from '../../http'
 import { SCHEMA_MAP } from './shacl.constants'
 import { ContentType, ValidationSchema } from './shacl.types'
 
@@ -26,9 +27,9 @@ export const _parseStreamToDataset =
 export const parseStreamToDataset = _parseStreamToDataset({ parser: rdfParser, environment: rdf })
 
 export const fetchShaclSchema = async (type: ValidationSchema) => {
-  const { body } = await fetch(SCHEMA_MAP[type])
+  const ttl = await httpGet<string>(SCHEMA_MAP[type])
 
-  return new Response(body).text()
+  return ttl
 }
 
 export const createReadableStream = (data: string) => {

@@ -7,6 +7,7 @@ import { db } from '../database/queries'
 import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
 import { parseGlobalIdentifier } from '../globalIdentifiers'
+import { httpPost } from '../http'
 import { log } from '../logger'
 import { assignSingleRole } from '../roles'
 import { CredentialType, User } from '../types'
@@ -218,22 +219,24 @@ export const signOut = () =>
   })
 
 export const checkRevocationRegistry = async (id: string, pkh: string, issuer: string, type: string) => {
-  const response = await fetch(`${process.env.OIDC_SERVER_URL!}/verify-user`, {
-    method: 'POST',
-    body: JSON.stringify({
+  const isVerified = await httpPost<{
+    success: boolean
+  }>(
+    `${process.env.OIDC_SERVER_URL!}/verify-user`,
+    {
       id,
       pkh: extractAddressFromDid(pkh),
       issuer: extractAddressFromDid(issuer),
       type,
-    }),
-    headers: {
+    },
+    {
       'Content-Type': 'application/json',
     },
-  })
+  )
 
-  if (!response.ok) {
-    throw new Error(`Response status: ${response.status}`)
+  if (!isVerified) {
+    throw new Error('User verification failed')
   }
 
-  return response.json()
+  return isVerified
 }

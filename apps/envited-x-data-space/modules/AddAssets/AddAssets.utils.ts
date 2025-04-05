@@ -1,8 +1,9 @@
-import { httpPutWithProgress } from 'apps/envited-x-data-space/common/http'
-import { concat, equals, map, propEq, times } from 'ramda'
+import { all, any, concat, equals, map, propEq, times } from 'ramda'
 
 import { createFilename } from '../../common/asset/utils'
 import { ERRORS } from '../../common/constants'
+import { httpPutWithProgress } from '../../common/http'
+import { UploadAssetState, UploadStatus } from '../../common/types'
 import { UploadAssetFile, insertAssetAfterUpload } from './AddAssets.actions'
 
 export const _removeFile = (dataTransfer: DataTransfer) => (files: FileList, idx: number) => {
@@ -21,6 +22,10 @@ export const _addFiles = (dataTransfer: DataTransfer) => (files: FileList, newFi
 }
 
 export const addFiles = (files: FileList, newFiles: FileList) => _addFiles(new DataTransfer())(files, newFiles)
+
+export const allStatus = (status: UploadStatus) => all(propEq(status, 'status'))
+
+export const anyStatus = (status: UploadStatus) => any(propEq(status, 'status'))
 
 export const processFile = async (file: File): Promise<{ name: string; type: string; cid: string }> => {
   const arrayBuffer = Buffer.from(await file.arrayBuffer())

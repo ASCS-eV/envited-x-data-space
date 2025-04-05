@@ -4,6 +4,7 @@
   "[Button] upload assets": "Upload assets",
   "[Error] invalid asset found": "Invalid asset(s) found.",
   "[Success] assets are uploaded": "All assets are uploaded.",
+  "[Error] assets upload failed": "Some assets failed to upload.",
   "[Notification] assets are uploaded": "All asset(s) are uploaded.",
   "[Notification] asset already exists": "asset already exists",
   "[Notification] asset successfully uploaded": "asset successfully uploaded",

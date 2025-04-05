@@ -10,7 +10,7 @@ import { useNotification } from '../../common/notifications'
 import { UploadAssetState, UploadStatus } from '../../common/types'
 import { allTrue, anyFalse } from '../../common/utils'
 import { AssetFile, validateAndUploadAssets } from './AddAssets.actions'
-import { addFiles, processFile, removeFile, uploadFile } from './AddAssets.utils'
+import { addFiles, allStatus, anyStatus, processFile, removeFile, uploadFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
@@ -155,7 +155,12 @@ export const AddAssets = () => {
             )}
           </div>
         )}
-        {isSubmitted && <Alert type={AlertType.succes}>{t('[Success] assets are uploaded')}</Alert>}
+        {isSubmitted && allStatus(UploadStatus.uploaded)(uploadAssetsState) && (
+          <Alert type={AlertType.succes}>{t('[Success] assets are uploaded')}</Alert>
+        )}
+        {isSubmitted && anyStatus(UploadStatus.error)(uploadAssetsState) && (
+          <Alert type={AlertType.error}>{t('[Error] assets upload failed')}</Alert>
+        )}
       </form>
     </>
   )

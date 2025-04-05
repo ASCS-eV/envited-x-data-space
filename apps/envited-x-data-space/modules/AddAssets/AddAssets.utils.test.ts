@@ -1,3 +1,5 @@
+import { UploadStatus } from 'apps/envited-x-data-space/common/types'
+
 import * as SUT from './AddAssets.utils'
 
 describe('modules/AddAssets/AddAssets.utils', () => {
@@ -36,6 +38,29 @@ describe('modules/AddAssets/AddAssets.utils', () => {
       const result = SUT._addFiles(new (DataTransfer as any)() as any)([0, 1] as any, [2, 3] as any)
 
       expect(result).toEqual([0, 1, 2, 3])
+    })
+  })
+
+  describe('allStatus', () => {
+    it.each([
+      [UploadStatus.uploaded, [{ status: UploadStatus.uploaded }, { status: UploadStatus.uploaded }], true],
+      [UploadStatus.uploaded, [{ status: UploadStatus.uploading }, { status: UploadStatus.uploaded }], false],
+      [UploadStatus.uploaded, [{ status: UploadStatus.error }, { status: UploadStatus.uploaded }], false],
+    ])('should, with value %s, return %s as expected', (status, array, result) => {
+      // when ... rendering component
+      // then ... should render with expected properties
+      expect(SUT.allStatus(status)(array)).toBe(result)
+    })
+  })
+
+  describe('allStatus', () => {
+    it.each([
+      [UploadStatus.error, [{ status: UploadStatus.uploaded }, { status: UploadStatus.uploaded }], false],
+      [UploadStatus.error, [{ status: UploadStatus.error }, { status: UploadStatus.uploaded }], true],
+    ])('should, with value %s, return %s as expected', (status, array, result) => {
+      // when ... rendering component
+      // then ... should render with expected properties
+      expect(SUT.anyStatus(status)(array)).toBe(result)
     })
   })
 })

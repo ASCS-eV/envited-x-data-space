@@ -1,1 +1,1 @@
-export { uploadFileWithOnProgress } from './axios'
+export { uploadFileWithOnProgress } from './http'

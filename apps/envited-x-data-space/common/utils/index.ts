@@ -31,7 +31,7 @@ export {
   segmentsToPath,
   slugToLabel,
   isTrustAnchor,
-  truncateDID,
+  truncatePkh,
   truncateCID,
   isServer,
   formatIpfsUri,

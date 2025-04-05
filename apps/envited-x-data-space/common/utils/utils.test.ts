@@ -116,14 +116,14 @@ describe('common/utils', () => {
     })
   })
 
-  describe('truncateDID', () => {
+  describe('truncatePkh', () => {
     it.each([
       ['did:pkh:tz12345678dSTkn2HMEuGa4b1oABCDEFGHIJ', 'did:pkh:tz…ABCDEFGHIJ'],
       ['', ''],
     ])('should, with value %s, return %s as expected', (value, result) => {
       // when ... we provide a value
       // then ... it should return as expected
-      expect(SUT.truncateDID(value)).toEqual(result)
+      expect(SUT.truncatePkh(value)).toEqual(result)
     })
   })
 

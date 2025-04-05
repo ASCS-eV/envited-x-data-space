@@ -1,1 +1,0 @@
-export { uploadFileWithOnProgress } from './axios'

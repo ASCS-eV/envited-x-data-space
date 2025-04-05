@@ -1,6 +1,6 @@
-import * as SUT from './axios'
+import * as SUT from './http'
 
-describe('common/http/axios', () => {
+describe('common/http', () => {
   describe('_uploadFileWithOnProgress', () => {
     it('should return a progress and successfully upload', async () => {
       // when ... we want to upload a file with progress

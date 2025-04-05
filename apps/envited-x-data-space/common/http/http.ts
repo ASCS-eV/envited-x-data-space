@@ -4,7 +4,7 @@ export type UploadOptions = {
   file: File
   url: string
   contentType: string
-  onProgress?: (percent: number) => void
+  onProgress: (percent: number) => void
 }
 
 export const _uploadFileWithOnProgress =

@@ -10,7 +10,16 @@ import { useNotification } from '../../common/notifications'
 import { FilesWithId, UploadAssetState, UploadStatus } from '../../common/types'
 import { allTrue, anyFalse } from '../../common/utils'
 import { AssetFile, validateAndUploadAssets } from './AddAssets.actions'
-import { addFiles, allStatus, anyStatus, formatFileList, processFile, removeFile, uploadFile } from './AddAssets.utils'
+import {
+  addFiles,
+  addIdToFileList,
+  allStatus,
+  anyStatus,
+  createDataTransferFromFileList,
+  processFile,
+  removeFile,
+  uploadFile,
+} from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
@@ -129,8 +138,8 @@ export const AddAssets = () => {
 
                 const filesWithId = addFiles(value, event.dataTransfer.files)
 
-                setUploadFiles(filesWithId)
-                onChange(formatFileList(filesWithId))
+                setUploadFiles(addIdToFileList(filesWithId))
+                onChange(createDataTransferFromFileList(filesWithId))
               }}
               onChange={event => {
                 if (!event.target.files) {
@@ -139,8 +148,8 @@ export const AddAssets = () => {
 
                 const filesWithId = addFiles(value, event.target.files)
 
-                setUploadFiles(filesWithId)
-                onChange(formatFileList(filesWithId))
+                setUploadFiles(addIdToFileList(filesWithId))
+                onChange(createDataTransferFromFileList(filesWithId))
                 event.target.value = ''
               }}
               removeFile={(idx: number) => {

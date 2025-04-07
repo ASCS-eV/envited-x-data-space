@@ -14,26 +14,21 @@ export const _removeFile = (dataTransfer: DataTransfer) => (files: FileList, idx
 
 export const removeFile = (files: FileList, idx: number) => _removeFile(new DataTransfer())(files, idx)
 
-export const _addFiles =
-  ({ crypto }: { crypto: { randomUUID: () => string } }) =>
-  (currentFiles: FileList | undefined, newFiles: FileList): FilesWithId[] => {
-    const fileArray = concat(currentFiles ? Array.from(currentFiles) : [])(Array.from(newFiles))
+export const addFiles = (currentFiles: FileList | undefined, newFiles: FileList): File[] =>
+  concat(currentFiles ? Array.from(currentFiles) : [])(Array.from(newFiles))
 
-    return map((file: File) => ({
-      id: crypto.randomUUID(),
-      file,
-    }))(fileArray)
-  }
+export const addIdToFileList = map(
+  (file: File): FilesWithId => ({
+    id: crypto.randomUUID(),
+    file,
+  }),
+)
 
-export const addFiles = (files: FileList, newFiles: FileList) =>
-  _addFiles({
-    crypto,
-  })(files, newFiles)
+export const _createDataTransferFromFileList = (dataTransfer: DataTransfer) => (files: File[]) =>
+  forEach((file: File) => dataTransfer.items.add(file))(files)
 
-export const _formatFileList = ({ dataTransfer }: { dataTransfer: DataTransfer }) =>
-  forEach(({ file }: { file: File }) => dataTransfer.items.add(file))
-
-export const formatFileList = _formatFileList({ dataTransfer: new DataTransfer() })
+export const createDataTransferFromFileList = (files: File[]) =>
+  _createDataTransferFromFileList(new DataTransfer())(files)
 
 export const allStatus = (status: UploadStatus) => all(propEq(status, 'status'))
 

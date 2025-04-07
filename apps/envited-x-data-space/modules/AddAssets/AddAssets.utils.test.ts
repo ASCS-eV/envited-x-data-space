@@ -22,8 +22,18 @@ describe('modules/AddAssets/AddAssets.utils', () => {
     })
   })
 
-  describe('_addFiles', () => {
+  describe('addFiles', () => {
     it('should return a FileList with new added files', () => {
+      // when ... we want to add files to the file list
+      // then ... it should update the file list as expected
+      const result = SUT.addFiles([0, 1] as any, [2, 3] as any)
+
+      expect(result).toEqual([0, 1, 2, 3])
+    })
+  })
+
+  describe('_createDataTransferFromFileList', () => {
+    it('should return a new DataTransfer with Files', () => {
       // when ... we want to add files to the file list
       // then ... it should update the file list as expected
       function DataTransfer(this: any) {
@@ -39,7 +49,40 @@ describe('modules/AddAssets/AddAssets.utils', () => {
         randomUUID: () => 'RANDOM-UUID',
       }
 
-      const result = SUT._addFiles({ crypto: cryptoStub })([0, 1] as any, [2, 3] as any)
+      const result = SUT._createDataTransferFromFileList(new (DataTransfer as any)() as any)([0, 1, 2, 3] as any)
+
+      expect(result).toEqual([0, 1, 2, 3])
+
+      /*
+      expect(result).toEqual([
+        {
+          file: 0,
+          id: 'RANDOM-UUID',
+        },
+        {
+          file: 1,
+          id: 'RANDOM-UUID',
+        },
+        {
+          file: 2,
+          id: 'RANDOM-UUID',
+        },
+        {
+          file: 3,
+          id: 'RANDOM-UUID',
+        },
+      ])
+      */
+    })
+  })
+
+  describe('addIdToFileList', () => {
+    it('should return a FileList with Ids', () => {
+      // when ... we we have a FileList
+      // then ... it should add and id to each file
+      global.crypto.randomUUID = jest.fn().mockReturnValue('RANDOM-UUID')
+
+      const result = SUT.addIdToFileList([0, 1, 2, 3] as any)
 
       expect(result).toEqual([
         {

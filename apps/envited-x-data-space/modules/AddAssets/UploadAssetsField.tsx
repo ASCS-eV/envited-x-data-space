@@ -13,10 +13,15 @@ interface FileData {
   data: any
 }
 
+interface UploadFile {
+  id: string
+  file: File
+}
+
 interface DragAndDropFieldProps {
   label: string | ReactElement<any, string | JSXElementConstructor<any>>
   name: string
-  files: any
+  files: UploadFile[]
   filesState: UploadAssetState[]
   error?: string
   inputRef: RefCallBack
@@ -83,7 +88,10 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
                 id={name}
                 name={name}
                 type="file"
-                onChange={onChange}
+                onChange={e => {
+                  onChange(e)
+                  e.target.value = ''
+                }}
                 ref={inputRef}
                 accept=".zip"
                 multiple
@@ -97,9 +105,9 @@ export const UploadAssetsField: FC<DragAndDropFieldProps> = ({
       </div>
       <div className="flex flex-col items-center py-3 space-y-4">
         {!isNil(files) &&
-          Array.from(files as File[]).map((file, idx) => (
+          files.map(({ id, file }, idx) => (
             <UploadAssetItem
-              key={file.name}
+              key={id}
               idx={idx}
               file={file}
               state={filesState[idx]}

@@ -26,11 +26,7 @@ export const _parseStreamToDataset =
 
 export const parseStreamToDataset = _parseStreamToDataset({ parser: rdfParser, environment: rdf })
 
-export const fetchShaclSchema = async (type: ValidationSchema) => {
-  const ttl = await httpGet<string>(SCHEMA_MAP[type])
-
-  return ttl
-}
+export const fetchShaclSchema = async (type: ValidationSchema) => httpGet<string>(SCHEMA_MAP[type])
 
 export const createReadableStream = (data: string) => {
   const input = new Readable({

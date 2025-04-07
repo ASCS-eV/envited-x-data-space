@@ -13,6 +13,11 @@ import { AssetFile, validateAndUploadAssets } from './AddAssets.actions'
 import { addFiles, allStatus, anyStatus, processFile, removeFile, uploadFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
+interface UploadFile {
+  id: string
+  file: File
+}
+
 export const AddAssets = () => {
   const { t } = useTranslation('AddAssets')
   const { error, success: successNotification } = useNotification()
@@ -31,6 +36,7 @@ export const AddAssets = () => {
 
   const [selectedAssetsValidationResults, setSelectedAssetsValidationResults] = useState<boolean[]>([])
   const [uploadAssetsState, setUploadAssetsState] = useState<UploadAssetState[]>([])
+  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([])
 
   const validationHandler = (idx: number, data: { isValid: boolean; data: any }) => {
     selectedAssetsValidationResults[idx] = data.isValid
@@ -94,6 +100,7 @@ export const AddAssets = () => {
       await Promise.all(uploadPromises)
 
       reset()
+      setUploadFiles([])
       setUploadAssetsState([])
       setSelectedAssetsValidationResults([])
       setValue('allAssetsValid', false)
@@ -117,19 +124,39 @@ export const AddAssets = () => {
               label={t('[Label] select assets')}
               {...field}
               inputRef={ref}
-              files={value}
+              files={uploadFiles}
               filesState={uploadAssetsState}
               onDrop={event => {
                 if (event.dataTransfer.files.length > 0) {
-                  onChange(value ? addFiles(value, event.dataTransfer.files) : event.dataTransfer.files)
+                  const newFiles = Array.from(event.dataTransfer.files).map(file => ({
+                    id: crypto.randomUUID(),
+                    file,
+                  }))
+                  setUploadFiles(prev => [...prev, ...newFiles])
+                  // onChange(value ? addFiles(value, event.dataTransfer.files) : event.dataTransfer.files)
+                  onChange(newFiles.map(f => f.file))
                 }
+                // if (event.dataTransfer.files.length > 0) {
+                //   onChange(value ? addFiles(value, event.dataTransfer.files) : event.dataTransfer.files)
+                // }
               }}
               onChange={event => {
                 if (event.target.files) {
-                  onChange(value ? addFiles(value, event.target.files) : event.target.files)
+                  const newFiles = Array.from(event.target.files).map(file => ({
+                    id: crypto.randomUUID(),
+                    file,
+                  }))
+                  setUploadFiles(prev => [...prev, ...newFiles])
+                  onChange(newFiles.map(f => f.file))
+                  event.target.value = ''
+                  // onChange(value ? addFiles(value, event.target.files) : event.target.files)
                 }
+                // if (event.target.files) {
+                //   onChange(value ? addFiles(value, event.target.files) : event.target.files)
+                // }
               }}
               removeFile={(idx: number) => {
+                setUploadFiles(prev => prev.filter((_, index) => index !== idx))
                 selectedAssetsValidationResults.splice(idx, 1)
                 setSelectedAssetsValidationResults(selectedAssetsValidationResults)
                 setValue('allAssetsValid', allTrue(selectedAssetsValidationResults))

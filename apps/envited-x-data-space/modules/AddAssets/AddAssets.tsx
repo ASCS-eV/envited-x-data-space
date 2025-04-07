@@ -7,16 +7,11 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { UploadAssetState, UploadStatus } from '../../common/types'
+import { FilesWithId, UploadAssetState, UploadStatus } from '../../common/types'
 import { allTrue, anyFalse } from '../../common/utils'
 import { AssetFile, validateAndUploadAssets } from './AddAssets.actions'
-import { addFiles, allStatus, anyStatus, processFile, removeFile, uploadFile } from './AddAssets.utils'
+import { addFiles, allStatus, anyStatus, formatFileList, processFile, removeFile, uploadFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
-
-export interface UploadFile {
-  id: string
-  file: File
-}
 
 export const AddAssets = () => {
   const { t } = useTranslation('AddAssets')
@@ -36,7 +31,7 @@ export const AddAssets = () => {
 
   const [selectedAssetsValidationResults, setSelectedAssetsValidationResults] = useState<boolean[]>([])
   const [uploadAssetsState, setUploadAssetsState] = useState<UploadAssetState[]>([])
-  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([])
+  const [uploadFiles, setUploadFiles] = useState<FilesWithId[]>([])
 
   const validationHandler = (idx: number, data: { isValid: boolean; data: any }) => {
     selectedAssetsValidationResults[idx] = data.isValid
@@ -132,20 +127,20 @@ export const AddAssets = () => {
                   return
                 }
 
-                const { mergedFileList, uploadFiles: updatedUploadFiles } = addFiles(value, event.dataTransfer.files)
+                const filesWithId = addFiles(value, event.dataTransfer.files)
 
-                setUploadFiles(updatedUploadFiles)
-                onChange(mergedFileList)
+                setUploadFiles(filesWithId)
+                onChange(formatFileList(filesWithId))
               }}
               onChange={event => {
                 if (!event.target.files) {
                   return
                 }
 
-                const { mergedFileList, uploadFiles: updatedUploadFiles } = addFiles(value, event.target.files)
+                const filesWithId = addFiles(value, event.target.files)
 
-                setUploadFiles(updatedUploadFiles)
-                onChange(mergedFileList)
+                setUploadFiles(filesWithId)
+                onChange(formatFileList(filesWithId))
                 event.target.value = ''
               }}
               removeFile={(idx: number) => {

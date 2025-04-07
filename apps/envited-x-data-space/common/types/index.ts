@@ -15,9 +15,10 @@ export {
 export type {
   Action,
   Asset,
-  GlobalIdentifier,
   AssetMetadata,
   Environment,
+  FilesWithId,
+  GlobalIdentifier,
   Obj,
   Profile,
   Session,

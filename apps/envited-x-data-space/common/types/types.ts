@@ -224,3 +224,8 @@ export interface GlobalIdentifier {
   chainId?: string | null
   nss: string
 }
+
+export interface FilesWithId {
+  id: string
+  file: File
+}

@@ -1,4 +1,4 @@
-import { all, any, concat, equals, map, propEq, times } from 'ramda'
+import { all, any, concat, equals, forEach, map, propEq, times } from 'ramda'
 
 import { createFilename } from '../../common/asset/utils'
 import { ERRORS } from '../../common/constants'
@@ -20,12 +20,14 @@ export const _addFiles =
   (currentFiles: FileList | undefined, newFiles: FileList): { mergedFileList: FileList; uploadFiles: UploadFile[] } => {
     const fileArray = concat(currentFiles ? Array.from(currentFiles) : [])(Array.from(newFiles))
 
-    const uploadFiles: UploadFile[] = fileArray.map(file => ({
+    const uploadFiles: UploadFile[] = map((file: File) => ({
       id: crypto.randomUUID(),
       file,
-    }))
+    }))(fileArray)
 
-    fileArray.forEach(file => dataTransfer.items.add(file))
+    forEach((file: File) => {
+      dataTransfer.items.add(file)
+    })(fileArray)
 
     return {
       mergedFileList: dataTransfer.files,

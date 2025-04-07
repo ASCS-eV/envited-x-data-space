@@ -38,57 +38,63 @@ export const httpRequest = async <T = unknown>({
   return response.data
 }
 
-export const _httpGet = ({
-  httpRequest,
-}: {
-  httpRequest: <T = unknown>({
-    url,
-    method,
-    data,
-    headers,
-    responseType,
-    onUploadProgress,
-  }: RequestParams & {
-    onUploadProgress?: AxiosRequestConfig['onUploadProgress']
-  }) => Promise<T>
-}) => <T = unknown>(url: string, headers?: Record<string, string>) =>
-  httpRequest<T>({ url, method: 'GET', headers })
+export const _httpGet =
+  ({
+    httpRequest,
+  }: {
+    httpRequest: <T = unknown>({
+      url,
+      method,
+      data,
+      headers,
+      responseType,
+      onUploadProgress,
+    }: RequestParams & {
+      onUploadProgress?: AxiosRequestConfig['onUploadProgress']
+    }) => Promise<T>
+  }) =>
+  <T = unknown>(url: string, headers?: Record<string, string>) =>
+    httpRequest<T>({ url, method: 'GET', headers })
 
 export const httpGet = _httpGet({ httpRequest })
 
-export const _httpPost = ({
-  httpRequest,
-}: {
-  httpRequest: <T = unknown>({
-    url,
-    method,
-    data,
-    headers,
-    responseType,
-    onUploadProgress,
-  }: RequestParams & {
-    onUploadProgress?: AxiosRequestConfig['onUploadProgress']
-  }) => Promise<T>
-}) => <T = unknown>(url: string, data: any, headers?: Record<string, string>) =>
-  httpRequest<T>({ url, method: 'POST', data, headers })
+export const _httpPost =
+  ({
+    httpRequest,
+  }: {
+    httpRequest: <T = unknown>({
+      url,
+      method,
+      data,
+      headers,
+      responseType,
+      onUploadProgress,
+    }: RequestParams & {
+      onUploadProgress?: AxiosRequestConfig['onUploadProgress']
+    }) => Promise<T>
+  }) =>
+  <T = unknown>(url: string, data: any, headers?: Record<string, string>) =>
+    httpRequest<T>({ url, method: 'POST', data, headers })
 
 export const httpPost = _httpPost({ httpRequest })
 
-export const _httpPut = ({
-  httpRequest,
-}: {
-  httpRequest: <T = unknown>({
-    url,
-    method,
-    data,
-    headers,
-    responseType,
-    onUploadProgress,
-  }: RequestParams & {
-    onUploadProgress?: AxiosRequestConfig['onUploadProgress']
-  }) => Promise<T>
-}) => <T = unknown>(url: string, data: any, headers?: Record<string, string>) =>
-  httpRequest<T>({ url, method: 'PUT', data, headers })
+export const _httpPut =
+  ({
+    httpRequest,
+  }: {
+    httpRequest: <T = unknown>({
+      url,
+      method,
+      data,
+      headers,
+      responseType,
+      onUploadProgress,
+    }: RequestParams & {
+      onUploadProgress?: AxiosRequestConfig['onUploadProgress']
+    }) => Promise<T>
+  }) =>
+  <T = unknown>(url: string, data: any, headers?: Record<string, string>) =>
+    httpRequest<T>({ url, method: 'PUT', data, headers })
 
 export const httpPut = _httpPut({ httpRequest })
 

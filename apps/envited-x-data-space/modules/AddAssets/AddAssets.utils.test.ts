@@ -35,9 +35,36 @@ describe('modules/AddAssets/AddAssets.utils', () => {
         }
       }
 
-      const result = SUT._addFiles(new (DataTransfer as any)() as any)([0, 1] as any, [2, 3] as any)
+      const cryptoStub = {
+        randomUUID: () => 'RANDOM-UUID',
+      }
 
-      expect(result).toEqual([0, 1, 2, 3])
+      const result = SUT._addFiles({ dataTransfer: new (DataTransfer as any)(), crypto: cryptoStub })(
+        [0, 1] as any,
+        [2, 3] as any,
+      )
+
+      expect(result).toEqual({
+        mergedFileList: [0, 1, 2, 3],
+        uploadFiles: [
+          {
+            file: 0,
+            id: 'RANDOM-UUID',
+          },
+          {
+            file: 1,
+            id: 'RANDOM-UUID',
+          },
+          {
+            file: 2,
+            id: 'RANDOM-UUID',
+          },
+          {
+            file: 3,
+            id: 'RANDOM-UUID',
+          },
+        ],
+      })
     })
   })
 

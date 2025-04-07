@@ -13,7 +13,7 @@ import { AssetFile, validateAndUploadAssets } from './AddAssets.actions'
 import { addFiles, allStatus, anyStatus, processFile, removeFile, uploadFile } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
-interface UploadFile {
+export interface UploadFile {
   id: string
   file: File
 }
@@ -104,6 +104,7 @@ export const AddAssets = () => {
       setUploadAssetsState([])
       setSelectedAssetsValidationResults([])
       setValue('allAssetsValid', false)
+      setValue('assets', new DataTransfer().files)
     } catch (e) {
       error(t('[Notification] invalid asset found'))
       console.error(e)
@@ -127,63 +128,26 @@ export const AddAssets = () => {
               files={uploadFiles}
               filesState={uploadAssetsState}
               onDrop={event => {
-                if (event.dataTransfer.files.length > 0) {
-                  const mergedFileList = value ? addFiles(value, event.dataTransfer.files) : event.dataTransfer.files
-
-                  const newFiles = Array.from(event.dataTransfer.files).map(file => ({
-                    id: crypto.randomUUID(),
-                    file,
-                  }))
-
-                  setUploadFiles(prev => [...prev, ...newFiles])
-                  onChange(mergedFileList)
+                if (event.dataTransfer.files.length === 0) {
+                  return
                 }
+
+                const { mergedFileList, uploadFiles: updatedUploadFiles } = addFiles(value, event.dataTransfer.files)
+
+                setUploadFiles(updatedUploadFiles)
+                onChange(mergedFileList)
               }}
               onChange={event => {
-                if (event.target.files) {
-                  const mergedFileList = value ? addFiles(value, event.target.files) : event.target.files
+                if (!event.target.files) {
+                  return
+                }
 
-                  const newFiles = Array.from(event.target.files).map(file => ({
-                    id: crypto.randomUUID(),
-                    file,
-                  }))
+                const { mergedFileList, uploadFiles: updatedUploadFiles } = addFiles(value, event.target.files)
 
-                  setUploadFiles(prev => [...prev, ...newFiles])
-                  onChange(mergedFileList)
-                  event.target.value = ''
-                }
+                setUploadFiles(updatedUploadFiles)
+                onChange(mergedFileList)
+                event.target.value = ''
               }}
-              /*
-              onDrop={event => {
-                if (event.dataTransfer.files.length > 0) {
-                  const newFiles = Array.from(event.dataTransfer.files).map(file => ({
-                    id: crypto.randomUUID(),
-                    file,
-                  }))
-                  setUploadFiles(prev => [...prev, ...newFiles])
-                  // onChange(value ? addFiles(value, event.dataTransfer.files) : event.dataTransfer.files)
-                  onChange(newFiles.map(f => f.file))
-                }
-                // if (event.dataTransfer.files.length > 0) {
-                //   onChange(value ? addFiles(value, event.dataTransfer.files) : event.dataTransfer.files)
-                // }
-              }}
-              onChange={event => {
-                if (event.target.files) {
-                  const newFiles = Array.from(event.target.files).map(file => ({
-                    id: crypto.randomUUID(),
-                    file,
-                  }))
-                  setUploadFiles(prev => [...prev, ...newFiles])
-                  onChange(newFiles.map(f => f.file))
-                  event.target.value = ''
-                  // onChange(value ? addFiles(value, event.target.files) : event.target.files)
-                }
-                // if (event.target.files) {
-                //   onChange(value ? addFiles(value, event.target.files) : event.target.files)
-                // }
-              }}
-              */
               removeFile={(idx: number) => {
                 setUploadFiles(prev => prev.filter((_, index) => index !== idx))
                 selectedAssetsValidationResults.splice(idx, 1)
@@ -191,15 +155,6 @@ export const AddAssets = () => {
                 setValue('allAssetsValid', allTrue(selectedAssetsValidationResults))
                 onChange(removeFile(value, idx))
               }}
-              /*
-              removeFile={(idx: number) => {
-                setUploadFiles(prev => prev.filter((_, index) => index !== idx))
-                selectedAssetsValidationResults.splice(idx, 1)
-                setSelectedAssetsValidationResults(selectedAssetsValidationResults)
-                setValue('allAssetsValid', allTrue(selectedAssetsValidationResults))
-                onChange(removeFile(value, idx))
-              }}
-              */
               validationHandler={validationHandler}
               error={pathOr('', ['assets', 'message'])(errors)}
             />

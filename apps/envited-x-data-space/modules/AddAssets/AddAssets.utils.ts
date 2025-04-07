@@ -4,6 +4,7 @@ import { createFilename } from '../../common/asset/utils'
 import { ERRORS } from '../../common/constants'
 import { httpPutWithProgress } from '../../common/http'
 import { UploadAssetState, UploadStatus } from '../../common/types'
+import { UploadFile } from './AddAssets'
 import { UploadAssetFile, insertAssetAfterUpload } from './AddAssets.actions'
 
 export const _removeFile = (dataTransfer: DataTransfer) => (files: FileList, idx: number) => {
@@ -14,6 +15,7 @@ export const _removeFile = (dataTransfer: DataTransfer) => (files: FileList, idx
 
 export const removeFile = (files: FileList, idx: number) => _removeFile(new DataTransfer())(files, idx)
 
+/*
 export const _addFiles = (dataTransfer: DataTransfer) => (files: FileList, newFiles: FileList) => {
   const fileArray = concat(Array.from(files))(Array.from(newFiles))
   map((file: File) => dataTransfer.items.add(file))(fileArray)
@@ -22,6 +24,31 @@ export const _addFiles = (dataTransfer: DataTransfer) => (files: FileList, newFi
 }
 
 export const addFiles = (files: FileList, newFiles: FileList) => _addFiles(new DataTransfer())(files, newFiles)
+*/
+
+export const _addFiles =
+  ({ dataTransfer, crypto }: { dataTransfer: DataTransfer; crypto: { randomUUID: () => string } }) =>
+  (currentFiles: FileList | undefined, newFiles: FileList): { mergedFileList: FileList; uploadFiles: UploadFile[] } => {
+    const fileArray = concat(currentFiles ? Array.from(currentFiles) : [])(Array.from(newFiles))
+
+    const uploadFiles: UploadFile[] = fileArray.map(file => ({
+      id: crypto.randomUUID(),
+      file,
+    }))
+
+    fileArray.forEach(file => dataTransfer.items.add(file))
+
+    return {
+      mergedFileList: dataTransfer.files,
+      uploadFiles,
+    }
+  }
+
+export const addFiles = (files: FileList, newFiles: FileList) =>
+  _addFiles({
+    dataTransfer: new DataTransfer(),
+    crypto,
+  })(files, newFiles)
 
 export const allStatus = (status: UploadStatus) => all(propEq(status, 'status'))
 

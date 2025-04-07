@@ -1,15 +1,25 @@
 'use client'
 
-import { Alert, AlertType, Heading, LoadingIndicator } from '@envited-x-data-space/design-system'
+import { Alert, AlertType, Heading } from '@envited-x-data-space/design-system'
 import { isEmpty, isNil, map, pathOr, pipe } from 'ramda'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useTranslation } from '../../common/i18n'
 import { useNotification } from '../../common/notifications'
-import { allTrue } from '../../common/utils/utils'
+import { FilesWithId, UploadAssetState, UploadStatus } from '../../common/types'
+import { allTrue, anyFalse } from '../../common/utils'
 import { AssetFile, validateAndUploadAssets } from './AddAssets.actions'
-import { addFiles, processFile, removeFile, uploadFile } from './AddAssets.utils'
+import {
+  addFiles,
+  addIdToFileList,
+  allStatus,
+  anyStatus,
+  createDataTransferFromFileList,
+  processFile,
+  removeFile,
+  uploadFile,
+} from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
 export const AddAssets = () => {
@@ -29,11 +39,26 @@ export const AddAssets = () => {
   watch('allAssetsValid')
 
   const [selectedAssetsValidationResults, setSelectedAssetsValidationResults] = useState<boolean[]>([])
+  const [uploadAssetsState, setUploadAssetsState] = useState<UploadAssetState[]>([])
+  const [uploadFiles, setUploadFiles] = useState<FilesWithId[]>([])
 
   const validationHandler = (idx: number, data: { isValid: boolean; data: any }) => {
     selectedAssetsValidationResults[idx] = data.isValid
     setValue('allAssetsValid', allTrue(selectedAssetsValidationResults))
     setSelectedAssetsValidationResults(selectedAssetsValidationResults)
+  }
+
+  const updateUploadState = (index: number, progress: number, status: UploadStatus) => {
+    setUploadAssetsState(prev => {
+      const updated = [...prev]
+      updated[index] = {
+        ...updated[index],
+        progress,
+        status,
+      }
+
+      return updated
+    })
   }
 
   const { allAssetsValid } = getValues()
@@ -46,17 +71,44 @@ export const AddAssets = () => {
 
       const filesArray = Array.from(data.assets as FileList)
 
+      filesArray.forEach((_, index) => {
+        updateUploadState(index, 0, UploadStatus.queued)
+      })
+
       const processFiles = pipe(map(processFile), Promise.all.bind(Promise))
       const filesData = await processFiles(filesArray)
       const uploadData = await validateAndUploadAssets(filesData as AssetFile[])
-      const results = await Promise.all(map(file => uploadFile(filesArray, file as any), uploadData))
 
-      map(({ success, file }: { success: boolean; file: string }) =>
-        success
-          ? successNotification(`${file} ${t('[Notification] asset successfully uploaded')}`)
-          : error(`${file} ${t('[Notification] asset already exists')}`),
-      )(results)
+      const uploadPromises = uploadData.map(async (file, index) => {
+        try {
+          if (!file.success) {
+            updateUploadState(index, 0, UploadStatus.error)
+            return error(`${filesArray[index].name}: ${file.message}`)
+          }
+
+          const { success, message } = await uploadFile(filesArray, file, percent => {
+            updateUploadState(index, percent, UploadStatus.uploading)
+          })
+
+          if (!success) {
+            updateUploadState(index, 0, UploadStatus.error)
+            return error(`${filesArray[index].name}: ${message}`)
+          }
+
+          updateUploadState(index, 100, UploadStatus.uploaded)
+          successNotification(`${filesArray[index].name} successfully uploaded`)
+        } catch (err) {
+          error(`Upload failed for ${file}`)
+        }
+      })
+      await Promise.all(uploadPromises)
+
       reset()
+      setUploadFiles([])
+      setUploadAssetsState([])
+      setSelectedAssetsValidationResults([])
+      setValue('allAssetsValid', false)
+      setValue('assets', new DataTransfer().files)
     } catch (e) {
       error(t('[Notification] invalid asset found'))
       console.error(e)
@@ -77,20 +129,33 @@ export const AddAssets = () => {
               label={t('[Label] select assets')}
               {...field}
               inputRef={ref}
-              files={value}
+              files={uploadFiles}
+              filesState={uploadAssetsState}
               onDrop={event => {
-                if (event.dataTransfer.files.length > 0) {
-                  onChange(value ? addFiles(value, event.dataTransfer.files) : event.dataTransfer.files)
+                if (event.dataTransfer.files.length === 0) {
+                  return
                 }
+
+                const filesWithId = addFiles(value, event.dataTransfer.files)
+
+                setUploadFiles(addIdToFileList(filesWithId))
+                onChange(createDataTransferFromFileList(filesWithId))
               }}
               onChange={event => {
-                if (event.target.files) {
-                  onChange(value ? addFiles(value, event.target.files) : event.target.files)
+                if (!event.target.files) {
+                  return
                 }
+
+                const filesWithId = addFiles(value, event.target.files)
+
+                setUploadFiles(addIdToFileList(filesWithId))
+                onChange(createDataTransferFromFileList(filesWithId))
+                event.target.value = ''
               }}
               removeFile={(idx: number) => {
+                setUploadFiles(prev => prev.filter((_, index) => index !== idx))
                 selectedAssetsValidationResults.splice(idx, 1)
-                setSelectedAssetsValidationResults(selectedAssetsValidationResults)
+                setSelectedAssetsValidationResults([...selectedAssetsValidationResults])
                 setValue('allAssetsValid', allTrue(selectedAssetsValidationResults))
                 onChange(removeFile(value, idx))
               }}
@@ -101,27 +166,24 @@ export const AddAssets = () => {
         />
         {!isEmpty(selectedAssetsValidationResults) && !isNil(allAssetsValid) && (
           <div>
-            {allAssetsValid ? (
+            {allAssetsValid && !isSubmitting && (
               <button
                 type="submit"
                 className="bg-blue hover:bg-blue-900 text-white transition rounded-md font-bold py-2 px-4 w-full text-center"
-                disabled={isSubmitting}
               >
-                {isSubmitting ? (
-                  <span>
-                    <LoadingIndicator />
-                  </span>
-                ) : (
-                  t('[Button] upload assets')
-                )}
+                {t('[Button] upload assets')}
               </button>
-            ) : (
+            )}
+            {anyFalse(selectedAssetsValidationResults) && (
               <Alert type={AlertType.error}>{t('[Error] invalid asset found')}</Alert>
             )}
           </div>
         )}
-        {isSubmitted && isNil(allAssetsValid) && (
+        {isSubmitted && allStatus(UploadStatus.uploaded)(uploadAssetsState) && (
           <Alert type={AlertType.succes}>{t('[Success] assets are uploaded')}</Alert>
+        )}
+        {isSubmitted && anyStatus(UploadStatus.error)(uploadAssetsState) && (
+          <Alert type={AlertType.error}>{t('[Error] assets upload failed')}</Alert>
         )}
       </form>
     </>

@@ -94,6 +94,14 @@ export enum OperationStatus {
   skipped = 'skipped',
 }
 
+export enum UploadStatus {
+  idle = 'idle',
+  queued = 'queued',
+  uploading = 'uploading',
+  uploaded = 'uploaded',
+  error = 'error',
+}
+
 export enum OperationInstruction {
   incoming = 'incoming',
   outgoing = 'outgoing',

@@ -1,25 +1,114 @@
 'use client'
 
-import { LoadingIndicator, bytesToMegaBytes } from '@envited-x-data-space/design-system'
-import { CheckCircleIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { pathOr, prop } from 'ramda'
+import { LoadingIndicator, ProgressBar, bytesToMegaBytes } from '@envited-x-data-space/design-system'
+import { CheckCircleIcon, ClockIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { pathOr, prop, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
+import { match } from 'ts-pattern'
 
+import { UploadAssetState, UploadStatus } from '../../common/types'
+import { anyEqual } from '../../common/utils'
 import { validateAsset } from '../../common/validator/utils'
 
 interface UploadAssetItemProps {
   idx: number
   file: File
+  state: UploadAssetState
   validHandler: (idx: number, data: any) => void
   removeFile: (idx: number) => void
 }
-export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, validHandler, removeFile }) => {
+
+export const UploadAssetCard = ({
+  name,
+  size,
+  progress,
+  status,
+}: {
+  name: string
+  size: number
+  progress: number
+  status: UploadStatus
+}) => {
+  return (
+    <div className="border-gray-300 relative block w-full cursor-pointer rounded-lg border bg-white px-6 py-4 focus:outline-none sm:flex sm:justify-between items-center">
+      <span className="flex items-center w-full">
+        <span className="flex flex-col text-sm gap-3 w-full">
+          <span className="font-medium text-gray-900">{name}</span>
+          <span className="flex flex-col gap-2">
+            {!anyEqual(status)([UploadStatus.idle, UploadStatus.queued]) && (
+              <span className="text-gray-500 flex gap-6 items-center">
+                <span className="block sm:inline w-full">
+                  <ProgressBar percent={progress} status={status} />
+                </span>
+              </span>
+            )}
+            <span className="text-gray-500 flex gap-6 items-center justify-between">
+              {match(status)
+                .with(UploadStatus.idle, () => <></>)
+                .with(UploadStatus.queued, () => (
+                  <>
+                    <span className="text-xs flex items-center gap-1.5">
+                      <ClockIcon className="text-gray-400 w-[18px] h-[18px]" /> Waiting for upload
+                    </span>
+                  </>
+                ))
+                .with(UploadStatus.uploading, () => (
+                  <>
+                    <span className="flex items-center text-xs">
+                      <span className="flex gap-x-2 items-center">
+                        <LoadingIndicator /> Uploading
+                      </span>
+                      <span className="hidden sm:mx-1 sm:inline font-bold" aria-hidden="true">
+                        &middot;
+                      </span>{' '}
+                      <span>
+                        {bytesToMegaBytes(size * (progress / 100))} MB of {bytesToMegaBytes(size)} MB
+                      </span>
+                    </span>
+                    <span className="block sm:inline text-xs">{progress}%</span>
+                  </>
+                ))
+                .with(UploadStatus.uploaded, () => (
+                  <>
+                    <span className="text-xs flex items-center gap-1.5">
+                      <CheckCircleIcon className="text-green-500 w-[18px] h-[18px]" /> Upload successful!
+                    </span>
+                    <span className="block sm:inline text-xs">{progress}%</span>
+                  </>
+                ))
+                .with(UploadStatus.error, () => (
+                  <>
+                    <span className="block sm:inline text-xs">
+                      <XMarkIcon className="text-red-600 w-[18px] h-[18px]" /> Upload failed!
+                    </span>
+                    <span className="block sm:inline text-xs">{progress}%</span>
+                  </>
+                ))
+                .otherwise(() => (
+                  <></>
+                ))}
+            </span>
+          </span>
+        </span>
+      </span>
+    </div>
+  )
+}
+
+export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, validHandler, removeFile }) => {
+  const status = propOr(UploadStatus.idle, 'status')(state) as UploadStatus
+  const progress = propOr(0, 'progress')(state) as number
+
   const [asset, setAsset] = useState<any>(null)
   const [validating, setValidating] = useState(true)
 
   useEffect(() => {
     async function getAssetData() {
       try {
+        validHandler(idx, {
+          isValid: undefined,
+          data: null,
+        })
         const data = await validateAsset(file)
 
         setAsset(data)
@@ -33,51 +122,57 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, validHand
     if (!asset) {
       getAssetData()
     }
-  }, [])
+  }, [status])
 
-  return (
-    <div className="border-gray-300 hover:border-blue hover:bg-gray-100 relative block w-full cursor-pointer rounded-lg border bg-white px-6 py-4 focus:outline-none sm:flex sm:justify-between items-center">
-      <span className="flex items-center grow">
-        <span className="flex flex-col text-sm">
-          <span className="font-medium text-gray-900">
-            {pathOr('', ['data', 'title'])(asset)}
-            {` - `}
-            {file.name}
-          </span>
-          <span className="text-gray-500 flex">
-            <span className="block sm:inline">
-              <span className="flex gap-x-2 items-center">
-                {validating ? (
-                  <>
+  return match(status)
+    .with(UploadStatus.idle, () => (
+      <div className="border-gray-300 hover:border-blue hover:bg-gray-100 relative block w-full cursor-pointer rounded-lg border bg-white px-6 py-4 focus:outline-none sm:flex sm:justify-between items-center">
+        <span className="flex items-center grow">
+          <span className="flex flex-col text-sm gap-2.5">
+            <span className="font-medium text-gray-900">{file.name}</span>
+            <span className="text-gray-500 flex items-center text-xs">
+              {validating ? (
+                <span className="block sm:inline">
+                  <span className="flex gap-x-1.5 items-center">
                     <LoadingIndicator /> Is validating
-                  </>
-                ) : pathOr(false, ['isValid'])(asset) ? (
-                  <>
-                    <CheckCircleIcon className="text-green-600 w-3.5 h-3.5" /> Validated
-                  </>
-                ) : (
-                  <>
-                    <XMarkIcon className="text-red-600 w-3.5 h-3.5" /> Invalid
-                  </>
-                )}
-              </span>
+                  </span>
+                </span>
+              ) : (
+                <>
+                  <span className="block sm:inline text-xs">
+                    <span className="flex gap-x-1.5 items-center text-xs">
+                      {pathOr(false, ['isValid'])(asset) ? (
+                        <>
+                          <CheckCircleIcon className="text-green-500 w-[18px] h-[18px]" /> Validated
+                        </>
+                      ) : (
+                        <>
+                          <XMarkIcon className="text-red-600 w-[18px] h-[18px]" /> Invalid
+                        </>
+                      )}
+                    </span>
+                  </span>
+                  <span className="hidden sm:mx-1 sm:inline font-bold" aria-hidden="true">
+                    &middot;
+                  </span>{' '}
+                  <span className="block sm:inline">
+                    {prop('isValid')(asset)
+                      ? pathOr('', ['data', 'domainMetadata', '@type'])(asset)
+                      : prop('error')(asset)}
+                  </span>{' '}
+                </>
+              )}
             </span>
-            <span className="hidden sm:mx-1 sm:inline" aria-hidden="true">
-              &middot;
-            </span>{' '}
-            <span className="block sm:inline">
-              {prop('isValid')(asset) ? pathOr('', ['data', 'type'])(asset) : prop('error')(asset)}
-            </span>{' '}
           </span>
         </span>
-      </span>
-      <span className="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm:flex-col sm:text-right">
-        <span className="font-medium text-gray-900">{bytesToMegaBytes(file.size)}</span>
-        <span className="ml-1 text-gray-500 sm:ml-0">MB</span>
-      </span>
-      <span className="text-red-500 cursor-pointer ml-6" onClick={() => removeFile(idx)}>
-        <XCircleIcon className="text-red-500 w-5 h-5" />
-      </span>
-    </div>
-  )
+        <span className="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm:flex-col sm:text-right">
+          <span className="font-medium text-gray-900">{bytesToMegaBytes(file.size)}</span>
+          <span className="ml-1 text-gray-500 sm:ml-0">MB</span>
+        </span>
+        <span className="text-red-500 cursor-pointer ml-6" onClick={() => removeFile(idx)}>
+          <XCircleIcon className="text-red-500 w-5 h-5" />
+        </span>
+      </div>
+    ))
+    .otherwise(() => <UploadAssetCard name={file.name} size={file.size} status={status} progress={progress} />)
 }

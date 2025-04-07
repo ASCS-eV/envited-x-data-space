@@ -2,6 +2,7 @@ import {
   __,
   addIndex,
   all,
+  any,
   compose,
   concat,
   equals,
@@ -60,7 +61,11 @@ export const segmentsToPath = (pathNames: string[]) => (index: number) =>
 
 export const allEqual = (x: any) => all(equals(x))
 
+export const anyEqual = (x: any) => any(equals(x))
+
 export const allTrue = allEqual(true)
+
+export const anyFalse = anyEqual(false)
 
 export const getImageUrl = (image: string) => `${process.env.NEXT_PUBLIC_URL || ''}/${image}`
 

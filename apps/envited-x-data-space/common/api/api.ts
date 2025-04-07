@@ -1,5 +1,3 @@
-export const fetchAssetDataByCID = async (cid: string) => {
-  const response = await fetch(`/api/assets/${cid}`)
+import { httpGet } from '../http'
 
-  return response.json()
-}
+export const fetchAssetDataByCID = async (cid: string) => httpGet(`/api/assets/${cid}`)

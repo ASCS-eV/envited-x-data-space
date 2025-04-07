@@ -13,6 +13,9 @@ export {
 export {
   addUrnUuid,
   addDidToAddress,
+  allTrue,
+  anyEqual,
+  anyFalse,
   extractAddressFromDid,
   extractUuidFromUrn,
   extractIdFromCredential,

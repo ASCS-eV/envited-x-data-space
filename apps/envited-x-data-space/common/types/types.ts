@@ -10,6 +10,14 @@ export interface TranslationsMap {
   [Language.nl]: { [key: string]: { [key: string]: string } }
 }
 
+export enum UploadStatus {
+  idle = 'idle',
+  queued = 'queued',
+  uploading = 'uploading',
+  uploaded = 'uploaded',
+  error = 'error',
+}
+
 export enum AssetStatus {
   processing = 'processing',
   rejected = 'rejected',
@@ -162,6 +170,11 @@ export interface User {
   urnGlobalIdentifier?: GlobalIdentifier
 }
 
+export interface UploadAssetState {
+  status: UploadStatus
+  progress: number
+}
+
 export interface Profile {
   id?: string
   name: string
@@ -210,4 +223,9 @@ export interface GlobalIdentifier {
   namespace?: string | null
   chainId?: string | null
   nss: string
+}
+
+export interface FilesWithId {
+  id: string
+  file: File
 }

@@ -1,7 +1,9 @@
-import { concat, equals, map, propEq, times } from 'ramda'
+import { all, any, concat, equals, forEach, map, propEq, times } from 'ramda'
 
 import { createFilename } from '../../common/asset/utils'
 import { ERRORS } from '../../common/constants'
+import { httpPutWithProgress } from '../../common/http'
+import { FilesWithId, UploadStatus } from '../../common/types'
 import { UploadAssetFile, insertAssetAfterUpload } from './AddAssets.actions'
 
 export const _removeFile = (dataTransfer: DataTransfer) => (files: FileList, idx: number) => {
@@ -12,14 +14,25 @@ export const _removeFile = (dataTransfer: DataTransfer) => (files: FileList, idx
 
 export const removeFile = (files: FileList, idx: number) => _removeFile(new DataTransfer())(files, idx)
 
-export const _addFiles = (dataTransfer: DataTransfer) => (files: FileList, newFiles: FileList) => {
-  const fileArray = concat(Array.from(files))(Array.from(newFiles))
-  map((file: File) => dataTransfer.items.add(file))(fileArray)
+export const addFiles = (currentFiles: FileList | undefined, newFiles: FileList): File[] =>
+  concat(currentFiles ? Array.from(currentFiles) : [])(Array.from(newFiles))
 
-  return dataTransfer.files
-}
+export const addIdToFileList = map(
+  (file: File): FilesWithId => ({
+    id: crypto.randomUUID(),
+    file,
+  }),
+)
 
-export const addFiles = (files: FileList, newFiles: FileList) => _addFiles(new DataTransfer())(files, newFiles)
+export const _createDataTransferFromFileList = (dataTransfer: DataTransfer) => (files: File[]) =>
+  forEach((file: File) => dataTransfer.items.add(file))(files)
+
+export const createDataTransferFromFileList = (files: File[]) =>
+  _createDataTransferFromFileList(new DataTransfer())(files)
+
+export const allStatus = (status: UploadStatus) => all(propEq(status, 'status'))
+
+export const anyStatus = (status: UploadStatus) => any(propEq(status, 'status'))
 
 export const processFile = async (file: File): Promise<{ name: string; type: string; cid: string }> => {
   const arrayBuffer = Buffer.from(await file.arrayBuffer())
@@ -28,7 +41,11 @@ export const processFile = async (file: File): Promise<{ name: string; type: str
   return { name: file.name, type: file.type, cid }
 }
 
-export const uploadFile = async (filesArray: File[], { signedUrl, cid, fileType, file }: UploadAssetFile) => {
+export const uploadFile = async (
+  filesArray: File[],
+  { signedUrl, cid, fileType, file }: UploadAssetFile,
+  onProgress: (percent: number) => void,
+): Promise<{ success: boolean; file: string; message?: string }> => {
   if (!signedUrl) {
     return { success: false, file, message: ERRORS.SIGNED_URL_MISSING }
   }
@@ -42,19 +59,25 @@ export const uploadFile = async (filesArray: File[], { signedUrl, cid, fileType,
   }
 
   const fileObj = filesArray.find(propEq(file, 'name'))
-  if (!fileObj) return { success: false, file, message: ERRORS.FILE_NOT_FOUND }
+  if (!fileObj) {
+    return { success: false, file, message: ERRORS.FILE_NOT_FOUND }
+  }
 
-  const arrayBuffer = Buffer.from(await fileObj.arrayBuffer())
-
-  const uploadResponse = await fetch(signedUrl, {
-    method: 'PUT',
-    body: arrayBuffer,
-    headers: { 'Content-Type': fileType },
+  const success = await httpPutWithProgress({
+    file: fileObj,
+    url: signedUrl,
+    contentType: fileType,
+    onProgress,
   })
 
-  if (!uploadResponse.ok) return { success: false, file, message: ERRORS.FAILED_UPLOAD }
+  if (!success) {
+    return { success: false, file, message: ERRORS.FAILED_UPLOAD }
+  }
 
-  await insertAssetAfterUpload(cid, file)
-
-  return { success: true, file }
+  try {
+    await insertAssetAfterUpload(cid, file)
+    return { success: true, file }
+  } catch {
+    return { success: false, file, message: ERRORS.ASSET_UPLOAD_FAILED }
+  }
 }

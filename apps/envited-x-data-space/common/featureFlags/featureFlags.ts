@@ -1,4 +1,4 @@
-import { unique } from "drizzle-orm/mysql-core";
+import { unique } from 'drizzle-orm/mysql-core'
 
 export const FEATURE_FLAGS = {
   development: {

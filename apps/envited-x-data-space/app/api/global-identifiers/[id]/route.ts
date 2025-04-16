@@ -5,10 +5,7 @@ import { getServerSession } from '../../../../common/auth'
 import { ERRORS, ERROR_CODES } from '../../../../common/constants/errors'
 import { db } from '../../../../common/database/queries'
 
-export async function GET(
-  request: Request,
-  { params: { id } }: { params: { id: string } },
-) {
+export async function GET(request: Request, { params: { id } }: { params: { id: string } }) {
   console.log('endpoint check', id)
   try {
     if (isNil(id) || isEmpty(id)) {

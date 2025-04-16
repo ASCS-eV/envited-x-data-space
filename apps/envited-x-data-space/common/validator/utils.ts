@@ -1,6 +1,7 @@
 import { filter, groupBy, isEmpty, isNotNil, path, pathEq, pipe, prop, propOr } from 'ramda'
 
 import { fetchAssetDataByCID, fetchGlobalIdentifierByScopedIdentifier } from '../api'
+import { MANIFEST_LINK_MIME_TYPE } from '../asset/constants'
 import { Manifest, ManifestMetadataLink } from '../asset/types'
 import { createFilename } from '../asset/utils'
 import { ERRORS } from '../constants'
@@ -8,16 +9,12 @@ import { FEATURE_FLAGS } from '../featureFlags'
 import { parseGlobalIdentifier } from '../globalIdentifiers'
 import { Environment } from '../types'
 import { validateShaclFile } from './shacl'
-import { MANIFEST_LINK_MIME_TYPE } from '../asset/constants'
 
-export const getReferencedAssets = (manifest: Manifest) => pipe(
-  propOr([], 'manifest:hasReferencedArtifacts'),
-  filter(
-    (x: any) =>
-      path(['manifest:iri', '@id'], x) &&
-      pathEq('application/zip', MANIFEST_LINK_MIME_TYPE, x),
-  ),
-)(manifest)
+export const getReferencedAssets = (manifest: Manifest) =>
+  pipe(
+    propOr([], 'manifest:hasReferencedArtifacts'),
+    filter((x: any) => path(['manifest:iri', '@id'], x) && pathEq('application/zip', MANIFEST_LINK_MIME_TYPE, x)),
+  )(manifest)
 
 export const _validateAsset =
   ({

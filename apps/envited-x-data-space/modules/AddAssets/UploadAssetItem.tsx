@@ -1,7 +1,14 @@
 'use client'
 
 import { LoadingIndicator, ProgressBar, bytesToMegaBytes } from '@envited-x-data-space/design-system'
-import { CheckCircleIcon, CheckIcon, ClockIcon, ExclamationTriangleIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  CheckCircleIcon,
+  CheckIcon,
+  ClockIcon,
+  ExclamationTriangleIcon,
+  XCircleIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import { isEmpty, isNotNil, pathOr, prop, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
@@ -160,7 +167,8 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, va
                         &middot;
                       </span>{' '}
                       <span className="flex gap-x-1.5 items-center text-xs">
-                        <ExclamationTriangleIcon className="text-orange-400 w-[18px] h-[18px]" /> {asset.data?.referencedAssets['false']?.length} referenced asset(s) missing
+                        <ExclamationTriangleIcon className="text-orange-400 w-[18px] h-[18px]" />{' '}
+                        {asset.data?.referencedAssets['false']?.length} referenced asset(s) missing
                       </span>
                     </>
                   )}

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { isNil, map, pathOr, pipe } from 'ramda'
 import { FC, Fragment, useEffect, useState } from 'react'
 
+import { MANIFEST_LINK_FILENAME, MANIFEST_LINK_FILE_PATH } from '../../common/asset/constants'
 import displayTrees from '../../common/asset/displayTrees'
 import { ManifestLink } from '../../common/asset/types'
 import { extractDomainMetadata, extractManifestReferencedArtifacts } from '../../common/asset/utils'
@@ -22,7 +23,6 @@ import {
   removeKeywords,
 } from '../../common/utils'
 import { Button } from '../Button'
-import { MANIFEST_LINK_FILE_PATH, MANIFEST_LINK_FILENAME } from '../../common/asset/constants'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')

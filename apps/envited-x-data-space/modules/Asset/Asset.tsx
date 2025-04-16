@@ -2,11 +2,13 @@
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { clsx } from 'clsx'
-import { pipe } from 'ramda'
+import Link from 'next/link'
+import { isNil, map, pathOr, pipe } from 'ramda'
 import { FC, Fragment, useEffect, useState } from 'react'
 
 import displayTrees from '../../common/asset/displayTrees'
-import { extractDomainMetadata } from '../../common/asset/utils'
+import { ManifestLink } from '../../common/asset/types'
+import { extractDomainMetadata, extractManifestReferencedArtifacts } from '../../common/asset/utils'
 import { useTranslation } from '../../common/i18n'
 import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
 import {
@@ -20,6 +22,7 @@ import {
   removeKeywords,
 } from '../../common/utils'
 import { Button } from '../Button'
+import { MANIFEST_LINK_FILE_PATH, MANIFEST_LINK_FILENAME } from '../../common/asset/constants'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -33,6 +36,8 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
   const [displayTree, setDisplayTree] = useState<any>()
   const { t } = useTranslation('Asset')
   const [data, setData] = useState<Record<string, any>>({})
+
+  const referencedArtifacts = extractManifestReferencedArtifacts(token.manifest) as [] | ManifestLink[]
 
   useEffect(() => {
     const assetType = getAssetType(token.domainMetadata)
@@ -184,6 +189,23 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
                 </li>
               </ul>
             </div>
+            {!isNil(referencedArtifacts) && referencedArtifacts.length > 0 && (
+              <div className="mt-10 border-t border-gray-200 pt-10">
+                <h3 className="text-sm font-bold text-gray-900">Referenced artifacts</h3>
+                <ul role="list" className="mt-4 text-sm font-medium leading-8 text-gray-900">
+                  {map((artifact: ManifestLink) => {
+                    const filePath = pathOr('', MANIFEST_LINK_FILE_PATH)(artifact)
+                    const filename = pathOr('', MANIFEST_LINK_FILENAME)(artifact)
+
+                    return (
+                      <li key={filename}>
+                        <Link href={filePath}>{filename}</Link>
+                      </li>
+                    )
+                  })(referencedArtifacts)}
+                </ul>
+              </div>
+            )}
           </div>
 
           <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">

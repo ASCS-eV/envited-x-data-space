@@ -19,12 +19,15 @@ export const globalIdentifier = pgTable(
     method: text('method').notNull(),
     namespace: text('namespace'),
     chainId: text('chain_id'),
-    nss: text('nss').notNull(),
+    fqdn: text('fqdn'),
+    scopedIdentifier: text('scoped_identifier').notNull(),
     metadata: jsonb('metadata'),
     createdAt: timestamp('created_at'),
     updatedAt: timestamp('updated_at'),
   },
-  table => [unique('composite_identifier_unique').on(table.method, table.namespace, table.chainId, table.nss)],
+  table => [
+    unique('composite_identifier_unique').on(table.method, table.namespace, table.chainId, table.scopedIdentifier),
+  ],
 )
 
 export const user = pgTable('user', {

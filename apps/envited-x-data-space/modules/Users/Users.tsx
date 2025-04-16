@@ -39,7 +39,7 @@ export const Users: FC<UsersProps> = ({ users, principalUserId = '' }) => {
         <TableBody>
           {map(({ addressGlobalIdentifier, name, email, isActive, id }: User) => (
             <TableRow key={id}>
-              <TableCell>{truncatePkh(addressGlobalIdentifier?.nss || '')}</TableCell>
+              <TableCell>{truncatePkh(addressGlobalIdentifier?.scopedIdentifier || '')}</TableCell>
               <TableCell>{name}</TableCell>
               <TableCell>{email}</TableCell>
               <TableCell>

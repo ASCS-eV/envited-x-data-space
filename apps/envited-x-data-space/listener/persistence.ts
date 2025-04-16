@@ -235,12 +235,47 @@ export const updateAsset =
 
 export const getGlobalIdentifierByFullResourceName =
   ({ database: db }: { database: DatabaseConnection }) =>
-  async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
+  async ({
+    method,
+    namespace,
+    chainId,
+    scopedIdentifier,
+  }: {
+    method: string
+    namespace: string
+    chainId: string
+    scopedIdentifier: string
+  }) =>
     db.query.globalIdentifier.findFirst({
       where: and(
         eq(schema.globalIdentifier.method, method),
         eq(schema.globalIdentifier.namespace, namespace),
         eq(schema.globalIdentifier.chainId, chainId),
-        eq(schema.globalIdentifier.nss, nss),
+        eq(schema.globalIdentifier.scopedIdentifier, scopedIdentifier),
       ),
+    })
+
+export const insertGlobalIdentifier =
+  ({ database: db }: { database: DatabaseConnection }) =>
+  async ({
+    method,
+    namespace,
+    chainId,
+    fqdn,
+    scopedIdentifier,
+  }: {
+    method: string
+    namespace?: string | null
+    chainId?: string | null
+    fqdn?: string | null
+    scopedIdentifier: string
+  }) =>
+    db.insert(schema.globalIdentifier).values({
+      method,
+      namespace,
+      chainId,
+      fqdn,
+      scopedIdentifier,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     })

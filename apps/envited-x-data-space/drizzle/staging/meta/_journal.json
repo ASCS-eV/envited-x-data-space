@@ -8,6 +8,13 @@
       "when": 1743516329071,
       "tag": "0000_eager_mephisto",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1744773346175,
+      "tag": "0001_clear_excalibur",
+      "breakpoints": true
     }
   ]
 }

@@ -21,6 +21,7 @@ import {
   pathEq,
   pathOr,
   pipe,
+  prop,
   reduce,
   reject,
   replace,
@@ -298,6 +299,8 @@ export const extractGeneralInformationFromMetadata = (type: string) =>
     formatType: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:formatType`]),
     version: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:version`, '@value']),
   })
+
+export const extractManifestReferencedArtifacts = prop('manifest:hasReferencedArtifacts')
 
 export const extractDomainMetadata = (jsonData: Record<string, any>) => {
   // Find any hasDataResource and hasDataResourceExtension properties

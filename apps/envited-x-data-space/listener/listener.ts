@@ -1,7 +1,8 @@
 import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 import { GetCIDResponse } from 'pinata-web3'
-import { replace } from 'ramda'
+import { pathOr, replace } from 'ramda'
 
+import { parseGlobalIdentifier } from '../common/globalIdentifiers'
 import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
@@ -53,6 +54,7 @@ export const listenToAssetContract =
     getAssetByCID,
     updateAsset,
     getGlobalIdentifierByFullResourceName,
+    insertGlobalIdentifier,
     log,
   }: {
     tezos: TezosToolkit
@@ -61,6 +63,7 @@ export const listenToAssetContract =
     getAssetByCID: any
     updateAsset: any
     getGlobalIdentifierByFullResourceName: any
+    insertGlobalIdentifier: any
     log: Log
   }) =>
   async () => {
@@ -88,7 +91,7 @@ export const listenToAssetContract =
           method: 'urn:contract',
           namespace: 'tezos',
           chainId: process.env.TEZOS_CHAIN_ID!,
-          nss: process.env.TEZOS_ASSETS_CONTRACT!,
+          scopedIdentifier: process.env.TEZOS_ASSETS_CONTRACT!,
         })
 
         if (contractGuid) {
@@ -111,6 +114,8 @@ export const listenToAssetContract =
           replace('ipfs://', '')(domainMetadataUri as string),
         )
         const attributes = extractKeyValuePairs(domainMetadata.data)
+
+        await insertGlobalIdentifier(parseGlobalIdentifier(pathOr('', ['data', '@id'])(domainMetadata)))
 
         // Save token to DB
         const token = await insertToken({

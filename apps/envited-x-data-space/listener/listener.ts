@@ -54,7 +54,6 @@ export const listenToAssetContract =
     getAssetByCID,
     updateAsset,
     getGlobalIdentifierByFullResourceName,
-    insertGlobalIdentifier,
     log,
   }: {
     tezos: TezosToolkit
@@ -63,7 +62,6 @@ export const listenToAssetContract =
     getAssetByCID: any
     updateAsset: any
     getGlobalIdentifierByFullResourceName: any
-    insertGlobalIdentifier: any
     log: Log
   }) =>
   async () => {
@@ -115,14 +113,13 @@ export const listenToAssetContract =
         )
         const attributes = extractKeyValuePairs(domainMetadata.data)
 
-        await insertGlobalIdentifier(parseGlobalIdentifier(pathOr('', ['data', '@id'])(domainMetadata)))
-
         // Save token to DB
         const token = await insertToken({
           hash: `urn:operation:tezos:${process.env.TEZOS_CHAIN_ID!}:${hash}`,
           contract: `urn:contract:tezos:${process.env.TEZOS_CHAIN_ID!}:${destination}`,
           minter: `did:pkh:tezos:${process.env.TEZOS_CHAIN_ID!}:${creator}`,
           tokenId,
+          webGlobalIdentifier: pathOr('', ['data', '@id'])(domainMetadata),
           name: tokenMetadata?.name,
           description: tokenMetadata?.description,
           creators: tokenMetadata?.creators,

@@ -15,6 +15,13 @@
       "when": 1744773346175,
       "tag": "0001_clear_excalibur",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1744882202665,
+      "tag": "0002_flawless_the_order",
+      "breakpoints": true
     }
   ]
 }

@@ -247,6 +247,7 @@ export const token = pgTable('token', {
   operationGlobalIdentifierId: uuid('hash_global_identifier_id').references(() => globalIdentifier.id),
   contractGlobalIdentifierId: uuid('contract_global_identifier_id').references(() => globalIdentifier.id),
   minterGlobalIdentifierId: uuid('minter_global_identifier_id').references(() => globalIdentifier.id),
+  webGlobalIdentifierId: uuid('web_global_identifier_id').references(() => globalIdentifier.id),
   tokenId: integer('token_id'),
   name: text('name'),
   description: text('description'),

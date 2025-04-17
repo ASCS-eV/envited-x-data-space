@@ -44,6 +44,7 @@ export const insertTokenTx =
     operationGlobalIdentifierId,
     contractGlobalIdentifierId,
     minterGlobalIdentifierId,
+    webGlobalIdentifierId,
     tokenId,
     name,
     description,
@@ -65,6 +66,7 @@ export const insertTokenTx =
     operationGlobalIdentifierId: string
     contractGlobalIdentifierId: string
     minterGlobalIdentifierId: string
+    webGlobalIdentifierId: string
     tokenId: number
     name: string
     description: string
@@ -89,6 +91,7 @@ export const insertTokenTx =
         operationGlobalIdentifierId,
         contractGlobalIdentifierId,
         minterGlobalIdentifierId,
+        webGlobalIdentifierId,
         tokenId,
         name,
         description,
@@ -153,6 +156,7 @@ export const insertToken =
           hash,
           contract,
           minter,
+          webGloblalIdentifier,
           tokenId,
           name,
           description,
@@ -177,10 +181,12 @@ export const insertToken =
         const [operationGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(hash))
         const [contractGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(contract))
         const [minterGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(minter))
+        const [webGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(webGloblalIdentifier))
         const [insertedToken] = await insertTokenTx(tx)({
           operationGlobalIdentifierId: operationGuid.id,
           contractGlobalIdentifierId: contractGuid.id,
           minterGlobalIdentifierId: minterGuid.id,
+          webGlobalIdentifierId: webGuid.id,
           tokenId,
           name,
           description,

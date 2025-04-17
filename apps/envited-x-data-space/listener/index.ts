@@ -11,7 +11,6 @@ import {
   getAssetByCID,
   getGlobalIdentifierByFullResourceName,
   getTokenByTokenId,
-  insertGlobalIdentifier,
   insertToken,
   updateAsset,
 } from './persistence'
@@ -44,6 +43,5 @@ listenToAssetContract({
   getAssetByCID: getAssetByCID({ database: connection }),
   updateAsset: updateAsset({ database: connection }),
   getGlobalIdentifierByFullResourceName: getGlobalIdentifierByFullResourceName({ database: connection }),
-  insertGlobalIdentifier: insertGlobalIdentifier({ database: connection }),
   log,
 })()

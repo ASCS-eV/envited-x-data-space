@@ -1,4 +1,5 @@
-import { filter, groupBy, isEmpty, isNotNil, path, pathEq, pipe, prop, propOr } from 'ramda'
+import { isValid } from 'date-fns'
+import { any, filter, groupBy, isEmpty, isNotNil, path, pathEq, pipe, prop, propEq, propOr } from 'ramda'
 
 import { fetchAssetDataByCID, fetchGlobalIdentifierByScopedIdentifier } from '../api'
 import { MANIFEST_LINK_MIME_TYPE } from '../asset/constants'
@@ -95,6 +96,7 @@ export const _validateAsset =
 
       return {
         ...validation,
+        isValid: !any(propEq(false, 'exists'))(results),
         data: {
           ...validation.data,
           referencedAssets: groupBy(asset => String(asset.exists), results),

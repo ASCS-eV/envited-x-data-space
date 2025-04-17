@@ -65,7 +65,10 @@ describe('common/validator/utils', () => {
       }
       const createFilenameStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
-      const fetchGlobalIdentifierByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
+      const fetchGlobalIdentifierByScopedIdentifierStub = jest
+        .fn()
+        .mockResolvedValueOnce(null)
+        .mockResolvedValue('GLOBAL_IDENTIFIER')
       const validateShaclFileStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {
@@ -150,9 +153,116 @@ describe('common/validator/utils', () => {
             ],
           },
           referencedAssets: {
-            false: [
+            true: [
               {
-                exists: false,
+                exists: true,
+                id: 'did:web:domainname.com:Type:Identifier',
+              },
+            ],
+          },
+        },
+        error: false,
+      })
+    })
+
+    it('Should return a invalid result with referencedAssets', async () => {
+      // when ... we want to validate a asset file
+      const file = {
+        arrayBuffer: () => 'ASSET.ZIP',
+      }
+      const createFilenameStub = jest.fn().mockResolvedValue('CID')
+      const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
+      const fetchGlobalIdentifierByScopedIdentifierStub = jest
+        .fn()
+        .mockResolvedValueOnce(null)
+        .mockResolvedValue('GLOBAL_IDENTIFIER')
+      const validateShaclFileStub = jest.fn().mockResolvedValue({
+        isValid: true,
+        data: {
+          domainMetadata: {
+            '@id': 'did:web:fqdn:type:scopedIdentifier',
+          },
+          manifest: {
+            'manifest:hasReferencedArtifacts': [
+              {
+                'manifest:iri': {
+                  '@id': 'did:web:domainname.com:Type:Identifier',
+                },
+                'manifest:hasFileMetadata': {
+                  'manifest:mimeType': {
+                    '@value': 'application/zip',
+                  },
+                },
+              },
+              {
+                'manifest:hasFileMetadata': {
+                  'manifest:mimeType': {
+                    '@value': 'application/zip',
+                  },
+                },
+              },
+              {
+                'manifest:hasFileMetadata': {
+                  'manifest:mimeType': {
+                    '@value': 'application/x-xosc',
+                  },
+                },
+              },
+            ],
+          },
+        },
+        error: false,
+      })
+
+      // then ... we should get a valid response
+      const result = await SUT._validateAsset({
+        createFilename: createFilenameStub,
+        fetchAssetDataByCID: fetchAssetDataByCIDStub,
+        fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
+        validateShaclFile: validateShaclFileStub,
+      })(file as any)
+
+      expect(createFilenameStub).toHaveBeenCalledTimes(1)
+      expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
+      expect(fetchGlobalIdentifierByScopedIdentifierStub).toHaveBeenCalledWith('type:scopedIdentifier')
+      expect(result).toEqual({
+        isValid: true,
+        data: {
+          domainMetadata: {
+            '@id': 'did:web:fqdn:type:scopedIdentifier',
+          },
+          manifest: {
+            'manifest:hasReferencedArtifacts': [
+              {
+                'manifest:iri': {
+                  '@id': 'did:web:domainname.com:Type:Identifier',
+                },
+                'manifest:hasFileMetadata': {
+                  'manifest:mimeType': {
+                    '@value': 'application/zip',
+                  },
+                },
+              },
+              {
+                'manifest:hasFileMetadata': {
+                  'manifest:mimeType': {
+                    '@value': 'application/zip',
+                  },
+                },
+              },
+              {
+                'manifest:hasFileMetadata': {
+                  'manifest:mimeType': {
+                    '@value': 'application/x-xosc',
+                  },
+                },
+              },
+            ],
+          },
+          referencedAssets: {
+            true: [
+              {
+                exists: true,
                 id: 'did:web:domainname.com:Type:Identifier',
               },
             ],

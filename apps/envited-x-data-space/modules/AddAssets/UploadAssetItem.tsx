@@ -3,13 +3,12 @@
 import { LoadingIndicator, ProgressBar, bytesToMegaBytes } from '@envited-x-data-space/design-system'
 import {
   CheckCircleIcon,
-  CheckIcon,
   ClockIcon,
   ExclamationTriangleIcon,
   XCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { isEmpty, isNotNil, pathOr, prop, propOr } from 'ramda'
+import {pathOr, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
@@ -175,32 +174,6 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, va
                 </>
               )}
             </span>
-            {/*pathOr(false, ['data', 'referencedAssets'])(asset) && !isEmpty(asset.data?.referencedAssets) ? (
-              <span className="text-gray-500 flex flex-col text-xs gap-2">
-                {asset.data?.referencedAssets['true']?.length > 0 && (
-                  <>
-                    <span className="flex gap-x-1.5 items-center">
-                      <CheckIcon className="text-green-500 w-[18px] h-[18px]" /> Found referenced asset(s):
-                    </span>
-                    <ul className="list-disc pl-5">
-                      {asset.data?.referencedAssets['true'].map(({ id }: { id: string }) => <li key={id}>{id}</li>)}
-                    </ul>
-                  </>
-                )}
-                {asset.data?.referencedAssets['false']?.length > 0 && (
-                  <>
-                    <span className="flex gap-x-1.5 items-center">
-                      <ExclamationTriangleIcon className="text-orange-600 w-[18px] h-[18px]" /> Missing referenced asset(s):
-                    </span>
-                    <ul className="list-disc pl-5">
-                      {asset.data?.referencedAssets['false'].map(({ id }: { id: string }) => <li key={id}>{id}</li>)}
-                    </ul>
-                  </>
-                )}
-              </span>
-            ) : (
-              <></>
-            )*/}
           </span>
         </span>
         <span className="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm:flex-col sm:text-right">

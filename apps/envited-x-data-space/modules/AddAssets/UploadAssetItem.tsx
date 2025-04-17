@@ -8,7 +8,7 @@ import {
   XCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import {pathOr, propOr } from 'ramda'
+import { pathOr, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 

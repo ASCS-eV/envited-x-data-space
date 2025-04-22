@@ -42,13 +42,7 @@ import {
   MANIFEST_LINK_MIME_TYPE,
   MANIFEST_REFERENCE,
 } from './constants'
-import {
-  AccessRole,
-  ExtractedResource,
-  Manifest,
-  ManifestCategoryId,
-  ManifestLink,
-} from './types'
+import { AccessRole, ExtractedResource, Manifest, ManifestCategoryId, ManifestLink } from './types'
 
 export const jsonToUint8Array = (json: object): Uint8Array => {
   const jsonString = JSON.stringify(json)

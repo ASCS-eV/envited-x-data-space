@@ -2,6 +2,7 @@ import { all, and, compose, equals, find, includes, prop, propEq, propOr } from 
 
 import { SCHEMA } from '../schemas'
 import { extractContentFromStream, formatAssetUri, streamToUint8Array } from '../utils'
+import { stringToStream } from '../utils/utils'
 import { validateShacl } from '../validator/shacl'
 import { MANIFEST_FILE, README_FILE } from './constants'
 import { ExtractedResourceWithCID, Manifest, ManifestCategoryId } from './types'
@@ -13,7 +14,6 @@ import {
   jsonToUint8Array,
   predetermineCID,
 } from './utils'
-import { stringToStream } from '../utils/utils'
 
 export const extractManifest = async (assetArchive: Uint8Array) => {
   const manifestStream = await extractFileFromArchive(assetArchive, MANIFEST_FILE)

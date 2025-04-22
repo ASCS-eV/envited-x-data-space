@@ -83,7 +83,13 @@ export const validateAsset =
   }
 
 export const checkIfAllResourcessInManifestExist =
-  ({ extract, read }: { extract: (archive: Uint8Array, fileName: string) => Promise<Entry>, read: (entry: Entry) => Promise<string> }) =>
+  ({
+    extract,
+    read,
+  }: {
+    extract: (archive: Uint8Array, fileName: string) => Promise<Entry>
+    read: (entry: Entry) => Promise<string>
+  }) =>
   async (archive: Uint8Array, manifest: Manifest) => {
     const links = getAllManifestLinksAndFormatPaths(manifest)
     const validationPromises = links.map((fileName: string) => ({

@@ -7,18 +7,15 @@ describe('common/asset/validation', () => {
     it('should return empty errors when all resources exist', async () => {
       // Setup stubs
       const extractStub = jest.fn().mockResolvedValue('file-content')
-      
+
       // Create stub for getAllManifestLinksAndFormatPaths
       const getAllLinksStub = jest.fn().mockReturnValue(['file1.json', 'file2.txt', 'file3.md'])
 
       // Execute function with stubbed dependencies
       const result = await SUT.checkIfAllResourcessInManifestExist({
         extract: extractStub,
-        getAllManifestLinksAndFormatPaths: getAllLinksStub
-      })(
-        new Uint8Array([1, 2, 3]),
-        {} as Manifest,
-      )
+        getAllManifestLinksAndFormatPaths: getAllLinksStub,
+      })(new Uint8Array([1, 2, 3]), {} as Manifest)
 
       // Verify
       expect(result).toEqual({
@@ -31,21 +28,16 @@ describe('common/asset/validation', () => {
 
     it('should report errors for missing resources', async () => {
       // Setup stubs
-      const extractStub = jest.fn()
-        .mockResolvedValueOnce('file1-content')
-        .mockRejectedValueOnce(new Error('Not found'))
-      
+      const extractStub = jest.fn().mockResolvedValueOnce('file1-content').mockRejectedValueOnce(new Error('Not found'))
+
       // Create stub for getAllManifestLinksAndFormatPaths
       const getAllLinksStub = jest.fn().mockReturnValue(['file1.json', 'missing-file.txt'])
 
       // Execute function with stubbed dependencies
       const result = await SUT.checkIfAllResourcessInManifestExist({
         extract: extractStub,
-        getAllManifestLinksAndFormatPaths: getAllLinksStub
-      })(
-        new Uint8Array([1, 2, 3]),
-        {} as Manifest,
-      )
+        getAllManifestLinksAndFormatPaths: getAllLinksStub,
+      })(new Uint8Array([1, 2, 3]), {} as Manifest)
 
       // Verify
       expect(result).toEqual({

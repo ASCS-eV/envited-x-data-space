@@ -1,10 +1,10 @@
 import { all, any, concat, equals, forEach, map, propEq, times } from 'ramda'
 
+import { predetermineCID } from '../../common/asset/utils'
 import { ERRORS } from '../../common/constants'
 import { httpPutWithProgress } from '../../common/http'
 import { FilesWithId, UploadStatus } from '../../common/types'
 import { UploadAssetFile, insertAssetAfterUpload } from './AddAssets.actions'
-import { predetermineCID } from '../../common/asset/utils'
 
 export const _removeFile = (dataTransfer: DataTransfer) => (files: FileList, idx: number) => {
   times(index => !equals(idx)(index) && dataTransfer.items.add(files[index]), files.length)

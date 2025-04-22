@@ -3,9 +3,9 @@ import { find, propEq } from 'ramda'
 import { Readable } from 'stream'
 import { ReadableStream as WebReadableStream } from 'stream/web'
 
+import { isBrowser } from '../utils/utils'
 import { transformByteArrayToReadable } from './archive.utils'
 import { BlobType } from './types'
-import { isBrowser } from '../utils/utils'
 
 export const _extract =
   ({ ZipReader }: { ZipReader: any }) =>
@@ -51,7 +51,7 @@ export const stream = async (entry: Entry): Promise<Readable> => {
 
     const webStream = new TransformStream()
     entry.getData(webStream.writable)
-    
+
     if (!isBrowser) {
       const nodeStream = Readable.fromWeb(webStream.readable as unknown as WebReadableStream)
       return nodeStream

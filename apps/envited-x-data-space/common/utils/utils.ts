@@ -227,11 +227,12 @@ export const fileToUint8Array = async (file: File): Promise<Uint8Array> => {
   return new Uint8Array(arrayBuffer)
 }
 
-export const stringToStream = (str: string) => new Readable({
-  read() {
-    this.push(str);
-    this.push(null);
-  }
-})
+export const stringToStream = (str: string) =>
+  new Readable({
+    read() {
+      this.push(str)
+      this.push(null)
+    },
+  })
 
 export const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined'

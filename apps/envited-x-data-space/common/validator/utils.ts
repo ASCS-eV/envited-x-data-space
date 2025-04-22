@@ -1,7 +1,7 @@
 import { fetchAssetDataByCID } from '../api'
 import { predetermineCID } from '../asset/utils'
-import { ERRORS } from '../constants'
 import { validateAsset } from '../asset/validation'
+import { ERRORS } from '../constants'
 
 export const _validateAsset =
   ({

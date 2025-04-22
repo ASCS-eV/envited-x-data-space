@@ -6,9 +6,9 @@ import { pathOr, prop, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
+import { validateAsset } from '../../common/asset'
 import { UploadAssetState, UploadStatus } from '../../common/types'
 import { anyEqual } from '../../common/utils'
-import { validateAsset } from '../../common/asset'
 
 interface UploadAssetItemProps {
   idx: number

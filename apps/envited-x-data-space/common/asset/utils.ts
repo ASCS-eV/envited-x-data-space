@@ -1,9 +1,5 @@
 import { MemoryBlockstore } from 'blockstore-core/memory'
 import { importer } from 'ipfs-unixfs-importer'
-import { CID } from 'multiformats/cid'
-import * as raw from 'multiformats/codecs/raw'
-import { Hasher } from 'multiformats/dist/src/hashes/hasher'
-import { sha256 } from 'multiformats/hashes/sha2'
 import {
   any,
   append,
@@ -11,24 +7,32 @@ import {
   assoc,
   concat,
   equals,
+  filter,
   find,
+  flip,
   groupBy,
   includes,
   is,
   isNil,
+  keys,
   map,
+  omit,
   path,
   pathEq,
   pathOr,
+  pickAll,
   pipe,
+  propEq,
   reduce,
   reject,
   replace,
   startsWith,
+  values,
 } from 'ramda'
 
-import { extractFromByteArray, read } from '../archive'
-import { getFileBlob } from '../archive/archive'
+import { extractFromByteArray, stream } from '../archive'
+import { IGNORED_SCHEMAS, SCHEMA } from '../schemas'
+import { streamToUint8Array } from '../utils'
 import {
   MANIFEST_ARTIFACTS,
   MANIFEST_CATEGORY_ID,
@@ -38,27 +42,13 @@ import {
   MANIFEST_LINK_MIME_TYPE,
   MANIFEST_REFERENCE,
 } from './constants'
-import { AccessRole, ExtractedFile, ExtractedFileWithCID, Manifest, ManifestCategoryId, ManifestLink } from './types'
-
-export const _createFilename =
-  ({ raw, sha256, CID }: { raw: any; sha256: Hasher<'sha2-256', 18>; CID: any }) =>
-  async (byteArray: Uint8Array) => {
-    try {
-      const rawBytes = raw.encode(byteArray)
-      const hash = await sha256.digest(rawBytes)
-      const cid = CID.create(1, raw.code, hash)
-
-      return cid.toString()
-    } catch (error: unknown) {
-      console.log(error)
-    }
-  }
-
-export const createFilename = _createFilename({
-  raw,
-  sha256,
-  CID,
-})
+import {
+  AccessRole,
+  ExtractedResource,
+  Manifest,
+  ManifestCategoryId,
+  ManifestLink,
+} from './types'
 
 export const jsonToUint8Array = (json: object): Uint8Array => {
   const jsonString = JSON.stringify(json)
@@ -66,15 +56,8 @@ export const jsonToUint8Array = (json: object): Uint8Array => {
   return new Uint8Array(buffer)
 }
 
-export const getFileFromByteArray = async (byteArray: Uint8Array, filename: string) =>
-  extractFromByteArray(byteArray, filename).then(read)
-
-export const getArrayBufferFromByteArray = async (byteArray: Uint8Array, filename: string) => {
-  const extractedFile = await extractFromByteArray(byteArray, filename)
-  const blob = await getFileBlob(extractedFile)
-
-  return blob.arrayBuffer()
-}
+export const extractFileFromArchive = async (array: Uint8Array, path: string) =>
+  extractFromByteArray(array, path).then(stream)
 
 export const getDomainMetadataPath = (manifest: Manifest) =>
   pipe(
@@ -117,7 +100,7 @@ export const formatManifestLinkPath = replace('./', '')
 export const isRemoteUrl = startsWith('https://')
 export const isSelfHosted = includes('.envited-x.net')
 
-export const hasManifestThirdPartyLinks = (manifest: Manifest) =>
+export const hasRemoteLinks = (manifest: Manifest) =>
   pipe(
     getAllManifestLinks,
     map(
@@ -155,23 +138,6 @@ export const getAllManifestLinksAndFormatPaths = (manifest: Manifest) =>
     map(({ path }: { path: string }) => path),
   )(manifest)
 
-export const _getPathAndBufferFromFile =
-  ({
-    getArrayBufferFromByteArray,
-  }: {
-    getArrayBufferFromByteArray: (byteArray: Uint8Array, filename: string) => Promise<ArrayBuffer>
-  }) =>
-  async (byteArray: Uint8Array, path: string, category: ManifestCategoryId, mimeType?: string) => ({
-    path,
-    category,
-    arrayBuffer: await getArrayBufferFromByteArray(byteArray, path),
-    mimeType: mimeType || '',
-  })
-
-export const getPathAndBufferFromFile = _getPathAndBufferFromFile({
-  getArrayBufferFromByteArray,
-})
-
 export const predetermineCID = async (array: Uint8Array) => {
   try {
     const buffer = Buffer.from(array)
@@ -192,105 +158,6 @@ export const predetermineCID = async (array: Uint8Array) => {
   }
 }
 
-export const _getFilenameFromFile =
-  ({ predetermineCID }: { predetermineCID: (byteArray: Uint8Array) => Promise<string> }) =>
-  async (
-    path: string,
-    category: ManifestCategoryId,
-    arrayBuffer: ArrayBuffer,
-    mimeType: string,
-  ): Promise<ExtractedFileWithCID> => {
-    const cid = await predetermineCID(new Uint8Array(arrayBuffer))
-    return {
-      cid,
-      path,
-      category,
-      arrayBuffer,
-      mimeType,
-    }
-  }
-
-export const getFilenameFromFile = _getFilenameFromFile({
-  predetermineCID,
-})
-
-export const _getAllFilenamesFromFiles =
-  ({
-    getFilenameFromFile,
-  }: {
-    getFilenameFromFile: (
-      path: string,
-      category: ManifestCategoryId,
-      arrayBuffer: ArrayBuffer,
-      mimeType: string,
-    ) => Promise<ExtractedFileWithCID>
-  }) =>
-  async (files: { path: string; category: ManifestCategoryId; arrayBuffer: ArrayBuffer; mimeType: string }[]) =>
-    await Promise.all(
-      files.map(
-        ({
-          path,
-          category,
-          arrayBuffer,
-          mimeType,
-        }: {
-          path: string
-          category: ManifestCategoryId
-          arrayBuffer: ArrayBuffer
-          mimeType: string
-        }) => getFilenameFromFile(path, category, arrayBuffer, mimeType),
-      ),
-    )
-
-export const getAllFilenamesFromFiles = _getAllFilenamesFromFiles({
-  getFilenameFromFile,
-})
-
-export const _getPathsAndBuffersFromByteArray =
-  ({
-    getPathAndBufferFromFile,
-  }: {
-    getPathAndBufferFromFile: (
-      byteArray: Uint8Array,
-      path: string,
-      category: ManifestCategoryId,
-      mimeType?: string,
-    ) => Promise<ExtractedFile>
-  }) =>
-  async (byteArray: Uint8Array, files: { path: string; category: ManifestCategoryId; mimeType?: string }[]) =>
-    await Promise.all(
-      files.map(({ path, category, mimeType }: { path: string; category: ManifestCategoryId; mimeType?: string }) =>
-        getPathAndBufferFromFile(byteArray, path, category, mimeType),
-      ),
-    )
-
-export const getPathsAndBuffersFromByteArray = _getPathsAndBuffersFromByteArray({
-  getPathAndBufferFromFile,
-})
-
-export const _getFilesAsPathAndByteArrayFromManifest =
-  ({
-    getPathsAndBuffersFromByteArray,
-  }: {
-    getPathsAndBuffersFromByteArray: (
-      byteArray: Uint8Array,
-      files: { path: string; category: ManifestCategoryId; mimeType?: string }[],
-    ) => Promise<ExtractedFile[]>
-  }) =>
-  async (byteArray: Uint8Array, manifest: Manifest) => {
-    const { owner, registeredUser, publicUser } = getFilesGroupedByAccessRoles(manifest)
-
-    return {
-      owner: await getPathsAndBuffersFromByteArray(byteArray, owner),
-      registeredUser: await getPathsAndBuffersFromByteArray(byteArray, registeredUser),
-      publicUser: await getPathsAndBuffersFromByteArray(byteArray, publicUser),
-    }
-  }
-
-export const getFilesAsPathAndByteArrayFromManifest = _getFilesAsPathAndByteArrayFromManifest({
-  getPathsAndBuffersFromByteArray,
-})
-
 export const extractGeneralInformationFromMetadata = (type: string) =>
   applySpec({
     name: path([`${type}:hasDataResource`, 'gx:name', '@value']),
@@ -299,7 +166,7 @@ export const extractGeneralInformationFromMetadata = (type: string) =>
     version: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:version`, '@value']),
   })
 
-export const extractDomainMetadata = (jsonData: Record<string, any>) => {
+export const transformDomainMetadata = (jsonData: Record<string, any>) => {
   // Find any hasDataResource and hasDataResourceExtension properties
   const dataResource = Object.entries(jsonData).find(([key]) => key.endsWith(':hasDataResource'))?.[1] as Record<
     string,
@@ -380,4 +247,27 @@ export const extractValue = (value: any): any => {
   }
 
   return value
+}
+
+export const getDomainMetadataSchemas: (context: Record<string, any>) => string[] = pipe(
+  omit(IGNORED_SCHEMAS),
+  keys as (context: Record<string, any>) => string[],
+  flip(pickAll)(SCHEMA) as (context: Record<string, any>) => Record<string, string>,
+  values as (context: Record<string, any>) => string[],
+)
+
+export const getMediaFiles = filter(propEq('envited-x:isMedia', 'category'))
+
+export const addCIDs = async (assetArchive: Uint8Array, resources: ExtractedResource[]) => {
+  const cids = await Promise.all(
+    resources.map(async resource => {
+      const resourceStream = await extractFileFromArchive(assetArchive, resource.path)
+      const arrayBuffer = await streamToUint8Array(resourceStream)
+      return predetermineCID(arrayBuffer)
+    }),
+  )
+  return cids.map((cid, index) => ({
+    ...resources[index],
+    cid,
+  }))
 }

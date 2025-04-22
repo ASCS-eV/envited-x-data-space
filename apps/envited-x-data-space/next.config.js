@@ -30,6 +30,13 @@ const nextConfig = {
         },
       }
     }
+
+    // Add support for TTL files
+    config.module.rules.push({
+      test: /\.ttl$/,
+      use: 'raw-loader',
+    })
+
     // config.optimization.minimize = false;
     if (config.plugins) {
       config.plugins.push(

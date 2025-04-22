@@ -1,176 +1,107 @@
+import { DatasetCore, Quad } from '@rdfjs/types'
+import { Readable } from 'stream'
+
 import * as SUT from './shacl'
 
-describe('common/validator/shacl', () => {
-  describe('_validateShaclFile', () => {
-    it('Should return a valid result', async () => {
-      // when ... we want to validate a asset file
-      const file = 'ZIP'
-      const validateReadmeStub = jest.fn().mockResolvedValue('FILE_NAME')
-      const validateManifestStub = jest.fn().mockResolvedValue({
+describe('common/shacl/shacl', () => {
+  describe('validateShacl', () => {
+    it('should validate data against shapes', async () => {
+      // Given stubs for dependencies
+      const mockDataset = {} as DatasetCore<Quad, Quad>
+      const mockValidationReport = {
         conforms: true,
-        data: {
-          file: 'FILE_NAME',
+        results: [],
+      }
+
+      // Create a mock stream
+      const mockStream = new Readable({
+        read() {
+          /* noop */
         },
       })
-      const validateDomainMetadataStub = jest.fn().mockResolvedValue({
-        conforms: true,
-        data: {
-          name: 'NAME',
-        },
+
+      const datasetStub = {
+        import: jest.fn().mockResolvedValue(mockDataset),
+      }
+
+      const rdfStub = {
+        dataset: jest.fn().mockReturnValue(datasetStub),
+        fromFile: jest.fn().mockReturnValue('file-stream'),
+      }
+
+      const validatorStub = {
+        validate: jest.fn().mockReturnValue(mockValidationReport),
+      }
+
+      const SHACLValidatorStub = jest.fn().mockImplementation(() => validatorStub)
+
+      // When we create a validator with these stubs
+      const validateShacl = SUT.validateShacl({
+        rdf: rdfStub as any,
+        SHACLValidator: SHACLValidatorStub as any,
       })
 
-      const checkIfAllFilesInManifestExistStub = jest.fn().mockResolvedValue({
-        errors: [],
-        amount: 14,
-      })
+      // And validate data with it
+      const shapePath = 'path/to/shapes.ttl'
+      const result = await validateShacl(shapePath)(mockStream)
 
-      const countAmountOfFilesInZipStub = jest.fn().mockResolvedValue(14)
+      // Then the correct functions should be called
+      expect(rdfStub.fromFile).toHaveBeenCalledWith(shapePath)
+      expect(datasetStub.import).toHaveBeenCalledWith(mockStream)
+      expect(SHACLValidatorStub).toHaveBeenCalledWith(mockDataset, { factory: rdfStub })
+      expect(validatorStub.validate).toHaveBeenCalledWith(mockDataset)
 
-      // then ... we should get a valid response
-      const result = await SUT._validateShaclFile({
-        validateManifest: validateManifestStub,
-        validateDomainMetadata: validateDomainMetadataStub,
-        checkIfAllFilesInManifestExist: checkIfAllFilesInManifestExistStub,
-        countAmountOfFilesInZip: countAmountOfFilesInZipStub,
-        validateReadme: validateReadmeStub,
-      })(file as any)
-
-      expect(validateManifestStub).toHaveBeenCalledWith('ZIP')
-      expect(validateDomainMetadataStub).toHaveBeenCalledWith('ZIP', { file: 'FILE_NAME' })
+      // And the result should match the validation report structure
       expect(result).toEqual({
-        isValid: true,
-        data: {
-          manifest: {
-            file: 'FILE_NAME',
-          },
-          domainMetadata: {
-            name: 'NAME',
-          },
-        },
+        conforms: true,
+        report: [],
       })
     })
-  })
 
-  describe('_validateManifest', () => {
-    it('Should return a valid result', async () => {
-      // when ... we want to validate a asset file
-      const file = 'ZIP'
+    it('should handle errors during shape loading', async () => {
+      // Given stubs for dependencies
+      const mockDataset = {} as DatasetCore<Quad, Quad>
+      const importError = new Error('Failed to import')
 
-      const getShaclDataFromZipStub = jest.fn().mockResolvedValue(
-        JSON.stringify({
-          '@context': {
-            SHACL_SCHEMA: 'SCHEMA',
-          },
-        }),
-      )
-      const loadDatasetStub = jest.fn().mockResolvedValueOnce('DATA_QUADS')
-      const validateShaclDataStub = jest.fn().mockReturnValue(true)
-      const validateShaclStub = jest.fn().mockReturnValue(validateShaclDataStub)
-
-      // then ... we should get a valid response
-      const result = await SUT._validateManifest({
-        getShaclDataFromZip: getShaclDataFromZipStub,
-        loadDataset: loadDatasetStub,
-        validateShaclSchema: validateShaclStub,
-      })(file as any)
-
-      expect(loadDatasetStub).toHaveBeenCalledWith(
-        JSON.stringify({
-          '@context': {
-            SHACL_SCHEMA: 'SCHEMA',
-          },
-        }),
-        'application/ld+json',
-      )
-      expect(validateShaclStub).toHaveBeenCalledWith('DATA_QUADS')
-      expect(validateShaclDataStub).toHaveBeenCalledWith('manifest')
-      expect(result).toEqual({
-        conforms: true,
-        data: {
-          '@context': {
-            SHACL_SCHEMA: 'SCHEMA',
-          },
+      // Create a mock stream
+      const mockStream = new Readable({
+        read() {
+          /* noop */
         },
       })
-    })
-  })
 
-  describe('_validateDomainMetadata', () => {
-    it('Should return a valid result', async () => {
-      // when ... we want to validate a asset file
-      const file = 'ZIP'
-      const manifest = {}
+      const datasetStub = {
+        import: jest
+          .fn()
+          .mockResolvedValueOnce(mockDataset) // First call for data stream succeeds
+          .mockRejectedValueOnce(importError), // Second call for shapes fails
+      }
 
-      const getShaclDataFromZipStub = jest.fn().mockResolvedValue(
-        JSON.stringify({
-          '@context': {
-            SHACL_SCHEMA: 'SCHEMA',
-          },
-        }),
-      )
-      const loadDatasetStub = jest.fn().mockResolvedValueOnce('DATA_QUADS')
-      const validateShaclDataStub = jest.fn().mockReturnValue(true)
-      const validateShaclStub = jest.fn().mockReturnValue(validateShaclDataStub)
-      const getDomainMetadataPathStub = jest.fn().mockReturnValue('DOMAIN_METADATA_PATH')
+      const rdfStub = {
+        dataset: jest.fn().mockReturnValue(datasetStub),
+        fromFile: jest.fn().mockReturnValue('file-stream'),
+      }
 
-      // then ... we should get a valid response
-      const result = await SUT._validateDomainMetadata({
-        getShaclDataFromZip: getShaclDataFromZipStub,
-        loadDataset: loadDatasetStub,
-        validateShaclSchema: validateShaclStub,
-        getDomainMetadataPath: getDomainMetadataPathStub,
-      })(file as any, manifest as any)
+      const validatorStub = {
+        validate: jest.fn(),
+      }
 
-      expect(loadDatasetStub).toHaveBeenCalledWith(
-        JSON.stringify({
-          '@context': {
-            SHACL_SCHEMA: 'SCHEMA',
-          },
-        }),
-        'application/ld+json',
-      )
-      expect(validateShaclStub).toHaveBeenCalledWith('DATA_QUADS')
-      expect(validateShaclDataStub).toHaveBeenCalledWith('SHACL_SCHEMA')
-      expect(result).toEqual({
-        conforms: true,
-        data: {
-          '@context': {
-            SHACL_SCHEMA: 'SCHEMA',
-          },
-        },
+      const SHACLValidatorStub = jest.fn().mockImplementation(() => validatorStub)
+
+      // When we create a validator with these dependencies
+      const validateShacl = SUT.validateShacl({
+        rdf: rdfStub as any,
+        SHACLValidator: SHACLValidatorStub as any,
       })
-    })
-  })
 
-  describe('_validateShaclDataWithSchema', () => {
-    it('Should return a valid result', async () => {
-      // when ... we want to validate a asset file on a NodeJS server
-      const data = 'DATA'
-      const schema = 'SCHEMA'
+      // And try to validate data with it
+      const shapePath = 'path/to/shapes.ttl'
 
-      const parseStreamToDatasetStub = jest.fn().mockResolvedValue('SHACL_QUADS')
-      const loadDatasetStub = jest.fn().mockResolvedValueOnce('DATA_QUADS')
-      const validateShaclDataStub = jest.fn().mockReturnValue({
-        conforms: true,
-        dataset: {},
-      })
-      const validateShaclSchemaStub = jest.fn().mockReturnValue(validateShaclDataStub)
+      // Then it should throw the error
+      await expect(validateShacl(shapePath)(mockStream)).rejects.toThrow(importError)
 
-      // then ... we should get a valid response
-      const result = await SUT._validateShaclDataWithSchema({
-        parseStreamToDataset: parseStreamToDatasetStub,
-        loadDataset: loadDatasetStub,
-        validateShacl: validateShaclSchemaStub,
-      })(data as any, schema as any)
-
-      expect(parseStreamToDatasetStub).toHaveBeenCalledWith('SCHEMA', 'text/turtle')
-      expect(loadDatasetStub).toHaveBeenCalledWith('DATA', 'application/ld+json')
-      expect(validateShaclSchemaStub).toHaveBeenCalledWith('SHACL_QUADS')
-      expect(validateShaclDataStub).toHaveBeenCalledWith('DATA_QUADS')
-      expect(result).toEqual({
-        conforms: true,
-        dataset: {},
-      })
+      // And the validator should not be created
+      expect(SHACLValidatorStub).not.toHaveBeenCalled()
     })
   })
 })

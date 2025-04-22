@@ -6,7 +6,7 @@ import { pipe } from 'ramda'
 import { FC, Fragment, useEffect, useState } from 'react'
 
 import displayTrees from '../../common/asset/displayTrees'
-import { extractDomainMetadata } from '../../common/asset/utils'
+import { transformDomainMetadata } from '../../common/asset/utils'
 import { useTranslation } from '../../common/i18n'
 import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
 import {
@@ -41,7 +41,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
 
   useEffect(() => {
     const getSections = async (metadata: Record<string, any>) => {
-      const metadataInSections = extractDomainMetadata(metadata)
+      const metadataInSections = transformDomainMetadata(metadata)
       setData(metadataInSections)
     }
 

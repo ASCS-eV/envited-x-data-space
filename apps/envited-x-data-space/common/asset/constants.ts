@@ -27,6 +27,8 @@ export const MANIFEST_LICENSE_PATH = [
   '@value',
 ]
 
+export const ASSET_SPECIFICATION = 'EVES-003 https://github.com/ASCS-eV/EVES'
+
 export const MANIFEST_REFERENCE = ['manifest:hasManifestReference']
 
 export const MANIFEST_CATEGORY_ID = ['manifest:hasCategory', '@id']

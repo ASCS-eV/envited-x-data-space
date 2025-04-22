@@ -4,7 +4,7 @@ import manifest from '../fixtures/manifest.json'
 import manifestLicenseRefCustomCommercialAgreement from '../fixtures/manifestLicenseRefCustomCommercialAgreement.json'
 import manifestLicenseRefPolicySmartContract from '../fixtures/manifestLicenseRefPolicySmartContract.json'
 import manifestRemoteAssetData from '../fixtures/manifestRemoteAssetData.json'
-import * as SUT from './createTokenMetadata'
+import * as SUT from './metadata'
 
 export const TEST_TOKEN_TAGS = {
   ASAM_OPENDRIVE_VERSION: 'ASAM OpenDRIVE 1.6',
@@ -89,7 +89,7 @@ describe('common/asset/createTokenMetadata', () => {
         ],
       }
 
-      const result = SUT.createTokenMetadata({
+      const result = SUT.createTzip21Metadata({
         asset: {
           cid: 'ASSET_CID',
           fileSize: 1024,
@@ -194,7 +194,7 @@ describe('common/asset/createTokenMetadata', () => {
         ],
       }
 
-      const result = SUT.createTokenMetadata({
+      const result = SUT.createTzip21Metadata({
         asset: {
           cid: 'ASSET_CID',
           fileSize: 1024,
@@ -298,7 +298,7 @@ describe('common/asset/createTokenMetadata', () => {
         ],
       }
 
-      const result = SUT.createTokenMetadata({
+      const result = SUT.createTzip21Metadata({
         asset: {
           cid: 'ASSET_CID',
           fileSize: 1024,
@@ -402,7 +402,7 @@ describe('common/asset/createTokenMetadata', () => {
         ],
       }
 
-      const result = SUT.createTokenMetadata({
+      const result = SUT.createTzip21Metadata({
         asset: {
           cid: 'ASSET_CID',
           fileSize: 1024,

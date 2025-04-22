@@ -8,7 +8,7 @@ import { match } from 'ts-pattern'
 
 import { UploadAssetState, UploadStatus } from '../../common/types'
 import { anyEqual } from '../../common/utils'
-import { validateAsset } from '../../common/validator/utils'
+import { validateAsset } from '../../common/asset'
 
 interface UploadAssetItemProps {
   idx: number
@@ -110,7 +110,6 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, va
           data: null,
         })
         const data = await validateAsset(file)
-
         setAsset(data)
         validHandler(idx, data)
         setValidating(false)

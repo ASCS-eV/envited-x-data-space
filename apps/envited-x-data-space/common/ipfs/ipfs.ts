@@ -1,7 +1,7 @@
 import type { PinataSDK } from 'pinata-web3'
 import { prop } from 'ramda'
 
-export const uploadJson =
+export const uploadJsonToIPFS =
   (pinata: PinataSDK) =>
   async ({ data, filename, group = '' }: { data: object; filename: string; group?: string }) => {
     if (group) {
@@ -11,7 +11,7 @@ export const uploadJson =
     return pinata.upload.json(data).addMetadata({ name: filename }).then(prop('IpfsHash'))
   }
 
-export const uploadFile =
+export const uploadFileToIPFS =
   (pinata: PinataSDK) =>
   async ({ arrayBuffer, filename, group = '' }: { arrayBuffer: ArrayBuffer; filename: string; group?: string }) => {
     if (group) {

@@ -7,9 +7,9 @@ describe('common/validator/utils', () => {
       const file = {
         arrayBuffer: () => 'ASSET.ZIP',
       }
-      const createFilenameStub = jest.fn().mockResolvedValue('CID')
+      const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
-      const validateShaclFileStub = jest.fn().mockResolvedValue({
+      const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {},
         error: false,
@@ -17,12 +17,12 @@ describe('common/validator/utils', () => {
 
       // then ... we should get a valid response
       const result = await SUT._validateAsset({
-        createFilename: createFilenameStub,
+        predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
-        validateShaclFile: validateShaclFileStub,
+        validateAsset: validateAssetStub,
       })(file as any)
 
-      expect(createFilenameStub).toHaveBeenCalledTimes(1)
+      expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
       expect(result).toEqual({
         isValid: true,
@@ -36,9 +36,9 @@ describe('common/validator/utils', () => {
       const file = {
         arrayBuffer: () => 'ASSET.ZIP',
       }
-      const createFilenameStub = jest.fn().mockResolvedValue('CID')
+      const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue(['ASSET'])
-      const validateShaclFileStub = jest.fn().mockResolvedValue({
+      const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {},
         error: false,
@@ -46,12 +46,12 @@ describe('common/validator/utils', () => {
 
       // then ... we should get a already exists response
       const result = await SUT._validateAsset({
-        createFilename: createFilenameStub,
+        predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
-        validateShaclFile: validateShaclFileStub,
+        validateAsset: validateAssetStub,
       })(file as any)
 
-      expect(createFilenameStub).toHaveBeenCalledTimes(1)
+      expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
       expect(result).toEqual({
         isValid: false,

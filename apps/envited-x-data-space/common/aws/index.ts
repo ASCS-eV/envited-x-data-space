@@ -23,13 +23,13 @@ export const getSignedUrl = _getS3SignedUrl({ getSignedUrl: AwsGetSignedUrl, s3C
 
 export const copyFile = _copyObjectToS3({ s3Client })
 
-export const uploadFile = _putObjectToS3({ s3Client })
+export const uploadFileToIPFS = _putObjectToS3({ s3Client })
 
-export const deleteFile = _deleteObjectFromS3({ s3Client })
+export const deleteFileFromObjectStorage = _deleteObjectFromS3({ s3Client })
 
-export const writeFile = _writeStreamToS3({ s3Client })
+export const uploadToObjectStorage = _writeStreamToS3({ s3Client })
 
-export const readFile = _readStreamFromS3({ s3Client })
+export const readFileFromObjectStorage = _readStreamFromS3({ s3Client })
 
 export const getUploadUrl = _getUploadUrl(getSignedUrl)
 

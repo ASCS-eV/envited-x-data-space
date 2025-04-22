@@ -57,3 +57,5 @@ cdk.context.json
 
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+
+example-assets

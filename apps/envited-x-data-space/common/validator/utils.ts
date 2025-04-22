@@ -1,19 +1,17 @@
-import { isEmpty } from 'ramda'
-
 import { fetchAssetDataByCID } from '../api'
-import { createFilename } from '../asset/utils'
+import { predetermineCID } from '../asset/utils'
 import { ERRORS } from '../constants'
-import { validateShaclFile } from './shacl'
+import { validateAsset } from '../asset/validation'
 
 export const _validateAsset =
   ({
-    createFilename,
+    predetermineCID,
     fetchAssetDataByCID,
-    validateShaclFile,
+    validateAsset,
   }: {
-    createFilename: (byteArray: Uint8Array) => Promise<any>
+    predetermineCID: (array: Uint8Array) => Promise<string>
     fetchAssetDataByCID: (cid: string) => Promise<any>
-    validateShaclFile: (file: File) => Promise<
+    validateAsset: (file: File) => Promise<
       | {
           isValid: boolean
           data: {
@@ -35,7 +33,7 @@ export const _validateAsset =
   async (file: File) => {
     try {
       const arrayBuffer = Buffer.from(await file.arrayBuffer())
-      const cid = await createFilename(arrayBuffer)
+      const cid = await predetermineCID(arrayBuffer)
       const asset = await fetchAssetDataByCID(cid)
 
       // if (!isEmpty(asset)) {
@@ -46,15 +44,15 @@ export const _validateAsset =
       //   }
       // }
 
-      return validateShaclFile(file)
+      return validateAsset(file)
     } catch (error) {
       console.log(error)
       return { isValid: false, data: {}, error: ERRORS.ASSET_FILE_NOT_FOUND }
     }
   }
 
-export const validateAsset = _validateAsset({
-  createFilename,
+export const validate = _validateAsset({
+  predetermineCID,
   fetchAssetDataByCID,
-  validateShaclFile,
+  validateAsset,
 })

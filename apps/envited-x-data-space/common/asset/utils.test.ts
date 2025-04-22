@@ -2,46 +2,52 @@ import domainMetadata from '../fixtures/domainMetadata.json'
 import manifest from '../fixtures/manifest.json'
 import manifestRemoteAssetData from '../fixtures/manifestRemoteAssetData.json'
 import { ASSET_TYPE } from './constants'
-import { ManifestCategoryId, ManifestLink, MetadataType } from './types'
+import { ManifestLink, MetadataType } from './types'
 import * as SUT from './utils'
 
 describe('common/asset/utils', () => {
-  describe('createFilename', () => {
-    it('should create a filename', async () => {
-      const byteArray = 'BYTE_ARRAY'
-
-      const rawStub = {
-        encode: jest.fn().mockReturnValue('JSON_BYTES'),
-        code: 'JSON_CODE',
-      } as any
-
-      const sha256Stub = {
-        digest: jest.fn().mockReturnValue('SHA256_HASH'),
-      } as any
-
-      const CIDStub = {
-        create: jest.fn().mockReturnValue({
-          toString: jest.fn().mockReturnValue('CID'),
-        }),
-      } as any
-
-      const result = await SUT._createFilename({
-        raw: rawStub,
-        sha256: sha256Stub,
-        CID: CIDStub,
-      })(byteArray as any)
-
-      expect(rawStub.encode).toHaveBeenCalledWith('BYTE_ARRAY')
-      expect(CIDStub.create).toHaveBeenCalledWith(1, 'JSON_CODE', 'SHA256_HASH')
-      expect(result).toBe('CID')
-    })
-  })
-
   describe('getDomainMetadataPath', () => {
     it('should return domainMetadata path', () => {
       const result = SUT.getDomainMetadataPath(manifest as any)
 
       expect(result).toBe('metadata/hdmap_instance.json')
+    })
+  })
+
+  describe('getMediaFiles', () => {
+    it('should filter files with media category', () => {
+      // given a list of items with the media category
+      const items = [
+        { path: 'file1.json', mimeType: 'application/json', category: 'regular-category' },
+        { path: 'file2.png', mimeType: 'image/png', category: 'envited-x:isMedia' },
+        { path: 'file3.txt', mimeType: 'text/plain', category: 'another-category' },
+        { path: 'file4.jpg', mimeType: 'image/jpeg', category: 'envited-x:isMedia' },
+        { path: 'file5.geojson', mimeType: 'application/geo+json', category: 'envited-x:isMedia' },
+        { path: 'file6.json', mimeType: 'application/json', category: 'yet-another-category' },
+      ]
+
+      const result = SUT.getMediaFiles(items)
+
+      expect(result).toEqual([
+        { path: 'file2.png', mimeType: 'image/png', category: 'envited-x:isMedia' },
+        { path: 'file4.jpg', mimeType: 'image/jpeg', category: 'envited-x:isMedia' },
+        { path: 'file5.geojson', mimeType: 'application/geo+json', category: 'envited-x:isMedia' },
+      ])
+    })
+
+    it('should return empty array when no media files exist', () => {
+      // given a list with no media files
+      const items = [
+        { path: 'file1.json', mimeType: 'application/json', category: 'regular-category' },
+        { path: 'file3.txt', mimeType: 'text/plain', category: 'another-category' },
+        { path: 'file6.json', mimeType: 'application/json', category: 'yet-another-category' },
+      ]
+
+      // when filtering for media files using the actual function
+      const result = SUT.getMediaFiles(items)
+
+      // then an empty array should be returned since no items match
+      expect(result).toEqual([])
     })
   })
 
@@ -187,115 +193,6 @@ describe('common/asset/utils', () => {
     })
   })
 
-  describe('_getFilesAsPathAndByteArrayFromManifest', () => {
-    it('should group manifest links by access roles', async () => {
-      const expected = {
-        owner: [
-          {
-            path: 'PATH',
-            category: 'CATEGORY',
-            buffer: 'FILE_BUFFER',
-          },
-        ],
-        publicUser: [
-          {
-            path: 'PATH',
-            category: 'CATEGORY',
-            buffer: 'FILE_BUFFER',
-          },
-        ],
-        registeredUser: [
-          {
-            path: 'PATH',
-            category: 'CATEGORY',
-            buffer: 'FILE_BUFFER',
-          },
-        ],
-      }
-
-      const byteArray = 'BYTE_ARRAY' as any
-      const getPathsAndBuffersFromByteArrayStub = jest.fn().mockReturnValue([
-        {
-          path: 'PATH',
-          category: 'CATEGORY',
-          buffer: 'FILE_BUFFER',
-        },
-      ]) as any
-
-      const result = await SUT._getFilesAsPathAndByteArrayFromManifest({
-        getPathsAndBuffersFromByteArray: getPathsAndBuffersFromByteArrayStub,
-      })(byteArray, manifest as any)
-
-      expect(result).toEqual(expected)
-    })
-  })
-
-  describe('_getPathsAndBuffersFromByteArray', () => {
-    it('should get multiple files from byte array', async () => {
-      const files = [
-        {
-          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-          category: 'CATEGORY' as ManifestCategoryId,
-        },
-      ]
-
-      const expected = [
-        {
-          arrayBuffer: 'FILE_BUFFER',
-          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-          category: 'CATEGORY' as ManifestCategoryId,
-        },
-      ]
-
-      const byteArray = 'BYTE_ARRAY' as any
-      const getFileFromByteArrayStub = jest.fn().mockResolvedValue({
-        path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-        category: 'CATEGORY' as ManifestCategoryId,
-        arrayBuffer: 'FILE_BUFFER',
-      }) as any
-
-      const result = await SUT._getPathsAndBuffersFromByteArray({
-        getPathAndBufferFromFile: getFileFromByteArrayStub,
-      })(byteArray, files)
-
-      expect(result).toEqual(expected)
-    })
-  })
-
-  describe('_getAllFilenamesFromFiles', () => {
-    it('should get multiple files from byte array', async () => {
-      const files = [
-        {
-          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-          category: 'CATEGORY' as ManifestCategoryId,
-          arrayBuffer: 'FILE_BUFFER',
-        },
-      ]
-
-      const expected = [
-        {
-          arrayBuffer: 'FILE_BUFFER',
-          cid: 'FILE_CID',
-          path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-          category: 'CATEGORY' as ManifestCategoryId,
-        },
-      ]
-
-      const getFilenameFromFileStub = jest.fn().mockResolvedValue({
-        arrayBuffer: 'FILE_BUFFER',
-        cid: 'FILE_CID',
-        path: 'data/TestfeldNiedersachsen_ALKS_ODR_sample.xodr',
-        category: 'CATEGORY' as ManifestCategoryId,
-      }) as any
-
-      const result = await SUT._getAllFilenamesFromFiles({
-        getFilenameFromFile: getFilenameFromFileStub,
-      })(files as any)
-
-      expect(result).toEqual(expected)
-    })
-  })
-
   describe('getAllManifestLinks', () => {
     it('should return all manifest links as array', () => {
       const manifest = {
@@ -339,12 +236,12 @@ describe('common/asset/utils', () => {
             'manifest:hasFileMetadata': {
               '@type': 'manifest:FileMetadata',
               'manifest:filePath': {
-                '@value': 'https://www.mozilla.org/en-US/MPL/2.0/',
                 '@type': 'xsd:anyURI',
+                '@value': 'https://www.mozilla.org/en-US/MPL/2.0/',
               },
               'manifest:mimeType': {
-                '@value': 'text/html',
                 '@type': 'xsd:string',
+                '@value': 'text/html',
               },
             },
           },
@@ -371,8 +268,8 @@ describe('common/asset/utils', () => {
                 '@type': 'xsd:string',
               },
               'manifest:fileSize': {
-                '@value': 645096,
                 '@type': 'xsd:integer',
+                '@value': 645096,
               },
               'manifest:filename': {
                 '@value': 'TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
@@ -541,22 +438,22 @@ describe('common/asset/utils', () => {
     })
   })
 
-  describe('hasManifestThirdPartyLinks', () => {
+  describe('hasRemoteLinks', () => {
     it('should return true when there is a external link', () => {
-      const result = SUT.hasManifestThirdPartyLinks(manifest as any)
+      const result = SUT.hasRemoteLinks(manifest as any)
 
       expect(result).toEqual(true)
     })
 
     it('should return false when there are not external links found', () => {
-      const result = SUT.hasManifestThirdPartyLinks(manifestRemoteAssetData as any)
+      const result = SUT.hasRemoteLinks(manifestRemoteAssetData as any)
 
       expect(result).toEqual(true)
     })
   })
 
   describe('extractGeneralInformationFromMetadata', () => {
-    it('should extract general information from metadata', async () => {
+    it('should extract general information from metadata', () => {
       // when ... we want to extact general information from the metadata
       // then ... it should return name, description, formatType and the version
       const expected = {
@@ -566,9 +463,9 @@ describe('common/asset/utils', () => {
         version: '1.6',
       }
 
-      const result = await SUT.extractGeneralInformationFromMetadata(
-        ASSET_TYPE[domainMetadata['@type'] as MetadataType],
-      )(domainMetadata)
+      const result = SUT.extractGeneralInformationFromMetadata(ASSET_TYPE[domainMetadata['@type'] as MetadataType])(
+        domainMetadata,
+      )
 
       expect(result).toEqual(expected)
     })
@@ -627,7 +524,7 @@ describe('common/asset/utils', () => {
     })
   })
 
-  describe('extractDomainMetadata', () => {
+  describe('transformDomainMetadata', () => {
     it('should extract basic info from dataResource', () => {
       const input = {
         'hdmap:hasDataResource': {
@@ -635,7 +532,7 @@ describe('common/asset/utils', () => {
           'gx:description': { '@value': 'A sample HD map for testing' },
         },
       }
-      const result = SUT.extractDomainMetadata(input)
+      const result = SUT.transformDomainMetadata(input)
       expect(result).toEqual({
         name: 'Sample HD Map',
         description: 'A sample HD map for testing',
@@ -665,7 +562,7 @@ describe('common/asset/utils', () => {
           },
         },
       }
-      const result = SUT.extractDomainMetadata(input)
+      const result = SUT.transformDomainMetadata(input)
       expect(result).toEqual({
         'name': 'Sample HD Map',
         'description': 'A sample HD map for testing',
@@ -697,7 +594,7 @@ describe('common/asset/utils', () => {
           },
         },
       }
-      const result = SUT.extractDomainMetadata(input)
+      const result = SUT.transformDomainMetadata(input)
       expect(result).toEqual({
         'name': 'Environment Model',
         'description': 'A sample environment model',
@@ -709,7 +606,7 @@ describe('common/asset/utils', () => {
 
     it('should handle missing or empty data', () => {
       const empty = {}
-      const result = SUT.extractDomainMetadata(empty)
+      const result = SUT.transformDomainMetadata(empty)
       expect(result).toEqual({
         name: '',
         description: '',

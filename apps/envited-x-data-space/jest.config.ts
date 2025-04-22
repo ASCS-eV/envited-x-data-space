@@ -14,6 +14,14 @@ const esModules = [
   'blockstore-core',
   'ipfs-unixfs-importer',
   'multiformats',
+  '@zazuko/env-node',
+  'duplex-to',
+  'stream-chunks',
+  'nodeify-fetch',
+  'node-fetch',
+  'data-uri-to-buffer',
+  'fetch-blob',
+  'formdata-polyfill',
 ].join('|')
 
 export default {
@@ -22,6 +30,7 @@ export default {
   transform: {
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/next/babel'] }],
   },
+
   transformIgnorePatterns: [`/node_modules/(?!(${esModules})/.*)`],
   testPathIgnorePatterns: ['/node_modules/', '\\.integration\\.test\\.ts$'],
 }

@@ -6,7 +6,7 @@ import { Readable } from 'stream'
 
 import { MANIFEST_LICENSE, MANIFEST_LICENSE_PATH } from '../../../asset/constants'
 import { ExtractedResource, ExtractedResourceWithCID, Manifest, MetadataType } from '../../../asset/types'
-import { Asset, AssetMetadata, AssetStatus } from '../../../types'
+import { Asset, AssetMetadata, AssetStatus, GlobalIdentifier, User } from '../../../types'
 import { createTzip21Metadata } from '../../../tzip21/metadata'
 
 export const processAssetUpload =
@@ -69,7 +69,7 @@ export const processAssetUpload =
     }) => Promise<string>
     createGroup: (minter: string) => Promise<string>
     predetermineCID: (array: Uint8Array) => Promise<string>
-    getMinter: (asset: Asset) => Promise<{ pkh: string; name: string }>
+    getMinter: (asset: Asset) => Promise<User>
     streamToUint8Array: (stream: Readable) => Promise<Uint8Array>
     extractManifest: (assetArchive: Uint8Array) => Promise<{ conforms: boolean; data: Manifest }>
     extractDomainMetadata: (
@@ -147,17 +147,15 @@ export const processAssetUpload =
       const resources = extractResources(manifest)
       const publicUserMedia = pipe(propOr([], 'publicUser'), getMediaFiles)(resources) as ExtractedResource[]
       const registeredUserMedia = pipe(propOr([], 'registeredUser'), getMediaFiles)(resources) as ExtractedResource[]
-      const { pkh: minterPkh, name: minterName } = await getMinter(asset)
+      const minter = await getMinter(asset)
 
       // Upload the resources
-      const group = await createGroup(minterPkh)
-
+      const group = await createGroup(minter?.addressGlobalIdentifier?.nss ?? '')
       if (publicUserMedia) {
         const uploadPublicMediaPromises = publicUserMedia.map(async ({ path }: { path: string }) => {
           const fileToUpload = await extractFileFromArchive(uploadedFile, path)
           const fileBuffer = await streamToUint8Array(fileToUpload)
           const cid = await predetermineCID(fileBuffer)
-
           const upload = uploadToObjectStorage({
             Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
             Key: `${assetCID}/${cid}`,
@@ -165,6 +163,7 @@ export const processAssetUpload =
             ContentEncoding: 'base64',
             ContentDisposition: 'inline',
           })
+          
           await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
 
           return upload.done()
@@ -205,7 +204,7 @@ export const processAssetUpload =
           cid: assetCID,
           fileSize: uploadedFile.length,
         },
-        creator: minterName,
+        creator: minter.name,
         display: coverImage,
         domainMetadata: {
           cid: domainMetadataCID,
@@ -216,7 +215,7 @@ export const processAssetUpload =
           fileSize: modifiedManifest.fileSize as number,
           data: manifest,
         },
-        minter: minterPkh,
+        minter: minter.addressGlobalIdentifier?.nss ?? '',
         rights: {
           identifier: pathOr('', MANIFEST_LICENSE)(manifest),
           path: pathOr('', MANIFEST_LICENSE_PATH)(manifest),

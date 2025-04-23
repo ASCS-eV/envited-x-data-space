@@ -1,9 +1,8 @@
 import { getAsset, getMinter, updateAsset } from '../../../asset'
 import { createModifiedManifest } from '../../../asset/manifest'
-import { extractManifest, extractResources, getCoverImage } from '../../../asset/resources'
+import { extractDomainMetadata, extractManifest, extractResources, getCoverImage } from '../../../asset/resources'
 import {
   addCIDs,
-  extractDomainMetadata,
   extractFileFromArchive,
   extractGeneralInformationFromMetadata,
   getMediaFiles,

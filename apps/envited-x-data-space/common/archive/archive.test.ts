@@ -1,3 +1,4 @@
+import { BlobReader } from '@zip.js/zip.js'
 import * as SUT from './archive'
 
 describe('common/archive', () => {
@@ -64,14 +65,15 @@ describe('common/archive', () => {
         getEntries: mockGetEntries,
         close: jest.fn().mockResolvedValue(undefined),
       }))
-      const mockBlobReader = 'BlobReader-instance'
+      // Use a mocked stream for the zip file
+      const zipFile = { mocked: 'stream' }
 
       // Execute
-      const result = await SUT._countAmountOfFilesInZip({ ZipReader: mockZipReader })(mockBlobReader as any)
+      const result = await SUT._countAmountOfFilesInZip({ ZipReader: mockZipReader })(zipFile as any)
 
       // Verify
       expect(result).toBe(3)
-      expect(mockZipReader).toHaveBeenCalledWith(mockBlobReader)
+      expect(mockZipReader).toHaveBeenCalledWith(new BlobReader(new Blob([zipFile as any])))
       expect(mockGetEntries).toHaveBeenCalledTimes(1)
     })
 
@@ -82,10 +84,11 @@ describe('common/archive', () => {
         getEntries: mockGetEntries,
         close: jest.fn().mockResolvedValue(undefined),
       }))
-      const mockBlobReader = 'BlobReader-instance'
+      // Use a mocked stream for the zip file
+      const zipFile = { mocked: 'stream' }
 
       // Execute
-      const result = await SUT._countAmountOfFilesInZip({ ZipReader: mockZipReader })(mockBlobReader as any)
+      const result = await SUT._countAmountOfFilesInZip({ ZipReader: mockZipReader })(zipFile as any)
 
       // Verify
       expect(result).toBe(0)
@@ -112,7 +115,7 @@ describe('common/archive', () => {
       expect(result).toEqual(2)
       expect(closeStub).toHaveBeenCalledWith()
       expect(getEntriesStub).toHaveBeenCalledWith()
-      expect(zipReaderStub).toHaveBeenCalledWith('FILE' as any)
+      expect(zipReaderStub).toHaveBeenCalledWith(new BlobReader(new Blob(['FILE'])))
     })
   })
 })

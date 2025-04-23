@@ -42,11 +42,9 @@ describe('common/shacl/shacl', () => {
       })
 
       // And validate data with it
-      const shapePath = 'path/to/shapes.ttl'
-      const result = await validateShacl(shapePath)(mockStream)
+      const result = await validateShacl(mockStream)(mockStream)
 
       // Then the correct functions should be called
-      expect(rdfStub.fromFile).toHaveBeenCalledWith(shapePath)
       expect(datasetStub.import).toHaveBeenCalledWith(mockStream)
       expect(SHACLValidatorStub).toHaveBeenCalledWith(mockDataset, { factory: rdfStub })
       expect(validatorStub.validate).toHaveBeenCalledWith(mockDataset)
@@ -94,11 +92,8 @@ describe('common/shacl/shacl', () => {
         SHACLValidator: SHACLValidatorStub as any,
       })
 
-      // And try to validate data with it
-      const shapePath = 'path/to/shapes.ttl'
-
       // Then it should throw the error
-      await expect(validateShacl(shapePath)(mockStream)).rejects.toThrow(importError)
+      await expect(validateShacl(mockStream)(mockStream)).rejects.toThrow(importError)
 
       // And the validator should not be created
       expect(SHACLValidatorStub).not.toHaveBeenCalled()

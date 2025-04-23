@@ -29,6 +29,7 @@ export default {
   preset: '../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/next/babel'] }],
+    '^.+\\.ttl$': '<rootDir>/../../jest-transform-raw-ttl.js',
   },
 
   transformIgnorePatterns: [`/node_modules/(?!(${esModules})/.*)`],

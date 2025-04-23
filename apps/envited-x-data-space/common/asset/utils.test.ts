@@ -1,3 +1,4 @@
+import { ERRORS } from '../constants'
 import domainMetadata from '../fixtures/domainMetadata.json'
 import manifest from '../fixtures/manifest.json'
 import manifestRemoteAssetData from '../fixtures/manifestRemoteAssetData.json'
@@ -611,6 +612,16 @@ describe('common/asset/utils', () => {
         name: '',
         description: '',
       })
+    })
+  })
+
+  describe('formatFilesErrorMessage', () => {
+    it('should format error messages correctly', () => {
+      const errors = [{ error: 'file1.json' }, { error: 'file2.txt' }]
+
+      const result = SUT.formatFilesErrorMessage(errors)
+
+      expect(result).toEqual(`${ERRORS.FILES_NOT_FOUND} - file1.json, file2.txt`)
     })
   })
 })

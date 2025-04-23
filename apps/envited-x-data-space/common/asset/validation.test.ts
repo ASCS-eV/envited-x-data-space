@@ -7,14 +7,13 @@ describe('common/asset/validation', () => {
     it('should return empty errors when all resources exist', async () => {
       // Setup stubs
       const extractStub = jest.fn().mockResolvedValue('file-content')
-
-      // Create stub for getAllManifestLinksAndFormatPaths
-      const getAllLinksStub = jest.fn().mockReturnValue(['file1.json', 'file2.txt', 'file3.md'])
+      // Create stub for read
+      const readStub = jest.fn().mockResolvedValue('file-content')
 
       // Execute function with stubbed dependencies
       const result = await SUT.checkIfAllResourcessInManifestExist({
         extract: extractStub,
-        getAllManifestLinksAndFormatPaths: getAllLinksStub,
+        read: readStub,
       })(new Uint8Array([1, 2, 3]), {} as Manifest)
 
       // Verify
@@ -23,38 +22,84 @@ describe('common/asset/validation', () => {
         amount: 3,
       })
       expect(extractStub).toHaveBeenCalledTimes(3)
-      expect(getAllLinksStub).toHaveBeenCalledWith({} as Manifest)
+      expect(readStub).toHaveBeenCalledTimes(3)
     })
 
     it('should report errors for missing resources', async () => {
-      // Setup stubs
-      const extractStub = jest.fn().mockResolvedValueOnce('file1-content').mockRejectedValueOnce(new Error('Not found'))
+      // Construct a valid manifest with two artifact links
+      const manifest = {
+        '@context': {},
+        '@id': 'id',
+        '@type': 'type',
+        'manifest:hasManifestReference': {
+          '@type': 'refType',
+          'manifest:hasAccessRole': { '@type': 'roleType', '@id': 'envited-x:isOwner' },
+          'manifest:hasCategory': { '@type': 'catType', '@id': 'envited-x:isDocumentation' },
+          'manifest:hasFileMetadata': {
+            '@type': 'metaType',
+            'manifest:filePath': { '@value': 'file1.json', '@type': 'string' },
+            'manifest:mimeType': { '@value': 'application/json', '@type': 'string' },
+          },
+        },
+        'manifest:hasLicense': {
+          '@type': 'licenseType',
+          'gx:license': { '@value': 'MIT' },
+          'manifest:licenseData': {
+            '@type': 'licenseDataType',
+            'manifest:hasAccessRole': { '@type': 'roleType', '@id': 'envited-x:isOwner' },
+            'manifest:hasCategory': { '@type': 'catType', '@id': 'envited-x:isLicense' },
+            'manifest:hasFileMetadata': {
+              '@type': 'metaType',
+              'manifest:filePath': { '@value': 'missing-file.txt', '@type': 'string' },
+              'manifest:mimeType': { '@value': 'text/plain', '@type': 'string' },
+            },
+          },
+        },
+        'manifest:hasArtifacts': [
+          {
+            '@type': 'artifactType',
+            'manifest:hasAccessRole': { '@type': 'roleType', '@id': 'envited-x:isOwner' },
+            'manifest:hasCategory': { '@type': 'catType', '@id': 'envited-x:isDocumentation' },
+            'manifest:hasFileMetadata': {
+              '@type': 'metaType',
+              'manifest:filePath': { '@value': 'file1.json', '@type': 'string' },
+              'manifest:mimeType': { '@value': 'application/json', '@type': 'string' },
+            },
+          },
+          {
+            '@type': 'artifactType',
+            'manifest:hasAccessRole': { '@type': 'roleType', '@id': 'envited-x:isOwner' },
+            'manifest:hasCategory': { '@type': 'catType', '@id': 'envited-x:isDocumentation' },
+            'manifest:hasFileMetadata': {
+              '@type': 'metaType',
+              'manifest:filePath': { '@value': 'missing-file.txt', '@type': 'string' },
+              'manifest:mimeType': { '@value': 'text/plain', '@type': 'string' },
+            },
+          },
+        ],
+        'manifest:hasReferencedArtifacts': [],
+      };
 
-      // Create stub for getAllManifestLinksAndFormatPaths
-      const getAllLinksStub = jest.fn().mockReturnValue(['file1.json', 'missing-file.txt'])
+      // Setup stubs
+      const extractStub = jest.fn()
+      extractStub.mockResolvedValueOnce('file1-content')
+      extractStub.mockRejectedValueOnce(new Error('Not found'))
+      // Create stub for read
+      const readStub = jest.fn().mockResolvedValue('file1-content')
 
       // Execute function with stubbed dependencies
       const result = await SUT.checkIfAllResourcessInManifestExist({
         extract: extractStub,
-        getAllManifestLinksAndFormatPaths: getAllLinksStub,
-      })(new Uint8Array([1, 2, 3]), {} as Manifest)
+        read: readStub,
+      })(new Uint8Array([1, 2]), manifest as any)
 
       // Verify
       expect(result).toEqual({
         errors: [{ error: 'missing-file.txt' }],
-        amount: 2,
+        amount: 4,
       })
-      expect(getAllLinksStub).toHaveBeenCalledWith({} as Manifest)
-    })
-  })
-
-  describe('formatFilesErrorMessage', () => {
-    it('should format error messages correctly', () => {
-      const errors = [{ error: 'file1.json' }, { error: 'file2.txt' }]
-
-      const result = SUT.formatFilesErrorMessage(errors)
-
-      expect(result).toEqual(`${ERRORS.FILES_NOT_FOUND} - file1.json, file2.txt`)
+      expect(extractStub).toHaveBeenCalledTimes(4)
+      expect(readStub).toHaveBeenCalledTimes(1)
     })
   })
 

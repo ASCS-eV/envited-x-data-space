@@ -14,6 +14,7 @@ import {
   includes,
   is,
   isNil,
+  join,
   keys,
   map,
   omit,
@@ -43,6 +44,7 @@ import {
   MANIFEST_REFERENCE,
 } from './constants'
 import { AccessRole, ExtractedResource, Manifest, ManifestCategoryId, ManifestLink } from './types'
+import { ERRORS } from '../constants'
 
 export const jsonToUint8Array = (json: object): Uint8Array => {
   const jsonString = JSON.stringify(json)
@@ -265,3 +267,11 @@ export const addCIDs = async (assetArchive: Uint8Array, resources: ExtractedReso
     cid,
   }))
 }
+
+export const formatFilesErrorMessage = (errors: { error: string }[]) =>
+  pipe(
+    map(({ error }: { error: string }) => error),
+    join(', '),
+    (x: string) => `${ERRORS.FILES_NOT_FOUND} - ${x}`,
+  )(errors)
+  

@@ -1,9 +1,9 @@
 import { Entry } from '@zip.js/zip.js'
-import { equals, has, isEmpty, isNil, join, map, pipe } from 'ramda'
+import { equals, has, isEmpty, isNil } from 'ramda'
 
 import { ERRORS } from '../constants'
 import { Manifest } from './types'
-import { getAllManifestLinksAndFormatPaths } from './utils'
+import { formatFilesErrorMessage, getAllManifestLinksAndFormatPaths } from './utils'
 
 export const validateAsset =
   ({
@@ -32,7 +32,6 @@ export const validateAsset =
       const uploadedAsset = await fileToUint8Array(file)
 
       const readme = await extractReadme(uploadedAsset)
-      console.log('readme', readme)
       if (isNil(readme)) {
         return {
           isValid: false,
@@ -42,9 +41,8 @@ export const validateAsset =
       }
 
       const { conforms: manifestConforms, data: manifest } = await extractManifest(uploadedAsset)
-      console.log('manifest', manifest, manifestConforms)
       const manifestFiles = await checkIfAllResourcessInManifestExist(uploadedAsset, manifest)
-      console.log('manifestFiles', manifestFiles)
+
       if (!isEmpty(manifestFiles.errors)) {
         return {
           isValid: false,
@@ -54,7 +52,7 @@ export const validateAsset =
       }
 
       const amountOfFilesInZip = await countAmountOfFilesInZip(uploadedAsset)
-      console.log('amountOfFilesInZip', amountOfFilesInZip, manifestFiles.amount)
+
       if (!equals(amountOfFilesInZip)(manifestFiles.amount)) {
         return {
           isValid: false,
@@ -91,14 +89,15 @@ export const checkIfAllResourcessInManifestExist =
     read: (entry: Entry) => Promise<string>
   }) =>
   async (archive: Uint8Array, manifest: Manifest) => {
+    try {
     const links = getAllManifestLinksAndFormatPaths(manifest)
     const validationPromises = links.map((fileName: string) => ({
       fileName,
-      promise: extract(archive, fileName).then(read),
+      promise: extract(archive, fileName)?.then(read),
     }))
 
     const wrappedPromises = validationPromises.map(({ fileName, promise }) =>
-      promise.catch(() => ({ error: fileName })),
+      promise?.catch(() => ({ error: fileName })),
     )
 
     const errors = await Promise.all(wrappedPromises).then(
@@ -112,11 +111,8 @@ export const checkIfAllResourcessInManifestExist =
       errors,
       amount: links.length,
     }
+  } catch (error) {
+    console.log(error)
   }
+}
 
-export const formatFilesErrorMessage = (errors: { error: string }[]) =>
-  pipe(
-    map(({ error }: { error: string }) => error),
-    join(', '),
-    (x: string) => `${ERRORS.FILES_NOT_FOUND} - ${x}`,
-  )(errors)

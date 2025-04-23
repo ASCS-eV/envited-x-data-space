@@ -163,7 +163,7 @@ export const processAssetUpload =
             ContentEncoding: 'base64',
             ContentDisposition: 'inline',
           })
-          
+
           await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
 
           return upload.done()

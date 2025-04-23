@@ -38,7 +38,8 @@ module.exports = {
     },
     {
       name: 'processAssetUpload',
-      script: './apps/envited-x-data-space/common/aws/handlers/processAssetUpload/processAssetUpload.integration.test.ts',
+      script:
+        './apps/envited-x-data-space/common/aws/handlers/processAssetUpload/processAssetUpload.integration.test.ts',
       watch: '.',
       max_restarts: 1,
       env_development: {
@@ -57,7 +58,6 @@ module.exports = {
         NEXT_PUBLIC_ASSET_BUCKET_NAME: 'staging-envited-x-data-space--assetsbucket5f3b285a-jajxd4n1z8k2',
         NEXT_PUBLIC_IPFS_BUCKET_NAME: 'staging-envited-x-data-space-en-ipfsbucket72ccbc1e-xjvx8c5kfvgb',
       },
-      
     },
   ],
 }

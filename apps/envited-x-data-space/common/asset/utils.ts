@@ -32,6 +32,7 @@ import {
 } from 'ramda'
 
 import { extractFromByteArray, stream } from '../archive'
+import { ERRORS } from '../constants'
 import { IGNORED_SCHEMAS, SCHEMA } from '../schemas'
 import { streamToUint8Array } from '../utils'
 import {
@@ -44,7 +45,6 @@ import {
   MANIFEST_REFERENCE,
 } from './constants'
 import { AccessRole, ExtractedResource, Manifest, ManifestCategoryId, ManifestLink } from './types'
-import { ERRORS } from '../constants'
 
 export const jsonToUint8Array = (json: object): Uint8Array => {
   const jsonString = JSON.stringify(json)
@@ -274,4 +274,3 @@ export const formatFilesErrorMessage = (errors: { error: string }[]) =>
     join(', '),
     (x: string) => `${ERRORS.FILES_NOT_FOUND} - ${x}`,
   )(errors)
-  

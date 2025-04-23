@@ -90,29 +90,28 @@ export const checkIfAllResourcessInManifestExist =
   }) =>
   async (archive: Uint8Array, manifest: Manifest) => {
     try {
-    const links = getAllManifestLinksAndFormatPaths(manifest)
-    const validationPromises = links.map((fileName: string) => ({
-      fileName,
-      promise: extract(archive, fileName)?.then(read),
-    }))
+      const links = getAllManifestLinksAndFormatPaths(manifest)
+      const validationPromises = links.map((fileName: string) => ({
+        fileName,
+        promise: extract(archive, fileName)?.then(read),
+      }))
 
-    const wrappedPromises = validationPromises.map(({ fileName, promise }) =>
-      promise?.catch(() => ({ error: fileName })),
-    )
+      const wrappedPromises = validationPromises.map(({ fileName, promise }) =>
+        promise?.catch(() => ({ error: fileName })),
+      )
 
-    const errors = await Promise.all(wrappedPromises).then(
-      (results: (string | { error: string })[]) =>
-        results.filter((result: string | { error: string }) => has('error')(result) && result.error) as {
-          error: string
-        }[],
-    )
+      const errors = await Promise.all(wrappedPromises).then(
+        (results: (string | { error: string })[]) =>
+          results.filter((result: string | { error: string }) => has('error')(result) && result.error) as {
+            error: string
+          }[],
+      )
 
-    return {
-      errors,
-      amount: links.length,
+      return {
+        errors,
+        amount: links.length,
+      }
+    } catch (error) {
+      console.log(error)
     }
-  } catch (error) {
-    console.log(error)
   }
-}
-

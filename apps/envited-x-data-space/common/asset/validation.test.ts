@@ -78,7 +78,7 @@ describe('common/asset/validation', () => {
           },
         ],
         'manifest:hasReferencedArtifacts': [],
-      };
+      }
 
       // Setup stubs
       const extractStub = jest.fn()

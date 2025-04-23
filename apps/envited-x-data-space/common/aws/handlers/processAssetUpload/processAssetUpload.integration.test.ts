@@ -5,7 +5,7 @@ const s3Event = {
     {
       s3: {
         object: {
-          key: 'bafkreicqavlpj72n5yhow4gmgfisiygpcsjnkni2fp524d33bsmmlblxoe',
+          key: 'bafkreif7ewbwgnl757vuwufo7mzcp6n7qpkroc5z65otvmb3qeohzamigy',
         },
         bucket: {
           name: 'staging-envited-x-data-space--assetsbucket5f3b285a-jajxd4n1z8k2',

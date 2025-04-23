@@ -1,4 +1,4 @@
-import rdf from '@zazuko/env-node'
+import rdf from '@zazuko/env'
 import SHACLValidator from 'rdf-validate-shacl'
 
 import { validateShacl as _validateShacl } from './shacl'

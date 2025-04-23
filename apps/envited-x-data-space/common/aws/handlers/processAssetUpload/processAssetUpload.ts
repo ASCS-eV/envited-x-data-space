@@ -6,7 +6,7 @@ import { Readable } from 'stream'
 
 import { MANIFEST_LICENSE, MANIFEST_LICENSE_PATH } from '../../../asset/constants'
 import { ExtractedResource, ExtractedResourceWithCID, Manifest, MetadataType } from '../../../asset/types'
-import { Asset, AssetMetadata, AssetStatus, GlobalIdentifier, User } from '../../../types'
+import { Asset, AssetMetadata, AssetStatus, User } from '../../../types'
 import { createTzip21Metadata } from '../../../tzip21/metadata'
 
 export const processAssetUpload =

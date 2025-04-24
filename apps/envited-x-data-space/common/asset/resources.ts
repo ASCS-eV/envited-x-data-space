@@ -5,7 +5,7 @@ import { extractContentFromStream, formatAssetUri, streamToUint8Array } from '..
 import { stringToStream } from '../utils/utils'
 import { validateShacl } from '../validator/shacl'
 import { MANIFEST_FILE, README_FILE } from './constants'
-import { ExtractedResourceWithCID, Manifest, ManifestCategoryId } from './types'
+import { AccessLevel, ExtractedResourceWithCID, Manifest, ManifestCategoryId } from './types'
 import {
   extractFileFromArchive,
   getDomainMetadataPath,
@@ -14,6 +14,74 @@ import {
   jsonToUint8Array,
   predetermineCID,
 } from './utils'
+import { Database } from '../database/types'
+import { formatError, internalServerErrorError } from '../utils'
+import { log, Log } from '../logger'
+import { db } from '../database/queries'
+
+export const _getAssetResourcesByAssetId =
+  ({ db, log }: { db: Database; log: Log }) =>
+  async (assetId: string) => {
+    try {
+      const connection = await db()
+      const [result] = await connection.getAssetResourcesByAssetId(assetId)
+
+      return result
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const getAsset = _getAssetResourcesByAssetId({ db, log })
+
+export const _getAssetResourcesByAssetIdAndAccessLevel =
+  ({ db, log }: { db: Database; log: Log }) =>
+  async (assetId: string, accessLevel: AccessLevel) => {
+    try {
+      const connection = await db()
+      const [result] = await connection.getAssetResourcesByAssetIdAndAccessLevel({ assetId, accessLevel })
+
+      return result
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const getAssetResourcesByAssetIdAndAccessLevel = _getAssetResourcesByAssetIdAndAccessLevel({ db, log })
+
+export const _insertAssetResource =
+  ({ db, log }: { db: Database; log: Log }) =>
+  async ({ assetId, name, cid, mimeType, accessLevel }: { assetId: string; name: string; cid: string; mimeType: string; accessLevel: AccessLevel }) => {
+    try {
+      const connection = await db()
+      const [result] = await connection.insertAssetResource({ assetId, name, cid, mimeType, accessLevel })
+
+      return result
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const insertAssetResource = _insertAssetResource({ db, log })
+
+export const _deleteAssetResource =
+  ({ db, log }: { db: Database; log: Log }) =>
+  async (assetId: string, name: string) => {
+    try {
+      const connection = await db()
+      const [result] = await connection.deleteAssetResource({ assetId, name })
+
+      return result
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const deleteAssetResource = _deleteAssetResource({ db, log })
 
 export const extractManifest = async (assetArchive: Uint8Array) => {
   const manifestStream = await extractFileFromArchive(assetArchive, MANIFEST_FILE)

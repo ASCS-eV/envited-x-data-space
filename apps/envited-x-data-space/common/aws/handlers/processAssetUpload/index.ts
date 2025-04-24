@@ -1,6 +1,6 @@
 import { getAsset, getMinter, updateAsset } from '../../../asset'
 import { createModifiedManifest } from '../../../asset/manifest'
-import { extractDomainMetadata, extractManifest, extractResources, getCoverImage } from '../../../asset/resources'
+import { extractDomainMetadata, extractManifest, extractResources, getCoverImage, insertAssetResource } from '../../../asset'
 import {
   addCIDs,
   extractFileFromArchive,
@@ -38,4 +38,5 @@ export const main = processAssetUpload({
   hasRemoteLinks,
   extractManifest,
   getMediaFiles,
+  insertAssetResource,
 })

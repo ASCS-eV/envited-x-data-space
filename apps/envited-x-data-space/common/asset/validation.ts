@@ -113,5 +113,9 @@ export const checkIfAllResourcessInManifestExist =
       }
     } catch (error) {
       console.log(error)
+      return {
+        errors: [],
+        amount: 0,
+      }
     }
   }

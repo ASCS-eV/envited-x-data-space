@@ -51,6 +51,16 @@ describe('common/aws/handlers/processAssetUpload', () => {
         { path: 'public-document.pdf', mimeType: 'application/pdf', category: 'envited-x:isMedia' },
         { path: 'restricted-image.png', mimeType: 'image/png', category: 'envited-x:isMedia' },
       ]) as any
+      const insertAssetResourceStub = jest.fn().mockResolvedValue({
+        id: 'resource-id',
+        assetId: 'asset-id',
+        name: 'resource-name',
+        cid: 'cid',
+        mimeType: 'mime/type',
+        accessLevel: 'public',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
 
       const event = {
         Records: [
@@ -92,6 +102,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         hasRemoteLinks: hasRemoteLinksStub,
         extractManifest: extractManifestStub,
         getMediaFiles: getMediaFilesStub,
+        insertAssetResource: insertAssetResourceStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
@@ -107,6 +118,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       )
       expect(createGroupStub).toHaveBeenCalledWith(expect.any(String))
       expect(uploadDoneStub).toHaveBeenCalledWith()
+      expect(insertAssetResourceStub).toHaveBeenCalled()
     })
 
     it('should delete the asset if the validation does not conforms', async () => {
@@ -158,6 +170,16 @@ describe('common/aws/handlers/processAssetUpload', () => {
         { path: 'public-document.pdf', mimeType: 'application/pdf', category: 'envited-x:isMedia' },
         { path: 'restricted-image.png', mimeType: 'image/png', category: 'envited-x:isMedia' },
       ]) as any
+      const insertAssetResourceStub = jest.fn().mockResolvedValue({
+        id: 'resource-id',
+        assetId: 'asset-id',
+        name: 'resource-name',
+        cid: 'cid',
+        mimeType: 'mime/type',
+        accessLevel: 'public',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
 
       const event = {
         Records: [
@@ -199,6 +221,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         hasRemoteLinks: hasRemoteLinksStub,
         extractManifest: extractManifestStub,
         getMediaFiles: getMediaFilesStub,
+        insertAssetResource: insertAssetResourceStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
@@ -209,6 +232,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(uploadDoneStub).not.toHaveBeenCalledWith()
       expect(createGroupStub).toHaveBeenCalledTimes(0)
       expect(uploadFileToIPFSStub).toHaveBeenCalledTimes(0)
+      expect(insertAssetResourceStub).not.toHaveBeenCalled()
     })
   })
 })

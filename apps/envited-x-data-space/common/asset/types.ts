@@ -168,3 +168,20 @@ export interface TokenMetadata {
   formats: TokenFormat[]
   attributes: TokenAttribute[]
 }
+
+export enum AccessLevel {
+  public = 'public',
+  authenticated = 'authenticated',
+  owner = 'owner',
+}
+
+export interface AssetResource {
+  id: string
+  assetId: string
+  name: string
+  cid: string
+  mimeType: string
+  accessLevel: AccessLevel
+  createdAt: string
+  updatedAt: string
+}

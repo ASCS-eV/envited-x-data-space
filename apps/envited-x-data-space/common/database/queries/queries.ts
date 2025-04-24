@@ -59,6 +59,7 @@ import {
   insertUserTx,
   removeUserFromRole,
 } from './users'
+import { deleteAssetResource, getAssetResourcesByAssetIdAndAccessLevel, insertAssetResource, getAssetResourcesByAssetId } from './assetResources'
 
 const queries = {
   activateUserById,
@@ -105,6 +106,10 @@ const queries = {
   updateAsset,
   updateAssetByCID,
   updateAssetStatus,
+  getAssetResourcesByAssetId,
+  getAssetResourcesByAssetIdAndAccessLevel,
+  insertAssetResource,
+  deleteAssetResource,
 }
 
 export const init =

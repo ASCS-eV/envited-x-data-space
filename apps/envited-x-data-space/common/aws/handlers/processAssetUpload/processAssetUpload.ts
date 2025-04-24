@@ -5,7 +5,14 @@ import { isNil, last, pathOr, pipe, propOr, split } from 'ramda'
 import { Readable } from 'stream'
 
 import { MANIFEST_LICENSE, MANIFEST_LICENSE_PATH } from '../../../asset/constants'
-import { AccessLevel, AssetResource, ExtractedResource, ExtractedResourceWithCID, Manifest, MetadataType } from '../../../asset/types'
+import {
+  AccessLevel,
+  AssetResource,
+  ExtractedResource,
+  ExtractedResourceWithCID,
+  Manifest,
+  MetadataType,
+} from '../../../asset/types'
 import { Asset, AssetMetadata, AssetStatus, User } from '../../../types'
 import { createTzip21Metadata } from '../../../tzip21/metadata'
 
@@ -102,7 +109,19 @@ export const processAssetUpload =
     }
     hasRemoteLinks: (manifest: Manifest) => boolean
     getMediaFiles: (items: ExtractedResource[]) => ExtractedResource[]
-    insertAssetResource: ({ assetId, name, cid, mimeType, accessLevel }: { assetId: string, name: string, cid: string, mimeType: string, accessLevel: AccessLevel }) => Promise<AssetResource>
+    insertAssetResource: ({
+      assetId,
+      name,
+      cid,
+      mimeType,
+      accessLevel,
+    }: {
+      assetId: string
+      name: string
+      cid: string
+      mimeType: string
+      accessLevel: AccessLevel
+    }) => Promise<AssetResource>
   }): S3Handler =>
   async event => {
     try {
@@ -154,43 +173,59 @@ export const processAssetUpload =
       // Upload the resources
       const group = await createGroup(minter?.addressGlobalIdentifier?.nss ?? '')
       if (publicUserMedia) {
-        const uploadPublicMediaPromises = publicUserMedia.map(async ({ path, mimeType }: { path: string, mimeType: string }) => {
-          const fileToUpload = await extractFileFromArchive(uploadedFile, path)
-          const fileBuffer = await streamToUint8Array(fileToUpload)
-          const cid = await predetermineCID(fileBuffer)
-          const upload = uploadToObjectStorage({
-            Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
-            Key: `${assetCID}/${cid}`,
-            Body: fileBuffer,
-            ContentEncoding: 'base64',
-            ContentDisposition: 'inline',
-          })
+        const uploadPublicMediaPromises = publicUserMedia.map(
+          async ({ path, mimeType }: { path: string; mimeType: string }) => {
+            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+            const fileBuffer = await streamToUint8Array(fileToUpload)
+            const cid = await predetermineCID(fileBuffer)
+            const upload = uploadToObjectStorage({
+              Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: fileBuffer,
+              ContentEncoding: 'base64',
+              ContentDisposition: 'inline',
+            })
 
-          await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
-          await insertAssetResource({ assetId: assetCID, name: last(split('/', path)) as string, cid, mimeType, accessLevel: AccessLevel.public })
+            await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
+            await insertAssetResource({
+              assetId: assetCID,
+              name: last(split('/', path)) as string,
+              cid,
+              mimeType,
+              accessLevel: AccessLevel.public,
+            })
 
-          return upload.done()
-        })
+            return upload.done()
+          },
+        )
 
         await Promise.all(uploadPublicMediaPromises)
       }
 
       if (registeredUserMedia) {
-        const uploadRegisteredUserMediaPromises = registeredUserMedia.map(async ({ path, mimeType }: { path: string, mimeType: string }) => {
-          const fileToUpload = await extractFileFromArchive(uploadedFile, path)
-          const fileBuffer = await streamToUint8Array(fileToUpload)
-          const cid = await predetermineCID(fileBuffer)
-          const upload = uploadToObjectStorage({
-            Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
-            Key: `${assetCID}/${cid}`,
-            Body: fileBuffer,
-            ContentEncoding: 'base64',
-          })
+        const uploadRegisteredUserMediaPromises = registeredUserMedia.map(
+          async ({ path, mimeType }: { path: string; mimeType: string }) => {
+            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+            const fileBuffer = await streamToUint8Array(fileToUpload)
+            const cid = await predetermineCID(fileBuffer)
+            const upload = uploadToObjectStorage({
+              Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: fileBuffer,
+              ContentEncoding: 'base64',
+            })
 
-          await insertAssetResource({ assetId: assetCID, name: last(split('/', path)) as string, cid, mimeType, accessLevel: AccessLevel.authenticated })
+            await insertAssetResource({
+              assetId: assetCID,
+              name: last(split('/', path)) as string,
+              cid,
+              mimeType,
+              accessLevel: AccessLevel.authenticated,
+            })
 
-          return upload.done()
-        })
+            return upload.done()
+          },
+        )
 
         await Promise.all(uploadRegisteredUserMediaPromises)
       }

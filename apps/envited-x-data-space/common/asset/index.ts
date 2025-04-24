@@ -4,7 +4,14 @@ import { extractDomainMetadata, extractManifest, extractReadme } from './resourc
 import { checkIfAllResourcessInManifestExist, validateAsset as validate } from './validation'
 
 export { getAsset, getMinter, updateAsset } from './asset'
-export { insertAssetResource, extractResources, getCoverImage, extractDomainMetadata, extractManifest, extractReadme } from './resources'
+export {
+  insertAssetResource,
+  extractResources,
+  getCoverImage,
+  extractDomainMetadata,
+  extractManifest,
+  extractReadme,
+} from './resources'
 export const validateAsset = validate({
   extractManifest,
   extractDomainMetadata,

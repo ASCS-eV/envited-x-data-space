@@ -1,7 +1,11 @@
 import { all, and, compose, equals, find, includes, prop, propEq, propOr } from 'ramda'
 
+import { db } from '../database/queries'
+import { Database } from '../database/types'
+import { Log, log } from '../logger'
 import { SCHEMA } from '../schemas'
 import { extractContentFromStream, formatAssetUri, streamToUint8Array } from '../utils'
+import { formatError, internalServerErrorError } from '../utils'
 import { stringToStream } from '../utils/utils'
 import { validateShacl } from '../validator/shacl'
 import { MANIFEST_FILE, README_FILE } from './constants'
@@ -14,10 +18,6 @@ import {
   jsonToUint8Array,
   predetermineCID,
 } from './utils'
-import { Database } from '../database/types'
-import { formatError, internalServerErrorError } from '../utils'
-import { log, Log } from '../logger'
-import { db } from '../database/queries'
 
 export const _getAssetResourcesByAssetId =
   ({ db, log }: { db: Database; log: Log }) =>
@@ -53,7 +53,19 @@ export const getAssetResourcesByAssetIdAndAccessLevel = _getAssetResourcesByAsse
 
 export const _insertAssetResource =
   ({ db, log }: { db: Database; log: Log }) =>
-  async ({ assetId, name, cid, mimeType, accessLevel }: { assetId: string; name: string; cid: string; mimeType: string; accessLevel: AccessLevel }) => {
+  async ({
+    assetId,
+    name,
+    cid,
+    mimeType,
+    accessLevel,
+  }: {
+    assetId: string
+    name: string
+    cid: string
+    mimeType: string
+    accessLevel: AccessLevel
+  }) => {
     try {
       const connection = await db()
       const [result] = await connection.insertAssetResource({ assetId, name, cid, mimeType, accessLevel })

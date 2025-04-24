@@ -56,7 +56,7 @@ export const createTzip21Metadata = ({
     `${formatType} ${version}`,
   ]
   const isThirdPartyHosted = hasRemoteLinks(manifest.data)
-
+  const { data: manifestData } = manifest
   return {
     decimals: 0,
     isBooleanAmount: true,
@@ -74,7 +74,7 @@ export const createTzip21Metadata = ({
       : rights.path,
     language: 'en',
     artifactUri: formatAssetUri(asset.cid),
-    identifier: asset.cid,
+    identifier: manifestData['@id'],
     externalUri: formatIpfsUri(manifest.cid),
     displayUri: formatIpfsUri(display.cid),
     formats: [

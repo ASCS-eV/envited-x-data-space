@@ -124,9 +124,9 @@ export interface ExtractedResourceWithCID extends ExtractedResource {
 }
 
 export interface ManifestExtractedResources {
-  owner: ExtractedResource[]
-  registeredUser: ExtractedResource[]
-  publicUser: ExtractedResource[]
+  isOwner: ExtractedResource[]
+  isRegistered: ExtractedResource[]
+  isPublic: ExtractedResource[]
 }
 
 export interface TokenFormat {

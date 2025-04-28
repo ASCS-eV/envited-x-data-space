@@ -157,7 +157,7 @@ manifest:LicenseShape a sh:NodeShape ;
         ],
         [   sh:name "license data"@en ;
             sh:description "Defines a link to the license."@en ;
-            skos:example "accessRole: publicUser, type: license, format: html, path: <https://opensource.org/license/mit>"@en ;
+            skos:example "accessRole: isPublic, type: license, format: html, path: <https://opensource.org/license/mit>"@en ;
             sh:message "Validation of licenseData failed!"@en ;
             sh:minCount 1 ;
             sh:maxCount 1 ;

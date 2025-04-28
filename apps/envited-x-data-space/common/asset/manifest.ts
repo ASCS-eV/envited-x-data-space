@@ -43,7 +43,7 @@ export const formatManifestUri =
     if (includes(category, [ManifestCategoryId.envitedXIsMedia]) && equals(accessRole)(AccessRole.envitedXIsPublic)) {
       return pipe(
         find(propEq(formatManifestLinkPath(path), 'path')),
-        propOr('', 'cid'), // TODO: get CID
+        propOr('', 'cid'),
         formatIpfsUri,
       )(media)
     }

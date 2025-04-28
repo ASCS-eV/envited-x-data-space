@@ -166,25 +166,24 @@ export const processAssetUpload =
 
       // Get the resources from manifest
       const resources = extractResources(manifest)
-      const publicUserMedia = pipe(propOr([], 'publicUser'), getMediaFiles)(resources) as ExtractedResource[]
-      const registeredUserMedia = pipe(propOr([], 'registeredUser'), getMediaFiles)(resources) as ExtractedResource[]
+      const isPublicMedia = pipe(propOr([], 'isPublic'), getMediaFiles)(resources) as ExtractedResource[]
+      const isRegisteredMedia = pipe(propOr([], 'isRegistered'), getMediaFiles)(resources) as ExtractedResource[]
       const minter = await getMinter(asset)
 
       // Upload the resources
-      const group = await createGroup(minter?.addressGlobalIdentifier?.nss ?? '')
-      if (publicUserMedia) {
-        const uploadPublicMediaPromises = publicUserMedia.map(
-          async ({ path, mimeType }: { path: string; mimeType: string }) => {
-            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
-            const fileBuffer = await streamToUint8Array(fileToUpload)
-            const cid = await predetermineCID(fileBuffer)
-            const upload = uploadToObjectStorage({
-              Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
-              Key: `${assetCID}/${cid}`,
-              Body: fileBuffer,
-              ContentEncoding: 'base64',
-              ContentDisposition: 'inline',
-            })
+      const group = await createGroup(minter?.addressGlobalIdentifier?.scopedIdentifier ?? '')
+      if (isPublicMedia) {
+        const uploadPublicMediaPromises = isPublicMedia.map(async ({ path, mimeType }: { path: string; mimeType: string }) => {
+          const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+          const fileBuffer = await streamToUint8Array(fileToUpload)
+          const cid = await predetermineCID(fileBuffer)
+          const upload = uploadToObjectStorage({
+            Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
+            Key: `${assetCID}/${cid}`,
+            Body: fileBuffer,
+            ContentEncoding: 'base64',
+            ContentDisposition: 'inline',
+          })
 
             await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
             await insertAssetResource({
@@ -202,18 +201,17 @@ export const processAssetUpload =
         await Promise.all(uploadPublicMediaPromises)
       }
 
-      if (registeredUserMedia) {
-        const uploadRegisteredUserMediaPromises = registeredUserMedia.map(
-          async ({ path, mimeType }: { path: string; mimeType: string }) => {
-            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
-            const fileBuffer = await streamToUint8Array(fileToUpload)
-            const cid = await predetermineCID(fileBuffer)
-            const upload = uploadToObjectStorage({
-              Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
-              Key: `${assetCID}/${cid}`,
-              Body: fileBuffer,
-              ContentEncoding: 'base64',
-            })
+      if (isRegisteredMedia) {
+        const uploadRegisteredUserMediaPromises = isRegisteredMedia.map(async ({ path, mimeType }: { path: string; mimeType: string }) => {
+          const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+          const fileBuffer = await streamToUint8Array(fileToUpload)
+          const cid = await predetermineCID(fileBuffer)
+          const upload = uploadToObjectStorage({
+            Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+            Key: `${assetCID}/${cid}`,
+            Body: fileBuffer,
+            ContentEncoding: 'base64',
+          })
 
             await insertAssetResource({
               assetId: assetCID,
@@ -230,14 +228,14 @@ export const processAssetUpload =
         await Promise.all(uploadRegisteredUserMediaPromises)
       }
 
-      const publicUserMediaWithCids = await addCIDs(uploadedFile, publicUserMedia)
+      const isPublicMediaWithCids = await addCIDs(uploadedFile, isPublicMedia)
       const modifiedManifest = createModifiedManifest({
         assetCID,
         domainMetadataCID,
-        media: publicUserMediaWithCids,
+        media: isPublicMediaWithCids,
       })(manifest)
       const modifiedManifestCID = await predetermineCID(jsonToUint8Array(modifiedManifest))
-      const coverImage = await getCoverImage(uploadedFile, publicUserMediaWithCids)
+      const coverImage = await getCoverImage(uploadedFile, isPublicMediaWithCids)
 
       const tzip21Metadata = createTzip21Metadata({
         asset: {
@@ -255,7 +253,7 @@ export const processAssetUpload =
           fileSize: modifiedManifest.fileSize as number,
           data: manifest,
         },
-        minter: minter.addressGlobalIdentifier?.nss ?? '',
+        minter: minter.addressGlobalIdentifier?.scopedIdentifier ?? '',
         rights: {
           identifier: pathOr('', MANIFEST_LICENSE)(manifest),
           path: pathOr('', MANIFEST_LICENSE_PATH)(manifest),

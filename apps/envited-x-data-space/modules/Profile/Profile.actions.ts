@@ -1,11 +1,11 @@
 'use server'
 
-import { httpPut } from 'apps/envited-x-data-space/common/http'
 import { revalidatePath } from 'next/cache'
 import { dissoc, isEmpty, omit } from 'ramda'
 import { z } from 'zod'
 
 import { getUniqueFilename, getUploadUrl } from '../../common/aws'
+import { httpPut } from '../../common/http'
 import { log } from '../../common/logger'
 import { updateProfile } from '../../common/serverActions/profiles'
 import { badRequestError, formatError, internalServerErrorError, slugify } from '../../common/utils'

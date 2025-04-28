@@ -9,7 +9,7 @@ export const validateAsset =
   ({
     extractManifest,
     extractDomainMetadata,
-    checkIfAllResourcessInManifestExist,
+    checkIfAllResourcesInManifestExist,
     countAmountOfFilesInZip,
     extractReadme,
     fileToUint8Array,
@@ -20,7 +20,7 @@ export const validateAsset =
       manifest: Manifest,
     ) => Promise<{ conforms: boolean; data: Record<string, unknown>; cid: string }>
     extractReadme: (assetArchive: Uint8Array) => Promise<string | null>
-    checkIfAllResourcessInManifestExist: (
+    checkIfAllResourcesInManifestExist: (
       assetArchive: Uint8Array,
       manifest: Manifest,
     ) => Promise<{ errors: { error: string }[]; amount: number }>
@@ -41,7 +41,7 @@ export const validateAsset =
       }
 
       const { conforms: manifestConforms, data: manifest } = await extractManifest(uploadedAsset)
-      const manifestFiles = await checkIfAllResourcessInManifestExist(uploadedAsset, manifest)
+      const manifestFiles = await checkIfAllResourcesInManifestExist(uploadedAsset, manifest)
 
       if (!isEmpty(manifestFiles.errors)) {
         return {
@@ -80,7 +80,7 @@ export const validateAsset =
     }
   }
 
-export const checkIfAllResourcessInManifestExist =
+export const checkIfAllResourcesInManifestExist =
   ({
     extract,
     read,

@@ -5,6 +5,7 @@ export const ERRORS = {
   FORBIDDEN: 'Forbidden',
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
   NOT_FOUND: 'Not found',
+  ASSET_ID_EXISTS: 'Global identifier already exists',
   ASSET_EXISTS: 'Asset already exists',
   ASSETS_NOT_FOUND: 'Assets not found',
   ASSET_INVALID: 'Asset validation failed',

@@ -46,7 +46,7 @@ export const getMinter = _getMinter({ db, log })
 export const _updateAsset =
   ({ db, log }: { db: Database; log: Log }) =>
   async (
-    newCID: string,
+    newCid: string,
     oldCid: string,
     status: AssetStatus,
     metadata: AssetMetadata | string = '',
@@ -54,7 +54,7 @@ export const _updateAsset =
   ) => {
     try {
       const connection = await db()
-      const [result] = await connection.updateAssetByCID({ metadata, status, cid: newCID, manifest }, oldCid)
+      const [result] = await connection.updateAssetByCID({ metadata, status, cid: newCid, manifest }, oldCid)
 
       return result
     } catch (error: unknown) {

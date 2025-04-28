@@ -70,7 +70,7 @@
       {
         "@type": "manifest:Link",
         "manifest:type": "assetData",
-        "manifest:accessRole": "owner",
+        "manifest:accessRole": "isOwner",
         "manifest:fileMetaData": {
           "manifest:uri": {
             "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/Vehicles/VehicleCatalog.xosc",
@@ -81,7 +81,7 @@
       {
         "@type": "manifest:Link",
         "manifest:type": "assetData",
-        "manifest:accessRole": "owner",
+        "manifest:accessRole": "isOwner",
         "manifest:fileMetaData": {
           "manifest:uri": {
             "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/Pedestrians/PedestrianCatalog.xosc",
@@ -92,7 +92,7 @@
       {
         "@type": "manifest:Link",
         "manifest:type": "assetData",
-        "manifest:accessRole": "owner",
+        "manifest:accessRole": "isOwner",
         "manifest:fileMetaData": {
           "manifest:uri": {
             "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/MiscObjects/MiscObjectCatalog.xosc",
@@ -103,7 +103,7 @@
       {
         "@type": "manifest:Link",
         "manifest:type": "assetData",
-        "manifest:accessRole": "owner",
+        "manifest:accessRole": "isOwner",
         "manifest:fileMetaData": {
           "manifest:uri": {
             "@value": "https://github.com/asam-oss/OSC-ALKS-scenarios/blob/master/Catalogs/Controllers/ControllerCatalog.xosc",
@@ -116,7 +116,7 @@
       {
         "@type": "manifest:Link",
         "manifest:accessRole": {
-          "@value": "owner"
+          "@value": "isOwner"
         },
         "manifest:type": {
           "@value": "assetData"
@@ -137,7 +137,7 @@
     "scenario:trafficSpace": {
       "@type": "manifest:Link",
       "manifest:accessRole": {
-        "@value": "owner"
+        "@value": "isOwner"
       },
       "manifest:type": {
         "@value": "assetData"

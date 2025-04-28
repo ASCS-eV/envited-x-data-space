@@ -42,7 +42,7 @@ export const _getMintParams =
 
     return {
       from: stringifyGlobalIdentifier(from),
-      owner: owner?.nss,
+      owner: owner?.scopedIdentifier,
       contractAddress: process.env.TEZOS_ASSETS_CONTRACT!,
     }
   }

@@ -19,12 +19,15 @@ export const globalIdentifier = pgTable(
     method: text('method').notNull(),
     namespace: text('namespace'),
     chainId: text('chain_id'),
-    nss: text('nss').notNull(),
+    fqdn: text('fqdn'),
+    scopedIdentifier: text('scoped_identifier').notNull(),
     metadata: jsonb('metadata'),
     createdAt: timestamp('created_at'),
     updatedAt: timestamp('updated_at'),
   },
-  table => [unique('composite_identifier_unique').on(table.method, table.namespace, table.chainId, table.nss)],
+  table => [
+    unique('composite_identifier_unique').on(table.method, table.namespace, table.chainId, table.scopedIdentifier),
+  ],
 )
 
 export const user = pgTable('user', {
@@ -268,6 +271,7 @@ export const token = pgTable('token', {
   operationGlobalIdentifierId: uuid('hash_global_identifier_id').references(() => globalIdentifier.id),
   contractGlobalIdentifierId: uuid('contract_global_identifier_id').references(() => globalIdentifier.id),
   minterGlobalIdentifierId: uuid('minter_global_identifier_id').references(() => globalIdentifier.id),
+  webGlobalIdentifierId: uuid('web_global_identifier_id').references(() => globalIdentifier.id),
   tokenId: integer('token_id'),
   name: text('name'),
   description: text('description'),

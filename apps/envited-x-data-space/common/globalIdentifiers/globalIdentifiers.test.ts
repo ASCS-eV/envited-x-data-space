@@ -6,14 +6,14 @@ describe('Global Identifier Utilities', () => {
     method: 'did:pkh',
     namespace: 'exampleNamespace',
     chainId: '1234',
-    nss: 'exampleNSS',
+    scopedIdentifier: 'scopedIdentifier',
   }
 
-  const didPkhString = 'did:pkh:exampleNamespace:1234:exampleNSS'
+  const didPkhString = 'did:pkh:exampleNamespace:1234:scopedIdentifier'
 
   const uuidIdentifier: GlobalIdentifier = {
     method: 'urn:uuid',
-    nss: 'UUID',
+    scopedIdentifier: 'UUID',
   }
 
   const uuidString = 'urn:uuid:UUID'
@@ -44,7 +44,7 @@ describe('Global Identifier Utilities', () => {
 
     it('should handle strings with missing values', () => {
       const result = parseGlobalIdentifier('did:pkh::1234:')
-      expect(result).toEqual({ method: 'did:pkh', namespace: null, chainId: '1234', nss: null })
+      expect(result).toEqual({ method: 'did:pkh', namespace: null, chainId: '1234', scopedIdentifier: null })
     })
 
     it('should handle Tezos DIDs by converting tz namespace to tezos with specific chainId', () => {
@@ -53,9 +53,20 @@ describe('Global Identifier Utilities', () => {
         method: 'did:pkh',
         namespace: 'tezos',
         chainId: 'NetXnHfVqm9iesp',
-        nss: 'exampleAddress',
+        scopedIdentifier: 'exampleAddress',
       }
       const result = parseGlobalIdentifier(tezosDid)
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle web DIDs by converting id to a specific scopedIdentifier', () => {
+      const webDid = 'did:web:registry.gaia-x.eu:environment-model:xwsY5p3Z4Jjvf7XGp2PDnDFt36AlVhYnahHU'
+      const expected: GlobalIdentifier = {
+        method: 'did:web',
+        fqdn: 'registry.gaia-x.eu',
+        scopedIdentifier: 'environment-model:xwsY5p3Z4Jjvf7XGp2PDnDFt36AlVhYnahHU',
+      }
+      const result = parseGlobalIdentifier(webDid)
       expect(result).toEqual(expected)
     })
   })

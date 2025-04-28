@@ -44,6 +44,7 @@ export const insertTokenTx =
     operationGlobalIdentifierId,
     contractGlobalIdentifierId,
     minterGlobalIdentifierId,
+    webGlobalIdentifierId,
     tokenId,
     name,
     description,
@@ -65,6 +66,7 @@ export const insertTokenTx =
     operationGlobalIdentifierId: string
     contractGlobalIdentifierId: string
     minterGlobalIdentifierId: string
+    webGlobalIdentifierId: string
     tokenId: number
     name: string
     description: string
@@ -89,6 +91,7 @@ export const insertTokenTx =
         operationGlobalIdentifierId,
         contractGlobalIdentifierId,
         minterGlobalIdentifierId,
+        webGlobalIdentifierId,
         tokenId,
         name,
         description,
@@ -153,6 +156,7 @@ export const insertToken =
           hash,
           contract,
           minter,
+          webGloblalIdentifier,
           tokenId,
           name,
           description,
@@ -177,10 +181,12 @@ export const insertToken =
         const [operationGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(hash))
         const [contractGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(contract))
         const [minterGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(minter))
+        const [webGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(webGloblalIdentifier))
         const [insertedToken] = await insertTokenTx(tx)({
           operationGlobalIdentifierId: operationGuid.id,
           contractGlobalIdentifierId: contractGuid.id,
           minterGlobalIdentifierId: minterGuid.id,
+          webGlobalIdentifierId: webGuid.id,
           tokenId,
           name,
           description,
@@ -235,12 +241,47 @@ export const updateAsset =
 
 export const getGlobalIdentifierByFullResourceName =
   ({ database: db }: { database: DatabaseConnection }) =>
-  async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
+  async ({
+    method,
+    namespace,
+    chainId,
+    scopedIdentifier,
+  }: {
+    method: string
+    namespace: string
+    chainId: string
+    scopedIdentifier: string
+  }) =>
     db.query.globalIdentifier.findFirst({
       where: and(
         eq(schema.globalIdentifier.method, method),
         eq(schema.globalIdentifier.namespace, namespace),
         eq(schema.globalIdentifier.chainId, chainId),
-        eq(schema.globalIdentifier.nss, nss),
+        eq(schema.globalIdentifier.scopedIdentifier, scopedIdentifier),
       ),
+    })
+
+export const insertGlobalIdentifier =
+  ({ database: db }: { database: DatabaseConnection }) =>
+  async ({
+    method,
+    namespace,
+    chainId,
+    fqdn,
+    scopedIdentifier,
+  }: {
+    method: string
+    namespace?: string | null
+    chainId?: string | null
+    fqdn?: string | null
+    scopedIdentifier: string
+  }) =>
+    db.insert(schema.globalIdentifier).values({
+      method,
+      namespace,
+      chainId,
+      fqdn,
+      scopedIdentifier,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     })

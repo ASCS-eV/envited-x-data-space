@@ -3,7 +3,7 @@ import { Manifest } from './types'
 import * as SUT from './validation'
 
 describe('common/asset/validation', () => {
-  describe('checkIfAllResourcessInManifestExist', () => {
+  describe('checkIfAllResourcesInManifestExist', () => {
     it('should return empty errors when all resources exist', async () => {
       // Setup stubs
       const extractStub = jest.fn().mockResolvedValue('file-content')
@@ -11,7 +11,7 @@ describe('common/asset/validation', () => {
       const readStub = jest.fn().mockResolvedValue('file-content')
 
       // Execute function with stubbed dependencies
-      const result = await SUT.checkIfAllResourcessInManifestExist({
+      const result = await SUT.checkIfAllResourcesInManifestExist({
         extract: extractStub,
         read: readStub,
       })(new Uint8Array([1, 2, 3]), {} as Manifest)
@@ -88,7 +88,7 @@ describe('common/asset/validation', () => {
       const readStub = jest.fn().mockResolvedValue('file1-content')
 
       // Execute function with stubbed dependencies
-      const result = await SUT.checkIfAllResourcessInManifestExist({
+      const result = await SUT.checkIfAllResourcesInManifestExist({
         extract: extractStub,
         read: readStub,
       })(new Uint8Array([1, 2]), manifest as any)
@@ -107,7 +107,7 @@ describe('common/asset/validation', () => {
     // Setup stubs for each test
     let extractManifestStub: jest.Mock
     let extractDomainMetadataStub: jest.Mock
-    let checkIfAllResourcessInManifestExistStub: jest.Mock
+    let checkIfAllResourcesInManifestExistStub: jest.Mock
     let countAmountOfFilesInZipStub: jest.Mock
     let extractReadmeStub: jest.Mock
     let fileToUint8ArrayStub: jest.Mock
@@ -116,7 +116,7 @@ describe('common/asset/validation', () => {
       // Create fresh stubs for each test
       extractManifestStub = jest.fn()
       extractDomainMetadataStub = jest.fn()
-      checkIfAllResourcessInManifestExistStub = jest.fn()
+      checkIfAllResourcesInManifestExistStub = jest.fn()
       countAmountOfFilesInZipStub = jest.fn()
       extractReadmeStub = jest.fn()
       fileToUint8ArrayStub = jest.fn().mockResolvedValue(new Uint8Array([1, 2, 3]))
@@ -129,7 +129,7 @@ describe('common/asset/validation', () => {
         conforms: true,
         data: { id: 'test-manifest' },
       })
-      checkIfAllResourcessInManifestExistStub.mockResolvedValue({
+      checkIfAllResourcesInManifestExistStub.mockResolvedValue({
         errors: [],
         amount: 5,
       })
@@ -143,7 +143,7 @@ describe('common/asset/validation', () => {
       const validateAssetFn = SUT.validateAsset({
         extractManifest: extractManifestStub,
         extractDomainMetadata: extractDomainMetadataStub,
-        checkIfAllResourcessInManifestExist: checkIfAllResourcessInManifestExistStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
         countAmountOfFilesInZip: countAmountOfFilesInZipStub,
         extractReadme: extractReadmeStub,
         fileToUint8Array: fileToUint8ArrayStub,
@@ -170,7 +170,7 @@ describe('common/asset/validation', () => {
       const validateAssetFn = SUT.validateAsset({
         extractManifest: extractManifestStub,
         extractDomainMetadata: extractDomainMetadataStub,
-        checkIfAllResourcessInManifestExist: checkIfAllResourcessInManifestExistStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
         countAmountOfFilesInZip: countAmountOfFilesInZipStub,
         extractReadme: extractReadmeStub,
         fileToUint8Array: fileToUint8ArrayStub,
@@ -194,7 +194,7 @@ describe('common/asset/validation', () => {
         conforms: true,
         data: { id: 'test-manifest' },
       })
-      checkIfAllResourcessInManifestExistStub.mockResolvedValue({
+      checkIfAllResourcesInManifestExistStub.mockResolvedValue({
         errors: [{ error: 'missing.txt' }],
         amount: 5,
       })
@@ -203,7 +203,7 @@ describe('common/asset/validation', () => {
       const validateAssetFn = SUT.validateAsset({
         extractManifest: extractManifestStub,
         extractDomainMetadata: extractDomainMetadataStub,
-        checkIfAllResourcessInManifestExist: checkIfAllResourcessInManifestExistStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
         countAmountOfFilesInZip: countAmountOfFilesInZipStub,
         extractReadme: extractReadmeStub,
         fileToUint8Array: fileToUint8ArrayStub,
@@ -224,7 +224,7 @@ describe('common/asset/validation', () => {
         conforms: true,
         data: { id: 'test-manifest' },
       })
-      checkIfAllResourcessInManifestExistStub.mockResolvedValue({
+      checkIfAllResourcesInManifestExistStub.mockResolvedValue({
         errors: [],
         amount: 5,
       })
@@ -234,7 +234,7 @@ describe('common/asset/validation', () => {
       const validateAssetFn = SUT.validateAsset({
         extractManifest: extractManifestStub,
         extractDomainMetadata: extractDomainMetadataStub,
-        checkIfAllResourcessInManifestExist: checkIfAllResourcessInManifestExistStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
         countAmountOfFilesInZip: countAmountOfFilesInZipStub,
         extractReadme: extractReadmeStub,
         fileToUint8Array: fileToUint8ArrayStub,
@@ -256,7 +256,7 @@ describe('common/asset/validation', () => {
       const validateAssetFn = SUT.validateAsset({
         extractManifest: extractManifestStub,
         extractDomainMetadata: extractDomainMetadataStub,
-        checkIfAllResourcessInManifestExist: checkIfAllResourcessInManifestExistStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
         countAmountOfFilesInZip: countAmountOfFilesInZipStub,
         extractReadme: extractReadmeStub,
         fileToUint8Array: fileToUint8ArrayStub,

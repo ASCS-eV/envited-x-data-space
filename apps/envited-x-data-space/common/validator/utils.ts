@@ -1,50 +1,96 @@
-import { fetchAssetDataByCID } from '../api'
+import { any, filter, groupBy, isEmpty, isNotNil, path, pathEq, pipe, propEq, propOr } from 'ramda'
+
+import { fetchAssetDataByCID, fetchGlobalIdentifierByScopedIdentifier } from '../api'
+import { validateAsset } from '../asset'
+import { MANIFEST_LINK_MIME_TYPE } from '../asset/constants'
+import { Manifest, ManifestMetadataLink } from '../asset/types'
 import { predetermineCID } from '../asset/utils'
-import { validateAsset } from '../asset/validation'
 import { ERRORS } from '../constants'
+import { FEATURE_FLAGS } from '../featureFlags'
+import { parseGlobalIdentifier } from '../globalIdentifiers'
+import { Environment } from '../types'
+
+export const getReferencedAssets = (manifest: Manifest) =>
+  pipe(
+    propOr([], 'manifest:hasReferencedArtifacts'),
+    filter((x: any) => path(['manifest:iri', '@id'], x) && pathEq('application/zip', MANIFEST_LINK_MIME_TYPE, x)),
+  )(manifest)
 
 export const _validateAsset =
   ({
     predetermineCID,
     fetchAssetDataByCID,
     validateAsset,
+    fetchGlobalIdentifierByScopedIdentifier,
   }: {
     predetermineCID: (array: Uint8Array) => Promise<string>
     fetchAssetDataByCID: (cid: string) => Promise<any>
-    validateAsset: (file: File) => Promise<
-      | {
-          isValid: boolean
-          data: {
-            manifest?: undefined
-            domainMetadata?: undefined
-          }
-          error: string
-        }
-      | {
-          isValid: boolean
-          data: {
-            manifest: any
-            domainMetadata: any
-          }
-          error?: undefined
-        }
-    >
+    validateAsset: (file: File) => Promise<{
+      isValid: boolean
+      data: {
+        domainMetadata?: Record<string, unknown>
+        manifest?: Manifest
+      }
+      error?: string
+    }>
+    fetchGlobalIdentifierByScopedIdentifier: (scopedIdentifier: string) => Promise<any>
   }) =>
   async (file: File) => {
     try {
-      const arrayBuffer = Buffer.from(await file.arrayBuffer())
-      const cid = await predetermineCID(arrayBuffer)
-      const asset = await fetchAssetDataByCID(cid)
+      if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueAsset) {
+        const arrayBuffer = Buffer.from(await file.arrayBuffer())
+        const cid = await predetermineCID(arrayBuffer)
+        const asset = await fetchAssetDataByCID(cid)
 
-      // if (!isEmpty(asset)) {
-      //   return {
-      //     isValid: false,
-      //     data: {},
-      //     error: ERRORS.ASSET_EXISTS,
-      //   }
-      // }
+        if (!isEmpty(asset)) {
+          return {
+            isValid: false,
+            data: {},
+            error: ERRORS.ASSET_EXISTS,
+          }
+        }
+      }
 
-      return validateAsset(file)
+      const validation = await validateAsset(file)
+
+      if (!validation.isValid) {
+        return validation
+      }
+
+      if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueGlobalIdentifier) {
+        const { scopedIdentifier } = parseGlobalIdentifier(validation.data.domainMetadata?.['@id'] as string)
+        const globalIdentifier = await fetchGlobalIdentifierByScopedIdentifier(scopedIdentifier)
+
+        if (isNotNil(globalIdentifier)) {
+          return {
+            isValid: false,
+            data: {},
+            error: ERRORS.ASSET_ID_EXISTS,
+          }
+        }
+      }
+
+      const referencedAssets = getReferencedAssets(validation.data.manifest as Manifest)
+      const results = await Promise.all(
+        referencedAssets.map(async (manifestLink: ManifestMetadataLink) => {
+          const { scopedIdentifier } = parseGlobalIdentifier(manifestLink['manifest:iri']['@id'])
+          const checkIfReferencedArtifactsExists = await fetchGlobalIdentifierByScopedIdentifier(scopedIdentifier)
+
+          return {
+            id: manifestLink['manifest:iri']['@id'],
+            exists: isNotNil(checkIfReferencedArtifactsExists),
+          }
+        }),
+      )
+
+      return {
+        ...validation,
+        isValid: !any(propEq(false, 'exists'))(results),
+        data: {
+          ...validation.data,
+          referencedAssets: groupBy(asset => String(asset.exists), results),
+        },
+      }
     } catch (error) {
       console.log(error)
       return { isValid: false, data: {}, error: ERRORS.ASSET_FILE_NOT_FOUND }
@@ -54,5 +100,6 @@ export const _validateAsset =
 export const validate = _validateAsset({
   predetermineCID,
   fetchAssetDataByCID,
+  fetchGlobalIdentifierByScopedIdentifier,
   validateAsset,
 })

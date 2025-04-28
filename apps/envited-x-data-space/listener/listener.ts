@@ -1,7 +1,8 @@
 import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 import { GetCIDResponse } from 'pinata-web3'
-import { replace } from 'ramda'
+import { pathOr, replace } from 'ramda'
 
+import { parseGlobalIdentifier } from '../common/globalIdentifiers'
 import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
@@ -88,7 +89,7 @@ export const listenToAssetContract =
           method: 'urn:contract',
           namespace: 'tezos',
           chainId: process.env.TEZOS_CHAIN_ID!,
-          nss: process.env.TEZOS_ASSETS_CONTRACT!,
+          scopedIdentifier: process.env.TEZOS_ASSETS_CONTRACT!,
         })
 
         if (contractGuid) {
@@ -118,6 +119,7 @@ export const listenToAssetContract =
           contract: `urn:contract:tezos:${process.env.TEZOS_CHAIN_ID!}:${destination}`,
           minter: `did:pkh:tezos:${process.env.TEZOS_CHAIN_ID!}:${creator}`,
           tokenId,
+          webGlobalIdentifier: pathOr('', ['data', '@id'])(domainMetadata),
           name: tokenMetadata?.name,
           description: tokenMetadata?.description,
           creators: tokenMetadata?.creators,

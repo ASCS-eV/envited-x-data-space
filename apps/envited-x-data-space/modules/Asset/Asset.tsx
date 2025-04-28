@@ -9,7 +9,7 @@ import { FC, Fragment, useEffect, useState } from 'react'
 import { MANIFEST_LINK_FILENAME, MANIFEST_LINK_FILE_PATH } from '../../common/asset/constants'
 import displayTrees from '../../common/asset/displayTrees'
 import { ManifestLink } from '../../common/asset/types'
-import { extractDomainMetadata, extractManifestReferencedArtifacts } from '../../common/asset/utils'
+import { extractDomainMetadata, extractReferencedArtifactsFromManifest } from '../../common/asset/utils'
 import { useTranslation } from '../../common/i18n'
 import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
 import {
@@ -37,7 +37,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
   const { t } = useTranslation('Asset')
   const [data, setData] = useState<Record<string, any>>({})
 
-  const referencedArtifacts = extractManifestReferencedArtifacts(token.manifest) as [] | ManifestLink[]
+  const referencedArtifacts = extractReferencedArtifactsFromManifest(token.manifest) as [] | ManifestLink[]
 
   useEffect(() => {
     const assetType = getAssetType(token.domainMetadata)

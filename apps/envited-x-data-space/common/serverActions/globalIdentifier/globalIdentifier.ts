@@ -8,12 +8,12 @@ import { Log, log } from '../../logger'
 import { Session } from '../../types'
 import { badRequestError, formatError, internalServerErrorError, unauthorizedError } from '../../utils'
 
-export const _getGlobalIdentifierById =
+export const _getGlobalIdentifierByDid =
   ({ db, getServerSession, log }: { db: Database; getServerSession: () => Promise<Session | null>; log: Log }) =>
-  async (id: string) => {
+  async (did: string) => {
     try {
-      if (isNil(id) || isEmpty(id)) {
-        throw badRequestError({ resource: 'globalIdentifier', resourceId: id, message: 'Missing ID' })
+      if (isNil(did) || isEmpty(did)) {
+        throw badRequestError({ resource: 'globalIdentifier', resourceId: did, message: 'Missing ID' })
       }
 
       const session = await getServerSession()
@@ -22,7 +22,7 @@ export const _getGlobalIdentifierById =
         throw unauthorizedError({ resource: 'globalIdentifier' })
       }
 
-      const { scopedIdentifier } = parseGlobalIdentifier(id)
+      const { scopedIdentifier } = parseGlobalIdentifier(did)
 
       const connection = await db()
       const [globalIdentifier] = await connection.getGlobalIdentifierByScopedIdentifier(scopedIdentifier)
@@ -34,4 +34,4 @@ export const _getGlobalIdentifierById =
     }
   }
 
-export const getGlobalIdentifierById = _getGlobalIdentifierById({ db, getServerSession, log })
+export const getGlobalIdentifierByDid = _getGlobalIdentifierByDid({ db, getServerSession, log })

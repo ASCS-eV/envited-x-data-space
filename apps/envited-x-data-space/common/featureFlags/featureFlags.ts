@@ -1,5 +1,3 @@
-import { unique } from 'drizzle-orm/mysql-core'
-
 export const FEATURE_FLAGS = {
   development: {
     oidc: false,

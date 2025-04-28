@@ -8,7 +8,7 @@ import { getAssetUploadUrl } from '../../common/aws'
 import { ERRORS } from '../../common/constants'
 import { FEATURE_FLAGS } from '../../common/featureFlags'
 import { log } from '../../common/logger'
-import { getAssetByCID, getGlobalIdentifierById, insertAsset } from '../../common/serverActions'
+import { getAssetByCID, insertAsset } from '../../common/serverActions'
 import { Environment } from '../../common/types'
 import { badRequestError, formatError, internalServerErrorError, unauthorizedError } from '../../common/utils'
 

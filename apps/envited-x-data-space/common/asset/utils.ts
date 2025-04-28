@@ -300,7 +300,7 @@ export const extractGeneralInformationFromMetadata = (type: string) =>
     version: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:version`, '@value']),
   })
 
-export const extractManifestReferencedArtifacts = prop('manifest:hasReferencedArtifacts')
+export const extractReferencedArtifactsFromManifest = prop('manifest:hasReferencedArtifacts')
 
 export const extractDomainMetadata = (jsonData: Record<string, any>) => {
   // Find any hasDataResource and hasDataResourceExtension properties

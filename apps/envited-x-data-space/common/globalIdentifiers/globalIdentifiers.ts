@@ -43,7 +43,7 @@ export const parseGlobalIdentifier = (identifier: string): GlobalIdentifier => {
 
     if (method === 'did:web') {
       result.fqdn = parts[2]
-      result.scopedIdentifier = join(':', drop(3, parts)) //(parts[3] + ':' + parts[4]) // parts[3] || undefined
+      result.scopedIdentifier = join(':', drop(3, parts))
       return result as GlobalIdentifier
     }
 

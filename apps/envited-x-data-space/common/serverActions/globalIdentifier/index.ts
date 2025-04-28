@@ -1,1 +1,1 @@
-export { getGlobalIdentifierById } from './globalIdentifier'
+export { getGlobalIdentifierByDid } from './globalIdentifier'

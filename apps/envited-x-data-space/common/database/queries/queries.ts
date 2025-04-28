@@ -25,6 +25,7 @@ import { fetchTables } from './common'
 import {
   getGlobalIdentifierByFullResourceName,
   getGlobalIdentifierById,
+  getGlobalIdentifierByScopedIdentifier,
   insertGlobalIdentifier,
 } from './globalIdentifiers'
 import { getIssuerByGlobalIdentifier, getIssuerById } from './issuers'
@@ -97,6 +98,7 @@ const queries = {
   getTokenById,
   getTokensByIssuerId,
   getGlobalIdentifierById,
+  getGlobalIdentifierByScopedIdentifier,
   getGlobalIdentifierByFullResourceName,
   getUserByDid,
   getUserRolesByDid,

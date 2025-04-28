@@ -1,4 +1,4 @@
-import { prop, reduce, split } from 'ramda'
+import { drop, join, prop, reduce, split } from 'ramda'
 
 import { GlobalIdentifier } from '../types'
 import { IdentifierMethod } from '../types/types'
@@ -37,7 +37,13 @@ export const parseGlobalIdentifier = (identifier: string): GlobalIdentifier => {
     if (method === 'did:pkh' && parts[2] === 'tz') {
       result.namespace = 'tezos'
       result.chainId = process.env.TEZOS_CHAIN_ID || 'NetXnHfVqm9iesp'
-      result.nss = parts[3] || undefined
+      result.scopedIdentifier = parts[3] || undefined
+      return result as GlobalIdentifier
+    }
+
+    if (method === 'did:web') {
+      result.fqdn = parts[2]
+      result.scopedIdentifier = join(':', drop(3, parts))
       return result as GlobalIdentifier
     }
 

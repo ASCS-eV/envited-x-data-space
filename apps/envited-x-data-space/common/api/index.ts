@@ -1,1 +1,1 @@
-export { fetchAssetDataByCID } from './api'
+export { fetchAssetDataByCID, fetchGlobalIdentifierByScopedIdentifier } from './api'

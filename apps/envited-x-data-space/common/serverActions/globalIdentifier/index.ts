@@ -1,0 +1,1 @@
+export { getGlobalIdentifierByDid } from './globalIdentifier'

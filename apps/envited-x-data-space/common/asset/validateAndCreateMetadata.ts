@@ -325,7 +325,7 @@ export const _validateAndCreateMetadata =
         display: displayObject,
         domainMetadata: domainMetadataObject,
         manifest: manifestObject,
-        minter: minterGuid.nss,
+        minter: minterGuid.scopedIdentifier,
         rights: rightsObject,
       })
 

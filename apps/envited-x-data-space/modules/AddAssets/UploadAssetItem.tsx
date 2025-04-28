@@ -1,8 +1,14 @@
 'use client'
 
 import { LoadingIndicator, ProgressBar, bytesToMegaBytes } from '@envited-x-data-space/design-system'
-import { CheckCircleIcon, ClockIcon, XCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { pathOr, prop, propOr } from 'ramda'
+import {
+  CheckCircleIcon,
+  ClockIcon,
+  ExclamationTriangleIcon,
+  XCircleIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
+import { pathOr, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
@@ -124,13 +130,15 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, va
     }
   }, [status])
 
+  console.log('TEST asset', asset)
+
   return match(status)
     .with(UploadStatus.idle, () => (
-      <div className="border-gray-300 hover:border-blue hover:bg-gray-100 relative block w-full cursor-pointer rounded-lg border bg-white px-6 py-4 focus:outline-none sm:flex sm:justify-between items-center">
+      <div className="border-gray-300 hover:border-blue hover:bg-gray-100 relative block w-full cursor-pointer rounded-lg border bg-white px-6 py-4 focus:outline-none sm:flex sm:justify-between items-start">
         <span className="flex items-center grow">
           <span className="flex flex-col text-sm gap-2.5">
             <span className="font-medium text-gray-900">{file.name}</span>
-            <span className="text-gray-500 flex items-center text-xs">
+            <span className="text-gray-500 flex items-center gap-2 text-xs">
               {validating ? (
                 <span className="block sm:inline">
                   <span className="flex gap-x-1.5 items-center">
@@ -152,14 +160,17 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, va
                       )}
                     </span>
                   </span>
-                  <span className="hidden sm:mx-1 sm:inline font-bold" aria-hidden="true">
-                    &middot;
-                  </span>{' '}
-                  <span className="block sm:inline">
-                    {prop('isValid')(asset)
-                      ? pathOr('', ['data', 'domainMetadata', '@type'])(asset)
-                      : prop('error')(asset)}
-                  </span>{' '}
+                  {asset.data?.referencedAssets['false']?.length > 0 && (
+                    <>
+                      <span className="hidden sm:mx-1 sm:inline font-bold" aria-hidden="true">
+                        &middot;
+                      </span>{' '}
+                      <span className="flex gap-x-1.5 items-center text-xs">
+                        <ExclamationTriangleIcon className="text-orange-400 w-[18px] h-[18px]" />{' '}
+                        {asset.data?.referencedAssets['false']?.length} referenced asset(s) missing
+                      </span>
+                    </>
+                  )}
                 </>
               )}
             </span>

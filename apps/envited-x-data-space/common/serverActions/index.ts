@@ -9,6 +9,7 @@ export {
   getMintParams,
 } from './assets'
 export { getBusinessCategories } from './businessCategories'
+export { getGlobalIdentifierByDid } from './globalIdentifier'
 export { updateProfile, getProfile, getProfileBySlug, getPublishedProfiles } from './profiles'
 export {
   getActiveUsersByIssuerId,

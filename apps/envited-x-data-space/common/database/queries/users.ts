@@ -62,7 +62,17 @@ export const getUserRolesById = (db: DatabaseConnection) => async (id: string) =
 
 export const getUserRolesByDid =
   (db: DatabaseConnection) =>
-  async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
+  async ({
+    method,
+    namespace,
+    chainId,
+    scopedIdentifier,
+  }: {
+    method: string
+    namespace: string
+    chainId: string
+    scopedIdentifier: string
+  }) =>
     db
       .select()
       .from(globalIdentifier)
@@ -71,7 +81,7 @@ export const getUserRolesByDid =
           eq(globalIdentifier.method, method),
           eq(globalIdentifier.namespace, namespace),
           eq(globalIdentifier.chainId, chainId),
-          eq(globalIdentifier.nss, nss),
+          eq(globalIdentifier.scopedIdentifier, scopedIdentifier),
         ),
       )
       .leftJoin(user, eq(user.addressGlobalIdentifierId, globalIdentifier.id))
@@ -79,7 +89,17 @@ export const getUserRolesByDid =
 
 export const getUserByDid =
   (db: DatabaseConnection) =>
-  async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
+  async ({
+    method,
+    namespace,
+    chainId,
+    scopedIdentifier,
+  }: {
+    method: string
+    namespace: string
+    chainId: string
+    scopedIdentifier: string
+  }) =>
     db.query.user.findFirst({
       where: (fields, { eq }) =>
         eq(
@@ -92,7 +112,7 @@ export const getUserByDid =
                 eq(globalIdentifier.method, method),
                 eq(globalIdentifier.namespace, namespace),
                 eq(globalIdentifier.chainId, chainId),
-                eq(globalIdentifier.nss, nss),
+                eq(globalIdentifier.scopedIdentifier, scopedIdentifier),
               ),
             ),
         ),
@@ -324,19 +344,19 @@ export const _txn =
       method,
       namespace,
       chainId,
-      nss,
+      scopedIdentifier,
     }: {
       method: string
       namespace?: string | null
       chainId?: string | null
-      nss: string
+      scopedIdentifier: string
     }) => Promise<
       {
         id: string
         method: string
         namespace?: string | null
         chainId?: string | null
-        nss: string
+        scopedIdentifier: string
       }[]
     >
   }) =>

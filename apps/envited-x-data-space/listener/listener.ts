@@ -9,7 +9,7 @@ import { getTokenMetadata } from './tokenMetadata'
 import { extractDomainMetadataUri, extractKeyValuePairs, extractManifestUri } from './utils'
 
 export const createLocalCopy =
-  ({ uploadFileToS3 }: { uploadFileToS3: any }) =>
+  ({ uploadFileToIPFSToS3 }: { uploadFileToIPFSToS3: any }) =>
   async (cid: string) => {
     try {
       console.log(`Creating local copy for ${cid}`)
@@ -38,7 +38,7 @@ export const createLocalCopy =
         ContentDisposition: 'inline',
       }
 
-      await uploadFileToS3(uploadParams)
+      await uploadFileToIPFSToS3(uploadParams)
       return `${process.env.ASSET_URL}/${cid}`
     } catch (err) {
       console.log(err)

@@ -9,7 +9,7 @@ import { FC, Fragment, useEffect, useState } from 'react'
 import { MANIFEST_LINK_FILENAME, MANIFEST_LINK_FILE_PATH } from '../../common/asset/constants'
 import displayTrees from '../../common/asset/displayTrees'
 import { ManifestLink } from '../../common/asset/types'
-import { extractDomainMetadata, extractReferencedArtifactsFromManifest } from '../../common/asset/utils'
+import { extractReferencedArtifactsFromManifest, transformDomainMetadata } from '../../common/asset/utils'
 import { useTranslation } from '../../common/i18n'
 import { ButtonType, ColorScheme, Profile, Token, TokenAttribute } from '../../common/types'
 import {
@@ -46,7 +46,7 @@ export const Asset: FC<AssetProps> = ({ token: { token } }) => {
 
   useEffect(() => {
     const getSections = async (metadata: Record<string, any>) => {
-      const metadataInSections = extractDomainMetadata(metadata)
+      const metadataInSections = transformDomainMetadata(metadata)
       setData(metadataInSections)
     }
 

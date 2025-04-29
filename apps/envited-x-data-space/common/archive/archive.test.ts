@@ -1,3 +1,5 @@
+import { BlobReader } from '@zip.js/zip.js'
+
 import * as SUT from './archive'
 
 describe('common/archive', () => {
@@ -51,7 +53,48 @@ describe('common/archive', () => {
     })
   })
 
-  describe('countAmountOfFilesInZip', () => {
+  describe('_countAmountOfFilesInZip', () => {
+    it('should count files in a zip archive correctly', async () => {
+      // Setup mocks
+      const mockEntries = [
+        { filename: 'file1.txt' },
+        { filename: 'folder/file2.txt' },
+        { filename: 'folder/file3.json' },
+      ]
+      const mockGetEntries = jest.fn().mockResolvedValue(mockEntries)
+      const mockZipReader = jest.fn().mockImplementation(() => ({
+        getEntries: mockGetEntries,
+        close: jest.fn().mockResolvedValue(undefined),
+      }))
+      // Use a mocked stream for the zip file
+      const zipFile = { mocked: 'stream' }
+
+      // Execute
+      const result = await SUT._countAmountOfFilesInZip({ ZipReader: mockZipReader })(zipFile as any)
+
+      // Verify
+      expect(result).toBe(3)
+      expect(mockZipReader).toHaveBeenCalledWith(new BlobReader(new Blob([zipFile as any])))
+      expect(mockGetEntries).toHaveBeenCalledTimes(1)
+    })
+
+    it('should handle empty zip archives', async () => {
+      // Setup mocks
+      const mockGetEntries = jest.fn().mockResolvedValue([])
+      const mockZipReader = jest.fn().mockImplementation(() => ({
+        getEntries: mockGetEntries,
+        close: jest.fn().mockResolvedValue(undefined),
+      }))
+      // Use a mocked stream for the zip file
+      const zipFile = { mocked: 'stream' }
+
+      // Execute
+      const result = await SUT._countAmountOfFilesInZip({ ZipReader: mockZipReader })(zipFile as any)
+
+      // Verify
+      expect(result).toBe(0)
+    })
+
     it('Should return the amount of files', async () => {
       // when ... we want to read a file from a zip archive
       // then ... it should return the entries from the zip archive
@@ -73,7 +116,7 @@ describe('common/archive', () => {
       expect(result).toEqual(2)
       expect(closeStub).toHaveBeenCalledWith()
       expect(getEntriesStub).toHaveBeenCalledWith()
-      expect(zipReaderStub).toHaveBeenCalledWith({ blob: 'FILE', size: undefined })
+      expect(zipReaderStub).toHaveBeenCalledWith(new BlobReader(new Blob(['FILE'])))
     })
   })
 })

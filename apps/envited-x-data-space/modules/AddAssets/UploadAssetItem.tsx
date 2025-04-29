@@ -12,9 +12,9 @@ import { pathOr, propOr } from 'ramda'
 import { FC, useEffect, useState } from 'react'
 import { match } from 'ts-pattern'
 
+import { validateAsset } from '../../common/asset'
 import { UploadAssetState, UploadStatus } from '../../common/types'
 import { anyEqual } from '../../common/utils'
-import { validateAsset } from '../../common/validator/utils'
 
 interface UploadAssetItemProps {
   idx: number
@@ -116,7 +116,6 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, va
           data: null,
         })
         const data = await validateAsset(file)
-
         setAsset(data)
         validHandler(idx, data)
         setValidating(false)

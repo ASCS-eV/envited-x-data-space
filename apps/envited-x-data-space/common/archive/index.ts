@@ -5,4 +5,5 @@ export {
   extractFromByteArray,
   read,
   readContentFromJsonFile,
+  stream,
 } from './archive'

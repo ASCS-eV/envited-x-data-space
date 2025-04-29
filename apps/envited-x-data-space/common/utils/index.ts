@@ -45,4 +45,7 @@ export {
   removeKeywords,
   kebabToCamelCase,
   handleImageLoadError,
+  extractContentFromStream,
+  streamToUint8Array,
+  fileToUint8Array,
 } from './utils'

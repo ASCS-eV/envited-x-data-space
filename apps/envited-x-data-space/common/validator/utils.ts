@@ -1,15 +1,14 @@
-import { isValid } from 'date-fns'
-import { any, filter, groupBy, isEmpty, isNotNil, path, pathEq, pipe, prop, propEq, propOr } from 'ramda'
+import { any, filter, groupBy, isEmpty, isNotNil, path, pathEq, pipe, propEq, propOr } from 'ramda'
 
 import { fetchAssetDataByCID, fetchGlobalIdentifierByScopedIdentifier } from '../api'
+import { validateAsset } from '../asset'
 import { MANIFEST_LINK_MIME_TYPE } from '../asset/constants'
 import { Manifest, ManifestMetadataLink } from '../asset/types'
-import { createFilename } from '../asset/utils'
+import { predetermineCID } from '../asset/utils'
 import { ERRORS } from '../constants'
 import { FEATURE_FLAGS } from '../featureFlags'
 import { parseGlobalIdentifier } from '../globalIdentifiers'
 import { Environment } from '../types'
-import { validateShaclFile } from './shacl'
 
 export const getReferencedAssets = (manifest: Manifest) =>
   pipe(
@@ -19,38 +18,28 @@ export const getReferencedAssets = (manifest: Manifest) =>
 
 export const _validateAsset =
   ({
-    createFilename,
+    predetermineCID,
     fetchAssetDataByCID,
+    validateAsset,
     fetchGlobalIdentifierByScopedIdentifier,
-    validateShaclFile,
   }: {
-    createFilename: (byteArray: Uint8Array) => Promise<any>
+    predetermineCID: (array: Uint8Array) => Promise<string>
     fetchAssetDataByCID: (cid: string) => Promise<any>
+    validateAsset: (file: File) => Promise<{
+      isValid: boolean
+      data: {
+        domainMetadata?: Record<string, unknown>
+        manifest?: Manifest
+      }
+      error?: string
+    }>
     fetchGlobalIdentifierByScopedIdentifier: (scopedIdentifier: string) => Promise<any>
-    validateShaclFile: (file: File) => Promise<
-      | {
-          isValid: boolean
-          data: {
-            manifest?: undefined
-            domainMetadata?: undefined
-          }
-          error: string
-        }
-      | {
-          isValid: boolean
-          data: {
-            manifest: any
-            domainMetadata: any
-          }
-          error?: undefined
-        }
-    >
   }) =>
   async (file: File) => {
     try {
       if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueAsset) {
         const arrayBuffer = Buffer.from(await file.arrayBuffer())
-        const cid = await createFilename(arrayBuffer)
+        const cid = await predetermineCID(arrayBuffer)
         const asset = await fetchAssetDataByCID(cid)
 
         if (!isEmpty(asset)) {
@@ -62,14 +51,14 @@ export const _validateAsset =
         }
       }
 
-      const validation = await validateShaclFile(file)
+      const validation = await validateAsset(file)
 
       if (!validation.isValid) {
         return validation
       }
 
       if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueGlobalIdentifier) {
-        const { scopedIdentifier } = parseGlobalIdentifier(validation.data.domainMetadata['@id'])
+        const { scopedIdentifier } = parseGlobalIdentifier(validation.data.domainMetadata?.['@id'] as string)
         const globalIdentifier = await fetchGlobalIdentifierByScopedIdentifier(scopedIdentifier)
 
         if (isNotNil(globalIdentifier)) {
@@ -81,7 +70,7 @@ export const _validateAsset =
         }
       }
 
-      const referencedAssets = getReferencedAssets(validation.data.manifest)
+      const referencedAssets = getReferencedAssets(validation.data.manifest as Manifest)
       const results = await Promise.all(
         referencedAssets.map(async (manifestLink: ManifestMetadataLink) => {
           const { scopedIdentifier } = parseGlobalIdentifier(manifestLink['manifest:iri']['@id'])
@@ -108,9 +97,9 @@ export const _validateAsset =
     }
   }
 
-export const validateAsset = _validateAsset({
-  createFilename,
+export const validate = _validateAsset({
+  predetermineCID,
   fetchAssetDataByCID,
   fetchGlobalIdentifierByScopedIdentifier,
-  validateShaclFile,
+  validateAsset,
 })

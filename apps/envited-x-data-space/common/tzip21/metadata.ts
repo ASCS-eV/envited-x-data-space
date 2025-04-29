@@ -1,12 +1,13 @@
 import { append, equals } from 'ramda'
 
+import { ASSET_SPECIFICATION, ASSET_TYPE } from '../asset/constants'
+import { Manifest, MetadataType } from '../asset/types'
+import { extractGeneralInformationFromMetadata, formatManifestLinkPath, hasRemoteLinks } from '../asset/utils'
+import { TOKEN_PUBLISHERS } from '../constants'
 import { TOKEN_TAGS } from '../constants/tokenTags'
 import { extractFilenameFromPath, formatAssetUri, formatIpfsUri } from '../utils'
-import { ASSET_TYPE } from './constants'
-import { Manifest, MetadataType } from './types'
-import { extractGeneralInformationFromMetadata, formatManifestLinkPath, hasManifestThirdPartyLinks } from './utils'
 
-export const createTokenMetadata = ({
+export const createTzip21Metadata = ({
   asset,
   creator,
   display,
@@ -27,7 +28,7 @@ export const createTokenMetadata = ({
   }
   domainMetadata: {
     cid: string
-    data: any
+    data: Record<string, unknown>
   }
   manifest: {
     cid: string
@@ -54,7 +55,7 @@ export const createTokenMetadata = ({
     TOKEN_TAGS.NFT,
     `${formatType} ${version}`,
   ]
-  const isThirdPartyHosted = hasManifestThirdPartyLinks(manifest.data)
+  const isThirdPartyHosted = hasRemoteLinks(manifest.data)
 
   return {
     decimals: 0,
@@ -64,9 +65,9 @@ export const createTokenMetadata = ({
     tags: isThirdPartyHosted ? append(TOKEN_TAGS.THIRD_PARTY_HOSTED)(tags) : tags,
     minter,
     creators: [creator],
-    publishers: ['Automotive Solution Center for Simulation e.V.', 'ENVITED-X Data Space'],
+    publishers: TOKEN_PUBLISHERS,
     date,
-    type: 'EVES-003 https://github.com/ASCS-eV/EVES',
+    type: ASSET_SPECIFICATION,
     rights: rights.identifier,
     rightsUri: equals('LicenseRef-Custom-Commercial-Agreement')(rights.identifier)
       ? `${formatAssetUri(asset.cid)}/${formatManifestLinkPath(rights.path)}`
@@ -99,13 +100,14 @@ export const createTokenMetadata = ({
       },
     ],
     attributes: [
+      // TODO: Add ontology metadata
       {
-        name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
-        value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
+        name: `de.gaiax4plcaad.ontology-management-base.${ASSET_TYPE[type]}.ontology`,
+        value: `https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/${ASSET_TYPE[type]}/`,
         type: 'uri',
       },
       {
-        name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
+        name: `de.gaiax4plcaad.ontology-management-base.${ASSET_TYPE[type]}.metadata`,
         value: formatIpfsUri(domainMetadata.cid),
         type: 'application/json',
       },

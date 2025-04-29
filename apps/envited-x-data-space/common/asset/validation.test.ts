@@ -1,0 +1,276 @@
+import { ERRORS } from '../constants'
+import { Manifest } from './types'
+import * as SUT from './validation'
+
+describe('common/asset/validation', () => {
+  describe('checkIfAllResourcesInManifestExist', () => {
+    it('should return empty errors when all resources exist', async () => {
+      // Setup stubs
+      const extractStub = jest.fn().mockResolvedValue('file-content')
+      // Create stub for read
+      const readStub = jest.fn().mockResolvedValue('file-content')
+
+      // Execute function with stubbed dependencies
+      const result = await SUT.checkIfAllResourcesInManifestExist({
+        extract: extractStub,
+        read: readStub,
+      })(new Uint8Array([1, 2, 3]), {} as Manifest)
+
+      // Verify
+      expect(result).toEqual({
+        errors: [],
+        amount: 3,
+      })
+      expect(extractStub).toHaveBeenCalledTimes(3)
+      expect(readStub).toHaveBeenCalledTimes(3)
+    })
+
+    it('should report errors for missing resources', async () => {
+      // Construct a valid manifest with two artifact links
+      const manifest = {
+        '@context': {},
+        '@id': 'id',
+        '@type': 'type',
+        'manifest:hasManifestReference': {
+          '@type': 'refType',
+          'manifest:hasAccessRole': { '@type': 'roleType', '@id': 'envited-x:isOwner' },
+          'manifest:hasCategory': { '@type': 'catType', '@id': 'envited-x:isDocumentation' },
+          'manifest:hasFileMetadata': {
+            '@type': 'metaType',
+            'manifest:filePath': { '@value': 'file1.json', '@type': 'string' },
+            'manifest:mimeType': { '@value': 'application/json', '@type': 'string' },
+          },
+        },
+        'manifest:hasLicense': {
+          '@type': 'licenseType',
+          'gx:license': { '@value': 'MIT' },
+          'manifest:licenseData': {
+            '@type': 'licenseDataType',
+            'manifest:hasAccessRole': { '@type': 'roleType', '@id': 'envited-x:isOwner' },
+            'manifest:hasCategory': { '@type': 'catType', '@id': 'envited-x:isLicense' },
+            'manifest:hasFileMetadata': {
+              '@type': 'metaType',
+              'manifest:filePath': { '@value': 'missing-file.txt', '@type': 'string' },
+              'manifest:mimeType': { '@value': 'text/plain', '@type': 'string' },
+            },
+          },
+        },
+        'manifest:hasArtifacts': [
+          {
+            '@type': 'artifactType',
+            'manifest:hasAccessRole': { '@type': 'roleType', '@id': 'envited-x:isOwner' },
+            'manifest:hasCategory': { '@type': 'catType', '@id': 'envited-x:isDocumentation' },
+            'manifest:hasFileMetadata': {
+              '@type': 'metaType',
+              'manifest:filePath': { '@value': 'file1.json', '@type': 'string' },
+              'manifest:mimeType': { '@value': 'application/json', '@type': 'string' },
+            },
+          },
+          {
+            '@type': 'artifactType',
+            'manifest:hasAccessRole': { '@type': 'roleType', '@id': 'envited-x:isOwner' },
+            'manifest:hasCategory': { '@type': 'catType', '@id': 'envited-x:isDocumentation' },
+            'manifest:hasFileMetadata': {
+              '@type': 'metaType',
+              'manifest:filePath': { '@value': 'missing-file.txt', '@type': 'string' },
+              'manifest:mimeType': { '@value': 'text/plain', '@type': 'string' },
+            },
+          },
+        ],
+        'manifest:hasReferencedArtifacts': [],
+      }
+
+      // Setup stubs
+      const extractStub = jest.fn()
+      extractStub.mockResolvedValueOnce('file1-content')
+      extractStub.mockRejectedValueOnce(new Error('Not found'))
+      // Create stub for read
+      const readStub = jest.fn().mockResolvedValue('file1-content')
+
+      // Execute function with stubbed dependencies
+      const result = await SUT.checkIfAllResourcesInManifestExist({
+        extract: extractStub,
+        read: readStub,
+      })(new Uint8Array([1, 2]), manifest as any)
+
+      // Verify
+      expect(result).toEqual({
+        errors: [{ error: 'missing-file.txt' }],
+        amount: 4,
+      })
+      expect(extractStub).toHaveBeenCalledTimes(4)
+      expect(readStub).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('validateAsset', () => {
+    // Setup stubs for each test
+    let extractManifestStub: jest.Mock
+    let extractDomainMetadataStub: jest.Mock
+    let checkIfAllResourcesInManifestExistStub: jest.Mock
+    let countAmountOfFilesInZipStub: jest.Mock
+    let extractReadmeStub: jest.Mock
+    let fileToUint8ArrayStub: jest.Mock
+
+    beforeEach(() => {
+      // Create fresh stubs for each test
+      extractManifestStub = jest.fn()
+      extractDomainMetadataStub = jest.fn()
+      checkIfAllResourcesInManifestExistStub = jest.fn()
+      countAmountOfFilesInZipStub = jest.fn()
+      extractReadmeStub = jest.fn()
+      fileToUint8ArrayStub = jest.fn().mockResolvedValue(new Uint8Array([1, 2, 3]))
+    })
+
+    it('should validate a complete and valid asset', async () => {
+      // Setup stubs
+      extractReadmeStub.mockResolvedValue('# Readme content')
+      extractManifestStub.mockResolvedValue({
+        conforms: true,
+        data: { id: 'test-manifest' },
+      })
+      checkIfAllResourcesInManifestExistStub.mockResolvedValue({
+        errors: [],
+        amount: 5,
+      })
+      countAmountOfFilesInZipStub.mockResolvedValue(5)
+      extractDomainMetadataStub.mockResolvedValue({
+        conforms: true,
+        data: { name: 'Test Asset' },
+      })
+
+      // Create function with stubs
+      const validateAssetFn = SUT.validateAsset({
+        extractManifest: extractManifestStub,
+        extractDomainMetadata: extractDomainMetadataStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
+        countAmountOfFilesInZip: countAmountOfFilesInZipStub,
+        extractReadme: extractReadmeStub,
+        fileToUint8Array: fileToUint8ArrayStub,
+      })
+
+      // Execute
+      const result = await validateAssetFn({} as File)
+
+      // Verify
+      expect(result).toEqual({
+        isValid: true,
+        data: {
+          manifest: { id: 'test-manifest' },
+          domainMetadata: { name: 'Test Asset' },
+        },
+      })
+    })
+
+    it('should fail validation when README is missing', async () => {
+      // Setup stubs
+      extractReadmeStub.mockResolvedValue(null)
+
+      // Create function with stubs
+      const validateAssetFn = SUT.validateAsset({
+        extractManifest: extractManifestStub,
+        extractDomainMetadata: extractDomainMetadataStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
+        countAmountOfFilesInZip: countAmountOfFilesInZipStub,
+        extractReadme: extractReadmeStub,
+        fileToUint8Array: fileToUint8ArrayStub,
+      })
+
+      // Execute
+      const result = await validateAssetFn({} as File)
+
+      // Verify
+      expect(result).toEqual({
+        isValid: false,
+        data: {},
+        error: ERRORS.README_FILE_NOT_FOUND,
+      })
+    })
+
+    it('should fail validation when manifest files are missing', async () => {
+      // Setup stubs
+      extractReadmeStub.mockResolvedValue('# Readme content')
+      extractManifestStub.mockResolvedValue({
+        conforms: true,
+        data: { id: 'test-manifest' },
+      })
+      checkIfAllResourcesInManifestExistStub.mockResolvedValue({
+        errors: [{ error: 'missing.txt' }],
+        amount: 5,
+      })
+
+      // Create function with stubs
+      const validateAssetFn = SUT.validateAsset({
+        extractManifest: extractManifestStub,
+        extractDomainMetadata: extractDomainMetadataStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
+        countAmountOfFilesInZip: countAmountOfFilesInZipStub,
+        extractReadme: extractReadmeStub,
+        fileToUint8Array: fileToUint8ArrayStub,
+      })
+
+      // Execute
+      const result = await validateAssetFn({} as File)
+
+      // Verify
+      expect(result.isValid).toBe(false)
+      expect(result.error).toContain(ERRORS.FILES_NOT_FOUND)
+    })
+
+    it('should fail validation when file count mismatch', async () => {
+      // Setup stubs
+      extractReadmeStub.mockResolvedValue('# Readme content')
+      extractManifestStub.mockResolvedValue({
+        conforms: true,
+        data: { id: 'test-manifest' },
+      })
+      checkIfAllResourcesInManifestExistStub.mockResolvedValue({
+        errors: [],
+        amount: 5,
+      })
+      countAmountOfFilesInZipStub.mockResolvedValue(6) // One extra file
+
+      // Create function with stubs
+      const validateAssetFn = SUT.validateAsset({
+        extractManifest: extractManifestStub,
+        extractDomainMetadata: extractDomainMetadataStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
+        countAmountOfFilesInZip: countAmountOfFilesInZipStub,
+        extractReadme: extractReadmeStub,
+        fileToUint8Array: fileToUint8ArrayStub,
+      })
+
+      // Execute
+      const result = await validateAssetFn({} as File)
+
+      // Verify
+      expect(result.isValid).toBe(false)
+      expect(result.error).toContain('6 files found, should be 5 files')
+    })
+
+    it('should handle errors during validation', async () => {
+      // Setup stubs
+      extractReadmeStub.mockRejectedValue(new Error('Test error'))
+
+      // Create function with stubs
+      const validateAssetFn = SUT.validateAsset({
+        extractManifest: extractManifestStub,
+        extractDomainMetadata: extractDomainMetadataStub,
+        checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExistStub,
+        countAmountOfFilesInZip: countAmountOfFilesInZipStub,
+        extractReadme: extractReadmeStub,
+        fileToUint8Array: fileToUint8ArrayStub,
+      })
+
+      // Execute
+      const result = await validateAssetFn({} as File)
+
+      // Verify
+      expect(result).toEqual({
+        isValid: false,
+        data: {},
+        error: 'Test error',
+      })
+    })
+  })
+})

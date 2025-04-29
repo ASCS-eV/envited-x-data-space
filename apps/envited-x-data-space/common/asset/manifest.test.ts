@@ -2,16 +2,16 @@ import manifest from '../fixtures/manifest.json'
 import manifestLicenseRefCustomCommercialAgreement from '../fixtures/manifestLicenseRefCustomCommercialAgreement.json'
 import manifestLicenseRefPolicySmartContract from '../fixtures/manifestLicenseRefPolicySmartContract.json'
 import manifestRemoteAssetData from '../fixtures/manifestRemoteAssetData.json'
-import * as SUT from './createModifiedManifest'
+import * as SUT from './manifest'
 
 describe('common/asset/createModifiedManifest', () => {
   process.env.ASSETS_URL = 'https://assets.envited-x.net'
   process.env.METADATA_URL = 'https://metadata.envited-x.net'
   describe('createModifiedManifest', () => {
-    it('should create the modified manifest object - LicenseRemote', async () => {
+    it('should create the modified manifest object - LicenseRemote', () => {
       // when ... we want to validate data conform the data type
       // then ... it should get the type and validate with this schema
-      const visualizationFiles = [
+      const media = [
         {
           arrayBuffer: 'BUFFER',
           path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
@@ -766,19 +766,19 @@ describe('common/asset/createModifiedManifest', () => {
         'manifest:hasReferencedArtifacts': [],
       }
 
-      const result = await SUT.createModifiedManifest({
+      const result = SUT.createModifiedManifest({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
-        visualizationFiles: visualizationFiles as any,
+        media: media as any,
       })(manifest as any)
 
       expect(result).toEqual(expected)
     })
 
-    it('should create the modified manifest object - LicenseRef-Policy-Smart-Contract', async () => {
+    it('should create the modified manifest object - LicenseRef-Policy-Smart-Contract', () => {
       // when ... we want to validate data conform the data type
       // then ... it should get the type and validate with this schema
-      const visualizationFiles = [
+      const media = [
         {
           arrayBuffer: 'BUFFER',
           path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
@@ -1533,19 +1533,19 @@ describe('common/asset/createModifiedManifest', () => {
         'manifest:hasReferencedArtifacts': [],
       }
 
-      const result = await SUT.createModifiedManifest({
+      const result = SUT.createModifiedManifest({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
-        visualizationFiles: visualizationFiles as any,
+        media: media as any,
       })(manifestLicenseRefPolicySmartContract as any)
 
       expect(result).toEqual(expected)
     })
 
-    it('should create the modified manifest object - LicenseRef-Custom-Commercial-Agreement', async () => {
+    it('should create the modified manifest object - LicenseRef-Custom-Commercial-Agreement', () => {
       // when ... we want to validate data conform the data type
       // then ... it should get the type and validate with this schema
-      const visualizationFiles = [
+      const media = [
         {
           arrayBuffer: 'BUFFER',
           path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
@@ -2300,19 +2300,19 @@ describe('common/asset/createModifiedManifest', () => {
         'manifest:hasReferencedArtifacts': [],
       }
 
-      const result = await SUT.createModifiedManifest({
+      const result = SUT.createModifiedManifest({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
-        visualizationFiles: visualizationFiles as any,
+        media: media as any,
       })(manifestLicenseRefCustomCommercialAgreement as any)
 
       expect(result).toEqual(expected)
     })
 
-    it('should create the modified manifest object - Remote license link', async () => {
+    it('should create the modified manifest object - Remote license link', () => {
       // when ... we want to validate data conform the data type
       // then ... it should get the type and validate with this schema
-      const visualizationFiles = [
+      const media = [
         {
           arrayBuffer: 'BUFFER',
           path: 'media/TestfeldNiedersachsen_ALKS_ODR_sample_offset_impression-01.png',
@@ -3066,10 +3066,10 @@ describe('common/asset/createModifiedManifest', () => {
         'manifest:hasReferencedArtifacts': [],
       }
 
-      const result = await SUT.createModifiedManifest({
+      const result = SUT.createModifiedManifest({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
-        visualizationFiles: visualizationFiles as any,
+        media: media as any,
       })(manifestRemoteAssetData as any)
 
       expect(result).toEqual(expected)

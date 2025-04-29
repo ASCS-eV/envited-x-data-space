@@ -113,21 +113,20 @@ export interface ManifestLicenseData {
   'manifest:hasFileMetadata': ManifestHasFileMetadata
 }
 
-export interface ExtractedFile {
-  arrayBuffer: ArrayBuffer
+export interface ExtractedResource {
   path: string
   category: ManifestCategoryId
   mimeType: string
 }
 
-export interface ExtractedFileWithCID extends ExtractedFile {
+export interface ExtractedResourceWithCID extends ExtractedResource {
   cid: string
 }
 
-export interface ManifestExtractedFiles {
-  owner: ExtractedFile[]
-  registeredUser: ExtractedFile[]
-  publicUser: ExtractedFile[]
+export interface ManifestExtractedResources {
+  isOwner: ExtractedResource[]
+  isRegistered: ExtractedResource[]
+  isPublic: ExtractedResource[]
 }
 
 export interface TokenFormat {

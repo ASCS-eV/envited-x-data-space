@@ -242,6 +242,30 @@ export const asset = pgTable('asset', {
   updatedAt: timestamp('modified_at'),
 })
 
+export const assetResource = pgTable('assetResource', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  assetId: uuid('asset_id')
+    .references(() => asset.id)
+    .notNull(),
+  name: text('name').notNull(),
+  cid: text('cid').notNull(),
+  mimeType: text('mime_type').notNull(),
+  accessLevel: text('access_level', { enum: ['public', 'authenticated', 'owner'] }).notNull(),
+  createdAt: timestamp('created_at'),
+  updatedAt: timestamp('updated_at'),
+})
+
+export const assetRelations = relations(asset, ({ many }) => ({
+  resources: many(assetResource),
+}))
+
+export const assetResourceRelations = relations(assetResource, ({ one }) => ({
+  asset: one(asset, {
+    fields: [assetResource.assetId],
+    references: [asset.id],
+  }),
+}))
+
 export const token = pgTable('token', {
   id: uuid('id').unique().defaultRandom().primaryKey(),
   operationGlobalIdentifierId: uuid('hash_global_identifier_id').references(() => globalIdentifier.id),

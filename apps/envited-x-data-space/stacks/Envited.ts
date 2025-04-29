@@ -110,7 +110,7 @@ export default function Envited({ stack }: StackContext) {
             METADATA_URL: process.env.METADATA_URL!,
           },
           permissions: [ipfsBucket, metadataBucket, 'secretsmanager:GetSecretValue'],
-          copyFiles: [{ from: 'common/aws/handlers/processAssetUpload/schemas' }],
+          // copyFiles: [{ from: 'common/aws/handlers/processAssetUpload/schemas' }],
           securityGroups: [sg],
           vpc,
           timeout: 60,

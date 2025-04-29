@@ -26,6 +26,7 @@ import {
   toUpper,
   when,
 } from 'ramda'
+import { Readable } from 'stream'
 
 import { KEYWORDS } from '../asset/constants'
 
@@ -204,3 +205,34 @@ export const handleImageLoadError = (e: React.SyntheticEvent<HTMLImageElement, E
     target.style.opacity = '0.5'
   }
 }
+
+export const extractContentFromStream = async (stream: Readable) => {
+  let dataString = ''
+  for await (const chunk of stream) {
+    dataString += chunk.toString()
+  }
+  return dataString
+}
+
+export const streamToUint8Array = async (stream: Readable) => {
+  const chunks: Uint8Array[] = []
+  for await (const chunk of stream) {
+    chunks.push(chunk)
+  }
+  return new Uint8Array(Buffer.concat(chunks))
+}
+
+export const fileToUint8Array = async (file: File): Promise<Uint8Array> => {
+  const arrayBuffer = await file.arrayBuffer()
+  return new Uint8Array(arrayBuffer)
+}
+
+export const stringToStream = (str: string) =>
+  new Readable({
+    read() {
+      this.push(str)
+      this.push(null)
+    },
+  })
+
+export const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined'

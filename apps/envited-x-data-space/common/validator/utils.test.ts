@@ -16,10 +16,10 @@ describe('common/validator/utils', () => {
       const file = {
         arrayBuffer: () => 'ASSET.ZIP',
       }
-      const createFilenameStub = jest.fn().mockResolvedValue('CID')
+      const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
       const fetchGlobalIdentifierByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
-      const validateShaclFileStub = jest.fn().mockResolvedValue({
+      const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {
           domainMetadata: {
@@ -34,13 +34,13 @@ describe('common/validator/utils', () => {
 
       // then ... we should get a valid response
       const result = await SUT._validateAsset({
-        createFilename: createFilenameStub,
+        predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
         fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
-        validateShaclFile: validateShaclFileStub,
+        validateAsset: validateAssetStub,
       })(file as any)
 
-      expect(createFilenameStub).toHaveBeenCalledTimes(1)
+      expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
       expect(fetchGlobalIdentifierByScopedIdentifierStub).toHaveBeenCalledWith('type:scopedIdentifier')
       expect(result).toEqual({
@@ -63,13 +63,13 @@ describe('common/validator/utils', () => {
       const file = {
         arrayBuffer: () => 'ASSET.ZIP',
       }
-      const createFilenameStub = jest.fn().mockResolvedValue('CID')
+      const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
       const fetchGlobalIdentifierByScopedIdentifierStub = jest
         .fn()
         .mockResolvedValueOnce(null)
         .mockResolvedValue('GLOBAL_IDENTIFIER')
-      const validateShaclFileStub = jest.fn().mockResolvedValue({
+      const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {
           domainMetadata: {
@@ -109,13 +109,13 @@ describe('common/validator/utils', () => {
 
       // then ... we should get a valid response
       const result = await SUT._validateAsset({
-        createFilename: createFilenameStub,
+        predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
         fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
-        validateShaclFile: validateShaclFileStub,
+        validateAsset: validateAssetStub,
       })(file as any)
 
-      expect(createFilenameStub).toHaveBeenCalledTimes(1)
+      expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
       expect(fetchGlobalIdentifierByScopedIdentifierStub).toHaveBeenCalledWith('type:scopedIdentifier')
       expect(result).toEqual({
@@ -170,13 +170,13 @@ describe('common/validator/utils', () => {
       const file = {
         arrayBuffer: () => 'ASSET.ZIP',
       }
-      const createFilenameStub = jest.fn().mockResolvedValue('CID')
+      const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
       const fetchGlobalIdentifierByScopedIdentifierStub = jest
         .fn()
         .mockResolvedValueOnce(null)
         .mockResolvedValue('GLOBAL_IDENTIFIER')
-      const validateShaclFileStub = jest.fn().mockResolvedValue({
+      const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {
           domainMetadata: {
@@ -216,13 +216,13 @@ describe('common/validator/utils', () => {
 
       // then ... we should get a valid response
       const result = await SUT._validateAsset({
-        createFilename: createFilenameStub,
+        predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
         fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
-        validateShaclFile: validateShaclFileStub,
+        validateAsset: validateAssetStub,
       })(file as any)
 
-      expect(createFilenameStub).toHaveBeenCalledTimes(1)
+      expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
       expect(fetchGlobalIdentifierByScopedIdentifierStub).toHaveBeenCalledWith('type:scopedIdentifier')
       expect(result).toEqual({
@@ -277,7 +277,7 @@ describe('common/validator/utils', () => {
       const file = {
         arrayBuffer: () => 'ASSET.ZIP',
       }
-      const createFilenameStub = jest.fn().mockResolvedValue('CID')
+      const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
       const fetchGlobalIdentifierByScopedIdentifierStub = jest.fn().mockResolvedValue(['GLOBAL_IDENTIFIER'])
       const validateShaclFileStub = jest.fn().mockResolvedValue({
@@ -292,13 +292,13 @@ describe('common/validator/utils', () => {
 
       // then ... we should get a already exists response
       const result = await SUT._validateAsset({
-        createFilename: createFilenameStub,
+        predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
         fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
-        validateShaclFile: validateShaclFileStub,
+        validateAsset: validateShaclFileStub,
       })(file as any)
 
-      expect(createFilenameStub).toHaveBeenCalledTimes(1)
+      expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
       expect(result).toEqual({
         isValid: false,
@@ -312,10 +312,10 @@ describe('common/validator/utils', () => {
       const file = {
         arrayBuffer: () => 'ASSET.ZIP',
       }
-      const createFilenameStub = jest.fn().mockResolvedValue('CID')
+      const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue(['ASSET'])
       const fetchGlobalIdentifierByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
-      const validateShaclFileStub = jest.fn().mockResolvedValue({
+      const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {},
         error: false,
@@ -323,13 +323,13 @@ describe('common/validator/utils', () => {
 
       // then ... we should get a already exists response
       const result = await SUT._validateAsset({
-        createFilename: createFilenameStub,
+        predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
         fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
-        validateShaclFile: validateShaclFileStub,
+        validateAsset: validateAssetStub,
       })(file as any)
 
-      expect(createFilenameStub).toHaveBeenCalledTimes(1)
+      expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
       expect(result).toEqual({
         isValid: false,

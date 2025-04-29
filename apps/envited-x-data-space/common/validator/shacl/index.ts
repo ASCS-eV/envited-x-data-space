@@ -1,1 +1,6 @@
-export { validateShaclFile, validateShaclDataWithSchema } from './shacl'
+import rdf from '@zazuko/env'
+import SHACLValidator from 'rdf-validate-shacl'
+
+import { validateShacl as _validateShacl } from './shacl'
+
+export const validateShacl = _validateShacl({ rdf, SHACLValidator })

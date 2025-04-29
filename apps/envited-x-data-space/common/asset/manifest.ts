@@ -1,35 +1,34 @@
 import { equals, evolve, find, includes, map, pipe, propEq, propOr, tail } from 'ramda'
 
 import { formatAssetUri, formatIpfsUri, formatMetadataUri } from '../utils'
-import { AccessRole, ExtractedFileWithCID, ManifestCategoryId, ManifestLink } from './types'
+import { AccessRole, ExtractedResourceWithCID, Manifest, ManifestCategoryId, ManifestLink } from './types'
 import { formatManifestLinkPath, isRemoteUrl } from './utils'
 
 export const createModifiedManifest = ({
   assetCID,
   domainMetadataCID,
-  visualizationFiles,
+  media,
 }: {
   assetCID: string
   domainMetadataCID: string
-  visualizationFiles: ExtractedFileWithCID[]
-}) =>
+  media: ExtractedResourceWithCID[]
+}): ((manifest: Manifest) => Record<string, unknown>) =>
   evolve({
-    'manifest:hasManifestReference': modifyManifestLink(assetCID, domainMetadataCID, visualizationFiles),
-    'manifest:hasArtifacts': map(modifyManifestLink(assetCID, domainMetadataCID, visualizationFiles)),
+    'manifest:hasManifestReference': modifyManifestLink(assetCID, domainMetadataCID, media),
+    'manifest:hasArtifacts': map(modifyManifestLink(assetCID, domainMetadataCID, media)),
     'manifest:hasLicense': {
-      'manifest:licenseData': modifyManifestLink(assetCID, domainMetadataCID, visualizationFiles),
+      'manifest:licenseData': modifyManifestLink(assetCID, domainMetadataCID, media),
     },
   })
 
 export const modifyManifestLink =
-  (assetCID: string, domainMetadataCID: string, visualizationFiles: ExtractedFileWithCID[]) =>
-  (link: ManifestLink) => ({
+  (assetCID: string, domainMetadataCID: string, media: ExtractedResourceWithCID[]) => (link: ManifestLink) => ({
     ...link,
     'manifest:hasFileMetadata': {
       ...link['manifest:hasFileMetadata'],
       'manifest:filePath': {
         ...link['manifest:hasFileMetadata']['manifest:filePath'],
-        '@value': formatManifestUri(assetCID, domainMetadataCID, visualizationFiles)(
+        '@value': formatManifestUri(assetCID, domainMetadataCID, media)(
           link['manifest:hasAccessRole']['@id'],
           link['manifest:hasFileMetadata']['manifest:filePath']['@value'],
           link['manifest:hasCategory']['@id'],
@@ -39,14 +38,10 @@ export const modifyManifestLink =
   })
 
 export const formatManifestUri =
-  (assetCID: string, domainMetadataCID: string, visualizationFiles: ExtractedFileWithCID[]) =>
+  (assetCID: string, domainMetadataCID: string, media: ExtractedResourceWithCID[]) =>
   (accessRole: AccessRole, path: string, category: ManifestCategoryId) => {
     if (includes(category, [ManifestCategoryId.envitedXIsMedia]) && equals(accessRole)(AccessRole.envitedXIsPublic)) {
-      return pipe(
-        find(propEq(formatManifestLinkPath(path), 'path')),
-        propOr('', 'cid'),
-        formatIpfsUri,
-      )(visualizationFiles)
+      return pipe(find(propEq(formatManifestLinkPath(path), 'path')), propOr('', 'cid'), formatIpfsUri)(media)
     }
 
     if (includes(category, [ManifestCategoryId.envitedXIsMetadata])) {

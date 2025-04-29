@@ -21,7 +21,7 @@ describe('common/ipfs/ipfs', () => {
       },
     } as any
 
-    const result = await SUT.uploadJson(pinataStub)({
+    const result = await SUT.uploadJsonToIPFS(pinataStub)({
       data: { name: 'asset' },
       filename: 'FILENAME',
       group: 'GROUP_ID',
@@ -48,7 +48,7 @@ describe('common/ipfs/ipfs', () => {
       },
     } as any
 
-    const result = await SUT.uploadJson(pinataStub)({ data: { name: 'asset' }, filename: 'FILENAME' })
+    const result = await SUT.uploadJsonToIPFS(pinataStub)({ data: { name: 'asset' }, filename: 'FILENAME' })
 
     expect(result).toEqual('IPFS HASH')
     expect(jsonStub).toHaveBeenCalledWith({ name: 'asset' })

@@ -18,7 +18,7 @@ import {
   createDataTransferFromFileList,
   processFile,
   removeFile,
-  uploadFile,
+  uploadFileToIPFS,
 } from './AddAssets.utils'
 import { UploadAssetsField } from './UploadAssetsField'
 
@@ -40,7 +40,7 @@ export const AddAssets = () => {
 
   const [selectedAssetsValidationResults, setSelectedAssetsValidationResults] = useState<boolean[]>([])
   const [uploadAssetsState, setUploadAssetsState] = useState<UploadAssetState[]>([])
-  const [uploadFiles, setUploadFiles] = useState<FilesWithId[]>([])
+  const [uploadFileToIPFSs, setUploadFiles] = useState<FilesWithId[]>([])
 
   const validationHandler = (idx: number, data: { isValid: boolean; data: any }) => {
     selectedAssetsValidationResults[idx] = data.isValid
@@ -86,7 +86,7 @@ export const AddAssets = () => {
             return error(`${filesArray[index].name}: ${file.message}`)
           }
 
-          const { success, message } = await uploadFile(filesArray, file, percent => {
+          const { success, message } = await uploadFileToIPFS(filesArray, file, percent => {
             updateUploadState(index, percent, UploadStatus.uploading)
           })
 
@@ -129,7 +129,7 @@ export const AddAssets = () => {
               label={t('[Label] select assets')}
               {...field}
               inputRef={ref}
-              files={uploadFiles}
+              files={uploadFileToIPFSs}
               filesState={uploadAssetsState}
               onDrop={event => {
                 if (event.dataTransfer.files.length === 0) {

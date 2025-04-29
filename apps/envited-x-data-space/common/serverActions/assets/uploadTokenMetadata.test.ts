@@ -38,10 +38,10 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       } as any
 
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_ID')
-      const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
+      const uploadJsonToIPFSStub = jest.fn().mockResolvedValue('IPFS URL')
 
       const result = await SUT.uploadTokenMetadataToIPFS({
-        uploadJson: uploadJsonStub,
+        uploadJsonToIPFS: uploadJsonToIPFSStub,
         createGroup: createGroupStub,
         db: dbStub,
         getServerSession: getServerSessionStub,
@@ -53,7 +53,11 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       expect(getAssetStub).toHaveBeenCalledWith('ASSET_ID')
       expect(getUserByIdStub).toHaveBeenCalledWith('USER_ID')
       expect(createGroupStub).toHaveBeenCalledWith('ISSUER_ID')
-      expect(uploadJsonStub).toHaveBeenCalledWith({ data: 'METADATA', filename: 'token_info.json', group: 'GROUP_ID' })
+      expect(uploadJsonToIPFSStub).toHaveBeenCalledWith({
+        data: 'METADATA',
+        filename: 'token_info.json',
+        group: 'GROUP_ID',
+      })
     })
 
     it('should fail to upload the asset token metadata to IPFS as expected when the asset ID is missing', async () => {
@@ -91,11 +95,11 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       } as any
 
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_ID')
-      const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
+      const uploadJsonToIPFSStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
         SUT.uploadTokenMetadataToIPFS({
-          uploadJson: uploadJsonStub,
+          uploadJsonToIPFS: uploadJsonToIPFSStub,
           createGroup: createGroupStub,
           db: dbStub,
           getServerSession: getServerSessionStub,
@@ -133,11 +137,11 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       } as any
 
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_ID')
-      const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
+      const uploadJsonToIPFSStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
         SUT.uploadTokenMetadataToIPFS({
-          uploadJson: uploadJsonStub,
+          uploadJsonToIPFS: uploadJsonToIPFSStub,
           createGroup: createGroupStub,
           db: dbStub,
           getServerSession: getServerSessionStub,
@@ -182,11 +186,11 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       } as any
 
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_ID')
-      const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
+      const uploadJsonToIPFSStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
         SUT.uploadTokenMetadataToIPFS({
-          uploadJson: uploadJsonStub,
+          uploadJsonToIPFS: uploadJsonToIPFSStub,
           createGroup: createGroupStub,
           db: dbStub,
           getServerSession: getServerSessionStub,
@@ -224,11 +228,11 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       } as any
 
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_ID')
-      const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
+      const uploadJsonToIPFSStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
         SUT.uploadTokenMetadataToIPFS({
-          uploadJson: uploadJsonStub,
+          uploadJsonToIPFS: uploadJsonToIPFSStub,
           createGroup: createGroupStub,
           db: dbStub,
           getServerSession: getServerSessionStub,
@@ -274,11 +278,11 @@ describe('serverActions/assets/uploadTokenMetadata', () => {
       } as any
 
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_ID')
-      const uploadJsonStub = jest.fn().mockResolvedValue('IPFS URL')
+      const uploadJsonToIPFSStub = jest.fn().mockResolvedValue('IPFS URL')
 
       await expect(
         SUT.uploadTokenMetadataToIPFS({
-          uploadJson: uploadJsonStub,
+          uploadJsonToIPFS: uploadJsonToIPFSStub,
           createGroup: createGroupStub,
           db: dbStub,
           getServerSession: getServerSessionStub,

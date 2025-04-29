@@ -3,20 +3,20 @@ import { isEmpty, isNil, pathEq } from 'ramda'
 import { getServerSession } from '../../auth'
 import { db } from '../../database/queries'
 import { Database } from '../../database/types'
-import { CreateGroup, UploadJson, createGroup, uploadJson } from '../../ipfs'
+import { CreateGroup, UploadJson, createGroup, uploadJsonToIPFS } from '../../ipfs'
 import { Log, log } from '../../logger'
 import { Asset, Role, Session } from '../../types'
 import { badRequestError, extractAddressFromDid, forbiddenError, notFoundError, unauthorizedError } from '../../utils'
 
 export const uploadTokenMetadataToIPFS =
   ({
-    uploadJson,
+    uploadJsonToIPFS,
     createGroup,
     db,
     getServerSession,
     log,
   }: {
-    uploadJson: UploadJson
+    uploadJsonToIPFS: UploadJson
     createGroup: CreateGroup
     db: Database
     getServerSession: () => Promise<Session | null>
@@ -52,11 +52,11 @@ export const uploadTokenMetadataToIPFS =
     }
 
     const group = await createGroup(extractAddressFromDid(user.issuerId))
-    return uploadJson({ data: (asset as Asset).metadata, filename: 'token_info.json', group })
+    return uploadJsonToIPFS({ data: (asset as Asset).metadata, filename: 'token_info.json', group })
   }
 
 export const uploadTokenMetadata = uploadTokenMetadataToIPFS({
-  uploadJson,
+  uploadJsonToIPFS,
   createGroup,
   db,
   getServerSession,

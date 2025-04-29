@@ -84,7 +84,7 @@ export const createTzip21Metadata = ({
     language: 'en',
     artifactUri: formatAssetUri(asset.cid),
     identifier: manifestData['@id'],
-    externalUri: formatIpfsUri(manifest.cid),
+    externalUri: formatIpfsUri(modifiedManifest.cid),
     displayUri: formatIpfsUri(display.cid),
     formats: [
       // asset
@@ -105,7 +105,7 @@ export const createTzip21Metadata = ({
       },
       // envited-x manifest
       {
-        uri: formatIpfsUri(manifest.cid),
+        uri: formatIpfsUri(modifiedManifest.cid),
         hash: modifiedManifest.cid,
         mimeType: 'application/ld+json',
         fileSize: modifiedManifest.fileSize,

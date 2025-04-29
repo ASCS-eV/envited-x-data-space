@@ -21,11 +21,15 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const uploadFileToIPFSStub = jest.fn().mockResolvedValue('ASSET_CID') as any
       const uploadJsonToIPFSStub = jest.fn().mockResolvedValue('JSON_CID') as any
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_NAME') as any
-      const getMinterStub = jest.fn().mockResolvedValue({ pkh: 'MINTER_ADDRESS', name: 'MINTER_NAME' }) as any
+      const getMinterStub = jest.fn().mockResolvedValue({ pkh: 'MINTER_ADDRESS', name: 'MINTER_NAME', addressGlobalIdentifier: { method: 'did:web', fqdn: 'registry.gaia-x.eu', scopedIdentifier: 'MINTER_GLOBAL_IDENTIFIER' } }) as any
       const streamToUint8ArrayStub = jest.fn().mockResolvedValue('FILE_BUFFER') as any
       const extractDomainMetadataStub = jest
         .fn()
-        .mockResolvedValue({ conforms: true, data: {}, cid: 'DOMAIN_METADATA_CID' }) as any
+        .mockResolvedValue({ conforms: true, data: {
+          '@context': {
+            'envited-x': 'https://github.com/ENVITED-X/ontology-management-base/releases/tag/v0.0.1',
+          },
+        }, cid: 'DOMAIN_METADATA_CID' }) as any
       const extractResourcesStub = jest.fn().mockReturnValue({
         isPublic: [
           { path: 'public-image.jpg', mimeType: 'image/jpeg', category: 'envited-x:isMedia' },
@@ -144,7 +148,11 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const streamToUint8ArrayStub = jest.fn().mockResolvedValue('FILE_BUFFER') as any
       const extractDomainMetadataStub = jest
         .fn()
-        .mockResolvedValue({ conforms: true, data: {}, cid: 'DOMAIN_METADATA_CID' }) as any
+        .mockResolvedValue({ conforms: true, data: {
+          '@context': {
+            'envited-x': 'https://github.com/ENVITED-X/ontology-management-base/releases/tag/v0.0.1',
+          },
+        }, cid: 'DOMAIN_METADATA_CID' }) as any
       const extractResourcesStub = jest.fn().mockReturnValue({
         public: [
           { path: 'public-image.jpg', mimeType: 'image/jpeg', category: 'envited-x:isMedia' },

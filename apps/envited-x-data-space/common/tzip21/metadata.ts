@@ -1,6 +1,6 @@
 import { append, equals } from 'ramda'
 
-import { ASSET_SPECIFICATION, ASSET_TYPE } from '../asset/constants'
+import { ASSET_SPECIFICATION, ASSET_TYPE, ONTOLOGY_URL } from '../asset/constants'
 import { Manifest, MetadataType } from '../asset/types'
 import { extractGeneralInformationFromMetadata, formatManifestLinkPath, hasRemoteLinks } from '../asset/utils'
 import { TOKEN_PUBLISHERS } from '../constants'
@@ -130,12 +130,12 @@ export const createTzip21Metadata = ({
     attributes: [
       {
         name: context[ASSET_TYPE[type]],
-        value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
+        value: ONTOLOGY_URL,
         type: 'uri',
       },
       {
         name: context['envited-x'],
-        value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
+        value: ONTOLOGY_URL,
         type: 'uri',
       },
     ],

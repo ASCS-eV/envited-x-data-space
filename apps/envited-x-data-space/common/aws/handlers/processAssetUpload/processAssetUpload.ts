@@ -13,9 +13,9 @@ import {
   Manifest,
   MetadataType,
 } from '../../../asset/types'
+import { stringifyGlobalIdentifier } from '../../../globalIdentifiers'
 import { Asset, AssetMetadata, AssetStatus, GlobalIdentifier, User } from '../../../types'
 import { createTzip21Metadata } from '../../../tzip21/metadata'
-import { stringifyGlobalIdentifier } from '../../../globalIdentifiers'
 
 export const processAssetUpload =
   ({
@@ -80,11 +80,13 @@ export const processAssetUpload =
     predetermineCID: (array: Uint8Array) => Promise<string>
     getMinter: (asset: Asset) => Promise<User>
     streamToUint8Array: (stream: Readable) => Promise<Uint8Array>
-    extractManifest: (assetArchive: Uint8Array) => Promise<{ conforms: boolean; data: Manifest, cid: string, fileSize: number }>
+    extractManifest: (
+      assetArchive: Uint8Array,
+    ) => Promise<{ conforms: boolean; data: Manifest; cid: string; fileSize: number }>
     extractDomainMetadata: (
       assetArchive: Uint8Array,
       manifest: Manifest,
-    ) => Promise<{ conforms: boolean; data: Record<string, unknown>; cid: string, fileSize: number }>
+    ) => Promise<{ conforms: boolean; data: Record<string, unknown>; cid: string; fileSize: number }>
     extractResources: (manifest: Manifest) => Record<string, unknown>
     extractFileFromArchive: (array: Uint8Array, path: string) => Promise<Readable>
     getCoverImage: (
@@ -141,7 +143,12 @@ export const processAssetUpload =
       // Validate uploaded asset
       const asset = await getAsset(Key)
       const assetCID = await predetermineCID(uploadedFile)
-      const { conforms: manifestConforms, data: manifest, cid: manifestCID, fileSize: manifestFileSize } = await extractManifest(uploadedFile)
+      const {
+        conforms: manifestConforms,
+        data: manifest,
+        cid: manifestCID,
+        fileSize: manifestFileSize,
+      } = await extractManifest(uploadedFile)
 
       if (!manifestConforms) {
         // Revert if validation fails

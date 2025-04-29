@@ -23,6 +23,7 @@ import {
   pathOr,
   pickAll,
   pipe,
+  prop,
   propEq,
   reduce,
   reject,
@@ -70,13 +71,13 @@ export const getFilesGroupedByAccessRoles = (manifest: Manifest) => {
   )(manifest)
 
   return {
-    owner: groupedAssets[AccessRole.envitedXIsOwner]
+    isOwner: groupedAssets[AccessRole.envitedXIsOwner]
       ? getPathsFromManifestLinks(groupedAssets[AccessRole.envitedXIsOwner])
       : [],
-    registeredUser: groupedAssets[AccessRole.envitedXIsRegistered]
+    isRegistered: groupedAssets[AccessRole.envitedXIsRegistered]
       ? getPathsFromManifestLinks(groupedAssets[AccessRole.envitedXIsRegistered])
       : [],
-    publicUser: groupedAssets[AccessRole.envitedXIsPublic]
+    isPublic: groupedAssets[AccessRole.envitedXIsPublic]
       ? getPathsFromManifestLinks(groupedAssets[AccessRole.envitedXIsPublic])
       : [],
   }
@@ -161,6 +162,8 @@ export const extractGeneralInformationFromMetadata = (type: string) =>
     formatType: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:formatType`]),
     version: path([`${type}:hasDataResourceExtension`, `${type}:hasFormat`, `${type}:version`, '@value']),
   })
+
+export const extractReferencedArtifactsFromManifest = prop('manifest:hasReferencedArtifacts')
 
 export const transformDomainMetadata = (jsonData: Record<string, any>) => {
   // Find any hasDataResource and hasDataResourceExtension properties
@@ -252,7 +255,7 @@ export const getDomainMetadataSchemas: (context: Record<string, any>) => string[
   values as (context: Record<string, any>) => string[],
 )
 
-export const getMediaFiles = filter(propEq('envited-x:isMedia', 'category'))
+export const getMediaFiles = filter(propEq(ManifestCategoryId.envitedXIsMedia, 'category'))
 
 export const addCIDs = async (assetArchive: Uint8Array, resources: ExtractedResource[]) => {
   const cids = await Promise.all(

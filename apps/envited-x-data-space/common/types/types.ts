@@ -213,6 +213,7 @@ export enum FileType {
 
 export enum IdentifierMethod {
   didPkh = 'did:pkh',
+  didWeb = 'did:web',
   urnUuid = 'urn:uuid',
   urnContract = 'urn:contract',
   urnOperation = 'urn:operation',
@@ -222,7 +223,8 @@ export interface GlobalIdentifier {
   method: IdentifierMethod
   namespace?: string | null
   chainId?: string | null
-  nss: string
+  fqdn?: string | null
+  scopedIdentifier: string
 }
 
 export interface FilesWithId {

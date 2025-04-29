@@ -41,11 +41,7 @@ export const formatManifestUri =
   (assetCID: string, domainMetadataCID: string, media: ExtractedResourceWithCID[]) =>
   (accessRole: AccessRole, path: string, category: ManifestCategoryId) => {
     if (includes(category, [ManifestCategoryId.envitedXIsMedia]) && equals(accessRole)(AccessRole.envitedXIsPublic)) {
-      return pipe(
-        find(propEq(formatManifestLinkPath(path), 'path')),
-        propOr('', 'cid'), // TODO: get CID
-        formatIpfsUri,
-      )(media)
+      return pipe(find(propEq(formatManifestLinkPath(path), 'path')), propOr('', 'cid'), formatIpfsUri)(media)
     }
 
     if (includes(category, [ManifestCategoryId.envitedXIsMetadata])) {

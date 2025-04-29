@@ -27,11 +27,11 @@ describe('common/aws/handlers/processAssetUpload', () => {
         .fn()
         .mockResolvedValue({ conforms: true, data: {}, cid: 'DOMAIN_METADATA_CID' }) as any
       const extractResourcesStub = jest.fn().mockReturnValue({
-        publicUser: [
+        isPublic: [
           { path: 'public-image.jpg', mimeType: 'image/jpeg', category: 'envited-x:isMedia' },
           { path: 'public-document.pdf', mimeType: 'application/pdf', category: 'envited-x:isMedia' },
         ],
-        registeredUser: [
+        isRegistered: [
           { path: 'restricted-data.json', mimeType: 'application/json', category: 'envited-x:isMedia' },
           { path: 'restricted-image.png', mimeType: 'image/png', category: 'envited-x:isMedia' },
         ],
@@ -107,7 +107,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
 
       expect(result).toEqual(undefined)
       expect(readFileFromObjectStorageStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
-      expect(uploadToObjectStorageStub).toHaveBeenCalledTimes(6)
+      expect(uploadToObjectStorageStub).toHaveBeenCalledTimes(9)
       expect(deleteFileFromObjectStorageStub).toHaveBeenCalledTimes(0)
       expect(updateAssetStub).toHaveBeenCalledWith(
         expect.any(String),

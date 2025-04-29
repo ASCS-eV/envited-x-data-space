@@ -13,13 +13,15 @@ export const insertGlobalIdentifier =
     method,
     namespace,
     chainId,
-    nss,
+    fqdn,
+    scopedIdentifier,
     metadata,
   }: {
     method: string
     namespace?: string
     chainId?: string
-    nss: string
+    fqdn?: string
+    scopedIdentifier: string
     metadata?: string
   }) =>
     db
@@ -28,7 +30,8 @@ export const insertGlobalIdentifier =
         method,
         namespace,
         chainId,
-        nss,
+        fqdn,
+        scopedIdentifier,
         metadata,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -47,13 +50,15 @@ export const insertGlobalIdentifierTx =
     method,
     namespace,
     chainId,
-    nss,
+    fqdn,
+    scopedIdentifier,
     metadata = null,
   }: {
     method: string
     namespace?: string | null
     chainId?: string | null
-    nss: string
+    fqdn?: string | null
+    scopedIdentifier: string
     metadata?: string | null
   }) =>
     tx
@@ -62,13 +67,19 @@ export const insertGlobalIdentifierTx =
         method,
         namespace,
         chainId,
-        nss,
+        fqdn,
+        scopedIdentifier,
         metadata,
         createdAt: new Date(),
         updatedAt: new Date(),
       })
       .onConflictDoUpdate({
-        target: [globalIdentifier.method, globalIdentifier.namespace, globalIdentifier.chainId, globalIdentifier.nss],
+        target: [
+          globalIdentifier.method,
+          globalIdentifier.namespace,
+          globalIdentifier.chainId,
+          globalIdentifier.scopedIdentifier,
+        ],
         set: {
           metadata,
           updatedAt: new Date(),
@@ -85,14 +96,33 @@ export const getGlobalIdentifierById = (db: DatabaseConnection) => async (id: st
     .then(results => results[0] || null)
 }
 
+export const getGlobalIdentifierByScopedIdentifier = (db: DatabaseConnection) => async (scopedIdentifier: string) => {
+  return db
+    .select()
+    .from(globalIdentifier)
+    .where(eq(globalIdentifier.scopedIdentifier, scopedIdentifier))
+    .limit(1)
+    .then(results => results[0] || null)
+}
+
 export const getGlobalIdentifierByFullResourceName =
   (db: DatabaseConnection) =>
-  async ({ method, namespace, chainId, nss }: { method: string; namespace: string; chainId: string; nss: string }) =>
+  async ({
+    method,
+    namespace,
+    chainId,
+    scopedIdentifier,
+  }: {
+    method: string
+    namespace: string
+    chainId: string
+    scopedIdentifier: string
+  }) =>
     db.query.globalIdentifier.findFirst({
       where: and(
         eq(globalIdentifier.method, method),
         eq(globalIdentifier.namespace, namespace),
         eq(globalIdentifier.chainId, chainId),
-        eq(globalIdentifier.nss, nss),
+        eq(globalIdentifier.scopedIdentifier, scopedIdentifier),
       ),
     })

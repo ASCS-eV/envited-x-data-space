@@ -21,7 +21,7 @@ export const _getTokenById =
         method: minterGuid.method,
         namespace: minterGuid.namespace,
         chainId: minterGuid.chainId,
-        nss: minterGuid.nss,
+        scopedIdentifier: minterGuid.scopedIdentifier,
       })
       const profile = await connection.getProfileByName(user.name)
       const tokenWithTokenAttributes = await connection.getTokenWithAttributesById(id)

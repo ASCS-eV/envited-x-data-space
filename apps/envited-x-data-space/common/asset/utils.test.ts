@@ -55,14 +55,14 @@ describe('common/asset/utils', () => {
   describe('getFilesGroupedByAccessRoles', () => {
     it('should group manifest links by access roles', () => {
       const expected = {
-        owner: [
+        isOwner: [
           {
             path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.xodr',
             category: 'envited-x:isSimulationData',
             mimeType: 'application/x-xodr',
           },
         ],
-        registeredUser: [
+        isRegistered: [
           {
             path: 'simulation-data/TestfeldNiedersachsen_ALKS_ODR_sample_offset.bjson',
             category: 'envited-x:isMiscellaneous',
@@ -154,7 +154,7 @@ describe('common/asset/utils', () => {
             mimeType: 'text/plain',
           },
         ],
-        publicUser: [
+        isPublic: [
           {
             path: 'manifest_reference.json',
             category: 'envited-x:isManifest',

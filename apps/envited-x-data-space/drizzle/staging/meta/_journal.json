@@ -8,6 +8,27 @@
       "when": 1743516329071,
       "tag": "0000_eager_mephisto",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1744773346175,
+      "tag": "0001_clear_excalibur",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1744882202665,
+      "tag": "0002_flawless_the_order",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1745850359920,
+      "tag": "0003_overrated_hellion",
+      "breakpoints": true
     }
   ]
 }

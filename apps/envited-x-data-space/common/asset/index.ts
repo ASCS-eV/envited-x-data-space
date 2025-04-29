@@ -1,7 +1,7 @@
 import { countAmountOfFilesInZip, extractFromByteArray, read } from '../archive'
 import { fileToUint8Array } from '../utils'
 import { extractDomainMetadata, extractManifest, extractReadme } from './resources'
-import { checkIfAllResourcessInManifestExist, validateAsset as validate } from './validation'
+import { checkIfAllResourcesInManifestExist, validateAsset as validate } from './validation'
 
 export { getAsset, getMinter, updateAsset } from './asset'
 export {
@@ -16,7 +16,7 @@ export const validateAsset = validate({
   extractManifest,
   extractDomainMetadata,
   extractReadme,
-  checkIfAllResourcessInManifestExist: checkIfAllResourcessInManifestExist({ extract: extractFromByteArray, read }),
+  checkIfAllResourcesInManifestExist: checkIfAllResourcesInManifestExist({ extract: extractFromByteArray, read }),
   countAmountOfFilesInZip,
   fileToUint8Array,
 })

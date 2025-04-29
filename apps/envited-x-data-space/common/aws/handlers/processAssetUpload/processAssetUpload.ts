@@ -150,7 +150,7 @@ export const processAssetUpload =
       const minter = await getMinter(asset)
 
       // Upload the resources
-      const group = await createGroup(minter?.addressGlobalIdentifier?.nss ?? '')
+      const group = await createGroup(minter?.addressGlobalIdentifier?.scopedIdentifier ?? '')
       if (isPublicMedia) {
         const uploadPublicMediaPromises = isPublicMedia.map(async ({ path }: { path: string }) => {
           const fileToUpload = await extractFileFromArchive(uploadedFile, path)
@@ -215,7 +215,7 @@ export const processAssetUpload =
           fileSize: modifiedManifest.fileSize as number,
           data: manifest,
         },
-        minter: minter.addressGlobalIdentifier?.nss ?? '',
+        minter: minter.addressGlobalIdentifier?.scopedIdentifier ?? '',
         rights: {
           identifier: pathOr('', MANIFEST_LICENSE)(manifest),
           path: pathOr('', MANIFEST_LICENSE_PATH)(manifest),

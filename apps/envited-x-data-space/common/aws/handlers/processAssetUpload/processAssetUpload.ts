@@ -168,6 +168,10 @@ export const processAssetUpload =
       const resources = extractResources(manifest)
       const isPublicMedia = pipe(propOr([], 'isPublic'), getMediaFiles)(resources) as ExtractedResource[]
       const isRegisteredMedia = pipe(propOr([], 'isRegistered'), getMediaFiles)(resources) as ExtractedResource[]
+
+      console.log('Asset', asset)
+      throw new Error('test')
+
       const minter = await getMinter(asset)
 
       // Upload the resources

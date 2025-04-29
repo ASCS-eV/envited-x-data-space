@@ -137,7 +137,6 @@ export const processAssetUpload =
         return
       }
       const uploadedFile = await Body.transformToByteArray()
-
       // Validate uploaded asset
       const asset = await getAsset(Key)
       const assetCID = await predetermineCID(uploadedFile)
@@ -170,9 +169,6 @@ export const processAssetUpload =
       const isPublicMedia = pipe(propOr([], 'isPublic'), getMediaFiles)(resources) as ExtractedResource[]
       const isRegisteredMedia = pipe(propOr([], 'isRegistered'), getMediaFiles)(resources) as ExtractedResource[]
       const isOwnerMedia = pipe(propOr([], 'isOwner'), getMediaFiles)(resources) as ExtractedResource[]
-      console.log('Asset', asset)
-      console.log('Public Media', isPublicMedia)
-      console.log('Registered Media', isRegisteredMedia)
       const minter = await getMinter(asset)
 
       // Upload the resources

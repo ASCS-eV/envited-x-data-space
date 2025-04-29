@@ -137,6 +137,7 @@ export const processAssetUpload =
         return
       }
       const uploadedFile = await Body.transformToByteArray()
+
       // Validate uploaded asset
       const asset = await getAsset(Key)
       const assetCID = await predetermineCID(uploadedFile)
@@ -168,10 +169,10 @@ export const processAssetUpload =
       const resources = extractResources(manifest)
       const isPublicMedia = pipe(propOr([], 'isPublic'), getMediaFiles)(resources) as ExtractedResource[]
       const isRegisteredMedia = pipe(propOr([], 'isRegistered'), getMediaFiles)(resources) as ExtractedResource[]
-
+      const isOwnerMedia = pipe(propOr([], 'isOwner'), getMediaFiles)(resources) as ExtractedResource[]
       console.log('Asset', asset)
-      throw new Error('test')
-
+      console.log('Public Media', isPublicMedia)
+      console.log('Registered Media', isRegisteredMedia)
       const minter = await getMinter(asset)
 
       // Upload the resources
@@ -192,7 +193,7 @@ export const processAssetUpload =
 
             await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
             await insertAssetResource({
-              assetId: assetCID,
+              assetId: asset.id,
               name: last(split('/', path)) as string,
               cid,
               mimeType,
@@ -220,7 +221,7 @@ export const processAssetUpload =
             })
 
             await insertAssetResource({
-              assetId: assetCID,
+              assetId: asset.id,
               name: last(split('/', path)) as string,
               cid,
               mimeType,
@@ -232,6 +233,34 @@ export const processAssetUpload =
         )
 
         await Promise.all(uploadRegisteredUserMediaPromises)
+      }
+
+      if (isOwnerMedia) {
+        const uploadOwnerMediaPromises = isOwnerMedia.map(
+          async ({ path, mimeType }: { path: string; mimeType: string }) => {
+            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+            const fileBuffer = await streamToUint8Array(fileToUpload)
+            const cid = await predetermineCID(fileBuffer)
+            const upload = uploadToObjectStorage({
+              Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: fileBuffer,
+              ContentEncoding: 'base64',
+            })
+
+            await insertAssetResource({
+              assetId: asset.id,
+              name: last(split('/', path)) as string,
+              cid,
+              mimeType,
+              accessLevel: AccessLevel.owner,
+            })
+
+            return upload.done()
+          },
+        )
+
+        await Promise.all(uploadOwnerMediaPromises)
       }
 
       const isPublicMediaWithCids = await addCIDs(uploadedFile, isPublicMedia)

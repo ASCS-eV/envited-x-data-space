@@ -177,17 +177,18 @@ export const processAssetUpload =
       // Upload the resources
       const group = await createGroup(minter?.addressGlobalIdentifier?.scopedIdentifier ?? '')
       if (isPublicMedia) {
-        const uploadPublicMediaPromises = isPublicMedia.map(async ({ path, mimeType }: { path: string; mimeType: string }) => {
-          const fileToUpload = await extractFileFromArchive(uploadedFile, path)
-          const fileBuffer = await streamToUint8Array(fileToUpload)
-          const cid = await predetermineCID(fileBuffer)
-          const upload = uploadToObjectStorage({
-            Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
-            Key: `${assetCID}/${cid}`,
-            Body: fileBuffer,
-            ContentEncoding: 'base64',
-            ContentDisposition: 'inline',
-          })
+        const uploadPublicMediaPromises = isPublicMedia.map(
+          async ({ path, mimeType }: { path: string; mimeType: string }) => {
+            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+            const fileBuffer = await streamToUint8Array(fileToUpload)
+            const cid = await predetermineCID(fileBuffer)
+            const upload = uploadToObjectStorage({
+              Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: fileBuffer,
+              ContentEncoding: 'base64',
+              ContentDisposition: 'inline',
+            })
 
             await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
             await insertAssetResource({
@@ -206,16 +207,17 @@ export const processAssetUpload =
       }
 
       if (isRegisteredMedia) {
-        const uploadRegisteredUserMediaPromises = isRegisteredMedia.map(async ({ path, mimeType }: { path: string; mimeType: string }) => {
-          const fileToUpload = await extractFileFromArchive(uploadedFile, path)
-          const fileBuffer = await streamToUint8Array(fileToUpload)
-          const cid = await predetermineCID(fileBuffer)
-          const upload = uploadToObjectStorage({
-            Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
-            Key: `${assetCID}/${cid}`,
-            Body: fileBuffer,
-            ContentEncoding: 'base64',
-          })
+        const uploadRegisteredUserMediaPromises = isRegisteredMedia.map(
+          async ({ path, mimeType }: { path: string; mimeType: string }) => {
+            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+            const fileBuffer = await streamToUint8Array(fileToUpload)
+            const cid = await predetermineCID(fileBuffer)
+            const upload = uploadToObjectStorage({
+              Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: fileBuffer,
+              ContentEncoding: 'base64',
+            })
 
             await insertAssetResource({
               assetId: assetCID,

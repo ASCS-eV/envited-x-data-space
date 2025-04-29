@@ -107,7 +107,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
 
       expect(result).toEqual(undefined)
       expect(readFileFromObjectStorageStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
-      expect(uploadToObjectStorageStub).toHaveBeenCalledTimes(6)
+      expect(uploadToObjectStorageStub).toHaveBeenCalledTimes(9)
       expect(deleteFileFromObjectStorageStub).toHaveBeenCalledTimes(0)
       expect(updateAssetStub).toHaveBeenCalledWith(
         expect.any(String),

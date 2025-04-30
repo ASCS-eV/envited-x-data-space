@@ -72,7 +72,9 @@ export const _validateAsset =
         }
 
         const parsedManifestGlobalIdentifier = parseGlobalIdentifier(validation.data.manifest?.['@id'] as string)
-        const globalIdentifier = await fetchGlobalIdentifierByScopedIdentifier(parsedManifestGlobalIdentifier.scopedIdentifier)
+        const globalIdentifier = await fetchGlobalIdentifierByScopedIdentifier(
+          parsedManifestGlobalIdentifier.scopedIdentifier,
+        )
         if (isNotNil(globalIdentifier)) {
           return {
             isValid: false,

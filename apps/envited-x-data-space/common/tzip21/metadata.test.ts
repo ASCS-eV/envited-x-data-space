@@ -40,7 +40,7 @@ describe('common/asset/createTokenMetadata', () => {
         rightsUri: 'https://opensource.org/license/mit',
         language: 'en',
         artifactUri: 'https://assets.envited-x.net/ASSET_CID',
-        identifier: 'did:web:registry.gaia-x.eu:Manifest:ZNh9Z-tHQpkpxJhNobhUVmauYxrfTAZdQy9L',
+        identifier: 'did:web:registry.gaia-x.eu:HdMap:DjHgK5ErTBow1Ya3J05tW9l12skGWgZn6kA9',
         externalUri: 'ipfs://MODIFIED_MANIFEST_CID',
         displayUri: 'ipfs://DISPLAY_URI_CID',
         formats: [
@@ -155,7 +155,7 @@ describe('common/asset/createTokenMetadata', () => {
         rightsUri: 'https://opensource.org/license/mit',
         language: 'en',
         artifactUri: 'https://assets.envited-x.net/ASSET_CID',
-        identifier: 'did:web:registry.gaia-x.eu:Manifest:ZNh9Z-tHQpkpxJhNobhUVmauYxrfTAZdQy9L',
+        identifier: 'did:web:registry.gaia-x.eu:HdMap:DjHgK5ErTBow1Ya3J05tW9l12skGWgZn6kA9',
         externalUri: 'ipfs://MODIFIED_MANIFEST_CID',
         displayUri: 'ipfs://DISPLAY_URI_CID',
         formats: [
@@ -269,7 +269,7 @@ describe('common/asset/createTokenMetadata', () => {
         rightsUri: 'urn:blockchain:tezos:NetXnHfVqm9iesp:contract:KT1PCaD2kmgCHy15wQ1gpqZUy9RLxyBVJdTF',
         language: 'en',
         artifactUri: 'https://assets.envited-x.net/ASSET_CID',
-        identifier: 'did:web:registry.gaia-x.eu:Manifest:ZNh9Z-tHQpkpxJhNobhUVmauYxrfTAZdQy9L',
+        identifier: 'did:web:registry.gaia-x.eu:HdMap:DjHgK5ErTBow1Ya3J05tW9l12skGWgZn6kA9',
         externalUri: 'ipfs://MODIFIED_MANIFEST_CID',
         displayUri: 'ipfs://DISPLAY_URI_CID',
         formats: [
@@ -383,7 +383,7 @@ describe('common/asset/createTokenMetadata', () => {
         rightsUri: 'https://assets.envited-x.net/ASSET_CID/LICENSE',
         language: 'en',
         artifactUri: 'https://assets.envited-x.net/ASSET_CID',
-        identifier: 'did:web:registry.gaia-x.eu:Manifest:ZNh9Z-tHQpkpxJhNobhUVmauYxrfTAZdQy9L',
+        identifier: 'did:web:registry.gaia-x.eu:HdMap:DjHgK5ErTBow1Ya3J05tW9l12skGWgZn6kA9',
         externalUri: 'ipfs://MODIFIED_MANIFEST_CID',
         displayUri: 'ipfs://DISPLAY_URI_CID',
         formats: [

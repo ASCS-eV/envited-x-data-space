@@ -52,11 +52,25 @@ describe('common/asset/createTokenMetadata', () => {
             fileName: 'ASSET_CID.zip',
           },
           {
+            uri: 'ipfs://MANIFEST_CID',
+            hash: 'MANIFEST_CID',
+            mimeType: 'application/ld+json',
+            fileSize: 2048,
+            fileName: 'manifest_reference.json',
+          },
+          {
             uri: 'ipfs://MODIFIED_MANIFEST_CID',
             hash: 'MODIFIED_MANIFEST_CID',
-            mimeType: 'application/json',
             fileSize: 2048,
-            fileName: 'manifest.json',
+            fileName: 'envited-x_manifest.json',
+            mimeType: 'application/ld+json',
+          },
+          {
+            uri: 'ipfs://DOMAIN_METADATA_CID',
+            hash: 'DOMAIN_METADATA_CID',
+            fileSize: 1024,
+            fileName: 'domain_metadata.json',
+            mimeType: 'application/ld+json',
           },
           {
             uri: 'ipfs://DISPLAY_URI_CID',
@@ -67,24 +81,14 @@ describe('common/asset/createTokenMetadata', () => {
         ],
         attributes: [
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
-            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
+            name: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/hdmap/',
+            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
-            value: 'ipfs://DOMAIN_METADATA_CID',
-            type: 'application/json',
-          },
-          {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
-            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
+            name: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/envited-x/',
+            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
             type: 'uri',
-          },
-          {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
-            value: 'ipfs://MODIFIED_MANIFEST_CID',
-            type: 'application/json',
           },
         ],
       }
@@ -103,8 +107,14 @@ describe('common/asset/createTokenMetadata', () => {
         domainMetadata: {
           cid: 'DOMAIN_METADATA_CID',
           data: domainMetadata,
+          fileSize: 1024,
         },
         manifest: {
+          cid: 'MANIFEST_CID',
+          fileSize: 2048,
+          data: manifest as any,
+        },
+        modifiedManifest: {
           cid: 'MODIFIED_MANIFEST_CID',
           fileSize: 2048,
           data: manifest as any,
@@ -157,11 +167,25 @@ describe('common/asset/createTokenMetadata', () => {
             fileName: 'ASSET_CID.zip',
           },
           {
+            uri: 'ipfs://MANIFEST_CID',
+            hash: 'MANIFEST_CID',
+            mimeType: 'application/ld+json',
+            fileSize: 2048,
+            fileName: 'manifest_reference.json',
+          },
+          {
             uri: 'ipfs://MODIFIED_MANIFEST_CID',
             hash: 'MODIFIED_MANIFEST_CID',
-            mimeType: 'application/json',
             fileSize: 2048,
-            fileName: 'manifest.json',
+            fileName: 'envited-x_manifest.json',
+            mimeType: 'application/ld+json',
+          },
+          {
+            uri: 'ipfs://DOMAIN_METADATA_CID',
+            hash: 'DOMAIN_METADATA_CID',
+            fileSize: 1024,
+            fileName: 'domain_metadata.json',
+            mimeType: 'application/ld+json',
           },
           {
             uri: 'ipfs://DISPLAY_URI_CID',
@@ -172,24 +196,14 @@ describe('common/asset/createTokenMetadata', () => {
         ],
         attributes: [
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
-            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
+            name: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/hdmap/',
+            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
-            value: 'ipfs://DOMAIN_METADATA_CID',
-            type: 'application/json',
-          },
-          {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
-            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
+            name: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/envited-x/',
+            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
             type: 'uri',
-          },
-          {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
-            value: 'ipfs://MODIFIED_MANIFEST_CID',
-            type: 'application/json',
           },
         ],
       }
@@ -208,8 +222,14 @@ describe('common/asset/createTokenMetadata', () => {
         domainMetadata: {
           cid: 'DOMAIN_METADATA_CID',
           data: domainMetadata,
+          fileSize: 1024,
         },
         manifest: {
+          cid: 'MANIFEST_CID',
+          fileSize: 2048,
+          data: manifestRemoteAssetData as any,
+        },
+        modifiedManifest: {
           cid: 'MODIFIED_MANIFEST_CID',
           fileSize: 2048,
           data: manifestRemoteAssetData as any,
@@ -261,11 +281,25 @@ describe('common/asset/createTokenMetadata', () => {
             fileName: 'ASSET_CID.zip',
           },
           {
+            uri: 'ipfs://MANIFEST_CID',
+            hash: 'MANIFEST_CID',
+            mimeType: 'application/ld+json',
+            fileSize: 2048,
+            fileName: 'manifest_reference.json',
+          },
+          {
             uri: 'ipfs://MODIFIED_MANIFEST_CID',
             hash: 'MODIFIED_MANIFEST_CID',
-            mimeType: 'application/json',
             fileSize: 2048,
-            fileName: 'manifest.json',
+            fileName: 'envited-x_manifest.json',
+            mimeType: 'application/ld+json',
+          },
+          {
+            uri: 'ipfs://DOMAIN_METADATA_CID',
+            hash: 'DOMAIN_METADATA_CID',
+            fileSize: 1024,
+            fileName: 'domain_metadata.json',
+            mimeType: 'application/ld+json',
           },
           {
             uri: 'ipfs://DISPLAY_URI_CID',
@@ -276,24 +310,14 @@ describe('common/asset/createTokenMetadata', () => {
         ],
         attributes: [
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
-            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
+            name: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/hdmap/',
+            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
-            value: 'ipfs://DOMAIN_METADATA_CID',
-            type: 'application/json',
-          },
-          {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
-            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
+            name: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/envited-x/',
+            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
             type: 'uri',
-          },
-          {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
-            value: 'ipfs://MODIFIED_MANIFEST_CID',
-            type: 'application/json',
           },
         ],
       }
@@ -312,8 +336,14 @@ describe('common/asset/createTokenMetadata', () => {
         domainMetadata: {
           cid: 'DOMAIN_METADATA_CID',
           data: domainMetadata,
+          fileSize: 1024,
         },
         manifest: {
+          cid: 'MANIFEST_CID',
+          fileSize: 2048,
+          data: manifestLicenseRefPolicySmartContract as any,
+        },
+        modifiedManifest: {
           cid: 'MODIFIED_MANIFEST_CID',
           fileSize: 2048,
           data: manifestLicenseRefPolicySmartContract as any,
@@ -365,11 +395,25 @@ describe('common/asset/createTokenMetadata', () => {
             fileName: 'ASSET_CID.zip',
           },
           {
+            uri: 'ipfs://MANIFEST_CID',
+            hash: 'MANIFEST_CID',
+            mimeType: 'application/ld+json',
+            fileSize: 2048,
+            fileName: 'manifest_reference.json',
+          },
+          {
             uri: 'ipfs://MODIFIED_MANIFEST_CID',
             hash: 'MODIFIED_MANIFEST_CID',
-            mimeType: 'application/json',
             fileSize: 2048,
-            fileName: 'manifest.json',
+            fileName: 'envited-x_manifest.json',
+            mimeType: 'application/ld+json',
+          },
+          {
+            uri: 'ipfs://DOMAIN_METADATA_CID',
+            hash: 'DOMAIN_METADATA_CID',
+            fileSize: 1024,
+            fileName: 'domain_metadata.json',
+            mimeType: 'application/ld+json',
           },
           {
             uri: 'ipfs://DISPLAY_URI_CID',
@@ -380,24 +424,14 @@ describe('common/asset/createTokenMetadata', () => {
         ],
         attributes: [
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
-            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
+            name: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/hdmap/',
+            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
             type: 'uri',
           },
           {
-            name: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
-            value: 'ipfs://DOMAIN_METADATA_CID',
-            type: 'application/json',
-          },
-          {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
-            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
+            name: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/tree/main/envited-x/',
+            value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4',
             type: 'uri',
-          },
-          {
-            name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
-            value: 'ipfs://MODIFIED_MANIFEST_CID',
-            type: 'application/json',
           },
         ],
       }
@@ -416,8 +450,14 @@ describe('common/asset/createTokenMetadata', () => {
         domainMetadata: {
           cid: 'DOMAIN_METADATA_CID',
           data: domainMetadata,
+          fileSize: 1024,
         },
         manifest: {
+          cid: 'MANIFEST_CID',
+          fileSize: 2048,
+          data: manifestLicenseRefCustomCommercialAgreement as any,
+        },
+        modifiedManifest: {
           cid: 'MODIFIED_MANIFEST_CID',
           fileSize: 2048,
           data: manifestLicenseRefCustomCommercialAgreement as any,

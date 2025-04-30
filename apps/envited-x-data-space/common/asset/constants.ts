@@ -46,3 +46,5 @@ export const MANIFEST_LINK_IRI_ID = ['manifest:iri', '@id']
 export const DOMAIN_METADATA_FILE = 'metadata/domainMetadata.json'
 
 export const KEYWORDS = ['Has ']
+
+export const ONTOLOGY_URL = 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/releases/tag/v0.0.4'

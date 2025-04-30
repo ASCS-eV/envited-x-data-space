@@ -74,7 +74,7 @@ export const createTzip21Metadata = ({
       : rights.path,
     language: 'en',
     artifactUri: formatAssetUri(asset.cid),
-    identifier: manifestData['@id'],
+    identifier: domainMetadata.data['@id'],
     externalUri: formatIpfsUri(manifest.cid),
     displayUri: formatIpfsUri(display.cid),
     formats: [

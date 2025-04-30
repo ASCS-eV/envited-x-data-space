@@ -116,6 +116,16 @@ export default function Envited({ stack }: StackContext) {
           timeout: 60,
           memorySize: 1024,
           runtime: 'nodejs20.x',
+          nodejs: {
+            loader: {
+              '.ttl': 'text',
+            },
+            esbuild: {
+              loader: {
+                '.ttl': 'text',
+              },
+            },
+          },
         },
         events: ['object_created_put'],
       },

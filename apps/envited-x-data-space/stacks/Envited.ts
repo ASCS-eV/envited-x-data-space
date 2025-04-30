@@ -156,35 +156,43 @@ export default function Envited({ stack }: StackContext) {
     ],
   })
 
-  const privateResourcesDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, `privateResourcesDistribution-${stack.stage}`, {
-    originConfigs: [
-      {
-        s3OriginSource: {
-          s3BucketSource: privateResourcesBucket.cdk.bucket,
-          originAccessIdentity: oai,
+  const privateResourcesDistribution = new aws_cloudfront.CloudFrontWebDistribution(
+    stack,
+    `privateResourcesDistribution-${stack.stage}`,
+    {
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: privateResourcesBucket.cdk.bucket,
+            originAccessIdentity: oai,
+          },
+          behaviors: [
+            { isDefaultBehavior: true },
+            { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
+          ],
         },
-        behaviors: [
-          { isDefaultBehavior: true },
-          { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
-        ],
-      },
-    ],
-  })
+      ],
+    },
+  )
 
-  const publicResourcesDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, `publicResourcesDistribution-${stack.stage}`, {
-    originConfigs: [
-      {
-        s3OriginSource: {
-          s3BucketSource: publicResourcesBucket.cdk.bucket,
-          originAccessIdentity: oai,
+  const publicResourcesDistribution = new aws_cloudfront.CloudFrontWebDistribution(
+    stack,
+    `publicResourcesDistribution-${stack.stage}`,
+    {
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: publicResourcesBucket.cdk.bucket,
+            originAccessIdentity: oai,
+          },
+          behaviors: [
+            { isDefaultBehavior: true },
+            { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
+          ],
         },
-        behaviors: [
-          { isDefaultBehavior: true },
-          { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
-        ],
-      },
-    ],
-  })
+      ],
+    },
+  )
 
   // Create the Next.js site
   const site = new NextjsSite(stack, `envited_x_data_space-${stack.stage}`, {

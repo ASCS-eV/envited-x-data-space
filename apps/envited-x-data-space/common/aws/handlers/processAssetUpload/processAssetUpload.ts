@@ -5,8 +5,16 @@ import { isNil, last, pathOr, pipe, propOr, split } from 'ramda'
 import { Readable } from 'stream'
 
 import { MANIFEST_LICENSE, MANIFEST_LICENSE_PATH } from '../../../asset/constants'
-import { ExtractedResource, ExtractedResourceWithCID, Manifest, MetadataType } from '../../../asset/types'
-import { Asset, AssetMetadata, AssetStatus, User } from '../../../types'
+import {
+  AccessLevel,
+  AssetResource,
+  ExtractedResource,
+  ExtractedResourceWithCID,
+  Manifest,
+  MetadataType,
+} from '../../../asset/types'
+import { stringifyGlobalIdentifier } from '../../../globalIdentifiers'
+import { Asset, AssetMetadata, AssetStatus, GlobalIdentifier, User } from '../../../types'
 import { createTzip21Metadata } from '../../../tzip21/metadata'
 
 export const processAssetUpload =
@@ -31,6 +39,7 @@ export const processAssetUpload =
     jsonToUint8Array,
     getMinter,
     streamToUint8Array,
+    insertAssetResource,
   }: {
     readFileFromObjectStorage: ({ Bucket, Key }: { Bucket: string; Key: string }) => Promise<GetObjectCommandOutput>
     uploadToObjectStorage: (params: PutObjectCommandInput) => Upload
@@ -71,11 +80,13 @@ export const processAssetUpload =
     predetermineCID: (array: Uint8Array) => Promise<string>
     getMinter: (asset: Asset) => Promise<User>
     streamToUint8Array: (stream: Readable) => Promise<Uint8Array>
-    extractManifest: (assetArchive: Uint8Array) => Promise<{ conforms: boolean; data: Manifest }>
+    extractManifest: (
+      assetArchive: Uint8Array,
+    ) => Promise<{ conforms: boolean; data: Manifest; cid: string; fileSize: number }>
     extractDomainMetadata: (
       assetArchive: Uint8Array,
       manifest: Manifest,
-    ) => Promise<{ conforms: boolean; data: Record<string, unknown>; cid: string }>
+    ) => Promise<{ conforms: boolean; data: Record<string, unknown>; cid: string; fileSize: number }>
     extractResources: (manifest: Manifest) => Record<string, unknown>
     extractFileFromArchive: (array: Uint8Array, path: string) => Promise<Readable>
     getCoverImage: (
@@ -101,6 +112,19 @@ export const processAssetUpload =
     }
     hasRemoteLinks: (manifest: Manifest) => boolean
     getMediaFiles: (items: ExtractedResource[]) => ExtractedResource[]
+    insertAssetResource: ({
+      assetId,
+      name,
+      cid,
+      mimeType,
+      accessLevel,
+    }: {
+      assetId: string
+      name: string
+      cid: string
+      mimeType: string
+      accessLevel: AccessLevel
+    }) => Promise<AssetResource>
   }): S3Handler =>
   async event => {
     try {
@@ -119,7 +143,12 @@ export const processAssetUpload =
       // Validate uploaded asset
       const asset = await getAsset(Key)
       const assetCID = await predetermineCID(uploadedFile)
-      const { conforms: manifestConforms, data: manifest } = await extractManifest(uploadedFile)
+      const {
+        conforms: manifestConforms,
+        data: manifest,
+        cid: manifestCID,
+        fileSize: manifestFileSize,
+      } = await extractManifest(uploadedFile)
 
       if (!manifestConforms) {
         // Revert if validation fails
@@ -133,6 +162,7 @@ export const processAssetUpload =
         conforms: domainMetadataConforms,
         data: domainMetadata,
         cid: domainMetadataCID,
+        fileSize: domainMetadataFileSize,
       } = await extractDomainMetadata(uploadedFile, manifest)
       // Validate domain metadata
       if (!domainMetadataConforms) {
@@ -147,47 +177,95 @@ export const processAssetUpload =
       const resources = extractResources(manifest)
       const isPublicMedia = pipe(propOr([], 'isPublic'), getMediaFiles)(resources) as ExtractedResource[]
       const isRegisteredMedia = pipe(propOr([], 'isRegistered'), getMediaFiles)(resources) as ExtractedResource[]
+      const isOwnerMedia = pipe(propOr([], 'isOwner'), getMediaFiles)(resources) as ExtractedResource[]
       const minter = await getMinter(asset)
 
       // Upload the resources
       const group = await createGroup(minter?.addressGlobalIdentifier?.scopedIdentifier ?? '')
       if (isPublicMedia) {
-        const uploadPublicMediaPromises = isPublicMedia.map(async ({ path }: { path: string }) => {
-          const fileToUpload = await extractFileFromArchive(uploadedFile, path)
-          const fileBuffer = await streamToUint8Array(fileToUpload)
-          const cid = await predetermineCID(fileBuffer)
-          const upload = uploadToObjectStorage({
-            Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
-            Key: `${assetCID}/${cid}`,
-            Body: fileBuffer,
-            ContentEncoding: 'base64',
-            ContentDisposition: 'inline',
-          })
+        const uploadPublicMediaPromises = isPublicMedia.map(
+          async ({ path, mimeType }: { path: string; mimeType: string }) => {
+            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+            const fileBuffer = await streamToUint8Array(fileToUpload)
+            const cid = await predetermineCID(fileBuffer)
+            const upload = uploadToObjectStorage({
+              Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: fileBuffer,
+              ContentEncoding: 'base64',
+              ContentDisposition: 'inline',
+            })
 
-          await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
+            await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
+            await insertAssetResource({
+              assetId: asset.id,
+              name: last(split('/', path)) as string,
+              cid,
+              mimeType,
+              accessLevel: AccessLevel.public,
+            })
 
-          return upload.done()
-        })
+            return upload.done()
+          },
+        )
 
         await Promise.all(uploadPublicMediaPromises)
       }
 
       if (isRegisteredMedia) {
-        const uploadRegisteredUserMediaPromises = isRegisteredMedia.map(async ({ path }: { path: string }) => {
-          const fileToUpload = await extractFileFromArchive(uploadedFile, path)
-          const fileBuffer = await streamToUint8Array(fileToUpload)
-          const cid = await predetermineCID(fileBuffer)
-          const upload = uploadToObjectStorage({
-            Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
-            Key: `${assetCID}/${cid}`,
-            Body: fileBuffer,
-            ContentEncoding: 'base64',
-          })
+        const uploadRegisteredUserMediaPromises = isRegisteredMedia.map(
+          async ({ path, mimeType }: { path: string; mimeType: string }) => {
+            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+            const fileBuffer = await streamToUint8Array(fileToUpload)
+            const cid = await predetermineCID(fileBuffer)
+            const upload = uploadToObjectStorage({
+              Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: fileBuffer,
+              ContentEncoding: 'base64',
+            })
 
-          return upload.done()
-        })
+            await insertAssetResource({
+              assetId: asset.id,
+              name: last(split('/', path)) as string,
+              cid,
+              mimeType,
+              accessLevel: AccessLevel.authenticated,
+            })
+
+            return upload.done()
+          },
+        )
 
         await Promise.all(uploadRegisteredUserMediaPromises)
+      }
+
+      if (isOwnerMedia) {
+        const uploadOwnerMediaPromises = isOwnerMedia.map(
+          async ({ path, mimeType }: { path: string; mimeType: string }) => {
+            const fileToUpload = await extractFileFromArchive(uploadedFile, path)
+            const fileBuffer = await streamToUint8Array(fileToUpload)
+            const cid = await predetermineCID(fileBuffer)
+            const upload = uploadToObjectStorage({
+              Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+              Key: `${assetCID}/${cid}`,
+              Body: fileBuffer,
+              ContentEncoding: 'base64',
+            })
+
+            await insertAssetResource({
+              assetId: asset.id,
+              name: last(split('/', path)) as string,
+              cid,
+              mimeType,
+              accessLevel: AccessLevel.owner,
+            })
+
+            return upload.done()
+          },
+        )
+
+        await Promise.all(uploadOwnerMediaPromises)
       }
 
       const isPublicMediaWithCids = await addCIDs(uploadedFile, isPublicMedia)
@@ -209,13 +287,19 @@ export const processAssetUpload =
         domainMetadata: {
           cid: domainMetadataCID,
           data: domainMetadata,
+          fileSize: domainMetadataFileSize,
         },
         manifest: {
-          cid: modifiedManifestCID,
-          fileSize: modifiedManifest.fileSize as number,
+          cid: manifestCID,
+          fileSize: manifestFileSize,
           data: manifest,
         },
-        minter: minter.addressGlobalIdentifier?.scopedIdentifier ?? '',
+        modifiedManifest: {
+          cid: modifiedManifestCID,
+          fileSize: modifiedManifest.fileSize as number,
+          data: modifiedManifest,
+        },
+        minter: stringifyGlobalIdentifier(minter.addressGlobalIdentifier as GlobalIdentifier) ?? '',
         rights: {
           identifier: pathOr('', MANIFEST_LICENSE)(manifest),
           path: pathOr('', MANIFEST_LICENSE_PATH)(manifest),

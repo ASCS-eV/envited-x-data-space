@@ -21,11 +21,25 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const uploadFileToIPFSStub = jest.fn().mockResolvedValue('ASSET_CID') as any
       const uploadJsonToIPFSStub = jest.fn().mockResolvedValue('JSON_CID') as any
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_NAME') as any
-      const getMinterStub = jest.fn().mockResolvedValue({ pkh: 'MINTER_ADDRESS', name: 'MINTER_NAME' }) as any
+      const getMinterStub = jest.fn().mockResolvedValue({
+        pkh: 'MINTER_ADDRESS',
+        name: 'MINTER_NAME',
+        addressGlobalIdentifier: {
+          method: 'did:web',
+          fqdn: 'registry.gaia-x.eu',
+          scopedIdentifier: 'MINTER_GLOBAL_IDENTIFIER',
+        },
+      }) as any
       const streamToUint8ArrayStub = jest.fn().mockResolvedValue('FILE_BUFFER') as any
-      const extractDomainMetadataStub = jest
-        .fn()
-        .mockResolvedValue({ conforms: true, data: {}, cid: 'DOMAIN_METADATA_CID' }) as any
+      const extractDomainMetadataStub = jest.fn().mockResolvedValue({
+        conforms: true,
+        data: {
+          '@context': {
+            'envited-x': 'https://github.com/ENVITED-X/ontology-management-base/releases/tag/v0.0.1',
+          },
+        },
+        cid: 'DOMAIN_METADATA_CID',
+      }) as any
       const extractResourcesStub = jest.fn().mockReturnValue({
         isPublic: [
           { path: 'public-image.jpg', mimeType: 'image/jpeg', category: 'envited-x:isMedia' },
@@ -51,6 +65,16 @@ describe('common/aws/handlers/processAssetUpload', () => {
         { path: 'public-document.pdf', mimeType: 'application/pdf', category: 'envited-x:isMedia' },
         { path: 'restricted-image.png', mimeType: 'image/png', category: 'envited-x:isMedia' },
       ]) as any
+      const insertAssetResourceStub = jest.fn().mockResolvedValue({
+        id: 'resource-id',
+        assetId: 'asset-id',
+        name: 'resource-name',
+        cid: 'cid',
+        mimeType: 'mime/type',
+        accessLevel: 'public',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
 
       const event = {
         Records: [
@@ -92,11 +116,12 @@ describe('common/aws/handlers/processAssetUpload', () => {
         hasRemoteLinks: hasRemoteLinksStub,
         extractManifest: extractManifestStub,
         getMediaFiles: getMediaFilesStub,
+        insertAssetResource: insertAssetResourceStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
       expect(readFileFromObjectStorageStub).toHaveBeenCalledWith({ Bucket: 'BUCKET_NAME', Key: 'OBJECT_KEY' })
-      expect(uploadToObjectStorageStub).toHaveBeenCalledTimes(6)
+      expect(uploadToObjectStorageStub).toHaveBeenCalledTimes(9)
       expect(deleteFileFromObjectStorageStub).toHaveBeenCalledTimes(0)
       expect(updateAssetStub).toHaveBeenCalledWith(
         expect.any(String),
@@ -107,6 +132,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       )
       expect(createGroupStub).toHaveBeenCalledWith(expect.any(String))
       expect(uploadDoneStub).toHaveBeenCalledWith()
+      expect(insertAssetResourceStub).toHaveBeenCalled()
     })
 
     it('should delete the asset if the validation does not conforms', async () => {
@@ -130,9 +156,15 @@ describe('common/aws/handlers/processAssetUpload', () => {
       const createGroupStub = jest.fn().mockResolvedValue('GROUP_NAME') as any
       const getMinterStub = jest.fn().mockResolvedValue({ pkh: 'MINTER_ADDRESS', name: 'MINTER_NAME' }) as any
       const streamToUint8ArrayStub = jest.fn().mockResolvedValue('FILE_BUFFER') as any
-      const extractDomainMetadataStub = jest
-        .fn()
-        .mockResolvedValue({ conforms: true, data: {}, cid: 'DOMAIN_METADATA_CID' }) as any
+      const extractDomainMetadataStub = jest.fn().mockResolvedValue({
+        conforms: true,
+        data: {
+          '@context': {
+            'envited-x': 'https://github.com/ENVITED-X/ontology-management-base/releases/tag/v0.0.1',
+          },
+        },
+        cid: 'DOMAIN_METADATA_CID',
+      }) as any
       const extractResourcesStub = jest.fn().mockReturnValue({
         public: [
           { path: 'public-image.jpg', mimeType: 'image/jpeg', category: 'envited-x:isMedia' },
@@ -158,6 +190,16 @@ describe('common/aws/handlers/processAssetUpload', () => {
         { path: 'public-document.pdf', mimeType: 'application/pdf', category: 'envited-x:isMedia' },
         { path: 'restricted-image.png', mimeType: 'image/png', category: 'envited-x:isMedia' },
       ]) as any
+      const insertAssetResourceStub = jest.fn().mockResolvedValue({
+        id: 'resource-id',
+        assetId: 'asset-id',
+        name: 'resource-name',
+        cid: 'cid',
+        mimeType: 'mime/type',
+        accessLevel: 'public',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
 
       const event = {
         Records: [
@@ -199,6 +241,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         hasRemoteLinks: hasRemoteLinksStub,
         extractManifest: extractManifestStub,
         getMediaFiles: getMediaFilesStub,
+        insertAssetResource: insertAssetResourceStub,
       })(event as any, context, callback)
 
       expect(result).toEqual(undefined)
@@ -209,6 +252,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
       expect(uploadDoneStub).not.toHaveBeenCalledWith()
       expect(createGroupStub).toHaveBeenCalledTimes(0)
       expect(uploadFileToIPFSStub).toHaveBeenCalledTimes(0)
+      expect(insertAssetResourceStub).not.toHaveBeenCalled()
     })
   })
 })

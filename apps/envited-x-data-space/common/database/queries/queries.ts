@@ -5,6 +5,12 @@ import { fromPairs, map, pipe, toPairs } from 'ramda'
 import { connectDb } from '../database'
 import * as schema from '../schema'
 import {
+  deleteAssetResource,
+  getAssetResourcesByAssetId,
+  getAssetResourcesByAssetIdAndAccessLevel,
+  insertAssetResource,
+} from './assetResources'
+import {
   deleteAsset,
   getAsset,
   getAssetByCID,
@@ -107,6 +113,10 @@ const queries = {
   updateAsset,
   updateAssetByCID,
   updateAssetStatus,
+  getAssetResourcesByAssetId,
+  getAssetResourcesByAssetIdAndAccessLevel,
+  insertAssetResource,
+  deleteAssetResource,
 }
 
 export const init =

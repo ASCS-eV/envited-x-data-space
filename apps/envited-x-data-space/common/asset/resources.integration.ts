@@ -6,7 +6,7 @@ import { extractDomainMetadata, extractManifest } from './resources'
 const readFixtureAsUint8Array = (filename: string): Uint8Array => {
   const fixturePath = path.resolve(__dirname, '../fixtures', filename)
   console.log(`Reading fixture from: ${fixturePath}`)
-  const buffer = fs.readFileFromObjectStorageSync(fixturePath)
+  const buffer = fs.readFileSync(fixturePath)
   console.log(`Fixture size: ${buffer.length} bytes`)
   return new Uint8Array(buffer)
 }

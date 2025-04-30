@@ -1,6 +1,6 @@
 import { append, equals } from 'ramda'
 
-import { ASSET_SPECIFICATION, ASSET_TYPE } from '../asset/constants'
+import { ASSET_SPECIFICATION, ASSET_TYPE, ONTOLOGY_URL } from '../asset/constants'
 import { Manifest, MetadataType } from '../asset/types'
 import { extractGeneralInformationFromMetadata, formatManifestLinkPath, hasRemoteLinks } from '../asset/utils'
 import { TOKEN_PUBLISHERS } from '../constants'
@@ -13,6 +13,7 @@ export const createTzip21Metadata = ({
   display,
   domainMetadata,
   manifest,
+  modifiedManifest,
   minter,
   rights,
 }: {
@@ -29,11 +30,17 @@ export const createTzip21Metadata = ({
   domainMetadata: {
     cid: string
     data: Record<string, unknown>
+    fileSize: number
   }
   manifest: {
     cid: string
     fileSize: number
     data: Manifest
+  }
+  modifiedManifest: {
+    cid: string
+    fileSize: number
+    data: Record<string, unknown>
   }
   minter: string
   rights: {
@@ -56,6 +63,8 @@ export const createTzip21Metadata = ({
     `${formatType} ${version}`,
   ]
   const isThirdPartyHosted = hasRemoteLinks(manifest.data)
+  const { data: manifestData } = manifest
+  const context = domainMetadata.data['@context'] as Record<string, string>
 
   return {
     decimals: 0,
@@ -74,10 +83,11 @@ export const createTzip21Metadata = ({
       : rights.path,
     language: 'en',
     artifactUri: formatAssetUri(asset.cid),
-    identifier: asset.cid,
-    externalUri: formatIpfsUri(manifest.cid),
+    identifier: domainMetadata.data['@id'],
+    externalUri: formatIpfsUri(modifiedManifest.cid),
     displayUri: formatIpfsUri(display.cid),
     formats: [
+      // asset
       {
         uri: formatAssetUri(asset.cid),
         hash: asset.cid,
@@ -85,13 +95,31 @@ export const createTzip21Metadata = ({
         fileSize: asset.fileSize,
         fileName: `${asset.cid}.zip`,
       },
+      // original manifest
       {
         uri: formatIpfsUri(manifest.cid),
         hash: manifest.cid,
-        mimeType: 'application/json',
+        mimeType: 'application/ld+json',
         fileSize: manifest.fileSize,
-        fileName: 'manifest.json',
+        fileName: 'manifest_reference.json',
       },
+      // envited-x manifest
+      {
+        uri: formatIpfsUri(modifiedManifest.cid),
+        hash: modifiedManifest.cid,
+        mimeType: 'application/ld+json',
+        fileSize: modifiedManifest.fileSize,
+        fileName: 'envited-x_manifest.json',
+      },
+      // domain metadata
+      {
+        uri: formatIpfsUri(domainMetadata.cid),
+        hash: domainMetadata.cid,
+        mimeType: 'application/ld+json',
+        fileSize: domainMetadata.fileSize,
+        fileName: 'domain_metadata.json',
+      },
+      // display
       {
         uri: formatIpfsUri(display.cid),
         hash: display.cid,
@@ -100,26 +128,15 @@ export const createTzip21Metadata = ({
       },
     ],
     attributes: [
-      // TODO: Add ontology metadata
       {
-        name: `de.gaiax4plcaad.ontology-management-base.${ASSET_TYPE[type]}.ontology`,
-        value: `https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/${ASSET_TYPE[type]}/`,
+        name: context[ASSET_TYPE[type]],
+        value: ONTOLOGY_URL,
         type: 'uri',
       },
       {
-        name: `de.gaiax4plcaad.ontology-management-base.${ASSET_TYPE[type]}.metadata`,
-        value: formatIpfsUri(domainMetadata.cid),
-        type: 'application/json',
-      },
-      {
-        name: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
-        value: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
+        name: context['envited-x'],
+        value: ONTOLOGY_URL,
         type: 'uri',
-      },
-      {
-        name: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
-        value: formatIpfsUri(manifest.cid),
-        type: 'application/json',
       },
     ],
   }

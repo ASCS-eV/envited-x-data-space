@@ -100,7 +100,9 @@ export const extractManifest = async (assetArchive: Uint8Array) => {
   const manifest = await extractContentFromStream(manifestStream)
   const manifestSchemaStream = stringToStream(SCHEMA.manifest)
   const { conforms, report } = await validateShacl(manifestSchemaStream)(manifestStream)
-  return { conforms, report, data: JSON.parse(manifest) }
+  const manifestArrayBuffer = await streamToUint8Array(manifestStream)
+  const cid = await predetermineCID(manifestArrayBuffer)
+  return { conforms, report, data: JSON.parse(manifest), cid, fileSize: manifestArrayBuffer.byteLength }
 }
 
 export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: Manifest) => {
@@ -110,13 +112,15 @@ export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: 
   const schemas = getDomainMetadataSchemas(domainMetadata['@context'])
   const validationsPromises = schemas.map(schema => validateShacl(stringToStream(schema))(domainMetadataStream))
   const validationsResults = await Promise.all(validationsPromises)
-  const cid = await predetermineCID(jsonToUint8Array(domainMetadata))
+  const domainMetadataArrayBuffer = await streamToUint8Array(domainMetadataStream)
+  const cid = await predetermineCID(domainMetadataArrayBuffer)
 
   return {
     conforms: all(x => equals(true)(prop('conforms')(x)), validationsResults),
     report: validationsResults,
     data: domainMetadata,
     cid,
+    fileSize: domainMetadataArrayBuffer.byteLength,
   }
 }
 

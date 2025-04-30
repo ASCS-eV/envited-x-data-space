@@ -4,3 +4,6 @@ export const fetchAssetDataByCID = async (cid: string) => httpGet(`/api/assets/$
 
 export const fetchGlobalIdentifierByScopedIdentifier = async (scopedIdentifier: string) =>
   httpGet(`/api/global-identifiers/${scopedIdentifier}`)
+
+export const fetchTokenByScopedIdentifier = async (scopedIdentifier: string) =>
+  httpGet(`/api/tokens/${scopedIdentifier}`)

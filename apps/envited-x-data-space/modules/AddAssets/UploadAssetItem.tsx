@@ -129,8 +129,6 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, va
     }
   }, [status])
 
-  console.log('TEST asset', asset)
-
   return match(status)
     .with(UploadStatus.idle, () => (
       <div className="border-gray-300 hover:border-blue hover:bg-gray-100 relative block w-full cursor-pointer rounded-lg border bg-white px-6 py-4 focus:outline-none sm:flex sm:justify-between items-start">

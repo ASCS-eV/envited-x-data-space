@@ -2,7 +2,6 @@ import { PollingSubscribeProvider, TezosToolkit } from '@taquito/taquito'
 import { GetCIDResponse } from 'pinata-web3'
 import { pathOr, replace } from 'ramda'
 
-import { parseGlobalIdentifier } from '../common/globalIdentifiers'
 import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'

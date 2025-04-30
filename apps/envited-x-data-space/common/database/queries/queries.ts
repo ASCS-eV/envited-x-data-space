@@ -46,6 +46,7 @@ import {
 import {
   getTokenAttributesByTokenId,
   getTokenById,
+  getTokenByWebGlobalIdentifierId,
   getTokenWithAttributesById,
   getTokens,
   getTokensByIssuerId,
@@ -103,6 +104,7 @@ const queries = {
   getTokens,
   getTokenById,
   getTokensByIssuerId,
+  getTokenByWebGlobalIdentifierId,
   getGlobalIdentifierById,
   getGlobalIdentifierByScopedIdentifier,
   getGlobalIdentifierByFullResourceName,

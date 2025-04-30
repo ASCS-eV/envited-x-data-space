@@ -23,6 +23,8 @@ export const ERRORS = {
   MINTED_ASSET_CANNOT_BE_DELETED: 'Minted asset cannot be deleted',
   ASSET_UPLOAD_FAILED: 'Asset upload failed',
   NETWORK_ERROR: 'Network error',
+  GLOBAL_IDENTIFIER_NOT_FOUND: 'Global identifier not found',
+  GLOBAL_IDENTIFIER_MISSING: 'Global identifier is required',
 }
 
 export const ERROR_CODES = {

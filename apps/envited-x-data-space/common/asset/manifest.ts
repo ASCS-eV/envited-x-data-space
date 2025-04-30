@@ -1,24 +1,52 @@
-import { equals, evolve, find, includes, map, pipe, propEq, propOr, tail } from 'ramda'
+import { equals, evolve, find, includes, isNotNil, map, pipe, propEq, propOr, tail } from 'ramda'
 
-import { formatAssetUri, formatIpfsUri, formatMetadataUri } from '../utils'
+import { db } from '../database/queries'
+import { Database } from '../database/types'
+import { parseGlobalIdentifier } from '../globalIdentifiers'
+import { Log, log } from '../logger'
+import { formatAssetUri, formatError, formatIpfsUri, formatMetadataUri, internalServerErrorError } from '../utils'
 import { AccessRole, ExtractedResourceWithCID, Manifest, ManifestCategoryId, ManifestLink } from './types'
 import { formatManifestLinkPath, isRemoteUrl } from './utils'
 
-export const createModifiedManifest = ({
-  assetCID,
-  domainMetadataCID,
-  media,
-}: {
-  assetCID: string
-  domainMetadataCID: string
-  media: ExtractedResourceWithCID[]
-}): ((manifest: Manifest) => Record<string, unknown>) =>
-  evolve({
-    'manifest:hasManifestReference': modifyManifestLink(assetCID, domainMetadataCID, media),
-    'manifest:hasArtifacts': map(modifyManifestLink(assetCID, domainMetadataCID, media)),
+export const _createModifiedManifest =
+  ({
+    resolveGlobalIdentifierUuid,
+    resolveReferencedArtifactsUuids,
+  }: {
+    resolveGlobalIdentifierUuid: (fullResourceName: string) => Promise<string>
+    resolveReferencedArtifactsUuids: (artifact: any) => Promise<any>
+  }) =>
+  ({
+    assetCID,
+    domainMetadataCID,
+    media,
+  }: {
+    assetCID: string
+    domainMetadataCID: string
+    media: ExtractedResourceWithCID[]
+  }) =>
+  async (manifest: Manifest): Promise<Record<string, unknown>> => ({
+    ...manifest,
+    '@id': await resolveGlobalIdentifierUuid(manifest['@id']),
+    'manifest:hasManifestReference': modifyManifestLink(
+      assetCID,
+      domainMetadataCID,
+      media,
+    )(manifest['manifest:hasManifestReference']),
+    'manifest:hasArtifacts': map(modifyManifestLink(assetCID, domainMetadataCID, media))(
+      manifest['manifest:hasArtifacts'],
+    ),
     'manifest:hasLicense': {
-      'manifest:licenseData': modifyManifestLink(assetCID, domainMetadataCID, media),
+      ...manifest['manifest:hasLicense'],
+      'manifest:licenseData': modifyManifestLink(
+        assetCID,
+        domainMetadataCID,
+        media,
+      )(manifest['manifest:hasLicense']['manifest:licenseData']),
     },
+    'manifest:hasReferencedArtifacts': await Promise.all(
+      manifest['manifest:hasReferencedArtifacts']?.map(resolveReferencedArtifactsUuids) ?? [],
+    ),
   })
 
 export const modifyManifestLink =
@@ -36,6 +64,19 @@ export const modifyManifestLink =
       },
     },
   })
+
+export const resolveReferencedArtifactsUuids = async (artifact: any): Promise<any> => {
+  if (artifact['manifest:iri']?.['@id']) {
+    return {
+      ...artifact,
+      'manifest:iri': {
+        '@id': await resolveGlobalIdentifierUuid(artifact['manifest:iri']['@id']),
+      },
+    }
+  }
+
+  return artifact
+}
 
 export const formatManifestUri =
   (assetCID: string, domainMetadataCID: string, media: ExtractedResourceWithCID[]) =>
@@ -67,3 +108,33 @@ export const formatManifestUri =
       return `${formatIpfsUri(assetCID)}${tail(path)}`
     }
   }
+
+export const _resolveGlobalIdentifierUuid =
+  ({ db, log }: { db: Database; log: Log }) =>
+  async (fullResourceName: string) => {
+    try {
+      const parsedGlobalIdentifier = parseGlobalIdentifier(fullResourceName)
+      const connection = await db()
+      const existingGlobalIdentifier = await connection.getGlobalIdentifierByScopedIdentifier(
+        parsedGlobalIdentifier.scopedIdentifier,
+      )
+
+      if (isNotNil(existingGlobalIdentifier)) {
+        return existingGlobalIdentifier.id
+      }
+
+      const globalIdentifier = await connection.insertGlobalIdentifier(parsedGlobalIdentifier)
+
+      return globalIdentifier.id
+    } catch (error: unknown) {
+      log.error(formatError(error))
+      throw internalServerErrorError()
+    }
+  }
+
+export const resolveGlobalIdentifierUuid = _resolveGlobalIdentifierUuid({ db, log })
+
+export const createModifiedManifest = _createModifiedManifest({
+  resolveGlobalIdentifierUuid,
+  resolveReferencedArtifactsUuids,
+})

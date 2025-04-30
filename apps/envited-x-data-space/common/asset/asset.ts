@@ -51,10 +51,14 @@ export const _updateAsset =
     status: AssetStatus,
     metadata: AssetMetadata | string = '',
     manifest: Record<string, unknown> = {},
+    manifestGlobalIdentifierId = '',
   ) => {
     try {
       const connection = await db()
-      const [result] = await connection.updateAssetByCID({ metadata, status, cid: newCid, manifest }, oldCid)
+      const [result] = await connection.updateAssetByCID(
+        { metadata, status, cid: newCid, manifest, manifestGlobalIdentifierId },
+        oldCid,
+      )
 
       return result
     } catch (error: unknown) {

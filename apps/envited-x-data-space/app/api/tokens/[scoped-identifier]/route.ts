@@ -1,0 +1,36 @@
+import { NextResponse } from 'next/server'
+import { isEmpty, isNil, prop } from 'ramda'
+
+import { getServerSession } from '../../../../common/auth'
+import { ERRORS, ERROR_CODES } from '../../../../common/constants/errors'
+import { db } from '../../../../common/database/queries'
+
+export async function GET(request: Request, { params }: { params: { 'scoped-identifier': string } }) {
+  try {
+    const scopedIdentifier = params['scoped-identifier']
+
+    if (isNil(scopedIdentifier) || isEmpty(scopedIdentifier)) {
+      return NextResponse.json({ error: ERRORS.GLOBAL_IDENTIFIER_MISSING }, { status: ERROR_CODES.BAD_REQUEST })
+    }
+
+    const session = await getServerSession()
+
+    if (isNil(session)) {
+      return NextResponse.json({ error: ERRORS.UNAUTHORIZED }, { status: ERROR_CODES.UNAUTHORIZED })
+    }
+
+    const connection = await db()
+    const globalIdentifier = await connection.getGlobalIdentifierByScopedIdentifier(scopedIdentifier)
+
+    if (isNil(globalIdentifier)) {
+      return NextResponse.json(null)
+    }
+
+    const token = await connection.getTokenByWebGlobalIdentifierId(prop('id')(globalIdentifier))
+
+    return NextResponse.json(token)
+  } catch (error) {
+    console.error('Error fetching asset:', error)
+    return NextResponse.json({ error: ERRORS.INTERNAL_SERVER_ERROR }, { status: ERROR_CODES.INTERNAL_SERVER_ERROR })
+  }
+}

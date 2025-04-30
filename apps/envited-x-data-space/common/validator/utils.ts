@@ -1,6 +1,6 @@
 import { any, filter, groupBy, isEmpty, isNotNil, path, pathEq, pipe, propEq, propOr } from 'ramda'
 
-import { fetchAssetDataByCID, fetchGlobalIdentifierByScopedIdentifier } from '../api'
+import { fetchAssetDataByCID, fetchGlobalIdentifierByScopedIdentifier, fetchTokenByScopedIdentifier } from '../api'
 import { validateAsset } from '../asset'
 import { MANIFEST_LINK_MIME_TYPE } from '../asset/constants'
 import { Manifest, ManifestMetadataLink } from '../asset/types'
@@ -21,6 +21,7 @@ export const _validateAsset =
     predetermineCID,
     fetchAssetDataByCID,
     validateAsset,
+    fetchTokenByScopedIdentifier,
     fetchGlobalIdentifierByScopedIdentifier,
   }: {
     predetermineCID: (array: Uint8Array) => Promise<string>
@@ -33,6 +34,7 @@ export const _validateAsset =
       }
       error?: string
     }>
+    fetchTokenByScopedIdentifier: (scopedIdentifier: string) => Promise<any>
     fetchGlobalIdentifierByScopedIdentifier: (scopedIdentifier: string) => Promise<any>
   }) =>
   async (file: File) => {
@@ -59,8 +61,18 @@ export const _validateAsset =
 
       if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueGlobalIdentifier) {
         const { scopedIdentifier } = parseGlobalIdentifier(validation.data.domainMetadata?.['@id'] as string)
-        const globalIdentifier = await fetchGlobalIdentifierByScopedIdentifier(scopedIdentifier)
+        const token = await fetchTokenByScopedIdentifier(scopedIdentifier)
 
+        if (isNotNil(token)) {
+          return {
+            isValid: false,
+            data: {},
+            error: ERRORS.ASSET_ID_EXISTS,
+          }
+        }
+
+        const parsedManifestGlobalIdentifier = parseGlobalIdentifier(validation.data.manifest?.['@id'] as string)
+        const globalIdentifier = await fetchGlobalIdentifierByScopedIdentifier(parsedManifestGlobalIdentifier.scopedIdentifier)
         if (isNotNil(globalIdentifier)) {
           return {
             isValid: false,
@@ -74,7 +86,7 @@ export const _validateAsset =
       const results = await Promise.all(
         referencedAssets.map(async (manifestLink: ManifestMetadataLink) => {
           const { scopedIdentifier } = parseGlobalIdentifier(manifestLink['manifest:iri']['@id'])
-          const checkIfReferencedArtifactsExists = await fetchGlobalIdentifierByScopedIdentifier(scopedIdentifier)
+          const checkIfReferencedArtifactsExists = await fetchTokenByScopedIdentifier(scopedIdentifier)
 
           return {
             id: manifestLink['manifest:iri']['@id'],
@@ -85,7 +97,6 @@ export const _validateAsset =
 
       return {
         ...validation,
-        isValid: !any(propEq(false, 'exists'))(results),
         data: {
           ...validation.data,
           referencedAssets: groupBy(asset => String(asset.exists), results),
@@ -100,6 +111,7 @@ export const _validateAsset =
 export const validate = _validateAsset({
   predetermineCID,
   fetchAssetDataByCID,
+  fetchTokenByScopedIdentifier,
   fetchGlobalIdentifierByScopedIdentifier,
   validateAsset,
 })

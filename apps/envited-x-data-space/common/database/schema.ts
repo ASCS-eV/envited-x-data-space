@@ -228,6 +228,7 @@ export const profilesToBusinessCategoriesRelations = relations(profilesToBusines
 
 export const asset = pgTable('asset', {
   id: uuid('id').defaultRandom().primaryKey(),
+  manifestGlobalIdentifierId: uuid('manifest_global_identifier_id').references(() => globalIdentifier.id),
   cid: text('cid'),
   name: text('name'),
   metadata: jsonb('metadata'),

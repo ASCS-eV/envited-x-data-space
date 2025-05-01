@@ -18,8 +18,8 @@ describe('common/validator/utils', () => {
       }
       const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
-      const fetchTokenByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
-      const fetchGlobalIdentifierByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
+      const fetchTokenByFullResourceNameStub = jest.fn().mockResolvedValue(null)
+      const fetchGlobalIdentifierByFullResourceNameStub = jest.fn().mockResolvedValue(null)
       const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {
@@ -37,14 +37,14 @@ describe('common/validator/utils', () => {
       const result = await SUT._validateAsset({
         predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
-        fetchTokenByScopedIdentifier: fetchTokenByScopedIdentifierStub,
-        fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
+        fetchTokenByFullResourceName: fetchTokenByFullResourceNameStub,
+        fetchGlobalIdentifierByFullResourceName: fetchGlobalIdentifierByFullResourceNameStub,
         validateAsset: validateAssetStub,
       })(file as any)
 
       expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
-      expect(fetchTokenByScopedIdentifierStub).toHaveBeenCalledWith('type:scopedIdentifier')
+      expect(fetchTokenByFullResourceNameStub).toHaveBeenCalledWith('did:web:fqdn:type:scopedIdentifier')
       expect(result).toEqual({
         isValid: true,
         data: {
@@ -67,11 +67,11 @@ describe('common/validator/utils', () => {
       }
       const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
-      const fetchTokenByScopedIdentifierStub = jest
+      const fetchGlobalIdentifierByFullResourceNameStub = jest
         .fn()
         .mockResolvedValueOnce(null)
         .mockResolvedValue('GLOBAL_IDENTIFIER')
-      const fetchGlobalIdentifierByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
+      const fetchTokenByFullResourceNameStub = jest.fn().mockResolvedValue(null)
       const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {
@@ -114,14 +114,14 @@ describe('common/validator/utils', () => {
       const result = await SUT._validateAsset({
         predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
-        fetchTokenByScopedIdentifier: fetchTokenByScopedIdentifierStub,
-        fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
+        fetchTokenByFullResourceName: fetchTokenByFullResourceNameStub,
+        fetchGlobalIdentifierByFullResourceName: fetchGlobalIdentifierByFullResourceNameStub,
         validateAsset: validateAssetStub,
       })(file as any)
 
       expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
-      expect(fetchTokenByScopedIdentifierStub).toHaveBeenCalledWith('type:scopedIdentifier')
+      expect(fetchTokenByFullResourceNameStub).toHaveBeenCalledWith('did:web:fqdn:type:scopedIdentifier')
       expect(result).toEqual({
         isValid: true,
         data: {
@@ -176,11 +176,11 @@ describe('common/validator/utils', () => {
       }
       const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
-      const fetchTokenByScopedIdentifierStub = jest
+      const fetchGlobalIdentifierByFullResourceNameStub = jest
         .fn()
         .mockResolvedValueOnce(null)
         .mockResolvedValue('GLOBAL_IDENTIFIER')
-      const fetchGlobalIdentifierByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
+      const fetchTokenByFullResourceNameStub = jest.fn().mockResolvedValue(null)
       const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {
@@ -223,14 +223,14 @@ describe('common/validator/utils', () => {
       const result = await SUT._validateAsset({
         predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
-        fetchTokenByScopedIdentifier: fetchTokenByScopedIdentifierStub,
-        fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
+        fetchTokenByFullResourceName: fetchTokenByFullResourceNameStub,
+        fetchGlobalIdentifierByFullResourceName: fetchGlobalIdentifierByFullResourceNameStub,
         validateAsset: validateAssetStub,
       })(file as any)
 
       expect(predetermineCIDStub).toHaveBeenCalledTimes(1)
       expect(fetchAssetDataByCIDStub).toHaveBeenCalledWith('CID')
-      expect(fetchTokenByScopedIdentifierStub).toHaveBeenCalledWith('type:scopedIdentifier')
+      expect(fetchTokenByFullResourceNameStub).toHaveBeenCalledWith('did:web:fqdn:type:scopedIdentifier')
       expect(result).toEqual({
         isValid: true,
         data: {
@@ -285,8 +285,8 @@ describe('common/validator/utils', () => {
       }
       const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue([])
-      const fetchTokenByScopedIdentifierStub = jest.fn().mockResolvedValue(['GLOBAL_IDENTIFIER'])
-      const fetchGlobalIdentifierByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
+      const fetchTokenByFullResourceNameStub = jest.fn().mockResolvedValue(['GLOBAL_IDENTIFIER'])
+      const fetchGlobalIdentifierByFullResourceNameStub = jest.fn().mockResolvedValue(null)
       const validateShaclFileStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {
@@ -301,8 +301,8 @@ describe('common/validator/utils', () => {
       const result = await SUT._validateAsset({
         predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
-        fetchTokenByScopedIdentifier: fetchTokenByScopedIdentifierStub,
-        fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
+        fetchTokenByFullResourceName: fetchTokenByFullResourceNameStub,
+        fetchGlobalIdentifierByFullResourceName: fetchGlobalIdentifierByFullResourceNameStub,
         validateAsset: validateShaclFileStub,
       })(file as any)
 
@@ -322,8 +322,8 @@ describe('common/validator/utils', () => {
       }
       const predetermineCIDStub = jest.fn().mockResolvedValue('CID')
       const fetchAssetDataByCIDStub = jest.fn().mockResolvedValue(['ASSET'])
-      const fetchTokenByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
-      const fetchGlobalIdentifierByScopedIdentifierStub = jest.fn().mockResolvedValue(null)
+      const fetchTokenByFullResourceNameStub = jest.fn().mockResolvedValue(null)
+      const fetchGlobalIdentifierByFullResourceNameStub = jest.fn().mockResolvedValue(null)
       const validateAssetStub = jest.fn().mockResolvedValue({
         isValid: true,
         data: {},
@@ -334,8 +334,8 @@ describe('common/validator/utils', () => {
       const result = await SUT._validateAsset({
         predetermineCID: predetermineCIDStub,
         fetchAssetDataByCID: fetchAssetDataByCIDStub,
-        fetchTokenByScopedIdentifier: fetchTokenByScopedIdentifierStub,
-        fetchGlobalIdentifierByScopedIdentifier: fetchGlobalIdentifierByScopedIdentifierStub,
+        fetchTokenByFullResourceName: fetchTokenByFullResourceNameStub,
+        fetchGlobalIdentifierByFullResourceName: fetchGlobalIdentifierByFullResourceNameStub,
         validateAsset: validateAssetStub,
       })(file as any)
 

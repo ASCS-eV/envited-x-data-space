@@ -3,13 +3,15 @@ import { isEmpty, isNil, prop } from 'ramda'
 
 import { getServerSession } from '../../../../common/auth'
 import { ERRORS, ERROR_CODES } from '../../../../common/constants/errors'
+import { parseGlobalIdentifier } from '../../../../common/globalIdentifiers'
 import { db } from '../../../../common/database/queries'
 
-export async function GET(request: Request, { params }: { params: { 'scoped-identifier': string } }) {
+export async function GET(
+  request: Request,
+  { params: { fullResourceName } }: { params: { fullResourceName: string } },
+) {
   try {
-    const scopedIdentifier = params['scoped-identifier']
-
-    if (isNil(scopedIdentifier) || isEmpty(scopedIdentifier)) {
+    if (isNil(fullResourceName) || isEmpty(fullResourceName)) {
       return NextResponse.json({ error: ERRORS.GLOBAL_IDENTIFIER_MISSING }, { status: ERROR_CODES.BAD_REQUEST })
     }
 
@@ -18,6 +20,8 @@ export async function GET(request: Request, { params }: { params: { 'scoped-iden
     if (isNil(session)) {
       return NextResponse.json({ error: ERRORS.UNAUTHORIZED }, { status: ERROR_CODES.UNAUTHORIZED })
     }
+
+    const { scopedIdentifier } = parseGlobalIdentifier(fullResourceName)
 
     const connection = await db()
     const globalIdentifier = await connection.getGlobalIdentifierByScopedIdentifier(scopedIdentifier)

@@ -57,7 +57,7 @@ export const processAssetUpload =
       status: AssetStatus,
       metadata?: AssetMetadata | string,
       manifest?: Record<string, unknown>,
-      manifestGlobalIdentifierId?: string | undefined,
+      manifestGlobalIdentifierId?: string,
     ) => Promise<Asset>
     uploadFileToIPFS: ({
       arrayBuffer,

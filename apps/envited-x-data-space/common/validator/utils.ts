@@ -1,13 +1,12 @@
-import { any, filter, groupBy, isEmpty, isNotNil, path, pathEq, pipe, propEq, propOr } from 'ramda'
+import { filter, groupBy, isEmpty, isNotNil, path, pathEq, pipe, propOr } from 'ramda'
 
-import { fetchAssetDataByCID, fetchGlobalIdentifierByScopedIdentifier, fetchTokenByScopedIdentifier } from '../api'
+import { fetchAssetDataByCID, fetchGlobalIdentifierByFullResourceName, fetchTokenByFullResourceName } from '../api'
 import { validateAsset } from '../asset'
 import { MANIFEST_LINK_MIME_TYPE } from '../asset/constants'
 import { Manifest, ManifestMetadataLink } from '../asset/types'
 import { predetermineCID } from '../asset/utils'
 import { ERRORS } from '../constants'
 import { FEATURE_FLAGS } from '../featureFlags'
-import { parseGlobalIdentifier } from '../globalIdentifiers'
 import { Environment } from '../types'
 
 export const getReferencedAssets = (manifest: Manifest) =>
@@ -21,8 +20,8 @@ export const _validateAsset =
     predetermineCID,
     fetchAssetDataByCID,
     validateAsset,
-    fetchTokenByScopedIdentifier,
-    fetchGlobalIdentifierByScopedIdentifier,
+    fetchTokenByFullResourceName,
+    fetchGlobalIdentifierByFullResourceName,
   }: {
     predetermineCID: (array: Uint8Array) => Promise<string>
     fetchAssetDataByCID: (cid: string) => Promise<any>
@@ -34,8 +33,8 @@ export const _validateAsset =
       }
       error?: string
     }>
-    fetchTokenByScopedIdentifier: (scopedIdentifier: string) => Promise<any>
-    fetchGlobalIdentifierByScopedIdentifier: (scopedIdentifier: string) => Promise<any>
+    fetchTokenByFullResourceName: (scopedIdentifier: string) => Promise<any>
+    fetchGlobalIdentifierByFullResourceName: (scopedIdentifier: string) => Promise<any>
   }) =>
   async (file: File) => {
     try {
@@ -60,8 +59,7 @@ export const _validateAsset =
       }
 
       if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].uniqueGlobalIdentifier) {
-        const { scopedIdentifier } = parseGlobalIdentifier(validation.data.domainMetadata?.['@id'] as string)
-        const token = await fetchTokenByScopedIdentifier(scopedIdentifier)
+        const token = await fetchTokenByFullResourceName(validation.data.domainMetadata?.['@id'] as string)
 
         if (isNotNil(token)) {
           return {
@@ -71,10 +69,10 @@ export const _validateAsset =
           }
         }
 
-        const parsedManifestGlobalIdentifier = parseGlobalIdentifier(validation.data.manifest?.['@id'] as string)
-        const globalIdentifier = await fetchGlobalIdentifierByScopedIdentifier(
-          parsedManifestGlobalIdentifier.scopedIdentifier,
+        const globalIdentifier = await fetchGlobalIdentifierByFullResourceName(
+          validation.data.manifest?.['@id'] as string,
         )
+
         if (isNotNil(globalIdentifier)) {
           return {
             isValid: false,
@@ -87,8 +85,9 @@ export const _validateAsset =
       const referencedAssets = getReferencedAssets(validation.data.manifest as Manifest)
       const results = await Promise.all(
         referencedAssets.map(async (manifestLink: ManifestMetadataLink) => {
-          const { scopedIdentifier } = parseGlobalIdentifier(manifestLink['manifest:iri']['@id'])
-          const checkIfReferencedArtifactsExists = await fetchTokenByScopedIdentifier(scopedIdentifier)
+          const checkIfReferencedArtifactsExists = await fetchGlobalIdentifierByFullResourceName(
+            manifestLink['manifest:iri']['@id'],
+          )
 
           return {
             id: manifestLink['manifest:iri']['@id'],
@@ -113,7 +112,7 @@ export const _validateAsset =
 export const validate = _validateAsset({
   predetermineCID,
   fetchAssetDataByCID,
-  fetchTokenByScopedIdentifier,
-  fetchGlobalIdentifierByScopedIdentifier,
+  fetchTokenByFullResourceName,
+  fetchGlobalIdentifierByFullResourceName,
   validateAsset,
 })

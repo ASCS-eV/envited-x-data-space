@@ -21,7 +21,7 @@ describe('common/asset/createModifiedManifest', () => {
         },
       ]
       const getOrCreateGlobalIdentifierUuidStub = jest.fn().mockResolvedValue('UUID')
-      const getReferencedArtifactsUuidsStub = jest.fn().mockResolvedValue(null)
+      const formatReferencedArtifactManifestIdStub = jest.fn().mockResolvedValue(null)
 
       const expected = {
         '@context': {
@@ -771,7 +771,7 @@ describe('common/asset/createModifiedManifest', () => {
 
       const result = await SUT._createModifiedManifest({
         getOrCreateGlobalIdentifierUuid: getOrCreateGlobalIdentifierUuidStub,
-        getReferencedArtifactsUuids: getReferencedArtifactsUuidsStub,
+        formatReferencedArtifactManifestId: formatReferencedArtifactManifestIdStub,
       })({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
@@ -793,7 +793,7 @@ describe('common/asset/createModifiedManifest', () => {
         },
       ]
       const getOrCreateGlobalIdentifierUuidStub = jest.fn().mockResolvedValue('UUID')
-      const getReferencedArtifactsUuidsStub = jest.fn().mockResolvedValue(null)
+      const formatReferencedArtifactManifestIdStub = jest.fn().mockResolvedValue(null)
 
       const expected = {
         '@context': {
@@ -1543,7 +1543,7 @@ describe('common/asset/createModifiedManifest', () => {
 
       const result = await SUT._createModifiedManifest({
         getOrCreateGlobalIdentifierUuid: getOrCreateGlobalIdentifierUuidStub,
-        getReferencedArtifactsUuids: getReferencedArtifactsUuidsStub,
+        formatReferencedArtifactManifestId: formatReferencedArtifactManifestIdStub,
       })({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
@@ -1565,7 +1565,7 @@ describe('common/asset/createModifiedManifest', () => {
         },
       ]
       const getOrCreateGlobalIdentifierUuidStub = jest.fn().mockResolvedValue('UUID')
-      const getReferencedArtifactsUuidsStub = jest.fn().mockResolvedValue(null)
+      const formatReferencedArtifactManifestIdStub = jest.fn().mockResolvedValue(null)
 
       const expected = {
         '@context': {
@@ -2315,7 +2315,7 @@ describe('common/asset/createModifiedManifest', () => {
 
       const result = await SUT._createModifiedManifest({
         getOrCreateGlobalIdentifierUuid: getOrCreateGlobalIdentifierUuidStub,
-        getReferencedArtifactsUuids: getReferencedArtifactsUuidsStub,
+        formatReferencedArtifactManifestId: formatReferencedArtifactManifestIdStub,
       })({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
@@ -2337,7 +2337,7 @@ describe('common/asset/createModifiedManifest', () => {
         },
       ]
       const getOrCreateGlobalIdentifierUuidStub = jest.fn().mockResolvedValue('UUID')
-      const getReferencedArtifactsUuidsStub = jest.fn().mockResolvedValue(null)
+      const formatReferencedArtifactManifestIdStub = jest.fn().mockResolvedValue(null)
 
       const expected = {
         '@context': {
@@ -3086,7 +3086,7 @@ describe('common/asset/createModifiedManifest', () => {
 
       const result = await SUT._createModifiedManifest({
         getOrCreateGlobalIdentifierUuid: getOrCreateGlobalIdentifierUuidStub,
-        getReferencedArtifactsUuids: getReferencedArtifactsUuidsStub,
+        formatReferencedArtifactManifestId: formatReferencedArtifactManifestIdStub,
       })({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',
@@ -3108,7 +3108,7 @@ describe('common/asset/createModifiedManifest', () => {
         },
       ]
       const getOrCreateGlobalIdentifierUuidStub = jest.fn().mockResolvedValue('UUID')
-      const getReferencedArtifactsUuidsStub = jest
+      const formatReferencedArtifactManifestIdStub = jest
         .fn()
         .mockResolvedValueOnce({
           '@type': 'manifest:Link',
@@ -4192,7 +4192,7 @@ describe('common/asset/createModifiedManifest', () => {
 
       const result = await SUT._createModifiedManifest({
         getOrCreateGlobalIdentifierUuid: getOrCreateGlobalIdentifierUuidStub,
-        getReferencedArtifactsUuids: getReferencedArtifactsUuidsStub,
+        formatReferencedArtifactManifestId: formatReferencedArtifactManifestIdStub,
       })({
         assetCID: 'ASSET_CID',
         domainMetadataCID: 'DOMAIN_METADATA_CID',

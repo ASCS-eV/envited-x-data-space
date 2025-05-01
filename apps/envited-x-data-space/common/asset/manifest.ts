@@ -1,4 +1,4 @@
-import { equals, find, includes, isNotNil, map, pipe, propEq, propOr, tail } from 'ramda'
+import { equals, find, includes, isNotNil, map, path, pathOr, pipe, propEq, propOr, tail } from 'ramda'
 
 import { db } from '../database/queries'
 import { Database } from '../database/types'
@@ -18,10 +18,12 @@ import { formatManifestLinkPath, isRemoteUrl } from './utils'
 export const _createModifiedManifest =
   ({
     getOrCreateGlobalIdentifierUuid,
-    getReferencedArtifactsUuids,
+    formatReferencedArtifactManifestId,
   }: {
     getOrCreateGlobalIdentifierUuid: (fullResourceName: string) => Promise<string>
-    getReferencedArtifactsUuids: (artifact: any) => Promise<any>
+    formatReferencedArtifactManifestId: (
+      artifact: ManifestMetadataLink | ManifestLink,
+    ) => Promise<ManifestMetadataLink | ManifestLink>
   }) =>
   ({
     assetCID,
@@ -52,7 +54,7 @@ export const _createModifiedManifest =
       )(manifest['manifest:hasLicense']['manifest:licenseData']),
     },
     'manifest:hasReferencedArtifacts': await Promise.all(
-      manifest['manifest:hasReferencedArtifacts']?.map(getReferencedArtifactsUuids) ?? [],
+      manifest['manifest:hasReferencedArtifacts']?.map(formatReferencedArtifactManifestId) ?? [],
     ),
   })
 
@@ -72,12 +74,14 @@ export const modifyManifestLink =
     },
   })
 
-export const getReferencedArtifactsUuids = async (artifact: ManifestMetadataLink): Promise<ManifestMetadataLink> => {
-  if (artifact['manifest:iri']?.['@id']) {
+export const formatReferencedArtifactManifestId = async (
+  artifact: ManifestMetadataLink | ManifestLink,
+): Promise<ManifestMetadataLink | ManifestLink> => {
+  if (path(['manifest:iri', '@id'])(artifact)) {
     return {
       ...artifact,
       'manifest:iri': {
-        '@id': await getOrCreateGlobalIdentifierUuid(artifact['manifest:iri']['@id']),
+        '@id': await getOrCreateGlobalIdentifierUuid(pathOr('', ['manifest:iri', '@id'])(artifact)),
       },
     }
   }
@@ -143,5 +147,5 @@ export const getOrCreateGlobalIdentifierUuid = _getOrCreateGlobalIdentifierUuid(
 
 export const createModifiedManifest = _createModifiedManifest({
   getOrCreateGlobalIdentifierUuid,
-  getReferencedArtifactsUuids,
+  formatReferencedArtifactManifestId,
 })

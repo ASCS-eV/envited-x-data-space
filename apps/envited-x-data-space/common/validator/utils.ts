@@ -33,8 +33,8 @@ export const _validateAsset =
       }
       error?: string
     }>
-    fetchTokenByFullResourceName: (scopedIdentifier: string) => Promise<any>
-    fetchGlobalIdentifierByFullResourceName: (scopedIdentifier: string) => Promise<any>
+    fetchTokenByFullResourceName: (fullResourceName: string) => Promise<any>
+    fetchGlobalIdentifierByFullResourceName: (fullResourceName: string) => Promise<any>
   }) =>
   async (file: File) => {
     try {

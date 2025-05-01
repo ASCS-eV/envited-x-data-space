@@ -123,7 +123,7 @@ export const formatIpfsUri = (CID: string) => `ipfs://${CID}`
 
 export const formatAssetUri = (CID: string) => `${process.env.ASSETS_URL}/${CID}`
 
-export const formatMetadataUri = (CID: string) => `${process.env.METADATA_URL}/${CID}`
+export const formatMetadataUri = (CID: string) => `${process.env.PRIVATE_RESOURCES_URL}/${CID}`
 
 export const extractFilenameFromPath = (path: string) => last(split('/')(path))
 

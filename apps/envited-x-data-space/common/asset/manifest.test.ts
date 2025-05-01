@@ -6,7 +6,7 @@ import * as SUT from './manifest'
 
 describe('common/asset/createModifiedManifest', () => {
   process.env.ASSETS_URL = 'https://assets.envited-x.net'
-  process.env.METADATA_URL = 'https://metadata.envited-x.net'
+  process.env.PRIVATE_RESOURCES_URL = 'https://metadata.envited-x.net'
   describe('createModifiedManifest', () => {
     it('should create the modified manifest object - LicenseRemote', () => {
       // when ... we want to validate data conform the data type

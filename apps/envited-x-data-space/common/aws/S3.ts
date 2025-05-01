@@ -28,7 +28,7 @@ export const getUploadUrl = (getSignedUrl: (command: PutObjectCommand) => Promis
     new PutObjectCommand({
       ACL: 'private',
       Key: filename,
-      Bucket: process.env.NEXT_PUBLIC_UPLOAD_BUCKET_NAME || '',
+      Bucket: process.env.NEXT_PUBLIC_UPLOADS_BUCKET_NAME || '',
     }),
   )
 

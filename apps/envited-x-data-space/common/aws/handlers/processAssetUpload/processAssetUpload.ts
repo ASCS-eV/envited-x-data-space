@@ -189,7 +189,7 @@ export const processAssetUpload =
             const fileBuffer = await streamToUint8Array(fileToUpload)
             const cid = await predetermineCID(fileBuffer)
             const upload = uploadToObjectStorage({
-              Bucket: process.env.NEXT_PUBLIC_IPFS_BUCKET_NAME,
+              Bucket: process.env.NEXT_PUBLIC_PUBLIC_RESOURCES_BUCKET_NAME,
               Key: `${assetCID}/${cid}`,
               Body: fileBuffer,
               ContentEncoding: 'base64',
@@ -219,7 +219,7 @@ export const processAssetUpload =
             const fileBuffer = await streamToUint8Array(fileToUpload)
             const cid = await predetermineCID(fileBuffer)
             const upload = uploadToObjectStorage({
-              Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+              Bucket: process.env.NEXT_PUBLIC_PRIVATE_RESOURCES_BUCKET_NAME,
               Key: `${assetCID}/${cid}`,
               Body: fileBuffer,
               ContentEncoding: 'base64',
@@ -247,7 +247,7 @@ export const processAssetUpload =
             const fileBuffer = await streamToUint8Array(fileToUpload)
             const cid = await predetermineCID(fileBuffer)
             const upload = uploadToObjectStorage({
-              Bucket: process.env.NEXT_PUBLIC_METADATA_BUCKET_NAME,
+              Bucket: process.env.NEXT_PUBLIC_PRIVATE_RESOURCES_BUCKET_NAME,
               Key: `${assetCID}/${cid}`,
               Body: fileBuffer,
               ContentEncoding: 'base64',

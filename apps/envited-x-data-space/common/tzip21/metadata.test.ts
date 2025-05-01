@@ -12,7 +12,7 @@ export const TEST_TOKEN_TAGS = {
 
 describe('common/asset/createTokenMetadata', () => {
   process.env.ASSETS_URL = 'https://assets.envited-x.net'
-  process.env.METADATA_URL = 'https://metadata.envited-x.net'
+  process.env.PRIVATE_RESOURCES_URL = 'https://metadata.envited-x.net'
   describe('createTokenMetadata', () => {
     it('should extract data from manifest and domainMetadata and create a token metadata object', async () => {
       // when ... we want to validate data conform the data type

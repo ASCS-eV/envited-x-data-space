@@ -47,7 +47,7 @@ export default function Envited({ stack }: StackContext) {
     exposedHeaders: ['ETag'],
   }
 
-  const uploadsBucket = new Bucket(stack, 'uploads', {
+  const uploadsBucket = new Bucket(stack, `uploads-${stack.stage}`, {
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
@@ -74,7 +74,7 @@ export default function Envited({ stack }: StackContext) {
     ],
   })
 
-  const metadataBucket = new Bucket(stack, 'metadata', {
+  const privateResourcesBucket = new Bucket(stack, `private-resources-${stack.stage}`, {
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
@@ -82,9 +82,9 @@ export default function Envited({ stack }: StackContext) {
     },
     cors: [s3CorsRule],
   })
-  metadataBucket.cdk.bucket.grantRead(oai)
+  privateResourcesBucket.cdk.bucket.grantRead(oai)
 
-  const ipfsBucket = new Bucket(stack, 'ipfs', {
+  const publicResourcesBucket = new Bucket(stack, `public-resources-${stack.stage}`, {
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
@@ -92,24 +92,24 @@ export default function Envited({ stack }: StackContext) {
     },
     cors: [s3CorsRule],
   })
-  ipfsBucket.cdk.bucket.grantRead(oai)
+  publicResourcesBucket.cdk.bucket.grantRead(oai)
 
-  const assetsBucket = new Bucket(stack, 'assets', {
+  const assetsBucket = new Bucket(stack, `assets-${stack.stage}`, {
     notifications: {
       processAssetUpload: {
         function: {
           handler: 'common/aws/handlers/processAssetUpload/index.main',
           environment: {
             RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
-            NEXT_PUBLIC_METADATA_BUCKET_NAME: metadataBucket.bucketName,
-            NEXT_PUBLIC_IPFS_BUCKET_NAME: ipfsBucket.bucketName,
+            NEXT_PUBLIC_METADATA_BUCKET_NAME: privateResourcesBucket.bucketName,
+            NEXT_PUBLIC_IPFS_BUCKET_NAME: publicResourcesBucket.bucketName,
             PINATA_JWT: process.env.PINATA_JWT!,
             PINATA_GATEWAY: process.env.PINATA_GATEWAY!,
             PINATA_GATEWAY_KEY: process.env.PINATA_GATEWAY_KEY!,
             ASSETS_URL: process.env.ASSETS_URL!,
             METADATA_URL: process.env.METADATA_URL!,
           },
-          permissions: [ipfsBucket, metadataBucket, 'secretsmanager:GetSecretValue'],
+          permissions: [publicResourcesBucket, privateResourcesBucket, 'secretsmanager:GetSecretValue'],
           // copyFiles: [{ from: 'common/aws/handlers/processAssetUpload/schemas' }],
           securityGroups: [sg],
           vpc,
@@ -137,11 +137,11 @@ export default function Envited({ stack }: StackContext) {
     },
     cors: [s3CorsRule],
   })
-  assetsBucket.attachPermissions([assetsBucket, ipfsBucket, metadataBucket])
-  metadataBucket.attachPermissions([metadataBucket, assetsBucket])
+  assetsBucket.attachPermissions([assetsBucket, publicResourcesBucket, privateResourcesBucket])
+  privateResourcesBucket.attachPermissions([privateResourcesBucket, assetsBucket])
   assetsBucket.cdk.bucket.grantRead(oai)
 
-  const assetsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'assetsDistribution', {
+  const assetsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, `assetsDistribution-${stack.stage}`, {
     originConfigs: [
       {
         s3OriginSource: {
@@ -156,38 +156,46 @@ export default function Envited({ stack }: StackContext) {
     ],
   })
 
-  const metadataDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'metadataDistribution', {
-    originConfigs: [
-      {
-        s3OriginSource: {
-          s3BucketSource: metadataBucket.cdk.bucket,
-          originAccessIdentity: oai,
+  const privateResourcesDistribution = new aws_cloudfront.CloudFrontWebDistribution(
+    stack,
+    `privateResourcesDistribution-${stack.stage}`,
+    {
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: privateResourcesBucket.cdk.bucket,
+            originAccessIdentity: oai,
+          },
+          behaviors: [
+            { isDefaultBehavior: true },
+            { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
+          ],
         },
-        behaviors: [
-          { isDefaultBehavior: true },
-          { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
-        ],
-      },
-    ],
-  })
+      ],
+    },
+  )
 
-  const ipfsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, 'ipfsDistribution', {
-    originConfigs: [
-      {
-        s3OriginSource: {
-          s3BucketSource: ipfsBucket.cdk.bucket,
-          originAccessIdentity: oai,
+  const publicResourcesDistribution = new aws_cloudfront.CloudFrontWebDistribution(
+    stack,
+    `publicResourcesDistribution-${stack.stage}`,
+    {
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: publicResourcesBucket.cdk.bucket,
+            originAccessIdentity: oai,
+          },
+          behaviors: [
+            { isDefaultBehavior: true },
+            { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
+          ],
         },
-        behaviors: [
-          { isDefaultBehavior: true },
-          { pathPattern: '/*', allowedMethods: aws_cloudfront.CloudFrontAllowedMethods.GET_HEAD },
-        ],
-      },
-    ],
-  })
+      ],
+    },
+  )
 
   // Create the Next.js site
-  const site = new NextjsSite(stack, 'envited_x_data_space', {
+  const site = new NextjsSite(stack, `envited_x_data_space-${stack.stage}`, {
     path: './',
     bind: [uploadsBucket, assetsBucket],
     memorySize: '1024 MB',
@@ -241,9 +249,9 @@ export default function Envited({ stack }: StackContext) {
     UploadsDistributionId: uploadsDistribution.distributionId,
     AssetsDistribution: assetsDistribution.distributionDomainName,
     AssetsDistributionId: assetsDistribution.distributionId,
-    MetadataDistribution: metadataDistribution.distributionDomainName,
-    MetadataDistributionId: metadataDistribution.distributionId,
-    IpfsDistribution: ipfsDistribution.distributionDomainName,
-    IpfsDistributionId: ipfsDistribution.distributionId,
+    PrivateResourcesDistribution: privateResourcesDistribution.distributionDomainName,
+    PrivateResourcesDistributionId: privateResourcesDistribution.distributionId,
+    PublicResourcesDistribution: publicResourcesDistribution.distributionDomainName,
+    PublicResourcesDistributionId: publicResourcesDistribution.distributionId,
   })
 }

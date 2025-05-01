@@ -3,8 +3,8 @@ import { isEmpty, isNil, prop } from 'ramda'
 
 import { getServerSession } from '../../../../common/auth'
 import { ERRORS, ERROR_CODES } from '../../../../common/constants/errors'
-import { parseGlobalIdentifier } from '../../../../common/globalIdentifiers'
 import { db } from '../../../../common/database/queries'
+import { parseGlobalIdentifier } from '../../../../common/globalIdentifiers'
 
 export async function GET(
   request: Request,

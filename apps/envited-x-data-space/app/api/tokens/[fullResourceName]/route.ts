@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server'
-import { isEmpty, isNil, prop } from 'ramda'
+import { equals, isEmpty, isNil, prop } from 'ramda'
 
 import { getServerSession } from '../../../../common/auth'
 import { ERRORS, ERROR_CODES } from '../../../../common/constants/errors'
 import { db } from '../../../../common/database/queries'
 import { parseGlobalIdentifier } from '../../../../common/globalIdentifiers'
+import { IdentifierMethod } from '../../../../common/types'
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params: { fullResourceName } }: { params: { fullResourceName: string } },
 ) {
   try {
@@ -21,7 +22,7 @@ export async function GET(
       return NextResponse.json({ error: ERRORS.UNAUTHORIZED }, { status: ERROR_CODES.UNAUTHORIZED })
     }
 
-    const { scopedIdentifier } = parseGlobalIdentifier(fullResourceName)
+    const { method, scopedIdentifier } = parseGlobalIdentifier(fullResourceName)
 
     const connection = await db()
     const globalIdentifier = await connection.getGlobalIdentifierByScopedIdentifier(scopedIdentifier)
@@ -30,9 +31,13 @@ export async function GET(
       return NextResponse.json(null)
     }
 
-    const token = await connection.getTokenByWebGlobalIdentifierId(prop('id')(globalIdentifier))
+    if (equals(method)(IdentifierMethod.didWeb)) {
+      const token = await connection.getTokenByWebGlobalIdentifierId(prop('id')(globalIdentifier))
 
-    return NextResponse.json(token)
+      return NextResponse.json(token)
+    }
+
+    return NextResponse.json(null)
   } catch (error) {
     console.error('Error fetching asset:', error)
     return NextResponse.json({ error: ERRORS.INTERNAL_SERVER_ERROR }, { status: ERROR_CODES.INTERNAL_SERVER_ERROR })

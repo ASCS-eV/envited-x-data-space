@@ -7,7 +7,7 @@ import { ERRORS, ERROR_CODES } from '../../../../common/constants/errors'
 import { db } from '../../../../common/database/queries'
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params: { fullResourceName } }: { params: { fullResourceName: string } },
 ) {
   try {

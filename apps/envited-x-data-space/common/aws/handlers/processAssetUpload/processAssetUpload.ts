@@ -57,6 +57,7 @@ export const processAssetUpload =
       status: AssetStatus,
       metadata?: AssetMetadata | string,
       manifest?: Record<string, unknown>,
+      manifestGlobalIdentifierId?: string,
     ) => Promise<Asset>
     uploadFileToIPFS: ({
       arrayBuffer,
@@ -102,7 +103,7 @@ export const processAssetUpload =
       assetCID: string
       domainMetadataCID: string
       media: ExtractedResourceWithCID[]
-    }) => (manifest: Manifest) => Record<string, unknown>
+    }) => (manifest: Manifest) => Promise<Record<string, unknown>>
     jsonToUint8Array: (data: Record<string, unknown>) => Uint8Array
     extractGeneralInformationFromMetadata: (type: MetadataType) => (metadata: Record<string, unknown>) => {
       name: string
@@ -269,7 +270,7 @@ export const processAssetUpload =
       }
 
       const isPublicMediaWithCids = await addCIDs(uploadedFile, isPublicMedia)
-      const modifiedManifest = createModifiedManifest({
+      const modifiedManifest = await createModifiedManifest({
         assetCID,
         domainMetadataCID,
         media: isPublicMediaWithCids,
@@ -319,7 +320,14 @@ export const processAssetUpload =
       })
 
       // Update stored asset in DB
-      await updateAsset(assetCID, Key, AssetStatus.pending, tzip21Metadata, modifiedManifest)
+      await updateAsset(
+        assetCID,
+        Key,
+        AssetStatus.pending,
+        tzip21Metadata,
+        modifiedManifest,
+        propOr('', '@id')(modifiedManifest),
+      )
     } catch (err) {
       console.log(err)
       throw err

@@ -37,3 +37,11 @@ export const getTokenByTokenId =
 
 export const getTokensByIssuerId = (db: DatabaseConnection) => async (issuerGuid: string) =>
   db.select().from(token).where(eq(token.minterGlobalIdentifierId, issuerGuid))
+
+export const getTokenByWebGlobalIdentifierId = (db: DatabaseConnection) => async (globalIdentifierId: string) =>
+  db
+    .select()
+    .from(token)
+    .where(eq(token.webGlobalIdentifierId, globalIdentifierId))
+    .limit(1)
+    .then(tokens => tokens[0] || null)

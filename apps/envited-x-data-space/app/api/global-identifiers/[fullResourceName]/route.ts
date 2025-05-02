@@ -1,3 +1,4 @@
+import { parseGlobalIdentifier } from 'apps/envited-x-data-space/common/globalIdentifiers'
 import { NextResponse } from 'next/server'
 import { isEmpty, isNil } from 'ramda'
 
@@ -5,9 +6,12 @@ import { getServerSession } from '../../../../common/auth'
 import { ERRORS, ERROR_CODES } from '../../../../common/constants/errors'
 import { db } from '../../../../common/database/queries'
 
-export async function GET(request: Request, { params: { id } }: { params: { id: string } }) {
+export async function GET(
+  _request: Request,
+  { params: { fullResourceName } }: { params: { fullResourceName: string } },
+) {
   try {
-    if (isNil(id) || isEmpty(id)) {
+    if (isNil(fullResourceName) || isEmpty(fullResourceName)) {
       return NextResponse.json({ error: ERRORS.CID_MISSING }, { status: ERROR_CODES.BAD_REQUEST })
     }
 
@@ -18,7 +22,8 @@ export async function GET(request: Request, { params: { id } }: { params: { id: 
     }
 
     const connection = await db()
-    const assets = await connection.getGlobalIdentifierByScopedIdentifier(id)
+    const { scopedIdentifier } = parseGlobalIdentifier(fullResourceName)
+    const assets = await connection.getGlobalIdentifierByScopedIdentifier(scopedIdentifier)
 
     return NextResponse.json(assets)
   } catch (error) {

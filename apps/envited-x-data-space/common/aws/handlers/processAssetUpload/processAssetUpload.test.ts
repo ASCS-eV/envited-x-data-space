@@ -55,7 +55,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         .fn()
         .mockResolvedValue({ cid: 'COVER_CID', fileSize: 1000, uri: 'COVER_URI' }) as any
       const addCIDsStub = jest.fn().mockResolvedValue([]) as any
-      const createModifiedManifestStub = jest.fn().mockReturnValue(() => ({ fileSize: 1000 })) as any
+      const createModifiedManifestStub = jest.fn().mockReturnValue(() => ({ '@id': 'UUID', 'fileSize': 1000 })) as any
       const jsonToUint8ArrayStub = jest.fn().mockReturnValue(new Uint8Array()) as any
       const extractGeneralInformationFromMetadataStub = jest.fn().mockReturnValue(() => ({})) as any
       const hasRemoteLinksStub = jest.fn().mockReturnValue(false) as any
@@ -129,6 +129,7 @@ describe('common/aws/handlers/processAssetUpload', () => {
         'pending',
         expect.any(Object),
         expect.any(Object),
+        'UUID',
       )
       expect(createGroupStub).toHaveBeenCalledWith(expect.any(String))
       expect(uploadDoneStub).toHaveBeenCalledWith()

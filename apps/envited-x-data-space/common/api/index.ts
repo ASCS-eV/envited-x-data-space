@@ -1,1 +1,1 @@
-export { fetchAssetDataByCID, fetchGlobalIdentifierByScopedIdentifier } from './api'
+export { fetchAssetDataByCID, fetchGlobalIdentifierByFullResourceName, fetchTokenByFullResourceName } from './api'

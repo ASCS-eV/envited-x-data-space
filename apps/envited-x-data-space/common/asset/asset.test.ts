@@ -223,6 +223,7 @@ describe('common/asset/asset', () => {
           metadata: {},
           manifest: {},
           status: 'pending',
+          manifestGlobalIdentifierId: '',
         },
         'ASSET_CID',
       )

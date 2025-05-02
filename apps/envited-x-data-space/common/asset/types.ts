@@ -36,7 +36,7 @@ export interface Manifest {
   'manifest:hasManifestReference': ManifestLink
   'manifest:hasLicense': ManifestLicense
   'manifest:hasArtifacts': ManifestArtifacts
-  'manifest:hasReferencedArtifacts': []
+  'manifest:hasReferencedArtifacts': ManifestArtifacts
 }
 
 export type ManifestContext =

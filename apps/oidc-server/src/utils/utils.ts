@@ -135,7 +135,7 @@ export const _verifyPresentation =
   async (VC: any, VP: any): Promise<boolean> => {
     if (
       VP.holder &&
-      VP.verifiableCredential.credentialSubject.id === VC.credentialSubject.id &&
+      VP.verifiableCredential[0].credentialSubject.id === VC.credentialSubject.id &&
       VP.proof.verificationMethod.split('#')[0] === VP.holder
     ) {
       // Verify the signature on the VC

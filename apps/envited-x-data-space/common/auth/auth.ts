@@ -97,12 +97,12 @@ export const authOptions: NextAuthOptions = {
             return '/error?error=CREDENTIAL_NOT_FOUND'
           }
 
-          const credential = omit(['proof'])(prop('credential')(profile) as Partial<Record<'proof', any>>) as Credential
+          const credential = omit(['proof'])(prop('credential')(profile) as Partial<Record<'proof', any>>) as Credential[]
           const {
             id,
             issuer,
             credentialSubject: { id: credentialSubjectId, type: credentialSubjectType },
-          } = credential
+          } = credential[0]
 
           if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].contract) {
             log.info('Starting revocation registry check')

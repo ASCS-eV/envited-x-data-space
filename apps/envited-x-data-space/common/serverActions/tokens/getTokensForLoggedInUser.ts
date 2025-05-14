@@ -25,7 +25,7 @@ export const _getTokensForLoggedInUser =
       console.log('USER', user)
       let addressGlobalIdentifierId = user.addressGlobalIdentifierId
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
-        const principal = await connection.getUserById(user.issuerId)
+        const principal = await connection.getUserByIssuerId(user.issuerId)
         console.log('PRINCIPAL', principal)
         addressGlobalIdentifierId = principal.addressGlobalIdentifierId
       }

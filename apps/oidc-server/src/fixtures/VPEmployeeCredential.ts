@@ -2,7 +2,7 @@ export const VPEmployeeCredential = {
   '@context': ['https://www.w3.org/2018/credentials/v1'],
   'id': 'urn:uuid:befddbe3-4cbc-430a-b5b5-b61b3850b14a',
   'type': ['VerifiablePresentation'],
-  'verifiableCredential': {
+  'verifiableCredential': [{
     '@context': [
       'https://www.w3.org/2018/credentials/v1',
       {
@@ -198,7 +198,7 @@ export const VPEmployeeCredential = {
     },
     'validFrom': '2023-07-20T15:36:41Z',
     'issued': '2023-07-20T15:36:41Z',
-  },
+  }],
   'proof': {
     type: 'Ed25519Signature2018',
     proofPurpose: 'authentication',

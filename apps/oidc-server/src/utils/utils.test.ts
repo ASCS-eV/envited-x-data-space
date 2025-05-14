@@ -246,7 +246,7 @@ describe('utils', () => {
       const result = await SUT._verifyPresentation({
         spruceVerifyCredential: spruceVerifyCredentialStub,
         spruceVerifyPresentation: spruceVerifyPresentationStub,
-      })(vp.verifiableCredential, vp)
+      })(vp.verifiableCredential[0], vp)
       expect(result).toEqual(true)
     })
 
@@ -259,7 +259,7 @@ describe('utils', () => {
       const result = await SUT._verifyPresentation({
         spruceVerifyCredential: spruceVerifyCredentialStub,
         spruceVerifyPresentation: spruceVerifyPresentationStub,
-      })(vp.verifiableCredential, vp)
+      })(vp.verifiableCredential[0], vp)
       expect(result).toEqual(false)
     })
 
@@ -272,7 +272,7 @@ describe('utils', () => {
       const result = await SUT._verifyPresentation({
         spruceVerifyCredential: spruceVerifyCredentialStub,
         spruceVerifyPresentation: spruceVerifyPresentationStub,
-      })(vp.verifiableCredential, vp)
+      })(vp.verifiableCredential[0], vp)
       expect(result).toEqual(false)
     })
 
@@ -286,7 +286,7 @@ describe('utils', () => {
       const result = await SUT._verifyPresentation({
         spruceVerifyCredential: spruceVerifyCredentialStub,
         spruceVerifyPresentation: spruceVerifyPresentationStub,
-      })(vp.verifiableCredential, vp)
+      })(vp.verifiableCredential[0], vp)
       expect(result).toEqual(false)
     })
   })

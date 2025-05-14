@@ -2,7 +2,7 @@ export const VPEmailPass = {
   '@context': ['https://www.w3.org/2018/credentials/v1'],
   'id': 'urn:uuid:89581491-c9d6-47d2-bd4b-e606fe6acd70',
   'type': ['VerifiablePresentation'],
-  'verifiableCredential': {
+  'verifiableCredential': [{
     '@context': [
       'https://www.w3.org/2018/credentials/v1',
       {
@@ -51,7 +51,7 @@ export const VPEmailPass = {
       jws: 'eyJhbGciOiJFZERTQSIsImNyaXQiOlsiYjY0Il0sImI2NCI6ZmFsc2V9..wl9s4OXCG5vV_sDvxn0E8DmHqQ482e2BlKy-sRsIN9WSwO0ZTU3O75wnEl0PtAcwIFPz_3VIlpz9hjJcRUqABA',
     },
     'expirationDate': '2024-11-28T09:43:33.446349Z',
-  },
+  }],
   'proof': {
     type: 'Ed25519Signature2018',
     proofPurpose: 'authentication',

@@ -2,7 +2,7 @@ export const VPTezos = {
   '@context': ['https://www.w3.org/2018/credentials/v1'],
   'id': 'urn:uuid:9175110e-d09a-47c2-bfa1-e3b6cbc238ad',
   'type': ['VerifiablePresentation'],
-  'verifiableCredential': {
+  'verifiableCredential': [{
     '@context': [
       'https://www.w3.org/2018/credentials/v1',
       {
@@ -163,7 +163,7 @@ export const VPTezos = {
         x: 'zCqtyJzkG7tGRonDKhz02vUrAYt58uyOjP_ETgF2pO8',
       },
     },
-  },
+  }],
   'proof': {
     type: 'Ed25519Signature2018',
     proofPurpose: 'authentication',

@@ -174,12 +174,7 @@ export const _verifyAuthenticationPresentation = (verifyPresentation: any) => as
     }
 
     const creds = Array.isArray(VP.verifiableCredential) ? VP.verifiableCredential : [VP.verifiableCredential]
-    console.log('Verifying credentials')
-    console.log(creds)
     for (const cred of creds) {
-      console.log('Verifying credential')
-      console.log(VP)
-      console.log(VP.verifiableCredential)
       if (!(await verifyPresentation(cred, VP))) {
         console.log('Unable to verify presentation', cred, VP)
         return false

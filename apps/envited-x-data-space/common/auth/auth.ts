@@ -97,7 +97,9 @@ export const authOptions: NextAuthOptions = {
             return '/error?error=CREDENTIAL_NOT_FOUND'
           }
 
-          const credential = omit(['proof'])(prop('credential')(profile) as Partial<Record<'proof', any>>) as Credential[]
+          const credential = omit(['proof'])(
+            prop('credential')(profile) as Partial<Record<'proof', any>>,
+          ) as Credential[]
           const {
             id,
             issuer,

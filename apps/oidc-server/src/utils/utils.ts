@@ -135,7 +135,7 @@ export const _verifyPresentation =
   async (VC: any, VP: any): Promise<boolean> => {
     if (
       VP.holder &&
-      VP.verifiableCredential.credentialSubject.id === VC.credentialSubject.id &&
+      VP.verifiableCredential[0].credentialSubject.id === VC.credentialSubject.id &&
       VP.proof.verificationMethod.split('#')[0] === VP.holder
     ) {
       // Verify the signature on the VC
@@ -166,6 +166,7 @@ export const _verifyPresentation =
 export const verifyPresentation = _verifyPresentation({ spruceVerifyCredential, spruceVerifyPresentation })
 
 export const _verifyAuthenticationPresentation = (verifyPresentation: any) => async (VP: any) => {
+  console.log('Verifying presentation')
   try {
     if (!VP?.verifiableCredential) {
       console.error('Unable to detect verifiable credentials in the VP')
@@ -173,7 +174,6 @@ export const _verifyAuthenticationPresentation = (verifyPresentation: any) => as
     }
 
     const creds = Array.isArray(VP.verifiableCredential) ? VP.verifiableCredential : [VP.verifiableCredential]
-
     for (const cred of creds) {
       if (!(await verifyPresentation(cred, VP))) {
         console.log('Unable to verify presentation', cred, VP)

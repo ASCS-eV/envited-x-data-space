@@ -30,7 +30,7 @@ export const postPresentCredential =
     }
 
     // Get the user claims
-    const subject = presentation['verifiableCredential']['credentialSubject']['id']
+    const subject = presentation['verifiableCredential'][0]['credentialSubject']['id']
     const login_id = presentation['proof']['challenge']
 
     const challenge = (await redis.get('' + login_id))!

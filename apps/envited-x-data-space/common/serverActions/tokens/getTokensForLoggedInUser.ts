@@ -15,17 +15,15 @@ export const _getTokensForLoggedInUser =
   async (): Promise<Token[]> => {
     try {
       const session = await getServerSession()
-
       if (isNil(session)) {
         throw unauthorizedError({ resource: 'tokens' })
       }
 
       const connection = await db()
       const user = await connection.getUserById(session?.user?.id)
-
       let addressGlobalIdentifierId = user.addressGlobalIdentifierId
       if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
-        const principal = await connection.getUserById(user.issuerId)
+        const principal = await connection.getUserByIssuerId(user.issuerId)
         addressGlobalIdentifierId = principal.addressGlobalIdentifierId
       }
 

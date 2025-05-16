@@ -47,7 +47,7 @@ export default function Envited({ stack }: StackContext) {
     exposedHeaders: ['ETag'],
   }
 
-  const uploadsBucket = new Bucket(stack, `uploads-${stack.stage}`, {
+  const uploadsBucket = new Bucket(stack, `uploads`, {
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
@@ -74,7 +74,7 @@ export default function Envited({ stack }: StackContext) {
     ],
   })
 
-  const privateResourcesBucket = new Bucket(stack, `private-resources-${stack.stage}`, {
+  const privateResourcesBucket = new Bucket(stack, `private-resources`, {
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
@@ -84,7 +84,7 @@ export default function Envited({ stack }: StackContext) {
   })
   privateResourcesBucket.cdk.bucket.grantRead(oai)
 
-  const publicResourcesBucket = new Bucket(stack, `public-resources-${stack.stage}`, {
+  const publicResourcesBucket = new Bucket(stack, `public-resources`, {
     cdk: {
       bucket: {
         accessControl: aws_s3.BucketAccessControl.PRIVATE,
@@ -94,7 +94,7 @@ export default function Envited({ stack }: StackContext) {
   })
   publicResourcesBucket.cdk.bucket.grantRead(oai)
 
-  const assetsBucket = new Bucket(stack, `assets-${stack.stage}`, {
+  const assetsBucket = new Bucket(stack, `assets`, {
     notifications: {
       processAssetUpload: {
         function: {
@@ -141,7 +141,7 @@ export default function Envited({ stack }: StackContext) {
   privateResourcesBucket.attachPermissions([privateResourcesBucket, assetsBucket])
   assetsBucket.cdk.bucket.grantRead(oai)
 
-  const assetsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, `assetsDistribution-${stack.stage}`, {
+  const assetsDistribution = new aws_cloudfront.CloudFrontWebDistribution(stack, `assetsDistribution`, {
     originConfigs: [
       {
         s3OriginSource: {

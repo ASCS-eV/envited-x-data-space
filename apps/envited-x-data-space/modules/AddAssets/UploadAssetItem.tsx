@@ -157,14 +157,14 @@ export const UploadAssetItem: FC<UploadAssetItemProps> = ({ idx, file, state, va
                       )}
                     </span>
                   </span>
-                  {asset.data?.referencedAssets['false']?.length > 0 && (
+                  {asset.data?.referencedAssets?.['false']?.length > 0 && (
                     <>
                       <span className="hidden sm:mx-1 sm:inline font-bold" aria-hidden="true">
                         &middot;
                       </span>{' '}
                       <span className="flex gap-x-1.5 items-center text-xs">
                         <ExclamationTriangleIcon className="text-orange-400 w-[18px] h-[18px]" />{' '}
-                        {asset.data?.referencedAssets['false']?.length} referenced asset(s) missing
+                        {asset.data?.referencedAssets?.['false']?.length} referenced asset(s) missing
                       </span>
                     </>
                   )}

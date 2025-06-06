@@ -44,10 +44,12 @@
       },
       "configurations": {
         "development": {
-          "buildTarget": "oidc-server:build:development"
+          "buildTarget": "oidc-server:build:development",
+          "watch": false
         },
         "production": {
-          "buildTarget": "oidc-server:build:production"
+          "buildTarget": "oidc-server:build:production",
+          "watch": false
         }
       }
     },

@@ -10,14 +10,22 @@
     "importHelpers": true,
     "target": "ES2017",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "allowJs": true,
     "paths": {
-      "@envited-x-data-space/design-system": ["apps/design-system/src/index.ts"]
+      "@envited-x-data-space/design-system": [
+        "apps/design-system/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

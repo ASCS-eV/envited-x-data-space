@@ -29,6 +29,7 @@ export const postPresentCredential =
       throw new Error('Presentation invalid')
     }
 
+    console.log('PRESENTATION VERIFIABLE CREDENTIAL', presentation.verifiableCredential[0])
     // Get the user claims
     const subject = presentation['verifiableCredential'][0]['credentialSubject']['id']
     const login_id = presentation['proof']['challenge']

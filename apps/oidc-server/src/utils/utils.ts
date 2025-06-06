@@ -133,6 +133,9 @@ export const _verifyPresentation =
     spruceVerifyCredential: any
   }) =>
   async (VC: any, VP: any): Promise<boolean> => {
+    console.log('Verifying presentation')
+    console.log('VC', VC.credentialSubject)
+    console.log('VP', VP.verifiableCredential[0])
     if (
       VP.holder &&
       VP.verifiableCredential[0].credentialSubject.id === VC.credentialSubject.id &&

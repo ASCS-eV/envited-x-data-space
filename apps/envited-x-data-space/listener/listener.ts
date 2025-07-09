@@ -104,9 +104,9 @@ export const listenToAssetContract =
         const displayCid = replace('ipfs://', '')(tokenMetadata?.displayUri || '')
         const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${tokenMetadata?.identifier}/${displayCid}`
         log.info('Local display URI', localDisplayUri)
-        const manifestUri = extractManifestUri(tokenMetadata?.attributes || [])
+        const manifestUri = extractManifestUri(tokenMetadata?.formats || [])
         const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(manifestUri as string))
-        const domainMetadataUri = extractDomainMetadataUri(tokenMetadata?.attributes || [])
+        const domainMetadataUri = extractDomainMetadataUri(tokenMetadata?.formats || [])
         const domainMetadata: GetCIDResponse = await pinata.gateways.get(
           replace('ipfs://', '')(domainMetadataUri as string),
         )

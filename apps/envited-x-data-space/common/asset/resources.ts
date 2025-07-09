@@ -96,8 +96,10 @@ export const _deleteAssetResource =
 export const deleteAssetResource = _deleteAssetResource({ db, log })
 
 export const extractManifest = async (assetArchive: Uint8Array) => {
+  console.log('EXTRACTING MANIFEST')
   const manifestStream = await extractFileFromArchive(assetArchive, MANIFEST_FILE)
   const manifest = await extractContentFromStream(manifestStream)
+  console.log('MANIFEST', manifest)
   const manifestSchemaStream = stringToStream(SCHEMA.manifest)
   const { conforms, report } = await validateShacl(manifestSchemaStream)(manifestStream)
   const manifestArrayBuffer = await streamToUint8Array(manifestStream)
@@ -107,6 +109,7 @@ export const extractManifest = async (assetArchive: Uint8Array) => {
 
 export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: Manifest) => {
   const domainMetadataPath = getDomainMetadataPath(manifest)
+  console.log('DOMAIN METADATA PATH', domainMetadataPath)
   const domainMetadataStream = await extractFileFromArchive(assetArchive, domainMetadataPath)
   const domainMetadata = await extractContentFromStream(domainMetadataStream).then(JSON.parse)
   const schemas = getDomainMetadataSchemas(domainMetadata['@context'])
@@ -114,7 +117,7 @@ export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: 
   const validationsResults = await Promise.all(validationsPromises)
   const domainMetadataArrayBuffer = await streamToUint8Array(domainMetadataStream)
   const cid = await predetermineCID(domainMetadataArrayBuffer)
-
+  console.log('DOMAIN METADATA', domainMetadata)
   return {
     conforms: all(x => equals(true)(prop('conforms')(x)), validationsResults),
     report: validationsResults,

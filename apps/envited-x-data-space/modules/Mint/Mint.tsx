@@ -23,13 +23,14 @@ export const Mint: FC<MintProps> = ({ assetId, disabled }) => {
   const { Tezos, wallet, account, connectWallet } = useWallet()
 
   const mintAsset = async (id: string) => {
+    console.log(id)
     if (!account) {
       await connectWallet()
       ShowSpecificBeaconWallets()
     }
     console.log(id)
     if (account && Tezos && wallet) {
-      // const cid = await uploadAssetTokenMetadata(id)
+      const cid = await uploadAssetTokenMetadata(id)
       const mintParams = await getAssetMintParams(id)
       const operation = await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: formatIpfsUri(cid) })
       await operation

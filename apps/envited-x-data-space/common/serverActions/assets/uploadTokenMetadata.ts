@@ -53,7 +53,10 @@ export const uploadTokenMetadataToIPFS =
 
     const group = await createGroup(extractAddressFromDid(user.issuerId))
     console.log('group', group)
-    return uploadJsonToIPFS({ data: (asset as Asset).metadata, filename: 'token_info.json', group })
+    const upload = await uploadJsonToIPFS({ data: (asset as Asset).metadata, filename: 'token_info.json', group })
+    console.log('upload', upload)
+
+    return upload
   }
 
 export const uploadTokenMetadata = uploadTokenMetadataToIPFS({

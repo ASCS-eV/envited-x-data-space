@@ -158,6 +158,7 @@ export const processAssetUpload =
 
         return
       }
+      console.log('manifest', manifest)
       // Get the domain metadata
       const {
         conforms: domainMetadataConforms,
@@ -275,6 +276,8 @@ export const processAssetUpload =
         domainMetadataCID,
         media: isPublicMediaWithCids,
       })(manifest)
+
+      console.log('modifiedManifest', modifiedManifest)
       const modifiedManifestCID = await predetermineCID(jsonToUint8Array(modifiedManifest))
       const coverImage = await getCoverImage(uploadedFile, isPublicMediaWithCids)
 
@@ -306,6 +309,9 @@ export const processAssetUpload =
           path: pathOr('', MANIFEST_LICENSE_PATH)(manifest),
         },
       })
+      console.log('tzip21Metadata', tzip21Metadata)
+
+      console.log('domainMetadata', domainMetadata)
 
       const domainCid = await uploadJsonToIPFS({
         data: domainMetadata,

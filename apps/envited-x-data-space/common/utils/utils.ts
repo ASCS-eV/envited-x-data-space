@@ -29,6 +29,7 @@ import {
 import { Readable } from 'stream'
 
 import { KEYWORDS } from '../asset/constants'
+import { buffer } from 'stream/consumers'
 
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
 
@@ -220,6 +221,10 @@ export const streamToUint8Array = async (stream: Readable) => {
     chunks.push(chunk)
   }
   return new Uint8Array(Buffer.concat(chunks))
+}
+
+export const streamToBuffer = async (stream: Readable): Promise<Buffer> => {
+  return await buffer(stream)
 }
 
 export const fileToUint8Array = async (file: File): Promise<Uint8Array> => {

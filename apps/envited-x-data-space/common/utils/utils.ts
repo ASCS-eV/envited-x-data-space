@@ -27,7 +27,6 @@ import {
   when,
 } from 'ramda'
 import { Readable } from 'stream'
-import { buffer } from 'stream/consumers'
 
 import { KEYWORDS } from '../asset/constants'
 
@@ -224,7 +223,13 @@ export const streamToUint8Array = async (stream: Readable) => {
 }
 
 export const streamToBuffer = async (stream: Readable): Promise<Buffer> => {
-  return await buffer(stream)
+  const chunks: Buffer[] = [];
+  
+  for await (const chunk of stream) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  }
+  
+  return Buffer.concat(chunks)
 }
 
 export const fileToUint8Array = async (file: File): Promise<Uint8Array> => {

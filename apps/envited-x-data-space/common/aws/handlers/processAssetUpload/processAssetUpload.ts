@@ -307,18 +307,18 @@ export const processAssetUpload =
         },
       })
 
-      await uploadJsonToIPFS({
+      const domainCid = await uploadJsonToIPFS({
         data: domainMetadata,
         filename: `${assetCID}-domain-metadata.json`,
         group,
       })
-
-      await uploadJsonToIPFS({
+      console.log(domainCid)
+      const manCid = await uploadJsonToIPFS({
         data: modifiedManifest,
         filename: `${assetCID}-manifest.json`,
         group,
       })
-
+      console.log(manCid)
       // Update stored asset in DB
       await updateAsset(
         assetCID,

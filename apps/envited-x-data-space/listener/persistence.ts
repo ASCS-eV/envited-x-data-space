@@ -156,7 +156,7 @@ export const insertToken =
           hash,
           contract,
           minter,
-          webGloblalIdentifier,
+          webGlobalIdentifier,
           tokenId,
           name,
           description,
@@ -177,11 +177,18 @@ export const insertToken =
           attributes,
           tags,
         } = token
-
+        console.log('HASH', hash)
+        console.log('contract', contract)
+        console.log('minter', minter)
+        console.log('webglobalidentifier', webGlobalIdentifier)
         const [operationGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(hash))
+        console.log(operationGuid)
         const [contractGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(contract))
+        console.log(contractGuid)
         const [minterGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(minter))
-        const [webGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(webGloblalIdentifier))
+        console.log(minterGuid)
+        const [webGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(webGlobalIdentifier))
+        console.log(webGuid)
         const [insertedToken] = await insertTokenTx(tx)({
           operationGlobalIdentifierId: operationGuid.id,
           contractGlobalIdentifierId: contractGuid.id,

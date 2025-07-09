@@ -198,7 +198,7 @@ export const processAssetUpload =
             })
 
             await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
-            console.log('INSERTING ASSET RESOURCE PUBLIC MEDIA');
+            console.log('INSERTING ASSET RESOURCE PUBLIC MEDIA')
             await insertAssetResource({
               assetId: asset.id,
               name: last(split('/', path)) as string,
@@ -227,7 +227,7 @@ export const processAssetUpload =
               ContentEncoding: 'base64',
             })
 
-            console.log('INSERTING ASSET RESOURCE REGISTERED MEDIA');
+            console.log('INSERTING ASSET RESOURCE REGISTERED MEDIA')
             await insertAssetResource({
               assetId: asset.id,
               name: last(split('/', path)) as string,
@@ -256,7 +256,7 @@ export const processAssetUpload =
               ContentEncoding: 'base64',
             })
 
-            console.log('INSERTING ASSET RESOURCE OWNER MEDIA');
+            console.log('INSERTING ASSET RESOURCE OWNER MEDIA')
             await insertAssetResource({
               assetId: asset.id,
               name: last(split('/', path)) as string,
@@ -323,7 +323,7 @@ export const processAssetUpload =
       })
 
       // Update stored asset in DB
-      console.log('UPDATE ASSET');
+      console.log('UPDATE ASSET')
       await updateAsset(
         assetCID,
         Key,

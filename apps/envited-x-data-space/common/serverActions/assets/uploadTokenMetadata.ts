@@ -44,14 +44,15 @@ export const uploadTokenMetadataToIPFS =
     if (isNil(asset) || isEmpty(asset)) {
       throw notFoundError({ resource: 'assets', resourceId: assetId, userId: session?.user.id })
     }
-
+    console.log('asset', asset)
     const user = await connection.getUserById(session.user.id)
-
+    console.log('user', user)
     if (isNil(user.issuerId) || isEmpty(user.issuerId)) {
       throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })
     }
 
     const group = await createGroup(extractAddressFromDid(user.issuerId))
+    console.log('group', group)
     return uploadJsonToIPFS({ data: (asset as Asset).metadata, filename: 'token_info.json', group })
   }
 

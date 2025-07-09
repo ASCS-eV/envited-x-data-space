@@ -29,7 +29,8 @@ export const Mint: FC<MintProps> = ({ assetId, disabled }) => {
     }
     console.log(id)
     if (account && Tezos && wallet) {
-      // const cid = await uploadAssetTokenMetadata(id)
+      const cid = await uploadAssetTokenMetadata(id)
+      console.log(cid)
       // const mintParams = await getAssetMintParams(id)
       // const operation = await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: formatIpfsUri(cid) })
       // await operation

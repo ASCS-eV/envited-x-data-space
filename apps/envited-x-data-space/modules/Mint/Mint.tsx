@@ -27,20 +27,21 @@ export const Mint: FC<MintProps> = ({ assetId, disabled }) => {
       await connectWallet()
       ShowSpecificBeaconWallets()
     }
-
+    console.log(id)
     if (account && Tezos && wallet) {
-      const cid = await uploadAssetTokenMetadata(id)
-      const mintParams = await getAssetMintParams(id)
-      const operation = await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: formatIpfsUri(cid) })
-      await operation
-        ?.confirmation(3)
-        .then(async () => {
-          await updateStatus(id)
-          success(t('[Status] token is minted'))
-        })
-        .catch(() => {
-          error(t('[Status] token minting failed'))
-        })
+      // const cid = await uploadAssetTokenMetadata(id)
+      // const mintParams = await getAssetMintParams(id)
+      // const operation = await mintToken({ Tezos, wallet })({ ...mintParams, tokenInfo: formatIpfsUri(cid) })
+      // await operation
+      //   ?.confirmation(3)
+      //   .then(async () => {
+      //     await updateStatus(id)
+      //     success(t('[Status] token is minted'))
+      //   })
+      //   .catch(() => {
+      //     error(t('[Status] token minting failed'))
+      //   })
+      console.log('minting')
     }
   }
   return (

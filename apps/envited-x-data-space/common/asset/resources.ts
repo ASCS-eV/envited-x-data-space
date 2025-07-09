@@ -6,7 +6,7 @@ import { Log, log } from '../logger'
 import { SCHEMA } from '../schemas'
 import { extractContentFromStream, formatAssetUri, streamToUint8Array } from '../utils'
 import { formatError, internalServerErrorError } from '../utils'
-import { stringToStream } from '../utils/utils'
+import { streamToBuffer, stringToStream } from '../utils/utils'
 import { validateShacl } from '../validator/shacl'
 import { MANIFEST_FILE, README_FILE } from './constants'
 import { AccessLevel, ExtractedResourceWithCID, Manifest, ManifestCategoryId } from './types'
@@ -152,7 +152,7 @@ export const getCoverImage = async (assetArchive: Uint8Array, media: ExtractedRe
   const coverImageStream = await extractFileFromArchive(assetArchive, coverImage.path)
   return {
     cid: coverImage.cid,
-    fileSize: (await streamToUint8Array(coverImageStream)).byteLength,
+    fileSize: (await streamToBuffer(coverImageStream)).byteLength,
     uri: `${formatAssetUri(coverImage.cid)}${coverImage.path}`,
   }
 }

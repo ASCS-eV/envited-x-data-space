@@ -27,9 +27,9 @@ import {
   when,
 } from 'ramda'
 import { Readable } from 'stream'
+import { buffer } from 'stream/consumers'
 
 import { KEYWORDS } from '../asset/constants'
-import { buffer } from 'stream/consumers'
 
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
 

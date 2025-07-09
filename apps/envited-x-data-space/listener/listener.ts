@@ -107,9 +107,12 @@ export const listenToAssetContract =
         const manifestUri = extractManifestUri(tokenMetadata?.formats || [])
         const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(manifestUri as string))
         const domainMetadataUri = extractDomainMetadataUri(tokenMetadata?.formats || [])
+
+        console.log('DOMAIN METADATA URI', domainMetadataUri)
         const domainMetadata: GetCIDResponse = await pinata.gateways.get(
           replace('ipfs://', '')(domainMetadataUri as string),
         )
+        console.log(domainMetadata)
         const attributes = extractKeyValuePairs(domainMetadata.data)
 
         // Save token to DB

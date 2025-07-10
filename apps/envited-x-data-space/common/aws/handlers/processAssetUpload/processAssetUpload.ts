@@ -177,6 +177,8 @@ export const processAssetUpload =
 
       // Get the resources from manifest
       const resources = extractResources(manifest)
+      console.log('RESOURCES', resources)
+      console.log('MEDIA FILES', getMediaFiles)
       const isPublicMedia = pipe(propOr([], 'isPublic'), getMediaFiles)(resources) as ExtractedResource[]
       console.log('PBULIC MEDIA', isPublicMedia)
       const isRegisteredMedia = pipe(propOr([], 'isRegistered'), getMediaFiles)(resources) as ExtractedResource[]

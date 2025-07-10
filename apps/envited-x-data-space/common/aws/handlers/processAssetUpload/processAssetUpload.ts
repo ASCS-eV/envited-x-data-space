@@ -178,11 +178,11 @@ export const processAssetUpload =
       // Get the resources from manifest
       const resources = extractResources(manifest)
       const isPublicMedia = pipe(propOr([], 'isPublic'), getMediaFiles)(resources) as ExtractedResource[]
-      console.log(isPublicMedia)
+      console.log('PBULIC MEDIA', isPublicMedia)
       const isRegisteredMedia = pipe(propOr([], 'isRegistered'), getMediaFiles)(resources) as ExtractedResource[]
-      console.log(isRegisteredMedia)
+      console.log('REGISTERED MEDIA', isRegisteredMedia)
       const isOwnerMedia = pipe(propOr([], 'isOwner'), getMediaFiles)(resources) as ExtractedResource[]
-      console.log(isOwnerMedia)
+      console.log('OWNER MEDIA', isOwnerMedia)
       const minter = await getMinter(asset)
 
       // Upload the resources

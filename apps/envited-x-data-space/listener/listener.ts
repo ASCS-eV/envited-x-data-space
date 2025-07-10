@@ -100,10 +100,7 @@ export const listenToAssetContract =
 
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
-        log.info('Token metadata', tokenMetadata)
-        const displayCid = replace('ipfs://', '')(tokenMetadata?.displayUri || '')
-        const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${tokenMetadata?.identifier}/${displayCid}`
-        log.info('Local display URI', localDisplayUri)
+        log.info('Token metadata', tokenMetadata) 
         const manifestUri = extractManifestUri(tokenMetadata?.formats || [])
         log.info('MANIFEST URI', manifestUri)
         const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(manifestUri as string))
@@ -116,11 +113,16 @@ export const listenToAssetContract =
         )
         console.log(domainMetadata)
         const attributes = extractKeyValuePairs(domainMetadata.data)
-
+        
         const assetUri = extractAssetUri(tokenMetadata?.formats || []) as string
         log.info('ASSET URI', assetUri)
         const assetCID = assetUri.split('/').pop()
         console.log(assetCID)
+
+
+        const displayCid = replace('ipfs://', '')(tokenMetadata?.displayUri || '')
+        const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${assetCID}/${displayCid}`
+        log.info('Local display URI', localDisplayUri)
         // Save token to DB
         const token = await insertToken({
           hash: `urn:operation:tezos:${process.env.TEZOS_CHAIN_ID!}:${hash}`,

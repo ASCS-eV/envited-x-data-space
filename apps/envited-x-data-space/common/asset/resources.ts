@@ -103,12 +103,13 @@ export const extractManifest = async (assetArchive: Uint8Array) => {
   console.log('MANIFEST', manifest)
   const manifestSchemaStream = stringToStream(SCHEMA.manifest)
   const { conforms, report } = await validateShacl(manifestSchemaStream)(manifestStream)
-  const manifestArrayBuffer = await streamToBuffer(manifestStream)
-  console.log('MANIFEST ARRAY BUFFER', manifestArrayBuffer)
+  // const manifestArrayBuffer = await streamToBuffer(manifestStream)
+  // console.log('MANIFEST ARRAY BUFFER', manifestArrayBuffer)
   // const cid = await predetermineCID(manifestArrayBuffer)
-  const cid = await predetermineCID(jsonToUint8Array(manifest))
+  const manifestArrayBuffer = await jsonToUint8Array(manifest)
+  const cid = await predetermineCID(manifestArrayBuffer)
   console.log('MANIFEST CID', cid)
-  return { conforms, report, data: JSON.parse(manifest), cid, fileSize: manifestArrayBuffer.byteLength }
+  return { conforms, report, data: manifest, cid, fileSize: manifestArrayBuffer.byteLength }
 }
 
 export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: Manifest) => {
@@ -120,10 +121,11 @@ export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: 
   const schemas = getDomainMetadataSchemas(domainMetadata['@context'])
   const validationsPromises = schemas.map(schema => validateShacl(stringToStream(schema))(domainMetadataStream))
   const validationsResults = await Promise.all(validationsPromises)
-  const domainMetadataArrayBuffer = await streamToBuffer(domainMetadataStream)
-  console.log('DMAB', domainMetadataArrayBuffer)
+  // const domainMetadataArrayBuffer = await streamToBuffer(domainMetadataStream)
+  // console.log('DMAB', domainMetadataArrayBuffer)
   // const cid = await predetermineCID(domainMetadataArrayBuffer)
-  const cid = await predetermineCID(jsonToUint8Array(domainMetadata))
+  const domainMetadataArrayBuffer = await jsonToUint8Array(domainMetadata)
+  const cid = await predetermineCID(domainMetadataArrayBuffer)
   console.log('DOMAIN METADATA', domainMetadata)
   console.log('DOMAIN METADATA CID', cid)
   return {

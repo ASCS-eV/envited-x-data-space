@@ -178,8 +178,11 @@ export const processAssetUpload =
       // Get the resources from manifest
       const resources = extractResources(manifest)
       const isPublicMedia = pipe(propOr([], 'isPublic'), getMediaFiles)(resources) as ExtractedResource[]
+      console.log(isPublicMedia)
       const isRegisteredMedia = pipe(propOr([], 'isRegistered'), getMediaFiles)(resources) as ExtractedResource[]
+      console.log(isRegisteredMedia)
       const isOwnerMedia = pipe(propOr([], 'isOwner'), getMediaFiles)(resources) as ExtractedResource[]
+      console.log(isOwnerMedia)
       const minter = await getMinter(asset)
 
       // Upload the resources
@@ -197,16 +200,16 @@ export const processAssetUpload =
               ContentEncoding: 'base64',
               ContentDisposition: 'inline',
             })
-
+            console.log(upload)
             await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
-            await insertAssetResource({
+            const assetResource = await insertAssetResource({
               assetId: asset.id,
               name: last(split('/', path)) as string,
               cid,
               mimeType,
               accessLevel: AccessLevel.public,
             })
-
+            console.log(assetResource)
             return upload.done()
           },
         )

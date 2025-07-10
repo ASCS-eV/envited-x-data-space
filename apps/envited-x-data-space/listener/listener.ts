@@ -5,7 +5,7 @@ import { pathOr, replace } from 'ramda'
 import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
-import { extractDomainMetadataUri, extractKeyValuePairs, extractManifestUri } from './utils'
+import { extractAssetUri, extractDomainMetadataUri, extractKeyValuePairs, extractManifestUri } from './utils'
 
 export const createLocalCopy =
   ({ uploadFileToIPFSToS3 }: { uploadFileToIPFSToS3: any }) =>
@@ -38,7 +38,7 @@ export const createLocalCopy =
       }
 
       await uploadFileToIPFSToS3(uploadParams)
-      return `${process.env.ASSET_URL}/${cid}`
+      return `${process.env.ASSETS_URL}/${cid}`
     } catch (err) {
       console.log(err)
       throw new Error(`Unable to create local copy: ${err}`)
@@ -117,6 +117,10 @@ export const listenToAssetContract =
         console.log(domainMetadata)
         const attributes = extractKeyValuePairs(domainMetadata.data)
 
+        const assetUri = extractAssetUri(tokenMetadata?.formats || []) as string
+        log.info('ASSET URI', assetUri)
+        const assetCID = assetUri.split('/').pop()
+        console.log(assetCID)
         // Save token to DB
         const token = await insertToken({
           hash: `urn:operation:tezos:${process.env.TEZOS_CHAIN_ID!}:${hash}`,
@@ -145,7 +149,7 @@ export const listenToAssetContract =
         })
         log.info('Token registered', token)
         log.info('Updating Asset')
-        const [asset] = await getAssetByCID(token.identifier)
+        const [asset] = await getAssetByCID(assetCID)
         log.info('Asset', asset)
         if (!asset) {
           return true

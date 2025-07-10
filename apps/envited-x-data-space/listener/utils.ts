@@ -40,6 +40,12 @@ export const extractDomainMetadataUri = pipe(
   head,
 )
 
+export const extractAssetUri = pipe(
+  filter(allPass([propEq('application/zip', 'mimeType')])),
+  map((x: any) => prop('uri')(x)),
+  head,
+)
+
 // @ts-expect-error - ramda typing
 export const extractKeyValuePairs = (obj, parentKey = '') => {
   return pipe(

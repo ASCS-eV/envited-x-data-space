@@ -114,7 +114,7 @@ export default function Envited({ stack }: StackContext) {
           securityGroups: [sg],
           vpc,
           timeout: 60,
-          memorySize: 1024,
+          memorySize: 4096,
           runtime: 'nodejs20.x',
           nodejs: {
             loader: {

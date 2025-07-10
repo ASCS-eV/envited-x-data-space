@@ -1,4 +1,4 @@
-import { ExtractTablesWithRelations, and, eq, inArray } from 'drizzle-orm'
+import { ExtractTablesWithRelations, and, desc, eq, inArray } from 'drizzle-orm'
 import { AwsDataApiPgDatabase, AwsDataApiPgQueryResultHKT } from 'drizzle-orm/aws-data-api/pg'
 import { PgQueryResultHKT, PgTransaction } from 'drizzle-orm/pg-core'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
@@ -235,7 +235,7 @@ export const insertToken =
 export const getAssetByCID =
   ({ database: db }: { database: DatabaseConnection }) =>
   async (cid: string) =>
-    db.select().from(schema.asset).where(eq(schema.asset.cid, cid))
+    db.select().from(schema.asset).where(eq(schema.asset.cid, cid)).orderBy(desc(schema.asset.createdAt))
 
 export const updateAsset =
   ({ database: db }: { database: DatabaseConnection }) =>

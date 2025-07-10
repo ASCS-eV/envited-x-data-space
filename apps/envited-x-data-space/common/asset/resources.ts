@@ -99,13 +99,14 @@ export const extractManifest = async (assetArchive: Uint8Array) => {
   console.log('EXTRACTING MANIFEST')
   const manifestStream = await extractFileFromArchive(assetArchive, MANIFEST_FILE)
   console.log('MANIFEST STREAM', manifestStream)
-  const manifest = await extractContentFromStream(manifestStream)
+  const manifest = await extractContentFromStream(manifestStream).then(JSON.parse)
   console.log('MANIFEST', manifest)
   const manifestSchemaStream = stringToStream(SCHEMA.manifest)
   const { conforms, report } = await validateShacl(manifestSchemaStream)(manifestStream)
   const manifestArrayBuffer = await streamToBuffer(manifestStream)
   console.log('MANIFEST ARRAY BUFFER', manifestArrayBuffer)
-  const cid = await predetermineCID(manifestArrayBuffer)
+  // const cid = await predetermineCID(manifestArrayBuffer)
+  const cid = await predetermineCID(jsonToUint8Array(manifest))
   console.log('MANIFEST CID', cid)
   return { conforms, report, data: JSON.parse(manifest), cid, fileSize: manifestArrayBuffer.byteLength }
 }
@@ -121,7 +122,8 @@ export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: 
   const validationsResults = await Promise.all(validationsPromises)
   const domainMetadataArrayBuffer = await streamToBuffer(domainMetadataStream)
   console.log('DMAB', domainMetadataArrayBuffer)
-  const cid = await predetermineCID(domainMetadataArrayBuffer)
+  // const cid = await predetermineCID(domainMetadataArrayBuffer)
+  const cid = await predetermineCID(jsonToUint8Array(domainMetadata))
   console.log('DOMAIN METADATA', domainMetadata)
   console.log('DOMAIN METADATA CID', cid)
   return {

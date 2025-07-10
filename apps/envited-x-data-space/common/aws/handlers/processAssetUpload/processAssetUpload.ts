@@ -203,7 +203,11 @@ export const processAssetUpload =
               ContentDisposition: 'inline',
             })
             console.log(upload)
-            await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
+            try {
+              await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
+            } catch (err) {
+              console.log(err)
+            }
             const assetResource = await insertAssetResource({
               assetId: asset.id,
               name: last(split('/', path)) as string,

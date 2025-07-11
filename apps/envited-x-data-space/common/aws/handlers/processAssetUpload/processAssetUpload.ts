@@ -158,7 +158,6 @@ export const processAssetUpload =
 
         return
       }
-      console.log('manifest', manifest)
       // Get the domain metadata
       const {
         conforms: domainMetadataConforms,
@@ -177,14 +176,9 @@ export const processAssetUpload =
 
       // Get the resources from manifest
       const resources = extractResources(manifest)
-      console.log('RESOURCES', resources)
-      console.log('MEDIA FILES', getMediaFiles)
       const isPublicMedia = pipe(propOr([], 'isPublic'), getMediaFiles)(resources) as ExtractedResource[]
-      console.log('PBULIC MEDIA', isPublicMedia)
       const isRegisteredMedia = pipe(propOr([], 'isRegistered'), getMediaFiles)(resources) as ExtractedResource[]
-      console.log('REGISTERED MEDIA', isRegisteredMedia)
       const isOwnerMedia = pipe(propOr([], 'isOwner'), getMediaFiles)(resources) as ExtractedResource[]
-      console.log('OWNER MEDIA', isOwnerMedia)
       const minter = await getMinter(asset)
 
       // Upload the resources
@@ -202,20 +196,18 @@ export const processAssetUpload =
               ContentEncoding: 'base64',
               ContentDisposition: 'inline',
             })
-            console.log(upload)
             try {
               await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
             } catch (err) {
               console.log(err)
             }
-            const assetResource = await insertAssetResource({
+            await insertAssetResource({
               assetId: asset.id,
               name: last(split('/', path)) as string,
               cid,
               mimeType,
               accessLevel: AccessLevel.public,
             })
-            console.log(assetResource)
             return upload.done()
           },
         )
@@ -286,7 +278,6 @@ export const processAssetUpload =
         media: isPublicMediaWithCids,
       })(manifest)
 
-      console.log('modifiedManifest', modifiedManifest)
       const modifiedManifestCID = await predetermineCID(jsonToUint8Array(modifiedManifest))
       const coverImage = await getCoverImage(uploadedFile, isPublicMediaWithCids)
 
@@ -318,22 +309,17 @@ export const processAssetUpload =
           path: pathOr('', MANIFEST_LICENSE_PATH)(manifest),
         },
       })
-      console.log('tzip21Metadata', tzip21Metadata)
 
-      console.log('domainMetadata', domainMetadata)
-
-      const domainCid = await uploadJsonToIPFS({
+      await uploadJsonToIPFS({
         data: domainMetadata,
         filename: `${assetCID}-domain-metadata.json`,
         group,
       })
-      console.log(domainCid)
-      const manCid = await uploadJsonToIPFS({
+      await uploadJsonToIPFS({
         data: modifiedManifest,
         filename: `${assetCID}-manifest.json`,
         group,
       })
-      console.log(manCid)
       // Update stored asset in DB
       await updateAsset(
         assetCID,

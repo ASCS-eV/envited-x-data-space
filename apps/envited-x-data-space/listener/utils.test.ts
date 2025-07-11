@@ -6,12 +6,12 @@ describe('listener/utils', () => {
       // given ... a set of attributes with a manifest attribute
       const formats = [
         {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
+          fileName: 'domain_metadata.json',
           mimeType: 'application/ld+json',
           uri: 'ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu',
         },
         {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
+          fileName: 'envited-x_manifest.json',
           mimeType: 'application/ld+json',
           uri: 'ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy',
         },
@@ -26,31 +26,16 @@ describe('listener/utils', () => {
 
     it('should return undefined when there is no manifest attribute', () => {
       // given ... a set of attributes without a manifest attribute
-      const attributes = [
+      const formats = [
         {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.hdmap.ontology',
-          mimeType: 'uri',
-          uri: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/hdmap/',
-        },
-        {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
+          fileName: 'domain_metadata.json',
           mimeType: 'application/ld+json',
           uri: 'ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu',
-        },
-        {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.manifest.ontology',
-          mimeType: 'uri',
-          uri: 'https://github.com/GAIA-X4PLC-AAD/ontology-management-base/blob/main/manifest/',
-        },
-        {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.anything-else.metadata',
-          mimeType: 'application/ld+json',
-          uri: 'ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy',
         },
       ]
 
       // when ... we extract the manifest URI
-      const result = SUT.extractManifestUri(attributes)
+      const result = SUT.extractManifestUri(formats)
 
       // then ... it should return undefined
       expect(result).toBeUndefined()
@@ -71,21 +56,21 @@ describe('listener/utils', () => {
   describe('extractDomainMetadataUri', () => {
     it('should extract the metadata URI when it does not contain manifest', () => {
       // given ... a set of attributes with a metadata attribute that doesn't contain manifest
-      const attributes = [
+      const formats = [
         {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.hdmap.metadata',
+          fileName: 'domain_metadata.json',
           mimeType: 'application/ld+json',
           uri: 'ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu',
         },
         {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
+          fileName: 'envited-x_manifest.json',
           mimeType: 'application/ld+json',
           uri: 'ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy',
         },
       ]
 
       // when ... we extract the domain metadata URI
-      const result = SUT.extractDomainMetadataUri(attributes)
+      const result = SUT.extractDomainMetadataUri(formats)
 
       // then ... it should return the metadata URI
       expect(result).toEqual('ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu')
@@ -95,12 +80,7 @@ describe('listener/utils', () => {
       // given ... a set of attributes with metadata that contains manifest
       const formats = [
         {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.hdmap.manifest.metadata',
-          mimeType: 'application/ld+json',
-          uri: 'ipfs://bafkreifskuvufcolrg5czp7jqmd52sysgac6nyhowu6c6bbklk4gtgx2xu',
-        },
-        {
-          fileName: 'de.gaiax4plcaad.ontology-management-base.manifest.metadata',
+          fileName: 'envited-x_manifest.json',
           mimeType: 'application/ld+json',
           uri: 'ipfs://bafkreifv6mfechfjgul7qcqcblrk44m5wjznqjwkhgwqtxpgcdt7qfdqxy',
         },

@@ -100,25 +100,21 @@ export const listenToAssetContract =
 
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
-        log.info('Token metadata', tokenMetadata) 
+        log.info('Token metadata', tokenMetadata)
         const manifestUri = extractManifestUri(tokenMetadata?.formats || [])
         log.info('MANIFEST URI', manifestUri)
         const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(manifestUri as string))
         log.info('MANIFEST', manifest)
         const domainMetadataUri = extractDomainMetadataUri(tokenMetadata?.formats || [])
 
-        console.log('DOMAIN METADATA URI', domainMetadataUri)
         const domainMetadata: GetCIDResponse = await pinata.gateways.get(
           replace('ipfs://', '')(domainMetadataUri as string),
         )
-        console.log(domainMetadata)
         const attributes = extractKeyValuePairs(domainMetadata.data)
-        
+
         const assetUri = extractAssetUri(tokenMetadata?.formats || []) as string
         log.info('ASSET URI', assetUri)
         const assetCID = assetUri.split('/').pop()
-        console.log(assetCID)
-
 
         const displayCid = replace('ipfs://', '')(tokenMetadata?.displayUri || '')
         const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${assetCID}/${displayCid}`

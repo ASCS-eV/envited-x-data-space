@@ -4,7 +4,7 @@ import { db } from '../database/queries'
 import { Database } from '../database/types'
 import { Log, log } from '../logger'
 import { SCHEMA } from '../schemas'
-import { extractContentFromStream, formatAssetUri, streamToUint8Array } from '../utils'
+import { extractContentFromStream, formatAssetUri } from '../utils'
 import { formatError, internalServerErrorError } from '../utils'
 import { streamToBuffer, stringToStream } from '../utils/utils'
 import { validateShacl } from '../validator/shacl'
@@ -96,38 +96,26 @@ export const _deleteAssetResource =
 export const deleteAssetResource = _deleteAssetResource({ db, log })
 
 export const extractManifest = async (assetArchive: Uint8Array) => {
-  console.log('EXTRACTING MANIFEST')
   const manifestStream = await extractFileFromArchive(assetArchive, MANIFEST_FILE)
-  console.log('MANIFEST STREAM', manifestStream)
   const manifest = await extractContentFromStream(manifestStream).then(JSON.parse)
-  console.log('MANIFEST', manifest)
   const manifestSchemaStream = stringToStream(SCHEMA.manifest)
   const { conforms, report } = await validateShacl(manifestSchemaStream)(manifestStream)
-  // const manifestArrayBuffer = await streamToBuffer(manifestStream)
-  // console.log('MANIFEST ARRAY BUFFER', manifestArrayBuffer)
-  // const cid = await predetermineCID(manifestArrayBuffer)
   const manifestArrayBuffer = await jsonToUint8Array(manifest)
   const cid = await predetermineCID(manifestArrayBuffer)
-  console.log('MANIFEST CID', cid)
+
   return { conforms, report, data: manifest, cid, fileSize: manifestArrayBuffer.byteLength }
 }
 
 export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: Manifest) => {
   const domainMetadataPath = getDomainMetadataPath(manifest)
-  console.log('DOMAIN METADATA PATH', domainMetadataPath)
   const domainMetadataStream = await extractFileFromArchive(assetArchive, domainMetadataPath)
-  console.log('DOMAIN METADATA STREAM', domainMetadataStream)
   const domainMetadata = await extractContentFromStream(domainMetadataStream).then(JSON.parse)
   const schemas = getDomainMetadataSchemas(domainMetadata['@context'])
   const validationsPromises = schemas.map(schema => validateShacl(stringToStream(schema))(domainMetadataStream))
   const validationsResults = await Promise.all(validationsPromises)
-  // const domainMetadataArrayBuffer = await streamToBuffer(domainMetadataStream)
-  // console.log('DMAB', domainMetadataArrayBuffer)
-  // const cid = await predetermineCID(domainMetadataArrayBuffer)
   const domainMetadataArrayBuffer = await jsonToUint8Array(domainMetadata)
   const cid = await predetermineCID(domainMetadataArrayBuffer)
-  console.log('DOMAIN METADATA', domainMetadata)
-  console.log('DOMAIN METADATA CID', cid)
+
   return {
     conforms: all(x => equals(true)(prop('conforms')(x)), validationsResults),
     report: validationsResults,
@@ -142,6 +130,7 @@ export const extractResources = getFilesGroupedByAccessRoles
 export const extractReadme = async (assetArchive: Uint8Array) => {
   try {
     const readmeStream = await extractFileFromArchive(assetArchive, README_FILE)
+
     return await extractContentFromStream(readmeStream)
   } catch (error) {
     return null
@@ -152,8 +141,8 @@ export const getCoverImage = async (assetArchive: Uint8Array, media: ExtractedRe
   const coverImage = find(
     and(propEq(ManifestCategoryId.envitedXIsMedia, 'category'), compose(includes('image'), propOr('', 'mimeType'))),
   )(media) as ExtractedResourceWithCID
-
   const coverImageStream = await extractFileFromArchive(assetArchive, coverImage.path)
+
   return {
     cid: coverImage.cid,
     fileSize: (await streamToBuffer(coverImageStream)).byteLength,

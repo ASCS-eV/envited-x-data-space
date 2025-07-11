@@ -48,4 +48,6 @@ export {
   extractContentFromStream,
   streamToUint8Array,
   fileToUint8Array,
+  streamToBuffer,
+  stringToStream,
 } from './utils'

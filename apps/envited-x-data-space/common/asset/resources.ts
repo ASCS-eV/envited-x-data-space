@@ -4,9 +4,14 @@ import { db } from '../database/queries'
 import { Database } from '../database/types'
 import { Log, log } from '../logger'
 import { SCHEMA } from '../schemas'
-import { extractContentFromStream, formatAssetUri } from '../utils'
-import { formatError, internalServerErrorError } from '../utils'
-import { streamToBuffer, stringToStream } from '../utils/utils'
+import {
+  extractContentFromStream,
+  formatAssetUri,
+  formatError,
+  internalServerErrorError,
+  streamToBuffer,
+  stringToStream,
+} from '../utils'
 import { validateShacl } from '../validator/shacl'
 import { MANIFEST_FILE, README_FILE } from './constants'
 import { AccessLevel, ExtractedResourceWithCID, Manifest, ManifestCategoryId } from './types'

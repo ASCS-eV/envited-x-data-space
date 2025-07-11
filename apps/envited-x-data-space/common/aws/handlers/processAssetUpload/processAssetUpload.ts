@@ -196,11 +196,8 @@ export const processAssetUpload =
               ContentEncoding: 'base64',
               ContentDisposition: 'inline',
             })
-            try {
-              await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
-            } catch (err) {
-              console.log(err)
-            }
+
+            await uploadFileToIPFS({ arrayBuffer: fileBuffer, filename: last(split('/', path)) as string, group })
             await insertAssetResource({
               assetId: asset.id,
               name: last(split('/', path)) as string,
@@ -208,6 +205,7 @@ export const processAssetUpload =
               mimeType,
               accessLevel: AccessLevel.public,
             })
+
             return upload.done()
           },
         )

@@ -275,6 +275,7 @@ export const processAssetUpload =
         domainMetadataCID,
         media: isPublicMediaWithCids,
       })(manifest)
+
       const modifiedManifestCID = await predetermineCID(jsonToUint8Array(modifiedManifest))
       const coverImage = await getCoverImage(uploadedFile, isPublicMediaWithCids)
 
@@ -312,13 +313,11 @@ export const processAssetUpload =
         filename: `${assetCID}-domain-metadata.json`,
         group,
       })
-
       await uploadJsonToIPFS({
         data: modifiedManifest,
         filename: `${assetCID}-manifest.json`,
         group,
       })
-
       // Update stored asset in DB
       await updateAsset(
         assetCID,

@@ -1,4 +1,4 @@
-import { ExtractTablesWithRelations, and, eq, inArray } from 'drizzle-orm'
+import { ExtractTablesWithRelations, and, desc, eq, inArray } from 'drizzle-orm'
 import { AwsDataApiPgDatabase, AwsDataApiPgQueryResultHKT } from 'drizzle-orm/aws-data-api/pg'
 import { PgQueryResultHKT, PgTransaction } from 'drizzle-orm/pg-core'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
@@ -156,7 +156,7 @@ export const insertToken =
           hash,
           contract,
           minter,
-          webGloblalIdentifier,
+          webGlobalIdentifier,
           tokenId,
           name,
           description,
@@ -177,11 +177,10 @@ export const insertToken =
           attributes,
           tags,
         } = token
-
         const [operationGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(hash))
         const [contractGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(contract))
         const [minterGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(minter))
-        const [webGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(webGloblalIdentifier))
+        const [webGuid] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(webGlobalIdentifier))
         const [insertedToken] = await insertTokenTx(tx)({
           operationGlobalIdentifierId: operationGuid.id,
           contractGlobalIdentifierId: contractGuid.id,
@@ -228,7 +227,7 @@ export const insertToken =
 export const getAssetByCID =
   ({ database: db }: { database: DatabaseConnection }) =>
   async (cid: string) =>
-    db.select().from(schema.asset).where(eq(schema.asset.cid, cid))
+    db.select().from(schema.asset).where(eq(schema.asset.cid, cid)).orderBy(desc(schema.asset.createdAt))
 
 export const updateAsset =
   ({ database: db }: { database: DatabaseConnection }) =>

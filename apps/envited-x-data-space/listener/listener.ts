@@ -5,7 +5,7 @@ import { pathOr, replace } from 'ramda'
 import { pinata } from '../common/ipfs'
 import { Log } from '../common/logger'
 import { getTokenMetadata } from './tokenMetadata'
-import { extractDomainMetadataUri, extractKeyValuePairs, extractManifestUri } from './utils'
+import { extractAssetUri, extractDomainMetadataUri, extractKeyValuePairs, extractManifestUri } from './utils'
 
 export const createLocalCopy =
   ({ uploadFileToIPFSToS3 }: { uploadFileToIPFSToS3: any }) =>
@@ -38,7 +38,7 @@ export const createLocalCopy =
       }
 
       await uploadFileToIPFSToS3(uploadParams)
-      return `${process.env.ASSET_URL}/${cid}`
+      return `${process.env.ASSETS_URL}/${cid}`
     } catch (err) {
       console.log(err)
       throw new Error(`Unable to create local copy: ${err}`)
@@ -101,17 +101,24 @@ export const listenToAssetContract =
         // Fetch Token metadata from contract
         const tokenMetadata = await getTokenMetadata({ tezos })(destination, tokenId)
         log.info('Token metadata', tokenMetadata)
-        const displayCid = replace('ipfs://', '')(tokenMetadata?.displayUri || '')
-        const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${tokenMetadata?.identifier}/${displayCid}`
-        log.info('Local display URI', localDisplayUri)
-        const manifestUri = extractManifestUri(tokenMetadata?.attributes || [])
+        const manifestUri = extractManifestUri(tokenMetadata?.formats || [])
+        log.info('MANIFEST URI', manifestUri)
         const manifest: GetCIDResponse = await pinata.gateways.get(replace('ipfs://', '')(manifestUri as string))
-        const domainMetadataUri = extractDomainMetadataUri(tokenMetadata?.attributes || [])
+        log.info('MANIFEST', manifest)
+        const domainMetadataUri = extractDomainMetadataUri(tokenMetadata?.formats || [])
+
         const domainMetadata: GetCIDResponse = await pinata.gateways.get(
           replace('ipfs://', '')(domainMetadataUri as string),
         )
         const attributes = extractKeyValuePairs(domainMetadata.data)
 
+        const assetUri = extractAssetUri(tokenMetadata?.formats || []) as string
+        log.info('ASSET URI', assetUri)
+        const assetCID = assetUri.split('/').pop()
+
+        const displayCid = replace('ipfs://', '')(tokenMetadata?.displayUri || '')
+        const localDisplayUri = `${process.env.PUBLIC_ASSET_URL}/${assetCID}/${displayCid}`
+        log.info('Local display URI', localDisplayUri)
         // Save token to DB
         const token = await insertToken({
           hash: `urn:operation:tezos:${process.env.TEZOS_CHAIN_ID!}:${hash}`,
@@ -140,7 +147,7 @@ export const listenToAssetContract =
         })
         log.info('Token registered', token)
         log.info('Updating Asset')
-        const [asset] = await getAssetByCID(token.identifier)
+        const [asset] = await getAssetByCID(assetCID)
         log.info('Asset', asset)
         if (!asset) {
           return true

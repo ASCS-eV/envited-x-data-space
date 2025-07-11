@@ -114,7 +114,7 @@ export default function Envited({ stack }: StackContext) {
           securityGroups: [sg],
           vpc,
           timeout: 60,
-          memorySize: 1024,
+          memorySize: 4096,
           runtime: 'nodejs20.x',
           nodejs: {
             loader: {
@@ -212,6 +212,7 @@ export default function Envited({ stack }: StackContext) {
     },
     permissions: ['secretsmanager:GetSecretValue'],
     environment: {
+      ASSETS_URL: process.env.ASSETS_URL!,
       RDS_SECRET_ARN: rdsCluster.secret?.secretArn || '',
       RDS_DB_NAME: process.env.RDS_DB_NAME!,
       REGION: process.env.region || 'eu-central-1',

@@ -222,6 +222,16 @@ export const streamToUint8Array = async (stream: Readable) => {
   return new Uint8Array(Buffer.concat(chunks))
 }
 
+export const streamToBuffer = async (stream: Readable): Promise<Buffer> => {
+  const chunks: Buffer[] = []
+
+  for await (const chunk of stream) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+  }
+
+  return Buffer.concat(chunks)
+}
+
 export const fileToUint8Array = async (file: File): Promise<Uint8Array> => {
   const arrayBuffer = await file.arrayBuffer()
   return new Uint8Array(arrayBuffer)

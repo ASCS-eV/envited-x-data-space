@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import { omit } from 'ramda'
 
 import { Asset, AssetStatus } from '../../types'
@@ -14,7 +14,7 @@ export const getAsset = (db: DatabaseConnection) => async (id: string) =>
 export const getAssets = (db: DatabaseConnection) => async () => db.select().from(asset)
 
 export const getAssetByCID = (db: DatabaseConnection) => async (cid: string) =>
-  db.select().from(asset).where(eq(asset.cid, cid))
+  db.select().from(asset).where(eq(asset.cid, cid)).orderBy(desc(asset.createdAt))
 
 export const deleteAsset = (db: DatabaseConnection) => async (id: string) =>
   db.delete(asset).where(eq(asset.id, id)).returning()

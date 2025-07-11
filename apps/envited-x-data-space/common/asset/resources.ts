@@ -4,9 +4,14 @@ import { db } from '../database/queries'
 import { Database } from '../database/types'
 import { Log, log } from '../logger'
 import { SCHEMA } from '../schemas'
-import { extractContentFromStream, formatAssetUri, streamToUint8Array } from '../utils'
-import { formatError, internalServerErrorError } from '../utils'
-import { stringToStream } from '../utils/utils'
+import {
+  extractContentFromStream,
+  formatAssetUri,
+  formatError,
+  internalServerErrorError,
+  streamToBuffer,
+  stringToStream,
+} from '../utils'
 import { validateShacl } from '../validator/shacl'
 import { MANIFEST_FILE, README_FILE } from './constants'
 import { AccessLevel, ExtractedResourceWithCID, Manifest, ManifestCategoryId } from './types'
@@ -97,12 +102,13 @@ export const deleteAssetResource = _deleteAssetResource({ db, log })
 
 export const extractManifest = async (assetArchive: Uint8Array) => {
   const manifestStream = await extractFileFromArchive(assetArchive, MANIFEST_FILE)
-  const manifest = await extractContentFromStream(manifestStream)
+  const manifest = await extractContentFromStream(manifestStream).then(JSON.parse)
   const manifestSchemaStream = stringToStream(SCHEMA.manifest)
   const { conforms, report } = await validateShacl(manifestSchemaStream)(manifestStream)
-  const manifestArrayBuffer = await streamToUint8Array(manifestStream)
+  const manifestArrayBuffer = await jsonToUint8Array(manifest)
   const cid = await predetermineCID(manifestArrayBuffer)
-  return { conforms, report, data: JSON.parse(manifest), cid, fileSize: manifestArrayBuffer.byteLength }
+
+  return { conforms, report, data: manifest, cid, fileSize: manifestArrayBuffer.byteLength }
 }
 
 export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: Manifest) => {
@@ -112,7 +118,7 @@ export const extractDomainMetadata = async (assetArchive: Uint8Array, manifest: 
   const schemas = getDomainMetadataSchemas(domainMetadata['@context'])
   const validationsPromises = schemas.map(schema => validateShacl(stringToStream(schema))(domainMetadataStream))
   const validationsResults = await Promise.all(validationsPromises)
-  const domainMetadataArrayBuffer = await streamToUint8Array(domainMetadataStream)
+  const domainMetadataArrayBuffer = await jsonToUint8Array(domainMetadata)
   const cid = await predetermineCID(domainMetadataArrayBuffer)
 
   return {
@@ -129,6 +135,7 @@ export const extractResources = getFilesGroupedByAccessRoles
 export const extractReadme = async (assetArchive: Uint8Array) => {
   try {
     const readmeStream = await extractFileFromArchive(assetArchive, README_FILE)
+
     return await extractContentFromStream(readmeStream)
   } catch (error) {
     return null
@@ -139,11 +146,11 @@ export const getCoverImage = async (assetArchive: Uint8Array, media: ExtractedRe
   const coverImage = find(
     and(propEq(ManifestCategoryId.envitedXIsMedia, 'category'), compose(includes('image'), propOr('', 'mimeType'))),
   )(media) as ExtractedResourceWithCID
-
   const coverImageStream = await extractFileFromArchive(assetArchive, coverImage.path)
+
   return {
     cid: coverImage.cid,
-    fileSize: (await streamToUint8Array(coverImageStream)).byteLength,
+    fileSize: (await streamToBuffer(coverImageStream)).byteLength,
     uri: `${formatAssetUri(coverImage.cid)}${coverImage.path}`,
   }
 }

@@ -407,9 +407,16 @@ export const _txn =
         .values({
           urnGlobalIdentifierId,
           addressGlobalIdentifierId,
-          name: has('legalName')(credentialSubject as AscsMember) ? prop('legalName')(credentialSubject as AscsMember) : `${prop('givenName')(credentialSubject as AscsUser)} ${prop('familyName')(credentialSubject as AscsUser)}`,
+          name: has('legalName')(credentialSubject as AscsMember)
+            ? prop('legalName')(credentialSubject as AscsMember)
+            : `${prop('givenName')(credentialSubject as AscsUser)} ${prop('familyName')(
+                credentialSubject as AscsUser,
+              )}`,
           email: propOr('', 'email')(credentialSubject as AscsUser),
-          vatId: `${pathOr('', ['registrationNumber', 'countryCode'])(credentialSubject as AscsMember)}${pathOr('', ['registrationNumber', 'vatID'])(credentialSubject as AscsMember)}`,
+          vatId: `${pathOr('', ['registrationNumber', 'countryCode'])(credentialSubject as AscsMember)}${pathOr('', [
+            'registrationNumber',
+            'vatID',
+          ])(credentialSubject as AscsMember)}`,
           privacyPolicyAccepted: '',
           articlesOfAssociationAccepted: '',
           contributionRulesAccepted: '',
@@ -427,7 +434,7 @@ export const _txn =
           createdAt: new Date(),
           updatedAt: new Date(),
         })
-        .returning() 
+        .returning()
       const roleFilterArray =
         credentialSubject.type === 'ascs:Participant'
           ? isTrustAnchor(credentialSubject.id)

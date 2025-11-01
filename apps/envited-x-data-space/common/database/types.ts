@@ -16,11 +16,11 @@ export interface Issuer {
 
 export interface Address {
   '@type': string
-  country: string
-  postalCode: string
-  streetAddress: string
-  addressLocality: string
-  countrySubdivisionCode: string
+  'country': string
+  'postalCode': string
+  'streetAddress': string
+  'addressLocality': string
+  'countrySubdivisionCode': string
 }
 
 export interface AscsMember {
@@ -30,14 +30,14 @@ export interface AscsMember {
   legalForm: string
   legalName: string
   dunsNumber: string
-  legalAddress: Address,
-  termsOfSimpulseId: Policy,
+  legalAddress: Address
+  termsOfSimpulseId: Policy
   registrationNumber: {
-    '@type': "gx:VatID",
-    vatID: string,
-    countryCode: string
-  },
-  headquartersAddress: Address,
+    '@type': 'gx:VatID'
+    'vatID': string
+    'countryCode': string
+  }
+  headquartersAddress: Address
   revocationRegistryIndex: string
 }
 
@@ -48,7 +48,7 @@ export interface Policy {
 
 export interface AscsUser {
   id: string
-  type: "ascs:User"
+  type: 'ascs:User'
   email: string
   memberOf: string
   givenName: string

@@ -51,7 +51,7 @@ export const uploadTokenMetadataToIPFS =
       throw forbiddenError({ resource: 'assets', message: 'No issuer found', userId: session.user.id })
     }
 
-    const group = await createGroup(extractAddressFromDid(user.issuerId))
+    const group = await createGroup(extractAddressFromDid(user.issuerId) as string)
     return uploadJsonToIPFS({ data: (asset as Asset).metadata, filename: 'token_info.json', group })
   }
 

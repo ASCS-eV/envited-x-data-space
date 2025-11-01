@@ -1,8 +1,8 @@
+import { decodeJwt } from 'jose'
 import type { NextAuthOptions, Session } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
 import { equals, has, isEmpty, isNil, pluck, reject } from 'ramda'
-import { decodeJwt } from 'jose'
 
 import { db } from '../database/queries'
 import { FEATURE_FLAGS } from '../featureFlags'
@@ -92,7 +92,7 @@ export const authOptions: NextAuthOptions = {
       try {
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
-          
+
           if (!has('credential')(profile)) {
             log.error('Credential not found')
             return '/error?error=CREDENTIAL_NOT_FOUND'
@@ -102,7 +102,7 @@ export const authOptions: NextAuthOptions = {
           log.info('Credential decoded')
           const {
             id,
-            issuer : { id: issuer },
+            issuer: { id: issuer },
             credentialSubject: { id: credentialSubjectId, type: credentialSubjectType },
           } = credential.vc as any
           log.info('Credential parsed', id, issuer, credentialSubjectId, credentialSubjectType)
@@ -177,7 +177,9 @@ export const authOptions: NextAuthOptions = {
         const connection = await db()
 
         const user = await connection.getUserByDid(parseGlobalIdentifier((credential.vc as any).credentialSubject.id))
-        const result = await connection.getUserRolesByDid(parseGlobalIdentifier((credential.vc as any).credentialSubject.id))
+        const result = await connection.getUserRolesByDid(
+          parseGlobalIdentifier((credential.vc as any).credentialSubject.id),
+        )
         const userRoles = pluck('usersToRoles', result)
         token.user.role = assignSingleRole(userRoles)
         token.user.id = user.id

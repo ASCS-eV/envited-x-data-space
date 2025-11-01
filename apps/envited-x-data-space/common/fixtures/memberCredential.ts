@@ -47,24 +47,44 @@ export const MEMBER_CREDENTIAL = {
   'issuanceDate': '2023-11-22T17:14:33Z',
   'expirationDate': '2102-09-15T17:14:33Z',
   'id': 'urn:uuid:576fbefb-35e8-4b71-bb1a-53d1803c86de',
-  'issuer': 'did:pkh:tz:tz1ggujjYjA7oYoaZBzTg1tYSXn3VMjcgDuv',
+  'issuer': { 
+    id: 'did:pkh:tz:tz1ggujjYjA7oYoaZBzTg1tYSXn3VMjcgDuv',
+    type: 'AscsIssuer',
+    member: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
+    revocationRegistry: 'https://registry.ascs.digital/revocation'
+  },
   'credentialSubject': {
     id: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
     type: 'AscsMember',
-    name: 'Testcompany GmbH',
-    url: 'https://test.de/',
-    address: {
-      type: 'PostalAddress',
-      streetAddress: 'Teststraße 1',
+    website: 'https://test.de/',
+    legalForm: 'GmbH',
+    legalName: 'Testcompany GmbH',
+    dunsNumber: '123456789',
+    legalAddress: {
+      '@type': 'PostalAddress',
+      country: 'DE',
       postalCode: '12345',
+      streetAddress: 'Teststraße 1',
       addressLocality: 'Munich',
-      addressCountry: 'DE',
+      countrySubdivisionCode: 'BY'
     },
-    vatID: 'DE123456789',
-    isAscsMember: true,
-    isEnvitedMember: true,
-    privacyPolicy: 'https://media.ascs.digital/terms/ascs_privacy_policy_2020-07-08.pdf#SHA-256',
-    articlesOfAssociation: 'https://media.ascs.digital/terms/ascs_articles_of_association_2021-09-17.pdf#SHA-256',
-    contributionRules: 'https://media.ascs.digital/terms/ascs_contribution_rules_2020-07-08.pdf#SHA-256',
+    termsOfSimpulseId: {
+      id: 'https://media.ascs.digital/terms/ascs_privacy_policy_2020-07-08.pdf#SHA-256',
+      type: 'Policy'
+    },
+    registrationNumber: {
+      '@type': 'gx:VatID' as const,
+      vatID: 'DE123456789',
+      countryCode: 'DE'
+    },
+    headquartersAddress: {
+      '@type': 'PostalAddress',
+      country: 'DE',
+      postalCode: '12345',
+      streetAddress: 'Teststraße 1',
+      addressLocality: 'Munich',
+      countrySubdivisionCode: 'BY'
+    },
+    revocationRegistryIndex: '0'
   },
 }

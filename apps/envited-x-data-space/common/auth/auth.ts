@@ -1,10 +1,10 @@
 import type { NextAuthOptions, Session } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signIn as NASignIn, signOut as NASignOut } from 'next-auth/react'
-import { equals, has, isEmpty, isNil, omit, pluck, prop, reject } from 'ramda'
+import { equals, has, isEmpty, isNil, pluck, reject } from 'ramda'
+import { decodeJwt } from 'jose'
 
 import { db } from '../database/queries'
-import { Credential } from '../database/types'
 import { FEATURE_FLAGS } from '../featureFlags'
 import { parseGlobalIdentifier } from '../globalIdentifiers'
 import { httpPost } from '../http'
@@ -77,35 +77,35 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.OIDC_CLIENT_ID,
       clientSecret: process.env.OIDC_CLIENT_SECRET,
       profile: async profile => {
+        const credential = decodeJwt(profile.credential as string)
         return {
-          id: profile.sub,
-          did: profile.sub,
+          id: (credential.vc as any).credentialSubject.id,
+          did: (credential.vc as any).credentialSubject.id,
         }
       },
     },
   ],
-  secret: process.env.SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   debug: true,
   callbacks: {
     async signIn({ profile }) {
       try {
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
-          log.info(profile)
+          
           if (!has('credential')(profile)) {
             log.error('Credential not found')
             return '/error?error=CREDENTIAL_NOT_FOUND'
           }
-
-          const credential = omit(['proof'])(
-            prop('credential')(profile) as Partial<Record<'proof', any>>,
-          ) as Credential[]
+          log.info('Credential found')
+          const credential = decodeJwt(profile.credential as string)
+          log.info('Credential decoded')
           const {
             id,
-            issuer,
+            issuer : { id: issuer },
             credentialSubject: { id: credentialSubjectId, type: credentialSubjectType },
-          } = credential[0]
-
+          } = credential.vc as any
+          log.info('Credential parsed', id, issuer, credentialSubjectId, credentialSubjectType)
           if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].contract) {
             log.info('Starting revocation registry check')
             log.info('credential', id, credentialSubjectId, issuer, credentialSubjectType)
@@ -126,7 +126,7 @@ export const authOptions: NextAuthOptions = {
 
           if (equals(CredentialType.AscsUser)(credentialSubjectType as CredentialType)) {
             const principal = await connection.getUserByDid(parseGlobalIdentifier(issuer))
-
+            log.info('Principal found', principal)
             log.info('User credential, checking principal credentials')
 
             if (isEmpty(principal)) {
@@ -142,7 +142,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           const existingUser = (await connection.getUserByDid(parseGlobalIdentifier(credentialSubjectId))) as User
-
+          log.info('User found', existingUser)
           if (!isNil(existingUser)) {
             // User already exists
             if (!existingUser.isActive) {
@@ -155,7 +155,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           log.info('Inserting user')
-          await connection.insertUserTx(credential)
+          await connection.insertUserTx(credential.vc)
         }
         log.info('Completing signin')
         return true
@@ -171,12 +171,13 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.user = user
       }
-      if (profile && profile.sub) {
-        const { sub } = profile
+
+      if (profile && profile.credential) {
+        const credential = decodeJwt(profile.credential as string)
         const connection = await db()
 
-        const user = await connection.getUserByDid(parseGlobalIdentifier(sub))
-        const result = await connection.getUserRolesByDid(parseGlobalIdentifier(sub))
+        const user = await connection.getUserByDid(parseGlobalIdentifier((credential.vc as any).credentialSubject.id))
+        const result = await connection.getUserRolesByDid(parseGlobalIdentifier((credential.vc as any).credentialSubject.id))
         const userRoles = pluck('usersToRoles', result)
         token.user.role = assignSingleRole(userRoles)
         token.user.id = user.id

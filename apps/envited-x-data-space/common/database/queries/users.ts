@@ -3,7 +3,7 @@ import { PgTransaction } from 'drizzle-orm/pg-core'
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { PostgresJsQueryResultHKT } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
-import { isEmpty, prop, propOr } from 'ramda'
+import { has, isEmpty, pathOr, prop, propOr } from 'ramda'
 
 import { parseGlobalIdentifier } from '../../globalIdentifiers'
 import { log } from '../../logger'
@@ -21,7 +21,7 @@ import {
   usersToCredentialTypes,
   usersToRoles,
 } from '../schema'
-import { Credential, DatabaseConnection, Issuer, User } from '../types'
+import { AscsMember, AscsUser, Credential, DatabaseConnection, Issuer, User } from '../types'
 import { insertGlobalIdentifierTx } from './globalIdentifiers'
 
 export const deactivateUserById = (db: DatabaseConnection) => async (id: string) =>
@@ -372,55 +372,54 @@ export const _txn =
         id: uuid,
       } = credential
 
-      const [addressType] = await insertAddressTypeTx(tx)(credentialSubject.address.type)
-      const { id: addressTypeId } = addressType
+      const [addressType] = await insertAddressTypeTx(tx)('legalAddress')
+      const legalAddressTypeId = addressType.id
 
-      if (credentialTypes.includes('AscsMemberCredential')) {
+      if (credentialTypes.includes('ASCS Participant')) {
         const [{ id: memberGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(
           parseGlobalIdentifier(credentialSubject.id),
         )
 
         await insertIssuerTx(tx)({
           globalIdentifierId: memberGlobalIdentifierId,
-          name: credentialSubject.name,
-          url: propOr('', 'url')(credentialSubject),
+          name: (credentialSubject as AscsMember).legalName,
+          url: propOr('', 'website')(credentialSubject),
           type: credentialSubject.type,
         })
       }
 
       const [{ id: issuerGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(
-        parseGlobalIdentifier(credentialIssuer),
+        parseGlobalIdentifier(credentialIssuer.id),
       )
       const [{ id }] = await insertIssuerTx(tx)({
         globalIdentifierId: issuerGlobalIdentifierId,
         name: '',
         url: '',
-        type: '',
+        type: credentialIssuer.type,
       })
 
       const [{ id: urnGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(parseGlobalIdentifier(uuid))
       const [{ id: addressGlobalIdentifierId }] = await insertGlobalIdentifierTx(tx)(
         parseGlobalIdentifier(credentialSubject.id),
       )
-
       const [newUser] = await tx
         .insert(user)
         .values({
           urnGlobalIdentifierId,
           addressGlobalIdentifierId,
-          name: prop('name')(credentialSubject),
-          email: propOr('', 'email')(credentialSubject),
-          vatId: propOr('', 'vatId')(credentialSubject),
-          privacyPolicyAccepted: prop('privacyPolicy')(credentialSubject),
-          articlesOfAssociationAccepted: propOr('', 'articlesOfAssociation')(credentialSubject),
-          contributionRulesAccepted: propOr('', 'contributionRules')(credentialSubject),
-          isAscsMember: prop('isAscsMember')(credentialSubject),
-          isEnvitedMember: prop('isEnvitedMember')(credentialSubject),
-          addressTypeId,
-          streetAddress: credentialSubject.address.streetAddress,
-          postalCode: credentialSubject.address.postalCode,
-          addressLocality: credentialSubject.address.addressLocality,
-          addressCountry: credentialSubject.address.addressCountry,
+          name: has('legalName')(credentialSubject as AscsMember) ? prop('legalName')(credentialSubject as AscsMember) : `${prop('givenName')(credentialSubject as AscsUser)} ${prop('familyName')(credentialSubject as AscsUser)}`,
+          email: propOr('', 'email')(credentialSubject as AscsUser),
+          vatId: `${pathOr('', ['registrationNumber', 'countryCode'])(credentialSubject as AscsMember)}${pathOr('', ['registrationNumber', 'vatID'])(credentialSubject as AscsMember)}`,
+          privacyPolicyAccepted: '',
+          articlesOfAssociationAccepted: '',
+          contributionRulesAccepted: '',
+          isAscsMember: true,
+          isEnvitedMember: true,
+          addressTypeId: has('legalAddress')(credentialSubject as AscsMember) ? legalAddressTypeId : null,
+          streetAddress: pathOr('', ['legalAddress', 'streetAddress'])(credentialSubject as AscsMember),
+          postalCode: pathOr('', ['legalAddress', 'postalCode'])(credentialSubject as AscsMember),
+          addressLocality: pathOr('', ['legalAddress', 'addressLocality'])(credentialSubject as AscsMember),
+          addressCountry: pathOr('', ['legalAddress', 'country'])(credentialSubject as AscsMember),
           issuerId: id,
           issuanceDate: new Date(issuanceDate),
           expirationDate: new Date(expirationDate),
@@ -428,24 +427,21 @@ export const _txn =
           createdAt: new Date(),
           updatedAt: new Date(),
         })
-        .returning()
-
+        .returning() 
       const roleFilterArray =
-        credentialSubject.type === 'AscsMember'
+        credentialSubject.type === 'ascs:Participant'
           ? isTrustAnchor(credentialSubject.id)
             ? ['federator', 'principal', 'provider', 'user']
             : ['principal', 'provider', 'user']
           : ['provider', 'user']
 
       const roles = await tx.select().from(role).where(inArray(role.id, roleFilterArray))
-
       const insertUsersToRolesPromises = roles.map(({ id }: { id: string }) =>
         insertUsersToRolesTx(tx)({
           userId: newUser.id,
           roleId: id,
         }),
       )
-
       await Promise.all(insertUsersToRolesPromises)
 
       const insertCredentialTypeTxPromises = credentialTypes.map((type: string) =>
@@ -454,21 +450,21 @@ export const _txn =
           type,
         }),
       )
-
       await Promise.all(insertCredentialTypeTxPromises)
-
-      await insertCompanyProfileTx(tx)({
-        name: credentialSubject.name,
-        slug: slugify(credentialSubject.name),
-        streetAddress: credentialSubject.address.streetAddress,
-        postalCode: credentialSubject.address.postalCode,
-        addressLocality: credentialSubject.address.addressLocality,
-        addressCountry: credentialSubject.address.addressCountry,
-        isPublished: false,
-      })
-
+      if (credentialSubject.type === 'ascs:Participant') {
+        await insertCompanyProfileTx(tx)({
+          name: pathOr('', ['legalName'])(credentialSubject as AscsMember),
+          slug: slugify(pathOr('', ['legalName'])(credentialSubject as AscsMember)),
+          streetAddress: pathOr('', ['legalAddress', 'streetAddress'])(credentialSubject as AscsMember),
+          postalCode: pathOr('', ['legalAddress', 'postalCode'])(credentialSubject as AscsMember),
+          addressLocality: pathOr('', ['legalAddress', 'addressLocality'])(credentialSubject as AscsMember),
+          addressCountry: pathOr('', ['legalAddress', 'country'])(credentialSubject as AscsMember),
+          isPublished: false,
+        })
+      }
       return newUser
     } catch (error) {
+      console.log(error)
       log.error(formatError(error))
       tx.rollback()
     }

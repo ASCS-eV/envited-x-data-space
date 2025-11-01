@@ -77,12 +77,12 @@ export const _getProfile =
       const issuer = await connection.getIssuerById(user?.issuerId)
       let profileName = issuer.name
 
-      if (hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
+      if (hasCredentialType('ASCS User')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserByIssuerId(user.issuerId)
         profileName = principal.name
       }
 
-      if (hasCredentialType('AscsMemberCredential')(user.usersToCredentialTypes)) {
+      if (hasCredentialType('ASCS Participant')(user.usersToCredentialTypes)) {
         profileName = user.name
       }
 

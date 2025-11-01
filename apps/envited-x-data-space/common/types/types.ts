@@ -81,8 +81,8 @@ export enum Role {
 }
 
 export enum CredentialType {
-  AscsMember = 'AscsMember',
-  AscsUser = 'AscsUser',
+  AscsMember = 'ascs:Participant',
+  AscsUser = 'ascs:User',
 }
 
 export interface Asset {

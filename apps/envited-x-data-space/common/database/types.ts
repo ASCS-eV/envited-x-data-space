@@ -15,29 +15,58 @@ export interface Issuer {
 }
 
 export interface Address {
-  type: string
-  streetAddress: string
+  '@type': string
+  country: string
   postalCode: string
+  streetAddress: string
   addressLocality: string
-  addressCountry: string
+  countrySubdivisionCode: string
 }
 
-export interface AscsMember extends AscsUser {
-  url: string
-  articlesOfAssociation: string
-  contributionRules: string
-  vatId: string
+export interface AscsMember {
+  id: string
+  type: string
+  website: string
+  legalForm: string
+  legalName: string
+  dunsNumber: string
+  legalAddress: Address,
+  termsOfSimpulseId: Policy,
+  registrationNumber: {
+    '@type': "gx:VatID",
+    vatID: string,
+    countryCode: string
+  },
+  headquartersAddress: Address,
+  revocationRegistryIndex: string
+}
+
+export interface Policy {
+  id: string
+  type: string
 }
 
 export interface AscsUser {
   id: string
+  type: "ascs:User"
+  email: string
+  memberOf: string
+  givenName: string
+  familyName: string
+  privacyPolicy: Policy
+  revocationRegistryIndex: string
+}
+
+export interface Policy {
+  id: string
   type: string
-  name: string
-  email?: string
-  address: Address
-  isAscsMember: boolean
-  isEnvitedMember: boolean
-  privacyPolicy: string
+}
+
+export interface CredentialIssuer {
+  id: string
+  type: string
+  member: string
+  revocationRegistry: string
 }
 
 export interface Credential {
@@ -45,7 +74,7 @@ export interface Credential {
   issuanceDate: string
   expirationDate: string
   id: string
-  issuer: string
+  issuer: CredentialIssuer
   credentialSubject: AscsMember | AscsUser
 }
 

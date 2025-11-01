@@ -12,6 +12,24 @@ declare module 'next-auth' {
       id: string
     } & DefaultSession['user']
   }
+
+  /**
+   * The shape of the user info returned from OAuth providers
+   */
+  interface Profile {
+    credential?: string
+    acr?: string
+    at_hash?: string
+    aud?: string[]
+    auth_time?: number
+    exp?: number
+    iat?: number
+    iss?: string
+    jti?: string
+    rat?: number
+    sid?: string
+    sub?: string
+  }
 }
 
 declare module 'next-auth/jwt' {

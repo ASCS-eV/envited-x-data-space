@@ -80,13 +80,13 @@ export const _getProfile =
       console.log('GEt PRofile ISSUER', issuer)
       let profileName = issuer.name
       console.log('GEt PRofile PROFILENAME', profileName)
-      if (hasCredentialType('ASCS User')(user.usersToCredentialTypes)) {
+      if (hasCredentialType('ASCS User')(user.usersToCredentialTypes) || hasCredentialType('AscsUserCredential')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserByIssuerId(user.issuerId)
         console.log('GEt PRofile PRINCIPAL', principal)
         profileName = principal.name
       }
 
-      if (hasCredentialType('ASCS Participant')(user.usersToCredentialTypes)) {
+      if (hasCredentialType('ASCS Participant')(user.usersToCredentialTypes) || hasCredentialType('AscsMemberCredential')(user.usersToCredentialTypes)) {
         profileName = user.name
       }
       console.log('GEt PRofile PROFILENAME', profileName)

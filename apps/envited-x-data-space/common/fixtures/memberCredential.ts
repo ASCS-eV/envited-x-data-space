@@ -47,11 +47,11 @@ export const MEMBER_CREDENTIAL = {
   'issuanceDate': '2023-11-22T17:14:33Z',
   'expirationDate': '2102-09-15T17:14:33Z',
   'id': 'urn:uuid:576fbefb-35e8-4b71-bb1a-53d1803c86de',
-  'issuer': { 
+  'issuer': {
     id: 'did:pkh:tz:tz1ggujjYjA7oYoaZBzTg1tYSXn3VMjcgDuv',
     type: 'AscsIssuer',
     member: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
-    revocationRegistry: 'https://registry.ascs.digital/revocation'
+    revocationRegistry: 'https://registry.ascs.digital/revocation',
   },
   'credentialSubject': {
     id: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
@@ -62,29 +62,29 @@ export const MEMBER_CREDENTIAL = {
     dunsNumber: '123456789',
     legalAddress: {
       '@type': 'PostalAddress',
-      country: 'DE',
-      postalCode: '12345',
-      streetAddress: 'Teststraße 1',
-      addressLocality: 'Munich',
-      countrySubdivisionCode: 'BY'
+      'country': 'DE',
+      'postalCode': '12345',
+      'streetAddress': 'Teststraße 1',
+      'addressLocality': 'Munich',
+      'countrySubdivisionCode': 'BY',
     },
     termsOfSimpulseId: {
       id: 'https://media.ascs.digital/terms/ascs_privacy_policy_2020-07-08.pdf#SHA-256',
-      type: 'Policy'
+      type: 'Policy',
     },
     registrationNumber: {
       '@type': 'gx:VatID' as const,
-      vatID: 'DE123456789',
-      countryCode: 'DE'
+      'vatID': 'DE123456789',
+      'countryCode': 'DE',
     },
     headquartersAddress: {
       '@type': 'PostalAddress',
-      country: 'DE',
-      postalCode: '12345',
-      streetAddress: 'Teststraße 1',
-      addressLocality: 'Munich',
-      countrySubdivisionCode: 'BY'
+      'country': 'DE',
+      'postalCode': '12345',
+      'streetAddress': 'Teststraße 1',
+      'addressLocality': 'Munich',
+      'countrySubdivisionCode': 'BY',
     },
-    revocationRegistryIndex: '0'
+    revocationRegistryIndex: '0',
   },
 }

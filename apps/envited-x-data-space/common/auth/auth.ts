@@ -90,6 +90,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ profile }) {
       try {
+
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
 
@@ -193,6 +194,8 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
+      console.log('SESSION', session)
+      console.log('TOKEN', token)
       if (session?.user) {
         session.user.name = null
         session.user.did = token.user.did

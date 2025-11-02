@@ -12,8 +12,11 @@ import { ProfileNotification } from '../../modules/Profile'
 
 export default async function Template({ children }: { children: React.ReactNode }) {
   const session = await getServerSession()
+  console.log("SESSION", session)
   const profile = await getProfile()
+  console.log("PROFILE", profile)
   const user = await getUser()
+  console.log("USER", user)
 
   return (
     <main className="mx-auto max-w-2xl px-4 pt-0 pb-12 sm:px-6 lg:max-w-7xl lg:px-8 mt-6">

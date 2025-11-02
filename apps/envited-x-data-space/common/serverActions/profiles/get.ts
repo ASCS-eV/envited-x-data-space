@@ -74,18 +74,22 @@ export const _getProfile =
       }
       const connection = await db()
       const user = await connection.getUserById(session.user.id)
+      console.log('GEt PRofile USER', user)
+      console.log('GEt PRofile USER CREDENTIALTYPES', user.usersToCredentialTypes)
       const issuer = await connection.getIssuerById(user?.issuerId)
+      console.log('GEt PRofile ISSUER', issuer)
       let profileName = issuer.name
-
+      console.log('GEt PRofile PROFILENAME', profileName)
       if (hasCredentialType('ASCS User')(user.usersToCredentialTypes)) {
         const principal = await connection.getUserByIssuerId(user.issuerId)
+        console.log('GEt PRofile PRINCIPAL', principal)
         profileName = principal.name
       }
 
       if (hasCredentialType('ASCS Participant')(user.usersToCredentialTypes)) {
         profileName = user.name
       }
-
+      console.log('GEt PRofile PROFILENAME', profileName)
       const profile = await connection.getProfileByName(profileName)
 
       if (isNil(profile) || isEmpty(profile)) {

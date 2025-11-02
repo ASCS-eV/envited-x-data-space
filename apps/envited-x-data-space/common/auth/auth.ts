@@ -90,7 +90,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ profile }) {
       try {
-
         if (FEATURE_FLAGS[(process.env.ENV as Environment) || 'development'].oidc) {
           log.info('Verifying credential')
 

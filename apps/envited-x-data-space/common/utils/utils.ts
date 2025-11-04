@@ -37,7 +37,7 @@ export const extractIssuerIdFromCredential = pathOr('', ['issuer', 'id'])
 export const extractTypeFromCredential = pipe(
   pathOr('', ['credentialSubject', 'type']),
   split(':'),
-  (parts: string[]) => parts.length > 1 ? capitalize(parts[0]) + capitalize(parts[1]) : parts[0] || ''
+  (parts: string[]) => (parts.length > 1 ? capitalize(parts[0]) + capitalize(parts[1]) : parts[0] || ''),
 )
 
 export const slugify = (string: string) =>
@@ -231,7 +231,7 @@ export const streamToBuffer = async (stream: Readable): Promise<Buffer> => {
   const chunks: Uint8Array[] = []
 
   for await (const chunk of stream) {
-    chunks.push(Buffer.isBuffer(chunk) ? new Uint8Array(chunk) : new Uint8Array(Buffer.from(chunk)))
+    chunks.push(Buffer.isBuffer(chunk) ? Uint8Array.from(chunk) : Uint8Array.from(Buffer.from(chunk)))
   }
 
   return Buffer.concat(chunks)

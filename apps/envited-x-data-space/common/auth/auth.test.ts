@@ -1,5 +1,17 @@
 import { _signIn } from './auth'
 
+// Mock the feature flags to disable OIDC for testing
+jest.mock('../featureFlags', () => ({
+  FEATURE_FLAGS: {
+    development: {
+      oidc: false,
+      contract: false,
+      uniqueAsset: false,
+      uniqueGlobalIdentifier: false,
+    },
+  },
+}))
+
 describe('common/auth/auth', () => {
   describe('signIn', () => {
     it('should call the sign in method with the expected parameters', async () => {

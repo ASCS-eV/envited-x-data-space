@@ -1,6 +1,4 @@
-import { Log } from '../../logger'
 import { CredentialType } from '../../types'
-import { badRequestError } from '../../utils'
 import * as SUT from './insert'
 
 describe('common/serverActions/users/insert', () => {
@@ -28,7 +26,9 @@ describe('common/serverActions/users/insert', () => {
         id: 'USER_DID',
         type: CredentialType.AscsUser,
       },
-      issuer: 'ISSUER_DID',
+      issuer: {
+        id: 'ISSUER_DID',
+      },
     } as any
 
     const logStub = {
@@ -94,7 +94,8 @@ describe('common/serverActions/users/insert', () => {
         id: 'USER_DID',
         type: CredentialType.AscsUser,
       }),
-      getUserById: jest.fn().mockResolvedValueOnce({}).mockResolvedValueOnce({}),
+      getUserById: jest.fn().mockResolvedValue({}),
+      getUserByIssuerId: jest.fn().mockResolvedValue({}),
     }) as any
 
     const credential = {

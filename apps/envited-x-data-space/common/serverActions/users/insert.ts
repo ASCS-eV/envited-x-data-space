@@ -3,7 +3,6 @@ import { equals, isEmpty } from 'ramda'
 import { db } from '../../database/queries'
 import { Credential, Database } from '../../database/types'
 import { Log, log } from '../../logger'
-import { CredentialType } from '../../types'
 import {
   badRequestError,
   extractIdFromCredential,
@@ -29,7 +28,7 @@ export const _insert =
         throw badRequestError({ resource: 'users', resourceId: credentialId, message: 'User already exists' })
       }
 
-      if (equals(CredentialType.AscsUser)(credentialType as CredentialType)) {
+      if (equals('AscsUser')(credentialType)) {
         const principal = await connection.getUserByIssuerId(credentialIssuerId)
 
         if (isEmpty(principal)) {

@@ -32,9 +32,13 @@ import { KEYWORDS } from '../asset/constants'
 
 export const extractIdFromCredential = pathOr('', ['credentialSubject', 'id'])
 
-export const extractIssuerIdFromCredential = pathOr('', ['issuer'])
+export const extractIssuerIdFromCredential = pathOr('', ['issuer', 'id'])
 
-export const extractTypeFromCredential = pathOr('', ['credentialSubject', 'type'])
+export const extractTypeFromCredential = pipe(
+  pathOr('', ['credentialSubject', 'type']),
+  split(':'),
+  (parts: string[]) => parts.length > 1 ? capitalize(parts[0]) + capitalize(parts[1]) : parts[0] || ''
+)
 
 export const slugify = (string: string) =>
   string
@@ -217,16 +221,17 @@ export const extractContentFromStream = async (stream: Readable) => {
 export const streamToUint8Array = async (stream: Readable) => {
   const chunks: Uint8Array[] = []
   for await (const chunk of stream) {
-    chunks.push(chunk)
+    chunks.push(Buffer.isBuffer(chunk) ? new Uint8Array(chunk) : new Uint8Array(Buffer.from(chunk)))
   }
-  return new Uint8Array(Buffer.concat(chunks))
+  const buffer = Buffer.concat(chunks)
+  return new Uint8Array(buffer)
 }
 
 export const streamToBuffer = async (stream: Readable): Promise<Buffer> => {
-  const chunks: Buffer[] = []
+  const chunks: Uint8Array[] = []
 
   for await (const chunk of stream) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+    chunks.push(Buffer.isBuffer(chunk) ? new Uint8Array(chunk) : new Uint8Array(Buffer.from(chunk)))
   }
 
   return Buffer.concat(chunks)

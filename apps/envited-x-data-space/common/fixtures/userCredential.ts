@@ -44,21 +44,32 @@ export const USER_CREDENTIAL = {
   'issuanceDate': '2023-11-22T17:14:33Z',
   'expirationDate': '2102-09-15T17:14:33Z',
   'id': 'urn:uuid:cf1f329d-9c4c-458e-ba0a-a762a296b79c',
-  'issuer': 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
+  'issuer': {
+    id: 'did:pkh:tz:tz1bpeJArd7apJyTUryfXH1SD6w8GL6Gwhj8',
+    type: 'AscsIssuer',
+    member: '',
+    revocationRegistry: '',
+  },
   'credentialSubject': {
     id: 'did:pkh:tz:tz1SfdVU1mor3Sgej3FmmwMH4HM1EjTzqqeE',
-    type: 'AscsUser',
-    name: 'User',
+    type: 'ascs:User',
+    givenName: 'User',
+    familyName: '',
     email: 'mailto:user@test.de',
-    address: {
+    memberOf: '',
+    privacyPolicy: {
+      id: 'https://media.ascs.digital/terms/ascs_privacy_policy_2020-07-08.pdf#SHA-256',
+      type: 'Policy',
+    },
+    revocationRegistryIndex: '',
+    legalAddress: {
       type: 'PostalAddress',
       streetAddress: 'Teststraße 1',
       postalCode: '12345',
       addressLocality: 'Munich',
-      addressCountry: 'DE',
+      country: 'DE',
     },
     isAscsMember: true,
     isEnvitedMember: true,
-    privacyPolicy: 'https://media.ascs.digital/terms/ascs_privacy_policy_2020-07-08.pdf#SHA-256',
   },
 }

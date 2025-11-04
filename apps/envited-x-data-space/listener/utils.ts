@@ -29,13 +29,17 @@ export const convertIpfsUrlToGateway = (ipfsUrl: string, gateway = 'https://ipfs
 export const getFileTypeFromBuffer = fileTypeFromBuffer
 
 export const extractManifestUri = pipe(
-  filter(allPass([propEq('application/ld+json', 'mimeType'), propSatisfies(test(/envited-x_manifest/), 'fileName')])),
+  filter(allPass([propEq('application/ld+json', 'mimeType'), propSatisfies(test(/\.manifest\.metadata$/), 'fileName')])),
   map((x: any) => prop('uri')(x)),
   head,
 )
 
 export const extractDomainMetadataUri = pipe(
-  filter(allPass([propEq('application/ld+json', 'mimeType'), propSatisfies(test(/domain_metadata/), 'fileName')])),
+  filter(allPass([
+    propEq('application/ld+json', 'mimeType'), 
+    propSatisfies(test(/\.metadata$/), 'fileName'),
+    propSatisfies(complement(test(/\.manifest\.metadata$/)), 'fileName')
+  ])),
   map((x: any) => prop('uri')(x)),
   head,
 )

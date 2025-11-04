@@ -165,7 +165,6 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async jwt({ token, user, account, profile }) {
-      console.log('JWT', token, user, account, profile)
       if (account?.access_token) {
         token.accessToken = account.access_token
       }
@@ -175,26 +174,19 @@ export const authOptions: NextAuthOptions = {
 
       if (profile && profile.credential) {
         const credential = decodeJwt(profile.credential as string)
-        console.log('Credential', credential)
         const connection = await db()
 
         const user = await connection.getUserByDid(parseGlobalIdentifier((credential.vc as any).credentialSubject.id))
-        console.log('User', user)
         const result = await connection.getUserRolesByDid(
           parseGlobalIdentifier((credential.vc as any).credentialSubject.id),
         )
-        console.log('Result', result)
         const userRoles = pluck('usersToRoles', result)
-        console.log('UserRoles', userRoles)
         token.user.role = assignSingleRole(userRoles)
-        console.log('Token', token)
         token.user.id = user.id
       }
       return token
     },
     async session({ session, token }) {
-      console.log('SESSION', session)
-      console.log('TOKEN', token)
       if (session?.user) {
         session.user.name = null
         session.user.did = token.user.did

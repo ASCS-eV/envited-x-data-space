@@ -13,11 +13,8 @@ import {
 
 export default async function Index() {
   const session = await getServerSession()
-  console.log('SESSION', session)
   const users = await getTotalUsersByIssuerId()
-  console.log('USERS', users)
   const tokens = await getTokensForLoggedInUser()
-  console.log('TOKENS', tokens)
 
   return (
     <div className="grid grid-cols-2 gap-5 mb-12">

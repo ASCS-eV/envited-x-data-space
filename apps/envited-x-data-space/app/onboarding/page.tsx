@@ -431,7 +431,7 @@ export default async function Index() {
                 protecting the integrity of the ecosystem and enabling transparent, trustworthy collaboration.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
-                <Button href={'https://staging.identity.ascs.digital/'} colorScheme={ColorScheme.dark} target="_blank">
+                <Button href={'https://identity.ascs.digital/'} colorScheme={ColorScheme.dark} target="_blank">
                   Create your own identity
                 </Button>
                 <Link href={'/about-us'} className="text-white text-base font-semibold">

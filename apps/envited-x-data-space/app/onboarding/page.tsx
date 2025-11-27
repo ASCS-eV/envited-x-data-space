@@ -426,12 +426,12 @@ export default async function Index() {
                 within the ecosystem.
               </p>
               <p className="mt-6 text-lg leading-8 text-gray-400">
-                Once your company's digital identity and those of your employees are verified, you can use them for
+                Once your company&apos;s digital identity and those of your employees are verified, you can use them for
                 seamless and secure login. This ensures that every user accessing the data space is authenticated,
                 protecting the integrity of the ecosystem and enabling transparent, trustworthy collaboration.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
-                <Button href={'https://staging.identity.ascs.digital/'} colorScheme={ColorScheme.dark} target="_blank">
+                <Button href={'https://identity.ascs.digital/'} colorScheme={ColorScheme.dark} target="_blank">
                   Create your own identity
                 </Button>
                 <Link href={'/about-us'} className="text-white text-base font-semibold">
